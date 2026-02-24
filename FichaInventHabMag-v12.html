@@ -1,0 +1,1773 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RPG System - Ficha Completa v7 (Menu Novo)</title>
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Roboto:wght@400;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* --- ESTILOS DO NOVO MENU E TEMA --- */
+        :root {
+            --bg-color: #0b0907;
+            --panel-bg: #1f1a14;
+            --text-color: #cbbfae;
+            --accent-color: #cfa84a;
+            --danger: #9e2b2b;
+            --success: #356b43;
+            --info: #2b4e7a;
+            --purple: #6a0dad;
+            --gold: #ffd700;
+            --input-bg: #14100d;
+            --border-color: #4a3e30;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            padding-top: 70px; /* Espaço para o menu fixo */
+            padding-bottom: 80px;
+        }
+
+        h1, h2, h3, h4, button, select, label, .stat-val, .tag, .nav-brand, .nav-btn {
+            font-family: 'MedievalSharp', cursive;
+        }
+
+        /* --- MENU RESPONSIVO --- */
+        .nav-menu {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: var(--panel-bg);
+            border-bottom: 2px solid var(--accent-color);
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.9);
+            padding: 0 15px;
+            box-sizing: border-box;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-brand {
+            font-size: 1.4rem;
+            color: var(--accent-color);
+            font-weight: bold;
+            text-shadow: 1px 1px 2px #000;
+        }
+
+        .nav-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--accent-color);
+            font-size: 1.8rem;
+            cursor: pointer;
+            padding: 0;
+            margin: 0;
+            width: auto;
+
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 5px;
+            height: 100%;
+            align-items: center;
+        }
+
+        .nav-btn {
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 1rem;
+            cursor: pointer;
+            padding: 8px 12px;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-btn.active {
+            color: var(--accent-color);
+            font-weight: bold;
+            border-bottom: 3px solid var(--accent-color);
+            background: rgba(207, 168, 74, 0.05);
+			background-color: #4a3e30;;
+        }
+
+        .nav-btn:hover {
+            color: #fff;
+            background-color: #4a3e30;;
+			
+        }
+
+        @media (max-width: 900px) {
+            .nav-toggle {
+                display: block;
+            }
+
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                width: 100%;
+                background-color: var(--panel-bg);
+                border-bottom: 2px solid var(--accent-color);
+                padding: 10px 0;
+                gap: 0;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.9);
+            }
+
+            .nav-links.show {
+                display: flex;
+				background-color: black;
+            }
+
+            .nav-btn {
+                width: 100%;
+                text-align: center;
+                border: none;
+                padding: 15px;
+                height: auto;
+                justify-content: center;
+                border-bottom: 1px solid #333;
+				background-color: black;
+            }
+
+            .nav-btn.active {
+                border-bottom: 1px solid var(--accent-color);
+                border-left: 4px solid var(--accent-color);
+                background: rgba(207, 168, 74, 0.1);
+				background-color: #4a3e30;;
+            }
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 10px;
+        }
+
+        /* --- ESTILOS GERAIS DO SISTEMA (MANTIDOS) --- */
+        .view-section {
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+
+        .view-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section {
+            background-color: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .section-title {
+            color: var(--accent-color);
+            border-bottom: 1px solid var(--border-color);
+            margin-top: 0;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+        }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+
+        .split-layout { display: grid; grid-template-columns: 1fr; gap: 15px; }
+        @media (min-width: 768px) { .split-layout { grid-template-columns: 1fr 1fr; } }
+
+        input, select, textarea {
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            padding: 8px;
+            width: 100%;
+            box-sizing: border-box;
+            border-radius: 3px;
+            margin-bottom: 5px;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        button {
+            background-color: var(--border-color);
+            color: #fff;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 3px;
+            width: 100%;
+            font-weight: bold;
+            margin-top: 5px;
+            transition: 0.2s;
+        }
+
+        button:hover { filter: brightness(1.2); }
+        .btn-success { background-color: var(--success); }
+        .btn-danger { background-color: var(--danger); }
+        .btn-info { background-color: var(--info); }
+        .btn-gold { background-color: var(--accent-color); color: #000; }
+        .btn-small { width: auto; font-size: 0.8rem; padding: 5px 10px; }
+
+        .attr-btn {
+            width: 35px; height: 35px; padding: 0; margin: 0 5px;
+            font-size: 1.2rem; line-height: 1; background: #333; border: 1px solid #555;
+        }
+        .attr-btn:active { background: var(--accent-color); color: #000; }
+
+        .stat-row {
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid #333; padding: 6px 0; font-size: 0.95rem;
+        }
+        .stat-val { color: var(--accent-color); font-size: 1.1rem; }
+
+        .inv-item {
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(0, 0, 0, 0.2); border: 1px solid #333;
+            padding: 8px; margin-bottom: 5px; border-radius: 3px;
+        }
+        .inv-item .item-actions { display: flex; gap: 5px; }
+        
+        .detailed-item {
+            background: rgba(20, 20, 20, 0.6); border: 1px solid #444;
+            border-left: 3px solid var(--accent-color); padding: 12px;
+            margin-bottom: 10px; border-radius: 3px;
+        }
+        .detailed-header {
+            display: flex; justify-content: space-between; align-items: flex-start;
+            border-bottom: 1px solid #444; padding-bottom: 6px; margin-bottom: 6px;
+        }
+        .detailed-body { font-size: 0.9rem; color: #ddd; line-height: 1.4; }
+        .detailed-meta { font-size: 0.8rem; color: #aaa; margin-bottom: 5px; font-style: italic; }
+
+        .load-bar-bg { background: #000; height: 10px; border-radius: 5px; margin-top: 5px; border: 1px solid #444; }
+        .load-bar-fill { background: var(--info); height: 100%; width: 0%; transition: width 0.3s; }
+        
+        .modal-overlay {
+            display:none; position:fixed; top:0; left:0; width:100%; height:100%; 
+            background: rgba(0,0,0,0.8); z-index: 2000; backdrop-filter: blur(2px);
+        }
+        .modal-content {
+            position: relative; background: var(--panel-bg); width: 90%; max-width: 600px;
+            margin: 5% auto; padding: 20px; border: 2px solid var(--accent-color); border-radius: 5px;
+            max-height: 90vh; overflow-y: auto; box-shadow: 0 0 20px #000; box-sizing: border-box;
+        }
+        
+        .cfg-label { font-size: 0.8rem; color:#aaa; margin-bottom:2px; display:block;}
+        .spell-tag {
+            font-size: 0.75rem; padding: 2px 6px; border-radius: 3px; margin-right: 5px;
+            text-transform: uppercase; font-weight: bold; display: inline-block;
+        }
+        .tag-fogo { background: #600; color: #fcc; }
+        .tag-agua { background: #006; color: #ccf; }
+        .tag-vento { background: #060; color: #cfc; }
+        .tag-comum { background: #333; color: #ccc; }
+        .tag-divino { background: #aa0; color: #000; }
+        .tag-profano { background: #303; color: #fcf; }
+        
+        /* PRINT */
+        #print-sheet { display: none; }
+        @media print {
+            @page { margin: 0.5cm; size: A4; }
+            body { background-color: #fff; color: #000; font-family: 'Times New Roman', serif; padding: 0; margin: 0; }
+            .nav-menu, .container, .modal-overlay { display: none !important; }
+            #print-sheet { display: block !important; width: 100%; height: 100%; }
+            .sheet-container { width: 100%; max-width: 210mm; margin: 0 auto; border: 2px solid #000; padding: 15px; box-sizing: border-box; }
+            .sheet-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 15px; }
+            .sheet-title { font-family: 'MedievalSharp', cursive; font-size: 2rem; font-weight: bold; }
+            .sheet-meta { text-align: right; font-size: 1.1rem; }
+            .sheet-grid-main { display: grid; grid-template-columns: 100px 1fr; gap: 20px; margin-bottom: 20px; }
+            .sheet-attr-box { border: 2px solid #000; border-radius: 8px; text-align: center; margin-bottom: 10px; padding: 5px; }
+            .sheet-attr-name { font-weight: bold; font-size: 1.1rem; display: block; }
+            .sheet-attr-val { font-size: 1.8rem; font-weight: bold; display: block; margin: 5px 0; }
+            .sheet-stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 15px; }
+            .sheet-stat-box { border: 2px solid #000; border-radius: 10px 10px 0 0; text-align: center; padding: 5px; }
+            .sheet-stat-val { font-size: 1.5rem; font-weight: bold; }
+            .sheet-stat-label { font-size: 0.8rem; text-transform: uppercase; }
+            .sheet-section { border: 1px solid #000; padding: 10px; margin-bottom: 10px; }
+            .sheet-sec-title { background: #000; color: #fff; font-family: 'MedievalSharp', cursive; padding: 2px 5px; margin: -10px -10px 10px -10px; font-weight: bold; }
+            .two-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+            .note-lines { background-image: linear-gradient(#999 1px, transparent 1px); background-size: 100% 1.5em; line-height: 1.5em; height: 150px; border: 1px solid #ccc; }
+        }
+		
+	
+    /* Reset básico apenas para este componente para evitar conflitos */
+    #globalAdmin_wrapper * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    /* --- Botão Flutuante --- */
+    #globalAdmin_floatBtn {
+        position: fixed;
+        bottom: 20px;
+        right: 20px; /* Altere para 'left' se preferir na esquerda */
+        width: 60px;
+        height: 60px;
+        background-color: #2c3e50; /* Cor do botão */
+        color: #fff;
+        border: none;
+        border-radius: 50%;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        cursor: pointer;
+        z-index: 999998; /* Muito alto para ficar acima de tudo */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.3s ease, background-color 0.3s;
+    }
+
+    #globalAdmin_floatBtn:hover {
+        transform: scale(1.1);
+        background-color: #1a252f;
+    }
+
+    #globalAdmin_floatBtn svg {
+        width: 30px;
+        height: 30px;
+    }
+
+    /* --- Overlay Tela Cheia --- */
+    #globalAdmin_overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(30, 30, 30, 0.95); /* Fundo escuro semi-transparente */
+        backdrop-filter: blur(5px); /* Efeito de desfoque (opcional) */
+        z-index: 999999; /* Maior que o botão */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    /* Classe ativada via JS para mostrar o menu */
+    #globalAdmin_overlay.is-visible {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    /* --- Botão Fechar (X) --- */
+    #globalAdmin_closeBtn {
+        position: absolute;
+        top: 30px;
+        right: 30px;
+        background: none;
+        border: none;
+        color: #fff;
+        font-size: 3rem;
+        cursor: pointer;
+        line-height: 1;
+        transition: color 0.2s;
+    }
+
+    #globalAdmin_closeBtn:hover {
+        color: #e74c3c; /* Vermelho ao passar o mouse */
+    }
+
+    /* --- Conteúdo e Links --- */
+    .globalAdmin_content {
+        text-align: center;
+        max-width: 600px;
+        width: 90%;
+    }
+
+    .globalAdmin_title {
+        color: #bdc3c7;
+        margin-bottom: 40px;
+        font-size: 1.5rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
+
+    .globalAdmin_nav {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .globalAdmin_link {
+        color: #fff;
+        text-decoration: none;
+        font-size: 1.5rem;
+        padding: 15px;
+        border: 2px solid transparent;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .globalAdmin_link:hover {
+        border-color: #3498db;
+        background-color: rgba(52, 152, 219, 0.1);
+        transform: translateX(5px);
+    }
+
+    /* Estilo especial para Logout */
+    .globalAdmin_link.logout {
+        margin-top: 20px;
+        color: #e74c3c;
+        font-size: 1.2rem;
+    }
+    
+    .globalAdmin_link.logout:hover {
+        border-color: #e74c3c;
+        background-color: rgba(231, 76, 60, 0.1);
+    }
+
+    </style>
+</head>
+
+<body>
+<!-- Início do Módulo Global Admin -->
+<div id="globalAdmin_wrapper">
+
+    <!-- Botão Flutuante (FAB) -->
+    <button id="globalAdmin_floatBtn" title="Abrir Menu Administrativo">
+        <!-- Ícone de Engrenagem/Admin SVG -->
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z" fill="currentColor"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 4C16.42 4 20 7.58 20 12C20 16.42 16.42 20 12 20C7.58 20 4 16.42 4 12C4 7.58 7.58 4 12 4Z" fill="currentColor"/>
+        </svg>
+
+
+
+    </button>
+
+    <!-- Menu Tela Cheia (Overlay) -->
+    <div id="globalAdmin_overlay" aria-hidden="true">
+        
+        <!-- Botão de Fechar (X) -->
+        <button id="globalAdmin_closeBtn" title="Fechar Menu">&times;</button>
+
+        <!-- Conteúdo do Menu -->
+        <div class="globalAdmin_content">
+            <h2 class="globalAdmin_title">Navegação Administrativa</h2>
+            
+            <nav class="globalAdmin_nav">
+                <!-- LISTA DE LINKS PARA OUTROS SISTEMAS -->
+                <a href="https://jalves2999.github.io/poderpoderoso/FichaInventHabMag-v11.html" class="globalAdmin_link">Sistema de RH</a>
+                <a href="https://sistema-financeiro.suaempresa.com" class="globalAdmin_link">Financeiro</a>
+                <a href="/dashboard" class="globalAdmin_link">Dashboard Principal</a>
+                <a href="/configuracoes" class="globalAdmin_link">Configurações</a>
+                <a href="/logout" class="globalAdmin_link logout">Sair do Sistema</a>
+            </nav>
+        </div>
+    </div>
+
+</div>
+<!-- Fim do Módulo Global Admin -->
+
+    <!-- === NOVO MENU RESPONSIVO === -->
+    <nav class="nav-menu">
+        <div class="nav-brand">RPG System v7</div>
+        
+        <button class="nav-toggle" onclick="toggleMobileMenu()">☰</button>
+        
+        <div class="nav-links" id="navLinks">
+            <button class="nav-btn" onclick="showView('files')">Arquivos</button>
+            <button class="nav-btn active" onclick="showView('character')">Personagem</button>
+            <button class="nav-btn" onclick="showView('items-db')">Criar Itens</button>
+            <button class="nav-btn" onclick="showView('inventory')">Inventário</button>
+            <button class="nav-btn" onclick="showView('skills')">Habilidades</button>
+            <button class="nav-btn" onclick="showView('spells')">Grimório</button>
+            <button class="nav-btn" onclick="showView('pericias')">Perícias</button>
+            <button class="nav-btn" onclick="showView('notes')">Anotações</button>
+            <button class="nav-btn" onclick="showView('config')">Config</button>
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <!-- === GERENCIADOR DE ARQUIVOS === -->
+        <div id="view-files" class="view-section">
+            <div class="section">
+                <h3 class="section-title">Meus Personagens</h3>
+                <button class="btn-success" onclick="createNewChar()">+ Novo Personagem</button>
+                <div id="fileList" style="margin-top:15px; display:grid; gap:10px;"></div>
+            </div>
+            <div class="section">
+                <h3 class="section-title">Backup Geral</h3>
+                <button class="btn-info" onclick="exportAllData()">Exportar Tudo (JSON)</button>
+                <textarea id="importAllArea" placeholder="Cole o JSON de backup aqui..." style="margin-top:5px; height:50px;"></textarea>
+                <button class="btn-danger" onclick="importAllData()">Importar Tudo (Sobrescreve)</button>
+            </div>
+        </div>
+
+        <!-- === PERSONAGEM === -->
+        <div id="view-character" class="view-section active">
+
+            <div class="section">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <h3 class="section-title" style="margin:0; border:0;">Ficha de Personagem</h3>
+                    <button class="btn-info" style="width:auto;" onclick="printCharacter()">🖨️ Imprimir Ficha</button>
+                </div>
+                <hr style="border-color:var(--border-color); margin-bottom:15px;">
+
+                <div class="grid-2">
+                    <div><label>Nome</label><input type="text" id="charName" onchange="saveData()"></div>
+                    <div>
+                        <label>Classe</label>
+                        <select id="charClass" onchange="changeClass()">
+                            <option value="guerreiro">Guerreiro</option>
+                            <option value="mago">Mago</option>
+                            <option value="arqueiro">Arqueiro</option>
+                            <option value="ladino">Ladino</option>
+                            <option value="clerigo">Clérigo</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="lockContainer" style="margin-top: 10px;">
+                    <button id="btnLock" class="btn-gold" onclick="lockCharacter()">🔒 Travar Classe / Salvar Definitivo</button>
+                    <button id="btnUnlock" class="btn-danger" onclick="unlockCharacter()" style="display:none;">🔓 Destravar (Resetar Classe?)</button>
+                </div>
+
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px; background:#111; padding:10px; border-radius:4px;">
+                    <div>
+                        <span style="color:#aaa;">Nível</span>
+                        <span id="displayLevel" style="font-size:1.5rem; color:var(--accent-color); font-weight:bold; margin-left:5px;">1</span>
+                    </div>
+                    <div style="text-align:right;">
+                        <small id="xpText" style="display:block; color:#aaa;">0 XP</small>
+                        <div style="display:flex; gap:5px;">
+                            <input type="number" id="xpInput" placeholder="+XP" style="width:70px; margin:0;">
+                            <button class="btn-success btn-small" onclick="addXP()">OK</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="subclassContainer" style="display:none; margin-top:10px; border-top:1px solid #333; padding-top:10px;">
+                    <label style="color:var(--accent-color)">Subclasse (Nv. 5+)</label>
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <select id="charSubClass" onchange="saveData()" style="flex-grow:1; margin-right:5px;">
+                            <option value="">-- Selecione --</option>
+                            <option value="paladino">Paladino</option>
+                            <option value="druida">Druida</option>
+                            <option value="bardo">Bardo</option>
+                            <option value="alquimista">Alquimista</option>
+                            <option value="necromante">Necromante</option>
+                        </select>
+                        <button id="btnLockSub" class="btn-info" style="width:auto; font-size:0.8rem; padding:5px;" onclick="lockSubclass()">🔒 Travar</button>
+                        <button id="btnUnlockSub" class="btn-danger" style="display:none; width:auto; font-size:0.8rem; padding:5px;" onclick="unlockSubclass()">🔓</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="split-layout">
+                <!-- ATRIBUTOS -->
+                <div class="section">
+                    <h3 class="section-title">Atributos</h3>
+                    <div id="attributesList"></div>
+                </div>
+
+                <!-- RESULTADOS -->
+                <div class="section">
+                    <h3 class="section-title">Resultados</h3>
+                    <div class="stat-row"><span>Vida (PV)</span><span class="stat-val" id="resHP">20</span></div>
+                    <div class="stat-row"><span>Ações</span><span class="stat-val" id="resAct">1</span></div>
+                    <div class="stat-row"><span>Movimento</span><span class="stat-val" id="resMove">4m</span></div>
+                    <hr style="border-color:#333">
+                    <div class="stat-row">
+                        <span>Dano Físico</span>
+                        <div class="stat-val" id="resPhyDmg" style="font-size:1rem;">-</div>
+                    </div>
+                    <div class="stat-row"><span>Defesa Total</span><span class="stat-val" id="resDef">0</span></div>
+                    <div class="stat-row"><span>Acerto Físico</span><span class="stat-val" id="resHit">+0</span></div>
+                    <div class="stat-row"><span>Crítico</span><span class="stat-val" id="resCrit">+0</span></div>
+                    <hr style="border-color:#333">
+                    <div class="stat-row"><span>Slots Magia</span><span class="stat-val" id="resSlots">1/1</span></div>
+                    <div class="stat-row"><span>Acerto Mágico</span><span class="stat-val" id="resMagHit">+0</span></div>
+                    <div class="stat-row"><span>Dano Mágico</span><span class="stat-val" id="resMagDmg">0d6</span></div>
+                    <div class="stat-row"><span>Bonus Cura</span><span class="stat-val" id="resHeal">+0d10</span></div>
+                    <div id="necromancerRow" class="stat-row" style="display:none; color:var(--success)">
+                        <span>PV Invocações</span><span class="stat-val" id="resMinionHP">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3 class="section-title">Modificadores de Equipamentos</h3>
+                <div id="equipModifiersList"><em style="color:#666">Nenhum modificador ativo.</em></div>
+            </div>
+
+            <div class="section">
+                <h3 class="section-title">Equipamentos & Magias</h3>
+                <div class="equip-controls" style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 4px;">
+                    <label>Equipar Habilidade (Pontos: <span id="skillPointsDisplay" style="color:var(--accent-color)">0/3</span>)</label>
+                    <div style="display:flex; gap:5px;">
+                        <select id="selectSkillToEquip" style="flex-grow:1;"></select>
+                        <button class="btn-info" style="width:80px; padding:5px;" onclick="equipSkill()">Equipar</button>
+                    </div>
+                    <div id="equippedSkillsList" style="margin-top:10px;"></div>
+                </div>
+
+                <div class="equip-controls" style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 4px; margin-top:10px;">
+                    <label>Preparar Magia (Slots: <span id="slotCounter">0</span>)</label>
+                    <div style="display:flex; gap:5px;">
+                        <select id="selectSpellToEquip" style="flex-grow:1;"></select>
+                        <button class="btn-info" style="width:80px; padding:5px;" onclick="equipSpell()">Preparar</button>
+                    </div>
+                    <div id="equippedSpellsList" style="margin-top:10px;"></div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3 class="section-title">Perícias Aprendidas</h3>
+                <div id="learnedPericiasList"><em style="color:#666">Nenhuma perícia aprendida.</em></div>
+            </div>
+        </div>
+
+        <!-- === NOVA ABA: CRIAR ITENS (BIBLIOTECA) === -->
+        <div id="view-items-db" class="view-section">
+            <div class="section">
+                <h3 class="section-title">Criar Novo Item</h3>
+                <p style="color:#aaa; font-size:0.9rem;">Aqui você define os itens que existem no mundo. Crie aqui e depois adicione à mochila do personagem.</p>
+                
+                <h4 style="margin-top:10px;">Item Simples</h4>
+                <div class="grid-2">
+                    <input type="text" id="invItemName" placeholder="Nome do Item">
+                    <input type="text" id="invItemPrice" placeholder="Preço (PO)">
+                </div>
+                <input type="number" id="invItemWeight" placeholder="Peso (kg)">
+                <input type="text" id="invItemDesc" placeholder="Descrição (Opcional)">
+
+                <input type="hidden" id="editItemDbId" value="-1">
+                <button id="btnAddItemDb" class="btn-success" onclick="registerItemDb()">Salvar na Biblioteca</button>
+                <button id="btnCancelEditItem" class="btn-danger" style="display:none;" onclick="cancelEdit('itemDb')">Cancelar Edição</button>
+                
+                <hr style="border-color:#444; margin:15px 0;">
+                
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <h4 style="margin:0;">Equipamento Complexo</h4>
+                    <button class="btn-gold" style="width:auto; font-size:0.9rem;" onclick="openEquipModal(-1)">+ Criar Equipamento</button>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3 class="section-title">Biblioteca de Itens</h3>
+                <input type="text" id="searchItemDb" placeholder="🔍 Buscar item..." onkeyup="renderItemLibrary()" style="margin-bottom:10px;">
+                
+                <div id="itemLibraryList"><em style="color:#666">Nenhum item cadastrado.</em></div>
+            </div>
+        </div>
+
+        <!-- === INVENTÁRIO (MOCHILA) === -->
+        <div id="view-inventory" class="view-section">
+            <div class="equip-controls" style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 4px; margin-bottom: 10px;">
+                <label>Gerenciar Equipamento (Apenas itens na Mochila)</label>
+                <button class="btn-info" onclick="openLoadoutModal()">Abrir Painel de Equipamento</button>
+            </div>
+
+            <div class="section">
+                <h3 class="section-title">Mochila</h3>
+                <div style="display:flex; justify-content:space-between;">
+                    <span>Carga</span>
+                    <span id="loadText" style="font-weight:bold;">0 / 20 kg</span>
+                </div>
+                <div class="load-bar-bg">
+                    <div id="loadBar" class="load-bar-fill"></div>
+                </div>
+                <p style="color:#aaa; font-size:0.8rem; margin-top:5px;">Apenas itens nesta lista contam para o peso.</p>
+            </div>
+            
+            <div class="section">
+                <h3 class="section-title" style="margin:0; border:none;">Itens na Mochila</h3>
+                <div id="inventoryList" style="margin-top:10px;"><em style="color:#666">Mochila vazia... Vá em 'Criar Itens' para pegar coisas.</em></div>
+            </div>
+        </div>
+
+        <!-- === PERÍCIAS === -->
+        <div id="view-pericias" class="view-section">
+            <div class="section">
+                <h3 class="section-title">Gerenciar Perícias</h3>
+                <div class="grid-2">
+                    <input type="text" id="regPerName" placeholder="Nome da Perícia">
+                    <input type="text" id="regPerHow" placeholder="Como aprender (ex: Treino)">
+                </div>
+                <textarea id="regPerDesc" placeholder="Descrição e Efeitos..."></textarea>
+                <input type="hidden" id="editPerId" value="-1">
+                <button id="btnAddPericia" class="btn-success" onclick="registerPericia()">Salvar Perícia</button>
+                <button id="btnCancelEditPericia" class="btn-danger" style="display:none;" onclick="cancelEdit('pericia')">Cancelar Edição</button>
+            </div>
+            <div class="section">
+                <h4 style="margin-top:0;">Banco de Perícias</h4>
+                <div id="dbPericiasList"></div>
+            </div>
+        </div>
+
+        <!-- === HABILIDADES === -->
+        <div id="view-skills" class="view-section">
+            <div class="section">
+                <h3 class="section-title">Gerenciar Habilidade</h3>
+                <div class="grid-2">
+                    <input type="text" id="regSkillName" placeholder="Nome">
+                    <select id="regSkillClass">
+                        <option value="Qualquer">Qualquer</option>
+                        <option value="Guerreiro">Guerreiro</option>
+                        <option value="Mago">Mago</option>
+                        <option value="Arqueiro">Arqueiro</option>
+                        <option value="Ladino">Ladino</option>
+                        <option value="Clérigo">Clérigo</option>
+                        <option disabled>-- Subclasses --</option>
+                        <option value="Paladino">Paladino</option>
+                        <option value="Druida">Druida</option>
+                        <option value="Bardo">Bardo</option>
+                        <option value="Alquimista">Alquimista</option>
+                        <option value="Necromante">Necromante</option>
+                    </select>
+                </div>
+                <div class="grid-2">
+                    <input type="text" id="regSkillUses" placeholder="Usos (ex: Passiva)">
+                    <input type="number" id="regSkillLvl" placeholder="Nível Req.">
+                </div>
+                <textarea id="regSkillDesc" placeholder="Descrição..."></textarea>
+                <input type="hidden" id="editSkillId" value="-1">
+                <button id="btnAddSkill" class="btn-success" onclick="registerSkill()">Cadastrar</button>
+                <button id="btnCancelEditSkill" class="btn-danger" style="display:none;" onclick="cancelEdit('skill')">Cancelar Edição</button>
+            </div>
+            <div class="section">
+                <h4 style="margin-top:0;">Habilidades Cadastradas</h4>
+                <div style="margin-bottom:10px;">
+                    <label>Filtrar por Classe:</label>
+                    <select id="filterSkillClass" onchange="renderDatabases()">
+                        <option value="Todas">Todas</option>
+                        <option value="Guerreiro">Guerreiro</option>
+                        <option value="Mago">Mago</option>
+                        <option value="Arqueiro">Arqueiro</option>
+                        <option value="Ladino">Ladino</option>
+                        <option value="Clérigo">Clérigo</option>
+                        <option value="Paladino">Paladino</option>
+                        <option value="Druida">Druida</option>
+                        <option value="Bardo">Bardo</option>
+                        <option value="Alquimista">Alquimista</option>
+                        <option value="Necromante">Necromante</option>
+                    </select>
+                </div>
+                <div id="dbSkillsList"></div>
+            </div>
+        </div>
+
+        <!-- === GRIMÓRIO === -->
+        <div id="view-spells" class="view-section">
+            <div class="section">
+                <h3 class="section-title">Escrever Magia</h3>
+                <div class="grid-2">
+                    <input type="text" id="regSpellName" placeholder="Nome">
+                    <input type="number" id="regSpellLevel" placeholder="Nível/Círculo">
+                </div>
+                <div class="grid-2">
+                    <select id="regSpellType">
+                        <option value="Comum">Comum / Arcano</option>
+                        <option value="Natureza">Natureza</option>
+                        <option value="Mental">Mental</option>
+                        <option value="Divino">Divino</option>
+                        <option value="Profano">Profano</option>
+                        <option value="Maldição">Maldição</option>
+                        <option value="Ritual">Ritual</option>
+                        <option value="Fogo">Fogo</option>
+                        <option value="Água">Água</option>
+                        <option value="Vento">Vento</option>
+                        <option value="Raio">Raio</option>
+                        <option value="Gelo">Gelo</option>
+                        <option value="Ether">Ether</option>
+                    </select>
+                    <select id="regSpellClass">
+                        <option value="Universal">Universal</option>
+                        <option value="Mago">Mago</option>
+                        <option value="Clérigo">Clérigo</option>
+                        <option value="Druida">Druida</option>
+                        <option value="Paladino">Paladino</option>
+                        <option value="Necromante">Necromante</option>
+                    </select>
+                </div>
+                <div class="grid-2">
+                    <input type="number" id="regSpellSlots" placeholder="Custo (Slots)">
+                    <input type="text" id="regSpellEffect" placeholder="Efeito/Duração">
+                </div>
+                <div class="grid-2">
+                    <input type="number" id="regSpellUsesQty" placeholder="Qtd. Usos (ex: 1)">
+                    <select id="regSpellFreq">
+                        <option value="Livre">Uso Livre</option>
+                        <option value="Batalha">Por Batalha</option>
+                        <option value="Dia">Por Dia</option>
+                        <option value="Semana">Por Semana</option>
+                        <option value="Sessão">Por Sessão</option>
+                    </select>
+                </div>
+                <textarea id="regSpellDesc" placeholder="Descrição..."></textarea>
+                <input type="hidden" id="editSpellId" value="-1">
+                <button id="btnAddSpell" class="btn-success" onclick="registerSpell()">Adicionar</button>
+                <button id="btnCancelEditSpell" class="btn-danger" style="display:none;" onclick="cancelEdit('spell')">Cancelar Edição</button>
+            </div>
+            <div class="section">
+                <h4 style="margin-top:0;">Grimório Conhecido</h4>
+                <div style="background: rgba(0,0,0,0.3); padding:10px; border-radius:4px; margin-bottom:10px;">
+                    <div class="grid-3">
+                        <input type="text" id="filterSpellName" placeholder="Buscar Nome..." onkeyup="renderDatabases()">
+                        <select id="filterSpellType" onchange="renderDatabases()">
+                            <option value="Todos">Todos os Tipos</option>
+                            <option value="Comum">Comum / Arcano</option>
+                            <option value="Natureza">Natureza</option>
+                            <option value="Mental">Mental</option>
+                            <option value="Divino">Divino</option>
+                            <option value="Profano">Profano</option>
+                            <option value="Maldição">Maldição</option>
+                            <option value="Ritual">Ritual</option>
+                            <option value="Fogo">Fogo</option>
+                            <option value="Água">Água</option>
+                            <option value="Vento">Vento</option>
+                            <option value="Raio">Raio</option>
+                            <option value="Gelo">Gelo</option>
+                            <option value="Ether">Ether</option>
+                        </select>
+                        <input type="number" id="filterSpellLevel" placeholder="Nível" onkeyup="renderDatabases()" onchange="renderDatabases()">
+                    </div>
+                </div>
+                <div id="dbSpellsList"></div>
+            </div>
+        </div>
+
+        <!-- === ANOTAÇÕES === -->
+        <div id="view-notes" class="view-section">
+            <div class="section">
+                <h3 class="section-title">Diário de Aventura</h3>
+                <div class="grid-2">
+                    <input type="number" id="noteDay" placeholder="Dia (número)">
+                    <button class="btn-success" onclick="addNote()">Adicionar na Linha do Tempo</button>
+                </div>
+                <textarea id="noteText" placeholder="O que aconteceu hoje?" rows="4"></textarea>
+            </div>
+            <div class="section">
+                <h3 class="section-title">Linha do Tempo</h3>
+                <div id="timelineList"></div>
+            </div>
+        </div>
+
+        <!-- === CONFIG === -->
+        <div id="view-config" class="view-section">
+            <div class="section">
+                <h3 class="section-title">Editor de Classes</h3>
+                <select id="configClassSelect" onchange="loadClassRulesUI()">
+                    <option value="guerreiro">Guerreiro</option>
+                    <option value="mago">Mago</option>
+                    <option value="arqueiro">Arqueiro</option>
+                    <option value="ladino">Ladino</option>
+                    <option value="clerigo">Clérigo</option>
+                </select>
+                <div id="classRulesInputs" class="grid-2" style="margin-top:15px; border-top:1px solid #333; padding-top:10px;"></div>
+                <div class="grid-2" style="margin-top:10px;">
+                    <button class="btn-success" onclick="saveClassRules()">Salvar Alterações</button>
+                    <button class="btn-danger" onclick="resetClassRules()">Resetar Padrão</button>
+                </div>
+            </div>
+            <div class="section">
+                <h3 class="section-title">Gerenciar Dados</h3>
+                <button class="btn-danger" onclick="deleteCharacter()">🗑️ Deletar Personagem Atual</button>
+                <hr style="border-color:#444; margin: 15px 0;">
+                <label>Backup Individual (JSON)</label>
+                <textarea id="ioData" rows="4" placeholder="Cole aqui para importar..."></textarea>
+                <div class="grid-2">
+                    <button onclick="exportData()">Exportar</button>
+                    <button class="btn-info" onclick="importData()">Importar</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- MODAL DE EQUIPAMENTO (CRIAÇÃO) -->
+    <div id="equipModal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 style="color:var(--accent-color); margin-top:0;">Novo Equipamento (Biblioteca)</h3>
+            <label>Tipo</label>
+            <select id="eqType" onchange="updateEquipFields()">
+                <option value="Arma 1H">Arma 1H</option>
+                <option value="Arma 2H">Arma 2H</option>
+                <option value="Escudo">Escudo</option>
+                <option value="Elmo">Elmo</option>
+                <option value="Peitoral">Peitoral</option>
+                <option value="Bota">Bota</option>
+                <option value="Luva">Luva</option>
+                <option value="Anel">Anel</option>
+                <option value="Colar">Colar</option>
+                <option value="Manto">Manto</option>
+            </select>
+            <div class="grid-2">
+                <input type="text" id="eqName" placeholder="Nome do Equipamento">
+                <input type="text" id="eqPrice" placeholder="Preço (PO)">
+            </div>
+            <div class="grid-2">
+                <input type="number" id="eqWeight" placeholder="Peso (kg)">
+            </div>
+            <label>Bônus de Atributo (Soma na ficha)</label>
+            <div style="display:flex; gap:5px; margin-bottom:10px;">
+                <select id="eqAttrType">
+                    <option value="">-- Sem Atributo --</option>
+                    <optgroup label="Atributos Principais">
+                        <option value="FOR">FOR (Força)</option>
+                        <option value="DEX">DEX (Destreza)</option>
+                        <option value="AGI">AGI (Agilidade)</option>
+                        <option value="INT">INT (Inteligência)</option>
+                        <option value="SAB">SAB (Sabedoria)</option>
+                    </optgroup>
+                    <optgroup label="Estatísticas de Combate">
+                        <option value="PV">Vida (PV)</option>
+                        <option value="MOVE">Movimento (m)</option>
+                        <option value="ACT">Ações</option>
+                        <option value="HIT">Acerto Físico</option>
+                        <option value="CRIT">Crítico</option>
+                        <option value="DMGPHY">Dano Físico (Flat)</option>
+                        <option value="DEF">Defesa Extra</option>
+                    </optgroup>
+                    <optgroup label="Magia">
+                        <option value="SLOTS">Slots de Magia</option>
+                        <option value="MAGHIT">Acerto Mágico</option>
+                        <option value="DMGMAG">Dano Mágico (Flat)</option>
+                        <option value="HEAL">Bônus de Cura</option>
+                    </optgroup>
+                </select>
+                <input type="number" id="eqAttrVal" placeholder="Valor" style="margin:0;">
+            </div>
+            <label>Efeito Especial / Modificador Livre</label>
+            <input type="text" id="eqMod" placeholder="Ex: Imune a Fogo, Brilha no escuro">
+            <div id="fieldDmg" style="display:none;">
+                <label>Dano</label>
+                <input type="text" id="eqDmg" placeholder="Ex: 1d8+2">
+            </div>
+            <div id="fieldDef" style="display:none;">
+                <label>Defesa</label>
+                <input type="number" id="eqDef" placeholder="Valor de Defesa">
+            </div>
+            <textarea id="eqDesc" placeholder="Descrição / Efeitos" rows="3"></textarea>
+            <input type="hidden" id="editEquipId" value="-1">
+            <div class="grid-2">
+                <button class="btn-success" onclick="saveEquipToDb()">Salvar na Biblioteca</button>
+                <button class="btn-danger" onclick="closeEquipModal()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE LOADOUT -->
+    <div id="loadoutModal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 style="color:var(--accent-color); margin-top:0;">Gerenciar Equipamento</h3>
+            <div class="split-layout">
+                <div class="section" style="margin-bottom:10px;">
+                    <h4 style="margin-top:0;">Combate</h4>
+                    <label>Mão Principal</label><select id="slot_mainHand" onchange="updateLoadoutUI('main')"></select>
+                    <label>Mão Secundária</label><select id="slot_offHand" onchange="updateLoadoutUI('off')"></select>
+                </div>
+                <div class="section" style="margin-bottom:10px;">
+                    <h4 style="margin-top:0;">Armadura</h4>
+                    <label>Elmo</label><select id="slot_head" onchange="updateLoadoutUI('armor')"></select>
+                    <label>Peitoral</label><select id="slot_body" onchange="updateLoadoutUI('armor')"></select>
+                    <label>Luva</label><select id="slot_hands" onchange="updateLoadoutUI('armor')"></select>
+                    <label>Bota</label><select id="slot_legs" onchange="updateLoadoutUI('armor')"></select>
+                </div>
+            </div>
+            <div class="section">
+                <h4 style="margin-top:0;">Acessórios</h4>
+                <label>Slot 1</label><select id="slot_acc1" onchange="updateLoadoutUI('acc')"></select>
+                <label>Slot 2</label><select id="slot_acc2" onchange="updateLoadoutUI('acc')"></select>
+                <label>Slot 3</label><select id="slot_acc3" onchange="updateLoadoutUI('acc')"></select>
+            </div>
+            <div class="grid-2">
+                <button class="btn-success" onclick="saveLoadout()">Salvar & Fechar</button>
+                <button class="btn-danger" onclick="closeLoadoutModal()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- IMPRESSÃO -->
+    <div id="print-sheet">
+         <div class="sheet-container">
+            <div class="sheet-header">
+                <div class="sheet-title">Ficha de Personagem</div>
+                <div class="sheet-meta">
+                    <div id="print-name">Nome: Heroi</div>
+                    <div id="print-class">Classe: Guerreiro | Nível 1</div>
+                    <div id="print-xp">XP: 0</div>
+                </div>
+            </div>
+            <div class="sheet-grid-main">
+                <div>
+                    <div class="sheet-attr-box"><span class="sheet-attr-name">FOR</span><span class="sheet-attr-val" id="p-for">10</span></div>
+                    <div class="sheet-attr-box"><span class="sheet-attr-name">DEX</span><span class="sheet-attr-val" id="p-dex">10</span></div>
+                    <div class="sheet-attr-box"><span class="sheet-attr-name">AGI</span><span class="sheet-attr-val" id="p-agi">10</span></div>
+                    <div class="sheet-attr-box"><span class="sheet-attr-name">INT</span><span class="sheet-attr-val" id="p-int">10</span></div>
+                    <div class="sheet-attr-box"><span class="sheet-attr-name">SAB</span><span class="sheet-attr-val" id="p-sab">10</span></div>
+                </div>
+                <div>
+                    <div class="sheet-stats-grid">
+                        <div class="sheet-stat-box"><div class="sheet-stat-label">Vida Max</div><div class="sheet-stat-val" id="p-hp">20</div></div>
+                        <div class="sheet-stat-box"><div class="sheet-stat-label">Defesa</div><div class="sheet-stat-val" id="p-def">10</div></div>
+                        <div class="sheet-stat-box"><div class="sheet-stat-label">Desloc.</div><div class="sheet-stat-val" id="p-move">9m</div></div>
+                        <div class="sheet-stat-box"><div class="sheet-stat-label">Ações</div><div class="sheet-stat-val" id="p-act">1</div></div>
+                        <div class="sheet-stat-box"><div class="sheet-stat-label">Slots Magia</div><div class="sheet-stat-val" id="p-slots">1/1</div></div>
+                        <div class="sheet-stat-box"><div class="sheet-stat-label">Iniciativa</div><div class="sheet-stat-val" id="p-ini">+0</div></div>
+                    </div>
+                    <div class="sheet-section">
+                        <div class="sheet-sec-title">Ataques & Equipamento</div>
+                        <div style="font-weight:bold; margin-bottom:5px;">Dano Físico: <span id="p-dmg">-</span></div>
+                        <div style="font-weight:bold; margin-bottom:5px;">Acerto Físico: <span id="p-hit">+0</span> | Crítico: <span id="p-crit">20</span></div>
+                        <div style="font-size:0.9rem; margin-top:5px; font-style:italic;" id="p-loadout-list"></div>
+                    </div>
+                    <div class="sheet-section">
+                        <div class="sheet-sec-title">Poderes Mágicos</div>
+                         <div style="display:flex; justify-content:space-between; font-weight:bold;">
+                            <span>Acerto Mágico: <span id="p-maghit">+0</span></span>
+                            <span>Dano Base: <span id="p-magdmg">0</span></span>
+                            <span>Cura: <span id="p-heal">0</span></span>
+                         </div>
+                    </div>
+                </div>
+            </div>
+            <div class="two-cols">
+                <div class="sheet-section">
+                    <div class="sheet-sec-title">Habilidades & Talentos</div>
+                    <ul id="p-skills-list" style="margin:0; padding-left:20px; font-size:0.9rem;"></ul>
+                    <div style="margin-top:10px; font-weight:bold; font-size:0.9rem;">Perícias:</div>
+                    <div id="p-pericias-list" style="font-size:0.85rem; line-height:1.4;"></div>
+                </div>
+                <div class="sheet-section">
+                    <div class="sheet-sec-title">Magias Preparadas</div>
+                    <ul id="p-spells-list" style="margin:0; padding-left:20px; font-size:0.9rem;"></ul>
+                </div>
+            </div>
+            <div class="sheet-section">
+                <div class="sheet-sec-title">Inventário & Tesouro</div>
+                <div id="p-inv-list" style="font-size:0.9rem; column-count: 2;"></div>
+            </div>
+            <div class="sheet-section" style="border:none;">
+                <div class="sheet-sec-title">Anotações</div>
+                <div class="note-lines"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- FUNÇÃO DO NOVO MENU ---
+        function toggleMobileMenu() {
+            document.getElementById('navLinks').classList.toggle('show');
+        }
+
+        function showView(v) {
+            document.querySelectorAll('.view-section').forEach(e => e.classList.remove('active'));
+            document.getElementById('view-' + v).classList.add('active');
+            
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            const btns = document.querySelectorAll('.nav-btn');
+            for (let btn of btns) { if (btn.onclick.toString().includes(v)) btn.classList.add('active'); }
+            
+            // Fecha menu mobile ao clicar
+            document.getElementById('navLinks').classList.remove('show');
+            
+            if (v === 'files') renderFileList();
+        }
+
+        // --- DADOS E LÓGICA DO SISTEMA ---
+        const attributes = ['FOR', 'DEX', 'AGI', 'INT', 'SAB'];
+        const classCycles = {
+            guerreiro: ['FOR', 'FOR', 'AGI', 'DEX'],
+            mago: ['INT', 'INT', 'SAB', 'AGI'],
+            arqueiro: ['DEX', 'DEX', 'AGI', 'FOR'],
+            ladino: ['AGI', 'AGI', 'DEX', 'INT'],
+            clerigo: ['SAB', 'SAB', 'INT', 'AGI']
+        };
+
+        const defaultScalingRules = {
+            guerreiro: { hpBase: 10, hpFor: 15, hitDex: 3, actAgi: 3, slotInt: 3, magHitBase: 3, magHitInt: 3, magDmgInt: 3, magDmgDie: 'd6', healSab: 1, healDie: 'd10', critSab: 3 },
+            arqueiro: { hpBase: 10, hpFor: 10, hitDex: 2, actAgi: 2, slotInt: 2, magHitBase: 3, magHitInt: 3, magDmgInt: 3, magDmgDie: 'd6', healSab: 1, healDie: 'd10', critSab: 2 },
+            ladino: { hpBase: 10, hpFor: 10, hitDex: 2, actAgi: 1, slotInt: 2, magHitBase: 3, magHitInt: 3, magDmgInt: 3, magDmgDie: 'd6', healSab: 1, healDie: 'd10', critSab: 2 },
+            mago: { hpBase: 10, hpFor: 8, hitDex: 2, actAgi: 2, slotInt: 0.5, magHitBase: 3, magHitInt: 3, magDmgInt: 3, magDmgDie: 'd10', healSab: 1, healDie: 'd10', critSab: 3 },
+            clerigo: { hpBase: 10, hpFor: 12, hitDex: 2, actAgi: 2, slotInt: 0.5, magHitBase: 3, magHitInt: 3, magDmgInt: 3, magDmgDie: 'd10', healSab: 1, healDie: 'd12', critSab: 3 }
+        };
+
+        let systemRules = JSON.parse(JSON.stringify(defaultScalingRules));
+        let rpgData = { currentId: null, list: [], systemRules: null };
+        let character = null;
+        let computed = {};
+
+        const newCharTemplate = {
+            id: 0,
+            isLocked: false,
+            isSubclassLocked: false,
+            name: 'Novo Heroi', class: 'guerreiro', subclass: '',
+            loadout: {
+                mainHand: null, offHand: null,
+                head: null, body: null, legs: null, hands: null,
+                acc1: null, acc2: null, acc3: null
+            },
+            xp: 0, level: 1,
+            modifiers: { FOR: 0, DEX: 0, AGI: 0, INT: 0, SAB: 0 },
+            dbSkills: [],
+            dbSpells: [],
+            dbPericias: [],
+            dbItems: [], // BIBLIOTECA DE ITENS
+            equippedSkills: [],
+            equippedSpells: [],
+            learnedPericias: [],
+            inventory: [], // ITENS NA MOCHILA
+            timeline: []
+        };
+
+        window.onload = function () {
+            const stored = localStorage.getItem('rpgSystemData');
+            if (stored) {
+                try { 
+                    rpgData = JSON.parse(stored); 
+                    if (rpgData.systemRules) systemRules = rpgData.systemRules;
+                    else systemRules = JSON.parse(JSON.stringify(defaultScalingRules));
+                } catch (e) { }
+            }
+
+            if (rpgData.currentId && rpgData.list.length > 0) {
+                const found = rpgData.list.find(c => c.id === rpgData.currentId);
+                if (found) {
+                    character = JSON.parse(JSON.stringify(found));
+                    // Correções de estrutura
+                    if(!character.dbPericias) character.dbPericias = [];
+                    if(!character.learnedPericias) character.learnedPericias = [];
+                    if(!character.dbItems) character.dbItems = [];
+                    showView('character');
+                    updateAll();
+                } else showView('files');
+            } else showView('files');
+            renderFileList();
+            loadClassRulesUI();
+        };
+
+        function saveAllData() {
+            rpgData.systemRules = systemRules;
+            localStorage.setItem('rpgSystemData', JSON.stringify(rpgData));
+        }
+
+        function saveData() {
+            if (!character) return;
+            character.name = document.getElementById('charName').value;
+            if (!character.isLocked) character.class = document.getElementById('charClass').value;
+            character.subclass = document.getElementById('charSubClass').value;
+
+            attributes.forEach(a => {
+                const el = document.getElementById('mod_' + a);
+                if (el) character.modifiers[a] = parseInt(el.value) || 0;
+            });
+
+            const idx = rpgData.list.findIndex(c => c.id === character.id);
+            if (idx >= 0) rpgData.list[idx] = JSON.parse(JSON.stringify(character));
+            else rpgData.list.push(JSON.parse(JSON.stringify(character)));
+
+            saveAllData();
+            updateAll();
+        }
+
+        // --- SISTEMAS DE ITENS (NOVO) ---
+
+        // 1. Cadastrar Item na Biblioteca
+        function registerItemDb() {
+            const name = document.getElementById('invItemName').value;
+            const price = document.getElementById('invItemPrice').value;
+            const w = parseFloat(document.getElementById('invItemWeight').value);
+            const desc = document.getElementById('invItemDesc').value;
+            const editId = parseFloat(document.getElementById('editItemDbId').value);
+
+            if (!name) return alert("Nome é obrigatório");
+
+            const newItem = { id: (editId !== -1) ? editId : Date.now() + Math.random(), name, price, weight: w || 0, desc };
+            
+            if (editId !== -1) {
+                const idx = character.dbItems.findIndex(i => i.id === editId);
+                if(idx !== -1) character.dbItems[idx] = newItem;
+                cancelEdit('itemDb');
+            } else {
+                character.dbItems.push(newItem);
+                document.getElementById('invItemName').value = '';
+                document.getElementById('invItemPrice').value = '';
+                document.getElementById('invItemWeight').value = '';
+                document.getElementById('invItemDesc').value = '';
+            }
+            saveData();
+        }
+
+        // 2. Cadastrar Equipamento na Biblioteca
+        function saveEquipToDb() {
+            const id = parseFloat(document.getElementById('editEquipId').value);
+            const type = document.getElementById('eqType').value;
+            const name = document.getElementById('eqName').value;
+            if (!name) return alert("Nome é obrigatório!");
+            
+            const newItem = {
+                id: (id !== -1) ? id : Date.now() + Math.random(), 
+                name: name, type: type,
+                price: document.getElementById('eqPrice').value,
+                weight: parseFloat(document.getElementById('eqWeight').value) || 0,
+                modifier: document.getElementById('eqMod').value,
+                desc: document.getElementById('eqDesc').value,
+                damage: (type.includes('Arma')) ? document.getElementById('eqDmg').value : null,
+                defense: (['Elmo', 'Peitoral', 'Bota', 'Luva', 'Escudo'].includes(type)) ? document.getElementById('eqDef').value : null,
+                attrBonus: document.getElementById('eqAttrType').value || null,
+                attrValue: document.getElementById('eqAttrVal').value || null
+            };
+
+            if (id !== -1) {
+                 const idx = character.dbItems.findIndex(i => i.id === id);
+                 if(idx !== -1) character.dbItems[idx] = newItem;
+            } else {
+                character.dbItems.push(newItem);
+            }
+            saveData();
+            closeEquipModal();
+        }
+
+        // 3. Renderizar Biblioteca com Busca
+        function renderItemLibrary() {
+            const div = document.getElementById('itemLibraryList');
+            div.innerHTML = '';
+            const filter = document.getElementById('searchItemDb').value.toLowerCase();
+            
+            let list = character.dbItems;
+            if (filter) list = list.filter(i => i.name.toLowerCase().includes(filter) || (i.type && i.type.toLowerCase().includes(filter)));
+
+            if (list.length === 0) { div.innerHTML = '<em style="color:#666">Nenhum item encontrado.</em>'; return; }
+
+            list.forEach(item => {
+                const descHtml = item.desc ? `<div style="font-size:0.8rem; color:#aaa; font-style:italic;">${item.desc}</div>` : '';
+                let extraInfo = "";
+                if (item.type) {
+                    extraInfo += `<span style="color:var(--accent-color); font-size:0.85rem; margin-left:5px;">[${item.type}]</span>`;
+                    if (item.damage) extraInfo += ` <span style="color:#dba; font-size:0.85rem;">Dano: ${item.damage}</span>`;
+                    if (item.defense) extraInfo += ` <span style="color:#abd; font-size:0.85rem;">Def: ${item.defense}</span>`;
+                }
+
+                div.innerHTML += `
+                <div class="inv-item" style="display:block;">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <div><strong>${item.name}</strong> ${extraInfo} <small>(${item.weight}kg)</small> | <span style="color:var(--gold)">${item.price}</span></div>
+                        <div class="item-actions">
+                            <button class="btn-success" style="width:auto; padding:5px 8px;" onclick="addToBag(${item.id})">Pegar</button>
+                            <button class="btn-info" style="width:auto; padding:5px 8px;" onclick="editLibraryItem(${item.id})">Edit</button>
+                            <button class="btn-danger" style="width:auto; padding:5px 8px;" onclick="delLibraryItem(${item.id})">X</button>
+                        </div>
+                    </div>
+                    ${descHtml}
+                </div>`;
+            });
+        }
+
+        function addToBag(dbId) {
+            const item = character.dbItems.find(i => i.id === dbId);
+            if (!item) return;
+            // Cria uma cópia com novo ID único para o inventário
+            const copy = JSON.parse(JSON.stringify(item));
+            copy.id = Date.now() + Math.random(); 
+            character.inventory.push(copy);
+            saveData();
+            alert(`${item.name} adicionado à mochila!`);
+        }
+
+        function editLibraryItem(id) {
+            const item = character.dbItems.find(i => i.id === id);
+            if(!item) return;
+            if (item.type) { openEquipModal(id); return; }
+            
+            document.getElementById('invItemName').value = item.name;
+            document.getElementById('invItemPrice').value = item.price;
+            document.getElementById('invItemWeight').value = item.weight;
+            document.getElementById('invItemDesc').value = item.desc || '';
+            document.getElementById('editItemDbId').value = id;
+            
+            document.getElementById('btnAddItemDb').innerText = "Salvar Alteração";
+            document.getElementById('btnCancelEditItem').style.display = 'inline-block';
+            window.scrollTo(0, document.getElementById('view-items-db').offsetTop);
+        }
+
+        function delLibraryItem(id) {
+            if(confirm("Apagar da biblioteca? Isso não remove itens que já estão nas mochilas.")) {
+                character.dbItems = character.dbItems.filter(i => i.id !== id);
+                saveData();
+            }
+        }
+
+        // 4. Renderizar Inventário (Apenas lista)
+        function renderInventory() {
+            const div = document.getElementById('inventoryList');
+            let cw = 0;
+            div.innerHTML = character.inventory.length ? '' : '<em style="color:#666">Mochila vazia.</em>';
+            
+            character.inventory.forEach((item, i) => {
+                cw += item.weight;
+                const descHtml = item.desc ? `<div style="font-size:0.8rem; color:#aaa; font-style:italic;">${item.desc}</div>` : '';
+                let extraInfo = "";
+                if (item.type) {
+                    extraInfo += `<span style="color:var(--accent-color); font-size:0.85rem; margin-left:5px;">[${item.type}]</span>`;
+                    if (item.damage) extraInfo += ` <span style="color:#dba; font-size:0.85rem;">Dano: ${item.damage}</span>`;
+                }
+                
+                let isEquipped = false;
+                if(character.loadout) Object.values(character.loadout).forEach(v => { if(v == item.id) isEquipped = true; });
+                const eqBadge = isEquipped ? '<span style="color:#0f0; font-weight:bold;">(E)</span> ' : '';
+
+                div.innerHTML += `
+                <div class="inv-item" style="display:block; border-left: ${isEquipped ? '4px solid var(--success)' : '1px solid #333'}">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <div>${eqBadge}<strong>${item.name}</strong> ${extraInfo} <small>(${item.weight}kg)</small></div>
+                        <button class="btn-danger" style="width:auto; padding:5px 8px;" onclick="delInv(${i})">Jogar Fora</button>
+                    </div>
+                    ${descHtml}
+                </div>`;
+            });
+            const max = computed.loadMax || 20;
+            document.getElementById('loadText').innerText = `${cw.toFixed(1)} / ${max} kg`;
+            document.getElementById('loadBar').style.width = Math.min((cw / max) * 100, 100) + '%';
+            document.getElementById('loadBar').style.background = cw > max ? 'var(--danger)' : 'var(--info)';
+        }
+
+        function delInv(i) {
+            if(confirm("Remover item da mochila?")) { 
+                // Se estiver equipado, desequipar
+                const itemId = character.inventory[i].id;
+                if(character.loadout) {
+                    Object.keys(character.loadout).forEach(k => {
+                        if(character.loadout[k] == itemId) character.loadout[k] = null;
+                    });
+                }
+                character.inventory.splice(i, 1); 
+                saveData(); 
+            }
+        }
+
+        // --- SISTEMAS DE PERICIAS, SKILLS, SPELLS (Mantidos mas adaptados para EDIT) ---
+        function registerPericia() {
+            const name = document.getElementById('regPerName').value;
+            const how = document.getElementById('regPerHow').value;
+            const desc = document.getElementById('regPerDesc').value;
+            const editId = parseInt(document.getElementById('editPerId').value);
+            if(!name) return alert("Nome obrigatório!");
+            const newPer = { id: (editId !== -1) ? editId : Date.now(), name, how, desc };
+            if(!character.dbPericias) character.dbPericias = [];
+            if(editId !== -1) {
+                const idx = character.dbPericias.findIndex(p => p.id === editId);
+                if(idx !== -1) character.dbPericias[idx] = newPer;
+                cancelEdit('pericia');
+            } else {
+                character.dbPericias.push(newPer);
+                document.getElementById('regPerName').value = ""; document.getElementById('regPerHow').value = ""; document.getElementById('regPerDesc').value = "";
+            }
+            saveData();
+        }
+        function editPericia(id) {
+             const p = character.dbPericias.find(x => x.id === id); if(!p) return;
+             document.getElementById('regPerName').value = p.name; document.getElementById('regPerHow').value = p.how; document.getElementById('regPerDesc').value = p.desc; document.getElementById('editPerId').value = p.id;
+             document.getElementById('btnAddPericia').innerText = "Salvar Alteração"; document.getElementById('btnCancelEditPericia').style.display = 'inline-block';
+             window.scrollTo(0, document.getElementById('view-pericias').offsetTop);
+        }
+
+        function registerSkill() {
+            const name = document.getElementById('regSkillName').value;
+            const editId = parseInt(document.getElementById('editSkillId').value);
+            if (!name) return;
+            const newSkill = { id: (editId !== -1) ? editId : Date.now(), name, cls: document.getElementById('regSkillClass').value, uses: document.getElementById('regSkillUses').value, lvl: parseInt(document.getElementById('regSkillLvl').value) || 1, desc: document.getElementById('regSkillDesc').value };
+            if (editId !== -1) { const idx = character.dbSkills.findIndex(s => s.id === editId); if (idx !== -1) character.dbSkills[idx] = newSkill; cancelEdit('skill'); } 
+            else { character.dbSkills.push(newSkill); document.getElementById('regSkillName').value = ''; document.getElementById('regSkillDesc').value = ''; }
+            saveData();
+        }
+        function editSkill(id) {
+            const s = character.dbSkills.find(x => x.id === id); if (!s) return;
+            document.getElementById('regSkillName').value = s.name; document.getElementById('regSkillClass').value = s.cls; document.getElementById('regSkillUses').value = s.uses; document.getElementById('regSkillLvl').value = s.lvl; document.getElementById('regSkillDesc').value = s.desc || ''; document.getElementById('editSkillId').value = s.id;
+            document.getElementById('btnAddSkill').innerText = "Salvar Alteração"; document.getElementById('btnCancelEditSkill').style.display = 'inline-block';
+            window.scrollTo(0, document.getElementById('view-skills').offsetTop);
+        }
+
+        function registerSpell() {
+            const name = document.getElementById('regSpellName').value;
+            const editId = parseInt(document.getElementById('editSpellId').value);
+            if (!name) return alert("Nome da magia é obrigatório!");
+            const newSpell = { id: (editId !== -1) ? editId : Date.now(), name, level: document.getElementById('regSpellLevel').value, slots: document.getElementById('regSpellSlots').value, effect: document.getElementById('regSpellEffect').value, usesQty: document.getElementById('regSpellUsesQty').value, freq: document.getElementById('regSpellFreq').value, type: document.getElementById('regSpellType').value, desc: document.getElementById('regSpellDesc').value, cls: document.getElementById('regSpellClass').value };
+            if (editId !== -1) { const idx = character.dbSpells.findIndex(s => s.id === editId); if (idx !== -1) character.dbSpells[idx] = newSpell; cancelEdit('spell'); } 
+            else { character.dbSpells.push(newSpell); document.getElementById('regSpellName').value = ''; document.getElementById('regSpellDesc').value = ''; }
+            saveData();
+        }
+        function editSpell(id) {
+            const s = character.dbSpells.find(x => x.id === id); if (!s) return;
+            document.getElementById('regSpellName').value = s.name; document.getElementById('regSpellLevel').value = s.level; document.getElementById('regSpellSlots').value = s.slots; document.getElementById('regSpellEffect').value = s.effect || ''; document.getElementById('regSpellUsesQty').value = s.usesQty || ''; document.getElementById('regSpellFreq').value = s.freq || 'Livre'; document.getElementById('regSpellType').value = s.type || 'Comum'; document.getElementById('regSpellDesc').value = s.desc || ''; document.getElementById('regSpellClass').value = s.cls || 'Universal'; document.getElementById('editSpellId').value = s.id;
+            document.getElementById('btnAddSpell').innerText = "Salvar Alteração"; document.getElementById('btnCancelEditSpell').style.display = 'inline-block';
+            window.scrollTo(0, document.getElementById('view-spells').offsetTop);
+        }
+
+        function cancelEdit(type) {
+            if (type === 'itemDb') {
+                document.getElementById('editItemDbId').value = -1;
+                document.getElementById('btnAddItemDb').innerText = "Salvar na Biblioteca";
+                document.getElementById('btnCancelEditItem').style.display = 'none';
+                document.getElementById('invItemName').value = ''; document.getElementById('invItemPrice').value = ''; document.getElementById('invItemWeight').value = ''; document.getElementById('invItemDesc').value = '';
+            } else if (type === 'skill') {
+                document.getElementById('editSkillId').value = -1; document.getElementById('btnAddSkill').innerText = "Cadastrar"; document.getElementById('btnCancelEditSkill').style.display = 'none';
+                document.getElementById('regSkillName').value = ''; document.getElementById('regSkillUses').value = ''; document.getElementById('regSkillLvl').value = ''; document.getElementById('regSkillDesc').value = '';
+            } else if (type === 'spell') {
+                document.getElementById('editSpellId').value = -1; document.getElementById('btnAddSpell').innerText = "Adicionar"; document.getElementById('btnCancelEditSpell').style.display = 'none';
+                document.getElementById('regSpellName').value = ''; document.getElementById('regSpellSlots').value = ''; document.getElementById('regSpellEffect').value = ''; document.getElementById('regSpellDesc').value = '';
+            } else if (type === 'pericia') {
+                document.getElementById('editPerId').value = -1; document.getElementById('btnAddPericia').innerText = "Salvar Perícia"; document.getElementById('btnCancelEditPericia').style.display = 'none';
+                document.getElementById('regPerName').value = ""; document.getElementById('regPerHow').value = ""; document.getElementById('regPerDesc').value = "";
+            }
+        }
+
+        // --- RENDERIZADORES GERAIS ---
+        function renderPericiasUI() {
+            const div = document.getElementById('dbPericiasList'); div.innerHTML = '';
+            if(!character.dbPericias || character.dbPericias.length === 0) { div.innerHTML = '<em style="color:#666">Nenhuma perícia cadastrada.</em>'; return; }
+            character.dbPericias.forEach(p => {
+                const learned = (character.learnedPericias || []).includes(p.id);
+                const btnHtml = learned ? `<button class="btn-danger" style="width:auto; padding:5px;" onclick="forgetPericia(${p.id})">Esquecer</button>` : `<button class="btn-success" style="width:auto; padding:5px;" onclick="learnPericia(${p.id})">Aprender</button>`;
+                div.innerHTML += `<div class="detailed-item"><div class="detailed-header"><strong style="color:var(--accent-color)">${p.name}</strong><div style="display:flex; gap:5px;">${btnHtml}<button class="btn-info" style="width:auto; padding:5px;" onclick="editPericia(${p.id})">✎</button><button class="btn-danger" style="width:auto; padding:5px;" onclick="delPericiaDb(${p.id})">X</button></div></div><div class="detailed-body"><div class="detailed-meta">Método: ${p.how}</div><div>${p.desc}</div></div></div>`;
+            });
+        }
+        function learnPericia(id) { if(!character.learnedPericias) character.learnedPericias = []; if(!character.learnedPericias.includes(id)) { character.learnedPericias.push(id); saveData(); } }
+        function forgetPericia(id) { if(!character.learnedPericias) return; character.learnedPericias = character.learnedPericias.filter(x => x !== id); saveData(); }
+        function delPericiaDb(id) { if(confirm("Deletar perícia permanentemente?")) { character.dbPericias = character.dbPericias.filter(x => x.id !== id); forgetPericia(id); saveData(); } }
+
+        function renderDatabases() {
+            const skFilter = document.getElementById('filterSkillClass') ? document.getElementById('filterSkillClass').value : "Todas";
+            const dbSk = document.getElementById('dbSkillsList');
+            let skList = character.dbSkills;
+            if (skFilter !== "Todas") skList = skList.filter(s => s.cls === skFilter || s.cls === "Qualquer");
+            dbSk.innerHTML = skList.map((s) => {
+                const desc = s.desc ? `<div style="font-size:0.8rem; color:#aaa; margin-top:2px;">${s.desc}</div>` : '';
+                return `<div class="inv-item" style="display:block;"><div style="display:flex; justify-content:space-between;"><small><strong>${s.name}</strong> (${s.cls}) - Nv.${s.lvl}</small><div><button class="btn-info" style="width:auto; padding:2px 5px;" onclick="editSkill(${s.id})">Edit</button><button class="btn-danger" style="width:auto; padding:2px 5px;" onclick="delDb('dbSkills',${s.id})">X</button></div></div>${desc}</div>`;
+            }).join('');
+
+            const dbSp = document.getElementById('dbSpellsList');
+            let spList = character.dbSpells;
+            const fNameEl = document.getElementById('filterSpellName'); if (fNameEl && fNameEl.value) spList = spList.filter(s => s.name.toLowerCase().includes(fNameEl.value.toLowerCase()));
+            const fTypeEl = document.getElementById('filterSpellType'); if (fTypeEl && fTypeEl.value !== "Todos") spList = spList.filter(s => (s.type || 'Comum') === fTypeEl.value);
+            const fLvlEl = document.getElementById('filterSpellLevel'); if (fLvlEl && fLvlEl.value) spList = spList.filter(s => s.level == fLvlEl.value);
+
+            dbSp.innerHTML = spList.map((s) => {
+                const desc = s.desc ? `<div style="font-size:0.8rem; color:#aaa; margin-top:2px;">${s.desc}</div>` : '';
+                let typeClass = 'tag-comum'; const t = (s.type || 'Comum').toLowerCase(); if(t === 'fogo') typeClass = 'tag-fogo'; if(t === 'agua' || t==='água') typeClass = 'tag-agua'; if(t === 'vento') typeClass = 'tag-vento'; if(t === 'divino') typeClass = 'tag-divino'; if(t === 'profano') typeClass = 'tag-profano';
+                return `<div class="inv-item" style="display:block;"><div style="display:flex; justify-content:space-between;"><small><span class="spell-tag ${typeClass}">${s.type || 'Comum'}</span><strong>${s.name}</strong> (C${s.level})</small><div><button class="btn-info" style="width:auto; padding:2px 5px;" onclick="editSpell(${s.id})">Edit</button><button class="btn-danger" style="width:auto; padding:2px 5px;" onclick="delDb('dbSpells',${s.id})">X</button></div></div><div style="font-size:0.8rem; color:#ccc; display:flex; justify-content:space-between; margin-top:2px;"><span>${(s.usesQty ? s.usesQty + 'x ' : '') + (s.freq || 'Livre')}</span><span>${s.effect || s.uses || ''}</span></div>${desc}</div>`;
+            }).join('');
+        }
+
+        // --- CORE FUNCTIONS (Stats, Loadout, etc) ---
+        function getBaseAttr(attr) {
+            const cycle = classCycles[character.class];
+            const cycles = Math.floor(character.level / 4);
+            const rem = character.level % 4;
+            let count = 0; cycle.forEach(a => { if (a === attr) count++; });
+            let total = count * cycles; for (let i = 0; i < rem; i++) if (cycle[i] === attr) total++;
+            if (total > 10) total = 10; return total;
+        }
+
+        function calcStats() {
+            const stats = {}; let eqBonuses = { FOR:0, DEX:0, AGI:0, INT:0, SAB:0 };
+            let spec = { PV:0, MOVE:0, ACT:0, HIT:0, MAGHIT:0, SLOTS:0, HEAL:0, CRIT:0, DMGPHY:0, DMGMAG:0, DEF:0 };
+            if (character.loadout) {
+                const slots = ['mainHand', 'offHand', 'head', 'body', 'hands', 'legs', 'acc1', 'acc2', 'acc3'];
+                slots.forEach(slot => {
+                    const itemId = character.loadout[slot];
+                    if (itemId) {
+                        const item = character.inventory.find(i => i.id == itemId);
+                        if (item && item.attrBonus && item.attrValue) {
+                            const val = parseInt(item.attrValue) || 0;
+                            if (['FOR','DEX','AGI','INT','SAB'].includes(item.attrBonus)) eqBonuses[item.attrBonus] += val;
+                            else if (spec.hasOwnProperty(item.attrBonus)) spec[item.attrBonus] += val;
+                        }
+                    }
+                });
+            }
+            attributes.forEach(a => stats[a] = getBaseAttr(a) + (character.modifiers[a] || 0) + eqBonuses[a]);
+            const r = systemRules[character.class] || defaultScalingRules[character.class];
+            let hp = 20 + (character.level * r.hpBase) + (stats.FOR * r.hpFor) + spec.PV;
+            if (character.subclass === 'alquimista') hp += Math.floor(stats.AGI / 2) * 5; if (character.subclass === 'paladino') hp += stats.INT * 5;
+            const minionRow = document.getElementById('necromancerRow'); if (character.subclass === 'necromante') { minionRow.style.display = 'flex'; document.getElementById('resMinionHP').innerText = character.level * 10; } else minionRow.style.display = 'none';
+
+            let hitMod = Math.floor(stats.DEX / r.hitDex); let hitChance = 50 + (hitMod * 10) + spec.HIT;
+            let crit = Math.floor(stats.SAB / r.critSab) + spec.CRIT;
+            let act = 1 + Math.floor(stats.AGI / r.actAgi) + spec.ACT;
+            let move = 4 + Math.floor(stats.AGI / r.actAgi) + spec.MOVE; if (character.subclass === 'bardo') move += Math.floor(stats.DEX / 2);
+            let slotBonus = (r.slotInt < 1) ? stats.INT * (1 / r.slotInt) : Math.floor(stats.INT / r.slotInt);
+            let slots = 1 + slotBonus + spec.SLOTS; if (character.subclass === 'druida') slots += stats.SAB;
+            let magDice = Math.floor(stats.INT / r.magDmgInt); if (character.class === 'mago') magDice += 1; if (character.subclass === 'druida' || character.subclass === 'necromante') magDice += 1;
+            let magHit = r.magHitBase + Math.floor(stats.INT / r.magHitInt) + spec.MAGHIT;
+            let healDiceCount = Math.floor(stats.SAB / r.healSab); if (character.class === 'clerigo') healDiceCount += 1;
+            let healStr = healDiceCount > 0 ? `+${healDiceCount}${r.healDie}` : "+0"; if (character.subclass === 'paladino') healStr += ` + ${character.level}d10`; if (spec.HEAL > 0) healStr += ` (+${spec.HEAL})`;
+            let eqDef = spec.DEF; let damageHtml = ""; let strength = stats.FOR; let d20Count = Math.floor(strength / 4); let remainder = strength % 4;
+            let naturalDmg = ""; if (d20Count > 0) naturalDmg += `${d20Count}d20`; if (remainder === 1) naturalDmg += (naturalDmg ? "+" : "") + "1d4"; if (remainder === 2) naturalDmg += (naturalDmg ? "+" : "") + "1d8"; if (remainder === 3) naturalDmg += (naturalDmg ? "+" : "") + "1d12"; if (!naturalDmg) naturalDmg = "0";
+
+            let mainItem = null; let offItem = null;
+            if (character.loadout) {
+                const l = character.loadout;
+                const slotsList = ['mainHand', 'offHand', 'head', 'body', 'hands', 'legs', 'acc1', 'acc2', 'acc3'];
+                slotsList.forEach(slot => {
+                    if (l[slot]) {
+                        const item = character.inventory.find(i => i.id == l[slot]);
+                        if (item) {
+                            if (item.defense) eqDef += parseInt(item.defense) || 0;
+                            if (slot === 'mainHand') mainItem = item;
+                            if (slot === 'offHand') offItem = item;
+                        }
+                    }
+                });
+            }
+            let hasWeapon = false; const flatDmgStr = spec.DMGPHY > 0 ? `<span style='color:orange'>+${spec.DMGPHY}</span>` : "";
+            if (mainItem && mainItem.damage) { damageHtml += `<span style="color:#4f4; font-weight:bold;">${mainItem.damage}</span>${flatDmgStr} <small style="color:#888">(Arma)</small>`; hasWeapon = true; }
+            if (offItem && offItem.damage) { if (hasWeapon) damageHtml += " / "; damageHtml += `<span style="color:#4f4; font-weight:bold;">${offItem.damage}</span>${flatDmgStr} <small style="color:#888">(Off)</small>`; hasWeapon = true; }
+            if (!hasWeapon) {
+                if(naturalDmg !== "0") damageHtml = `<span style="color:#aaa">1d4</span> <span style="color:#fff">+</span> <span style="color:#daaa00">${naturalDmg}</span>${flatDmgStr} <small style="color:#888">(Soco+Nat)</small>`;
+                else damageHtml = `<span style="color:#aaa">1d4</span>${flatDmgStr} <small style="color:#888">(Soco)</small>`;
+            } else { if(naturalDmg !== "0") damageHtml += ` <span style="color:#fff">+</span> <span style="color:#daaa00">${naturalDmg}</span> <small style="color:#888">(Natural)</small>`; }
+
+            let maxSkillPoints = character.level * 3; let currentSkillPoints = 0;
+            character.equippedSkills.forEach(id => { const skill = character.dbSkills.find(s => s.id === id); if(skill) currentSkillPoints += (parseInt(skill.lvl) || 1); });
+            let magDmgStr = magDice > 0 ? `${magDice}${r.magDmgDie}` : "0"; if (spec.DMGMAG > 0) magDmgStr += ` (+${spec.DMGMAG})`;
+
+            document.getElementById('resHP').innerText = hp; document.getElementById('resAct').innerText = act; document.getElementById('resMove').innerText = move + 'm'; document.getElementById('resHit').innerText = `${hitChance}% (+${hitMod})`; document.getElementById('resCrit').innerText = crit + '+'; document.getElementById('resMagHit').innerText = '+' + magHit; document.getElementById('resMagDmg').innerText = magDmgStr; document.getElementById('resHeal').innerText = healStr; document.getElementById('resDef').innerText = eqDef; document.getElementById('resPhyDmg').innerHTML = damageHtml;
+            computed = { slotsMax: slots, loadMax: 20 + stats.FOR, maxSkillPoints, currentSkillPoints, eqBonuses };
+        }
+
+        function renderAttributes() {
+            const div = document.getElementById('attributesList'); div.innerHTML = '';
+            let eqBonuses = computed.eqBonuses || { FOR:0, DEX:0, AGI:0, INT:0, SAB:0 };
+            attributes.forEach(a => {
+                const base = getBaseAttr(a); const mod = character.modifiers[a] || 0; const eq = eqBonuses[a] || 0; const total = base + mod + eq;
+                let eqText = ""; if(eq > 0) eqText = `<span style="color:#4f4; font-size:0.9rem; margin-left:5px;">(+${eq})</span>`;
+                div.innerHTML += `<div class="stat-row" style="padding:6px 0;"><span style="font-weight:bold; width:40px;">${a}</span><span style="color:#666; font-size:0.8rem;">(Base ${base})</span><div style="display:flex; align-items:center;"><button class="attr-btn" onclick="modAttr('${a}', -1)">-</button><input type="number" id="mod_${a}" value="${mod}" onchange="saveData()" style="width:50px; text-align:center; margin:0; height:35px; font-weight:bold;"><button class="attr-btn" onclick="modAttr('${a}', 1)">+</button></div><div style="text-align:right; min-width:50px;"><span style="font-weight:bold; color:var(--accent-color); font-size:1.1rem;">= ${total}</span>${eqText}</div></div>`;
+            });
+        }
+        function modAttr(attr, val) { const el = document.getElementById('mod_' + attr); let currentVal = parseInt(el.value) || 0; el.value = currentVal + val; saveData(); }
+
+        function openEquipModal(id) {
+            const modal = document.getElementById('equipModal');
+            document.getElementById('editEquipId').value = id;
+            modal.style.display = 'block';
+
+            if (id === -1) {
+                document.getElementById('eqType').value = 'Arma 1H'; document.getElementById('eqName').value = ''; document.getElementById('eqPrice').value = ''; document.getElementById('eqWeight').value = ''; document.getElementById('eqAttrType').value = ''; document.getElementById('eqAttrVal').value = ''; document.getElementById('eqMod').value = ''; document.getElementById('eqDmg').value = ''; document.getElementById('eqDef').value = ''; document.getElementById('eqDesc').value = '';
+            } else {
+                const item = character.dbItems.find(i => i.id === id);
+                document.getElementById('eqType').value = item.type || 'Arma 1H'; document.getElementById('eqName').value = item.name; document.getElementById('eqPrice').value = item.price; document.getElementById('eqWeight').value = item.weight; document.getElementById('eqAttrType').value = item.attrBonus || ''; document.getElementById('eqAttrVal').value = item.attrValue || ''; document.getElementById('eqMod').value = item.modifier || ''; document.getElementById('eqDmg').value = item.damage || ''; document.getElementById('eqDef').value = item.defense || ''; document.getElementById('eqDesc').value = item.desc || '';
+            }
+            updateEquipFields();
+            modal.scrollIntoView({behavior: "smooth", block: "center"});
+        }
+        function closeEquipModal() { document.getElementById('equipModal').style.display = 'none'; }
+        function updateEquipFields() {
+            const type = document.getElementById('eqType').value;
+            const fDmg = document.getElementById('fieldDmg'); const fDef = document.getElementById('fieldDef');
+            if (type.includes('Arma')) { fDmg.style.display = 'block'; fDef.style.display = 'none'; } 
+            else if (['Elmo', 'Peitoral', 'Bota', 'Luva', 'Escudo'].includes(type)) { fDmg.style.display = 'none'; fDef.style.display = 'block'; } 
+            else { fDmg.style.display = 'none'; fDef.style.display = 'none'; }
+        }
+
+        function renderEquipUI() {
+            const skSel = document.getElementById('selectSkillToEquip'); skSel.innerHTML = '<option value="">-- Selecione --</option>';
+            character.dbSkills.forEach(s => { const matchClass = s.cls === 'Qualquer' || (s.cls || '').toLowerCase() === character.class || (s.cls || '').toLowerCase() === character.subclass; if (matchClass && !character.equippedSkills.includes(s.id)) { const opt = document.createElement('option'); opt.value = s.id; opt.innerText = `${s.name} [Nível ${s.lvl}]`; skSel.appendChild(opt); } });
+            const spSel = document.getElementById('selectSpellToEquip'); spSel.innerHTML = '<option value="">-- Selecione --</option>';
+            character.dbSpells.forEach(s => { if (!character.equippedSpells.includes(s.id)) { const opt = document.createElement('option'); opt.value = s.id; opt.innerText = `${s.name} [Círculo ${s.level}] (Custo: ${s.slots})`; spSel.appendChild(opt); } });
+            document.getElementById('skillPointsDisplay').innerText = `${computed.currentSkillPoints} / ${computed.maxSkillPoints}`;
+
+            const listSk = document.getElementById('equippedSkillsList'); listSk.innerHTML = '';
+            character.equippedSkills.forEach((id, idx) => { const s = character.dbSkills.find(x => x.id === id); if (s) { listSk.innerHTML += `<div class="detailed-item"><div class="detailed-header"><strong style="color:var(--accent-color)">${s.name}</strong><div style="display:flex; align-items:center; gap:10px;"><span style="font-weight:bold; color:#fff;">Nível ${s.lvl}</span><button class="btn-danger" style="width:auto; padding:2px 8px; margin:0;" onclick="unequip('equippedSkills',${idx})">X</button></div></div><div class="detailed-body"><div class="detailed-meta">${s.cls} | ${s.uses}</div><div>${s.desc}</div></div></div>`; } });
+            const listSp = document.getElementById('equippedSpellsList'); listSp.innerHTML = ''; let used = 0;
+            character.equippedSpells.forEach((id, idx) => { const s = character.dbSpells.find(x => x.id === id); if (s) { used += parseInt(s.slots || 1); let useStr = ""; if(s.freq && s.freq !== 'Livre') useStr = (s.usesQty ? `${s.usesQty}x ` : "") + s.freq; else useStr = "Livre"; listSp.innerHTML += `<div class="detailed-item"><div class="detailed-header"><strong style="color:var(--info)">${s.name}</strong><div style="display:flex; align-items:center; gap:10px;"><span style="font-weight:bold; color:#fff;">Custo ${s.slots}</span><button class="btn-danger" style="width:auto; padding:2px 8px; margin:0;" onclick="unequip('equippedSpells',${idx})">X</button></div></div><div class="detailed-body"><div class="detailed-meta">Círculo ${s.level} | ${s.type || 'Comum'} | ${useStr}</div><div style="font-style:italic; color:#aaa; margin-bottom:5px;">${s.effect || s.uses || ''}</div><div>${s.desc}</div></div></div>`; } });
+            document.getElementById('slotCounter').innerText = `${used} / ${computed.slotsMax || 1}`; document.getElementById('resSlots').innerText = `${used} / ${computed.slotsMax || 1}`;
+        }
+
+        function delDb(arr, id) { if (confirm("Apagar permanentemente?")) { if (arr === 'dbSkills') character.equippedSkills = character.equippedSkills.filter(x => x !== id); if (arr === 'dbSpells') character.equippedSpells = character.equippedSpells.filter(x => x !== id); const idx = character[arr].findIndex(x => x.id === id); if (idx !== -1) character[arr].splice(idx, 1); saveData(); } }
+
+        function updateAll() {
+            if (!character) return;
+            if (!character.timeline) character.timeline = [];
+            document.getElementById('charName').value = character.name;
+            document.getElementById('charClass').value = character.class;
+            const classSelect = document.getElementById('charClass'); const lockBtn = document.getElementById('btnLock'); const unlockBtn = document.getElementById('btnUnlock');
+            if (character.isLocked) { classSelect.disabled = true; lockBtn.style.display = 'none'; unlockBtn.style.display = 'block'; } else { classSelect.disabled = false; lockBtn.style.display = 'block'; unlockBtn.style.display = 'none'; }
+            character.level = Math.floor(character.xp / 1000) + 1;
+            document.getElementById('displayLevel').innerText = character.level; document.getElementById('xpText').innerText = character.xp + " XP";
+            const subDiv = document.getElementById('subclassContainer'); const subSel = document.getElementById('charSubClass');
+            if (character.level >= 5) {
+                subDiv.style.display = 'block';
+                Array.from(subSel.options).forEach(opt => { if (opt.classList.contains('dynamic-opt')) subSel.removeChild(opt); });
+                let exists = false; for (let i = 0; i < subSel.options.length; i++) if (subSel.options[i].value === character.class) exists = true;
+                if (!exists) { const opt = document.createElement('option'); opt.value = character.class; opt.innerText = character.class.charAt(0).toUpperCase() + character.class.slice(1) + " (Principal)"; opt.className = 'dynamic-opt'; subSel.appendChild(opt); }
+                subSel.value = character.subclass;
+                const btnLockS = document.getElementById('btnLockSub'); const btnUnlockS = document.getElementById('btnUnlockSub');
+                if (character.isSubclassLocked) { subSel.disabled = true; btnLockS.style.display = 'none'; btnUnlockS.style.display = 'block'; } else { subSel.disabled = false; btnLockS.style.display = 'block'; btnUnlockS.style.display = 'none'; }
+            } else { subDiv.style.display = 'none'; character.subclass = ''; }
+
+            calcStats();
+            renderAttributes();
+            renderInventory(); // Agora só mostra o que tem
+            renderItemLibrary(); // Nova função
+            renderEquipUI();
+            renderDatabases();
+            renderPericiasUI(); 
+            renderTimeline();
+            renderEquipModifiers();
+            renderLearnedPericias();
+        }
+
+        // --- Configs & Loaders ---
+        function createNewChar() { const newChar = JSON.parse(JSON.stringify(newCharTemplate)); newChar.id = Date.now(); rpgData.list.push(newChar); loadChar(newChar.id); }
+        function loadChar(id) { const found = rpgData.list.find(c => c.id === id); if (found) { rpgData.currentId = id; character = JSON.parse(JSON.stringify(found)); if(!character.dbPericias) character.dbPericias = []; if(!character.learnedPericias) character.learnedPericias = []; if(!character.dbItems) character.dbItems = []; saveAllData(); showView('character'); updateAll(); } }
+        function deleteCharacter() { if(!character) return; if(confirm("Deletar permanentemente?")) { rpgData.list = rpgData.list.filter(c => c.id !== character.id); rpgData.currentId = null; character = null; saveAllData(); showView('files'); renderFileList(); } }
+        function deleteChar(id, e) { e.stopPropagation(); if (confirm("Deletar?")) { rpgData.list = rpgData.list.filter(c => c.id !== id); if (rpgData.currentId === id) { rpgData.currentId = null; character = null; } saveAllData(); renderFileList(); } }
+        function renderFileList() {
+            const div = document.getElementById('fileList'); div.innerHTML = ''; if (rpgData.list.length === 0) div.innerHTML = '<em style="color:#666">Nenhum personagem criado.</em>';
+            rpgData.list.forEach(c => {
+                const el = document.createElement('div'); el.className = 'section'; el.style.marginBottom = '0'; el.style.cursor = 'pointer'; el.style.display = 'flex'; el.style.justifyContent = 'space-between'; el.style.alignItems = 'center'; el.onclick = () => loadChar(c.id);
+                el.innerHTML = `<div><strong style="color:var(--accent-color); font-size:1.1rem;">${c.name}</strong><div style="font-size:0.9rem; color:#888;">Nível ${Math.floor(c.xp / 1000) + 1} ${c.class}</div></div><button class="btn-danger" style="width:auto;" onclick="deleteChar(${c.id}, event)">🗑️</button>`; div.appendChild(el);
+            });
+        }
+        function exportAllData() { const t = document.getElementById('importAllArea'); t.value = JSON.stringify(rpgData); t.select(); document.execCommand('copy'); alert("Backup de TODOS os personagens copiado!"); }
+        function importAllData() { try { const json = document.getElementById('importAllArea').value; if (!json) return; const data = JSON.parse(json); if (data.list && Array.isArray(data.list)) { if (confirm("Isso irá SOBRESCREVER todos os dados. Continuar?")) { rpgData = data; if(rpgData.systemRules) systemRules = rpgData.systemRules; character = null; rpgData.currentId = null; saveAllData(); renderFileList(); alert("Importado!"); } } } catch (e) { alert("Erro JSON"); } }
+        function lockCharacter() { if (confirm("Travar classe?")) { character.isLocked = true; saveData(); } }
+        function unlockCharacter() { if (confirm("Destravar?")) { character.isLocked = false; saveData(); } }
+        function changeClass() {
+            if (character.isLocked) return;
+            const newClass = document.getElementById('charClass').value; const oldClass = character.class; character.class = newClass;
+            if (newClass !== oldClass) {
+                const validEquipped = []; character.equippedSkills.forEach(id => { const skill = character.dbSkills.find(s => s.id === id); if (skill) { const req = (skill.cls || '').toLowerCase(); if (req === 'qualquer' || req === newClass || req === character.subclass) validEquipped.push(id); } });
+                if (validEquipped.length < character.equippedSkills.length) alert("Habilidades de outra classe foram removidas."); character.equippedSkills = validEquipped;
+            } saveData();
+        }
+        function lockSubclass() { if (!character.subclass) return alert("Selecione subclasse!"); if (confirm("Travar?")) { character.isSubclassLocked = true; saveData(); } }
+        function unlockSubclass() { if (confirm("Destravar?")) { character.isSubclassLocked = false; saveData(); } }
+
+        function renderEquipModifiers() {
+            const div = document.getElementById('equipModifiersList'); div.innerHTML = ''; let hasMod = false;
+            if (character.loadout) { const slots = ['mainHand', 'offHand', 'head', 'body', 'hands', 'legs', 'acc1', 'acc2', 'acc3']; slots.forEach(slot => { const itemId = character.loadout[slot]; if (itemId) { const item = character.inventory.find(i => i.id == itemId); if (item && item.modifier && item.modifier.trim() !== "") { hasMod = true; div.innerHTML += `<div class="stat-row"><span style="color:var(--gold);">${item.modifier}</span><small style="color:#888;">(${item.name})</small></div>`; } } }); }
+            if (!hasMod) div.innerHTML = '<em style="color:#666">Nenhum modificador ativo.</em>';
+        }
+        function renderLearnedPericias() { const div = document.getElementById('learnedPericiasList'); div.innerHTML = ''; if(!character.learnedPericias || character.learnedPericias.length === 0) { div.innerHTML = '<em style="color:#666">Nenhuma perícia aprendida.</em>'; return; } character.learnedPericias.forEach(id => { const p = character.dbPericias.find(x => x.id === id); if(p) { div.innerHTML += `<div class="detailed-item"><div class="detailed-header"><strong style="color:var(--accent-color)">${p.name}</strong></div><div class="detailed-body"><div class="detailed-meta">${p.how}</div><div>${p.desc}</div></div></div>`; } }); }
+        
+        function equipSkill() { const id = parseInt(document.getElementById('selectSkillToEquip').value); if (!id) return; const skill = character.dbSkills.find(s => s.id === id); if(!skill) return; const cost = parseInt(skill.lvl) || 1; const remaining = computed.maxSkillPoints - computed.currentSkillPoints; if (cost > remaining) return alert(`Pontos insuficientes!`); character.equippedSkills.push(id); saveData(); }
+        function equipSpell() { const id = parseInt(document.getElementById('selectSpellToEquip').value); if (!id) return; const s = character.dbSpells.find(x => x.id === id); let used = 0; character.equippedSpells.forEach(eid => { const sp = character.dbSpells.find(y => y.id === eid); if (sp) used += parseInt(sp.slots || 1); }); if ((used + parseInt(s.slots || 1)) > (computed.slotsMax || 1)) return alert("Slots insuficientes!"); character.equippedSpells.push(id); saveData(); }
+        function unequip(arr, i) { character[arr].splice(i, 1); saveData(); }
+        
+        function addNote() { const day = document.getElementById('noteDay').value; const text = document.getElementById('noteText').value; if (!day || !text) return alert("Preencha Dia e Texto!"); character.timeline.push({ id: Date.now(), day: parseInt(day), text: text }); character.timeline.sort((a, b) => b.day - a.day); document.getElementById('noteText').value = ''; saveData(); }
+        function renderTimeline() { const div = document.getElementById('timelineList'); if (!character.timeline || character.timeline.length === 0) { div.innerHTML = '<em style="color:#666">Vazio.</em>'; return; } div.innerHTML = character.timeline.map((note, i) => `<div style="background:rgba(0,0,0,0.2); padding:10px; border-left:2px solid var(--accent-color); margin-bottom:10px; position:relative;"><div style="font-weight:bold; color:var(--accent-color); margin-bottom:5px;">Dia ${note.day}</div><div style="white-space: pre-wrap; font-size:0.95rem;">${note.text}</div><button class="btn-danger" style="position:absolute; top:5px; right:5px; width:auto; padding:2px 6px; font-size:0.8rem;" onclick="delNote(${i})">X</button></div>`).join(''); }
+        function delNote(i) { if (confirm("Apagar?")) { character.timeline.splice(i, 1); saveData(); } }
+
+        function openLoadoutModal() {
+            const modal = document.getElementById('loadoutModal'); modal.style.display = 'block';
+            populateSlotSelect('slot_mainHand', ['Arma 1H', 'Arma 2H']); populateSlotSelect('slot_offHand', ['Arma 1H', 'Escudo']); populateSlotSelect('slot_head', ['Elmo']); populateSlotSelect('slot_body', ['Peitoral']); populateSlotSelect('slot_hands', ['Luva']); populateSlotSelect('slot_legs', ['Bota']);
+            const accTypes = ['Anel', 'Colar', 'Manto']; populateSlotSelect('slot_acc1', accTypes); populateSlotSelect('slot_acc2', accTypes); populateSlotSelect('slot_acc3', accTypes);
+            if (!character.loadout) character.loadout = {}; const l = character.loadout;
+            setVal('slot_mainHand', l.mainHand); setVal('slot_offHand', l.offHand); setVal('slot_head', l.head); setVal('slot_body', l.body); setVal('slot_hands', l.hands); setVal('slot_legs', l.legs); setVal('slot_acc1', l.acc1); setVal('slot_acc2', l.acc2); setVal('slot_acc3', l.acc3);
+            updateLoadoutUI('init');
+        }
+        function populateSlotSelect(id, types) {
+            const sel = document.getElementById(id); sel.innerHTML = '<option value="">(Vazio)</option>'; const currentLoadout = character.loadout || {};
+            character.inventory.forEach(item => { if (item.type && types.includes(item.type)) { let isEquippedElsewhere = false; Object.keys(currentLoadout).forEach(key => { if (currentLoadout[key] == item.id) isEquippedElsewhere = true; }); const opt = document.createElement('option'); opt.value = item.id; opt.innerText = `${item.name} ${isEquippedElsewhere ? '(Em uso)' : ''}`; if(isEquippedElsewhere) opt.style.color = "#aaa"; sel.appendChild(opt); } });
+        }
+        function setVal(id, val) { const el = document.getElementById(id); if (val) { if (character.inventory.find(i => i.id == val)) el.value = val; else el.value = ""; } else el.value = ""; }
+        function updateLoadoutUI(source) { const main = document.getElementById('slot_mainHand'); const off = document.getElementById('slot_offHand'); const mainId = main.value; if (mainId) { const item = character.inventory.find(i => i.id == mainId); if (item && item.type === 'Arma 2H') { off.value = ""; off.disabled = true; } else { off.disabled = false; } } else { off.disabled = false; } }
+        function saveLoadout() {
+            const l = character.loadout || {};
+            l.mainHand = document.getElementById('slot_mainHand').value || null; l.offHand = document.getElementById('slot_offHand').value || null;
+            l.head = document.getElementById('slot_head').value || null; l.body = document.getElementById('slot_body').value || null; l.hands = document.getElementById('slot_hands').value || null; l.legs = document.getElementById('slot_legs').value || null;
+            l.acc1 = document.getElementById('slot_acc1').value || null; l.acc2 = document.getElementById('slot_acc2').value || null; l.acc3 = document.getElementById('slot_acc3').value || null;
+            const accIds = [l.acc1, l.acc2, l.acc3].filter(id => id); const uniqueIds = new Set(accIds); if (uniqueIds.size !== accIds.length) return alert("Item repetido nos acessórios!");
+            let mantos = 0; let colares = 0; for (let id of accIds) { const it = character.inventory.find(x => x.id == id); if (it) { if (it.type === 'Manto') mantos++; if (it.type === 'Colar') colares++; } } if (mantos > 1 || colares > 1) return alert("Limite de 1 Manto e 1 Colar!");
+            character.loadout = l; saveData(); closeLoadoutModal();
+        }
+        function closeLoadoutModal() { document.getElementById('loadoutModal').style.display = 'none'; }
+        
+        function addXP() { const v = parseInt(document.getElementById('xpInput').value); if (v) { character.xp += v; document.getElementById('xpInput').value = ''; saveData(); } }
+        function showView(v) { document.querySelectorAll('.view-section').forEach(e => e.classList.remove('active')); document.getElementById('view-' + v).classList.add('active'); document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active')); const btns = document.querySelectorAll('.nav-btn'); for (let btn of btns) { if (btn.onclick.toString().includes(v)) btn.classList.add('active'); } if (v === 'files') renderFileList(); }
+        function exportData() { const t = document.getElementById('ioData'); t.value = JSON.stringify(character); t.select(); document.execCommand('copy'); alert("Copiado!"); }
+        function importData() { try { const imported = JSON.parse(document.getElementById('ioData').value); if (imported.name && imported.modifiers) { imported.id = character.id; character = imported; saveData(); alert("Carregado!"); } else { alert("JSON Inválido"); } } catch (e) { alert("Erro"); } }
+        function loadClassRulesUI() { const cls = document.getElementById('configClassSelect').value; const container = document.getElementById('classRulesInputs'); container.innerHTML = ''; const rules = systemRules[cls] || defaultScalingRules[cls]; for (const key in rules) { const val = rules[key]; const div = document.createElement('div'); const inputHtml = key.includes('Die') ? `<input type="text" class="rule-input" id="rule_${key}" value="${val}">` : `<input type="number" step="0.1" class="rule-input" id="rule_${key}" value="${val}">`; div.innerHTML = `<span class="cfg-label">${key}</span>${inputHtml}`; container.appendChild(div); } }
+        function saveClassRules() { const cls = document.getElementById('configClassSelect').value; const rules = systemRules[cls]; for (const key in rules) { const input = document.getElementById('rule_' + key); if (input) { if (key.includes('Die')) { rules[key] = input.value; } else { rules[key] = parseFloat(input.value) || 0; } } } saveAllData(); alert(`Atualizado!`); if (character && character.class === cls) { calcStats(); updateAll(); } }
+        function resetClassRules() { const cls = document.getElementById('configClassSelect').value; if(confirm(`Resetar?`)) { systemRules[cls] = JSON.parse(JSON.stringify(defaultScalingRules[cls])); saveAllData(); loadClassRulesUI(); alert("Resetado."); } }
+
+        function printCharacter() {
+            if(!character) return;
+            document.getElementById('print-name').innerText = "Nome: " + character.name;
+            const sub = character.subclass ? `(${character.subclass})` : "";
+            document.getElementById('print-class').innerText = `Classe: ${character.class} ${sub} | Nível ${character.level}`;
+            document.getElementById('print-xp').innerText = `XP: ${character.xp}`;
+            let eqBonuses = computed.eqBonuses || { FOR:0, DEX:0, AGI:0, INT:0, SAB:0 };
+            attributes.forEach(a => { const base = getBaseAttr(a); const mod = character.modifiers[a] || 0; const eq = eqBonuses[a] || 0; const total = base + mod + eq; document.getElementById('p-' + a.toLowerCase()).innerText = total; });
+            document.getElementById('p-hp').innerText = document.getElementById('resHP').innerText; document.getElementById('p-def').innerText = document.getElementById('resDef').innerText; document.getElementById('p-move').innerText = document.getElementById('resMove').innerText; document.getElementById('p-act').innerText = document.getElementById('resAct').innerText; document.getElementById('p-slots').innerText = document.getElementById('resSlots').innerText; document.getElementById('p-ini').innerText = "+" + (parseInt(document.getElementById('p-agi').innerText) - 10); 
+            document.getElementById('p-dmg').innerHTML = document.getElementById('resPhyDmg').innerText; document.getElementById('p-hit').innerText = document.getElementById('resHit').innerText; document.getElementById('p-crit').innerText = document.getElementById('resCrit').innerText; document.getElementById('p-maghit').innerText = document.getElementById('resMagHit').innerText; document.getElementById('p-magdmg').innerText = document.getElementById('resMagDmg').innerText; document.getElementById('p-heal').innerText = document.getElementById('resHeal').innerText;
+            let loadoutTxt = []; if (character.loadout) { const slots = ['mainHand', 'offHand', 'head', 'body', 'hands', 'legs', 'acc1', 'acc2', 'acc3']; slots.forEach(slot => { const itemId = character.loadout[slot]; if(itemId) { const item = character.inventory.find(i=>i.id == itemId); if(item) loadoutTxt.push(`${item.name} [${item.type}]`); } }); }
+            document.getElementById('p-loadout-list').innerText = loadoutTxt.join(", ");
+            const sl = document.getElementById('p-skills-list'); sl.innerHTML = ""; character.equippedSkills.forEach(id => { const s = character.dbSkills.find(x=>x.id == id); if(s) sl.innerHTML += `<li><strong>${s.name}:</strong> ${s.desc}</li>`; });
+            const pl = document.getElementById('p-pericias-list'); pl.innerHTML = ""; const perList = []; (character.learnedPericias || []).forEach(id => { const p = character.dbPericias.find(x => x.id === id); if(p) perList.push(p.name); }); pl.innerText = perList.join(", ") || "Nenhuma.";
+            const spl = document.getElementById('p-spells-list'); spl.innerHTML = ""; character.equippedSpells.forEach(id => { const s = character.dbSpells.find(x=>x.id == id); if(s) spl.innerHTML += `<li><strong>${s.name} (${s.slots}s):</strong> ${s.desc}</li>`; });
+            const invl = document.getElementById('p-inv-list'); invl.innerHTML = ""; character.inventory.forEach(item => { invl.innerHTML += `<div>• ${item.name} <small>(${item.weight}kg)</small></div>`; });
+            window.print();
+        }
+		
+		
+		
+		
+		    (function() {
+        // Usamos uma função anônima para isolar as variáveis do escopo global
+        const floatBtn = document.getElementById('globalAdmin_floatBtn');
+        const overlay = document.getElementById('globalAdmin_overlay');
+        const closeBtn = document.getElementById('globalAdmin_closeBtn');
+
+        // Função para abrir o menu
+        function openAdminMenu() {
+            overlay.classList.add('is-visible');
+            overlay.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden'; // Impede rolagem da página de fundo
+        }
+
+        // Função para fechar o menu
+        function closeAdminMenu() {
+            overlay.classList.remove('is-visible');
+            overlay.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = ''; // Libera rolagem
+        }
+
+        // Eventos de clique
+        floatBtn.addEventListener('click', openAdminMenu);
+        closeBtn.addEventListener('click', closeAdminMenu);
+
+        // Fechar ao pressionar a tecla ESC
+        document.addEventListener('keydown', function(event) {
+            if (event.key === "Escape" && overlay.classList.contains('is-visible')) {
+                closeAdminMenu();
+            }
+        });
+    })();
+    </script>
+</body>
+</html>

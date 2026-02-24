@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RPG Mestre - Bestiário, Combate & Alquimia v6</title>
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b0907;
+            --panel-bg: #1f1a14;
+            --text-color: #cbbfae;
+            --accent-color: #cfa84a;
+            --danger: #9e2b2b;
+            --success: #356b43;
+            --info: #2b4e7a;
+            --purple: #6a0dad;
+            --input-bg: #14100d;
+            --border-color: #4a3e30;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0; padding: 0; padding-top: 60px; padding-bottom: 80px;
+        }
+
+        h1, h2, h3, h4, button, select, label, .stat-val, .tag {
+            font-family: 'MedievalSharp', cursive;
+        }
+
+        /* --- MENU RESPONSIVO --- */
+        .nav-menu {
+            position: fixed; top: 0; width: 100%;
+            background-color: var(--panel-bg);
+            border-bottom: 2px solid var(--danger);
+            z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.9);
+            padding: 0 10px; box-sizing: border-box;
+            height: 60px; display: flex; align-items: center; justify-content: space-between;
+        }
+
+        .nav-brand { font-family: 'MedievalSharp'; font-size: 1.2rem; color: var(--accent-color); }
+
+        .nav-toggle {
+            display: none; background: none; border: none; 
+            color: var(--accent-color); font-size: 1.8rem; cursor: pointer;
+        }
+
+        .nav-links {
+            display: flex; gap: 10px;
+        }
+
+        .nav-btn {
+            background: none; border: none; color: #777;
+            font-size: 1rem; cursor: pointer; padding: 8px 12px;
+            transition: 0.3s; text-transform: uppercase;
+        }
+        .nav-btn.active { color: var(--danger); font-weight: bold; border-bottom: 2px solid var(--danger); }
+        .nav-btn:hover { color: #fff; }
+
+        @media (max-width: 768px) {
+            .nav-toggle { display: block; }
+            .nav-links {
+                display: none; flex-direction: column;
+                position: absolute; top: 60px; left: 0; width: 100%;
+                background-color: var(--panel-bg); border-bottom: 2px solid var(--danger);
+                padding: 10px 0;
+            }
+            .nav-links.show { display: flex; }
+            .nav-btn { width: 100%; text-align: center; border: none; padding: 15px; }
+            .nav-btn.active { border-bottom: none; background: rgba(255,0,0,0.1); }
+        }
+
+        .container { max-width: 1100px; margin: 20px auto; padding: 10px; }
+
+        /* PAINEIS */
+        .view-section { display: none; animation: fadeIn 0.3s; }
+        .view-section.active { display: block; }
+        @keyframes fadeIn { from { opacity:0; transform:translateY(5px); } to { opacity:1; transform:translateY(0); } }
+
+        .section {
+            background-color: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 4px; padding: 15px; margin-bottom: 15px;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+        }
+        .section-header {
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 15px; padding-bottom: 5px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .section-title { color: var(--accent-color); margin: 0; font-size: 1.4rem; }
+
+        /* GRIDS */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
+
+        input, select, textarea {
+            background-color: var(--input-bg); color: var(--text-color);
+            border: 1px solid var(--border-color); padding: 8px;
+            width: 100%; box-sizing: border-box; border-radius: 3px; margin-bottom: 5px;
+        }
+        input:focus { outline: none; border-color: var(--accent-color); }
+
+        button {
+            background-color: #333; color: #fff; border: 1px solid #555;
+            padding: 8px 12px; cursor: pointer; border-radius: 3px; width: 100%;
+            transition: 0.2s; margin-top: 5px;
+        }
+        button:hover { filter: brightness(1.2); }
+        .btn-success { background: var(--success); border-color: #2a5233; }
+        .btn-danger { background: var(--danger); border-color: #7a1f1f; }
+        .btn-info { background: var(--info); border-color: #1e3654; }
+        .btn-gold { background: var(--accent-color); color: #000; border-color: #a88632; }
+        .btn-purple { background: var(--purple); border-color: #4a097a; }
+        .btn-small { width: auto; font-size: 0.8rem; padding: 4px 8px; }
+
+        /* LIST ITEMS */
+        .list-item {
+            background: rgba(0,0,0,0.2); border: 1px solid #333;
+            padding: 10px; margin-bottom: 8px; display: flex;
+            justify-content: space-between; align-items: center;
+        }
+        
+        /* ALCHEMY */
+        .rarity-common { color: #fff; }
+        .rarity-rare { color: #44f; }
+        .rarity-epic { color: #a3a; }
+        .rarity-legendary { color: #fa0; }
+
+        /* COMBAT TRACKER */
+        .combat-row {
+            display: grid;
+            grid-template-columns: 35px 1fr 70px 140px; 
+            gap: 10px; align-items: center; padding: 10px;
+            background: rgba(20, 20, 20, 0.8);
+            border-left: 4px solid #555; margin-bottom: 5px;
+            position: relative;
+        }
+        .combat-row.boss { border-left-color: var(--purple); border-top: 1px solid var(--purple); }
+        .hp-bar-bg { background: #333; height: 6px; width: 100%; border-radius: 3px; margin-top: 5px; overflow: hidden;}
+        .hp-bar-fill { background: var(--danger); height: 100%; transition: width 0.3s; }
+        
+        .combat-stats { display: flex; gap: 10px; font-size: 0.75rem; color: #ccc; margin-top: 3px; }
+        .combat-stat-hl { color: var(--accent-color); font-weight: bold; }
+        .combat-inputs { display: flex; gap: 2px; margin-bottom: 2px; }
+        .combat-btns { display: flex; gap: 2px; }
+        .combat-log { max-height: 150px; overflow-y: auto; background: #000; padding: 10px; font-size: 0.85rem; border: 1px solid #333; margin-top: 10px; }
+        .loot-msg { color: var(--accent-color); font-weight: bold; }
+
+        /* MODALS */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); z-index: 2000; backdrop-filter: blur(3px);
+        }
+        .modal-content {
+            background: var(--panel-bg); width: 90%; max-width: 600px;
+            margin: 2% auto; padding: 20px; border: 2px solid var(--accent-color);
+            box-shadow: 0 0 20px #000; max-height: 90vh; overflow-y: auto;
+        }
+
+        .stat-block {
+            display: grid; grid-template-columns: repeat(5, 1fr);
+            text-align: center; background: #111; padding: 10px; border-radius: 5px; margin: 10px 0;
+        }
+        .stat-box { display: flex; flex-direction: column; }
+        .stat-label { font-size: 0.8rem; color: #888; }
+        .stat-num { font-size: 1.2rem; font-weight: bold; color: var(--accent-color); }
+        .phase-box { background: rgba(106, 13, 173, 0.2); border: 1px solid var(--purple); padding: 10px; margin-top: 5px; font-size: 0.9rem; }
+        .tag { font-size: 0.7rem; padding: 2px 5px; border-radius: 3px; text-transform: uppercase; margin-right: 5px; font-weight: bold; }
+        .tag-boss { background: var(--purple); color: #fff; border: 1px solid #fff; }
+		
+		
+		    /* Reset básico apenas para este componente para evitar conflitos */
+    #globalAdmin_wrapper * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    /* --- Botão Flutuante --- */
+    #globalAdmin_floatBtn {
+        position: fixed;
+        bottom: 20px;
+        right: 20px; /* Altere para 'left' se preferir na esquerda */
+        width: 60px;
+        height: 60px;
+        background-color: #2c3e50; /* Cor do botão */
+        color: #fff;
+        border: none;
+        border-radius: 50%;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        cursor: pointer;
+        z-index: 999998; /* Muito alto para ficar acima de tudo */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.3s ease, background-color 0.3s;
+    }
+
+    #globalAdmin_floatBtn:hover {
+        transform: scale(1.1);
+        background-color: #1a252f;
+    }
+
+    #globalAdmin_floatBtn svg {
+        width: 30px;
+        height: 30px;
+    }
+
+    /* --- Overlay Tela Cheia --- */
+    #globalAdmin_overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(30, 30, 30, 0.95); /* Fundo escuro semi-transparente */
+        backdrop-filter: blur(5px); /* Efeito de desfoque (opcional) */
+        z-index: 999999; /* Maior que o botão */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    /* Classe ativada via JS para mostrar o menu */
+    #globalAdmin_overlay.is-visible {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    /* --- Botão Fechar (X) --- */
+    #globalAdmin_closeBtn {
+        position: absolute;
+        top: 30px;
+        right: 30px;
+        background: none;
+        border: none;
+        color: #fff;
+        font-size: 3rem;
+        cursor: pointer;
+        line-height: 1;
+        transition: color 0.2s;
+    }
+
+    #globalAdmin_closeBtn:hover {
+        color: #e74c3c; /* Vermelho ao passar o mouse */
+    }
+
+    /* --- Conteúdo e Links --- */
+    .globalAdmin_content {
+        text-align: center;
+        max-width: 600px;
+        width: 90%;
+    }
+
+    .globalAdmin_title {
+        color: #bdc3c7;
+        margin-bottom: 40px;
+        font-size: 1.5rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
+
+    .globalAdmin_nav {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .globalAdmin_link {
+        color: #fff;
+        text-decoration: none;
+        font-size: 1.5rem;
+        padding: 15px;
+        border: 2px solid transparent;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .globalAdmin_link:hover {
+        border-color: #3498db;
+        background-color: rgba(52, 152, 219, 0.1);
+        transform: translateX(5px);
+    }
+
+    /* Estilo especial para Logout */
+    .globalAdmin_link.logout {
+        margin-top: 20px;
+        color: #e74c3c;
+        font-size: 1.2rem;
+    }
+    
+    .globalAdmin_link.logout:hover {
+        border-color: #e74c3c;
+        background-color: rgba(231, 76, 60, 0.1);
+    }
+		
+		
+    </style>
+</head>
+<body>
+
+<div id="globalAdmin_wrapper">
+
+    <!-- Botão Flutuante (FAB) -->
+    <button id="globalAdmin_floatBtn" title="Abrir Menu Administrativo">
+        <!-- Ícone de Engrenagem/Admin SVG -->
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z" fill="currentColor"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 4C16.42 4 20 7.58 20 12C20 16.42 16.42 20 12 20C7.58 20 4 16.42 4 12C4 7.58 7.58 4 12 4Z" fill="currentColor"/>
+        </svg>
+
+
+
+    </button>
+
+    <!-- Menu Tela Cheia (Overlay) -->
+    <div id="globalAdmin_overlay" aria-hidden="true">
+        
+        <!-- Botão de Fechar (X) -->
+        <button id="globalAdmin_closeBtn" title="Fechar Menu">&times;</button>
+
+        <!-- Conteúdo do Menu -->
+        <div class="globalAdmin_content">
+            <h2 class="globalAdmin_title">Navegação Administrativa</h2>
+            
+            <nav class="globalAdmin_nav">
+                <!-- LISTA DE LINKS PARA OUTROS SISTEMAS -->
+                <a href="https://jalves2999.github.io/poderpoderoso/FichaInventHabMag-v12.html" class="globalAdmin_link">Ficha personagem</a>
+                <a href="https://jalves2999.github.io/poderpoderoso/bestiarioAlquiHisto.html" class="globalAdmin_link">Mestre</a>
+            </nav>
+        </div>
+    </div>
+
+</div>
+
+<nav class="nav-menu">
+    <div class="nav-brand">RPG Mestre</div>
+    <button class="nav-toggle" onclick="toggleNav()">☰</button>
+    <div id="navLinks" class="nav-links">
+        <button class="nav-btn active" onclick="showView('monsters')">Bestiário</button>
+        <button class="nav-btn" onclick="showView('combat')">Combate</button>
+        <button class="nav-btn" onclick="showView('alchemy')">Alquimia</button>
+        <button class="nav-btn" onclick="showView('regions')">Regiões</button>
+        <button class="nav-btn" onclick="showView('calendar')">História</button>
+        <button class="nav-btn" onclick="showView('settings')">Sistema</button>
+    </div>
+</nav>
+
+<div class="container">
+
+    <!-- === BESTIÁRIO === -->
+    <div id="view-monsters" class="view-section active">
+        <div class="section">
+            <div class="section-header">
+                <h3 class="section-title">Editor de Inimigo</h3>
+                <button class="btn-info btn-small" onclick="toggleID('monsterForm')">Mostrar/Esconder Form</button>
+            </div>
+            
+            <div id="monsterForm" style="display:none;">
+                <input type="hidden" id="editMonsterId">
+                <div class="grid-3">
+                    <input type="text" id="mName" placeholder="Nome do Monstro">
+                    <select id="mSize">
+                        <option value="Médio">Médio</option>
+                        <option value="Pequeno">Pequeno</option>
+                        <option value="Grande">Grande</option>
+                        <option value="Enorme">Enorme</option>
+                        <option value="Colossal">Colossal</option>
+                    </select>
+                    <input type="number" id="mLevel" placeholder="Nível" value="1">
+                </div>
+                <div style="margin: 10px 0;">
+                    <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
+                        <input type="checkbox" id="isBoss" style="width:auto;" onchange="toggleBossFields()"> 
+                        <span style="color:var(--purple); font-weight:bold;">É um Chefe?</span>
+                    </label>
+                </div>
+                <label style="color:var(--accent-color)">Atributos Base (0 padrão)</label>
+                <div class="stat-block">
+                    <div class="stat-box"><span class="stat-label">FOR</span><input type="number" id="mFOR" value="0"></div>
+                    <div class="stat-box"><span class="stat-label">DEX</span><input type="number" id="mDEX" value="0"></div>
+                    <div class="stat-box"><span class="stat-label">AGI</span><input type="number" id="mAGI" value="0"></div>
+                    <div class="stat-box"><span class="stat-label">INT</span><input type="number" id="mINT" value="0"></div>
+                    <div class="stat-box"><span class="stat-label">SAB</span><input type="number" id="mSAB" value="0"></div>
+                </div>
+                <!-- REGRAS -->
+                <div style="background: rgba(0,0,0,0.3); padding: 10px; border-left: 2px solid var(--accent-color); margin-bottom: 10px;">
+                    <h4 style="margin-top:0;">Estatísticas & Dados</h4>
+                    <div class="grid-2">
+                        <div><label>PV Base</label><input type="number" id="scHpBase" value="10"></div>
+                        <div><label>PV por FOR</label><input type="number" id="scHpPerFor" value="5"></div>
+                    </div>
+                    <div class="grid-2">
+                        <div><label>Defesa Base</label><input type="number" id="scDefBase" value="10"></div>
+                        <div><label>Defesa por AGI</label><input type="number" id="scDefPerAgi" value="1"></div>
+                    </div>
+                    <div class="grid-2">
+                        <div><label>Movimento Base</label><input type="number" id="scMovBase" value="4"></div>
+                        <div><label>Movimento por AGI</label><input type="number" id="scMovPerAgi" value="1"></div>
+                    </div>
+                    <hr style="border-color:#333;">
+                    <div class="grid-2">
+                        <div><label>Dano Base</label><input type="text" id="scDmgBase" placeholder="Ex: 1d4"></div>
+                        <div><label>Dano por FOR</label><input type="text" id="scDmgPerFor" placeholder="Ex: 1d6"></div>
+                    </div>
+                    <div class="grid-2">
+                        <div><label>Dano Mágico (INT)</label><input type="text" id="scDmgInt" placeholder="Ex: 1d8"></div>
+                        <div><label>Cura (SAB)</label><input type="text" id="scHealSab" placeholder="Ex: 1d10"></div>
+                    </div>
+                </div>
+                <!-- BOSS PHASES -->
+                <div id="bossPhasesContainer" style="display:none; background: rgba(50,0,50,0.3); padding:10px; border:1px solid var(--purple); margin-bottom:10px;">
+                    <h4 style="color:var(--purple); margin-top:0;">Fases do Chefe</h4>
+                    <div class="grid-2">
+                        <input type="number" id="phasePct" placeholder="% Vida">
+                        <input type="text" id="phaseDesc" placeholder="Descrição">
+                    </div>
+                    <button class="btn-purple btn-small" onclick="addPhase()">Adicionar Fase</button>
+                    <ul id="phaseList" style="padding-left:20px; font-size:0.9rem;"></ul>
+                </div>
+                <!-- LOOT & SKILLS -->
+                <div class="grid-2">
+                    <div>
+                        <label>Loot</label>
+                        <div style="display:flex; gap:5px;">
+                            <input type="text" id="lootName" placeholder="Item">
+                            <input type="number" id="lootChance" placeholder="%" style="width:60px;">
+                            <button class="btn-success btn-small" onclick="addTempLoot()">+</button>
+                        </div>
+                        <ul id="tempLootList" style="padding-left:20px; color:#ccc;"></ul>
+                    </div>
+                    <div>
+                        <label>Habilidade</label>
+                        <div style="display:flex; gap:5px;">
+                            <input type="text" id="skillName" placeholder="Nome">
+                            <button class="btn-info btn-small" onclick="addTempSkill()">+</button>
+                        </div>
+                        <textarea id="skillDesc" placeholder="Efeito..." rows="2"></textarea>
+                        <ul id="tempSkillList" style="padding-left:20px; color:#ccc;"></ul>
+                    </div>
+                </div>
+                <div class="grid-2">
+                    <button id="btnSaveMonster" class="btn-success" onclick="saveMonster()">Salvar Monstro</button>
+                    <button class="btn-danger" onclick="clearMonsterForm()">Cancelar</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <h3 class="section-title">Catálogo</h3>
+                <div style="display:flex; gap:5px;">
+                    <input type="text" id="searchMonster" placeholder="Nome..." onkeyup="renderMonsterList()" style="width:120px;">
+                    <input type="number" id="searchLevel" placeholder="Nível" onkeyup="renderMonsterList()" style="width:60px;">
+                </div>
+            </div>
+            <div id="monsterList"></div>
+        </div>
+    </div>
+
+    <!-- === COMBATE === -->
+    <div id="view-combat" class="view-section">
+        <div class="section">
+            <h3 class="section-title">Gerador de Batalha</h3>
+            <div class="grid-2">
+                <div style="background:rgba(0,0,0,0.3); padding:10px;">
+                    <label>Encontro Aleatório</label>
+                    <div style="display:flex; gap:5px;">
+                        <select id="combatRegionSelect"><option value="">Região...</option></select>
+                        <input type="number" id="combatQty" placeholder="Qtd" value="1" style="width:60px;">
+                        <button class="btn-danger btn-small" onclick="generateRandomEncounter()">Gerar</button>
+                    </div>
+                </div>
+                <div style="background:rgba(0,0,0,0.3); padding:10px;">
+                    <label>Adicionar Específico</label>
+                    <div style="display:flex; gap:5px;">
+                        <input type="number" id="manualAddLevel" placeholder="Nv." style="width:50px;" onchange="updateManualCombatSelect()">
+                        <select id="manualCombatSelect"><option value="">Selecione...</option></select>
+                        <button class="btn-success btn-small" onclick="addManualMonsterToCombat()">Add</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="section">
+            <div class="section-header">
+                <h3 class="section-title">Rastreador</h3>
+                <div style="display:flex; gap:10px;">
+                    <button class="btn-info btn-small" onclick="sortCombat()">Ordenar (DEX)</button>
+                    <button class="btn-danger btn-small" onclick="clearCombat()">Limpar</button>
+                </div>
+            </div>
+            <div class="combat-row" style="background:#000; border:none; font-weight:bold; color:#aaa; font-size:0.8rem;">
+                <span>Ini</span><span>Nome / Status</span><span>PV</span><span>Ações</span>
+            </div>
+            <div id="combatList"><em style="padding:10px; display:block; color:#666;">Campo vazio.</em></div>
+            <div class="section-title" style="margin-top:20px; font-size:1rem;">Log</div>
+            <div id="combatLog" class="combat-log"></div>
+        </div>
+    </div>
+
+    <!-- === ALQUIMIA (NOVO) === -->
+    <div id="view-alchemy" class="view-section">
+        <div class="grid-2">
+            <!-- CRIAÇÃO DE MATERIAIS -->
+            <div class="section">
+                <h3 class="section-title">Materiais</h3>
+                <div class="grid-2">
+                    <input type="text" id="matName" placeholder="Nome do Material">
+                    <select id="matRarity">
+                        <option value="Comum">Comum</option>
+                        <option value="Incomum">Incomum</option>
+                        <option value="Raro">Raro</option>
+                        <option value="Épico">Épico</option>
+                        <option value="Lendário">Lendário</option>
+                    </select>
+                </div>
+                <textarea id="matDesc" placeholder="Descrição/Efeitos" rows="2"></textarea>
+                <button class="btn-success" onclick="saveMaterial()">Criar Material</button>
+                <hr style="border-color:#333;">
+                <div id="materialList" style="max-height:300px; overflow-y:auto;"></div>
+            </div>
+
+            <!-- CRIAÇÃO DE RECEITAS -->
+            <div class="section">
+                <h3 class="section-title">Receitas</h3>
+                <input type="text" id="recName" placeholder="Nome da Receita (ex: Poção de Cura)">
+                <textarea id="recDesc" placeholder="Descrição/Efeito Final" rows="2"></textarea>
+                
+                <div style="background:rgba(0,0,0,0.3); padding:10px; margin:10px 0; border:1px solid #444;">
+                    <label>Ingredientes</label>
+                    <div style="display:flex; gap:5px;">
+                        <select id="recMatSelect"><option>Selecione Material...</option></select>
+                        <input type="number" id="recMatQty" placeholder="Qtd" value="1" style="width:60px;">
+                        <button class="btn-info btn-small" onclick="addTempIngredient()">+</button>
+                    </div>
+                    <ul id="tempIngList" style="padding-left:20px; font-size:0.9rem; color:#ccc;"></ul>
+                </div>
+
+                <button class="btn-purple" onclick="saveRecipe()">Salvar Receita</button>
+                <hr style="border-color:#333;">
+                <div id="recipeList" style="max-height:300px; overflow-y:auto;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- === REGIOES === -->
+    <div id="view-regions" class="view-section">
+        <div class="section">
+            <h3 class="section-title">Gerenciar Regiões</h3>
+            <div class="grid-2">
+                <input type="text" id="regName" placeholder="Nome da Região">
+                <button class="btn-success" onclick="addRegion()">Criar Região</button>
+            </div>
+        </div>
+        <div id="regionsList"></div>
+    </div>
+
+    <!-- === CALENDARIO === -->
+    <div id="view-calendar" class="view-section">
+        <div class="section">
+            <h3 class="section-title">Data Atual</h3>
+            <div class="grid-3" style="text-align:center; font-family:'MedievalSharp'; font-size:1.5rem; color:var(--accent-color);">
+                <div style="background:#111; padding:10px; border:1px solid #333;">Dia <span id="calDay">1</span></div>
+                <div style="background:#111; padding:10px; border:1px solid #333;">Mês <span id="calMonth">1</span></div>
+                <div style="background:#111; padding:10px; border:1px solid #333;">Ano <span id="calYear">1200</span></div>
+            </div>
+            <div class="grid-4" style="margin-top:10px;">
+                <button onclick="advTime(1)">+1 Dia</button>
+                <button onclick="advTime(7)">+1 Sem</button>
+                <button onclick="advTime(30)">+1 Mês</button>
+                <button class="btn-info" onclick="logEvent()">Registrar</button>
+            </div>
+            <textarea id="eventInput" placeholder="O que aconteceu?" style="margin-top:10px;"></textarea>
+        </div>
+        <div class="section">
+            <h3 class="section-title">Linha do Tempo</h3>
+            <div id="historyLog"></div>
+        </div>
+    </div>
+
+    <!-- === SETTINGS === -->
+    <div id="view-settings" class="view-section">
+        <div class="section">
+            <h3 class="section-title">Importar / Exportar</h3>
+            <div class="grid-2">
+                <button class="btn-info" onclick="exportData()">Exportar JSON</button>
+                <button class="btn-danger" onclick="importData()">Importar JSON</button>
+            </div>
+            <textarea id="ioArea" placeholder="JSON aqui..." style="height:100px; margin-top:10px;"></textarea>
+        </div>
+        <div class="section">
+            <h3 class="section-title">IA Creator</h3>
+            <button class="btn-gold" onclick="copyPrompt()">Copiar Estrutura JSON</button>
+        </div>
+    </div>
+
+</div>
+
+<!-- MODAL DETALHES -->
+<div id="monsterModal" class="modal-overlay">
+    <div class="modal-content">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h2 id="modalTitle" style="color:var(--danger); margin:0;">Monster</h2>
+            <span id="modalLevel" style="background:#333; padding:5px; border-radius:4px;">Nv. 1</span>
+        </div>
+        <div id="modalBody"></div>
+        <div class="grid-2" style="margin-top:20px;">
+            <button class="btn-success" onclick="addToCombatFromModal()">⚔️ Combate</button>
+            <button onclick="closeModal()">Fechar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- STATE ---
+    let gmData = {
+        monsters: [], regions: [], combat: [],
+        calendar: { day: 1, month: 1, year: 1200, log: [] },
+        alchemy: { materials: [], recipes: [] }
+    };
+
+    let tempLoot = []; let tempSkills = []; let tempPhases = []; let tempIngredients = [];
+    let selectedMonsterId = null; let editingMonsterId = null;
+
+    // --- INIT ---
+    window.onload = function() {
+        const stored = localStorage.getItem('rpgMestreV6');
+        if(stored) try { 
+            const parsed = JSON.parse(stored);
+            gmData = parsed;
+            if(!gmData.alchemy) gmData.alchemy = { materials: [], recipes: [] };
+        } catch(e){}
+        updateAllViews();
+    };
+
+    function saveData() { localStorage.setItem('rpgMestreV6', JSON.stringify(gmData)); }
+    
+    function toggleNav() {
+        const links = document.getElementById('navLinks');
+        links.classList.toggle('show');
+    }
+
+    function showView(v) {
+        document.querySelectorAll('.view-section').forEach(e=>e.classList.remove('active'));
+        document.getElementById('view-'+v).classList.add('active');
+        document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+        event.target.classList.add('active');
+        document.getElementById('navLinks').classList.remove('show'); // Fecha menu mobile ao clicar
+    }
+    
+    function toggleID(id) { 
+        const e=document.getElementById(id); 
+        e.style.display = e.style.display==='none'?'block':'none'; 
+    }
+
+    // ==========================================
+    // ALQUIMIA
+    // ==========================================
+    function saveMaterial() {
+        const name = document.getElementById('matName').value;
+        if(!name) return alert("Nome obrigatório");
+        gmData.alchemy.materials.push({
+            id: Date.now(),
+            name: name,
+            rarity: document.getElementById('matRarity').value,
+            desc: document.getElementById('matDesc').value
+        });
+        saveData();
+        renderAlchemy();
+        document.getElementById('matName').value='';
+        document.getElementById('matDesc').value='';
+    }
+
+    function deleteMaterial(id) {
+        if(confirm("Apagar material?")) {
+            gmData.alchemy.materials = gmData.alchemy.materials.filter(m => m.id !== id);
+            saveData(); renderAlchemy();
+        }
+    }
+
+    function addTempIngredient() {
+        const matId = parseInt(document.getElementById('recMatSelect').value);
+        const qty = parseInt(document.getElementById('recMatQty').value);
+        const mat = gmData.alchemy.materials.find(m => m.id === matId);
+        
+        if(mat && qty > 0) {
+            tempIngredients.push({ id: matId, name: mat.name, qty: qty });
+            renderTempIngredients();
+        }
+    }
+
+    function renderTempIngredients() {
+        document.getElementById('tempIngList').innerHTML = tempIngredients.map((ing, i) => 
+            `<li>${ing.qty}x ${ing.name} <button class="btn-danger btn-small" style="padding:0 4px" onclick="tempIngredients.splice(${i},1); renderTempIngredients()">x</button></li>`
+        ).join('');
+    }
+
+    function saveRecipe() {
+        const name = document.getElementById('recName').value;
+        if(!name || tempIngredients.length === 0) return alert("Nome e ingredientes obrigatórios");
+        
+        gmData.alchemy.recipes.push({
+            id: Date.now(),
+            name: name,
+            desc: document.getElementById('recDesc').value,
+            ingredients: [...tempIngredients]
+        });
+        
+        saveData();
+        tempIngredients = [];
+        renderTempIngredients();
+        document.getElementById('recName').value = '';
+        document.getElementById('recDesc').value = '';
+        renderAlchemy();
+    }
+
+    function deleteRecipe(id) {
+        if(confirm("Apagar receita?")) {
+            gmData.alchemy.recipes = gmData.alchemy.recipes.filter(r => r.id !== id);
+            saveData(); renderAlchemy();
+        }
+    }
+
+    function renderAlchemy() {
+        // Render Materials List
+        const matList = document.getElementById('materialList');
+        matList.innerHTML = gmData.alchemy.materials.map(m => {
+            let color = '#fff';
+            if(m.rarity === 'Incomum') color = '#4f4';
+            if(m.rarity === 'Raro') color = '#44f';
+            if(m.rarity === 'Épico') color = '#a3a';
+            if(m.rarity === 'Lendário') color = '#fa0';
+            
+            return `<div class="list-item">
+                <div><strong style="color:${color}">${m.name}</strong> <small>(${m.rarity})</small><br><span style="font-size:0.8rem; color:#aaa;">${m.desc}</span></div>
+                <button class="btn-danger btn-small" onclick="deleteMaterial(${m.id})">X</button>
+            </div>`;
+        }).join('');
+
+        // Populate Recipe Select
+        const recSel = document.getElementById('recMatSelect');
+        recSel.innerHTML = '<option value="">Selecione Material...</option>' + 
+            gmData.alchemy.materials.map(m => `<option value="${m.id}">${m.name}</option>`).join('');
+
+        // Render Recipes List
+        const recList = document.getElementById('recipeList');
+        recList.innerHTML = gmData.alchemy.recipes.map(r => {
+            const ings = r.ingredients.map(i => `${i.qty}x ${i.name}`).join(', ');
+            return `<div class="list-item">
+                <div>
+                    <strong style="color:var(--accent-color)">${r.name}</strong>
+                    <div style="font-size:0.85rem; color:#ccc;">Ingredientes: ${ings}</div>
+                    <div style="font-size:0.8rem; font-style:italic;">${r.desc}</div>
+                </div>
+                <button class="btn-danger btn-small" onclick="deleteRecipe(${r.id})">X</button>
+            </div>`;
+        }).join('');
+    }
+
+    // ==========================================
+    // MONSTROS
+    // ==========================================
+    function toggleBossFields() {
+        const isBoss = document.getElementById('isBoss').checked;
+        document.getElementById('bossPhasesContainer').style.display = isBoss ? 'block' : 'none';
+    }
+    function addTempLoot() {
+        const item = document.getElementById('lootName').value;
+        const chance = parseFloat(document.getElementById('lootChance').value);
+        if(item && chance) { tempLoot.push({item, chance}); renderTempLists(); document.getElementById('lootName').value=''; }
+    }
+    function addTempSkill() {
+        const name = document.getElementById('skillName').value;
+        const desc = document.getElementById('skillDesc').value;
+        if(name) { tempSkills.push({name, desc}); renderTempLists(); document.getElementById('skillName').value=''; document.getElementById('skillDesc').value=''; }
+    }
+    function addPhase() {
+        const pct = parseInt(document.getElementById('phasePct').value);
+        const desc = document.getElementById('phaseDesc').value;
+        if(pct && desc) { tempPhases.push({pct, desc}); renderTempLists(); document.getElementById('phaseDesc').value=''; }
+    }
+    function renderTempLists() {
+        document.getElementById('tempLootList').innerHTML = tempLoot.map((l,i)=>`<li>${l.item} (${l.chance}%) <button class="btn-danger btn-small" style="padding:0 4px" onclick="remTmp('loot',${i})">x</button></li>`).join('');
+        document.getElementById('tempSkillList').innerHTML = tempSkills.map((s,i)=>`<li><b>${s.name}:</b> ${s.desc} <button class="btn-danger btn-small" style="padding:0 4px" onclick="remTmp('skill',${i})">x</button></li>`).join('');
+        document.getElementById('phaseList').innerHTML = tempPhases.map((p,i)=>`<li><${p.pct}%: ${p.desc} <button class="btn-danger btn-small" style="padding:0 4px" onclick="remTmp('phase',${i})">x</button></li>`).join('');
+    }
+    function remTmp(type, i) {
+        if(type==='loot') tempLoot.splice(i,1); if(type==='skill') tempSkills.splice(i,1); if(type==='phase') tempPhases.splice(i,1); renderTempLists();
+    }
+    function clearMonsterForm() {
+        editingMonsterId = null; document.getElementById('btnSaveMonster').innerText = "Salvar Monstro";
+        document.getElementById('mName').value = ''; document.getElementById('mLevel').value = 1; document.getElementById('mSize').value = 'Médio';
+        ['FOR','DEX','AGI','INT','SAB'].forEach(a => document.getElementById('m'+a).value = 0);
+        document.getElementById('scHpBase').value = 10; document.getElementById('scHpPerFor').value = 5;
+        document.getElementById('scDefBase').value = 10; document.getElementById('scDefPerAgi').value = 1;
+        document.getElementById('scMovBase').value = 4; document.getElementById('scMovPerAgi').value = 1;
+        ['scDmgBase','scDmgPerFor','scDmgInt','scHealSab'].forEach(id => document.getElementById(id).value = '');
+        document.getElementById('isBoss').checked = false; toggleBossFields();
+        tempLoot=[]; tempSkills=[]; tempPhases=[]; renderTempLists();
+    }
+    function editMonster(id) {
+        const m = gmData.monsters.find(x => x.id === id); if(!m) return;
+        editingMonsterId = id; document.getElementById('btnSaveMonster').innerText = "Atualizar Monstro";
+        document.getElementById('mName').value = m.name; document.getElementById('mLevel').value = m.level; document.getElementById('mSize').value = m.size;
+        document.getElementById('mFOR').value = m.attr.FOR; document.getElementById('mDEX').value = m.attr.DEX;
+        document.getElementById('mAGI').value = m.attr.AGI; document.getElementById('mINT').value = m.attr.INT; document.getElementById('mSAB').value = m.attr.SAB;
+        document.getElementById('scHpBase').value = m.scale.hpBase; document.getElementById('scHpPerFor').value = m.scale.hpFor;
+        document.getElementById('scDefBase').value = m.scale.defBase||10; document.getElementById('scDefPerAgi').value = m.scale.defAgi||1;
+        document.getElementById('scMovBase').value = m.scale.movBase||4; document.getElementById('scMovPerAgi').value = m.scale.movAgi||1;
+        document.getElementById('scDmgBase').value = m.scale.dmgBase; document.getElementById('scDmgPerFor').value = m.scale.dmgFor;
+        document.getElementById('scDmgInt').value = m.scale.dmgInt; document.getElementById('scHealSab').value = m.scale.healSab;
+        document.getElementById('isBoss').checked = m.isBoss; toggleBossFields();
+        tempLoot = m.loot?[...m.loot]:[]; tempSkills = m.skills?[...m.skills]:[]; tempPhases = m.phases?[...m.phases]:[]; renderTempLists();
+        document.getElementById('monsterForm').style.display = 'block';
+    }
+    function saveMonster() {
+        const name = document.getElementById('mName').value; if(!name) return alert("Nome obrigatório");
+        const mObj = {
+            id: editingMonsterId || Date.now(), name, level: parseInt(document.getElementById('mLevel').value)||1,
+            size: document.getElementById('mSize').value, isBoss: document.getElementById('isBoss').checked,
+            attr: { FOR: parseInt(document.getElementById('mFOR').value)||0, DEX: parseInt(document.getElementById('mDEX').value)||0, AGI: parseInt(document.getElementById('mAGI').value)||0, INT: parseInt(document.getElementById('mINT').value)||0, SAB: parseInt(document.getElementById('mSAB').value)||0 },
+            scale: { hpBase: parseInt(document.getElementById('scHpBase').value)||10, hpFor: parseInt(document.getElementById('scHpPerFor').value)||5, defBase: parseInt(document.getElementById('scDefBase').value)||10, defAgi: parseInt(document.getElementById('scDefPerAgi').value)||1, movBase: parseInt(document.getElementById('scMovBase').value)||4, movAgi: parseInt(document.getElementById('scMovPerAgi').value)||1, dmgBase: document.getElementById('scDmgBase').value, dmgFor: document.getElementById('scDmgPerFor').value, dmgInt: document.getElementById('scDmgInt').value, healSab: document.getElementById('scHealSab').value },
+            loot: [...tempLoot], skills: [...tempSkills], phases: document.getElementById('isBoss').checked ? [...tempPhases] : []
+        };
+        if(editingMonsterId) { const idx = gmData.monsters.findIndex(x=>x.id===editingMonsterId); if(idx!==-1) gmData.monsters[idx]=mObj; }
+        else gmData.monsters.push(mObj);
+        saveData(); clearMonsterForm(); updateAllViews();
+    }
+    function calculateDiceMath(mult, die) {
+        if(mult<=0 || !die) return "";
+        const m = die.match(/d(\d+)/); if(!m) return "";
+        let total = mult * parseInt(m[1]);
+        let c = {20:0,12:0,10:0,8:0,6:0,4:0};
+        while(total>=4){ if(total>=20){c[20]++;total-=20}else if(total>=12){c[12]++;total-=12}else if(total>=10){c[10]++;total-=10}else if(total>=8){c[8]++;total-=8}else if(total>=6){c[6]++;total-=6}else if(total>=4){c[4]++;total-=4}else break; }
+        let p = []; [20,12,10,8,6,4].forEach(d=>{ if(c[d]>0) p.push(`${c[d]}d${d}`); });
+        return p.join("+");
+    }
+    function calcStats(m) {
+        const hp = m.scale.hpBase + (m.attr.FOR * m.scale.hpFor);
+        const def = (m.scale.defBase||10) + (m.attr.AGI * (m.scale.defAgi||1));
+        const mov = (m.scale.movBase||4) + (m.attr.AGI * (m.scale.movAgi||1));
+        let dmgPhy = m.scale.dmgBase || ""; const bDmg = calculateDiceMath(m.attr.FOR, m.scale.dmgFor); if(bDmg) dmgPhy += (dmgPhy?" + ":"") + bDmg; if(!dmgPhy) dmgPhy="0";
+        let dmgMag = calculateDiceMath(m.attr.INT, m.scale.dmgInt) || "-";
+        let heal = calculateDiceMath(m.attr.SAB, m.scale.healSab) || "-";
+        return { hp, def, mov, dmgPhy, dmgMag, heal };
+    }
+    function renderMonsterList() {
+        const list = document.getElementById('monsterList'); const term = document.getElementById('searchMonster').value.toLowerCase(); const lvl = document.getElementById('searchLevel').value;
+        list.innerHTML = '';
+        gmData.monsters.forEach(m => {
+            if(m.name.toLowerCase().includes(term) && (!lvl || m.level == lvl)) {
+                const s = calcStats(m);
+                list.innerHTML += `<div class="monster-item">
+                    <div>${m.isBoss?'<span class="tag tag-boss">CHEFE</span>':''} <strong>${m.name}</strong> <small>(Nv.${m.level})</small><div style="font-size:0.8rem; color:#888;">PV:${s.hp} | Def:${s.def} | Mov:${s.mov}m</div></div>
+                    <div><button class="btn-info btn-small" onclick="editMonster(${m.id})">Editar</button> <button class="btn-gold btn-small" onclick="openDetails(${m.id})">Detalhes</button> <button class="btn-success btn-small" onclick="addToCombat(${m.id})">⚔️</button> <button class="btn-danger btn-small" onclick="delMon(${m.id})">X</button></div>
+                </div>`;
+            }
+        });
+    }
+    function openDetails(id) {
+        const m = gmData.monsters.find(x=>x.id==id); if(!m) return;
+        selectedMonsterId = id; const s = calcStats(m);
+        document.getElementById('modalTitle').innerText = m.name; document.getElementById('modalLevel').innerText = (m.isBoss?"CHEFE ":"")+"Nv. "+m.level;
+        let h = `<div class="stat-block"><div class="stat-box"><span class="stat-label">FOR</span><span class="stat-num">${m.attr.FOR}</span></div><div class="stat-box"><span class="stat-label">DEX</span><span class="stat-num">${m.attr.DEX}</span></div><div class="stat-box"><span class="stat-label">AGI</span><span class="stat-num">${m.attr.AGI}</span></div><div class="stat-box"><span class="stat-label">INT</span><span class="stat-num">${m.attr.INT}</span></div><div class="stat-box"><span class="stat-label">SAB</span><span class="stat-num">${m.attr.SAB}</span></div></div>
+        <div class="grid-3" style="text-align:center; margin-bottom:10px;"><div style="background:#300;padding:5px;">HP: <b>${s.hp}</b></div><div style="background:#003;padding:5px;">Def: <b>${s.def}</b></div><div style="background:#030;padding:5px;">Mov: <b>${s.mov}m</b></div></div>
+        <div style="background:#111;padding:10px;margin-bottom:10px;"><div>⚔️ ${s.dmgPhy}</div><div>✨ ${s.dmgMag}</div><div>💚 ${s.heal}</div><div style="font-size:0.9rem;color:#888;">Ini: 1d20+${Math.floor(m.attr.DEX/2)}</div></div>`;
+        if(m.isBoss && m.phases.length) h+= m.phases.map(p=>`<div class="phase-box"><strong><${p.pct}%:</strong> ${p.desc}</div>`).join('');
+        if(m.skills.length) h+= '<h4>Skills</h4><ul>'+m.skills.map(x=>`<li><b>${x.name}:</b> ${x.desc}</li>`).join('')+'</ul>';
+        if(m.loot.length) h+= '<h4>Loot</h4><ul>'+m.loot.map(x=>`<li>${x.item} (${x.chance}%)</li>`).join('')+'</ul>';
+        document.getElementById('modalBody').innerHTML = h; document.getElementById('monsterModal').style.display = 'block';
+    }
+    function closeModal() { document.getElementById('monsterModal').style.display='none'; }
+    function addToCombatFromModal() { if(selectedMonsterId) addToCombat(selectedMonsterId); closeModal(); showView('combat'); }
+    function delMon(id) { if(confirm("Apagar?")) { gmData.monsters = gmData.monsters.filter(x=>x.id!==id); saveData(); updateAllViews(); } }
+
+    // --- COMBAT ---
+    function updateRegionSelect() {
+        document.getElementById('combatRegionSelect').innerHTML = '<option value="">Região...</option>' + gmData.regions.map(r=>`<option value="${r.id}">${r.name}</option>`).join('');
+    }
+    function updateManualCombatSelect() {
+        const lvl = document.getElementById('manualAddLevel').value; const sel = document.getElementById('manualCombatSelect');
+        sel.innerHTML = '<option value="">Selecione...</option>';
+        gmData.monsters.forEach(m => { if(!lvl || m.level==lvl) sel.innerHTML += `<option value="${m.id}">${m.name} (Nv.${m.level})</option>`; });
+    }
+    function addManualMonsterToCombat() { const id = parseInt(document.getElementById('manualCombatSelect').value); if(id) addToCombat(id); }
+    function generateRandomEncounter() {
+        const rid = parseInt(document.getElementById('combatRegionSelect').value); const qty = parseInt(document.getElementById('combatQty').value)||1;
+        const r = gmData.regions.find(x=>x.id===rid); if(!r || !r.monsters.length) return alert("Região inválida");
+        for(let i=0;i<qty;i++) addToCombat(r.monsters[Math.floor(Math.random()*r.monsters.length)]);
+    }
+    function addToCombat(mid) {
+        const m = gmData.monsters.find(x=>x.id==mid); if(!m) return;
+        const s = calcStats(m);
+        gmData.combat.push({ uid: Date.now()+Math.random(), mid:m.id, name:m.name, hpMax:s.hp, hp:s.hp, dex:m.attr.DEX, ini: Math.floor(Math.random()*20)+1+Math.floor(m.attr.DEX/2), stats:s, isBoss:m.isBoss, phases:m.phases||[] });
+        saveData(); renderCombat();
+    }
+    function renderCombat() {
+        const l = document.getElementById('combatList'); if(!gmData.combat.length) { l.innerHTML='<em style="padding:10px;">Vazio</em>'; return; }
+        l.innerHTML = gmData.combat.map((c,i) => {
+            const pct = Math.max(0,(c.hp/c.hpMax)*100);
+            let ph = ""; if(c.isBoss && c.phases) { const p = c.phases.filter(x=>pct<=x.pct).sort((a,b)=>a.pct-b.pct)[0]; if(p) ph=`<div style="color:var(--purple);font-size:0.7rem;">⚠️ FASE: ${p.desc}</div>`; }
+            return `<div class="combat-row ${c.isBoss?'boss':''}">
+                <div style="text-align:center;color:var(--accent-color)">${c.ini}</div>
+                <div><strong>${c.name}</strong> ${c.isBoss?'💀':''} <div class="hp-bar-bg"><div class="hp-bar-fill" style="width:${pct}%"></div></div>
+                <div class="combat-stats">DEX:<span class="combat-stat-hl">${c.dex}</span> | DEF:<span class="combat-stat-hl">${c.stats.def}</span> | MOV:<span class="combat-stat-hl">${c.stats.mov}m</span></div>${ph}<small style="color:#888;">${c.stats.dmgPhy}</small></div>
+                <div style="text-align:center;">${c.hp}/${c.hpMax}</div>
+                <div class="combat-actions"><div class="combat-inputs"><input type="number" id="dmg_${c.uid}" placeholder="-"><input type="number" id="heal_${c.uid}" placeholder="+" style="border-color:green;"></div>
+                <div class="combat-btns"><button class="btn-danger btn-small" onclick="applyCombatChange(${c.uid},'dmg')">Hit</button><button class="btn-success btn-small" onclick="applyCombatChange(${c.uid},'heal')">Cura</button><button class="btn-gold btn-small" onclick="openDetails(${c.mid})">?</button><button class="btn-small" onclick="remCombat(${i})">X</button></div></div>
+            </div>`;
+        }).join('');
+    }
+    function applyCombatChange(uid, type) {
+        const c = gmData.combat.find(x=>x.uid===uid); if(!c) return;
+        const v = parseInt(document.getElementById((type==='dmg'?'dmg_':'heal_')+uid).value)||0;
+        if(type==='dmg') c.hp-=v; else c.hp+=v;
+        if(c.hp>c.hpMax) c.hp=c.hpMax; if(c.hp<=0) { c.hp=0; checkLoot(c); }
+        document.getElementById((type==='dmg'?'dmg_':'heal_')+uid).value=''; saveData(); renderCombat();
+    }
+    function checkLoot(c) {
+        const m = gmData.monsters.find(x=>x.id==c.mid);
+        const log = document.getElementById('combatLog');
+        if(!m || !m.loot.length) { log.innerHTML = `<div>☠️ <strong>${c.name}</strong> morreu.</div>` + log.innerHTML; return; }
+        let drops = []; m.loot.forEach(l=>{ if(Math.random()*100 <= l.chance) drops.push(l.item); });
+        if(drops.length) log.innerHTML = `<div>☠️ <strong>${c.name}</strong> dropou: <span class="loot-msg">${drops.join(', ')}</span></div>`+log.innerHTML;
+        else log.innerHTML = `<div>☠️ <strong>${c.name}</strong> morreu (Sem loot).</div>`+log.innerHTML;
+    }
+    function remCombat(i) { gmData.combat.splice(i,1); saveData(); renderCombat(); }
+    function sortCombat() { gmData.combat.sort((a,b)=>b.ini-a.ini); saveData(); renderCombat(); }
+    function clearCombat() { if(confirm("Limpar?")) { gmData.combat=[]; saveData(); renderCombat(); } }
+
+    // --- REGIONS & CALENDAR ---
+    function addRegion() { const n = document.getElementById('regName').value; if(n){ gmData.regions.push({id:Date.now(),name:n,monsters:[]}); saveData(); updateAllViews(); document.getElementById('regName').value=''; } }
+    function renderRegions() {
+        document.getElementById('regionsList').innerHTML = gmData.regions.map(r=>{
+            const ms = r.monsters.map(mid=>{ const m=gmData.monsters.find(x=>x.id==mid); return m?`<span class="tag" style="background:#333;">${m.name}</span>`:''; }).join(' ');
+            return `<div class="section"><div style="display:flex;justify-content:space-between;"><strong>${r.name}</strong><button class="btn-danger btn-small" style="width:auto;" onclick="delReg(${r.id})">X</button></div><div style="margin:5px 0;">${ms||'<small>Vazio</small>'}</div><div style="display:flex;gap:5px;"><select id="selReg_${r.id}">${gmData.monsters.map(m=>`<option value="${m.id}">${m.name} (Nv.${m.level})</option>`).join('')}</select><button class="btn-info btn-small" onclick="linkMon(${r.id})">Add</button></div></div>`;
+        }).join('');
+    }
+    function linkMon(rid) { const mid = parseInt(document.getElementById('selReg_'+rid).value); const r=gmData.regions.find(x=>x.id==rid); if(r&&mid&&!r.monsters.includes(mid)) { r.monsters.push(mid); saveData(); renderRegions(); updateRegionSelect(); } }
+    function delReg(id) { if(confirm("Apagar?")){ gmData.regions=gmData.regions.filter(x=>x.id!==id); saveData(); updateAllViews(); } }
+    function advTime(d) { let c=gmData.calendar; c.day+=d; if(c.day>30){c.day-=30;c.month++} if(c.month>12){c.month=1;c.year++} saveData(); updateCalendar(); }
+    function logEvent() { const t=document.getElementById('eventInput').value; if(t){ gmData.calendar.log.push({d:`${gmData.calendar.day}/${gmData.calendar.month}/${gmData.calendar.year}`,t}); saveData(); updateCalendar(); document.getElementById('eventInput').value=''; } }
+    function updateCalendar() {
+        document.getElementById('calDay').innerText=gmData.calendar.day; document.getElementById('calMonth').innerText=gmData.calendar.month; document.getElementById('calYear').innerText=gmData.calendar.year;
+        document.getElementById('historyLog').innerHTML=gmData.calendar.log.slice().reverse().map(l=>`<div style="border-bottom:1px solid #333;padding:5px;"><span style="color:var(--accent-color)">[${l.d}]</span> ${l.t}</div>`).join('');
+    }
+    function exportData() { document.getElementById('ioArea').value = JSON.stringify(gmData); }
+    function importData() {
+        try { const j=JSON.parse(document.getElementById('ioArea').value); if(Array.isArray(j)){ j.forEach(m=>{m.id=Date.now()+Math.floor(Math.random()*1000); gmData.monsters.push(m);}); alert("Monstros importados!"); } else { gmData=j; alert("Restaurado!"); } saveData(); updateAllViews(); } catch(e){alert("JSON Inválido");}
+    }
+    function copyPrompt() { navigator.clipboard.writeText(`Crie 3 monstros RPG em JSON (array). Estrutura: [{"id":0,"name":"Nome","level":1,"size":"Médio","isBoss":false,"attr":{"FOR":0,"DEX":0,"AGI":0,"INT":0,"SAB":0},"scale":{"hpBase":10,"hpFor":5,"defBase":10,"defAgi":1,"movBase":4,"movAgi":1,"dmgBase":"1d6","dmgFor":"1d4","dmgInt":"1d4","healSab":"1d4"},"loot":[{"item":"Ouro","chance":50}],"skills":[{"name":"Ataque","desc":"..."}],"phases":[]}]`); alert("Copiado!"); }
+	
+	
+    function updateAllViews() { renderMonsterList(); renderRegions(); updateRegionSelect(); updateManualCombatSelect(); renderCombat(); updateCalendar(); renderAlchemy(); }
+
+
+    (function() {
+        // Usamos uma função anônima para isolar as variáveis do escopo global
+        const floatBtn = document.getElementById('globalAdmin_floatBtn');
+        const overlay = document.getElementById('globalAdmin_overlay');
+        const closeBtn = document.getElementById('globalAdmin_closeBtn');
+
+        // Função para abrir o menu
+        function openAdminMenu() {
+            overlay.classList.add('is-visible');
+            overlay.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden'; // Impede rolagem da página de fundo
+        }
+
+        // Função para fechar o menu
+        function closeAdminMenu() {
+            overlay.classList.remove('is-visible');
+            overlay.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = ''; // Libera rolagem
+        }
+
+        // Eventos de clique
+        floatBtn.addEventListener('click', openAdminMenu);
+        closeBtn.addEventListener('click', closeAdminMenu);
+
+        // Fechar ao pressionar a tecla ESC
+        document.addEventListener('keydown', function(event) {
+            if (event.key === "Escape" && overlay.classList.contains('is-visible')) {
+                closeAdminMenu();
+            }
+        });
+    })();
+
+
+</script>
+</body>
+</html>
