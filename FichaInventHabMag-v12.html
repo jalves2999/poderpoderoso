@@ -477,8 +477,11 @@
             
             <nav class="globalAdmin_nav">
                 <!-- LISTA DE LINKS PARA OUTROS SISTEMAS -->
-                <a href="https://jalves2999.github.io/poderpoderoso/FichaInventHabMag-v12.html" class="globalAdmin_link">Ficha personagem</a>
-                <a href="https://jalves2999.github.io/poderpoderoso/bestiarioAlquiHisto.html" class="globalAdmin_link">Mestre</a>
+                <a href="https://jalves2999.github.io/poderpoderoso/FichaInventHabMag-v11.html" class="globalAdmin_link">Sistema de RH</a>
+                <a href="https://sistema-financeiro.suaempresa.com" class="globalAdmin_link">Financeiro</a>
+                <a href="/dashboard" class="globalAdmin_link">Dashboard Principal</a>
+                <a href="/configuracoes" class="globalAdmin_link">Configurações</a>
+                <a href="/logout" class="globalAdmin_link logout">Sair do Sistema</a>
             </nav>
         </div>
     </div>
@@ -1591,7 +1594,7 @@
 
         function renderEquipUI() {
             const skSel = document.getElementById('selectSkillToEquip'); skSel.innerHTML = '<option value="">-- Selecione --</option>';
-            character.dbSkills.forEach(s => { const matchClass = s.cls === 'Qualquer' || (s.cls || '').toLowerCase() === character.class || (s.cls || '').toLowerCase() === character.subclass; if (matchClass && !character.equippedSkills.includes(s.id)) { const opt = document.createElement('option'); opt.value = s.id; opt.innerText = `${s.name} [Nível ${s.lvl}]`; skSel.appendChild(opt); } });
+            character.dbSkills.forEach(s => { const matchClass = s.cls === 'Qualquer' || (s.cls || '').toLowerCase() === character.class.toLowerCase() || (s.cls || '').toLowerCase() === character.subclass.toLowerCase(); if (matchClass && !character.equippedSkills.includes(s.id)) { const opt = document.createElement('option'); opt.value = s.id; opt.innerText = `${s.name} [Nível ${s.lvl}]`; skSel.appendChild(opt); } });
             const spSel = document.getElementById('selectSpellToEquip'); spSel.innerHTML = '<option value="">-- Selecione --</option>';
             character.dbSpells.forEach(s => { if (!character.equippedSpells.includes(s.id)) { const opt = document.createElement('option'); opt.value = s.id; opt.innerText = `${s.name} [Círculo ${s.level}] (Custo: ${s.slots})`; spSel.appendChild(opt); } });
             document.getElementById('skillPointsDisplay').innerText = `${computed.currentSkillPoints} / ${computed.maxSkillPoints}`;
