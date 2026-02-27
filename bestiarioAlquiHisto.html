@@ -603,6 +603,69 @@
         </div>
     </div>
 
+	 <style>
+        /* Estilo básico para ficar bonito */
+        .caixa-texto {
+            background-color: #f4f4f4;
+            border-left: 5px solid #007bff;
+            padding: 15px;
+            margin-bottom: 15px;
+            font-family: sans-serif;
+        }
+
+        .btn-copiar {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+
+        .btn-copiar:hover {
+            background-color: #0056b3;
+        }
+
+        /* Classe para quando o texto for copiado */
+        .copiado {
+            background-color: #28a745 !important; /* Verde */
+        }
+    </style>
+</head>
+<body>
+
+    <div id="minhaDiv" class="caixa-texto">
+        Copie este código ou texto importante clicando no botão abaixo!
+    </div>
+
+    <button id="btnCopiar" class="btn-copiar" onclick="copiarComFeedback()">
+        Copiar para Área de Transferência
+    </button>
+
+    <script>
+        function copiarComFeedback() {
+            const texto = document.getElementById("minhaDiv").innerText;
+            const botao = document.getElementById("btnCopiar");
+
+            navigator.clipboard.writeText(texto).then(() => {
+                // Muda o visual do botão para indicar sucesso
+                botao.innerText = "Copiado!";
+                botao.classList.add("copiado");
+
+                // Volta ao normal depois de 2 segundos (2000ms)
+                setTimeout(() => {
+                    botao.innerText = "Copiar para Área de Transferência";
+                    botao.classList.remove("copiado");
+                }, 2000);
+            }).catch(err => {
+                console.error('Erro ao copiar:', err);
+                alert("Não foi possível copiar o texto automaticamente.");
+            });
+        }
+    </script>
+
 </div>
 
 <!-- MODAL DETALHES -->
