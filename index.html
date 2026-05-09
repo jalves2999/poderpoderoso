@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ferro & Sangue — Sistema de RPG</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=IM+Fell+English:ital@0;1&family=MedievalSharp&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!-- LOADING SCREEN -->
+<div id="loadingScreen" class="loading-screen">
+  <div class="loading-inner">
+    <div class="loading-rune">ᚠᛖᚱᚱᚢᛗ</div>
+    <h1 class="loading-title">FERRO <span>&</span> SANGUE</h1>
+    <div class="loading-bar-wrap"><div class="loading-bar"></div></div>
+    <p class="loading-sub">Despertando os feitiços antigos...</p>
+  </div>
+</div>
+
+<!-- SIDEBAR NAV -->
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-brand">
+    <span class="brand-rune">⚔</span>
+    <span class="brand-text">F<span>&</span>S</span>
+  </div>
+  <div class="sidebar-char-mini" id="sidebarCharMini">
+    <div class="char-mini-avatar" id="sidebarAvatar">?</div>
+    <div class="char-mini-info">
+      <span class="char-mini-name" id="sidebarName">Sem Personagem</span>
+      <span class="char-mini-class" id="sidebarClass">—</span>
+    </div>
+  </div>
+  <ul class="nav-list">
+    <li class="nav-item active" data-page="dashboard">
+      <span class="nav-icon">🏰</span><span class="nav-label">Início</span>
+    </li>
+    <li class="nav-item" data-page="character">
+      <span class="nav-icon">⚔️</span><span class="nav-label">Personagem</span>
+    </li>
+    <li class="nav-item" data-page="skills">
+      <span class="nav-icon">✨</span><span class="nav-label">Habilidades</span>
+    </li>
+    <li class="nav-item" data-page="inventory">
+      <span class="nav-icon">🎒</span><span class="nav-label">Inventário</span>
+    </li>
+    <li class="nav-item" data-page="spells">
+      <span class="nav-icon">🔮</span><span class="nav-label">Magias</span>
+    </li>
+    <li class="nav-item" data-page="encounters">
+      <span class="nav-icon">🗺️</span><span class="nav-label">Encontros</span>
+    </li>
+    <li class="nav-item" data-page="quests">
+      <span class="nav-icon">📜</span><span class="nav-label">Missões</span>
+    </li>
+    <li class="nav-item" data-page="lore">
+      <span class="nav-icon">📖</span><span class="nav-label">Lore</span>
+    </li>
+    <li class="nav-item" data-page="dice">
+      <span class="nav-icon">🎲</span><span class="nav-label">Dados</span>
+    </li>
+  </ul>
+  <div class="sidebar-footer">
+    <button class="btn-save-all" onclick="App.saveAll()">💾 Salvar Tudo</button>
+  </div>
+</nav>
+
+<!-- MOBILE TOPBAR -->
+<div class="topbar" id="topbar">
+  <button class="hamburger" id="hamburger" onclick="App.toggleSidebar()">☰</button>
+  <span class="topbar-title">Ferro & Sangue</span>
+  <button class="topbar-dice" onclick="App.quickRoll()">🎲</button>
+</div>
+
+<!-- MAIN CONTENT -->
+<main class="main-content" id="mainContent">
+
+  <!-- ===== DASHBOARD ===== -->
+  <section class="page active" id="page-dashboard">
+    <div class="page-header">
+      <h2 class="page-title">Salão do Aventureiro</h2>
+      <p class="page-sub">Bem-vindo ao sistema Ferro & Sangue</p>
+    </div>
+    <div id="dashboardNoChar" class="dashboard-empty">
+      <div class="empty-scroll">
+        <div class="empty-icon">⚔</div>
+        <h3>Nenhum herói ainda</h3>
+        <p>Crie seu personagem para começar a aventura</p>
+        <button class="btn-primary" onclick="App.navigate('character')">Criar Personagem</button>
+      </div>
+    </div>
+    <div id="dashboardChar" class="dashboard-char" style="display:none">
+      <div class="char-card-hero">
+        <div class="char-hero-left">
+          <div class="char-avatar-big" id="dashAvatar">K</div>
+          <div class="char-hero-info">
+            <h3 id="dashName">—</h3>
+            <p id="dashClass">—</p>
+            <p id="dashBackground">—</p>
+          </div>
+        </div>
+        <div class="char-hero-stats">
+          <div class="stat-orb" id="dashPV">
+            <div class="orb-val" id="dashPVval">0</div>
+            <div class="orb-label">PV</div>
+          </div>
+          <div class="stat-orb orb-st" id="dashST">
+            <div class="orb-val" id="dashSTval">0</div>
+            <div class="orb-label">ST</div>
+          </div>
+          <div class="stat-orb orb-mp" id="dashMP">
+            <div class="orb-val" id="dashMPval">0</div>
+            <div class="orb-label">MP</div>
+          </div>
+        </div>
+      </div>
+      <!-- XP BAR -->
+      <div class="xp-section">
+        <div class="xp-header">
+          <span class="xp-label">⭐ Experiência</span>
+          <span class="xp-val" id="dashXP">0 XP</span>
+        </div>
+        <div class="xp-bar-wrap"><div class="xp-bar" id="dashXPbar"></div></div>
+        <div class="xp-milestone" id="dashXPmilestone">Próxima habilidade em 50 XP</div>
+      </div>
+      <!-- QUICK ATTRS -->
+      <div class="quick-attrs">
+        <div class="qattr" id="qFOR"><span class="qattr-val">—</span><span class="qattr-name">FOR</span></div>
+        <div class="qattr" id="qAGI"><span class="qattr-val">—</span><span class="qattr-name">AGI</span></div>
+        <div class="qattr" id="qDEX"><span class="qattr-val">—</span><span class="qattr-name">DEX</span></div>
+        <div class="qattr" id="qINT"><span class="qattr-val">—</span><span class="qattr-name">INT</span></div>
+        <div class="qattr" id="qSAB"><span class="qattr-val">—</span><span class="qattr-name">SAB</span></div>
+      </div>
+      <!-- CONDITIONS -->
+      <div class="conditions-row" id="conditionsRow"></div>
+      <!-- QUICK ACTIONS -->
+      <div class="dash-actions">
+        <button class="dash-btn" onclick="App.showXPModal()">➕ Ganhar XP</button>
+        <button class="dash-btn" onclick="App.showHealModal()">💊 Curar</button>
+        <button class="dash-btn" onclick="App.showDamageModal()">🩸 Dano</button>
+        <button class="dash-btn" onclick="App.showRestModal()">🌙 Descansar</button>
+        <button class="dash-btn" onclick="App.showConditionModal()">⚡ Condição</button>
+        <button class="dash-btn danger" onclick="App.newChar()">🔄 Novo Herói</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CHARACTER CREATION ===== -->
+  <section class="page" id="page-character">
+    <div class="page-header">
+      <h2 class="page-title">Forja do Herói</h2>
+      <p class="page-sub">Distribua 50 pontos entre os atributos</p>
+    </div>
+
+    <!-- BASIC INFO -->
+    <div class="form-card">
+      <div class="form-card-title">📋 Informações Básicas</div>
+      <div class="form-grid">
+        <div class="form-field">
+          <label>Nome do Personagem</label>
+          <input type="text" id="charName" placeholder="Ex: Kira, a Guerreira..." maxlength="40">
+        </div>
+        <div class="form-field">
+          <label>Classe</label>
+          <select id="charClass" onchange="App.onClassChange()">
+            <option value="">— Escolha a Classe —</option>
+            <option value="guerreiro">⚔️ Guerreiro</option>
+            <option value="mago">🔮 Mago</option>
+            <option value="arqueiro">🏹 Arqueiro</option>
+            <option value="ladino">🗡️ Ladino</option>
+            <option value="clerigo">✝ Clérigo</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>Origem / Background</label>
+          <select id="charBackground">
+            <option value="">— Escolha a Origem —</option>
+            <option value="Nobre Decaído">Nobre Decaído (+1 SAB, +1 INT)</option>
+            <option value="Soldado Veterano">Soldado Veterano (+2 FOR)</option>
+            <option value="Eremita das Montanhas">Eremita das Montanhas (+1 SAB, +1 AGI)</option>
+            <option value="Ladrão de Mercado">Ladrão de Mercado (+2 DEX)</option>
+            <option value="Aprendiz de Mago">Aprendiz de Mago (+2 INT)</option>
+            <option value="Devoto da Fé">Devoto da Fé (+2 SAB)</option>
+            <option value="Mercenário">Mercenário (+1 FOR, +1 AGI)</option>
+            <option value="Camponês Resiliente">Camponês Resiliente (+1 FOR, +1 SAB)</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>Alinhamento</label>
+          <select id="charAlignment">
+            <option value="Leal e Bom">Leal e Bom</option>
+            <option value="Neutro e Bom">Neutro e Bom</option>
+            <option value="Caótico e Bom">Caótico e Bom</option>
+            <option value="Leal e Neutro">Leal e Neutro</option>
+            <option value="Neutro">Neutro</option>
+            <option value="Caótico e Neutro">Caótico e Neutro</option>
+            <option value="Leal e Mau">Leal e Mau</option>
+            <option value="Neutro e Mau">Neutro e Mau</option>
+            <option value="Caótico e Mau">Caótico e Mau</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>Idade</label>
+          <input type="number" id="charAge" min="15" max="200" value="25">
+        </div>
+        <div class="form-field">
+          <label>Moedas de Ouro iniciais</label>
+          <input type="number" id="charGold" min="0" value="10">
+        </div>
+      </div>
+    </div>
+
+    <!-- ATTRIBUTES -->
+    <div class="form-card">
+      <div class="form-card-title">
+        ⚔ Atributos
+        <span class="points-badge">Pontos restantes: <strong id="pointsLeft">50</strong></span>
+      </div>
+      <div class="attrs-builder">
+        <div class="attr-row" id="attrFOR">
+          <div class="attr-info">
+            <span class="attr-name">FOR</span>
+            <span class="attr-full">Força</span>
+            <span class="attr-desc">Dano c/c, carga, força bruta</span>
+          </div>
+          <div class="attr-controls">
+            <button class="attr-btn" onclick="App.adjAttr('FOR',-1)">−</button>
+            <span class="attr-val" id="valFOR">8</span>
+            <button class="attr-btn" onclick="App.adjAttr('FOR',1)">+</button>
+          </div>
+          <div class="attr-mod" id="modFOR">−1</div>
+        </div>
+        <div class="attr-row" id="attrAGI">
+          <div class="attr-info">
+            <span class="attr-name">AGI</span>
+            <span class="attr-full">Agilidade</span>
+            <span class="attr-desc">Stamina, movimento, iniciativa</span>
+          </div>
+          <div class="attr-controls">
+            <button class="attr-btn" onclick="App.adjAttr('AGI',-1)">−</button>
+            <span class="attr-val" id="valAGI">8</span>
+            <button class="attr-btn" onclick="App.adjAttr('AGI',1)">+</button>
+          </div>
+          <div class="attr-mod" id="modAGI">−1</div>
+        </div>
+        <div class="attr-row" id="attrDEX">
+          <div class="attr-info">
+            <span class="attr-name">DEX</span>
+            <span class="attr-full">Destreza</span>
+            <span class="attr-desc">Precisão, furtividade, testes finos</span>
+          </div>
+          <div class="attr-controls">
+            <button class="attr-btn" onclick="App.adjAttr('DEX',-1)">−</button>
+            <span class="attr-val" id="valDEX">8</span>
+            <button class="attr-btn" onclick="App.adjAttr('DEX',1)">+</button>
+          </div>
+          <div class="attr-mod" id="modDEX">−1</div>
+        </div>
+        <div class="attr-row" id="attrINT">
+          <div class="attr-info">
+            <span class="attr-name">INT</span>
+            <span class="attr-full">Inteligência</span>
+            <span class="attr-desc">Pontos de Magia, conhecimento</span>
+          </div>
+          <div class="attr-controls">
+            <button class="attr-btn" onclick="App.adjAttr('INT',-1)">−</button>
+            <span class="attr-val" id="valINT">8</span>
+            <button class="attr-btn" onclick="App.adjAttr('INT',1)">+</button>
+          </div>
+          <div class="attr-mod" id="modINT">−1</div>
+        </div>
+        <div class="attr-row" id="attrSAB">
+          <div class="attr-info">
+            <span class="attr-name">SAB</span>
+            <span class="attr-full">Sabedoria</span>
+            <span class="attr-desc">Percepção, moral, resistência</span>
+          </div>
+          <div class="attr-controls">
+            <button class="attr-btn" onclick="App.adjAttr('SAB',-1)">−</button>
+            <span class="attr-val" id="valSAB">8</span>
+            <button class="attr-btn" onclick="App.adjAttr('SAB',1)">+</button>
+          </div>
+          <div class="attr-mod" id="modSAB">−1</div>
+        </div>
+      </div>
+      <!-- CLASS PREVIEW -->
+      <div class="class-preview" id="classPreview" style="display:none">
+        <div class="preview-label">Atributos recomendados para <span id="previewClassName"></span>:</div>
+        <div class="preview-attrs" id="previewAttrs"></div>
+      </div>
+    </div>
+
+    <!-- DERIVED STATS PREVIEW -->
+    <div class="form-card">
+      <div class="form-card-title">📊 Derivados (Calculados Automaticamente)</div>
+      <div class="derived-grid">
+        <div class="derived-item"><div class="derived-val" id="dPV">—</div><div class="derived-name">Pontos de Vida</div><div class="derived-formula">FOR×4 + SAB×2</div></div>
+        <div class="derived-item"><div class="derived-val" id="dST">—</div><div class="derived-name">Stamina</div><div class="derived-formula">AGI×3 + FOR</div></div>
+        <div class="derived-item"><div class="derived-val" id="dMP">—</div><div class="derived-name">Pontos de Magia</div><div class="derived-formula">INT×4 + SAB</div></div>
+        <div class="derived-item"><div class="derived-val" id="dDEF">—</div><div class="derived-name">Defesa Base</div><div class="derived-formula">10 + AGI÷2</div></div>
+        <div class="derived-item"><div class="derived-val" id="dMOV">—</div><div class="derived-name">Movimento</div><div class="derived-formula">3 + AGI÷4 hex</div></div>
+        <div class="derived-item"><div class="derived-val" id="dINI">—</div><div class="derived-name">Iniciativa</div><div class="derived-formula">AGI + DEX÷2</div></div>
+        <div class="derived-item"><div class="derived-val" id="dCARGA">—</div><div class="derived-name">Carga (kg)</div><div class="derived-formula">FOR × 3</div></div>
+      </div>
+    </div>
+
+    <!-- SKILLS SELECTION -->
+    <div class="form-card" id="skillsSelCard" style="display:none">
+      <div class="form-card-title">✨ Habilidades Iniciais (escolha 3 da sua classe)</div>
+      <div class="init-skills-grid" id="initSkillsGrid"></div>
+    </div>
+
+    <!-- PERICIA -->
+    <div class="form-card">
+      <div class="form-card-title">📜 Perícias (escolha 4 + 1 por INT÷3)</div>
+      <div class="pericias-grid" id="periciasGrid">
+        <!-- Built by JS -->
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button class="btn-primary btn-lg" onclick="App.createCharacter()">⚔ Forjar Personagem</button>
+      <button class="btn-secondary" onclick="App.randomizeChar()">🎲 Aleatório</button>
+    </div>
+  </section>
+
+  <!-- ===== SKILLS PAGE ===== -->
+  <section class="page" id="page-skills">
+    <div class="page-header">
+      <h2 class="page-title">Habilidades</h2>
+      <p class="page-sub" id="skillsXPInfo">XP disponível para habilidades: 0</p>
+    </div>
+    <div class="skills-filter">
+      <button class="filter-btn active" onclick="App.filterSkills('all')">Todas</button>
+      <button class="filter-btn" onclick="App.filterSkills('basic')">Básicas (50 XP)</button>
+      <button class="filter-btn" onclick="App.filterSkills('advanced')">Avançadas (100 XP)</button>
+      <button class="filter-btn" onclick="App.filterSkills('master')">Mestre (200 XP)</button>
+      <button class="filter-btn" onclick="App.filterSkills('owned')">Aprendidas</button>
+    </div>
+    <div class="skills-grid" id="skillsGrid"></div>
+  </section>
+
+  <!-- ===== INVENTORY ===== -->
+  <section class="page" id="page-inventory">
+    <div class="page-header">
+      <h2 class="page-title">Inventário</h2>
+      <div class="inv-header-stats">
+        <span id="invGold">🪙 0 ouro</span>
+        <span id="invLoad">⚖️ 0 / 0 kg</span>
+      </div>
+    </div>
+    <!-- EQUIPPED -->
+    <div class="inv-equipped-section">
+      <div class="inv-section-title">Equipado</div>
+      <div class="equipped-slots" id="equippedSlots">
+        <div class="equip-slot" id="slot-weapon" data-slot="weapon"><div class="slot-icon">⚔️</div><div class="slot-label">Arma</div></div>
+        <div class="equip-slot" id="slot-offhand" data-slot="offhand"><div class="slot-icon">🛡️</div><div class="slot-label">Mão Off</div></div>
+        <div class="equip-slot" id="slot-armor" data-slot="armor"><div class="slot-icon">🪖</div><div class="slot-label">Armadura</div></div>
+        <div class="equip-slot" id="slot-neck" data-slot="neck"><div class="slot-icon">📿</div><div class="slot-label">Pescoço</div></div>
+        <div class="equip-slot" id="slot-ring1" data-slot="ring1"><div class="slot-icon">💍</div><div class="slot-label">Anel 1</div></div>
+        <div class="equip-slot" id="slot-ring2" data-slot="ring2"><div class="slot-icon">💍</div><div class="slot-label">Anel 2</div></div>
+        <div class="equip-slot" id="slot-belt" data-slot="belt"><div class="slot-icon">🔗</div><div class="slot-label">Cinto</div></div>
+        <div class="equip-slot" id="slot-cloak" data-slot="cloak"><div class="slot-icon">🧥</div><div class="slot-label">Capa</div></div>
+      </div>
+    </div>
+
+    <!-- INVENTORY TABS -->
+    <div class="inv-tabs">
+      <button class="inv-tab active" onclick="App.invTab('bag')">🎒 Bolsa</button>
+      <button class="inv-tab" onclick="App.invTab('shop-weapons')">⚔️ Armas</button>
+      <button class="inv-tab" onclick="App.invTab('shop-armor')">🪖 Armaduras</button>
+      <button class="inv-tab" onclick="App.invTab('shop-magic')">✨ Mágicos</button>
+      <button class="inv-tab" onclick="App.invTab('shop-consumable')">🧪 Consumíveis</button>
+    </div>
+
+    <!-- BAG -->
+    <div class="inv-panel active" id="inv-bag">
+      <div class="bag-toolbar">
+        <button class="btn-sm" onclick="App.addCustomItem()">+ Item Personalizado</button>
+        <button class="btn-sm danger" onclick="App.clearBag()">🗑️ Limpar Bolsa</button>
+      </div>
+      <div class="bag-grid" id="bagGrid"></div>
+    </div>
+
+    <!-- SHOP PANELS -->
+    <div class="inv-panel" id="inv-shop-weapons">
+      <div class="shop-search"><input type="text" placeholder="Buscar arma..." oninput="App.filterShop('weapons',this.value)"></div>
+      <div class="shop-grid" id="shopWeapons"></div>
+    </div>
+    <div class="inv-panel" id="inv-shop-armor">
+      <div class="shop-grid" id="shopArmor"></div>
+    </div>
+    <div class="inv-panel" id="inv-shop-magic">
+      <div class="shop-grid" id="shopMagic"></div>
+    </div>
+    <div class="inv-panel" id="inv-shop-consumable">
+      <div class="shop-grid" id="shopConsumable"></div>
+    </div>
+  </section>
+
+  <!-- ===== SPELLS ===== -->
+  <section class="page" id="page-spells">
+    <div class="page-header">
+      <h2 class="page-title">Grimório</h2>
+      <p class="page-sub" id="spellsMPInfo">MP: 0 / 0</p>
+    </div>
+    <div class="spells-tabs">
+      <button class="filter-btn active" onclick="App.filterSpells('all')">Todas</button>
+      <button class="filter-btn" onclick="App.filterSpells('1')">Tier 1</button>
+      <button class="filter-btn" onclick="App.filterSpells('2')">Tier 2</button>
+      <button class="filter-btn" onclick="App.filterSpells('3')">Tier 3</button>
+      <button class="filter-btn" onclick="App.filterSpells('4')">Tier 4</button>
+      <button class="filter-btn" onclick="App.filterSpells('known')">Aprendidas</button>
+    </div>
+    <div class="spells-grid" id="spellsGrid"></div>
+  </section>
+
+  <!-- ===== ENCOUNTERS ===== -->
+  <section class="page" id="page-encounters">
+    <div class="page-header">
+      <h2 class="page-title">Gerador de Encontros</h2>
+      <p class="page-sub">Role os dados e enfrente o destino</p>
+    </div>
+    <div class="encounter-roller">
+      <div class="enc-biome-select">
+        <label>Bioma</label>
+        <select id="encBiome">
+          <option value="floresta">🌲 Floresta</option>
+          <option value="floresta_sombria">🌑 Floresta Sombria</option>
+          <option value="caverna">🕳️ Caverna</option>
+          <option value="masmorra">💀 Masmorra Profunda</option>
+          <option value="planicie">🌾 Planície</option>
+          <option value="pantano">🌿 Pântano</option>
+          <option value="montanha">⛰️ Montanha</option>
+          <option value="ruinas">🏚️ Ruínas</option>
+          <option value="cidade">🏙️ Cidade</option>
+        </select>
+      </div>
+      <div class="enc-mods">
+        <label class="enc-mod-check"><input type="checkbox" id="encFurtive"> Grupo Furtivo (+3)</label>
+        <label class="enc-mod-check"><input type="checkbox" id="encTorch"> Tocha Acesa (−4)</label>
+        <label class="enc-mod-check"><input type="checkbox" id="encDawn"> Crepúsculo (−2)</label>
+        <label class="enc-mod-check"><input type="checkbox" id="encRun"> Correndo (−5)</label>
+        <label class="enc-mod-check"><input type="checkbox" id="encAfterBattle"> Após Batalha (−3)</label>
+        <label class="enc-mod-check"><input type="checkbox" id="encSentinel"> Sentinela (+2)</label>
+      </div>
+      <button class="btn-roll-encounter" onclick="App.rollEncounter()">
+        <span class="roll-icon">🎲</span> Rolar Encontro
+      </button>
+    </div>
+    <!-- RESULT -->
+    <div class="encounter-result" id="encResult" style="display:none">
+      <div class="enc-result-header">
+        <div class="enc-dice-display">
+          <div class="enc-die"><div class="enc-die-label">Encontro</div><div class="enc-die-val" id="encDie1">—</div></div>
+          <div class="enc-plus">+</div>
+          <div class="enc-die"><div class="enc-die-label">Terreno</div><div class="enc-die-val" id="encDie2">—</div></div>
+        </div>
+      </div>
+      <div class="enc-result-body">
+        <div class="enc-card" id="encCard1">
+          <div class="enc-card-title" id="encTitle1"></div>
+          <div class="enc-card-body" id="encBody1"></div>
+        </div>
+        <div class="enc-card" id="encCard2">
+          <div class="enc-card-title" id="encTitle2"></div>
+          <div class="enc-card-body" id="encBody2"></div>
+        </div>
+      </div>
+      <div class="enc-creature" id="encCreature" style="display:none">
+        <div class="creature-header" id="creatureHeader"></div>
+        <div class="creature-body" id="creatureBody"></div>
+      </div>
+    </div>
+
+    <!-- NPC GENERATOR -->
+    <div class="npc-section">
+      <div class="section-title-bar">⚔ Gerador de NPC / Inimigo</div>
+      <div class="npc-controls">
+        <select id="npcLevel">
+          <option value="1">Nível 1 — Muito Fácil</option>
+          <option value="2">Nível 2 — Fácil</option>
+          <option value="3" selected>Nível 3 — Moderado</option>
+          <option value="4">Nível 4 — Difícil</option>
+          <option value="5">Nível 5 — Muito Difícil</option>
+        </select>
+        <select id="npcType">
+          <option value="humanoid">Humanoide</option>
+          <option value="beast">Besta</option>
+          <option value="undead">Morto-Vivo</option>
+          <option value="giant">Gigante</option>
+          <option value="mage">Conjurador</option>
+          <option value="dragon">Dragão</option>
+        </select>
+        <button class="btn-primary" onclick="App.generateNPC()">Gerar NPC</button>
+      </div>
+      <div class="npc-result" id="npcResult" style="display:none"></div>
+      <div class="saved-npcs" id="savedNPCs">
+        <div class="section-title-bar">📋 NPCs Salvos</div>
+        <div id="npcList"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== QUESTS ===== -->
+  <section class="page" id="page-quests">
+    <div class="page-header">
+      <h2 class="page-title">Missões</h2>
+      <p class="page-sub">Sua lista de objetivos e aventuras</p>
+    </div>
+    <div class="quest-toolbar">
+      <button class="btn-primary" onclick="App.openQuestModal()">+ Nova Missão</button>
+      <div class="quest-filter">
+        <button class="filter-btn active" onclick="App.filterQuests('all')">Todas</button>
+        <button class="filter-btn" onclick="App.filterQuests('active')">Ativas</button>
+        <button class="filter-btn" onclick="App.filterQuests('completed')">Concluídas</button>
+        <button class="filter-btn" onclick="App.filterQuests('failed')">Falhas</button>
+      </div>
+    </div>
+    <div class="quests-list" id="questsList"></div>
+  </section>
+
+  <!-- ===== LORE ===== -->
+  <section class="page" id="page-lore">
+    <div class="page-header">
+      <h2 class="page-title">Crônicas do Herói</h2>
+      <p class="page-sub">Lore, história e anotações do personagem</p>
+    </div>
+    <div class="lore-tabs">
+      <button class="filter-btn active" onclick="App.loreTab('backstory')">📖 História</button>
+      <button class="filter-btn" onclick="App.loreTab('personality')">💭 Personalidade</button>
+      <button class="filter-btn" onclick="App.loreTab('goals')">🎯 Objetivos</button>
+      <button class="filter-btn" onclick="App.loreTab('relations')">👥 Relações</button>
+      <button class="filter-btn" onclick="App.loreTab('notes')">📝 Anotações</button>
+      <button class="filter-btn" onclick="App.loreTab('session')">🎭 Diário</button>
+    </div>
+    <div class="lore-panels">
+      <div class="lore-panel active" id="lore-backstory">
+        <textarea class="lore-textarea" id="txt-backstory" placeholder="A história de seu personagem antes da aventura começar... De onde veio? O que o levou a se tornar um aventureiro? Quais eventos marcaram sua vida?" oninput="App.saveLore()"></textarea>
+      </div>
+      <div class="lore-panel" id="lore-personality">
+        <div class="lore-subsections">
+          <div class="lore-sub">
+            <label>Traços de Personalidade</label>
+            <textarea class="lore-textarea small" id="txt-traits" placeholder="Como seu personagem age e pensa no dia a dia..." oninput="App.saveLore()"></textarea>
+          </div>
+          <div class="lore-sub">
+            <label>Ideais</label>
+            <textarea class="lore-textarea small" id="txt-ideals" placeholder="O que seu personagem valoriza acima de tudo..." oninput="App.saveLore()"></textarea>
+          </div>
+          <div class="lore-sub">
+            <label>Vínculos</label>
+            <textarea class="lore-textarea small" id="txt-bonds" placeholder="Pessoas, lugares ou coisas que seu personagem não pode abandonar..." oninput="App.saveLore()"></textarea>
+          </div>
+          <div class="lore-sub">
+            <label>Fraquezas</label>
+            <textarea class="lore-textarea small" id="txt-flaws" placeholder="Os defeitos e medos que tornam seu herói humano..." oninput="App.saveLore()"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="lore-panel" id="lore-goals">
+        <textarea class="lore-textarea" id="txt-goals" placeholder="Objetivos de curto e longo prazo. O que seu personagem quer alcançar? Vingança? Glória? Redenção? Riqueza?" oninput="App.saveLore()"></textarea>
+      </div>
+      <div class="lore-panel" id="lore-relations">
+        <div class="relations-list" id="relationsList"></div>
+        <button class="btn-sm" onclick="App.addRelation()">+ Adicionar Relação</button>
+      </div>
+      <div class="lore-panel" id="lore-notes">
+        <textarea class="lore-textarea" id="txt-notes" placeholder="Anotações gerais: pistas de missões, informações de NPCs, mapas descobertos, segredos..." oninput="App.saveLore()"></textarea>
+      </div>
+      <div class="lore-panel" id="lore-session">
+        <div class="session-toolbar">
+          <button class="btn-sm" onclick="App.addSessionEntry()">+ Nova Sessão</button>
+        </div>
+        <div class="session-list" id="sessionList"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== DICE ROLLER ===== -->
+  <section class="page" id="page-dice">
+    <div class="page-header">
+      <h2 class="page-title">Mesa de Dados</h2>
+      <p class="page-sub">Role os dados do destino</p>
+    </div>
+    <div class="dice-table">
+      <div class="dice-row">
+        <button class="die-btn" onclick="App.rollDie(4)"><span>d4</span></button>
+        <button class="die-btn" onclick="App.rollDie(6)"><span>d6</span></button>
+        <button class="die-btn" onclick="App.rollDie(8)"><span>d8</span></button>
+        <button class="die-btn" onclick="App.rollDie(10)"><span>d10</span></button>
+        <button class="die-btn" onclick="App.rollDie(12)"><span>d12</span></button>
+        <button class="die-btn die-d20" onclick="App.rollDie(20)"><span>d20</span></button>
+      </div>
+      <div class="dice-custom">
+        <input type="number" id="diceCount" value="2" min="1" max="20">
+        <span>d</span>
+        <input type="number" id="diceSides" value="6" min="2" max="100">
+        <span>+</span>
+        <input type="number" id="diceBonus" value="0" min="-20" max="20">
+        <button class="btn-primary" onclick="App.rollCustom()">Rolar</button>
+      </div>
+      <div class="dice-result" id="diceResult">
+        <div class="dice-result-inner">
+          <div class="dice-result-val" id="diceResultVal">—</div>
+          <div class="dice-result-detail" id="diceResultDetail"></div>
+        </div>
+      </div>
+      <!-- QUICK ROLL SHORTCUTS -->
+      <div class="quick-rolls">
+        <div class="quick-roll-title">Atalhos de Combate</div>
+        <div class="quick-roll-grid">
+          <button class="quick-btn" onclick="App.rollAttr('FOR')">FOR (d20+FOR)</button>
+          <button class="quick-btn" onclick="App.rollAttr('AGI')">AGI (d20+AGI)</button>
+          <button class="quick-btn" onclick="App.rollAttr('DEX')">DEX (d20+DEX)</button>
+          <button class="quick-btn" onclick="App.rollAttr('INT')">INT (d20+INT)</button>
+          <button class="quick-btn" onclick="App.rollAttr('SAB')">SAB (d20+SAB)</button>
+          <button class="quick-btn" onclick="App.rollInitiative()">⚡ Iniciativa</button>
+          <button class="quick-btn" onclick="App.rollAttack()">⚔️ Ataque (d10+DEX)</button>
+          <button class="quick-btn" onclick="App.rollDefense()">🛡️ Defesa (d10+AGI)</button>
+        </div>
+      </div>
+      <!-- HISTORY -->
+      <div class="dice-history">
+        <div class="dice-history-title">Histórico <button class="btn-xs" onclick="App.clearDiceHistory()">Limpar</button></div>
+        <div id="diceHistory"></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ===== MODALS ===== -->
+<div class="modal-overlay" id="modalOverlay" onclick="App.closeModal(event)">
+  <div class="modal" id="modal">
+    <button class="modal-close" onclick="App.closeModal()">✕</button>
+    <div class="modal-title" id="modalTitle"></div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-footer" id="modalFooter"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
