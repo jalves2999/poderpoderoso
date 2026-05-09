@@ -1511,6 +1511,21 @@ body {
 .nav-list::-webkit-scrollbar { width: 3px; }
 .nav-list::-webkit-scrollbar-thumb { background: var(--blood-d); }
 
+/* TOOLTIP WRAP */
+.tooltip-wrap { cursor: help; }
+.tooltip-wrap:hover { outline: 1px solid rgba(201,168,76,0.25); }
+
+/* ITEM RARITY GLOW */
+.item-card.rarity-uncommon { box-shadow: 0 0 8px rgba(72,178,72,0.08); }
+.item-card.rarity-rare { box-shadow: 0 0 10px rgba(72,130,230,0.12); }
+.item-card.rarity-very-rare { box-shadow: 0 0 12px rgba(163,102,246,0.15); }
+.item-card.rarity-legendary { box-shadow: 0 0 16px rgba(255,165,0,0.2); border-color: rgba(255,165,0,0.5) !important; }
+
+.item-card.rarity-uncommon .item-name { color: #81C784; }
+.item-card.rarity-rare .item-name { color: #90CAF9; }
+.item-card.rarity-very-rare .item-name { color: #CE93D8; }
+.item-card.rarity-legendary .item-name { color: var(--gold-b); text-shadow: 0 0 8px var(--glow-gold); }
+
 /* GLOW ANIMATIONS ON HOVER */
 .skill-card.tier-master:hover { box-shadow: 0 4px 20px rgba(139,0,0,0.3); }
 .skill-card.tier-advanced:hover { box-shadow: 0 4px 20px rgba(201,168,76,0.2); }

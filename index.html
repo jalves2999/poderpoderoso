@@ -60,6 +60,12 @@
     <li class="nav-item" data-page="dice">
       <span class="nav-icon">🎲</span><span class="nav-label">Dados</span>
     </li>
+    <li class="nav-item" onclick="App.openRules()">
+      <span class="nav-icon">📖</span><span class="nav-label">Regras</span>
+    </li>
+    <li class="nav-item" onclick="App.openConfig()">
+      <span class="nav-icon">⚙️</span><span class="nav-label">Config</span>
+    </li>
   </ul>
   <div class="sidebar-footer">
     <button class="btn-save-all" onclick="App.saveAll()">💾 Salvar Tudo</button>
@@ -215,7 +221,7 @@
     <div class="form-card">
       <div class="form-card-title">
         ⚔ Atributos
-        <span class="points-badge">Pontos restantes: <strong id="pointsLeft">50</strong></span>
+        <span class="points-badge">Pontos restantes: <strong id="pointsLeft">27</strong> <span style="font-size:0.6rem;opacity:0.7">(attr 14+ custa 2pts)</span></span>
       </div>
       <div class="attrs-builder">
         <div class="attr-row" id="attrFOR">
@@ -305,15 +311,26 @@
       </div>
     </div>
 
-    <!-- SKILLS SELECTION -->
+    <!-- SKILLS INFO NOTE -->
     <div class="form-card" id="skillsSelCard" style="display:none">
-      <div class="form-card-title">✨ Habilidades Iniciais (escolha 3 da sua classe)</div>
-      <div class="init-skills-grid" id="initSkillsGrid"></div>
+      <div class="form-card-title">✨ Habilidades — Ganhe XP para aprender</div>
+      <div style="font-size:0.85rem;color:var(--text-s);line-height:1.7;padding:0.25rem 0;">
+        <p>Ao criar o personagem você começa <strong style="color:var(--gold-b)">sem habilidades</strong>. Ganhe XP em combates e missões para aprender:</p>
+        <ul style="margin-top:0.5rem;padding-left:1.25rem;display:flex;flex-direction:column;gap:0.3rem;">
+          <li>Habilidades <strong>Básicas</strong>: 50 XP cada</li>
+          <li>Habilidades <strong>Avançadas</strong>: 100 XP cada (requer 1 Básica)</li>
+          <li>Habilidades de <strong>Mestre</strong>: 200 XP cada (requer 2 Avançadas)</li>
+          <li><strong>Magias</strong>: 50 XP cada</li>
+          <li>+1 Atributo: 100 XP (máximo 20)</li>
+        </ul>
+        <p style="margin-top:0.6rem;color:var(--text-m);font-size:0.78rem;">Dica: o guerreiro começa lento mas domina o campo de batalha depois de 2–3 habilidades básicas.</p>
+      </div>
+      <div class="init-skills-grid" id="initSkillsGrid" style="display:none"></div>
     </div>
 
     <!-- PERICIA -->
     <div class="form-card">
-      <div class="form-card-title">📜 Perícias (escolha 4 + 1 por INT÷3)</div>
+      <div class="form-card-title">📜 Perícias (escolha 3 + INT÷4 + SAB÷4) <span id="periciasMaxLabel" style="font-weight:400;font-size:0.7rem;color:var(--text-m);">Máximo: 3 perícias</span></div>
       <div class="pericias-grid" id="periciasGrid">
         <!-- Built by JS -->
       </div>

@@ -168,12 +168,18 @@ const DATA = {
     magic: [
       { id:'amulRes',  name:'Amuleto da Resiliência',  icon:'📿', type:'accessory', slot:'neck',  price:80,  rarity:'uncommon',  desc:'+4 PV máximos. –1 à DIF de Ferimento Grave.',  stats:['+4 PV máx','–1 DIF Ferimento'] },
       { id:'anelAgi',  name:'Anel de Agilidade',       icon:'💍', type:'accessory', slot:'ring1', price:100, rarity:'uncommon',  desc:'+1 AGI permanente enquanto equipado.',          stats:['+1 AGI'], bonuses:{ AGI:1 } },
-      { id:'cintoTita',name:'Cinto do Titã',           icon:'🔗', type:'accessory', slot:'belt',  price:200, rarity:'rare',      desc:'+3 FOR. Ignora –1 de penalidade de armadura pesada.', stats:['+3 FOR','Ignora –1 AGI Armadura'], bonuses:{ FOR:3 } },
+      { id:'cintoTita',name:'Cinto do Titã',           icon:'🔗', type:'accessory', slot:'belt',  price:200, rarity:'rare',      desc:'+3 FOR. Ignora –1 de penalidade de armadura pesada.', stats:['+3 FOR','Ignora –1 AGI'], bonuses:{ FOR:3 } },
       { id:'braArcano',name:'Bracelete do Arcano',     icon:'🔮', type:'accessory', slot:'ring1', price:150, rarity:'uncommon',  desc:'+8 MP máximos. Tier 1 custa –1 MP.',           stats:['+8 MP máx','Tier 1 –1 MP'] },
       { id:'anelSombr',name:'Anel de Sombra',          icon:'💍', type:'accessory', slot:'ring2', price:180, rarity:'rare',      desc:'Furtividade +3. Custo de Ataque Furtivo –2 ST.', stats:['Furtividade +3','Furtivo –2 ST'] },
       { id:'gorjalHer',name:'Gorjal do Herói',         icon:'📿', type:'accessory', slot:'neck',  price:220, rarity:'rare',      desc:'Imune sangramento cervical. +2 SAB.',           stats:['Imune Sangr. Cervical','+2 SAB'], bonuses:{ SAB:2 } },
       { id:'cintoArq', name:'Cinto do Arqueiro Veloz', icon:'🔗', type:'accessory', slot:'belt',  price:200, rarity:'rare',      desc:'Disparo Rápido –2 ST. +2 DEX permanente.',     stats:['Disparo Rápido –2 ST','+2 DEX'], bonuses:{ DEX:2 } },
-      { id:'capaS',    name:'Capa de Sombra',          icon:'🧥', type:'accessory', slot:'cloak', price:350, rarity:'rare',      desc:'+3 Furtividade. Desengajar sem custo de ST.',  stats:['Furtividade +3','Desengajar grátis'] }
+      { id:'capaS',    name:'Capa de Sombra',          icon:'🧥', type:'accessory', slot:'cloak', price:350, rarity:'rare',      desc:'+3 Furtividade. Desengajar sem custo de ST.',  stats:['Furtividade +3','Desengajar grátis'] },
+      // Very Rare & Legendary — strong attr bonuses
+      { id:'coroDrag',  name:'Coroa do Dragão Ancião', icon:'👑', type:'accessory', slot:'neck',  price:1200, rarity:'very-rare', desc:'+3 INT, +2 SAB, +10 MP máx. Resistência a fogo.', stats:['+3 INT','+2 SAB','+10 MP','Resist. Fogo'], bonuses:{ INT:3, SAB:2 } },
+      { id:'luvasGigan',name:'Luvas do Gigante',        icon:'🥊', type:'accessory', slot:'ring1', price:800,  rarity:'very-rare', desc:'+4 FOR. Ataque corpo-a-corpo: +1d6 dano extra.',   stats:['+4 FOR','+1d6 dano c/c'], bonuses:{ FOR:4 } },
+      { id:'anelDestino',name:'Anel do Destino',        icon:'💍', type:'accessory', slot:'ring2', price:1500, rarity:'legendary', desc:'+2 em TODOS os atributos. 1×/dia: ignore uma morte (retorne com 1 PV).', stats:['+2 a todos os atributos','1×/dia: ignore morte'], bonuses:{ FOR:2, AGI:2, DEX:2, INT:2, SAB:2 } },
+      { id:'capaSombEt',name:'Manto das Tumbas',        icon:'🧥', type:'accessory', slot:'cloak', price:900,  rarity:'very-rare', desc:'RD 3 em TODOS locais. Imune a sangramento e veneno. +1 DEX.', stats:['RD 3 universal','Imune sangr./veneno','+1 DEX'], bonuses:{ DEX:1 } },
+      { id:'elmoLend',  name:'Elmo do Herói Lendário',  icon:'🪖', type:'accessory', slot:'neck',  price:1000, rarity:'legendary', desc:'+3 SAB, +2 AGI. Imune a Atordoamento e Medo. +20 PV máx.', stats:['+3 SAB','+2 AGI','Imune Atordoam./Medo','+20 PV'], bonuses:{ SAB:3, AGI:2 } }
     ],
     consumable: [
       { id:'pocaoVida1',name:'Poção de Cura Menor',   icon:'🧪', type:'consumable', weight:0.3, price:15,  rarity:'common',   desc:'Restaura 2d8+5 PV ao beber.' },
@@ -425,34 +431,95 @@ function renderCharacterPage() {
 
 function renderExistingChar() {
   const c = State.char;
+  // Calculate equipped bonuses
+  const equipped = c.equipped || {};
+  let bonusAttr = { FOR:0, AGI:0, DEX:0, INT:0, SAB:0 };
+  let armorRD = 0, armorDef = 0, armorAgiPen = 0;
+  Object.values(equipped).forEach(id => {
+    const item = findItemById(id);
+    if (!item) return;
+    if (item.bonuses) Object.entries(item.bonuses).forEach(([k,v]) => { if (bonusAttr[k] !== undefined) bonusAttr[k] += v; });
+    if (item.rd) armorRD = Math.max(armorRD, item.rd);
+    if (item.defBonus) armorDef = Math.max(armorDef, item.defBonus);
+    if (item.agiPen) armorAgiPen = Math.max(armorAgiPen, item.agiPen);
+  });
+  const effAttrs = {};
+  ['FOR','AGI','DEX','INT','SAB'].forEach(a => { effAttrs[a] = c.attrs[a] + (bonusAttr[a]||0) - (a==='AGI'?armorAgiPen:0); });
+  const totalDEF = 10 + Math.floor(effAttrs.AGI/2) + armorDef;
+  const atkBonus = effAttrs.DEX; // d10+DEX for attack
+  const defBonus = effAttrs.AGI; // d10+AGI for defense
+  const initiative = effAttrs.AGI + Math.floor(effAttrs.DEX/2);
+  const maxPericias = 3 + Math.floor(c.attrs.INT/4) + Math.floor(c.attrs.SAB/4);
+
   const page = $('page-character');
   page.innerHTML = `
     <div class="page-header">
       <h2 class="page-title">Ficha do Herói</h2>
-      <p class="page-sub">${c.name} · ${DATA.classes[c.cls]?.label || c.cls}</p>
+      <p class="page-sub">${c.name} · ${DATA.classes[c.cls]?.icon||''} ${DATA.classes[c.cls]?.label || c.cls}</p>
     </div>
+
+    <!-- COMBAT STATS -->
+    <div class="form-card">
+      <div class="form-card-title">⚔ Chances de Combate</div>
+      <div class="derived-grid">
+        <div class="derived-item" title="Rolagem base de ataque: d10 + DEX. Quanto maior, mais fácil acertar.">
+          <div class="derived-val" style="color:var(--blood-b)">d10+${atkBonus}</div>
+          <div class="derived-name">Ataque Base</div><div class="derived-formula">d10 + DEX</div>
+        </div>
+        <div class="derived-item" title="Defesa base: quanto o inimigo precisa tirar para acertar você.">
+          <div class="derived-val" style="color:var(--gold-b)">${totalDEF}</div>
+          <div class="derived-name">Defesa Total</div><div class="derived-formula">10 + AGI÷2 + armadura</div>
+        </div>
+        <div class="derived-item" title="Rolagem de defesa ativa (aparar/esquivar): d10 + AGI.">
+          <div class="derived-val" style="color:#7B8ED8">d10+${defBonus}</div>
+          <div class="derived-name">Defesa Ativa</div><div class="derived-formula">d10 + AGI</div>
+        </div>
+        <div class="derived-item" title="Iniciativa: rola d10 e soma. Maior age primeiro.">
+          <div class="derived-val">+${initiative}</div>
+          <div class="derived-name">Iniciativa</div><div class="derived-formula">AGI + DEX÷2</div>
+        </div>
+        <div class="derived-item" title="Redução de Dano da armadura equipada.">
+          <div class="derived-val" style="color:#4CAF50">${armorRD}</div>
+          <div class="derived-name">RD Armadura</div><div class="derived-formula">da armadura equipada</div>
+        </div>
+        <div class="derived-item" title="Carga máxima em kg. Acima disso: –2 Movimento e –1 em testes físicos.">
+          <div class="derived-val">${c.attrs.FOR * 3}</div>
+          <div class="derived-name">Carga Máx.</div><div class="derived-formula">FOR × 3 kg</div>
+        </div>
+      </div>
+      ${Object.values(bonusAttr).some(v=>v!==0) || armorAgiPen > 0 ? `
+        <div style="margin-top:0.75rem;padding:0.5rem 0.75rem;background:rgba(201,168,76,0.06);border:1px solid rgba(201,168,76,0.2);border-radius:4px;font-size:0.75rem;color:var(--text-m);">
+          ✨ Bônus de itens equipados: ${Object.entries(bonusAttr).filter(([,v])=>v!==0).map(([k,v])=>`${k} ${v>0?'+':''}${v}`).join(', ')}${armorAgiPen>0?` | –${armorAgiPen} AGI (armadura)`:''}
+        </div>` : ''}
+    </div>
+
+    <!-- ATTR UPGRADE -->
     <div class="attr-upgrade-section">
-      <div class="form-card-title" style="margin-bottom:1rem;">⚔ Atributos — Custo: 100 XP para +1 (máx 20)</div>
+      <div class="form-card-title" style="margin-bottom:1rem;">⚔ Atributos — Custo: 100 XP cada +1 (máx 20) · XP disponível: <span style="color:var(--gold-b)">${c.xp||0}</span></div>
       <div class="attr-upgrade-grid">
-        ${['FOR','AGI','DEX','INT','SAB'].map(a => `
-          <div class="attr-upgrade-card">
+        ${['FOR','AGI','DEX','INT','SAB'].map(a => {
+          const eff = effAttrs[a];
+          const bonus = bonusAttr[a]||0;
+          return `<div class="attr-upgrade-card tooltip-wrap" data-tooltip="${ATTR_TIPS[a]||''}">
             <span class="attr-upgrade-name">${a}</span>
-            <span class="attr-upgrade-val">${c.attrs[a]}</span>
-            <span class="attr-upgrade-mod">${modStr(c.attrs[a])}</span>
+            <span class="attr-upgrade-val">${c.attrs[a]}${bonus!==0?`<sup style="font-size:0.6rem;color:var(--gold)">${bonus>0?'+':''}${bonus}</sup>`:''}</span>
+            <span class="attr-upgrade-mod">${modStr(eff)} efetivo</span>
             <button class="attr-upgrade-btn" onclick="App.upgradeAttr('${a}')" ${c.attrs[a] >= 20 || (c.xp||0) < 100 ? 'disabled style="opacity:0.4"' : ''}>
               +1 (100 XP)
             </button>
-            <span class="attr-upgrade-cost">${c.attrs[a] >= 20 ? 'Máximo!' : (c.xp||0) < 100 ? `${100-(c.xp||0)} XP faltando` : 'XP disponível'}</span>
-          </div>
-        `).join('')}
+            <span class="attr-upgrade-cost">${c.attrs[a] >= 20 ? 'Máximo!' : (c.xp||0) < 100 ? `Faltam ${100-(c.xp||0)} XP` : '✓ Disponível'}</span>
+          </div>`;
+        }).join('')}
       </div>
     </div>
+
     <div class="form-card">
       <div class="form-card-title">📊 Derivados Atuais</div>
       <div class="derived-grid">
-        ${Object.entries(calcDerived(c.attrs)).map(([k,v]) => `<div class="derived-item"><div class="derived-val">${v}</div><div class="derived-name">${k}</div></div>`).join('')}
+        ${Object.entries(calcDerived(effAttrs)).map(([k,v]) => `<div class="derived-item"><div class="derived-val">${v}</div><div class="derived-name">${k}</div></div>`).join('')}
       </div>
     </div>
+
     <div class="form-card">
       <div class="form-card-title">📜 Informações</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;font-size:0.85rem;color:var(--text-s);">
@@ -464,26 +531,32 @@ function renderExistingChar() {
         <div>XP Total: <strong style="color:var(--gold-b)">⭐ ${c.xp||0}</strong></div>
       </div>
     </div>
+
     <div class="form-card">
-      <div class="form-card-title">📜 Perícias</div>
-      <div style="display:flex;flex-wrap:wrap;gap:0.5rem;">
+      <div class="form-card-title">📜 Perícias <span style="font-size:0.72rem;font-weight:400;color:var(--text-m)">(${(c.pericias||[]).length}/${maxPericias} · 3 base + INT÷4 + SAB÷4)</span></div>
+      <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:0.75rem;">
         ${(c.pericias||[]).map(pid => {
           const p = DATA.pericias.find(x=>x.id===pid);
-          return p ? `<span class="badge badge-advanced" style="font-size:0.7rem;padding:0.2rem 0.6rem;">${p.name} (${p.attr})</span>` : '';
+          return p ? `<span class="badge badge-advanced" style="font-size:0.7rem;padding:0.25rem 0.7rem;">${p.name} <span style="opacity:0.6">(${p.attr})</span></span>` : '';
         }).join('')}
+        ${(c.pericias||[]).length === 0 ? '<span style="color:var(--text-m);font-size:0.8rem;font-style:italic;">Nenhuma perícia.</span>' : ''}
       </div>
+      ${(c.pericias||[]).length < maxPericias ? `<button class="btn-sm" onclick="App.openAddPericia()">+ Adicionar Perícia</button>` : ''}
     </div>
+
     <div class="form-card">
       <div class="form-card-title">💰 Moeda</div>
       <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
-        <button class="btn-sm" onclick="App.adjustGold(-1)">–1 ouro</button>
-        <button class="btn-sm" onclick="App.adjustGold(-5)">–5 ouros</button>
+        <button class="btn-sm" onclick="App.adjustGold(-1)">–1</button>
+        <button class="btn-sm" onclick="App.adjustGold(-5)">–5</button>
         <span style="font-family:'Cinzel',serif;font-size:1.3rem;color:var(--gold-b);">🪙 ${c.gold||0}</span>
-        <button class="btn-sm" onclick="App.adjustGold(1)">+1 ouro</button>
-        <button class="btn-sm" onclick="App.adjustGold(5)">+5 ouros</button>
-        <button class="btn-sm" onclick="App.adjustGold(10)">+10 ouros</button>
+        <button class="btn-sm" onclick="App.adjustGold(1)">+1</button>
+        <button class="btn-sm" onclick="App.adjustGold(5)">+5</button>
+        <button class="btn-sm" onclick="App.adjustGold(10)">+10</button>
+        <button class="btn-sm" onclick="App.openSetGold()">Definir</button>
       </div>
     </div>
+
     <div class="form-actions" style="padding-top:1rem;">
       <button class="btn-secondary" onclick="App.newChar()">🔄 Criar Novo Personagem</button>
     </div>`;
@@ -523,33 +596,48 @@ App.newChar = function() {
 };
 
 // ===================== ATTR BUILDER =====================
-let _pointsLeft = 50;
+let _pointsLeft = 27;  // Standard 27-point buy (attrs start at 8, cost 1pt each up to 13, 2pts above 13)
 let _attrs = { FOR:8, AGI:8, DEX:8, INT:8, SAB:8 };
 
 App.adjAttr = function(attr, delta) {
-  const newVal = _attrs[attr] + delta;
-  if (newVal < 5 || newVal > 16) return;
-  if (delta > 0 && _pointsLeft <= 0) { toast('Sem pontos restantes!','error'); return; }
+  const cur = _attrs[attr];
+  const newVal = cur + delta;
+  if (newVal < 8 || newVal > 15) return; // 8 min (no lowering below 8), 15 max at creation
+  // Point cost: each step 8→13 costs 1pt, 13→14 costs 2pts, 14→15 costs 2pts
+  const ptCost = (v) => v >= 14 ? 2 : 1;
+  const cost = delta > 0 ? ptCost(newVal) : -ptCost(cur);
+  if (delta > 0 && _pointsLeft < ptCost(newVal)) { toast(`Sem pontos suficientes! (custa ${ptCost(newVal)}pt)`,'error'); return; }
   _attrs[attr] = newVal;
-  _pointsLeft -= delta;
+  _pointsLeft -= cost;
   updateAttrDisplay();
 };
 
 function updateAttrDisplay() {
-  $('pointsLeft').textContent = _pointsLeft;
+  const ptEl = $('pointsLeft');
+  if (ptEl) {
+    ptEl.textContent = _pointsLeft;
+    ptEl.parentElement.style.color = _pointsLeft < 0 ? 'var(--blood-b)' : '';
+  }
   ['FOR','AGI','DEX','INT','SAB'].forEach(a => {
-    $(`val${a}`).textContent = _attrs[a];
-    $(`mod${a}`).textContent = modStr(_attrs[a]);
+    const vEl = $(`val${a}`); const mEl = $(`mod${a}`);
+    if (vEl) vEl.textContent = _attrs[a];
+    if (mEl) mEl.textContent = modStr(_attrs[a]);
+    // Color high attrs
+    if (vEl) vEl.style.color = _attrs[a] >= 14 ? 'var(--gold-b)' : _attrs[a] <= 8 ? 'var(--text-m)' : 'var(--parch)';
   });
+  // Update pericias max display
+  const maxP = 3 + Math.floor(_attrs.INT / 4) + Math.floor(_attrs.SAB / 4);
+  const pLabel = $('periciasMaxLabel');
+  if (pLabel) pLabel.textContent = `Máximo: ${maxP} perícias`;
   // Derived preview
   const d = calcDerived(_attrs);
-  $('dPV').textContent = d.PV;
-  $('dST').textContent = d.ST;
-  $('dMP').textContent = d.MP;
-  $('dDEF').textContent = d.DEF;
-  $('dMOV').textContent = d.MOV + ' hex';
-  $('dINI').textContent = '+' + d.INI;
-  $('dCARGA').textContent = d.CARGA + ' kg';
+  $('dPV') && ($('dPV').textContent = d.PV);
+  $('dST') && ($('dST').textContent = d.ST);
+  $('dMP') && ($('dMP').textContent = d.MP);
+  $('dDEF') && ($('dDEF').textContent = d.DEF);
+  $('dMOV') && ($('dMOV').textContent = d.MOV + ' hex');
+  $('dINI') && ($('dINI').textContent = '+' + d.INI);
+  $('dCARGA') && ($('dCARGA').textContent = d.CARGA + ' kg');
 }
 
 App.onClassChange = function() {
@@ -610,32 +698,40 @@ function buildPericiasGrid() {
 
 let _selectedPericias = [];
 App.togglePericia = function(id) {
-  const maxPericias = 4 + Math.floor(_attrs.INT / 3);
+  const maxPericias = 3 + Math.floor(_attrs.INT / 4) + Math.floor(_attrs.SAB / 4);
   if (_selectedPericias.includes(id)) {
     _selectedPericias = _selectedPericias.filter(x => x !== id);
-    $(`pitem-${id}`).classList.remove('selected');
-    $(`pcheck-${id}`).textContent = '';
+    $(`pitem-${id}`)?.classList.remove('selected');
+    const chk = $(`pcheck-${id}`); if (chk) chk.textContent = '';
   } else {
-    if (_selectedPericias.length >= maxPericias) { toast(`Máximo ${maxPericias} perícias!`,'error'); return; }
+    if (_selectedPericias.length >= maxPericias) { toast(`Máximo ${maxPericias} perícias! (3 base + INT÷4 + SAB÷4)`,'error'); return; }
     _selectedPericias.push(id);
-    $(`pitem-${id}`).classList.add('selected');
-    $(`pcheck-${id}`).textContent = '✓';
+    $(`pitem-${id}`)?.classList.add('selected');
+    const chk = $(`pcheck-${id}`); if (chk) chk.textContent = '✓';
   }
 };
 
 App.randomizeChar = function() {
-  // Random name
   const names = DATA.npcNames;
   $('charName').value = names[rand(0, names.length-1)];
-  // Random class
   const classes = Object.keys(DATA.classes);
   const cls = classes[rand(0, classes.length-1)];
   $('charClass').value = cls;
   App.onClassChange();
-  // Random attrs based on class
+  // Budget: 27 points, each point = +1 attr (above 13 costs 2)
+  _attrs = { FOR:8, AGI:8, DEX:8, INT:8, SAB:8 };
+  _pointsLeft = 27;
+  // Distribute based on class recommendation priorities
   const rec = DATA.classes[cls].recommended;
-  _attrs = { ...rec };
-  _pointsLeft = 50 - Object.values(_attrs).reduce((a,b)=>a+b,0) + 5*8;
+  const priorities = Object.entries(rec).sort((a,b) => b[1]-a[1]).map(e => e[0]);
+  let attempts = 0;
+  while (_pointsLeft > 0 && attempts < 200) {
+    attempts++;
+    const attr = priorities[rand(0, Math.min(2, priorities.length-1))];
+    if (_attrs[attr] >= 15) continue;
+    const cost = _attrs[attr] >= 13 ? 2 : 1;
+    if (_pointsLeft >= cost) { _attrs[attr]++; _pointsLeft -= cost; }
+  }
   updateAttrDisplay();
   toast('🎲 Personagem aleatório gerado!','info');
 };
@@ -653,7 +749,6 @@ App.createCharacter = function() {
   if (!background) { toast('Escolha uma origem!','error'); return; }
   if (_pointsLeft < 0) { toast('Pontos de atributo excedidos!','error'); return; }
 
-  // Apply background bonuses
   const bgBonus = DATA.backgrounds[background] || {};
   const finalAttrs = {};
   ['FOR','AGI','DEX','INT','SAB'].forEach(a => {
@@ -661,6 +756,7 @@ App.createCharacter = function() {
   });
 
   const derived = calcDerived(finalAttrs);
+  const maxPericias = 3 + Math.floor(finalAttrs.INT / 4) + Math.floor(finalAttrs.SAB / 4);
 
   State.char = {
     name, cls, background, alignment, age, gold,
@@ -670,11 +766,11 @@ App.createCharacter = function() {
     maxMP: derived.MP, currentMP: derived.MP,
     xp: 0,
     conditions: [],
-    skills: _selectedInitSkills.length > 0 ? [..._selectedInitSkills] : (DATA.skills[cls]||[]).filter(s=>s.tier==='basic').slice(0,3).map(s=>s.id),
+    skills: [],           // No free skills — must earn XP first
     spells: [],
     inventory: [],
     equipped: {},
-    pericias: _selectedPericias.length > 0 ? [..._selectedPericias] : [],
+    pericias: _selectedPericias.slice(0, maxPericias),
   };
 
   _selectedInitSkills = [];
@@ -711,7 +807,7 @@ function renderSkillCards(filter) {
     const canBuy = !owned && (c.xp||0) >= cost;
     const prereq = s.tier === 'advanced' && classSkills.filter(x=>x.tier==='basic').every(b => !c.skills.includes(b.id));
     return `
-    <div class="skill-card tier-${s.tier} ${owned?'owned':''}">
+    <div class="skill-card tier-${s.tier} ${owned?'owned':''}" data-tooltip="Custo: ${s.cost} | ${s.tier==='basic'?'50 XP':s.tier==='advanced'?'100 XP':'200 XP'} para aprender | Classe: ${c.cls}">
       <div class="skill-header">
         <span class="skill-name">${s.name}</span>
         <div class="skill-badges">
@@ -823,27 +919,32 @@ function renderShops() {
   Object.entries(DATA.items).forEach(([cat, items]) => {
     const el = $(`shop${capitalize(cat)}`);
     if (!el) return;
-    el.innerHTML = items.map(item => `
-      <div class="item-card rarity-${item.rarity||'common'}">
+    el.innerHTML = items.map(item => {
+      const rarityLabel = { common:'Comum', uncommon:'Incomum', rare:'Raro', 'very-rare':'Muito Raro', legendary:'Lendário' }[item.rarity] || '';
+      const tipText = `${rarityLabel} · Peso: ${item.weight||0}kg · Preço: ${item.price} ouro${item.magic?' · ✨ Item Mágico':''}${item.bonuses?` · Bônus: ${Object.entries(item.bonuses).map(([k,v])=>`+${v} ${k}`).join(', ')}`:''} `;
+      return `
+      <div class="item-card rarity-${item.rarity||'common'}" data-tooltip="${tipText.replace(/"/g,'&quot;')}">
         <div class="item-header">
           <span class="item-icon">${item.icon||'📦'}</span>
           <span class="item-name">${item.name}</span>
-          ${item.magic ? `<span class="badge badge-advanced">✨ MÁGICO</span>` : ''}
+          ${item.magic ? `<span class="badge badge-advanced">✨</span>` : ''}
+          <span class="item-rarity" style="font-family:Cinzel,serif;font-size:0.55rem;padding:0.1rem 0.35rem;border-radius:3px;background:rgba(255,255,255,0.05);color:var(--text-m);">${rarityLabel}</span>
         </div>
         <div class="item-desc">${item.desc}</div>
-        ${item.damage ? `<div class="item-stat">Dano: ${item.damage}</div>` : ''}
-        ${item.rd !== undefined ? `<div class="item-stat">RD: ${item.rd} | Def: +${item.defBonus}</div>` : ''}
+        ${item.damage ? `<div style="margin-top:0.25rem;"><span class="item-stat">Dano: ${item.damage}</span></div>` : ''}
+        ${item.rd !== undefined ? `<div style="margin-top:0.25rem;"><span class="item-stat">RD: ${item.rd}</span> <span class="item-stat">+${item.defBonus} Def</span> ${item.agiPen>0?`<span class="item-stat" style="color:#EF9A9A">–${item.agiPen} AGI</span>`:''}` : ''}
         ${item.stats ? `<div class="item-stats">${item.stats.map(s=>`<span class="item-stat">${s}</span>`).join('')}</div>` : ''}
+        ${item.bonuses ? `<div class="item-stats">${Object.entries(item.bonuses).map(([k,v])=>`<span class="item-stat" style="color:var(--gold-b)">+${v} ${k}</span>`).join('')}</div>` : ''}
         <div style="display:flex;justify-content:space-between;align-items:center;margin-top:0.5rem;">
           <span class="item-price">🪙 ${item.price} ouro</span>
-          <span class="item-weight">${item.weight||0} kg</span>
+          <span class="item-weight">⚖ ${item.weight||0} kg</span>
         </div>
         <div class="item-actions">
           <button class="btn-sm" onclick="App.buyItem('${item.id}')">Comprar</button>
-          <button class="btn-sm" onclick="App.addToBagFree('${item.id}')">Adicionar</button>
+          <button class="btn-sm" onclick="App.addToBagFree('${item.id}')">+ Bolsa</button>
         </div>
       </div>
-    `).join('');
+    `}).join('');
   });
 }
 
@@ -996,7 +1097,7 @@ function renderSpellCards(filter) {
     const known = (c.spells||[]).includes(s.id);
     const mp10 = (c.xp||0) >= 50;
     return `
-    <div class="spell-card ${s.type==='divine'?'divine':''} ${known?'known':''}">
+    <div class="spell-card ${s.type==='divine'?'divine':''} ${known?'known':''}" data-tooltip="Tier ${s.tier} · Custo: ${s.mp} MP · Tipo: ${s.type==='arcane'?'Arcana':'Divina'} | ${known?'Aprendida':'50 XP para aprender'}">
       <div class="spell-header">
         <span class="spell-name">${s.name}</span>
         <div class="spell-meta">
@@ -1641,6 +1742,171 @@ App.showAttrUpgradeModal = function(attr) {
 // ===================== HELPERS =====================
 function capitalize(str) { return str.charAt(0).toUpperCase() + str.slice(1); }
 
+const ATTR_TIPS = {
+  FOR: 'FORÇA: governa dano corpo-a-corpo, capacidade de carga e testes de força bruta. Fórmula PV: FOR×4+SAB×2',
+  AGI: 'AGILIDADE: governa Stamina (AGI×3+FOR), Movimento (3+AGI÷4), Defesa (10+AGI÷2) e Iniciativa.',
+  DEX: 'DESTREZA: governa precisão de ataque (d10+DEX), furtividade e testes de habilidades finas.',
+  INT: 'INTELIGÊNCIA: governa Pontos de Magia (INT×4+SAB), número de magias aprendidas e perícias extras.',
+  SAB: 'SABEDORIA: governa percepção, resistência ao medo, testes de moral e fé. Também contribui para PV e MP.'
+};
+
+// Add pericia from char sheet
+App.openAddPericia = function() {
+  const c = State.char;
+  if (!c) return;
+  const maxP = 3 + Math.floor(c.attrs.INT/4) + Math.floor(c.attrs.SAB/4);
+  const owned = c.pericias || [];
+  const available = DATA.pericias.filter(p => !owned.includes(p.id));
+  if (available.length === 0) { toast('Você já aprendeu todas as perícias!','info'); return; }
+  openModal(`Adicionar Perícia (${owned.length}/${maxP})`,
+    `<div style="display:flex;flex-direction:column;gap:0.5rem;max-height:320px;overflow-y:auto;">
+      ${available.map(p => `
+        <div class="pericia-item" style="cursor:pointer" onclick="App.addPericia('${p.id}')">
+          <div class="pericia-check">+</div>
+          <span class="pericia-name">${p.name}</span>
+          <span class="pericia-attr">${p.attr}</span>
+        </div>`).join('')}
+     </div>`,
+    `<button class="btn-secondary" onclick="App.closeModal()">Cancelar</button>`);
+};
+
+App.addPericia = function(id) {
+  const c = State.char;
+  if (!c) return;
+  const maxP = 3 + Math.floor(c.attrs.INT/4) + Math.floor(c.attrs.SAB/4);
+  if ((c.pericias||[]).length >= maxP) { toast('Limite de perícias atingido!','error'); return; }
+  if (!c.pericias) c.pericias = [];
+  c.pericias.push(id);
+  saveState();
+  App.closeModal();
+  renderExistingChar();
+  toast('Perícia adicionada!','success');
+};
+
+App.openSetGold = function() {
+  openModal('Definir Ouro',
+    `<div class="modal-field"><label>Quantidade de Ouro</label><input id="goldSet" type="number" value="${State.char?.gold||0}" min="0"></div>`,
+    `<button class="btn-secondary" onclick="App.closeModal()">Cancelar</button>
+     <button class="btn-primary" onclick="App.setGold()">Definir</button>`);
+};
+App.setGold = function() {
+  const v = parseInt($('goldSet')?.value)||0;
+  if (State.char) { State.char.gold = Math.max(0,v); saveState(); App.closeModal(); renderExistingChar(); }
+};
+
+// ===================== TOOLTIP SYSTEM =====================
+function initTooltips() {
+  document.addEventListener('mouseover', e => {
+    const el = e.target.closest('[data-tooltip]');
+    if (!el) return;
+    let tip = document.getElementById('_tooltip');
+    if (!tip) {
+      tip = document.createElement('div');
+      tip.id = '_tooltip';
+      tip.style.cssText = 'position:fixed;z-index:9000;max-width:260px;background:#1C160E;border:1px solid rgba(201,168,76,0.4);border-radius:6px;padding:0.6rem 0.85rem;font-size:0.75rem;color:#BFA882;line-height:1.5;pointer-events:none;box-shadow:0 4px 20px rgba(0,0,0,0.7);transition:opacity 0.15s;font-family:"IM Fell English",serif;';
+      document.body.appendChild(tip);
+    }
+    tip.textContent = el.dataset.tooltip;
+    tip.style.opacity = '1';
+    const rect = el.getBoundingClientRect();
+    let top = rect.bottom + 8;
+    let left = rect.left;
+    if (top + 100 > window.innerHeight) top = rect.top - 110;
+    if (left + 270 > window.innerWidth) left = window.innerWidth - 275;
+    tip.style.top = top + 'px';
+    tip.style.left = Math.max(8, left) + 'px';
+  });
+  document.addEventListener('mouseout', e => {
+    if (!e.target.closest('[data-tooltip]')) return;
+    const tip = document.getElementById('_tooltip');
+    if (tip) tip.style.opacity = '0';
+  });
+}
+
+// ===================== CONFIG MENU =====================
+App.openConfig = function() {
+  const cfg = State.config || {};
+  openModal('⚙ Configurações da Campanha',
+    `<div class="modal-field"><label>Nome da Campanha</label><input id="cfgCamp" value="${cfg.campaign||''}" placeholder="Ex: A Queda de Varanthos"></div>
+     <div class="modal-field"><label>Nome do Mestre</label><input id="cfgGM" value="${cfg.gm||''}" placeholder="Ex: Rodrigo"></div>
+     <div class="modal-field"><label>Dificuldade Global</label>
+       <select id="cfgDiff">
+         <option value="easy" ${cfg.diff==='easy'?'selected':''}>Fácil (–2 em todas as DIF)</option>
+         <option value="normal" ${!cfg.diff||cfg.diff==='normal'?'selected':''}>Normal</option>
+         <option value="hard" ${cfg.diff==='hard'?'selected':''}>Difícil (+2 em todas as DIF)</option>
+         <option value="brutal" ${cfg.diff==='brutal'?'selected':''}>Brutal (+4, morte permanente)</option>
+       </select></div>
+     <div class="modal-field"><label>Sistema de Moral</label>
+       <select id="cfgMoral">
+         <option value="on" ${!cfg.moral||cfg.moral==='on'?'selected':''}>Ativado</option>
+         <option value="off" ${cfg.moral==='off'?'selected':''}>Desativado</option>
+       </select></div>
+     <div class="modal-field"><label>Críticos e Fumbles</label>
+       <select id="cfgCrit">
+         <option value="on" ${!cfg.crit||cfg.crit==='on'?'selected':''}>Ativados</option>
+         <option value="off" ${cfg.crit==='off'?'selected':''}>Desativados</option>
+       </select></div>
+     <div class="modal-field"><label>XP por Sessão (sugestão)</label>
+       <input id="cfgXPSess" type="number" value="${cfg.xpPerSession||50}" min="10" max="500"></div>
+     <div class="modal-field"><label>Moeda Inicial (novo personagem)</label>
+       <input id="cfgStartGold" type="number" value="${cfg.startGold||10}" min="0"></div>
+     <div class="modal-field"><label>Notas da Campanha</label>
+       <textarea id="cfgNotes" style="min-height:80px;" placeholder="Regras da casa, avisos...">${cfg.notes||''}</textarea></div>`,
+    `<button class="btn-secondary" onclick="App.closeModal()">Cancelar</button>
+     <button class="btn-primary" onclick="App.saveConfig()">💾 Salvar</button>`);
+};
+
+App.saveConfig = function() {
+  State.config = {
+    campaign: $('cfgCamp')?.value||'',
+    gm: $('cfgGM')?.value||'',
+    diff: $('cfgDiff')?.value||'normal',
+    moral: $('cfgMoral')?.value||'on',
+    crit: $('cfgCrit')?.value||'on',
+    xpPerSession: parseInt($('cfgXPSess')?.value)||50,
+    startGold: parseInt($('cfgStartGold')?.value)||10,
+    notes: $('cfgNotes')?.value||''
+  };
+  saveState();
+  App.closeModal();
+  toast('⚙ Configurações salvas!','success');
+};
+
+// ===================== RULES MENU =====================
+App.openRules = function() {
+  const sections = [
+    { title:'⚔ Combate — Ordem do Turno', content:`<b>1.</b> Role d10 + Iniciativa (AGI + DEX÷2) → maior age primeiro.<br><b>2.</b> Cada turno: 1 Ação de Movimento + 1 Ação de Combate + 1 Ação Bônus + 1 Reação.<br><b>3.</b> Ataque simples: d10 + DEX vs Defesa inimiga (10 + AGI÷2 + armadura). Custa 1 ST.<br><b>4.</b> Se resultado ≥ Defesa: acertou → role dano da arma + FOR (corpo-a-corpo) ou DEX (distância).` },
+    { title:'🎯 Ataques Localizados', content:`Declare a localização ANTES de rolar. Custo extra de ST:<br>• Cabeça: +4 ST → dano ×1,5, possível atordoamento<br>• Pescoço: +5 ST → sangramento 2 PV/turno<br>• Tronco: +2 ST → dano normal<br>• Braço Armado: +3 ST → FOR DIF 14 ou solta arma<br>• Perna: +3 ST → Movimento ÷2 por 1d4 turnos<br>• Pé: +4 ST → imóvel 1 turno<br><br>Teste de ataque localizado: d10 + AGI + DEX. Defesa: d10 + AGI (+ perícia se tiver).` },
+    { title:'🛡️ Defesa e Reações', content:`<b>Defesa Passiva:</b> Defesa Base = 10 + AGI÷2 + armadura. Inimigo precisa superar este valor.<br><b>Aparar (reação):</b> 3 ST — d10 + DEX. Se ≥ ataque: cancela dano.<br><b>Esquivar (reação):</b> 4 ST — d10 + AGI. Se ≥ ataque: cancela dano.<br><b>Recuar (reação):</b> 2 ST — move 1 hex sem provocar ataque de oportunidade.<br><b>Contra-ataque (Guerreiro):</b> 5 ST — após aparar com sucesso: role dano imediatamente.` },
+    { title:'⚡ Stamina (ST)', content:`ST representa vigor de curto prazo. <b>Regenera AGI÷3 por turno</b> (início do seu turno).<br>• ST zerada: age normalmente mas não pode gastar ST<br>• Descanso Curto (10 min): recupera 50% da ST máxima<br>• Descanso Longo (8h): recupera 100% ST e PV<br><br><b>Custos comuns:</b><br>• Ataque simples: 1 ST<br>• Aparar: 3 ST | Esquivar: 4 ST | Recuar: 2 ST<br>• Habilidades Básicas: 3–6 ST | Avançadas: 8–12 ST | Mestre: 15–22 ST` },
+    { title:'🗺️ Movimentação e Hexágonos', content:`Cada hex ≈ 1,5 metro. 6 direções de movimento.<br><b>Movimento base:</b> 3 + AGI÷4 hexes/turno.<br>• <b>Terreno difícil:</b> custa 2 Mov por hex<br>• <b>Correr:</b> dobra Mov, proíbe ataque no turno<br>• <b>Charge:</b> 5 ST — move até 3 hexes + ataque (+3 dano)<br>• <b>Flanquear:</b> 2 aliados em lados opostos → +2 ataque cada<br>• <b>Cobertura parcial:</b> +2 Defesa | Cobertura total: +6 Defesa<br>• <b>Ataque de oportunidade:</b> inimigo sai sem Desengajar → gaste 3 ST para atacar de graça.` },
+    { title:'🎲 Dados e Dificuldades', content:`<b>Dado de combate:</b> d10 (ataque, defesa, localização)<br><b>Dado de perícia/roleplay:</b> d20 + atributo + bônus de perícia<br><b>Dado de dano:</b> d4 (armas pequenas) e d6 (armas médias/grandes)<br><br><b>Tabela de Dificuldade:</b><br>• DIF 8: Fácil (qualquer um consegue)<br>• DIF 12: Moderado (requer preparo)<br>• DIF 16: Difícil (desafia especialistas)<br>• DIF 20: Muito Difícil (feito heroico)<br>• DIF 25+: Épico (quase impossível)<br><br><b>Crítico</b> (natural máximo): efeito excepcional. <b>Fumble</b> (d10=1): falha grave.` },
+    { title:'💀 Ferimentos e Condições', content:`<b>PV ≤ 50%:</b> Exausto → –1 em todos os testes<br><b>PV ≤ 25%:</b> Crítico → –2 testes, ST regenera metade<br><b>PV = 0:</b> Caído → FOR DIF 12 por turno ou morre em 3 falhas<br><br><b>Condições:</b><br>• <b>Sangrando:</b> –2 PV/turno até estancar (ação bônus ou Curar Ferida)<br>• <b>Atordoado:</b> perde 1 ação, –3 Defesa (dura 1 turno)<br>• <b>Aterrorizado:</b> –4 em testes, não pode se aproximar da fonte<br>• <b>Envenenado:</b> –1 atributo/turno por X turnos<br><br><b>Ferimento Grave</b> (dano único ≥ 15 na localização): –1 no atributo da parte atingida até curar.` },
+    { title:'⭐ Progressão e XP', content:`Personagens ganham XP e usam para aprender habilidades — <b>não há níveis</b>.<br><br><b>Custo de habilidades:</b><br>• Básicas: 50 XP (disponíveis desde o início)<br>• Avançadas: 100 XP (requer 1 Básica da linha)<br>• Mestre: 200 XP (requer 2 Avançadas)<br>• Magias: 50 XP cada<br>• +1 Atributo: 100 XP (máx 20)<br><br><b>Fontes de XP:</b> combate (XP do inimigo), missões concluídas, roleplay notável, descobertas.` },
+    { title:'🔮 Magia e MP', content:`Pontos de Magia (MP) = INT×4 + SAB. Recuperam 100% com descanso longo (8h) ou INT com meditação de 1h.<br><br><b>Tiers de magia:</b><br>• Tier 1 (2–4 MP): instantâneo, 1 alvo<br>• Tier 2 (6–10 MP): 1 ação de Concentração antes de lançar<br>• Tier 3 (12–18 MP): Concentração obrigatória; área possível<br>• Tier 4 (22–30 MP): 2 turnos de Concentração; devastador<br><br><b>Interrupção:</b> sofrer dano durante Concentração → INT DIF (12 + dano÷5) ou a magia é perdida.` },
+    { title:'👁️ Moral e Medo', content:`Inimigos e PNJs testam SAB contra DIF quando:<br>• Aliado cai: DIF 10 → recua 1d4 hexes, –1 ataque<br>• Metade do grupo caiu: DIF 14 → foge ou paralisa<br>• Líder abatido: DIF 16 → todos debandam<br>• Magia devastadora: DIF 15 → aterrorizado<br>• Execução do Ladino: DIF 15 → –2 ataque por 2 turnos<br><br>Clérigo com Aura Sagrada: +2 em testes de moral para aliados adjacentes.` }
+  ];
+
+  openModal('📖 Regras de Ferro & Sangue',
+    `<div style="max-height:65vh;overflow-y:auto;padding-right:0.25rem;">
+      ${sections.map((s,i) => `
+        <div style="margin-bottom:1rem;">
+          <div style="font-family:Cinzel,serif;font-size:0.82rem;font-weight:700;color:var(--gold-b);padding:0.5rem 0.75rem;background:rgba(201,168,76,0.08);border-left:3px solid var(--gold);border-radius:0 4px 4px 0;cursor:pointer;margin-bottom:0.4rem;" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+            ${s.title} ▾
+          </div>
+          <div style="font-size:0.8rem;line-height:1.7;color:var(--text-s);padding:0.5rem 0.75rem;background:var(--bg2);border-radius:4px;${i>0?'display:none':''}">
+            ${s.content}
+          </div>
+        </div>`).join('')}
+     </div>`,
+    `<button class="btn-primary" onclick="App.closeModal()">Fechar</button>`);
+};
+
+// Tooltip for skills/spells/items
+function makeTooltip(text) {
+  return `data-tooltip="${text.replace(/"/g,'&quot;')}"`;
+}
+
 // ===================== INIT =====================
 document.querySelectorAll('.nav-item').forEach(item => {
   item.addEventListener('click', () => App.navigate(item.dataset.page));
@@ -1648,7 +1914,10 @@ document.querySelectorAll('.nav-item').forEach(item => {
 
 // Setup attr builder starting values
 _attrs = { FOR:8, AGI:8, DEX:8, INT:8, SAB:8 };
-_pointsLeft = 50 - (Object.values(_attrs).reduce((a,b)=>a+b,0) - 5*8);
+_pointsLeft = 27;
+
+// Init tooltips
+initTooltips();
 
 window.addEventListener('load', () => {
   try { loadState(); } catch(e) { console.warn('loadState error:', e); }
