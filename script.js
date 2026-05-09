@@ -294,6 +294,9 @@ function toast(msg, type = 'info', duration = 3000) {
   setTimeout(() => t.className = 'toast', duration);
 }
 
+// ===================== APP OBJECT =====================
+const App = window.App || {};
+
 // ===================== MODAL =====================
 function openModal(title, bodyHTML, footerHTML = '') {
   $('modalTitle').textContent = title;
@@ -302,13 +305,12 @@ function openModal(title, bodyHTML, footerHTML = '') {
   $('modalOverlay').classList.add('open');
 }
 function closeModal(e) {
-  if (e && e.target !== $('modalOverlay')) return;
+  if (e && e.target && e.target !== $('modalOverlay')) return;
   $('modalOverlay').classList.remove('open');
 }
 App.closeModal = closeModal;
 
 // ===================== NAVIGATION =====================
-const App = window.App || {};
 
 App.navigate = function(page) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -1301,12 +1303,13 @@ App.toggleObjective = function(qi, oi) {
 // ===================== LORE =====================
 function renderLore() {
   const l = State.lore;
+  if (!l) return;
   ['backstory','traits','ideals','bonds','flaws','goals','notes'].forEach(k => {
     const el = $(`txt-${k}`);
     if (el) el.value = l[k] || '';
   });
-  renderRelations();
-  renderSessions();
+  if ($('relationsList')) renderRelations();
+  if ($('sessionList')) renderSessions();
 }
 
 App.saveLore = function() {
@@ -1648,13 +1651,19 @@ _attrs = { FOR:8, AGI:8, DEX:8, INT:8, SAB:8 };
 _pointsLeft = 50 - (Object.values(_attrs).reduce((a,b)=>a+b,0) - 5*8);
 
 window.addEventListener('load', () => {
-  loadState();
+  try { loadState(); } catch(e) { console.warn('loadState error:', e); }
   setTimeout(() => {
-    $('loadingScreen').classList.add('hidden');
-    App.navigate(State.currentPage || 'dashboard');
-    renderDiceHistory();
-    if (State.lore) renderLore();
-  }, 2200);
+    try {
+      $('loadingScreen').classList.add('hidden');
+      App.navigate(State.currentPage || 'dashboard');
+      renderDiceHistory();
+      if (State.lore) renderLore();
+    } catch(e) {
+      console.error('Init error:', e);
+      $('loadingScreen').classList.add('hidden');
+      App.navigate('dashboard');
+    }
+  }, 2000);
 });
 
 // Keyboard shortcut: S to save
