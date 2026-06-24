@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grimório de Personagens — RPG de Mesa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=IM+Fell+English+SC&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="parchment-texture"></div>
+
+<header class="app-header">
+  <div class="header-seal"></div>
+  <h1 class="app-title">Grimório de Personagens</h1>
+  <p class="app-subtitle">Compêndio de Aventureiros &amp; Criaturas</p>
+  <nav class="header-nav">
+    <button id="btn-show-glossary" class="header-nav-link">📖 Glossário &amp; Tutoriais</button>
+  </nav>
+</header>
+
+<main id="view-root">
+
+  <!-- ===================== TELA: LISTA DE PERSONAGENS ===================== -->
+  <section id="view-list" class="view active">
+    <div class="list-toolbar">
+      <div class="tab-group" role="tablist">
+        <button class="tab-btn active" data-roster="pc" role="tab" aria-selected="true">Aventureiros</button>
+        <button class="tab-btn" data-roster="npc" role="tab" aria-selected="false">NPCs &amp; Criaturas</button>
+      </div>
+      <button id="btn-new-character" class="btn-primary">
+        <span class="btn-icon">✦</span> Criar Personagem
+      </button>
+    </div>
+
+    <div id="empty-state" class="empty-state hidden">
+      <p class="empty-title">A página está em branco.</p>
+      <p class="empty-text">Nenhum aventureiro foi registrado neste grimório ainda. Toque em <strong>"Criar Personagem"</strong> para começar uma nova lenda.</p>
+    </div>
+
+    <div id="character-grid" class="character-grid"></div>
+  </section>
+
+  <!-- ===================== TELA: CRIAÇÃO DE PERSONAGEM (WIZARD) ===================== -->
+  <section id="view-create" class="view">
+    <div class="wizard-frame">
+
+      <div class="wizard-progress" id="wizard-progress"></div>
+
+      <button class="btn-link btn-cancel-create" id="btn-cancel-create">← Voltar ao grimório</button>
+
+      <!-- Etapa 1: Identidade -->
+      <div class="wizard-step" data-step="1">
+        <h2 class="step-title">Etapa 1 — Identidade</h2>
+        <p class="step-desc">Quem é este aventureiro? Dê-lhe um nome e uma origem.</p>
+
+        <label class="field-label" for="input-name">Nome do personagem</label>
+        <input type="text" id="input-name" class="field-input" placeholder="Ex.: Theron Caolho">
+
+        <label class="field-label" for="input-origin">Origem / Vila natal (opcional)</label>
+        <input type="text" id="input-origin" class="field-input" placeholder="Ex.: Vale do Corvo">
+
+        <label class="field-label" for="input-type">Tipo de ficha</label>
+        <div class="choice-row" id="choice-roster-type">
+          <button class="choice-card" data-value="pc">
+            <span class="choice-icon">⚔</span>
+            <span class="choice-name">Personagem Jogador</span>
+            <span class="choice-desc">Aventureiro controlado por um jogador.</span>
+          </button>
+          <button class="choice-card" data-value="npc">
+            <span class="choice-icon">🛡</span>
+            <span class="choice-name">NPC / Criatura</span>
+            <span class="choice-desc">Personagem ou monstro do mestre.</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Etapa 2: Classe -->
+      <div class="wizard-step" data-step="2">
+        <h2 class="step-title">Etapa 2 — Classe</h2>
+        <p class="step-desc">A classe define o caminho do personagem: seu recurso especial, suas perícias e seu papel em combate.</p>
+        <div class="choice-row choice-row-classes" id="choice-class"></div>
+        <div id="class-detail" class="class-detail hidden"></div>
+      </div>
+
+      <!-- Etapa 3: Atributos -->
+      <div class="wizard-step" data-step="3">
+        <h2 class="step-title">Etapa 3 — Atributos</h2>
+        <p class="step-desc">Todo aventureiro nasce com os atributos em branco. Distribua <strong id="attr-points-total">2</strong> pontos entre eles — depois, sua classe concederá um bônus inicial automaticamente.</p>
+
+        <div class="attr-points-tracker">
+          Pontos restantes: <span id="attr-points-left">2</span>
+        </div>
+
+        <div class="attr-grid" id="attr-grid"></div>
+
+        <div class="attr-bonus-note" id="attr-bonus-note"></div>
+      </div>
+
+      <!-- Etapa 4: Perícias -->
+      <div class="wizard-step" data-step="4">
+        <h2 class="step-title">Etapa 4 — Perícias</h2>
+        <p class="step-desc">No 1º nível, você conhece <strong>2 perícias de classe</strong> e <strong>1 perícia geral</strong>. Mais tarde, novas perícias podem ser aprendidas com mestres e especialistas.</p>
+
+        <h3 class="subsection-title">Perícias de Classe <span class="pick-counter" id="class-skill-counter">(0/2)</span></h3>
+        <div class="pick-list" id="class-skill-list"></div>
+
+        <h3 class="subsection-title">Perícia Geral <span class="pick-counter" id="general-skill-counter">(0/1)</span></h3>
+        <div class="pick-list" id="general-skill-list"></div>
+      </div>
+
+      <!-- Etapa 5: Magia inicial (condicional) -->
+      <div class="wizard-step" data-step="5">
+        <h2 class="step-title">Etapa 5 — Magia Inicial</h2>
+        <p class="step-desc" id="spell-step-desc">Conjuradores começam conhecendo uma magia de Nível 1, extraída de seu grimório de estudos.</p>
+        <div class="pick-list" id="spell-pick-list"></div>
+        <p class="step-skip-note" id="spell-skip-note"></p>
+      </div>
+
+      <!-- Etapa 6: Equipamento inicial -->
+      <div class="wizard-step" data-step="6">
+        <h2 class="step-title">Etapa 6 — Equipamento Inicial</h2>
+        <p class="step-desc">Escolha o equipamento básico com que seu personagem inicia a jornada. Tudo isso entra na mochila — depois você decide o que equipar.</p>
+        <div class="pick-list" id="equipment-pick-list"></div>
+        <div class="weight-preview" id="weight-preview"></div>
+      </div>
+
+      <!-- Etapa 7: Revisão -->
+      <div class="wizard-step" data-step="7">
+        <h2 class="step-title">Etapa 7 — Selar o Pergaminho</h2>
+        <p class="step-desc">Revise a ficha antes de dar vida ao seu personagem.</p>
+        <div id="review-summary" class="review-summary"></div>
+      </div>
+
+      <div class="wizard-nav">
+        <button class="btn-secondary" id="btn-wizard-back">← Anterior</button>
+        <button class="btn-primary" id="btn-wizard-next">Próximo →</button>
+        <button class="btn-primary btn-finish hidden" id="btn-wizard-finish">Selar Personagem ✦</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== TELA: FICHA DE PERSONAGEM ===================== -->
+  <section id="view-sheet" class="view">
+    <button class="btn-link btn-back-sheet" id="btn-back-sheet">← Voltar ao grimório</button>
+
+    <div class="sheet-frame" id="sheet-frame">
+      <!-- Conteúdo injetado via JS -->
+    </div>
+  </section>
+
+  <!-- ===================== TELA: GLOSSÁRIO & TUTORIAIS ===================== -->
+  <section id="view-glossary" class="view">
+    <button class="btn-link" id="btn-back-glossary">← Voltar ao grimório</button>
+
+    <h2 class="step-title">Glossário &amp; Tutoriais</h2>
+    <p class="step-desc">Consulte aqui o significado de cada item, habilidade e magia do sistema, além de um guia rápido de como jogar cada classe.</p>
+
+    <div class="tab-group glossary-tab-group" id="glossary-tabs">
+      <button class="tab-btn active" data-glossarytab="classes">Tutorial de Classes</button>
+      <button class="tab-btn" data-glossarytab="abilities">Habilidades</button>
+      <button class="tab-btn" data-glossarytab="spells">Magias</button>
+      <button class="tab-btn" data-glossarytab="items">Itens</button>
+    </div>
+
+    <div class="glossary-search-row">
+      <input type="text" id="glossary-search" class="field-input" placeholder="Buscar por nome...">
+    </div>
+
+    <div id="glossary-content" class="glossary-content"></div>
+  </section>
+
+</main>
+
+<!-- Modal genérico de confirmação -->
+<div id="modal-overlay" class="modal-overlay hidden">
+  <div class="modal-box">
+    <p id="modal-message" class="modal-message"></p>
+    <div class="modal-actions">
+      <button id="modal-cancel" class="btn-secondary">Cancelar</button>
+      <button id="modal-confirm" class="btn-danger">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de adicionar item do mundo ao inventário -->
+<div id="add-item-modal-overlay" class="modal-overlay hidden">
+  <div class="modal-box modal-box-wide">
+    <h3 class="modal-title">Adicionar Item ao Inventário</h3>
+
+    <div class="tab-group modal-tab-group" id="add-item-tabs">
+      <button class="tab-btn active" data-itemtab="catalog">Item do Compêndio</button>
+      <button class="tab-btn" data-itemtab="generic">Item Genérico</button>
+    </div>
+
+    <!-- Aba: Item do catálogo (arma/escudo/armadura/acessório) -->
+    <div class="modal-tab-content active" data-itemtab-content="catalog">
+      <label class="field-label" for="catalog-category-select">Categoria</label>
+      <select id="catalog-category-select" class="field-input">
+        <option value="weapon">Arma</option>
+        <option value="shield">Escudo</option>
+        <option value="armor">Armadura</option>
+        <option value="accessory">Acessório</option>
+      </select>
+
+      <label class="field-label" for="catalog-item-select">Item</label>
+      <select id="catalog-item-select" class="field-input"></select>
+
+      <label class="field-label" for="catalog-item-qty">Quantidade</label>
+      <input type="number" id="catalog-item-qty" class="field-input" min="1" value="1">
+    </div>
+
+    <!-- Aba: Item genérico -->
+    <div class="modal-tab-content" data-itemtab-content="generic">
+      <label class="field-label" for="generic-item-name">Nome do item</label>
+      <input type="text" id="generic-item-name" class="field-input" placeholder="Ex.: Chave enferrujada, Mapa do tesouro...">
+
+      <label class="field-label" for="generic-item-qty">Quantidade</label>
+      <input type="number" id="generic-item-qty" class="field-input" min="1" value="1">
+
+      <label class="field-label" for="generic-item-weight">Peso (kg, por unidade)</label>
+      <input type="number" id="generic-item-weight" class="field-input" min="0" step="0.1" value="0">
+    </div>
+
+    <div id="add-item-weight-preview" class="weight-preview"></div>
+
+    <div class="modal-actions">
+      <button id="add-item-modal-cancel" class="btn-secondary">Cancelar</button>
+      <button id="add-item-modal-confirm" class="btn-primary">Adicionar ao Inventário</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast de notificação -->
+<div id="toast" class="toast hidden"></div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
