@@ -111,11 +111,13 @@ function toggleHeaderNavMenu() {
 function openHeaderNavMenu() {
   document.getElementById("header-nav-menu").classList.remove("hidden");
   document.getElementById("btn-nav-toggle").classList.add("active");
+  document.getElementById("nav-overlay")?.classList.add("active");
 }
 
 function closeHeaderNavMenu() {
   document.getElementById("header-nav-menu").classList.add("hidden");
   document.getElementById("btn-nav-toggle").classList.remove("active");
+  document.getElementById("nav-overlay")?.classList.remove("active");
 }
 
 renderHeaderNavMenu();
@@ -123,6 +125,7 @@ document.getElementById("btn-nav-toggle").addEventListener("click", (e) => {
   e.stopPropagation();
   toggleHeaderNavMenu();
 });
+document.getElementById("nav-overlay")?.addEventListener("click", closeHeaderNavMenu);
 // Fecha o menu ao clicar fora dele
 document.addEventListener("click", (e) => {
   const dropdown = document.getElementById("header-nav-dropdown");
@@ -263,9 +266,7 @@ function calcReactionActions(character) {
 /* Ações de Magia = max(floor(INT/2), floor(SAB/2)). Só o Mago tem mínimo garantido de 1. */
 function calcSpellActions(character) {
   const cls = getClassDef(character.classKey);
-  const fromInt = Math.floor(getEffectiveAttr(character, "INT") / 2);
-  const fromSab = Math.floor(getEffectiveAttr(character, "SAB") / 2);
-  let actions = Math.max(fromInt, fromSab);
+  let actions = Math.floor(getEffectiveAttr(character, "INT") / 2);
   if (cls && cls.name === "Mago" && actions < 1) actions = 1;
   actions += sumAccessoryEffectValue(character, "spellActions");
   actions += sumMagicItemBonus(character, "spellActions");
@@ -1488,20 +1489,34 @@ function renderVitalsSection(character, cls, maxHP, resourceMax) {
 /* --- Atributos (editáveis via level up) --- */
 
 function renderAttributesSection(character, cls) {
+  const totalPoints = CREATION_ATTR_POINTS + (character.level - 1); // pontos gastos + acumulados por nível
+  const spent = Object.values(character.attrs).reduce((a, b) => a + b, 0);
+  const available = character.unspentAttrPoints || 0;
+
   return `
   <div class="sheet-section">
-    <h3 class="sheet-section-title">Atributos</h3>
+    <h3 class="sheet-section-title">
+      Atributos
+      ${available > 0 ? `<span class="attr-points-badge">${available} ponto(s) disponível(is)</span>` : ""}
+      <button class="btn-link attr-reset-btn" id="btn-attr-reset" title="Zerar todos os atributos e recuperar os pontos para redistribuir" style="font-size:11px;margin-left:4px;">↺ Redistribuir</button>
+    </h3>
     <div class="sheet-attr-grid">
-      ${ATTRS.map(attr => `
+      ${ATTRS.map(attr => {
+        const val = character.attrs[attr];
+        const effectiveVal = getEffectiveAttr(character, attr);
+        const hasItemBonus = effectiveVal > val;
+        return `
         <div class="sheet-attr-box">
           <div class="sheet-attr-box-label">${attr}</div>
-          <div class="sheet-attr-box-value">${character.attrs[attr]}</div>
+          <div class="sheet-attr-box-value ${hasItemBonus ? "attr-has-bonus" : ""}" title="${hasItemBonus ? `+${effectiveVal - val} de item equipado` : ""}">${effectiveVal}${hasItemBonus ? `<span class="attr-item-bonus">+${effectiveVal - val}</span>` : ""}</div>
           <div class="sheet-attr-box-controls">
-            <button class="attr-step-btn" data-attr-up="${attr}" ${character.unspentAttrPoints > 0 ? "" : "disabled"} title="Gastar 1 ponto de nível">+</button>
+            <button class="attr-step-btn" data-attr-sheet-dec="${attr}" ${val <= 0 ? "disabled" : ""} title="Remover 1 ponto (recupera para redistribuir)">−</button>
+            <button class="attr-step-btn" data-attr-sheet-inc="${attr}" ${available <= 0 ? "disabled" : ""} title="Gastar 1 ponto de atributo">+</button>
           </div>
-        </div>
-      `).join("")}
+        </div>`;
+      }).join("")}
     </div>
+    <p class="section-hint" style="margin-top:8px;">Pontos gastos: ${spent} · Disponíveis: ${available} · Use ↺ para zerar e redistribuir livremente.</p>
   </div>`;
 }
 
@@ -1528,7 +1543,7 @@ function renderDerivedSection(character, cls) {
     { label: "Ações/turno", value: actions, tooltip: "Quantas ações você pode realizar no seu turno (atacar, usar habilidade, etc). Ganha-se 1 por ponto de AGI + 1 por ponto de DEX. Mínimo de 1." },
     { label: "Reações/rodada", value: reactions, tooltip: "Quantas vezes você pode reagir fora do seu turno (defender-se, ataque de oportunidade). Ganha-se 1 reação extra a cada 4 pontos de AGI, começando com 1." },
     { label: "Ações de Reação", value: reactionActions, tooltip: "Recurso separado das Reações comuns, usado especificamente para ações reativas especiais. Ganha-se 1 a cada 3 pontos de AGI. Mínimo de 1." },
-    { label: "Ações de Magia", value: spellActions, tooltip: "Ações reservadas exclusivamente para conjurar magias. Equivale ao maior valor entre (INT÷2) e (SAB÷2). O Mago sempre tem no mínimo 1, mesmo com INT baixa.", highlight: spellActions > 0 },
+    { label: "Ações de Magia", value: spellActions, tooltip: "Ações reservadas para conjurar magias. Equivale a INT ÷ 2 (arredondado para baixo). O Mago sempre tem no mínimo 1.", highlight: spellActions > 0 },
     { label: "Defesa Física", value: physDef, tooltip: "Reduz o dano de ataques físicos recebidos. Vem da armadura equipada e do escudo (se houver)." },
     { label: "Defesa Mágica", value: magDef, tooltip: "Reduz o dano de magias e ataques mágicos recebidos. Vem principalmente de armaduras arcanas/sagradas e itens mágicos." },
     { label: "Chance de Esquiva", value: `${dodge} ou menos (d20)`, tooltip: "Role 1d20: se o resultado for igual ou menor que este valor, você esquiva totalmente do ataque. Base 10 + AGI. Armas de duas mãos pesadas (sem a perícia 'Defesa com Armas Pesadas') aplicam −2." },
@@ -1805,9 +1820,26 @@ function renderSpellsSection(character, cls) {
       ${known.map(name => {
         const s = allSpells.find(x => x.name === name);
         if (!s) return "";
-        const isSlow = s.castTime && !s.castTime.includes("instantânea");
+        const isSlow = s.castTime && !s.castTime.includes("instantânea") && !s.castTime.includes("1 Ação");
         const isActive = active.includes(name);
         const canEquip = !isActive && usedSlots < totalSlots;
+
+        // Extrai dados mecânicos importantes do effect para destacar
+        const dmgMatch = s.effect.match(/(\d+d\d+(?:\s*[+\-]\s*\d+d\d+)*)\s*de\s*dano/i);
+        const healMatch = s.effect.match(/recupera\s+(\d+d\d+[^,.;]*(?:HP|vida))/i) || s.effect.match(/cura\s+(\d+d\d+[^,.;]*)/i);
+        const rangeMatch = s.effect.match(/raio\s+(\d+(?:\s*hex)?)|alcance\s+(\d+(?:\s*hex)?)/i);
+        const areaMatch = s.effect.match(/área\s+([\d]+x[\d]+(?:\s*hex)?)/i);
+        const durationMatch = s.effect.match(/por\s+(\d+\s*rodadas?)/i) || s.effect.match(/por\s+(\d+\s*turnos?)/i);
+        const isRestrictedCooldown = s.cooldown && (s.cooldown.includes("dia") || s.cooldown.includes("semana") || s.cooldown.includes("sessão"));
+
+        const highlights = [
+          dmgMatch   && `<span class="spell-hl spell-hl-dmg">⚔ ${dmgMatch[1]}</span>`,
+          healMatch  && `<span class="spell-hl spell-hl-heal">💚 ${healMatch[1]}</span>`,
+          areaMatch  && `<span class="spell-hl spell-hl-area">📐 ${areaMatch[1]}</span>`,
+          rangeMatch && `<span class="spell-hl spell-hl-range">🎯 ${rangeMatch[1] || rangeMatch[2]}</span>`,
+          durationMatch && `<span class="spell-hl spell-hl-duration">⏳ ${durationMatch[1]}</span>`,
+        ].filter(Boolean).join("");
+
         return `
         <div class="spell-card spell-level-${s.level} ${isActive ? "spell-card-active" : ""}">
           <div class="spell-card-head">
@@ -1818,6 +1850,7 @@ function renderSpellsSection(character, cls) {
             </div>
           </div>
           <span class="spell-card-origin">${s.origin}</span>
+          ${highlights ? `<div class="spell-highlights">${highlights}</div>` : ""}
           <p class="spell-card-effect">${s.effect}</p>
           <div class="spell-card-meta-row">
             <span class="spell-meta-tag ${isSlow ? "spell-meta-tag-slow" : ""}">⏱ ${s.castTime || "1 Ação"}</span>
@@ -2369,6 +2402,44 @@ function attachSheetHandlers(character) {
   });
 
   // Attribute level-up spending
+  // Atributos: + gasta ponto, − recupera ponto para redistribuir
+  document.querySelectorAll("[data-attr-sheet-inc]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      if ((character.unspentAttrPoints || 0) <= 0) { showToast("Sem pontos disponíveis. Use ↺ Redistribuir para recuperar pontos."); return; }
+      const attr = btn.dataset.attrSheetInc;
+      character.attrs[attr] += 1;
+      character.unspentAttrPoints -= 1;
+      persistCurrentCharacter();
+      renderSheet();
+    });
+  });
+
+  document.querySelectorAll("[data-attr-sheet-dec]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const attr = btn.dataset.attrSheetDec;
+      if (character.attrs[attr] <= 0) return;
+      character.attrs[attr] -= 1;
+      character.unspentAttrPoints = (character.unspentAttrPoints || 0) + 1;
+      persistCurrentCharacter();
+      renderSheet();
+      showToast(`1 ponto de ${attr} recuperado — redistribua livremente.`);
+    });
+  });
+
+  // Botão ↺ Redistribuir — zera tudo e devolve todos os pontos base
+  document.getElementById("btn-attr-reset")?.addEventListener("click", () => {
+    showConfirm("Zerar todos os atributos e recuperar os pontos para redistribuir?", () => {
+      const totalSpent = Object.values(character.attrs).reduce((a, b) => a + b, 0);
+      ATTRS.forEach(a => { character.attrs[a] = 0; });
+      character.unspentAttrPoints = (character.unspentAttrPoints || 0) + totalSpent;
+      // Garante que o bônus de classe de nível 1 é refletido
+      persistCurrentCharacter();
+      renderSheet();
+      showToast(`${character.unspentAttrPoints} pontos disponíveis para redistribuir.`);
+    });
+  });
+
+  // Legacy — handler antigo data-attr-up (retrocompatibilidade)
   document.querySelectorAll("[data-attr-up]").forEach(btn => {
     btn.addEventListener("click", () => {
       if (character.unspentAttrPoints <= 0) return;
@@ -2377,7 +2448,6 @@ function attachSheetHandlers(character) {
       character.unspentAttrPoints -= 1;
       persistCurrentCharacter();
       renderSheet();
-      showToast(`+1 ${attr} aplicado.`);
     });
   });
 
