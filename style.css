@@ -2007,17 +2007,14 @@ main {
 .header-nav-toggle.active { background: var(--ink); color: var(--parchment); border-color: var(--ink); }
 
 .header-nav-menu {
-  position: absolute;
-  top: calc(100% + 8px);
-  left: 50%;
-  transform: translateX(-50%);
+  /* Posicionamento controlado por JS (_positionNavMenu) para evitar
+     stacking context de animations/transforms nas views filhas do main */
   background: var(--parchment);
   border: 1px solid var(--line);
   border-radius: 8px;
-  box-shadow: 0 6px 18px var(--shadow-soft);
+  box-shadow: 0 6px 24px rgba(58,42,29,0.28);
   min-width: 240px;
-  max-width: 90vw;
-  z-index: 50;
+  max-width: calc(100vw - 16px);
   overflow: hidden;
   padding: 6px;
 }
@@ -3124,29 +3121,7 @@ main {
    FIX MENU "PÁGINAS DO MUNDO" — z-index acima de tudo em mobile
    ================================================================ */
 
-.header-nav-menu {
-  z-index: 500 !important;
-  position: fixed !important;
-  top: auto !important;
-  bottom: auto !important;
-  left: 50% !important;
-  transform: translateX(-50%) !important;
-  max-height: 70vh;
-  overflow-y: auto;
-}
-
-/* Em desktop, posiciona normalmente abaixo do botão */
-@media (min-width: 640px) {
-  .header-nav-menu {
-    position: absolute !important;
-    top: calc(100% + 8px) !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    bottom: auto !important;
-    max-height: none;
-    overflow-y: visible;
-  }
-}
+/* posicionamento do nav-menu controlado por JS */
 
 /* Overlay escuro quando o menu está aberto (mobile) */
 .nav-overlay {

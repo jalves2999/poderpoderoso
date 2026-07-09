@@ -109,7 +109,13 @@ function toggleHeaderNavMenu() {
 }
 
 function openHeaderNavMenu() {
-  document.getElementById("header-nav-menu").classList.remove("hidden");
+  // Garante que o menu está no body (fora de qualquer stacking context)
+  const menu = document.getElementById("header-nav-menu");
+  if (menu && menu.parentElement !== document.body) {
+    document.body.appendChild(menu);
+  }
+  _positionNavMenu();
+  menu.classList.remove("hidden");
   document.getElementById("btn-nav-toggle").classList.add("active");
   document.getElementById("nav-overlay")?.classList.add("active");
 }
@@ -118,6 +124,21 @@ function closeHeaderNavMenu() {
   document.getElementById("header-nav-menu").classList.add("hidden");
   document.getElementById("btn-nav-toggle").classList.remove("active");
   document.getElementById("nav-overlay")?.classList.remove("active");
+}
+
+function _positionNavMenu() {
+  const toggle = document.getElementById("btn-nav-toggle");
+  const menu   = document.getElementById("header-nav-menu");
+  if (!toggle || !menu) return;
+  const rect = toggle.getBoundingClientRect();
+  menu.style.position = "fixed";
+  menu.style.top      = (rect.bottom + 6) + "px";
+  menu.style.left     = Math.max(8, Math.min(
+    rect.left + rect.width / 2 - 120,
+    window.innerWidth - 248
+  )) + "px";
+  menu.style.width    = "240px";
+  menu.style.zIndex   = "9999";
 }
 
 renderHeaderNavMenu();
@@ -241,8 +262,13 @@ function calcMovement(character) {
 }
 
 /* Ações por turno = AGI + DEX, mínimo 1 */
+/* Ações de Combate por turno:
+   Base: max(1, floor(DEX/3) + floor(AGI/2))
+   Regra: a cada 3 DEX ganha +1 ação; a cada 2 AGI ganha +1 ação */
 function calcActions(character) {
-  const base = Math.max(1, getEffectiveAttr(character, "AGI") + getEffectiveAttr(character, "DEX"));
+  const dexBonus = Math.floor(getEffectiveAttr(character, "DEX") / 3);
+  const agiBonus = Math.floor(getEffectiveAttr(character, "AGI") / 2);
+  const base = Math.max(1, dexBonus + agiBonus);
   const bonus = sumAccessoryEffectValue(character, "actions") + sumMagicItemBonus(character, "actions");
   return base + bonus;
 }
@@ -524,14 +550,26 @@ function calcWeaponRequirementPenalty(character) {
   return check.met ? 0 : -2;
 }
 
+/* Dano natural por FOR:
+   FOR 0 = — | FOR 1 = 1d4 | FOR 2 = 1d6 | FOR 3 = 1d8
+   FOR 4 = 1d10 | FOR 5 = 1d12 | FOR 6 = 1d20 | FOR 7 = 2d20 | FOR 8+ = 4d20 */
+function calcNaturalDamageByFOR(forValue) {
+  const table = ["—", "1d4", "1d6", "1d8", "1d10", "1d12", "1d20", "2d20", "4d20"];
+  const idx = Math.min(Math.max(0, forValue), 8);
+  return table[idx];
+}
+
 function calcDamageBreakdown(character) {
   const cls = getClassDef(character.classKey);
   const primary = getEquippedItem(character, "primary");
   const secondary = getEquippedItem(character, "secondary");
-  const naturalDie = cls ? cls.naturalDamageDie : "1d4";
-  const naturalNote = cls ? cls.naturalDamageNote : "";
-  const forPerBonus = cls && cls.forPerNaturalBonus ? cls.forPerNaturalBonus : 0;
-  const naturalForBonus = forPerBonus > 0 ? Math.floor(getEffectiveAttr(character, "FOR") / forPerBonus) : 0;
+
+  // Dano natural por FOR (nova regra) — ignora naturalDamageDie da classe
+  const forVal = getEffectiveAttr(character, "FOR");
+  const naturalDie = calcNaturalDamageByFOR(forVal);
+  const naturalNote = forVal >= 8 ? "FOR máximo atingido!" :
+                      forVal >= 6 ? "Poder colossal" :
+                      forVal === 0 ? "Sem FOR — sem dano natural" : "";
 
   const sources = [];
   if (primary) {
@@ -552,9 +590,9 @@ function calcDamageBreakdown(character) {
     });
   }
   sources.push({
-    label: `Dano Natural (${cls ? cls.name : "padrão"})`,
+    label: `Dano Natural (FOR ${forVal} → ${naturalDie})`,
     dice: naturalDie,
-    bonus: naturalForBonus,
+    bonus: 0,
     modifier: naturalNote
   });
 
@@ -1540,7 +1578,7 @@ function renderDerivedSection(character, cls) {
 
   const stats = [
     { label: "Movimento", value: `${move} hex`, tooltip: "Quantos hexágonos você pode andar por turno. Ganha-se 1 por ponto de AGI (base 4), descontando penalidade de armadura/escudo pesado." },
-    { label: "Ações/turno", value: actions, tooltip: "Quantas ações você pode realizar no seu turno (atacar, usar habilidade, etc). Ganha-se 1 por ponto de AGI + 1 por ponto de DEX. Mínimo de 1." },
+    { label: "Ações/turno", value: actions, tooltip: "Quantas ações você pode realizar no seu turno (atacar, usar habilidade, etc). Ganha-se 1 a cada 3 pontos de DEX e 1 a cada 2 pontos de AGI. Mínimo de 1." },
     { label: "Reações/rodada", value: reactions, tooltip: "Quantas vezes você pode reagir fora do seu turno (defender-se, ataque de oportunidade). Ganha-se 1 reação extra a cada 4 pontos de AGI, começando com 1." },
     { label: "Ações de Reação", value: reactionActions, tooltip: "Recurso separado das Reações comuns, usado especificamente para ações reativas especiais. Ganha-se 1 a cada 3 pontos de AGI. Mínimo de 1." },
     { label: "Ações de Magia", value: spellActions, tooltip: "Ações reservadas para conjurar magias. Equivale a INT ÷ 2 (arredondado para baixo). O Mago sempre tem no mínimo 1.", highlight: spellActions > 0 },
