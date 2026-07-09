@@ -18,7 +18,12 @@
   <h1 class="app-title">Grimório de Personagens</h1>
   <p class="app-subtitle">Compêndio de Aventureiros &amp; Criaturas</p>
   <nav class="header-nav">
-    <button id="btn-show-glossary" class="header-nav-link">📖 Glossário &amp; Tutoriais</button>
+    <div class="header-nav-dropdown" id="header-nav-dropdown">
+      <button class="header-nav-link header-nav-toggle" id="btn-nav-toggle">☰ Páginas do Mundo ▾</button>
+      <div class="header-nav-menu hidden" id="header-nav-menu">
+        <!-- Itens injetados via JS a partir de NAV_PAGES em data.js -->
+      </div>
+    </div>
   </nav>
 </header>
 
@@ -103,13 +108,17 @@
       <!-- Etapa 4: Perícias -->
       <div class="wizard-step" data-step="4">
         <h2 class="step-title">Etapa 4 — Perícias</h2>
-        <p class="step-desc">No 1º nível, você conhece <strong>2 perícias de classe</strong> e <strong>1 perícia geral</strong>. Mais tarde, novas perícias podem ser aprendidas com mestres e especialistas.</p>
+        <p class="step-desc">No 1º nível, você conhece <strong>2 perícias de classe</strong>, <strong>1 perícia geral</strong> e pode opcionalmente escolher <strong>1 perícia de combate</strong>.</p>
 
         <h3 class="subsection-title">Perícias de Classe <span class="pick-counter" id="class-skill-counter">(0/2)</span></h3>
         <div class="pick-list" id="class-skill-list"></div>
 
         <h3 class="subsection-title">Perícia Geral <span class="pick-counter" id="general-skill-counter">(0/1)</span></h3>
         <div class="pick-list" id="general-skill-list"></div>
+
+        <h3 class="subsection-title">Perícia de Combate <span class="pick-counter" id="combat-skill-counter">(0/1) — opcional</span></h3>
+        <p class="step-skip-note">Perícias de combate concedem efeitos mecânicos especiais em batalha. Pode deixar em branco e aprender depois com um mestre.</p>
+        <div class="pick-list" id="combat-skill-list"></div>
       </div>
 
       <!-- Etapa 5: Magia inicial (condicional) -->
@@ -145,7 +154,10 @@
 
   <!-- ===================== TELA: FICHA DE PERSONAGEM ===================== -->
   <section id="view-sheet" class="view">
-    <button class="btn-link btn-back-sheet" id="btn-back-sheet">← Voltar ao grimório</button>
+    <div class="sheet-toolbar no-print">
+      <button class="btn-link btn-back-sheet" id="btn-back-sheet">← Voltar ao grimório</button>
+      <button class="btn-secondary btn-print-sheet" id="btn-print-sheet">🖨 Imprimir / Salvar PDF</button>
+    </div>
 
     <div class="sheet-frame" id="sheet-frame">
       <!-- Conteúdo injetado via JS -->
@@ -173,7 +185,11 @@
     <div id="glossary-content" class="glossary-content"></div>
   </section>
 
+
 </main>
+
+<!-- Versão imprimível (A4), gerada à parte e só visível durante a impressão -->
+<div id="print-sheet-area" class="print-only"></div>
 
 <!-- Modal genérico de confirmação -->
 <div id="modal-overlay" class="modal-overlay hidden">
@@ -194,6 +210,7 @@
     <div class="tab-group modal-tab-group" id="add-item-tabs">
       <button class="tab-btn active" data-itemtab="catalog">Item do Compêndio</button>
       <button class="tab-btn" data-itemtab="generic">Item Genérico</button>
+      <button class="tab-btn" data-itemtab="custom">Criar Item</button>
     </div>
 
     <!-- Aba: Item do catálogo (arma/escudo/armadura/acessório) -->
@@ -223,6 +240,143 @@
 
       <label class="field-label" for="generic-item-weight">Peso (kg, por unidade)</label>
       <input type="number" id="generic-item-weight" class="field-input" min="0" step="0.1" value="0">
+    </div>
+
+    <!-- Aba: Criar item personalizado (não faz parte do compêndio, salvo só neste personagem) -->
+    <div class="modal-tab-content" data-itemtab-content="custom">
+      <p class="step-skip-note" style="margin-top:0;">Este item é exclusivo deste personagem — não aparece no Glossário nem é compartilhado entre fichas.</p>
+
+      <label class="field-label" for="custom-item-category">Categoria</label>
+      <select id="custom-item-category" class="field-input">
+        <option value="weapon">Arma</option>
+        <option value="armor">Armadura</option>
+        <option value="shield">Escudo</option>
+        <option value="accessory">Acessório</option>
+      </select>
+
+      <label class="field-label" for="custom-item-name">Nome do item</label>
+      <input type="text" id="custom-item-name" class="field-input" placeholder="Ex.: Espada Élfica do Avô">
+
+      <label class="field-label" for="custom-item-weight">Peso (kg)</label>
+      <input type="number" id="custom-item-weight" class="field-input" min="0" step="0.1" value="1">
+
+      <!-- Campos específicos de Arma -->
+      <div id="custom-fields-weapon" class="custom-fields-group">
+        <label class="field-label" for="custom-weapon-dmg">Dano (ex.: 1d8, 1d12 + 1d4)</label>
+        <input type="text" id="custom-weapon-dmg" class="field-input" placeholder="1d6">
+        <label class="field-label" for="custom-weapon-req">Requisito (ex.: FOR, DEX/AGI, FOR alta)</label>
+        <input type="text" id="custom-weapon-req" class="field-input" placeholder="—">
+        <label class="field-label" for="custom-weapon-defense">Degradação de Defesa</label>
+        <select id="custom-weapon-defense" class="field-input">
+          <option value="null">Não defende (duas mãos)</option>
+          <option value="0">Não degrada (escudo-like)</option>
+          <option value="1" selected>Degrada −1/tentativa</option>
+          <option value="2">Degrada −2/tentativa</option>
+        </select>
+      </div>
+
+      <!-- Campos específicos de Armadura -->
+      <div id="custom-fields-armor" class="custom-fields-group hidden">
+        <label class="field-label" for="custom-armor-physdef">Defesa Física</label>
+        <input type="number" id="custom-armor-physdef" class="field-input" min="0" value="0">
+        <label class="field-label" for="custom-armor-magdef">Defesa Mágica</label>
+        <input type="number" id="custom-armor-magdef" class="field-input" min="0" value="0">
+        <label class="field-label" for="custom-armor-movepenalty">Penalidade de Movimento</label>
+        <input type="number" id="custom-armor-movepenalty" class="field-input" value="0">
+        <label class="field-label" for="custom-armor-req">Requisito (ex.: FOR, SAB)</label>
+        <input type="text" id="custom-armor-req" class="field-input" placeholder="—">
+      </div>
+
+      <!-- Campos específicos de Escudo -->
+      <div id="custom-fields-shield" class="custom-fields-group hidden">
+        <label class="field-label" for="custom-shield-physdef">Defesa Física</label>
+        <input type="number" id="custom-shield-physdef" class="field-input" min="0" value="1">
+        <label class="field-label" for="custom-shield-penalty">Penalidade (texto livre, ex.: "Nenhuma")</label>
+        <input type="text" id="custom-shield-penalty" class="field-input" placeholder="Nenhuma">
+      </div>
+
+      <!-- Campos específicos de Acessório -->
+      <div id="custom-fields-accessory" class="custom-fields-group hidden">
+        <label class="field-label" for="custom-accessory-effect">Efeito</label>
+        <textarea id="custom-accessory-effect" class="notes-textarea" style="min-height:70px;" placeholder="Descreva o que este acessório faz..."></textarea>
+      </div>
+
+      <label class="field-label" for="custom-item-note">Nota / Efeito Especial (opcional)</label>
+      <textarea id="custom-item-note" class="notes-textarea" style="min-height:60px;" placeholder="Ex.: benefício e maldição do item, se houver..."></textarea>
+
+      <!-- Bônus mágicos: aplicável a qualquer categoria (arma, armadura, escudo ou acessório) -->
+      <div class="magic-bonus-toggle-row">
+        <label class="magic-bonus-toggle-label">
+          <input type="checkbox" id="custom-item-is-magic">
+          ✦ Este é um item mágico especial (concede bônus às Estatísticas de Combate)
+        </label>
+      </div>
+
+      <div id="custom-magic-bonus-fields" class="custom-fields-group hidden">
+        <p class="step-skip-note" style="margin-top:0;">Defina os bônus que este item concede enquanto equipado. Deixe em 0 o que não se aplica.</p>
+
+        <div class="magic-bonus-grid">
+          <div class="magic-bonus-field">
+            <label class="field-label" for="custom-bonus-attr-select">Atributo</label>
+            <select id="custom-bonus-attr-select" class="field-input">
+              <option value="">Nenhum</option>
+              <option value="FOR">FOR</option>
+              <option value="DEX">DEX</option>
+              <option value="AGI">AGI</option>
+              <option value="INT">INT</option>
+              <option value="SAB">SAB</option>
+            </select>
+          </div>
+          <div class="magic-bonus-field">
+            <label class="field-label" for="custom-bonus-attr-value">Bônus no atributo</label>
+            <input type="number" id="custom-bonus-attr-value" class="field-input" value="0">
+          </div>
+        </div>
+
+        <div class="magic-bonus-grid">
+          <div class="magic-bonus-field">
+            <label class="field-label" for="custom-bonus-hp">HP Máximo</label>
+            <input type="number" id="custom-bonus-hp" class="field-input" value="0">
+          </div>
+          <div class="magic-bonus-field">
+            <label class="field-label" for="custom-bonus-move">Movimento</label>
+            <input type="number" id="custom-bonus-move" class="field-input" value="0">
+          </div>
+        </div>
+
+        <div class="magic-bonus-grid">
+          <div class="magic-bonus-field">
+            <label class="field-label" for="custom-bonus-actions">Ações</label>
+            <input type="number" id="custom-bonus-actions" class="field-input" value="0">
+          </div>
+          <div class="magic-bonus-field">
+            <label class="field-label" for="custom-bonus-reactions">Reações</label>
+            <input type="number" id="custom-bonus-reactions" class="field-input" value="0">
+          </div>
+        </div>
+
+        <div class="magic-bonus-grid">
+          <div class="magic-bonus-field">
+            <label class="field-label" for="custom-bonus-reaction-actions">Ações de Reação</label>
+            <input type="number" id="custom-bonus-reaction-actions" class="field-input" value="0">
+          </div>
+          <div class="magic-bonus-field">
+            <label class="field-label" for="custom-bonus-spell-actions">Ações de Magia</label>
+            <input type="number" id="custom-bonus-spell-actions" class="field-input" value="0">
+          </div>
+        </div>
+
+        <div class="magic-bonus-grid">
+          <div class="magic-bonus-field">
+            <label class="field-label" for="custom-bonus-dodge">Chance de Esquiva</label>
+            <input type="number" id="custom-bonus-dodge" class="field-input" value="0">
+          </div>
+          <div class="magic-bonus-field">
+            <label class="field-label" for="custom-bonus-slots">Slots de Magia</label>
+            <input type="number" id="custom-bonus-slots" class="field-input" value="0">
+          </div>
+        </div>
+      </div>
     </div>
 
     <div id="add-item-weight-preview" class="weight-preview"></div>

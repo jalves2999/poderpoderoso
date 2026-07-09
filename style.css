@@ -497,6 +497,43 @@ main {
   margin: 14px 0 6px;
 }
 
+.custom-fields-group {
+  border-top: 1px dashed var(--line);
+  padding-top: 10px;
+  margin-top: 10px;
+}
+.custom-fields-group.hidden { display: none; }
+
+.magic-bonus-toggle-row {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 2px solid var(--gold);
+}
+.magic-bonus-toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-heading);
+  font-size: 14px;
+  color: var(--gold);
+  cursor: pointer;
+}
+.magic-bonus-toggle-label input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  accent-color: var(--gold);
+}
+
+.magic-bonus-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+.magic-bonus-field .field-label { margin-top: 0; font-size: 12px; }
+.magic-bonus-field .field-input { padding: 8px; }
+
 .field-input {
   width: 100%;
   padding: 12px;
@@ -761,55 +798,73 @@ main {
 
 .sheet-header {
   display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
+  flex-wrap: nowrap;
+  gap: 10px;
   align-items: center;
-  padding: 16px;
+  padding: 12px 14px;
   background: linear-gradient(135deg, rgba(156,122,60,0.18), transparent);
   border-bottom: 3px double var(--line);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  backdrop-filter: blur(4px);
 }
 
 .sheet-seal {
-  width: 52px; height: 52px;
+  width: 44px; height: 44px;
   border-radius: 50%;
   background: radial-gradient(circle at 35% 30%, var(--gold-bright), var(--gold) 85%);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 22px;
+  font-size: 20px;
   color: var(--parchment);
   box-shadow: 0 2px 6px var(--shadow-soft), inset 0 -3px 5px rgba(0,0,0,0.25);
   flex-shrink: 0;
 }
 
-.sheet-title-block { flex: 1; min-width: 140px; }
+.sheet-title-block { flex: 1; min-width: 0; overflow: hidden; }
 .sheet-name {
   font-family: var(--font-display);
-  font-size: clamp(19px, 5.5vw, 30px);
+  font-size: clamp(16px, 4.5vw, 26px);
   margin: 0;
   color: var(--ink);
   line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.sheet-subtitle { color: var(--ink-soft); margin: 4px 0 0; font-style: italic; font-size: 13px; line-height: 1.4; }
+.sheet-subtitle { color: var(--ink-soft); margin: 2px 0 0; font-style: italic; font-size: 11px; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 .sheet-level-badge {
   font-family: var(--font-heading);
   background: var(--wax-red);
   color: var(--parchment);
-  padding: 7px 14px;
+  padding: 5px 11px;
   border-radius: 4px;
   text-align: center;
   flex-shrink: 0;
 }
-.sheet-level-badge .lvl-num { font-size: 20px; display: block; line-height: 1; }
-.sheet-level-badge .lvl-label { font-size: 9px; letter-spacing: 1px; text-transform: uppercase; opacity: 0.85; }
+.sheet-level-badge .lvl-num { font-size: 18px; display: block; line-height: 1; }
+.sheet-level-badge .lvl-label { font-size: 8px; letter-spacing: 1px; text-transform: uppercase; opacity: 0.85; }
 
+/* Tab content — scroll na área central, header e nav fixos */
+.sheet-tab-content {
+  padding: 14px 14px 12px;
+  display: grid;
+  gap: 14px;
+  /* espaço para bottom nav */
+  padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px) + 8px);
+  min-height: 0;
+}
+
+/* Legado — sheet-body ainda pode ser gerado por código antigo */
 .sheet-body { padding: 16px 14px 28px; display: grid; gap: 18px; }
 
 .sheet-section {
   background: rgba(255,255,255,0.3);
   border: 1px solid var(--line);
-  border-radius: 4px;
+  border-radius: 6px;
   padding: 14px 14px 16px;
 }
 
@@ -830,12 +885,64 @@ main {
   background: var(--line);
 }
 
+/* -------------------------------------------------------------------- */
+/* BOTTOM TAB NAV — navegação principal por polegar                     */
+/* -------------------------------------------------------------------- */
+
+.sheet-bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  background: var(--parchment);
+  border-top: 2px solid var(--line);
+  box-shadow: 0 -3px 12px rgba(58,42,29,0.12);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.sheet-tab-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 8px 4px;
+  min-height: 56px;
+  background: none;
+  border: none;
+  border-top: 3px solid transparent;
+  cursor: pointer;
+  color: var(--ink-soft);
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.sheet-tab-btn.active {
+  color: var(--wax-red);
+  border-top-color: var(--wax-red);
+  background: rgba(125,42,46,0.06);
+}
+@media (hover: hover) {
+  .sheet-tab-btn:hover { background: rgba(156,122,60,0.08); color: var(--gold); }
+}
+.sheet-tab-icon { font-size: 18px; line-height: 1; }
+.sheet-tab-label {
+  font-family: var(--font-heading);
+  font-size: 9.5px;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
 @media (min-width: 640px) {
-  .sheet-header { padding: 24px 28px; gap: 20px; }
-  .sheet-seal { width: 64px; height: 64px; font-size: 28px; }
-  .sheet-body { padding: 24px 28px 32px; gap: 26px; }
-  .sheet-section { padding: 18px 20px; }
+  .sheet-header { padding: 16px 24px; gap: 16px; }
+  .sheet-seal { width: 56px; height: 56px; font-size: 24px; }
+  .sheet-tab-content { padding: 20px 24px calc(64px + 8px); gap: 20px; }
+  .sheet-section { padding: 16px 18px; }
   .sheet-section-title { font-size: 16px; margin-bottom: 14px; }
+
 }
 
 .section-hint {
@@ -931,11 +1038,8 @@ main {
 
 .sheet-attr-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-}
-@media (min-width: 480px) {
-  .sheet-attr-grid { grid-template-columns: repeat(5, 1fr); }
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
 }
 
 .sheet-attr-box {
@@ -943,18 +1047,18 @@ main {
   background: rgba(255,255,255,0.4);
   border: 1px solid var(--line);
   border-radius: 4px;
-  padding: 10px 4px;
+  padding: 8px 2px;
 }
-.sheet-attr-box-label { font-family: var(--font-label); font-size: 11px; color: var(--ink-soft); letter-spacing: 0.5px; }
-.sheet-attr-box-value { font-family: var(--font-heading); font-size: 21px; color: var(--ink); margin: 2px 0; }
-.sheet-attr-box-controls { display: flex; justify-content: center; gap: 6px; margin-top: 2px; }
-.sheet-attr-box-controls .attr-step-btn { width: 32px; height: 32px; font-size: 15px; }
+.sheet-attr-box-label { font-family: var(--font-label); font-size: 10px; color: var(--ink-soft); letter-spacing: 0.4px; }
+.sheet-attr-box-value { font-family: var(--font-heading); font-size: 19px; color: var(--ink); margin: 2px 0; }
+.sheet-attr-box-controls { display: flex; justify-content: center; gap: 4px; margin-top: 2px; }
+.sheet-attr-box-controls .attr-step-btn { width: 28px; height: 28px; font-size: 14px; }
 
 /* Derived stats grid */
 .derived-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
+  gap: 10px;
 }
 @media (min-width: 480px) {
   .derived-grid { grid-template-columns: repeat(3, 1fr); }
@@ -964,19 +1068,72 @@ main {
 }
 
 .derived-box {
-  background: rgba(255,255,255,0.4);
-  border: 1px solid var(--line);
-  border-radius: 4px;
-  padding: 9px 10px;
+  background: var(--ink);
+  border: 1px solid var(--ink);
+  border-radius: 6px;
+  padding: 8px 10px 9px;
+  cursor: help;
+  position: relative;
 }
-.derived-box-label { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.4px; color: var(--ink-soft); line-height: 1.3; }
-.derived-box-value { font-family: var(--font-heading); font-size: 17px; color: var(--rust-green-dark); margin-top: 2px; }
+.derived-box-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  color: rgba(232,220,196,0.75);
+  line-height: 1.3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+}
+.derived-box-info {
+  font-size: 10px;
+  opacity: 0.7;
+  flex-shrink: 0;
+}
+.derived-box-value {
+  font-family: var(--font-heading);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--parchment);
+  margin-top: 2px;
+  line-height: 1.15;
+}
 
 .derived-box-highlight {
+  background: var(--gold);
   border-color: var(--gold);
-  background: rgba(156,122,60,0.12);
 }
-.derived-box-highlight .derived-box-value { color: var(--gold); }
+.derived-box-highlight .derived-box-label { color: rgba(58,42,29,0.7); }
+.derived-box-highlight .derived-box-value { color: var(--ink); }
+
+.derived-box-danger {
+  background: var(--wax-red-dark);
+  border-color: var(--wax-red-dark);
+}
+.derived-box-danger .derived-box-label { color: rgba(232,220,196,0.75); }
+.derived-box-danger .derived-box-value { color: var(--parchment); }
+
+.weapon-penalty-warning {
+  font-size: 13px;
+  color: var(--wax-red-dark);
+  background: rgba(125,42,46,0.1);
+  border: 1px solid var(--wax-red);
+  border-radius: 4px;
+  padding: 9px 12px;
+  margin: 10px 0 0;
+  line-height: 1.5;
+}
+
+.equip-requirement-warning {
+  font-size: 12.5px;
+  color: var(--wax-red-dark);
+  background: rgba(125,42,46,0.1);
+  border-radius: 3px;
+  padding: 7px 9px;
+  margin-top: 6px;
+  line-height: 1.5;
+}
 
 /* --- Dano por fontes --- */
 
@@ -987,6 +1144,39 @@ main {
   color: var(--ink);
   text-transform: uppercase;
   letter-spacing: 0.4px;
+}
+
+.damage-combined-row {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 12px 14px;
+  background: linear-gradient(135deg, rgba(125,42,46,0.1), rgba(125,42,46,0.04));
+  border: 2px solid var(--wax-red);
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+.damage-combined-label {
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--wax-red-dark);
+}
+.damage-combined-value {
+  font-family: var(--font-heading);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--wax-red-dark);
+  letter-spacing: 0.3px;
+}
+.damage-combined-hint {
+  font-size: 12px;
+  color: var(--ink-soft);
+  font-style: italic;
+  margin: 0 0 12px;
+  line-height: 1.5;
 }
 
 .damage-sources { display: flex; flex-direction: column; gap: 7px; }
@@ -1027,7 +1217,7 @@ main {
   grid-template-columns: 1fr;
   gap: 10px;
 }
-@media (min-width: 600px) {
+@media (min-width: 640px) {
   .ability-card-grid, .skill-card-grid, .spell-card-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
@@ -1112,6 +1302,75 @@ main {
   min-height: 40px;
 }
 
+.ability-level-dots {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: -2px 0 2px;
+}
+.ability-level-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 1.5px solid var(--gold);
+  background: transparent;
+}
+.ability-level-dot.filled { background: var(--gold); }
+.ability-level-text {
+  font-family: var(--font-heading);
+  font-size: 11px;
+  color: var(--ink-soft);
+  margin-left: 4px;
+}
+
+.btn-upgrade-ability {
+  margin-top: 6px;
+  font-size: 13px;
+  padding: 9px 12px;
+  min-height: 40px;
+  border-color: var(--gold);
+  color: var(--gold);
+}
+.btn-upgrade-ability:not(:disabled):active { background: var(--gold-bright); color: var(--parchment); }
+@media (hover: hover) {
+  .btn-upgrade-ability:not(:disabled):hover { background: var(--gold-bright); color: var(--parchment); }
+}
+
+.ability-max-level-note {
+  font-size: 12px;
+  color: var(--gold);
+  font-style: italic;
+  margin-top: 6px;
+}
+
+.ability-card-glossary-levels { gap: 8px; }
+.glossary-level-row {
+  border-top: 1px dashed var(--line);
+  padding-top: 6px;
+  margin-top: 2px;
+}
+.glossary-level-row:first-of-type { border-top: none; padding-top: 0; margin-top: 0; }
+.glossary-level-tag {
+  font-family: var(--font-heading);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+.glossary-level-cost {
+  font-family: var(--font-heading);
+  font-size: 11.5px;
+  color: var(--wax-red-dark);
+  margin-left: 6px;
+}
+.glossary-level-effect {
+  font-size: 13px;
+  color: var(--ink-soft);
+  line-height: 1.5;
+  margin: 3px 0 0;
+}
+
 .skill-card {
   background: rgba(255,255,255,0.4);
   border: 1px solid var(--gold);
@@ -1121,6 +1380,15 @@ main {
   display: flex;
   flex-direction: column;
   gap: 6px;
+}
+.skill-card-combat {
+  border-color: var(--wax-red);
+  border-left-color: var(--wax-red);
+  background: rgba(125,42,46,0.05);
+}
+.skill-card-combat .skill-card-attr-tag {
+  background: rgba(125,42,46,0.12);
+  color: var(--wax-red-dark);
 }
 .skill-card-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
 .skill-card-name { font-family: var(--font-heading); font-weight: 600; font-size: 15px; line-height: 1.3; }
@@ -1225,29 +1493,109 @@ main {
 .spell-level-4, .spell-level-5 { border-left-color: var(--wax-red); }
 .spell-level-4 .spell-card-level-badge, .spell-level-5 .spell-card-level-badge { background: var(--wax-red); }
 
+/* --- Botão de remover (perícia ou magia) --- */
+.skill-remove-btn {
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  font-size: 13px;
+  line-height: 1;
+  color: var(--ink-soft);
+  padding: 0;
+  cursor: pointer;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.skill-remove-btn:active { background: var(--wax-red-dark); border-color: var(--wax-red-dark); color: var(--parchment); }
+@media (hover: hover) {
+  .skill-remove-btn:hover { background: var(--wax-red-dark); border-color: var(--wax-red-dark); color: var(--parchment); }
+}
+
+/* --- Contador de slots no título de Magias Conhecidas --- */
+.spell-slots-counter {
+  font-family: var(--font-heading);
+  font-size: 12px;
+  background: rgba(86,98,74,0.18);
+  color: var(--rust-green-dark);
+  padding: 3px 10px;
+  border-radius: 10px;
+  margin-left: 8px;
+  vertical-align: middle;
+  font-weight: 600;
+}
+.spell-slots-full { background: rgba(125,42,46,0.18); color: var(--wax-red-dark); }
+
+/* --- Botão de equipar magia --- */
+.spell-equip-btn {
+  width: 100%;
+  margin-top: 6px;
+  padding: 8px 10px;
+  border: 1px solid var(--rust-green);
+  border-radius: 4px;
+  background: rgba(86,98,74,0.08);
+  color: var(--rust-green-dark);
+  font-family: var(--font-heading);
+  font-size: 12.5px;
+  cursor: pointer;
+  text-align: center;
+}
+.spell-equip-btn:active { background: var(--rust-green); color: var(--parchment); }
+@media (hover: hover) {
+  .spell-equip-btn:hover { background: var(--rust-green); color: var(--parchment); }
+}
+.spell-equip-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.spell-equip-btn-active {
+  border-color: var(--gold);
+  background: rgba(156,122,60,0.16);
+  color: var(--gold);
+}
+.spell-equip-btn-active:active { background: var(--gold-bright); color: var(--ink); }
+@media (hover: hover) {
+  .spell-equip-btn-active:hover { background: var(--gold-bright); color: var(--ink); }
+}
+
+/* --- Card de magia equipada (em uso) --- */
+.spell-card-active {
+  box-shadow: 0 0 0 2px var(--gold);
+  position: relative;
+}
+.spell-card-active::before {
+  content: "🔮 Em Uso";
+  position: absolute;
+  top: -10px;
+  right: 10px;
+  font-family: var(--font-heading);
+  font-size: 10px;
+  background: var(--gold);
+  color: var(--ink);
+  padding: 2px 8px;
+  border-radius: 8px;
+}
+
 /* Learn row (perícias/magias) */
 .learn-row {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 8px;
   margin-top: 10px;
+  align-items: center;
 }
 .learn-select {
-  width: 100%;
-  padding: 10px;
+  flex: 1;
+  min-width: 0;
+  padding: 10px 8px;
   border: 1px solid var(--line);
   border-radius: 3px;
   background: rgba(255,255,255,0.5);
   font-family: var(--font-body);
-  font-size: 15px;
+  font-size: 14px;
   min-height: var(--tap-target);
 }
-
-@media (min-width: 560px) {
-  .learn-row { flex-direction: row; }
-  .learn-select { flex: 1; }
-  .learn-row button { width: auto; flex-shrink: 0; }
-}
+.learn-row button { flex-shrink: 0; width: auto; }
 
 /* -------------------------------------------------------------------- */
 /* EQUIPMENT SLOTS + MODIFIER FIELDS                                     */
@@ -1258,7 +1606,7 @@ main {
   grid-template-columns: 1fr;
   gap: 10px;
 }
-@media (min-width: 600px) {
+@media (min-width: 640px) {
   .equip-slots-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
@@ -1331,22 +1679,17 @@ main {
 .rarity-badge.rarity-comum { background: rgba(58,42,29,0.1); color: var(--ink-soft); }
 .rarity-badge.rarity-incomum { background: rgba(86,98,74,0.16); color: var(--rust-green-dark); }
 .rarity-badge.rarity-raro { background: rgba(156,122,60,0.2); color: var(--gold); border: 1px solid var(--gold); }
-.equip-slot-actions { margin-top: 10px; display: flex; flex-direction: column; gap: 8px; }
+.equip-slot-actions { margin-top: 10px; display: flex; flex-direction: row; gap: 8px; align-items: center; }
 .equip-slot-actions select {
-  width: 100%;
-  font-size: 14.5px;
+  flex: 1;
+  min-width: 0;
+  font-size: 13.5px;
   padding: 9px 8px;
   border-radius: 3px;
   border: 1px solid var(--line);
   min-height: var(--tap-target);
 }
-.equip-slot-actions button { font-size: 13px; padding: 9px 10px; min-height: 40px; }
-
-@media (min-width: 480px) {
-  .equip-slot-actions { flex-direction: row; }
-  .equip-slot-actions select { flex: 1; }
-  .equip-slot-actions button { width: auto; flex-shrink: 0; }
-}
+.equip-slot-actions button { font-size: 13px; padding: 9px 10px; min-height: 44px; flex-shrink: 0; width: auto; }
 
 .equip-slot-item-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 8px; flex-wrap: wrap; }
 .equip-slot-item-row button { width: auto; flex-shrink: 0; font-size: 12px; padding: 6px 10px; min-height: 34px; }
@@ -1387,6 +1730,40 @@ main {
   font-family: var(--font-heading);
   text-align: center;
   min-height: 40px;
+}
+
+/* -------------------------------------------------------------------- */
+/* DINHEIRO (bronze/prata/ouro/platina)                                 */
+/* -------------------------------------------------------------------- */
+
+.currency-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.currency-box {
+  background: rgba(255,255,255,0.4);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 10px 8px;
+  text-align: center;
+}
+.currency-icon { font-size: 18px; margin-bottom: 2px; }
+.currency-label {
+  font-family: var(--font-label);
+  font-size: 12px;
+  letter-spacing: 0.4px;
+  color: var(--ink-soft);
+  margin-bottom: 6px;
+}
+.currency-controls { display: flex; align-items: center; justify-content: center; gap: 6px; }
+.currency-input { width: 60px; }
+
+.btn-consolidate-currency { width: 100%; font-size: 13.5px; }
+@media (min-width: 480px) {
+  .btn-consolidate-currency { width: auto; }
 }
 
 /* -------------------------------------------------------------------- */
@@ -1565,11 +1942,14 @@ main {
 .toast.hidden { display: none; }
 
 /* -------------------------------------------------------------------- */
-/* HEADER NAV (acesso ao Glossário)                                      */
+/* HEADER NAV (menu de navegação dinâmico — Páginas do Mundo)           */
 /* -------------------------------------------------------------------- */
 
-.header-nav { margin-top: 14px; }
-.header-nav-link {
+.header-nav { margin-top: 14px; display: flex; justify-content: center; position: relative; }
+
+.header-nav-dropdown { position: relative; display: inline-block; }
+
+.header-nav-link, .header-nav-toggle {
   background: rgba(255,255,255,0.3);
   border: 1px solid var(--line);
   border-radius: 20px;
@@ -1578,10 +1958,69 @@ main {
   font-size: 13px;
   color: var(--ink-soft);
   min-height: var(--tap-target);
+  cursor: pointer;
 }
-.header-nav-link:active { background: var(--gold-bright); color: var(--parchment); }
+.header-nav-link:active, .header-nav-toggle:active { background: var(--gold-bright); color: var(--parchment); }
 @media (hover: hover) {
-  .header-nav-link:hover { background: var(--gold-bright); color: var(--parchment); }
+  .header-nav-link:hover, .header-nav-toggle:hover { background: var(--gold-bright); color: var(--parchment); }
+}
+.header-nav-toggle.active { background: var(--ink); color: var(--parchment); border-color: var(--ink); }
+
+.header-nav-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--parchment);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: 0 6px 18px var(--shadow-soft);
+  min-width: 240px;
+  max-width: 90vw;
+  z-index: 50;
+  overflow: hidden;
+  padding: 6px;
+}
+.header-nav-menu.hidden { display: none; }
+
+.header-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  background: none;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 12px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--ink);
+  text-align: left;
+  min-height: var(--tap-target);
+}
+.header-nav-item:active { background: rgba(156,122,60,0.15); }
+@media (hover: hover) {
+  .header-nav-item:hover { background: rgba(156,122,60,0.15); }
+}
+.header-nav-item-icon { font-size: 16px; flex-shrink: 0; }
+.header-nav-item-label { flex: 1; font-family: var(--font-heading); font-size: 13.5px; }
+
+.header-nav-item-soon { color: var(--ink-soft); }
+.header-nav-item-badge {
+  font-size: 10px;
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  background: rgba(156,122,60,0.18);
+  color: var(--gold);
+  padding: 3px 8px;
+  border-radius: 10px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+@media (min-width: 640px) {
+  .header-nav { justify-content: flex-end; }
 }
 
 /* -------------------------------------------------------------------- */
@@ -1683,7 +2122,7 @@ main {
   gap: 10px;
   margin-bottom: 8px;
 }
-@media (min-width: 600px) {
+@media (min-width: 640px) {
   .item-glossary-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
@@ -1702,4 +2141,775 @@ main {
   padding: 6px 9px;
   margin: 8px 0 0;
   line-height: 1.5;
+}
+
+/* -------------------------------------------------------------------- */
+/* TOOLBAR DA FICHA (botão de imprimir)                                  */
+/* -------------------------------------------------------------------- */
+
+.sheet-toolbar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--line);
+  background: var(--parchment);
+  position: sticky;
+  top: 0;
+  z-index: 30;
+}
+.sheet-toolbar .btn-link { margin-bottom: 0; font-size: 13px; }
+.btn-print-sheet { font-size: 13px; padding: 8px 12px; }
+
+/* -------------------------------------------------------------------- */
+/* CONTROLE DE VISIBILIDADE TELA vs IMPRESSÃO                           */
+/* -------------------------------------------------------------------- */
+
+.print-only { display: none; }
+
+@media print {
+  .no-print { display: none !important; }
+}
+
+/* -------------------------------------------------------------------- */
+/* FICHA IMPRIMÍVEL — formatação A4                                     */
+/* Estas regras só se aplicam dentro de @media print: na tela normal,   */
+/* #print-sheet-area fica completamente oculto (.print-only acima).     */
+/* -------------------------------------------------------------------- */
+
+@media print {
+  @page {
+    size: A4;
+    margin: 12mm 14mm;
+  }
+
+  html, body {
+    background: #fff !important;
+    color: #1a1a1a !important;
+    font-size: 11pt;
+  }
+
+  .parchment-texture,
+  .app-header,
+  #view-list, #view-create, #view-sheet, #view-glossary,
+  .modal-overlay, .toast {
+    display: none !important;
+  }
+
+  #print-sheet-area {
+    display: block !important;
+  }
+
+  .print-page {
+    width: 100%;
+    max-width: 100%;
+    font-family: Georgia, 'Times New Roman', serif;
+    color: #1a1a1a;
+  }
+
+  .print-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: 3px double #333;
+    padding-bottom: 8px;
+    margin-bottom: 10px;
+  }
+  .print-char-name {
+    font-size: 22pt;
+    margin: 0;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  .print-char-sub {
+    font-size: 10pt;
+    margin: 3px 0 0;
+    color: #444;
+    font-style: italic;
+  }
+  .print-level-badge {
+    font-size: 13pt;
+    font-weight: 700;
+    border: 2px solid #1a1a1a;
+    border-radius: 4px;
+    padding: 4px 12px;
+    white-space: nowrap;
+  }
+
+  .print-grid-top {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8mm;
+    margin-bottom: 8px;
+  }
+
+  .print-box {
+    border: 1px solid #999;
+    border-radius: 3px;
+    padding: 6px 9px 8px;
+    margin-bottom: 8px;
+    page-break-inside: avoid;
+  }
+  .print-box-title {
+    font-size: 10.5pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 4px;
+    margin-bottom: 6px;
+  }
+
+  .print-stat-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10.5pt;
+    padding: 2px 0;
+    border-bottom: 1px dotted #ccc;
+  }
+  .print-stat-row:last-child { border-bottom: none; }
+  .print-stat-fill-line { font-weight: 700; }
+
+  .print-attr-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 4px;
+    text-align: center;
+  }
+  .print-attr-cell {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 4px 2px;
+  }
+  .print-attr-label { font-size: 8.5pt; text-transform: uppercase; color: #555; }
+  .print-attr-value { font-size: 14pt; font-weight: 700; }
+
+  .print-combat-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+  }
+  .print-combat-cell {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 4px 6px;
+  }
+  .print-combat-label { font-size: 8pt; text-transform: uppercase; color: #555; }
+  .print-combat-value { font-size: 11.5pt; font-weight: 700; }
+
+  .print-damage-list {
+    margin-top: 6px;
+    font-size: 9.5pt;
+    line-height: 1.5;
+    border-top: 1px dashed #ccc;
+    padding-top: 5px;
+  }
+
+  .print-currency-row {
+    font-size: 10pt;
+    line-height: 1.6;
+  }
+
+  .print-skill-tests-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3px;
+    margin-top: 4px;
+  }
+  .print-skill-test-cell {
+    display: flex;
+    flex-direction: column;
+    border: 0.5px solid #ccc;
+    border-radius: 3px;
+    padding: 3px 5px;
+    background: #fafafa;
+  }
+  .print-skill-test-cell.trained { background: rgba(86,98,74,0.08); border-color: #789; }
+  .print-skill-test-name { font-size: 8pt; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .print-skill-test-attrs { font-size: 7pt; color: #888; }
+  .print-skill-test-vals { font-size: 9pt; font-weight: 700; color: #333; letter-spacing: 0.5px; }
+
+  .print-two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8mm;
+  }
+
+  .print-table { width: 100%; border-collapse: collapse; font-size: 9.5pt; }
+  .print-table th {
+    text-align: left;
+    border-bottom: 1px solid #999;
+    padding: 3px 4px;
+    font-size: 8.5pt;
+    text-transform: uppercase;
+    color: #555;
+  }
+  .print-table td { padding: 3px 4px; border-bottom: 1px dotted #ddd; vertical-align: top; }
+  .print-table-label { font-weight: 700; width: 35%; white-space: nowrap; }
+
+  .print-compact-list {
+    margin: 0;
+    padding-left: 16px;
+    font-size: 9.5pt;
+    line-height: 1.55;
+  }
+  .print-compact-list li { margin-bottom: 4px; }
+
+  .print-empty-note { font-size: 9.5pt; color: #777; font-style: italic; margin: 0; }
+
+  .print-notes-text {
+    font-size: 10pt;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    margin: 0;
+  }
+
+  .print-footer {
+    text-align: center;
+    font-size: 8pt;
+    color: #888;
+    margin-top: 10px;
+    border-top: 1px solid #ccc;
+    padding-top: 6px;
+  }
+
+  /* Evita que blocos importantes sejam cortados de forma feia entre páginas */
+  .print-grid-top, .print-two-col { page-break-inside: avoid; }
+}
+
+/* -------------------------------------------------------------------- */
+/* TESTES DE PERÍCIA — cards compactos em grade                         */
+/* -------------------------------------------------------------------- */
+
+.skill-test-learned-tag {
+  font-family: var(--font-heading);
+  font-size: 10px;
+  background: rgba(86,98,74,0.22);
+  color: var(--rust-green-dark);
+  padding: 2px 6px;
+  border-radius: 8px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.skill-test-card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 7px;
+}
+@media (min-width: 560px) {
+  .skill-test-card-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (min-width: 860px) {
+  .skill-test-card-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+.skill-test-card {
+  background: rgba(255,255,255,0.35);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 9px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.skill-test-card-trained {
+  border-color: var(--rust-green);
+  background: rgba(86,98,74,0.06);
+}
+.skill-test-card-combat {
+  border-color: var(--wax-red);
+  border-left: 3px solid var(--wax-red);
+}
+
+.skill-test-card-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+.skill-test-card-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.skill-test-card-info { flex: 1; min-width: 0; }
+.skill-test-card-name {
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 700;
+  display: block;
+  line-height: 1.3;
+}
+.skill-test-card-attrs {
+  font-size: 10px;
+  color: var(--gold);
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.skill-test-values {
+  display: flex;
+  gap: 4px;
+}
+.skill-test-val {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  padding: 4px;
+  border-radius: 4px;
+  cursor: help;
+}
+.skill-test-val-label {
+  font-family: var(--font-heading);
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  opacity: 0.7;
+}
+.skill-test-val-num {
+  font-family: var(--font-heading);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.skill-test-normal   { background: rgba(86,98,74,0.15);  color: var(--rust-green-dark); }
+.skill-test-hard     { background: rgba(156,122,60,0.18); color: var(--gold); }
+.skill-test-critical { background: rgba(125,42,46,0.14);  color: var(--wax-red-dark); }
+
+.skill-test-combat-desc {
+  font-size: 12px;
+  color: var(--ink-soft);
+  line-height: 1.5;
+  padding-top: 4px;
+  border-top: 1px dashed var(--line);
+}
+
+/* -------------------------------------------------------------------- */
+/* TIERS DE ITENS — badges e cards especiais                            */
+/* -------------------------------------------------------------------- */
+
+.tier-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-family: var(--font-heading);
+  color: #fff;
+  padding: 2px 7px;
+  border-radius: 8px;
+  vertical-align: middle;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-left: 4px;
+}
+
+/* Cards Raro+ têm fundo levemente diferenciado */
+.item-glossary-card-special {
+  background: rgba(255,255,255,0.55);
+  border: 1px solid rgba(156,122,60,0.35);
+}
+
+/* Cards Único/Ancestral têm destaque máximo */
+.item-glossary-card-unique {
+  background: rgba(255,245,235,0.75);
+  border: 1px solid rgba(231,76,60,0.4);
+  box-shadow: 0 0 0 1px rgba(231,76,60,0.15);
+}
+
+/* Bloco de história do item */
+.item-glossary-story {
+  font-size: 12px;
+  color: var(--ink-soft);
+  font-style: italic;
+  line-height: 1.55;
+  margin: 6px 0 0;
+  padding: 6px 10px;
+  background: rgba(58,42,29,0.05);
+  border-left: 3px solid var(--gold);
+  border-radius: 0 4px 4px 0;
+}
+
+/* Bloco de habilidade única */
+.item-glossary-unique-ability {
+  font-size: 12px;
+  color: var(--wax-red-dark);
+  line-height: 1.55;
+  margin: 6px 0 0;
+  padding: 8px 10px;
+  background: rgba(125,42,46,0.07);
+  border-left: 3px solid var(--wax-red);
+  border-radius: 0 4px 4px 0;
+}
+
+/* -------------------------------------------------------------------- */
+/* ACESSÓRIOS EQUIPADOS — cards visuais destacados                      */
+/* -------------------------------------------------------------------- */
+
+.equip-slot-accessories {
+  background: rgba(156,122,60,0.06);
+  border: 1px solid var(--gold);
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+
+.accessory-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.accessory-card {
+  background: var(--parchment);
+  border: 1.5px solid var(--gold);
+  border-left: 4px solid var(--gold);
+  border-radius: 6px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  position: relative;
+}
+
+.accessory-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.accessory-card-name {
+  font-family: var(--font-heading);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.3;
+  flex: 1;
+}
+
+.accessory-card-effect {
+  font-size: 12.5px;
+  color: var(--ink);
+  line-height: 1.5;
+  margin: 0;
+  padding: 5px 8px;
+  background: rgba(156,122,60,0.1);
+  border-radius: 4px;
+  font-style: normal;
+}
+
+.accessory-card-story {
+  font-size: 11px;
+  color: var(--ink-soft);
+  font-style: italic;
+  line-height: 1.45;
+  margin: 2px 0 0;
+  border-top: 1px dashed var(--line);
+  padding-top: 4px;
+}
+
+/* Acessórios de tier especial têm borda colorida diferente */
+.accessory-card:has(.tier-badge[style*="4a90d9"]) { border-left-color: #4a90d9; }  /* raro */
+.accessory-card:has(.tier-badge[style*="9b59b6"]) { border-left-color: #9b59b6; }  /* magico */
+.accessory-card:has(.tier-badge[style*="e67e22"]) { border-left-color: #e67e22; }  /* lendario */
+.accessory-card:has(.tier-badge[style*="e74c3c"]) { border-left-color: #e74c3c; }  /* unico */
+
+/* ================================================================
+   BESTIÁRIO
+   ================================================================ */
+
+/* Toolbar */
+.bestiary-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  border-bottom: 2px solid var(--line);
+  background: var(--parchment);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+.bestiary-page-title {
+  font-family: var(--font-heading);
+  font-size: 17px;
+  margin: 0;
+  color: var(--ink);
+}
+
+/* Filtros */
+.bestiary-filters {
+  padding: 12px 14px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: rgba(255,255,255,0.4);
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 48px;
+  z-index: 15;
+  backdrop-filter: blur(4px);
+}
+.bestiary-search {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  background: rgba(255,255,255,0.7);
+  box-sizing: border-box;
+}
+.bestiary-filter-row { display: flex; gap: 8px; }
+.bestiary-filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+.bestiary-filter-label {
+  font-family: var(--font-label);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+.bestiary-chip {
+  font-family: var(--font-heading);
+  font-size: 12px;
+  padding: 5px 10px;
+  border-radius: 16px;
+  border: 1.5px solid var(--line);
+  background: rgba(255,255,255,0.5);
+  color: var(--ink-soft);
+  cursor: pointer;
+  white-space: nowrap;
+  min-height: 32px;
+  transition: all 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.bestiary-chip.active {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--parchment);
+}
+
+/* Conteúdo */
+.bestiary-content {
+  padding: 14px 14px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Grupos por dificuldade */
+.bestiary-group { display: flex; flex-direction: column; gap: 10px; }
+.bestiary-group-title {
+  font-family: var(--font-heading);
+  font-size: 14px;
+  letter-spacing: 0.3px;
+  margin: 0;
+  padding: 6px 12px;
+  border-radius: 5px;
+  font-weight: 700;
+}
+.diff-1 { background: rgba(86,98,74,0.15); color: var(--rust-green-dark); }
+.diff-2 { background: rgba(156,122,60,0.18); color: #7a5c20; }
+.diff-3 { background: rgba(180,100,30,0.18); color: #8b4a10; }
+.diff-4 { background: rgba(125,42,46,0.18); color: var(--wax-red-dark); }
+.diff-5 { background: rgba(80,0,0,0.20); color: #5a0000; }
+
+/* Cards de monstro */
+.monster-card {
+  border: 1.5px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.35);
+}
+.diff-card-1 { border-left: 4px solid var(--rust-green); }
+.diff-card-2 { border-left: 4px solid var(--gold); }
+.diff-card-3 { border-left: 4px solid #c0601a; }
+.diff-card-4 { border-left: 4px solid var(--wax-red); }
+.diff-card-5 { border-left: 4px solid #6b0000; }
+.monster-card-elite {
+  box-shadow: 0 0 0 2px #c0a030;
+}
+.monster-card-elite .monster-card-header {
+  background: linear-gradient(135deg, rgba(192,160,48,0.12), transparent);
+}
+
+/* Header do card (sempre visível) */
+.monster-card-header {
+  padding: 12px 14px;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.monster-card-title-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.monster-size-icon { font-size: 22px; flex-shrink: 0; line-height: 1.2; }
+.monster-card-title-block { flex: 1; min-width: 0; }
+.monster-name {
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-weight: 700;
+  display: block;
+  line-height: 1.3;
+}
+.monster-meta {
+  font-size: 11px;
+  color: var(--ink-soft);
+  display: block;
+  margin-top: 2px;
+  line-height: 1.4;
+}
+.monster-skulls {
+  font-size: 13px;
+  flex-shrink: 0;
+  letter-spacing: -2px;
+}
+.diff-skulls-1 { color: var(--rust-green); }
+.diff-skulls-2 { color: var(--gold); }
+.diff-skulls-3 { color: #c0601a; }
+.diff-skulls-4 { color: var(--wax-red); }
+.diff-skulls-5 { color: #8b0000; }
+
+/* Chips de estatística */
+.monster-stat-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 6px;
+}
+.monster-chip {
+  font-family: var(--font-heading);
+  font-size: 11.5px;
+  padding: 3px 8px;
+  border-radius: 10px;
+  white-space: nowrap;
+}
+.chip-hp      { background: rgba(125,42,46,0.14); color: var(--wax-red-dark); }
+.chip-def     { background: rgba(86,98,74,0.15); color: var(--rust-green-dark); }
+.chip-mag     { background: rgba(90,60,120,0.14); color: #5a3c78; }
+.chip-dodge   { background: rgba(156,122,60,0.14); color: #7a5c20; }
+.chip-act     { background: rgba(58,42,29,0.1); color: var(--ink-soft); }
+.chip-dmg     { background: rgba(125,42,46,0.1); color: var(--wax-red-dark); font-weight: 700; }
+
+.monster-expand-hint {
+  font-size: 11px;
+  color: var(--ink-soft);
+  text-align: right;
+  margin-top: 2px;
+  transition: opacity 0.15s;
+}
+.monster-card.expanded .monster-expand-hint { opacity: 0; height: 0; overflow: hidden; margin: 0; }
+
+/* Detalhes (acordeão) */
+.monster-card-details {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  border-top: 0px solid var(--line);
+}
+.monster-card.expanded .monster-card-details {
+  max-height: 9999px;
+  border-top-width: 1px;
+}
+.monster-detail-block {
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+.monster-detail-block:last-child { border-bottom: none; }
+.monster-detail-title {
+  font-family: var(--font-heading);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+.monster-ability {
+  margin-bottom: 8px;
+  font-size: 13px;
+  line-height: 1.55;
+}
+.monster-ability:last-child { margin-bottom: 0; }
+.monster-ability-name { color: var(--ink); }
+.monster-ability-desc { color: var(--ink-soft); }
+.monster-behavior-text, .monster-story-text {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  margin: 0;
+}
+.monster-story { background: rgba(156,122,60,0.05); }
+.monster-story-text { font-style: italic; }
+
+/* Loot */
+.monster-loot-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 4px 0;
+  border-bottom: 1px dashed var(--line);
+  font-size: 12.5px;
+}
+.monster-loot-row:last-child { border-bottom: none; }
+.monster-loot-chance {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color: var(--gold);
+  min-width: 36px;
+  flex-shrink: 0;
+}
+.monster-loot-item { flex: 1; color: var(--ink); }
+.monster-loot-qty {
+  font-family: var(--font-heading);
+  color: var(--ink-soft);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+/* ── Badges de categoria de magia (buff/ritual/invocação) ───── */
+.spell-cat-badge {
+  font-family: var(--font-heading);
+  font-size: 10px;
+  color: #fff;
+  padding: 2px 7px;
+  border-radius: 8px;
+  white-space: nowrap;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+.spell-condition-note {
+  font-size: 11.5px;
+  color: #8b4a10;
+  background: rgba(180,100,30,0.10);
+  border-left: 2px solid #c0601a;
+  padding: 4px 8px;
+  border-radius: 0 4px 4px 0;
+  font-style: italic;
+  line-height: 1.4;
+}
+
+/* ── Glossário de itens — badge de set ────────────────────────── */
+.set-badge {
+  font-family: var(--font-heading);
+  font-size: 10px;
+  background: rgba(86,98,74,0.22);
+  color: var(--rust-green-dark);
+  padding: 2px 7px;
+  border-radius: 8px;
+  white-space: nowrap;
+  margin-left: 4px;
 }

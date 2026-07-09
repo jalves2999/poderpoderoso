@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Locais & Reinos — Grimório de Personagens</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { margin: 0; min-height: 100vh; }
+    .loc-page { display: flex; flex-direction: column; min-height: 100vh; }
+
+    /* ── Toolbar ──────────────────────────────────────────────── */
+    .loc-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: var(--parchment);
+      border-bottom: 2px solid var(--line);
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      backdrop-filter: blur(4px);
+    }
+    .loc-back {
+      font-family: var(--font-heading);
+      font-size: 13px;
+      color: var(--ink-soft);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px 4px;
+      text-decoration: none;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .loc-title {
+      font-family: var(--font-heading);
+      font-size: 17px;
+      margin: 0;
+      color: var(--ink);
+      flex: 1;
+    }
+    .loc-subtitle {
+      font-size: 11px;
+      color: var(--ink-soft);
+      white-space: nowrap;
+    }
+
+    /* ── Conteúdo ──────────────────────────────────────────────── */
+    .loc-content {
+      padding: 12px 12px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+    }
+
+    /* ── Acordeão — 3 níveis ───────────────────────────────────── */
+
+    /* Nível 1: Região */
+    .region-block { border-radius: 8px; overflow: hidden; border: 1.5px solid var(--line); }
+
+    .accordion-trigger {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-align: left;
+      background: none;
+      border: none;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      font-family: var(--font-heading);
+    }
+    .accordion-arrow {
+      margin-left: auto;
+      flex-shrink: 0;
+      font-size: 13px;
+      color: var(--ink-soft);
+      transition: transform 0.2s;
+    }
+    .accordion-trigger.open .accordion-arrow { transform: rotate(180deg); }
+
+    /* Painel fechado */
+    .accordion-panel {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    .accordion-panel.open { max-height: 99999px; }
+
+    /* Nível 1 — Região trigger */
+    .region-trigger {
+      padding: 13px 14px;
+      background: linear-gradient(135deg, rgba(156,122,60,0.12), rgba(248,243,232,0.8));
+      border-bottom: 1px solid transparent;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+    .region-trigger.open { border-bottom-color: var(--line); }
+    .region-icon { font-size: 22px; flex-shrink: 0; }
+    .region-name { flex: 1; }
+
+    /* Sumário da região */
+    .region-summary {
+      font-size: 13px;
+      color: var(--ink-soft);
+      line-height: 1.6;
+      margin: 0;
+      padding: 12px 14px 8px;
+      font-style: italic;
+      border-bottom: 1px dashed var(--line);
+    }
+
+    /* Nível 2 — Subseção (Reinos, Cidades, etc.) */
+    .subsection-block {
+      border-top: 1px solid var(--line);
+    }
+    .subsection-block:first-child { border-top: none; }
+
+    .subsection-trigger {
+      padding: 10px 14px 10px 18px;
+      font-size: 13.5px;
+      color: var(--ink);
+      background: rgba(255,255,255,0.3);
+      width: 100%;
+    }
+    .subsection-trigger.open { background: rgba(156,122,60,0.06); }
+    .subsection-icon { font-size: 15px; flex-shrink: 0; }
+    .subsection-label { flex: 1; }
+    .subsection-count {
+      font-family: var(--font-heading);
+      font-size: 10px;
+      background: rgba(58,42,29,0.1);
+      color: var(--ink-soft);
+      padding: 2px 6px;
+      border-radius: 8px;
+      flex-shrink: 0;
+    }
+
+    /* Nível 3 — Entrada (Reino, Cidade, NPC, etc.) */
+    .entry-block {
+      border-top: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .entry-trigger {
+      padding: 9px 14px 9px 28px;
+      font-size: 13px;
+      color: var(--ink);
+      background: rgba(255,255,255,0.2);
+      width: 100%;
+      min-height: 44px;
+    }
+    .entry-trigger.open { background: rgba(248,243,232,0.7); }
+
+    .entry-badge {
+      font-family: var(--font-heading);
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 8px;
+      color: #fff;
+      flex-shrink: 0;
+      letter-spacing: -1px;
+    }
+    .entry-badge-npc {
+      background: rgba(86,98,74,0.25);
+      color: var(--rust-green-dark);
+      letter-spacing: 0;
+    }
+    .entry-name { flex: 1; min-width: 0; }
+
+    /* Painel de conteúdo da entrada */
+    .entry-panel { background: rgba(255,255,255,0.5); }
+
+    .entry-content {
+      padding: 12px 14px 14px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .entry-historia {
+      font-size: 13px;
+      color: var(--ink-soft);
+      line-height: 1.65;
+      margin: 0;
+      padding: 8px 10px;
+      background: rgba(58,42,29,0.04);
+      border-left: 3px solid var(--gold);
+      border-radius: 0 4px 4px 0;
+    }
+
+    .entry-row {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      padding: 6px 8px;
+      background: rgba(255,255,255,0.5);
+      border-radius: 4px;
+      font-size: 13px;
+      color: var(--ink);
+      line-height: 1.5;
+    }
+    .entry-row-alert { background: rgba(125,42,46,0.06); border-left: 2px solid var(--wax-red); }
+    .entry-label {
+      font-family: var(--font-label);
+      font-size: 9.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      color: var(--gold);
+    }
+
+    .entry-section-title {
+      font-family: var(--font-heading);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      color: var(--ink-soft);
+      margin-top: 4px;
+      padding-bottom: 4px;
+      border-bottom: 1px dashed var(--line);
+    }
+
+    .entry-list {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 13px;
+      color: var(--ink);
+      line-height: 1.8;
+    }
+    .entry-list-conhecimentos {
+      padding-left: 0;
+      list-style: none;
+    }
+    .entry-list-conhecimentos li {
+      padding: 5px 8px 5px 28px;
+      position: relative;
+      background: rgba(86,98,74,0.06);
+      border-radius: 4px;
+      margin-bottom: 4px;
+      border-left: 2px solid var(--rust-green);
+    }
+    .entry-list-conhecimentos li::before {
+      content: "💡";
+      position: absolute;
+      left: 6px;
+      top: 5px;
+      font-size: 11px;
+    }
+
+    /* NPCs inline nas cidades */
+    .entry-npc-inline {
+      padding: 8px 10px;
+      background: rgba(255,255,255,0.6);
+      border-radius: 4px;
+      border-left: 3px solid var(--gold);
+    }
+    .entry-npc-name {
+      font-family: var(--font-heading);
+      font-size: 13.5px;
+      font-weight: 700;
+      display: block;
+    }
+    .entry-npc-cargo {
+      font-size: 11px;
+      color: var(--gold);
+      display: block;
+      margin-bottom: 4px;
+    }
+    .entry-npc-desc {
+      font-size: 12.5px;
+      color: var(--ink-soft);
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    /* Responsivo */
+    @media (min-width: 640px) {
+      .loc-content { padding: 16px 20px 40px; gap: 10px; }
+      .region-trigger { padding: 15px 18px; font-size: 16px; }
+      .entry-trigger { padding: 10px 18px 10px 32px; }
+      .entry-content { padding: 14px 18px; }
+    }
+  </style>
+</head>
+<body>
+<div class="loc-page">
+
+  <header class="loc-toolbar">
+    <a href="index.html" class="loc-back">← Grimório</a>
+    <h1 class="loc-title">🏰 Locais & Reinos</h1>
+    <span class="loc-subtitle">5 regiões</span>
+  </header>
+
+  <div class="loc-content">
+    <div id="regions-container">
+      <p style="text-align:center;color:var(--ink-soft);padding:20px;">Carregando regiões…</p>
+    </div>
+  </div>
+
+</div>
+<script src="locations.js"></script>
+</body>
+</html>

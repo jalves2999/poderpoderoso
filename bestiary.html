@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Bestiário — Grimório de Personagens</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* ── Layout exclusivo do bestiário ─────────────────────────── */
+    body { margin: 0; min-height: 100vh; }
+
+    .bestiary-page {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* Toolbar */
+    .bestiary-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      background: var(--parchment);
+      border-bottom: 2px solid var(--line);
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      backdrop-filter: blur(4px);
+    }
+    .bestiary-page-title {
+      font-family: var(--font-heading);
+      font-size: 17px;
+      margin: 0;
+      color: var(--ink);
+      flex: 1;
+    }
+    .bestiary-result-count {
+      font-family: var(--font-heading);
+      font-size: 12px;
+      color: var(--ink-soft);
+      white-space: nowrap;
+    }
+    .btn-back-bestiary {
+      font-family: var(--font-heading);
+      font-size: 13px;
+      color: var(--ink-soft);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px 4px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      min-height: 44px;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Painel de filtros sticky */
+    .bestiary-filters {
+      position: sticky;
+      top: 49px;
+      z-index: 20;
+      background: rgba(248,243,232,0.96);
+      backdrop-filter: blur(6px);
+      border-bottom: 1px solid var(--line);
+      padding: 10px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    /* Linha de busca */
+    .filter-search-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .filter-search-input {
+      flex: 1;
+      padding: 9px 12px;
+      border: 1.5px solid var(--line);
+      border-radius: 8px;
+      font-family: var(--font-body);
+      font-size: 15px;
+      background: rgba(255,255,255,0.8);
+      min-height: 44px;
+      box-sizing: border-box;
+    }
+    .filter-search-input:focus {
+      outline: none;
+      border-color: var(--gold);
+    }
+
+    /* Linha de selects compactos */
+    .filter-selects-row {
+      display: flex;
+      gap: 7px;
+      flex-wrap: nowrap;
+    }
+    .filter-select-wrap {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .filter-select-label {
+      font-family: var(--font-label);
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--ink-soft);
+      padding-left: 2px;
+    }
+    .filter-select {
+      width: 100%;
+      padding: 7px 6px;
+      border: 1.5px solid var(--line);
+      border-radius: 6px;
+      font-family: var(--font-heading);
+      font-size: 12.5px;
+      background: rgba(255,255,255,0.8);
+      color: var(--ink);
+      min-height: 38px;
+      cursor: pointer;
+      -webkit-appearance: none;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 8px center;
+      padding-right: 22px;
+    }
+    .filter-select:focus { outline: none; border-color: var(--gold); }
+    .filter-select.has-value {
+      border-color: var(--wax-red);
+      background-color: rgba(125,42,46,0.06);
+      color: var(--wax-red-dark);
+    }
+
+    /* Tags de filtros ativos */
+    .active-filters-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      min-height: 0;
+    }
+    .active-filter-tag {
+      font-family: var(--font-heading);
+      font-size: 11px;
+      background: rgba(125,42,46,0.12);
+      color: var(--wax-red-dark);
+      border: 1px solid rgba(125,42,46,0.25);
+      padding: 3px 8px;
+      border-radius: 10px;
+    }
+    .active-filter-tag {
+  font-family: var(--font-heading);
+  font-size: 11px;
+  background: rgba(125,42,46,0.12);
+  color: var(--wax-red-dark);
+  border: 1px solid rgba(125,42,46,0.25);
+  padding: 3px 8px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.active-filter-tag:active { background: var(--wax-red-dark); color: #fff; }
+.active-filter-clear {
+      font-family: var(--font-heading);
+      font-size: 11px;
+      background: none;
+      border: 1px solid var(--line);
+      color: var(--ink-soft);
+      padding: 3px 8px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    /* Conteúdo */
+    .bestiary-content {
+      padding: 14px 14px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      flex: 1;
+    }
+    .bestiary-empty {
+      text-align: center;
+      color: var(--ink-soft);
+      padding: 40px 20px;
+      font-size: 15px;
+      line-height: 1.8;
+    }
+
+    /* Grupos por dificuldade */
+    .bestiary-group { display: flex; flex-direction: column; gap: 8px; }
+    .bestiary-group-title {
+      font-family: var(--font-heading);
+      font-size: 13px;
+      letter-spacing: 0.4px;
+      margin: 0;
+      padding: 5px 12px;
+      border-radius: 5px;
+      font-weight: 700;
+    }
+    .diff-1 { background: rgba(86,98,74,0.15);  color: #3a5a28; }
+    .diff-2 { background: rgba(156,122,60,0.18); color: #7a5c20; }
+    .diff-3 { background: rgba(180,100,30,0.18); color: #8b4a10; }
+    .diff-4 { background: rgba(125,42,46,0.18);  color: #7d2a2e; }
+    .diff-5 { background: rgba(80,0,0,0.20);     color: #5a0000; }
+
+    /* ── Card de monstro ─────────────────────────────────────── */
+    .monster-card {
+      border: 1.5px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.35);
+    }
+    .diff-card-1 { border-left: 4px solid #6a9e50; }
+    .diff-card-2 { border-left: 4px solid var(--gold); }
+    .diff-card-3 { border-left: 4px solid #c0601a; }
+    .diff-card-4 { border-left: 4px solid var(--wax-red); }
+    .diff-card-5 { border-left: 4px solid #6b0000; }
+    .monster-card-elite { box-shadow: 0 0 0 2px #c0a030; }
+    .monster-card-elite .monster-card-header {
+      background: linear-gradient(135deg, rgba(192,160,48,0.10), transparent);
+    }
+
+    .monster-card-header {
+      padding: 11px 13px;
+      cursor: pointer;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .monster-card-title-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      margin-bottom: 7px;
+    }
+    .monster-size-icon { font-size: 20px; flex-shrink: 0; line-height: 1.3; }
+    .monster-card-title-block { flex: 1; min-width: 0; }
+    .monster-name {
+      font-family: var(--font-heading);
+      font-size: 15px;
+      font-weight: 700;
+      display: block;
+      line-height: 1.3;
+    }
+    .monster-meta {
+      font-size: 11px;
+      color: var(--ink-soft);
+      display: block;
+      margin-top: 2px;
+      line-height: 1.35;
+    }
+    .monster-skulls { font-size: 12px; flex-shrink: 0; letter-spacing: -2px; }
+    .diff-skulls-1 { color: #6a9e50; }
+    .diff-skulls-2 { color: var(--gold); }
+    .diff-skulls-3 { color: #c0601a; }
+    .diff-skulls-4 { color: var(--wax-red); }
+    .diff-skulls-5 { color: #8b0000; }
+
+    .monster-stat-chips { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 5px; }
+    .monster-chip {
+      font-family: var(--font-heading);
+      font-size: 11px;
+      padding: 3px 7px;
+      border-radius: 10px;
+      white-space: nowrap;
+    }
+    .chip-hp     { background: rgba(125,42,46,0.13); color: #7d2a2e; }
+    .chip-def    { background: rgba(86,98,74,0.14);  color: #3a5a28; }
+    .chip-mag    { background: rgba(90,60,120,0.13); color: #5a3c78; }
+    .chip-dodge  { background: rgba(156,122,60,0.13); color: #7a5c20; }
+    .chip-act    { background: rgba(58,42,29,0.09);  color: var(--ink-soft); }
+    .chip-dmg    { background: rgba(125,42,46,0.10); color: #7d2a2e; font-weight: 700; }
+
+    .monster-expand-hint {
+      font-size: 10.5px;
+      color: var(--ink-soft);
+      text-align: right;
+    }
+    .monster-card.expanded .monster-expand-hint { display: none; }
+
+    /* Acordeão */
+    .monster-card-details {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      border-top: 0 solid var(--line);
+    }
+    .monster-card.expanded .monster-card-details {
+      max-height: 9999px;
+      border-top-width: 1px;
+    }
+    .monster-detail-block {
+      padding: 11px 13px;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+    .monster-detail-block:last-child { border-bottom: none; }
+    .monster-detail-title {
+      font-family: var(--font-heading);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--gold);
+      margin-bottom: 7px;
+    }
+    .monster-ability { margin-bottom: 7px; font-size: 13px; line-height: 1.55; }
+    .monster-ability:last-child { margin-bottom: 0; }
+    .monster-ability-name { color: var(--ink); }
+    .monster-ability-desc { color: var(--ink-soft); }
+    .monster-behavior-text, .monster-story-text {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--ink-soft);
+      margin: 0;
+    }
+    .monster-story-block { background: rgba(156,122,60,0.04); }
+    .monster-story-text { font-style: italic; }
+
+    .monster-loot-row {
+      display: flex;
+      align-items: baseline;
+      gap: 7px;
+      padding: 3px 0;
+      border-bottom: 1px dashed var(--line);
+      font-size: 12.5px;
+    }
+    .monster-loot-row:last-child { border-bottom: none; }
+    .monster-loot-chance {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      color: var(--gold);
+      min-width: 34px;
+      flex-shrink: 0;
+    }
+    .monster-loot-item { flex: 1; color: var(--ink); }
+    .monster-loot-qty { font-family: var(--font-heading); color: var(--ink-soft); font-size: 11px; white-space: nowrap; }
+
+    /* ── Battle FAB ───────────────────────────────────────────── */
+    .battle-fab {
+      position: fixed;
+      bottom: 20px;
+      right: 16px;
+      z-index: 200;
+      background: var(--wax-red, #7d2a2e);
+      color: #fff;
+      border: none;
+      border-radius: 28px;
+      padding: 12px 20px;
+      font-family: var(--font-heading);
+      font-size: 15px;
+      font-weight: 700;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+      cursor: pointer;
+      transition: background 0.15s, transform 0.15s;
+      min-height: 52px;
+    }
+    .battle-fab--active { background: #a03030; }
+    .battle-fab:active { transform: scale(0.96); }
+
+    /* ── Modal overlay ─────────────────────────────────────────── */
+    .battle-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: 300;
+      display: none;
+      align-items: flex-end;
+    }
+    .battle-modal-overlay.open { display: flex; }
+    .battle-modal-overlay.flash { animation: flash-bg 0.3s; }
+    @keyframes flash-bg { 0%,100%{background:rgba(0,0,0,0.55)} 50%{background:rgba(125,42,46,0.5)} }
+
+    .battle-modal {
+      background: var(--parchment, #f8f3e8);
+      width: 100%;
+      max-height: 85vh;
+      border-radius: 16px 16px 0 0;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .battle-modal-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line, #c8a060);
+      flex-shrink: 0;
+    }
+    .battle-modal-title {
+      font-family: var(--font-heading);
+      font-size: 16px;
+      flex: 1;
+      margin: 0;
+      color: var(--ink, #2a1a0a);
+    }
+    .battle-modal-btn {
+      background: none;
+      border: 1px solid var(--line, #c8a060);
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-family: var(--font-heading);
+      font-size: 12px;
+      cursor: pointer;
+      color: var(--ink-soft, #6a4a2a);
+    }
+    #btn-battle-close { font-size: 18px; border: none; color: var(--ink-soft, #6a4a2a); }
+
+    /* Custom add row */
+    .battle-custom-row {
+      display: flex;
+      gap: 8px;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--line, #c8a060);
+      flex-shrink: 0;
+      background: rgba(255,255,255,0.4);
+    }
+    .battle-custom-row input {
+      flex: 1;
+      padding: 8px 10px;
+      border: 1px solid var(--line, #c8a060);
+      border-radius: 6px;
+      font-size: 14px;
+      min-height: 40px;
+      background: rgba(255,255,255,0.8);
+    }
+    #battle-custom-hp { width: 72px; flex: 0 0 72px; }
+
+    /* Lista de monstros em batalha */
+    .battle-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px 14px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .battle-empty {
+      text-align: center;
+      color: var(--ink-soft, #6a4a2a);
+      padding: 30px 10px;
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    .battle-entry {
+      background: rgba(255,255,255,0.5);
+      border: 1.5px solid var(--line, #c8a060);
+      border-radius: 8px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+    .battle-entry--dead {
+      opacity: 0.6;
+      border-color: #aaa;
+      background: rgba(0,0,0,0.05);
+    }
+    .battle-entry-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .battle-entry-name {
+      font-family: var(--font-heading);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--ink, #2a1a0a);
+    }
+    .battle-remove-btn {
+      background: none;
+      border: 1px solid var(--line, #c8a060);
+      border-radius: 50%;
+      width: 26px;
+      height: 26px;
+      font-size: 12px;
+      cursor: pointer;
+      color: var(--ink-soft, #6a4a2a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .battle-remove-btn:active { background: #c83020; color: #fff; border-color: #c83020; }
+
+    .battle-hp-row {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .battle-hp-btn {
+      padding: 6px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--line, #c8a060);
+      background: rgba(125,42,46,0.1);
+      color: var(--wax-red-dark, #7d2a2e);
+      font-family: var(--font-heading);
+      font-size: 13px;
+      cursor: pointer;
+      min-height: 36px;
+      flex-shrink: 0;
+    }
+    .battle-hp-btn:active { background: var(--wax-red-dark, #7d2a2e); color: #fff; }
+    .battle-hp-btn--heal {
+      background: rgba(86,98,74,0.12);
+      color: var(--rust-green-dark, #3a5a28);
+      border-color: var(--rust-green, #6a8a50);
+    }
+    .battle-hp-btn--heal:active { background: var(--rust-green, #6a8a50); color: #fff; }
+
+    .battle-hp-display {
+      flex: 1;
+      text-align: center;
+      font-family: var(--font-heading);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--ink, #2a1a0a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+    }
+    .battle-hp-dead { color: #999; }
+    .battle-hp-current { font-size: 22px; }
+    .battle-hp-sep { font-size: 14px; opacity: 0.5; }
+    .battle-hp-max { font-size: 14px; opacity: 0.6; }
+
+    .battle-hp-bar-track {
+      height: 6px;
+      background: rgba(0,0,0,0.1);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .battle-hp-bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.2s, background 0.3s;
+    }
+
+    .battle-custom-dmg-row {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+    }
+    .battle-custom-input {
+      flex: 1;
+      padding: 6px 8px;
+      border: 1px solid var(--line, #c8a060);
+      border-radius: 5px;
+      font-size: 14px;
+      min-height: 36px;
+      background: rgba(255,255,255,0.8);
+    }
+
+    /* Botão de batalha nos cards de monstro */
+    .battle-add-btn {
+      font-family: var(--font-heading);
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      border: 1px solid var(--wax-red, #7d2a2e);
+      background: rgba(125,42,46,0.08);
+      color: var(--wax-red-dark, #7d2a2e);
+      cursor: pointer;
+      white-space: nowrap;
+      min-height: 28px;
+    }
+    .battle-add-btn:active { background: var(--wax-red-dark, #7d2a2e); color: #fff; }
+    .battle-add-btn--active { background: rgba(125,42,46,0.2); font-weight: 700; }
+
+  </style>
+</head>
+<body>
+<div class="bestiary-page">
+
+  <!-- Toolbar fixa -->
+  <header class="bestiary-toolbar">
+    <a href="index.html" class="btn-back-bestiary">← Grimório</a>
+    <h1 class="bestiary-page-title">🐺 Bestiário</h1>
+    <span class="bestiary-result-count" id="result-count"></span>
+  </header>
+
+  <!-- Filtros sticky -->
+  <div class="bestiary-filters">
+    <div class="filter-search-row">
+      <input type="search" id="search-input" class="filter-search-input"
+        placeholder="🔍 Buscar por nome ou categoria..." autocomplete="off" autocorrect="off">
+    </div>
+    <div class="filter-selects-row">
+      <div class="filter-select-wrap">
+        <label class="filter-select-label" for="diff-select">Dificuldade</label>
+        <select id="diff-select" class="filter-select">
+          <option value="">Todas</option>
+          <option value="1">☠ Fácil</option>
+          <option value="2">☠☠ Equilibrado</option>
+          <option value="3">☠☠☠ Desafiador</option>
+          <option value="4">☠☠☠☠ Muito Forte</option>
+          <option value="5">☠☠☠☠☠ Chefe/Lenda</option>
+        </select>
+      </div>
+      <div class="filter-select-wrap">
+        <label class="filter-select-label" for="size-select">Tamanho</label>
+        <select id="size-select" class="filter-select">
+          <option value="">Todos</option>
+          <option value="pequeno">🐭 Pequeno</option>
+          <option value="normal">🧍 Normal</option>
+          <option value="grande">🦁 Grande</option>
+          <option value="colossal">🐉 Colossal</option>
+        </select>
+      </div>
+      <div class="filter-select-wrap">
+        <label class="filter-select-label" for="loc-select">Local</label>
+        <select id="loc-select" class="filter-select">
+          <option value="">Todos</option>
+          <!-- Preenchido via JS com locais do BESTIARY -->
+        </select>
+      </div>
+    </div>
+    <div class="active-filters-row" id="active-filters"></div>
+  </div>
+
+  <!-- Cards dos monstros -->
+  <div id="bestiary-content" class="bestiary-content">
+    <p class="bestiary-empty">Carregando bestiário…</p>
+  </div>
+
+</div>
+
+<script src="data.js"></script>
+<script src="bestiary.js"></script>
+
+  <button class="battle-fab" id="battle-fab">⚔ Batalha</button>
+  <div class="battle-modal-overlay" id="battle-modal-overlay">
+    <div class="battle-modal">
+      <div class="battle-modal-header">
+        <h2 class="battle-modal-title">⚔ Monstros em Batalha</h2>
+        <button class="battle-modal-btn" id="btn-battle-clear">🗑 Limpar</button>
+        <button class="battle-modal-btn" id="btn-battle-close">✕</button>
+      </div>
+      <div class="battle-custom-row">
+        <input type="text" id="battle-custom-name" placeholder="Nome do monstro..." maxlength="40">
+        <input type="number" id="battle-custom-hp" placeholder="HP" min="1" max="9999">
+        <button class="battle-modal-btn" id="battle-custom-add">+ Add</button>
+      </div>
+      <div class="battle-list" id="battle-list">
+        <p class="battle-empty">Adicione monstros clicando em ⚔ Batalha nos cards.</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

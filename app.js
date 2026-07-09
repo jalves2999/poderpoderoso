@@ -53,6 +53,7 @@ function freshWizardDraft() {
     attrPointsLeft: CREATION_ATTR_POINTS,
     classSkills: [],
     generalSkills: [],
+    combatSkills: [],
     startSpell: null,
     equipment: [], // array of {name, weight, kind, refIndex}
     equipmentKitApplied: false,
@@ -68,6 +69,65 @@ function showView(id) {
   document.getElementById(id).classList.add("active");
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
+
+/* ---------------------------------------------------------------------- */
+/* MENU DE NAVEGAÇÃO DO TOPO (Páginas do Mundo)                          */
+/* Construído dinamicamente a partir de NAV_PAGES em data.js — adicionar */
+/* uma página nova ali não exige tocar no HTML.                          */
+/* ---------------------------------------------------------------------- */
+
+function renderHeaderNavMenu() {
+  const menu = document.getElementById("header-nav-menu");
+  menu.innerHTML = NAV_PAGES.map((page, idx) => `
+    <button class="header-nav-item ${page.available ? "" : "header-nav-item-soon"}" data-nav-index="${idx}">
+      <span class="header-nav-item-icon">${page.icon}</span>
+      <span class="header-nav-item-label">${page.label}</span>
+      ${!page.available ? `<span class="header-nav-item-badge">Em breve</span>` : ""}
+    </button>
+  `).join("");
+
+  menu.querySelectorAll(".header-nav-item").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const page = NAV_PAGES[parseInt(btn.dataset.navIndex)];
+      closeHeaderNavMenu();
+      if (page.available && page.action && typeof window[page.action] === "function") {
+        window[page.action]();
+      } else if (page.available && page.action) {
+        // função ainda não existe no escopo global por algum motivo — falha graciosamente
+        showToast(`Não foi possível abrir "${page.label}" agora.`);
+      } else {
+        showToast(`"${page.label}" ainda está em construção — fique de olho em futuras atualizações!`);
+      }
+    });
+  });
+}
+
+function toggleHeaderNavMenu() {
+  const menu = document.getElementById("header-nav-menu");
+  const isHidden = menu.classList.contains("hidden");
+  if (isHidden) openHeaderNavMenu(); else closeHeaderNavMenu();
+}
+
+function openHeaderNavMenu() {
+  document.getElementById("header-nav-menu").classList.remove("hidden");
+  document.getElementById("btn-nav-toggle").classList.add("active");
+}
+
+function closeHeaderNavMenu() {
+  document.getElementById("header-nav-menu").classList.add("hidden");
+  document.getElementById("btn-nav-toggle").classList.remove("active");
+}
+
+renderHeaderNavMenu();
+document.getElementById("btn-nav-toggle").addEventListener("click", (e) => {
+  e.stopPropagation();
+  toggleHeaderNavMenu();
+});
+// Fecha o menu ao clicar fora dele
+document.addEventListener("click", (e) => {
+  const dropdown = document.getElementById("header-nav-dropdown");
+  if (dropdown && !dropdown.contains(e.target)) closeHeaderNavMenu();
+});
 
 /* ---------------------------------------------------------------------- */
 /* TOAST + MODAL                                                         */
@@ -137,21 +197,32 @@ function getEquippedItem(character, slotKey) {
   return character.inventory.find(i => i.equippedSlot === slotKey) || null;
 }
 
-/* HP = 20 + (FOR * hpPerFor da classe) + 5 * (nivel - 1) + bônus de acessórios */
+/* Valor efetivo de um atributo: base do personagem + bônus de itens mágicos equipados.
+   Usar esta função (em vez de character.attrs.X direto) em qualquer cálculo derivado
+   garante que itens mágicos com bônus de atributo se propaguem corretamente. */
+function getEffectiveAttr(character, attrKey) {
+  const base = character.attrs[attrKey] || 0;
+  const bonus = calcEquippedAttrBonus(character, attrKey);
+  return base + bonus;
+}
+
+/* HP = 20 + (FOR * hpPerFor da classe) + hpPerLevel da classe * (nivel - 1) + bônus de acessórios */
 function calcMaxHP(character) {
   const cls = getClassDef(character.classKey);
   const hpPerFor = cls ? cls.hpPerFor : 3;
-  const base = 20 + (character.attrs.FOR * hpPerFor);
-  const levelBonus = 5 * (character.level - 1);
-  const accBonus = sumAccessoryEffectValue(character, "hp");
-  return Math.max(1, base + levelBonus + accBonus);
+  const hpPerLevel = cls && cls.hpPerLevel ? cls.hpPerLevel : 5;
+  const base = 20 + (getEffectiveAttr(character, "FOR") * hpPerFor);
+  const levelBonus = hpPerLevel * (character.level - 1);
+  const accBonus = sumAccessoryEffectValue(character, "hp"); // acessórios
+  const itemBonus = sumMagicItemBonus(character, "hp");      // armas/escudos/armaduras
+  return Math.max(1, base + levelBonus + accBonus + itemBonus);
 }
 
 /* Slots de Magia = INT + SAB, mínimo 1 para classes conjuradoras */
 function calcSpellSlots(character) {
   const cls = getClassDef(character.classKey);
   const isCaster = cls && cls.spellsFull !== null && cls.spellsFull !== undefined;
-  let slots = character.attrs.INT + character.attrs.SAB;
+  let slots = getEffectiveAttr(character, "INT") + getEffectiveAttr(character, "SAB");
   const accBonus = sumAccessoryEffectValue(character, "slots");
   slots += accBonus;
   if (isCaster && slots < 1) slots = 1; // garante ao menos 1 slot para conjuradores
@@ -160,7 +231,7 @@ function calcSpellSlots(character) {
 
 /* Movimento = 4 + AGI (- penalidade de armadura/escudo) + bônus de acessórios */
 function calcMovement(character) {
-  let move = 4 + character.attrs.AGI;
+  let move = 4 + getEffectiveAttr(character, "AGI");
   move -= getEquippedMovePenalty(character);
   move += sumAccessoryEffectValue(character, "move");
   return Math.max(1, move);
@@ -168,34 +239,108 @@ function calcMovement(character) {
 
 /* Ações por turno = AGI + DEX, mínimo 1 */
 function calcActions(character) {
-  return Math.max(1, character.attrs.AGI + character.attrs.DEX);
+  const base = Math.max(1, getEffectiveAttr(character, "AGI") + getEffectiveAttr(character, "DEX"));
+  const bonus = sumAccessoryEffectValue(character, "actions") + sumMagicItemBonus(character, "actions");
+  return base + bonus;
 }
 
 /* Reações por rodada = 1 + 1 a cada 4 pontos de AGI (regra original, mantida) */
 function calcReactions(character) {
-  let reactions = 1 + Math.floor(character.attrs.AGI / 4);
-  reactions += sumAccessoryEffectValue(character, "reaction");
+  let reactions = 1 + Math.floor(getEffectiveAttr(character, "AGI") / 4);
+  reactions += sumAccessoryEffectValue(character, "reaction");   // itens fixos por nome
+  reactions += sumAccessoryEffectValue(character, "reactions");  // magicBonus em acessórios
+  reactions += sumMagicItemBonus(character, "reactions");        // magicBonus em armas/armaduras/escudos
   return reactions;
 }
 
 /* Ações de Reação = 1 a cada 3 pontos de AGI, mínimo 1. Recurso separado das Reações de combate. */
 function calcReactionActions(character) {
-  return Math.max(1, Math.floor(character.attrs.AGI / 3));
+  const base = Math.max(1, Math.floor(getEffectiveAttr(character, "AGI") / 3));
+  const bonus = sumAccessoryEffectValue(character, "reactionActions") + sumMagicItemBonus(character, "reactionActions");
+  return base + bonus;
 }
 
 /* Ações de Magia = max(floor(INT/2), floor(SAB/2)). Só o Mago tem mínimo garantido de 1. */
 function calcSpellActions(character) {
   const cls = getClassDef(character.classKey);
-  const fromInt = Math.floor(character.attrs.INT / 2);
-  const fromSab = Math.floor(character.attrs.SAB / 2);
+  const fromInt = Math.floor(getEffectiveAttr(character, "INT") / 2);
+  const fromSab = Math.floor(getEffectiveAttr(character, "SAB") / 2);
   let actions = Math.max(fromInt, fromSab);
   if (cls && cls.name === "Mago" && actions < 1) actions = 1;
-  return actions;
+  actions += sumAccessoryEffectValue(character, "spellActions");
+  actions += sumMagicItemBonus(character, "spellActions");
+  return Math.max(0, actions);
 }
 
-/* Capacidade de Carga = 15 + FOR*5 */
+/* Verifica se o personagem conhece uma perícia de classe com o efeito mecânico indicado
+   (usado para perícias que destravam regras especiais, como Defesa com Armas Pesadas). */
+function hasMechanicalSkill(character, effectKey) {
+  const cls = getClassDef(character.classKey);
+  if (!cls || !character.skills || !character.skills.class) return false;
+  return character.skills.class.some(name => {
+    const skill = cls.skillsClass.find(s => s.name === name);
+    return skill && skill.mechanicalEffect === effectKey;
+  });
+}
+
+/* Identifica se a arma primária equipada é uma arma de duas mãos pesada (corpo a corpo) */
+function isHeavyTwoHandedEquipped(character) {
+  const primary = getEquippedItem(character, "primary");
+  return !!(primary && primary.baseData && primary.baseData.heavyTwoHanded);
+}
+
+/* Chance de Esquiva = 10 (base) + AGI, no d20. Penalidade de -2 ao empunhar arma de
+   duas mãos pesada sem a perícia "Defesa com Armas Pesadas" do Guerreiro. */
+function calcDodgeChance(character) {
+  let dodge = 10 + getEffectiveAttr(character, "AGI");
+  if (isHeavyTwoHandedEquipped(character) && !hasMechanicalSkill(character, "enable_two_hand_defense")) {
+    dodge -= 2;
+  }
+  dodge += sumAccessoryEffectValue(character, "dodge");
+  return Math.max(1, dodge);
+}
+
+/* Bônus de Cura: aplicado a magias/habilidades que curam "+SAB". O Clérigo dobra esse
+   bônus (2×SAB) — para outras classes que aprendam magia de cura, vale o SAB normal. */
+function calcHealingBonus(character) {
+  const cls = getClassDef(character.classKey);
+  const multiplier = (cls && cls.name === "Clérigo") ? 2 : 1;
+  return getEffectiveAttr(character, "SAB") * multiplier;
+}
+
+/* Calcula os valores de teste de uma perícia para o personagem.
+   Retorna { bonus, normal, hard, critical, hasSkill }
+   bonus = soma dos atributos efetivos listados em attrKeys + 2 se perícia aprendida
+   normal = 10 + bonus  /  hard = 5 + bonus  /  critical = 1 + bonus */
+function calcSkillTest(character, skillTest) {
+  const attrBonus = skillTest.attrKeys.reduce((sum, key) => sum + getEffectiveAttr(character, key), 0);
+
+  // Verifica se o personagem tem essa perícia aprendida (nas listas class ou general)
+  const allKnownSkills = [
+    ...(character.skills.class || []),
+    ...(character.skills.general || [])
+  ];
+  const hasSkill = allKnownSkills.includes(skillTest.name);
+  const learnedBonus = hasSkill ? 2 : 0;
+  const bonus = attrBonus + learnedBonus;
+
+  return {
+    bonus,
+    normal: Math.min(19, 10 + bonus),
+    hard:   Math.max(1, 5 + bonus),
+    critical: Math.max(1, 1 + bonus),
+    hasSkill
+  };
+}
+
+/* Capacidade de Carga = 15 + FOR*5 + carryPerLevel da classe * (nivel - 1) */
 function calcCarryCapacity(character) {
-  return CARRY_BASE + (character.attrs.FOR * CARRY_PER_FOR);
+  const cls = getClassDef(character.classKey);
+  const carryPerLevel = cls && cls.carryPerLevel ? cls.carryPerLevel : 0;
+  const levelBonus = carryPerLevel * (character.level - 1);
+  const accBonus = sumAccessoryEffectValue(character, "carry");
+  const itemBonus = sumMagicItemBonus(character, "carry");
+  return CARRY_BASE + (getEffectiveAttr(character, "FOR") * CARRY_PER_FOR) + levelBonus + accBonus + itemBonus;
 }
 
 /* Recurso de classe máximo (Fúria/Foco fixos, MP/Fé calculados) */
@@ -204,12 +349,12 @@ function calcResourceMax(character) {
   if (!cls) return 0;
   if (cls.resourceMax !== null) return cls.resourceMax;
   if (cls.name === "Mago") {
-    let mp = 10 + (character.attrs.INT * 2);
+    let mp = 10 + (getEffectiveAttr(character, "INT") * 2);
     mp += sumAccessoryEffectValue(character, "mp");
     return mp;
   }
   if (cls.name === "Clérigo") {
-    let fe = 8 + character.attrs.SAB;
+    let fe = 8 + getEffectiveAttr(character, "SAB");
     fe += sumAccessoryEffectValue(character, "fe");
     return fe;
   }
@@ -242,18 +387,56 @@ function getEquippedMovePenalty(character) {
   return penalty;
 }
 
-/* Soma efeitos numéricos de acessórios equipados que batem com uma chave de efeito */
+/* Soma efeitos numéricos de acessórios equipados e de itens com magicBonus */
 function sumAccessoryEffectValue(character, kind) {
   const accessories = getEquippedItem(character, "accessory");
   let total = 0;
   accessories.forEach(item => {
-    if (kind === "hp" && item.name === "Anel de Vitalidade") total += 5;
-    if (kind === "slots" && item.name === "Anel de Foco Arcano") total += 1;
-    if (kind === "move" && item.name === "Botas Ágeis") total += 1;
+    if (kind === "hp"       && item.name === "Anel de Vitalidade")    total += 5;
+    if (kind === "slots"    && item.name === "Anel de Foco Arcano")   total += 1;
+    if (kind === "move"     && item.name === "Botas Ágeis")           total += 1;
     if (kind === "reaction" && item.name === "Bracelete de Reflexos") total += 1;
-    if (kind === "mp" && item.name === "Pedra de Mana") total += 5;
-    if (kind === "fe" && item.name === "Amuleto de Fé") total += 2;
+    if (kind === "mp"       && item.name === "Pedra de Mana")         total += 5;
+    if (kind === "fe"       && item.name === "Amuleto de Fé")         total += 2;
+    const bonus = item.magicBonus || item.baseData?.magicBonus;
+    if (bonus && typeof bonus[kind] === "number") total += bonus[kind];
   });
+  return total;
+}
+
+/* Soma o bônus de itens MÁGICOS PERSONALIZADOS equipados em qualquer slot
+   (arma primária/secundária, escudo, armadura, acessórios). `kind` corresponde
+   às chaves do objeto magicBonus: hp, move, actions, reactions, reactionActions,
+   spellActions, dodge, slots. Bônus de atributo são tratados separadamente
+   por calcEquippedAttrBonus, pois afetam o cálculo de todas as outras stats. */
+/* Soma o bônus de magicBonus de itens equipados nos slots de ARMA/ESCUDO/ARMADURA
+   (não inclui acessórios — esses são cobertos por sumAccessoryEffectValue) */
+function sumMagicItemBonus(character, kind) {
+  let total = 0;
+  const getBonus = (item) => {
+    if (!item) return 0;
+    const bonus = item.magicBonus || item.baseData?.magicBonus;
+    return (bonus && typeof bonus[kind] === "number") ? bonus[kind] : 0;
+  };
+  ["primary", "secondary", "shield", "armor"].forEach(slotKey => {
+    total += getBonus(getEquippedItem(character, slotKey));
+  });
+  return total;
+}
+
+/* Soma o bônus de atributo concedido por itens mágicos equipados, para um atributo específico. */
+function calcEquippedAttrBonus(character, attrKey) {
+  let total = 0;
+  const getAttrBonus = (item) => {
+    if (!item) return 0;
+    const bonus = item.magicBonus || item.baseData?.magicBonus;
+    if (bonus && bonus.attr === attrKey) return bonus.attrValue || 0;
+    return 0;
+  };
+  const slots = ["primary", "secondary", "shield", "armor"];
+  slots.forEach(slotKey => { total += getAttrBonus(getEquippedItem(character, slotKey)); });
+  const accessories = getEquippedItem(character, "accessory");
+  accessories.forEach(item => { total += getAttrBonus(item); });
   return total;
 }
 
@@ -266,6 +449,80 @@ function calcTotalWeight(character) {
 
 /* --- DANO: separa fontes (arma equipada, modificador, dano natural) --- */
 
+/* Combina todas as fontes de dano (cada uma podendo ter múltiplos dados, ex: "1d12 + 1d4")
+   em uma única string resumida, somando dados iguais e bônus fixos. Ex.: "1d4 + 2d6 + 1d8 (+3)" */
+function buildCombinedDamageString(dmg) {
+  const diceCounts = {}; // ex.: { "d4": 3, "d6": 2, "d8": 1 }
+  let totalBonus = 0;
+
+  dmg.sources.forEach(source => {
+    totalBonus += source.bonus || 0;
+    if (!source.dice || source.dice === "—") return;
+    // Cada fonte pode ter múltiplos dados, ex: "1d12 + 1d4" ou "1d4 (toque)"
+    const diceMatches = source.dice.match(/(\d+)d(\d+)/g);
+    if (!diceMatches) return;
+    diceMatches.forEach(match => {
+      const [qtyStr, sidesStr] = match.split("d");
+      const qty = parseInt(qtyStr) || 1;
+      const key = "d" + sidesStr;
+      diceCounts[key] = (diceCounts[key] || 0) + qty;
+    });
+  });
+
+  // Ordena por tamanho do dado, do menor para o maior (d4, d6, d8, d10, d12, d20)
+  const orderedKeys = Object.keys(diceCounts).sort((a, b) => parseInt(a.slice(1)) - parseInt(b.slice(1)));
+  const diceParts = orderedKeys.map(key => `${diceCounts[key]}${key}`);
+
+  if (diceParts.length === 0 && totalBonus === 0) return "—";
+
+  let result = diceParts.join(" + ");
+  if (totalBonus > 0) result += (result ? ` + ${totalBonus}` : `${totalBonus}`);
+  return result || "—";
+}
+
+
+/* ---------------------------------------------------------------------- */
+/* REQUISITOS DE ATRIBUTO PARA EQUIPAMENTO                               */
+/* Interpreta o texto livre do campo `req` (ex.: "FOR", "FOR/DEX",       */
+/* "FOR alta", "FOR (alto)") em uma lista de {attr, minValue} a cumprir. */
+/* Cumprir QUALQUER um dos atributos listados já satisfaz o requisito.   */
+/* ---------------------------------------------------------------------- */
+
+const REQ_THRESHOLD_NORMAL = 2;
+const REQ_THRESHOLD_HIGH = 4;
+
+function parseAttrRequirement(reqText) {
+  if (!reqText || reqText === "—") return [];
+  const isHigh = /alta|alto/i.test(reqText);
+  const threshold = isHigh ? REQ_THRESHOLD_HIGH : REQ_THRESHOLD_NORMAL;
+  const found = [];
+  ATTRS.forEach(attr => {
+    if (reqText.toUpperCase().indexOf(attr) !== -1) {
+      found.push({ attr, minValue: threshold });
+    }
+  });
+  return found;
+}
+
+/* Verifica se o personagem cumpre o requisito de um item (cumprir QUALQUER
+   atributo listado já é suficiente). Retorna { met: bool, requirement: [...] } */
+function checkItemRequirement(character, baseData) {
+  if (!baseData || !baseData.req) return { met: true, requirement: [] };
+  const requirement = parseAttrRequirement(baseData.req);
+  if (requirement.length === 0) return { met: true, requirement: [] };
+  const met = requirement.some(r => getEffectiveAttr(character, r.attr) >= r.minValue);
+  return { met, requirement };
+}
+
+/* Penalidade de Chance de Acerto por não cumprir requisito da arma equipada.
+   Retorna 0 se cumprir ou se não houver arma/requisito. */
+function calcWeaponRequirementPenalty(character) {
+  const primary = getEquippedItem(character, "primary");
+  if (!primary || !primary.baseData) return 0;
+  const check = checkItemRequirement(character, primary.baseData);
+  return check.met ? 0 : -2;
+}
+
 function calcDamageBreakdown(character) {
   const cls = getClassDef(character.classKey);
   const primary = getEquippedItem(character, "primary");
@@ -273,7 +530,7 @@ function calcDamageBreakdown(character) {
   const naturalDie = cls ? cls.naturalDamageDie : "1d4";
   const naturalNote = cls ? cls.naturalDamageNote : "";
   const forPerBonus = cls && cls.forPerNaturalBonus ? cls.forPerNaturalBonus : 0;
-  const naturalForBonus = forPerBonus > 0 ? Math.floor(character.attrs.FOR / forPerBonus) : 0;
+  const naturalForBonus = forPerBonus > 0 ? Math.floor(getEffectiveAttr(character, "FOR") / forPerBonus) : 0;
 
   const sources = [];
   if (primary) {
@@ -599,6 +856,25 @@ function renderSkillStep() {
     generalList.appendChild(item);
   });
   document.getElementById("general-skill-counter").textContent = `(${wizard.generalSkills.length}/1)`;
+
+  const combatList = document.getElementById("combat-skill-list");
+  if (combatList) {
+    combatList.innerHTML = "";
+    SKILL_TESTS.filter(t => t.combat).forEach(test => {
+      const item = buildPickItem(
+        test.name,
+        test.attrKeys.join("+"),
+        test.desc,
+        wizard.combatSkills.includes(test.name),
+        () => {
+          toggleSelection(wizard.combatSkills, test.name, 1);
+          renderSkillStep();
+        }
+      );
+      combatList.appendChild(item);
+    });
+    document.getElementById("combat-skill-counter").textContent = `(${wizard.combatSkills.length}/1) — opcional`;
+  }
 }
 
 function toggleSelection(arr, value, maxCount) {
@@ -696,10 +972,11 @@ function renderEquipmentStep() {
     wizard.equipmentKitApplied = true;
   }
 
+  const isStarterEligible = i => (!i.tier || i.tier === "comum") && !i.setName;
   const allOptions = [
-    ...ALL_WEAPONS.map(w => ({ ...w, kind: "weapon" })),
-    ...SHIELDS.map(s => ({ ...s, kind: "shield" })),
-    ...ARMORS.map(a => ({ ...a, kind: "armor" })),
+    ...ALL_WEAPONS.filter(isStarterEligible).map(w => ({ ...w, kind: "weapon" })),
+    ...SHIELDS.filter(isStarterEligible).map(s => ({ ...s, kind: "shield" })),
+    ...ARMORS.filter(isStarterEligible).map(a => ({ ...a, kind: "armor" })),
     ...STARTER_GEAR.map(g => ({ ...g, kind: "gear" }))
   ];
 
@@ -782,11 +1059,13 @@ function finalizeCharacterCreation() {
     currentHP: null, // será setado para maxHP após cálculo
     currentResource: 0,
     skills: {
-      class: [...wizard.classSkills],
+      class: [...wizard.classSkills, ...(wizard.combatSkills || [])],
       general: [...wizard.generalSkills],
-      abilities: cls.skills.length > 0 ? [cls.skills[0].name] : [] // 1ª habilidade de classe é gratuita no nível 1
+      abilities: cls.skills.length > 0 ? [cls.skills[0].name] : [], // 1ª habilidade V1 gratuita no nível 1
+      abilityLevels: cls.skills.length > 0 ? { [cls.skills[0].name]: 1 } : {}, // nível atual de cada habilidade V1
     },
     spells: wizard.startSpell ? [wizard.startSpell] : [],
+    activeSpells: [], // magias preparadas/equipadas em uso (limitado pelos Slots de Magia)
     inventory: [],
     notes: "",
     createdAt: Date.now()
@@ -954,13 +1233,22 @@ document.getElementById("btn-back-sheet").addEventListener("click", () => {
 
 let currentGlossaryTab = "classes";
 
-document.getElementById("btn-show-glossary").addEventListener("click", () => {
+
+function openBestiary() {
+  window.open("bestiary.html", "_blank");
+}
+
+function openLocations() {
+  window.open("locations.html", "_blank");
+}
+
+function openGlossary() {
   currentGlossaryTab = "classes";
   document.querySelectorAll("#glossary-tabs .tab-btn").forEach(b => b.classList.toggle("active", b.dataset.glossarytab === "classes"));
   document.getElementById("glossary-search").value = "";
   renderGlossaryContent();
   showView("view-glossary");
-});
+}
 
 document.getElementById("btn-back-glossary").addEventListener("click", () => {
   showView("view-list");
@@ -1061,6 +1349,9 @@ function renderClassTutorials() {
   }).join("");
 }
 
+// Estado da aba ativa na ficha (persiste entre re-renders)
+let activeSheetTab = "vital";
+
 function renderSheet() {
   const character = findCharacter(currentSheetId);
   if (!character) { showView("view-list"); return; }
@@ -1071,39 +1362,80 @@ function renderSheet() {
   const resourceMax = calcResourceMax(character);
   if (character.currentResource > resourceMax) character.currentResource = resourceMax;
 
+  // Conteúdo de cada aba
+  const tabContent = {
+    vital: `
+      ${renderVitalsSection(character, cls, maxHP, resourceMax)}
+      ${renderAttributesSection(character, cls)}
+      ${renderDerivedSection(character, cls)}
+    `,
+    habilidades: `
+      ${cls ? renderClassAbilitiesSection(character, cls) : ""}
+      ${renderSkillsSection(character, cls)}
+      ${renderSkillTestsSection(character)}
+    `,
+    magias: renderSpellsSection(character, cls),
+    equip: `
+      ${renderEquipmentSection(character)}
+      ${renderCurrencySection(character)}
+    `,
+    inventario: `
+      ${renderInventorySection(character)}
+      ${renderNotesSection(character)}
+      <div class="sheet-danger-zone">
+        <button class="btn-danger" id="btn-delete-from-sheet">Remover este personagem</button>
+      </div>
+    `
+  };
+
+  const tabs = [
+    { key: "vital",       icon: "❤",  label: "Vital" },
+    { key: "habilidades", icon: "⚔",  label: "Perícias" },
+    { key: "magias",      icon: "✨",  label: "Magias" },
+    { key: "equip",       icon: "🛡",  label: "Equip." },
+    { key: "inventario",  icon: "🎒",  label: "Inv." }
+  ];
+
   const frame = document.getElementById("sheet-frame");
   frame.innerHTML = `
     <div class="sheet-header">
       <div class="sheet-seal">${cls ? cls.icon : "?"}</div>
       <div class="sheet-title-block">
         <h2 class="sheet-name">${escapeHTML(character.name)}</h2>
-        <p class="sheet-subtitle">${cls ? cls.name : "Sem classe"}${character.origin ? " · " + escapeHTML(character.origin) : ""} · ${character.rosterType === "pc" ? "Personagem Jogador" : "NPC / Criatura"}</p>
+        <p class="sheet-subtitle">${cls ? cls.name : "Sem classe"}${character.origin ? " · " + escapeHTML(character.origin) : ""} · Nv. ${character.level}</p>
       </div>
       <div class="sheet-level-badge">
         <span class="lvl-num">${character.level}</span>
         <span class="lvl-label">Nível</span>
       </div>
     </div>
-    <div class="sheet-body">
 
-      ${renderVitalsSection(character, cls, maxHP, resourceMax)}
-      ${renderAttributesSection(character, cls)}
-      ${renderDerivedSection(character, cls)}
-      ${cls ? renderClassAbilitiesSection(character, cls) : ""}
-      ${renderSkillsSection(character, cls)}
-      ${renderSpellsSection(character, cls)}
-      ${renderEquipmentSection(character)}
-      ${renderInventorySection(character)}
-      ${renderNotesSection(character)}
-
-      <div class="sheet-danger-zone">
-        <button class="btn-danger" id="btn-delete-from-sheet">Remover este personagem</button>
-      </div>
+    <div class="sheet-tab-content">
+      ${tabContent[activeSheetTab] || tabContent.vital}
     </div>
+
+    <nav class="sheet-bottom-nav no-print" aria-label="Seções da ficha">
+      ${tabs.map(t => `
+        <button class="sheet-tab-btn ${t.key === activeSheetTab ? "active" : ""}" data-sheet-tab="${t.key}">
+          <span class="sheet-tab-icon">${t.icon}</span>
+          <span class="sheet-tab-label">${t.label}</span>
+        </button>
+      `).join("")}
+    </nav>
   `;
+
+  // Handler de abas
+  frame.querySelectorAll("[data-sheet-tab]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      activeSheetTab = btn.dataset.sheetTab;
+      renderSheet();
+      frame.querySelector(".sheet-tab-content")?.scrollTo(0, 0);
+    });
+  });
 
   attachSheetHandlers(character);
 }
+
 
 /* --- Vitals: HP, XP/Nível, Recurso de classe --- */
 
@@ -1186,25 +1518,62 @@ function renderDerivedSection(character, cls) {
   const weight = calcTotalWeight(character);
   const physDef = calcPhysicalDefense(character);
   const magDef = calcMagicDefense(character);
+  const dodge = calcDodgeChance(character);
+  const healBonus = calcHealingBonus(character);
   const dmg = calcDamageBreakdown(character);
+  const weaponPenalty = calcWeaponRequirementPenalty(character);
+
+  const stats = [
+    { label: "Movimento", value: `${move} hex`, tooltip: "Quantos hexágonos você pode andar por turno. Ganha-se 1 por ponto de AGI (base 4), descontando penalidade de armadura/escudo pesado." },
+    { label: "Ações/turno", value: actions, tooltip: "Quantas ações você pode realizar no seu turno (atacar, usar habilidade, etc). Ganha-se 1 por ponto de AGI + 1 por ponto de DEX. Mínimo de 1." },
+    { label: "Reações/rodada", value: reactions, tooltip: "Quantas vezes você pode reagir fora do seu turno (defender-se, ataque de oportunidade). Ganha-se 1 reação extra a cada 4 pontos de AGI, começando com 1." },
+    { label: "Ações de Reação", value: reactionActions, tooltip: "Recurso separado das Reações comuns, usado especificamente para ações reativas especiais. Ganha-se 1 a cada 3 pontos de AGI. Mínimo de 1." },
+    { label: "Ações de Magia", value: spellActions, tooltip: "Ações reservadas exclusivamente para conjurar magias. Equivale ao maior valor entre (INT÷2) e (SAB÷2). O Mago sempre tem no mínimo 1, mesmo com INT baixa.", highlight: spellActions > 0 },
+    { label: "Defesa Física", value: physDef, tooltip: "Reduz o dano de ataques físicos recebidos. Vem da armadura equipada e do escudo (se houver)." },
+    { label: "Defesa Mágica", value: magDef, tooltip: "Reduz o dano de magias e ataques mágicos recebidos. Vem principalmente de armaduras arcanas/sagradas e itens mágicos." },
+    { label: "Chance de Esquiva", value: `${dodge} ou menos (d20)`, tooltip: "Role 1d20: se o resultado for igual ou menor que este valor, você esquiva totalmente do ataque. Base 10 + AGI. Armas de duas mãos pesadas (sem a perícia 'Defesa com Armas Pesadas') aplicam −2." },
+    { label: "Slots de Magia", value: slots, tooltip: "Quantas magias você pode conjurar antes de descansar. Equivale a INT + SAB. Classes conjuradoras têm garantia de pelo menos 1." },
+    { label: "Carga", value: `${weight} / ${carry}`, tooltip: "Peso atual carregado / capacidade máxima. Base 15 + (FOR × 5), mais um bônus fixo por nível que varia por classe." }
+  ];
+
+  if (healBonus > 0) {
+    const isCleric = cls && cls.name === "Clérigo";
+    stats.push({
+      label: "Bônus de Cura",
+      value: `+${healBonus}`,
+      tooltip: isCleric
+        ? "Valor somado aos dados em qualquer magia/habilidade de cura. O Clérigo dobra o bônus normal de SAB (2 × SAB) em vez de aplicar apenas +SAB."
+        : "Valor somado aos dados em qualquer magia/habilidade de cura que você conheça. Equivale ao seu SAB.",
+      highlight: isCleric
+    });
+  }
+
+  const statsHTML = stats.map(s => `
+    <div class="derived-box ${s.highlight ? "derived-box-highlight" : ""}" title="${escapeHTML(s.tooltip)}">
+      <div class="derived-box-label">${s.label} <span class="derived-box-info">ⓘ</span></div>
+      <div class="derived-box-value">${s.value}</div>
+    </div>
+  `).join("");
 
   return `
   <div class="sheet-section">
     <h3 class="sheet-section-title">Estatísticas de Combate</h3>
+    <p class="section-hint">Toque e segure (ou passe o mouse) sobre qualquer estatística para ver como ela é calculada.</p>
     <div class="derived-grid">
-      <div class="derived-box"><div class="derived-box-label">Movimento</div><div class="derived-box-value">${move} hex</div></div>
-      <div class="derived-box"><div class="derived-box-label">Ações/turno</div><div class="derived-box-value">${actions}</div></div>
-      <div class="derived-box"><div class="derived-box-label">Reações/rodada</div><div class="derived-box-value">${reactions}</div></div>
-      <div class="derived-box"><div class="derived-box-label">Ações de Reação</div><div class="derived-box-value">${reactionActions}</div></div>
-      <div class="derived-box ${spellActions > 0 ? "derived-box-highlight" : ""}"><div class="derived-box-label">Ações de Magia</div><div class="derived-box-value">${spellActions}</div></div>
-      <div class="derived-box"><div class="derived-box-label">Defesa Física</div><div class="derived-box-value">${physDef}</div></div>
-      <div class="derived-box"><div class="derived-box-label">Defesa Mágica</div><div class="derived-box-value">${magDef}</div></div>
-      <div class="derived-box"><div class="derived-box-label">Slots de Magia</div><div class="derived-box-value">${slots}</div></div>
-      <div class="derived-box"><div class="derived-box-label">Carga</div><div class="derived-box-value">${weight} / ${carry}</div></div>
+      ${statsHTML}
+      ${weaponPenalty !== 0 ? `<div class="derived-box derived-box-danger" title="Sua arma exige um atributo mínimo que você não possui. Enquanto isso não for corrigido, todos os seus ataques com essa arma sofrem esta penalidade na Chance de Acerto.">
+        <div class="derived-box-label">Penalidade de Acerto <span class="derived-box-info">ⓘ</span></div>
+        <div class="derived-box-value">${weaponPenalty}</div>
+      </div>` : ""}
     </div>
-    <p class="section-hint" style="margin-top:10px;">Ações de Reação (1 a cada 3 AGI) são usadas para reagir fora do seu turno. Ações de Magia (baseadas no maior entre INT/2 e SAB/2) só podem ser usadas para conjurar magias.</p>
+    ${weaponPenalty !== 0 ? `<p class="weapon-penalty-warning">⚠ Sua arma primária exige um atributo que você não possui em quantidade suficiente — aplique ${weaponPenalty} na Chance de Acerto enquanto estiver equipada com ela.</p>` : ""}
 
-    <h4 class="damage-subtitle">Dano — Fontes Separadas</h4>
+    <h4 class="damage-subtitle">Dano Total de Ataque</h4>
+    <div class="damage-combined-row">
+      <span class="damage-combined-label">DANOS:</span>
+      <span class="damage-combined-value">${buildCombinedDamageString(dmg)}</span>
+    </div>
+    <p class="damage-combined-hint">Some todos os dados abaixo ao resolver um ataque — cada fonte está detalhada para referência.</p>
     <div class="damage-sources">
       ${dmg.sources.map(s => `
         <div class="damage-source-row">
@@ -1222,7 +1591,9 @@ function renderDerivedSection(character, cls) {
 
 function renderClassAbilitiesSection(character, cls) {
   if (!character.skills.abilities) character.skills.abilities = [];
+  if (!character.skills.abilityLevels) character.skills.abilityLevels = {};
   const known = character.skills.abilities;
+  const levels = character.skills.abilityLevels;
   const points = character.unspentSkillPoints || 0;
 
   return `
@@ -1234,17 +1605,33 @@ function renderClassAbilitiesSection(character, cls) {
     <div class="ability-card-grid">
       ${cls.skills.map(skill => {
         const isKnown = known.includes(skill.name);
+        const isLevelable = Array.isArray(skill.levels) && skill.levels.length > 1;
+        const currentLevel = levels[skill.name] || 1;
+        const maxLevel = isLevelable ? skill.levels.length : 1;
+        const currentData = isLevelable ? skill.levels[currentLevel - 1] : skill;
+        const canUpgrade = isKnown && isLevelable && currentLevel < maxLevel;
+
         return `
         <div class="ability-card ${isKnown ? "known" : "locked"}">
           <div class="ability-card-head">
             <span class="ability-card-name">${skill.name}</span>
             ${isKnown ? `<span class="ability-card-badge">Aprendida</span>` : ""}
           </div>
-          <div class="ability-card-cost">${skill.cost}</div>
-          <p class="ability-card-effect">${skill.effect}</p>
+          ${isLevelable ? `
+            <div class="ability-level-dots" title="Nível ${currentLevel} de ${maxLevel}">
+              ${Array.from({ length: maxLevel }).map((_, i) => `<span class="ability-level-dot ${i < currentLevel ? "filled" : ""}"></span>`).join("")}
+              <span class="ability-level-text">Nível ${currentLevel}/${maxLevel}</span>
+            </div>
+          ` : ""}
+          <div class="ability-card-cost">${currentData.cost}</div>
+          <p class="ability-card-effect">${currentData.effect}</p>
           ${!isKnown ? `<button class="btn-secondary btn-learn-ability" data-learn-ability="${skill.name}" ${points > 0 ? "" : "disabled"}>
             ${points > 0 ? "Aprender (1 ponto)" : "Sem pontos disponíveis"}
           </button>` : ""}
+          ${canUpgrade ? `<button class="btn-secondary btn-upgrade-ability" data-upgrade-ability="${skill.name}" ${points > 0 ? "" : "disabled"}>
+            ${points > 0 ? `Evoluir para Nível ${currentLevel + 1} (1 ponto)` : "Sem pontos disponíveis"}
+          </button>` : ""}
+          ${isKnown && isLevelable && currentLevel >= maxLevel ? `<div class="ability-max-level-note">✦ Nível máximo alcançado</div>` : ""}
         </div>
       `}).join("")}
     </div>
@@ -1253,9 +1640,48 @@ function renderClassAbilitiesSection(character, cls) {
 
 /* --- Perícias (de classe + gerais, com aprendizado posterior) --- */
 
+function renderSkillTestsSection(character) {
+  const renderCard = (test) => {
+    const { normal, hard, critical, hasSkill } = calcSkillTest(character, test);
+    const attrLabel = test.attrKeys.join("+");
+
+    return `
+      <div class="skill-test-card ${hasSkill ? "skill-test-card-trained" : ""}">
+        <div class="skill-test-card-head">
+          <span class="skill-test-card-icon">${test.icon}</span>
+          <div class="skill-test-card-info">
+            <span class="skill-test-card-name">${test.name}</span>
+            <span class="skill-test-card-attrs">${attrLabel}</span>
+          </div>
+          ${hasSkill ? `<span class="skill-test-learned-tag">+2</span>` : ""}
+        </div>
+        <div class="skill-test-values">
+          <div class="skill-test-val skill-test-normal" title="Normal (rolar ≤ ${normal} no d20)"><span class="skill-test-val-label">N</span><span class="skill-test-val-num">${normal}</span></div>
+          <div class="skill-test-val skill-test-hard"   title="Difícil (rolar ≤ ${hard} no d20)"><span class="skill-test-val-label">D</span><span class="skill-test-val-num">${hard}</span></div>
+          <div class="skill-test-val skill-test-critical" title="Crítico (rolar ≤ ${critical} no d20)"><span class="skill-test-val-label">C</span><span class="skill-test-val-num">${critical}</span></div>
+        </div>
+      </div>`;
+  };
+
+  return `
+  <div class="sheet-section">
+    <h3 class="sheet-section-title">Testes de Perícia</h3>
+    <p class="section-hint">Role 1d20 e compare: <strong>N</strong> = Normal (≤ 10 + bônus) · <strong>D</strong> = Difícil (≤ 5 + bônus) · <strong>C</strong> = Crítico (≤ 1 + bônus). Perícia aprendida adiciona +2 em todos.</p>
+    <div class="skill-test-card-grid">
+      ${SKILL_TESTS.filter(t => !t.combat).map(renderCard).join("")}
+    </div>
+  </div>`;
+}
+
 function renderSkillsSection(character, cls) {
   const knownClassSkills = character.skills.class;
   const knownGeneralSkills = character.skills.general;
+  const allKnown = [...knownClassSkills, ...knownGeneralSkills];
+
+  // Separa as perícias de combate (que vivem em skills.class) das perícias de classe normais
+  const combatSkillNames = new Set(SKILL_TESTS.filter(t => t.combat).map(t => t.name));
+  const knownCombatSkills = knownClassSkills.filter(name => combatSkillNames.has(name));
+  const knownNormalClassSkills = knownClassSkills.filter(name => !combatSkillNames.has(name));
 
   const learnableClass = cls ? cls.skillsClass.filter(s => !knownClassSkills.includes(s.name)) : [];
   const learnableGeneral = GENERAL_SKILLS.filter(s => !knownGeneralSkills.includes(s.name));
@@ -1264,16 +1690,42 @@ function renderSkillsSection(character, cls) {
   <div class="sheet-section">
     <h3 class="sheet-section-title">Perícias Conhecidas</h3>
     <div class="skill-card-grid">
-      ${knownClassSkills.map(name => {
-        const s = cls.skillsClass.find(x => x.name === name);
-        return renderSkillCard(name, s);
+      ${knownNormalClassSkills.map(name => {
+        const s = cls ? cls.skillsClass.find(x => x.name === name) : null;
+        return renderSkillCard(name, s, true);
       }).join("")}
       ${knownGeneralSkills.map(name => {
         const s = GENERAL_SKILLS.find(x => x.name === name);
-        return renderSkillCard(name, s);
+        return renderSkillCard(name, s, false);
       }).join("")}
-      ${(knownClassSkills.length + knownGeneralSkills.length === 0) ? `<p class="empty-inline-note">Nenhuma perícia registrada ainda.</p>` : ""}
+      ${(knownNormalClassSkills.length + knownGeneralSkills.length === 0 && knownCombatSkills.length === 0) ? `<p class="empty-inline-note">Nenhuma perícia registrada ainda.</p>` : ""}
     </div>
+
+    ${knownCombatSkills.length > 0 ? `
+    <h4 class="learn-subtitle" style="margin-top:14px;">Perícias de Combate</h4>
+    <div class="skill-card-grid">
+      ${knownCombatSkills.map(name => {
+        const test = SKILL_TESTS.find(t => t.name === name);
+        if (!test) return "";
+        const { normal, hard, critical } = calcSkillTest(character, test);
+        return `
+          <div class="skill-card skill-card-combat">
+            <div class="skill-card-head">
+              <span class="skill-card-name">${test.icon} ${test.name}</span>
+              <div style="display:flex;gap:6px;align-items:center;">
+                <span class="skill-card-attr-tag">${test.attrKeys.join("+")}</span>
+                <button class="skill-remove-btn" data-remove-class-skill="${escapeHTML(name)}" title="Esquecer esta perícia">×</button>
+              </div>
+            </div>
+            <div class="skill-test-values" style="margin:4px 0;">
+              <div class="skill-test-val skill-test-normal" title="Normal"><span class="skill-test-val-label">N</span><span class="skill-test-val-num">${normal}</span></div>
+              <div class="skill-test-val skill-test-hard" title="Difícil"><span class="skill-test-val-label">D</span><span class="skill-test-val-num">${hard}</span></div>
+              <div class="skill-test-val skill-test-critical" title="Crítico"><span class="skill-test-val-label">C</span><span class="skill-test-val-num">${critical}</span></div>
+            </div>
+            <p class="skill-card-effect">⚔ ${test.combatDesc}</p>
+          </div>`;
+      }).join("")}
+    </div>` : ""}
 
     <h4 class="learn-subtitle">Aprender Nova Perícia (com um NPC)</h4>
     <div class="learn-row">
@@ -1290,17 +1742,30 @@ function renderSkillsSection(character, cls) {
       </select>
       <button class="btn-secondary" id="btn-learn-general-skill">Aprender</button>
     </div>
+    <div class="learn-row">
+      <select class="learn-select" id="learn-combat-skill-select">
+        <option value="">Perícia de combate...</option>
+        ${SKILL_TESTS.filter(t => t.combat && !allKnown.includes(t.name)).map(t => `<option value="${t.name}">${t.name} (${t.attrKeys.join("+")})</option>`).join("")}
+      </select>
+      <button class="btn-secondary" id="btn-learn-combat-skill">Aprender</button>
+    </div>
   </div>`;
 }
 
 /* Card visual de uma perícia conhecida — mesmo padrão das habilidades de classe */
-function renderSkillCard(name, skillData) {
+function renderSkillCard(name, skillData, isClass) {
   if (!skillData) return "";
+  const removeAttr = isClass
+    ? `data-remove-class-skill="${escapeHTML(name)}"`
+    : `data-remove-general-skill="${escapeHTML(name)}"`;
   return `
     <div class="skill-card">
       <div class="skill-card-head">
         <span class="skill-card-name">${name}</span>
-        <span class="skill-card-attr-tag">${skillData.attr}</span>
+        <div style="display:flex;gap:6px;align-items:center;">
+          <span class="skill-card-attr-tag">${skillData.attr}</span>
+          <button class="skill-remove-btn" ${removeAttr} title="Esquecer esta perícia">×</button>
+        </div>
       </div>
       <p class="skill-card-effect">${skillData.desc}</p>
       ${skillData.example ? `<div class="skill-card-example"><span class="skill-card-example-label">Exemplo:</span> ${skillData.example}</div>` : ""}
@@ -1312,7 +1777,11 @@ function renderSkillCard(name, skillData) {
 
 function renderSpellsSection(character, cls) {
   const known = character.spells || [];
+  if (!character.activeSpells) character.activeSpells = [];
+  const active = character.activeSpells;
   const allSpells = getAllSpellsInGame();
+  const totalSlots = calcSpellSlots(character);
+  const usedSlots = active.length;
   const learnable = allSpells.filter(s => !known.includes(s.name));
 
   // agrupa as aprendíveis por origem para o <select>
@@ -1324,18 +1793,29 @@ function renderSpellsSection(character, cls) {
 
   return `
   <div class="sheet-section">
-    <h3 class="sheet-section-title">Magias Conhecidas</h3>
-    <p class="section-hint">Qualquer classe pode aprender qualquer magia através de grimórios e livros — não há restrição de classe para conjurar.</p>
+    <h3 class="sheet-section-title">
+      Magias Conhecidas
+      <span class="spell-slots-counter ${usedSlots >= totalSlots ? "spell-slots-full" : ""}">
+        ${usedSlots}/${totalSlots} slots
+      </span>
+    </h3>
+    <p class="section-hint">Qualquer classe pode aprender qualquer magia através de grimórios. Equipe até <strong>${totalSlots} magia(s)</strong> nos slots disponíveis para que estejam em uso durante a aventura.</p>
+
     <div class="spell-card-grid">
       ${known.map(name => {
         const s = allSpells.find(x => x.name === name);
         if (!s) return "";
         const isSlow = s.castTime && !s.castTime.includes("instantânea");
+        const isActive = active.includes(name);
+        const canEquip = !isActive && usedSlots < totalSlots;
         return `
-        <div class="spell-card spell-level-${s.level}">
+        <div class="spell-card spell-level-${s.level} ${isActive ? "spell-card-active" : ""}">
           <div class="spell-card-head">
             <span class="spell-card-name">${name}</span>
-            <span class="spell-card-level-badge">Nível ${s.level}</span>
+            <div style="display:flex;gap:5px;align-items:center;">
+              <span class="spell-card-level-badge">Nível ${s.level}</span>
+              <button class="skill-remove-btn" data-remove-spell="${escapeHTML(name)}" title="Esquecer esta magia">×</button>
+            </div>
           </div>
           <span class="spell-card-origin">${s.origin}</span>
           <p class="spell-card-effect">${s.effect}</p>
@@ -1343,10 +1823,16 @@ function renderSpellsSection(character, cls) {
             <span class="spell-meta-tag ${isSlow ? "spell-meta-tag-slow" : ""}">⏱ ${s.castTime || "1 Ação"}</span>
             <span class="spell-meta-tag spell-meta-tag-cooldown">↻ ${s.cooldown || "Sem limite"}</span>
           </div>
+          <button class="spell-equip-btn ${isActive ? "spell-equip-btn-active" : ""}"
+            data-${isActive ? "unequip" : "equip"}-spell="${escapeHTML(name)}"
+            ${!isActive && !canEquip ? "disabled" : ""}>
+            ${isActive ? "🔮 Em Uso — Desequipar" : canEquip ? "⚡ Equipar (usar slot)" : "🔒 Sem slots disponíveis"}
+          </button>
         </div>`;
       }).join("")}
       ${known.length === 0 ? `<p class="empty-inline-note">Nenhuma magia conhecida ainda.</p>` : ""}
     </div>
+
     <h4 class="learn-subtitle">Aprender Nova Magia (em um grimório)</h4>
     <div class="learn-row">
       <select class="learn-select" id="learn-spell-select">
@@ -1377,15 +1863,38 @@ function renderEquipmentSection(character) {
     const itemData = equippedItem ? equippedItem.baseData : null;
 
     let chips = [];
+    let requirementWarning = "";
     if (itemData && (cfg.key === "primary" || cfg.key === "secondary")) {
-      const defenseInfo = itemData.defenseDegrade === null ? "Não defende" : itemData.defenseDegrade === 0 ? "Defesa não degrada" : `Defesa −${itemData.defenseDegrade}/tentativa`;
+      const hasHeavyDefenseSkill = hasMechanicalSkill(character, "enable_two_hand_defense");
+      const isHeavyTwoHand = !!itemData.heavyTwoHanded;
+      let defenseInfo, defenseKind;
+      if (isHeavyTwoHand && hasHeavyDefenseSkill) {
+        defenseInfo = "Defesa −2 (perícia de armas pesadas)";
+        defenseKind = "neutral";
+      } else if (itemData.defenseDegrade === null) {
+        defenseInfo = "Não defende";
+        defenseKind = "warn";
+      } else if (itemData.defenseDegrade === 0) {
+        defenseInfo = "Defesa não degrada";
+        defenseKind = "neutral";
+      } else {
+        defenseInfo = `Defesa −${itemData.defenseDegrade}/tentativa`;
+        defenseKind = "neutral";
+      }
+      const reqCheck = checkItemRequirement(character, itemData);
       chips = [
         { label: "Dano", value: itemData.dmg || "—", kind: "damage" },
         { label: "Peso", value: `${itemData.weight}kg`, kind: "neutral" },
-        { label: "Requisito", value: itemData.req || "—", kind: "neutral" },
-        { label: "Defesa", value: defenseInfo, kind: itemData.defenseDegrade === null ? "warn" : "neutral" }
+        { label: "Requisito", value: itemData.req || "—", kind: reqCheck.met ? "neutral" : "warn" },
+        { label: "Defesa", value: defenseInfo, kind: defenseKind }
       ];
       if (itemData.range) chips.splice(1, 0, { label: "Alcance", value: `${itemData.range} hex`, kind: "neutral" });
+      if (isHeavyTwoHand && cfg.key === "primary") {
+        chips.push({ label: "Esquiva", value: hasHeavyDefenseSkill ? "Sem penalidade" : "−2 (arma de 2 mãos pesada)", kind: hasHeavyDefenseSkill ? "neutral" : "warn" });
+      }
+      if (!reqCheck.met && cfg.key === "primary") {
+        requirementWarning = `<div class="equip-requirement-warning">⚠ Requisito não cumprido (${itemData.req}): −2 na Chance de Acerto enquanto esta arma estiver equipada como primária.</div>`;
+      }
     }
     if (itemData && cfg.key === "shield") {
       chips = [
@@ -1396,13 +1905,17 @@ function renderEquipmentSection(character) {
       ];
     }
     if (itemData && cfg.key === "armor") {
+      const armorReqCheck = checkItemRequirement(character, itemData);
       chips = [
         { label: "Def. Física", value: itemData.physDefense, kind: "defense" },
         { label: "Def. Mágica", value: itemData.magDefense, kind: "magic" },
         { label: "Peso", value: `${itemData.weight}kg`, kind: "neutral" },
-        { label: "Requisito", value: itemData.req || "—", kind: "neutral" }
+        { label: "Requisito", value: itemData.req || "—", kind: armorReqCheck.met ? "neutral" : "warn" }
       ];
       if (itemData.movePenalty) chips.push({ label: "Movimento", value: itemData.movePenalty < 0 ? `+${-itemData.movePenalty}` : `−${itemData.movePenalty}`, kind: itemData.movePenalty > 0 ? "warn" : "defense" });
+      if (!armorReqCheck.met) {
+        requirementWarning = `<div class="equip-requirement-warning">⚠ Requisito não cumprido (${itemData.req}) — o mestre pode aplicar penalidades adicionais de manejo.</div>`;
+      }
     }
     const subline = chips.length ? `<div class="equip-stat-chips">${chips.map(c => `<span class="equip-stat-chip equip-stat-chip-${c.kind}"><span class="equip-stat-chip-label">${c.label}</span>${c.value}</span>`).join("")}</div>` : "";
     const specialNote = itemData && itemData.note ? `<div class="equip-slot-special-note">✦ ${itemData.note}</div>` : "";
@@ -1418,6 +1931,7 @@ function renderEquipmentSection(character) {
         ${equippedItem ? `
           <div class="equip-slot-item">${equippedItem.name}</div>
           ${subline}
+          ${requirementWarning}
           ${specialNote}
           ${renderModifierFields(equippedItem)}
         ` : `<div class="equip-slot-empty">Vazio</div>`}
@@ -1437,26 +1951,33 @@ function renderEquipmentSection(character) {
   const availableAccessories = character.inventory.filter(i => i.category === "accessory" && !i.equippedSlot);
 
   const accessoriesHTML = `
-    <div class="equip-slot ${equippedAccessories.length ? "filled" : ""}" style="grid-column: 1 / -1;">
-      <div class="equip-slot-label">Acessórios (sem limite fixo — use o bom senso da mesa)</div>
-      ${equippedAccessories.length ? equippedAccessories.map(item => `
-        <div class="equip-slot-item-row">
-          <div>
-            <div class="equip-slot-item">${item.name}${item.baseData && item.baseData.rarity ? ` <span class="rarity-badge rarity-${item.baseData.rarity}">${item.baseData.rarity}</span>` : ""}</div>
-            <div class="equip-slot-sub">${item.baseData ? item.baseData.effect : ""}</div>
-            ${renderModifierFields(item)}
-          </div>
-          <button class="btn-secondary" data-unequip-accessory="${item.instanceId}" style="font-size:12px;padding:4px 8px;">Remover</button>
+    <div class="equip-slot equip-slot-accessories ${equippedAccessories.length ? "filled" : ""}" style="grid-column: 1 / -1;">
+      <div class="equip-slot-label">💍 Acessórios equipados</div>
+      ${equippedAccessories.length ? `
+        <div class="accessory-cards-grid">
+          ${equippedAccessories.map(item => {
+            const bd = item.baseData || {};
+            const tierBadge = bd.tier && bd.tier !== "comum" ? renderTierBadge(bd.tier) : "";
+            return `
+            <div class="accessory-card">
+              <div class="accessory-card-head">
+                <span class="accessory-card-name">${item.name}${tierBadge}</span>
+                <button class="skill-remove-btn" data-unequip-accessory="${item.instanceId}" title="Remover acessório">×</button>
+              </div>
+              ${bd.effect ? `<p class="accessory-card-effect">${bd.effect}</p>` : ""}
+              ${bd.story ? `<p class="accessory-card-story">📖 ${bd.story}</p>` : ""}
+            </div>`;
+          }).join("")}
         </div>
-      `).join("") : `<div class="equip-slot-empty">Nenhum acessório equipado</div>`}
-      <div class="equip-slot-actions">
+      ` : `<div class="equip-slot-empty">Nenhum acessório equipado</div>`}
+      <div class="equip-slot-actions" style="margin-top:8px;">
         <select id="accessory-select">
           <option value="">Equipar acessório do inventário...</option>
           ${availableAccessories.map(i => `<option value="${i.instanceId}">${i.name}</option>`).join("")}
         </select>
         <button class="btn-secondary" id="btn-equip-accessory">Equipar</button>
       </div>
-      ${availableAccessories.length === 0 ? `<div class="equip-slot-empty-note">Nenhum acessório disponível no inventário ainda.</div>` : ""}
+      ${availableAccessories.length === 0 && equippedAccessories.length === 0 ? `<div class="equip-slot-empty-note">Nenhum acessório disponível no inventário ainda.</div>` : ""}
     </div>
   `;
 
@@ -1473,19 +1994,79 @@ function renderEquipmentSection(character) {
 
 /* Campos de modificador (texto livre + bônus de dano numérico) para um item equipado */
 function renderModifierFields(item) {
-  return `
-    <div class="modifier-fields">
-      <label class="modifier-label">Modificador / Efeito especial</label>
-      <textarea class="modifier-text-input" data-modifier-text="${item.instanceId}" placeholder="Ex.: lâmina élfica, gela o alvo em contato, encantada contra mortos-vivos...">${escapeHTML(item.modifierText || "")}</textarea>
-      <div class="modifier-bonus-row">
-        <label class="modifier-label">Bônus de Dano</label>
-        <input type="number" class="modifier-bonus-input" data-modifier-bonus="${item.instanceId}" value="${item.damageBonus || 0}" step="1">
-      </div>
-    </div>
-  `;
+  // Modificadores são definidos na criação/edição do item personalizado, não nos slots equipados.
+  return "";
 }
 
 /* --- Inventário (itens livres + peso total) --- */
+
+/* --- Dinheiro: bronze, prata, ouro, platina (1 prata=10 bronze, 1 ouro=100 prata, 1 platina=1000 ouro) --- */
+
+const CURRENCY_DENOMINATIONS = [
+  { key: "bronze", label: "Bronze", icon: "🟫" },
+  { key: "prata", label: "Prata", icon: "⚪" },
+  { key: "ouro", label: "Ouro", icon: "🟡" },
+  { key: "platina", label: "Platina", icon: "⬜" }
+];
+
+/* Valor de 1 unidade de cada moeda, em bronze (a unidade base) */
+const CURRENCY_VALUE_IN_BRONZE = { bronze: 1, prata: 10, ouro: 1000, platina: 1000000 };
+
+function ensureCurrency(character) {
+  if (!character.currency) {
+    character.currency = { bronze: 0, prata: 0, ouro: 0, platina: 0 };
+  }
+  CURRENCY_DENOMINATIONS.forEach(d => {
+    if (typeof character.currency[d.key] !== "number") character.currency[d.key] = 0;
+  });
+  return character.currency;
+}
+
+/* Converte todo o dinheiro do personagem para a menor quantidade de moedas possível,
+   priorizando as denominações maiores (ex.: 500 bronze -> 5 prata -> ... -> conforme o total). */
+function consolidateCurrency(character) {
+  const currency = ensureCurrency(character);
+
+  let totalInBronze = 0;
+  CURRENCY_DENOMINATIONS.forEach(d => {
+    totalInBronze += (currency[d.key] || 0) * CURRENCY_VALUE_IN_BRONZE[d.key];
+  });
+
+  // Redistribui da maior denominação (platina) para a menor (bronze)
+  const order = ["platina", "ouro", "prata", "bronze"];
+  let remaining = totalInBronze;
+  order.forEach(key => {
+    const unitValue = CURRENCY_VALUE_IN_BRONZE[key];
+    currency[key] = Math.floor(remaining / unitValue);
+    remaining -= currency[key] * unitValue;
+  });
+}
+
+function renderCurrencySection(character) {
+  const currency = ensureCurrency(character);
+
+  return `
+  <div class="sheet-section">
+    <h3 class="sheet-section-title">Dinheiro</h3>
+    <p class="section-hint">Bronze, Prata, Ouro e Platina não contam no peso/carga do personagem. 1 Prata = 10 Bronze · 1 Ouro = 100 Prata · 1 Platina = 1000 Ouro.</p>
+
+    <div class="currency-grid">
+      ${CURRENCY_DENOMINATIONS.map(d => `
+        <div class="currency-box">
+          <div class="currency-icon">${d.icon}</div>
+          <div class="currency-label">${d.label}</div>
+          <div class="currency-controls">
+            <button class="bar-btn" data-currency-dec="${d.key}">−</button>
+            <input type="number" class="bar-input-inline currency-input" id="currency-input-${d.key}" value="${currency[d.key]}" min="0">
+            <button class="bar-btn" data-currency-inc="${d.key}">+</button>
+          </div>
+        </div>
+      `).join("")}
+    </div>
+
+    <button class="btn-secondary btn-consolidate-currency" id="btn-consolidate-currency">⇄ Juntar Moedas (converter para a maior denominação possível)</button>
+  </div>`;
+}
 
 function renderInventorySection(character) {
   const carry = calcCarryCapacity(character);
@@ -1549,22 +2130,206 @@ function renderNotesSection(character) {
 /* HANDLERS DA FICHA (delegação de eventos por re-render)                */
 /* ---------------------------------------------------------------------- */
 
+/* ---------------------------------------------------------------------- */
+/* FICHA IMPRIMÍVEL (A4 / PDF via window.print())                        */
+/* ---------------------------------------------------------------------- */
+
+function buildPrintableSheet(character, cls, maxHP, resourceMax) {
+  const move = calcMovement(character);
+  const actions = calcActions(character);
+  const reactions = calcReactions(character);
+  const reactionActions = calcReactionActions(character);
+  const spellActions = calcSpellActions(character);
+  const slots = calcSpellSlots(character);
+  const carry = calcCarryCapacity(character);
+  const weight = calcTotalWeight(character);
+  const physDef = calcPhysicalDefense(character);
+  const magDef = calcMagicDefense(character);
+  const dmg = calcDamageBreakdown(character);
+  const allSpells = getAllSpellsInGame();
+
+  const knownAbilities = (cls && character.skills.abilities) ? character.skills.abilities : [];
+  const knownClassSkills = character.skills.class || [];
+  const knownGeneralSkills = character.skills.general || [];
+  const knownSpells = character.spells || [];
+
+  const equippedPrimary = getEquippedItem(character, "primary");
+  const equippedSecondary = getEquippedItem(character, "secondary");
+  const equippedShield = getEquippedItem(character, "shield");
+  const equippedArmor = getEquippedItem(character, "armor");
+  const equippedAccessories = getEquippedItem(character, "accessory");
+
+  return `
+  <div class="print-page">
+    <div class="print-header">
+      <div class="print-header-main">
+        <h1 class="print-char-name">${escapeHTML(character.name)}</h1>
+        <p class="print-char-sub">${cls ? cls.name : "Sem classe"}${character.origin ? " · " + escapeHTML(character.origin) : ""} · ${character.rosterType === "pc" ? "Personagem Jogador" : "NPC / Criatura"}</p>
+      </div>
+      <div class="print-level-badge">Nível ${character.level}</div>
+    </div>
+
+    <div class="print-grid-top">
+      <div class="print-box">
+        <div class="print-box-title">Vitalidade</div>
+        <div class="print-stat-row"><span>Pontos de Vida</span><span class="print-stat-fill-line">${character.currentHP} / ${maxHP}</span></div>
+        ${cls ? `<div class="print-stat-row"><span>${cls.resource}</span><span class="print-stat-fill-line">${character.currentResource} / ${resourceMax}</span></div>` : ""}
+        <div class="print-stat-row"><span>Experiência (XP)</span><span class="print-stat-fill-line">${character.xp} / ${xpToNextLevel(character)}</span></div>
+      </div>
+
+      <div class="print-box">
+        <div class="print-box-title">Atributos</div>
+        <div class="print-attr-row">
+          ${ATTRS.map(a => `<div class="print-attr-cell"><span class="print-attr-label">${a}</span><span class="print-attr-value">${character.attrs[a]}</span></div>`).join("")}
+        </div>
+      </div>
+    </div>
+
+    <div class="print-box">
+      <div class="print-box-title">Estatísticas de Combate</div>
+      <div class="print-combat-grid">
+        <div class="print-combat-cell"><span class="print-combat-label">Movimento</span><span class="print-combat-value">${move} hex</span></div>
+        <div class="print-combat-cell"><span class="print-combat-label">Ações</span><span class="print-combat-value">${actions}</span></div>
+        <div class="print-combat-cell"><span class="print-combat-label">Reações</span><span class="print-combat-value">${reactions}</span></div>
+        <div class="print-combat-cell"><span class="print-combat-label">Ações de Reação</span><span class="print-combat-value">${reactionActions}</span></div>
+        <div class="print-combat-cell"><span class="print-combat-label">Ações de Magia</span><span class="print-combat-value">${spellActions}</span></div>
+        <div class="print-combat-cell"><span class="print-combat-label">Def. Física</span><span class="print-combat-value">${physDef}</span></div>
+        <div class="print-combat-cell"><span class="print-combat-label">Def. Mágica</span><span class="print-combat-value">${magDef}</span></div>
+        <div class="print-combat-cell"><span class="print-combat-label">Slots de Magia</span><span class="print-combat-value">${slots}</span></div>
+        <div class="print-combat-cell"><span class="print-combat-label">Carga</span><span class="print-combat-value">${weight}/${carry}kg</span></div>
+      </div>
+      <div class="print-damage-list">
+        <strong>DANOS: ${buildCombinedDamageString(dmg)}</strong><br>
+        ${dmg.sources.map(s => `${s.label.replace(/\s*\(.*?\)\s*/, "").trim()}: ${s.dice}${s.bonus ? ` +${s.bonus}` : ""}`).join("  ·  ")}
+      </div>
+    </div>
+
+    <div class="print-box">
+      <div class="print-box-title">Dinheiro</div>
+      <div class="print-currency-row">
+        ${CURRENCY_DENOMINATIONS.map(d => `<span>${d.label}: <strong>${(character.currency && character.currency[d.key]) || 0}</strong></span>`).join("  ·  ")}
+      </div>
+    </div>
+
+    <div class="print-two-col">
+      <div class="print-box">
+        <div class="print-box-title">Equipamento</div>
+        <table class="print-table">
+          <tbody>
+            <tr><td class="print-table-label">Arma Primária</td><td>${equippedPrimary ? equippedPrimary.name + (equippedPrimary.baseData ? ` (${equippedPrimary.baseData.dmg || "—"})` : "") : "—"}</td></tr>
+            <tr><td class="print-table-label">Arma Secundária</td><td>${equippedSecondary ? equippedSecondary.name : "—"}</td></tr>
+            <tr><td class="print-table-label">Escudo</td><td>${equippedShield ? equippedShield.name : "—"}</td></tr>
+            <tr><td class="print-table-label">Armadura</td><td>${equippedArmor ? equippedArmor.name : "—"}</td></tr>
+            <tr><td class="print-table-label">Acessórios</td><td>${equippedAccessories.length ? equippedAccessories.map(a => a.name).join(", ") : "—"}</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="print-box">
+        <div class="print-box-title">Inventário (Mochila)</div>
+        ${character.inventory.length ? `
+        <table class="print-table">
+          <thead><tr><th>Item</th><th>Qtd.</th><th>Peso</th></tr></thead>
+          <tbody>
+            ${character.inventory.map(i => `<tr><td>${escapeHTML(i.name)}${i.equippedSlot ? " (equipado)" : ""}</td><td>${i.qty}</td><td>${round1(i.weight * i.qty)}kg</td></tr>`).join("")}
+          </tbody>
+        </table>` : `<p class="print-empty-note">Mochila vazia.</p>`}
+      </div>
+    </div>
+
+    <div class="print-box">
+      <div class="print-box-title">Habilidades de Classe Conhecidas</div>
+      ${knownAbilities.length ? `<ul class="print-compact-list">
+        ${knownAbilities.map(name => {
+          const s = cls ? cls.skills.find(x => x.name === name) : null;
+          if (!s) return `<li><strong>${name}</strong></li>`;
+          const abilityLevels = character.skills.abilityLevels || {};
+          const isLevelable = Array.isArray(s.levels) && s.levels.length > 1;
+          const currentLevel = abilityLevels[name] || 1;
+          const data = isLevelable ? s.levels[currentLevel - 1] : s;
+          const levelTag = isLevelable ? ` [Nv.${currentLevel}/${s.levels.length}]` : "";
+          return `<li><strong>${name}</strong>${levelTag} (${data.cost}) — ${data.effect}</li>`;
+        }).join("")}
+      </ul>` : `<p class="print-empty-note">Nenhuma habilidade conhecida.</p>`}
+    </div>
+
+    <div class="print-two-col">
+      <div class="print-box">
+        <div class="print-box-title">Perícias</div>
+        ${(knownClassSkills.length + knownGeneralSkills.length) ? `<ul class="print-compact-list">
+          ${knownClassSkills.map(name => {
+            const s = cls ? cls.skillsClass.find(x => x.name === name) : null;
+            return `<li><strong>${name}</strong>${s ? ` (${s.attr})` : ""}</li>`;
+          }).join("")}
+          ${knownGeneralSkills.map(name => {
+            const s = GENERAL_SKILLS.find(x => x.name === name);
+            return `<li><strong>${name}</strong>${s ? ` (${s.attr})` : ""}</li>`;
+          }).join("")}
+        </ul>` : `<p class="print-empty-note">Nenhuma perícia conhecida.</p>`}
+      </div>
+
+      <div class="print-box">
+        <div class="print-box-title">Magias (${(character.activeSpells||[]).length}/${calcSpellSlots(character)} slots em uso)</div>
+        ${knownSpells.length ? `<ul class="print-compact-list">
+          ${knownSpells.map(name => {
+            const s = allSpells.find(x => x.name === name);
+            const isActive = (character.activeSpells || []).includes(name);
+            return `<li>${isActive ? "🔮 " : ""}<strong>${name}</strong>${s ? ` (Nv.${s.level} · ${s.castTime || "1 Ação"} · ${s.cooldown || "—"})` : ""} — ${s ? s.effect : ""}${isActive ? " [EM USO]" : ""}</li>`;
+          }).join("")}
+        </ul>` : `<p class="print-empty-note">Nenhuma magia conhecida.</p>`}
+      </div>
+    </div>
+
+    ${character.notes ? `
+    <div class="print-box">
+      <div class="print-box-title">Anotações</div>
+      <p class="print-notes-text">${escapeHTML(character.notes)}</p>
+    </div>` : ""}
+
+    <div class="print-box">
+      <div class="print-box-title">Testes de Perícia</div>
+      <p style="font-size:8.5pt;color:#555;margin:0 0 5px;">N = Normal (≤ 10+bônus) · D = Difícil (≤ 5+bônus) · C = Crítico (≤ 1+bônus) · +2 se treinado</p>
+      <div class="print-skill-tests-grid">
+        ${SKILL_TESTS.filter(t => !t.combat).map(test => {
+          const { normal, hard, critical, hasSkill } = calcSkillTest(character, test);
+          return `<div class="print-skill-test-cell ${hasSkill ? 'trained' : ''}">
+            <span class="print-skill-test-name">${test.icon} ${test.name}</span>
+            <span class="print-skill-test-attrs">${test.attrKeys.join("+")}</span>
+            <span class="print-skill-test-vals">${normal} / ${hard} / ${critical}</span>
+          </div>`;
+        }).join("")}
+      </div>
+    </div>
+
+    <div class="print-footer">Grimório de Personagens — Ficha gerada em ${new Date().toLocaleDateString("pt-BR")}</div>
+  </div>
+  `;
+}
+
+
 function attachSheetHandlers(character) {
   const cls = getClassDef(character.classKey);
   const maxHP = calcMaxHP(character);
   const resourceMax = calcResourceMax(character);
 
-  // HP controls
+  // Print / Save as PDF
+  const printBtn = document.getElementById("btn-print-sheet");
+  if (printBtn) printBtn.addEventListener("click", () => {
+    document.getElementById("print-sheet-area").innerHTML = buildPrintableSheet(character, cls, maxHP, resourceMax);
+    window.print();
+  });
+
+  // HP controls (aba vital)
   const hpInput = document.getElementById("hp-input");
-  document.querySelector('[data-action="hp-dec"]').addEventListener("click", () => {
+  document.querySelector('[data-action="hp-dec"]')?.addEventListener("click", () => {
     character.currentHP = clamp(character.currentHP - 1, 0, maxHP);
     persistCurrentCharacter(); renderSheet();
   });
-  document.querySelector('[data-action="hp-inc"]').addEventListener("click", () => {
+  document.querySelector('[data-action="hp-inc"]')?.addEventListener("click", () => {
     character.currentHP = clamp(character.currentHP + 1, 0, maxHP);
     persistCurrentCharacter(); renderSheet();
   });
-  hpInput.addEventListener("change", () => {
+  if (hpInput) hpInput.addEventListener("change", () => {
     character.currentHP = clamp(parseInt(hpInput.value) || 0, 0, maxHP);
     persistCurrentCharacter(); renderSheet();
   });
@@ -1589,7 +2354,7 @@ function attachSheetHandlers(character) {
   }
 
   // XP gain + level up
-  document.getElementById("btn-add-xp").addEventListener("click", () => {
+  document.getElementById("btn-add-xp")?.addEventListener("click", () => {
     const input = document.getElementById("xp-gain-input");
     const amount = parseInt(input.value) || 0;
     if (amount <= 0) { showToast("Informe uma quantidade de XP maior que zero."); return; }
@@ -1622,12 +2387,100 @@ function attachSheetHandlers(character) {
       if ((character.unspentSkillPoints || 0) <= 0) { showToast("Sem pontos de habilidade disponíveis. Ganhe XP para subir de nível."); return; }
       const abilityName = btn.dataset.learnAbility;
       if (!character.skills.abilities) character.skills.abilities = [];
+      if (!character.skills.abilityLevels) character.skills.abilityLevels = {};
       if (character.skills.abilities.includes(abilityName)) return;
       character.skills.abilities.push(abilityName);
+      character.skills.abilityLevels[abilityName] = 1;
       character.unspentSkillPoints -= 1;
       persistCurrentCharacter();
       renderSheet();
       showToast(`Habilidade "${abilityName}" aprendida!`);
+    });
+  });
+
+  // Evoluir (subir de nível) uma habilidade já conhecida — custa 1 ponto de habilidade
+  document.querySelectorAll("[data-upgrade-ability]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      if ((character.unspentSkillPoints || 0) <= 0) { showToast("Sem pontos de habilidade disponíveis. Ganhe XP para subir de nível."); return; }
+      const abilityName = btn.dataset.upgradeAbility;
+      if (!character.skills.abilityLevels) character.skills.abilityLevels = {};
+      const currentLevel = character.skills.abilityLevels[abilityName] || 1;
+      if (currentLevel >= ABILITY_MAX_LEVEL) { showToast("Esta habilidade já está no nível máximo."); return; }
+      character.skills.abilityLevels[abilityName] = currentLevel + 1;
+      character.unspentSkillPoints -= 1;
+      persistCurrentCharacter();
+      renderSheet();
+      showToast(`"${abilityName}" evoluiu para o Nível ${currentLevel + 1}!`);
+    });
+  });
+
+  // Remover perícia de classe aprendida
+  document.querySelectorAll("[data-remove-class-skill]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const skillName = btn.dataset.removeClassSkill;
+      showConfirm(`Esquecer a perícia "${skillName}"? Ela precisará ser reaprendida com um mestre.`, () => {
+        character.skills.class = character.skills.class.filter(s => s !== skillName);
+        persistCurrentCharacter();
+        renderSheet();
+        showToast(`Perícia "${skillName}" esquecida.`);
+      });
+    });
+  });
+
+  // Remover perícia geral aprendida
+  document.querySelectorAll("[data-remove-general-skill]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const skillName = btn.dataset.removeGeneralSkill;
+      showConfirm(`Esquecer a perícia "${skillName}"? Ela precisará ser reaprendida com um mestre.`, () => {
+        character.skills.general = character.skills.general.filter(s => s !== skillName);
+        persistCurrentCharacter();
+        renderSheet();
+        showToast(`Perícia "${skillName}" esquecida.`);
+      });
+    });
+  });
+
+  // Remover magia conhecida
+  document.querySelectorAll("[data-remove-spell]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const spellName = btn.dataset.removeSpell;
+      showConfirm(`Esquecer a magia "${spellName}"? Ela precisará ser reaprendida em um grimório.`, () => {
+        character.spells = (character.spells || []).filter(s => s !== spellName);
+        character.activeSpells = (character.activeSpells || []).filter(s => s !== spellName);
+        persistCurrentCharacter();
+        renderSheet();
+        showToast(`Magia "${spellName}" esquecida.`);
+      });
+    });
+  });
+
+  // Equipar magia (colocar em slot ativo)
+  document.querySelectorAll("[data-equip-spell]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      if (!character.activeSpells) character.activeSpells = [];
+      const spellName = btn.dataset.equipSpell;
+      const totalSlots = calcSpellSlots(character);
+      if (character.activeSpells.length >= totalSlots) {
+        showToast(`Sem slots disponíveis. Desequipe uma magia primeiro (${totalSlots} slot(s) no total).`);
+        return;
+      }
+      if (!character.activeSpells.includes(spellName)) {
+        character.activeSpells.push(spellName);
+        persistCurrentCharacter();
+        renderSheet();
+        showToast(`"${spellName}" equipada no slot!`);
+      }
+    });
+  });
+
+  // Desequipar magia (liberar slot)
+  document.querySelectorAll("[data-unequip-spell]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const spellName = btn.dataset.unequipSpell;
+      character.activeSpells = (character.activeSpells || []).filter(s => s !== spellName);
+      persistCurrentCharacter();
+      renderSheet();
+      showToast(`"${spellName}" desequipada.`);
     });
   });
 
@@ -1653,6 +2506,19 @@ function attachSheetHandlers(character) {
     persistCurrentCharacter();
     renderSheet();
     showToast(`Perícia "${value}" aprendida com um instrutor.`);
+  });
+
+  // Learn combat skill
+  const learnCombatBtn = document.getElementById("btn-learn-combat-skill");
+  if (learnCombatBtn) learnCombatBtn.addEventListener("click", () => {
+    const select = document.getElementById("learn-combat-skill-select");
+    const value = select.value;
+    if (!value) { showToast("Selecione uma perícia de combate para aprender."); return; }
+    // Perícias de combate ficam em skills.class para serem encontradas pelo sistema de testes
+    character.skills.class.push(value);
+    persistCurrentCharacter();
+    renderSheet();
+    showToast(`Perícia de Combate "${value}" aprendida!`);
   });
 
   // Learn spell
@@ -1751,17 +2617,55 @@ function attachSheetHandlers(character) {
   const openAddItemBtn = document.getElementById("btn-open-add-item-modal");
   if (openAddItemBtn) openAddItemBtn.addEventListener("click", () => openAddItemModal(character));
 
-  // Notes (debounced save on blur/input)
+  // Notes (debounced save on blur/input) — só existe na aba inventário
   const notesArea = document.getElementById("character-notes");
-  notesArea.addEventListener("input", () => {
-    character.notes = notesArea.value;
-  });
-  notesArea.addEventListener("blur", () => {
-    persistCurrentCharacter();
+  if (notesArea) {
+    notesArea.addEventListener("input", () => { character.notes = notesArea.value; });
+    notesArea.addEventListener("blur", () => { persistCurrentCharacter(); });
+  }
+
+  // Currency controls (bronze/prata/ouro/platina)
+  const currency = ensureCurrency(character);
+
+  document.querySelectorAll("[data-currency-inc]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const key = btn.dataset.currencyInc;
+      currency[key] = (currency[key] || 0) + 1;
+      persistCurrentCharacter();
+      renderSheet();
+    });
   });
 
-  // Delete from sheet
-  document.getElementById("btn-delete-from-sheet").addEventListener("click", () => {
+  document.querySelectorAll("[data-currency-dec]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const key = btn.dataset.currencyDec;
+      currency[key] = Math.max(0, (currency[key] || 0) - 1);
+      persistCurrentCharacter();
+      renderSheet();
+    });
+  });
+
+  CURRENCY_DENOMINATIONS.forEach(d => {
+    const input = document.getElementById(`currency-input-${d.key}`);
+    if (input) {
+      input.addEventListener("change", () => {
+        currency[d.key] = Math.max(0, parseInt(input.value) || 0);
+        persistCurrentCharacter();
+        renderSheet();
+      });
+    }
+  });
+
+  const consolidateBtn = document.getElementById("btn-consolidate-currency");
+  if (consolidateBtn) consolidateBtn.addEventListener("click", () => {
+    consolidateCurrency(character);
+    persistCurrentCharacter();
+    renderSheet();
+    showToast("Moedas convertidas para as maiores denominações possíveis.");
+  });
+
+  // Delete from sheet (só existe na aba inventário)
+  document.getElementById("btn-delete-from-sheet")?.addEventListener("click", () => {
     showConfirm(`Remover permanentemente "${character.name}" do grimório?`, () => {
       characters = characters.filter(c => c.id !== character.id);
       saveCharacters(characters);
@@ -1800,6 +2704,34 @@ function openAddItemModal(character) {
   document.getElementById("generic-item-weight").value = "0";
   document.getElementById("catalog-item-qty").value = "1";
 
+  document.getElementById("custom-item-category").value = "weapon";
+  document.getElementById("custom-item-name").value = "";
+  document.getElementById("custom-item-weight").value = "1";
+  document.getElementById("custom-weapon-dmg").value = "";
+  document.getElementById("custom-weapon-req").value = "";
+  document.getElementById("custom-weapon-defense").value = "1";
+  document.getElementById("custom-armor-physdef").value = "0";
+  document.getElementById("custom-armor-magdef").value = "0";
+  document.getElementById("custom-armor-movepenalty").value = "0";
+  document.getElementById("custom-armor-req").value = "";
+  document.getElementById("custom-shield-physdef").value = "1";
+  document.getElementById("custom-shield-penalty").value = "";
+  document.getElementById("custom-accessory-effect").value = "";
+  document.getElementById("custom-item-note").value = "";
+  document.getElementById("custom-item-is-magic").checked = false;
+  document.getElementById("custom-magic-bonus-fields").classList.add("hidden");
+  document.getElementById("custom-bonus-attr-select").value = "";
+  document.getElementById("custom-bonus-attr-value").value = "0";
+  document.getElementById("custom-bonus-hp").value = "0";
+  document.getElementById("custom-bonus-move").value = "0";
+  document.getElementById("custom-bonus-actions").value = "0";
+  document.getElementById("custom-bonus-reactions").value = "0";
+  document.getElementById("custom-bonus-reaction-actions").value = "0";
+  document.getElementById("custom-bonus-spell-actions").value = "0";
+  document.getElementById("custom-bonus-dodge").value = "0";
+  document.getElementById("custom-bonus-slots").value = "0";
+  updateCustomItemFieldsVisibility();
+
   updateAddItemWeightPreview();
 }
 
@@ -1819,10 +2751,12 @@ function updateAddItemWeightPreview() {
     const qty = parseInt(document.getElementById("catalog-item-qty").value) || 1;
     const sourceItem = (WORLD_ITEM_CATALOG[category] || []).find(i => i.name === itemName);
     pendingWeight = sourceItem ? (sourceItem.weight || 0) * qty : 0;
-  } else {
+  } else if (addItemModalTab === "generic") {
     const qty = parseInt(document.getElementById("generic-item-qty").value) || 1;
     const weight = parseFloat(document.getElementById("generic-item-weight").value) || 0;
     pendingWeight = weight * qty;
+  } else if (addItemModalTab === "custom") {
+    pendingWeight = parseFloat(document.getElementById("custom-item-weight").value) || 0;
   }
 
   const resultWeight = round1(currentWeight + pendingWeight);
@@ -1861,6 +2795,24 @@ catalogCategorySelect.addEventListener("change", () => {
   populateCatalogItemSelect();
   updateAddItemWeightPreview();
 });
+
+const customItemCategorySelect = document.getElementById("custom-item-category");
+customItemCategorySelect.addEventListener("change", () => {
+  updateCustomItemFieldsVisibility();
+});
+
+const customItemIsMagicCheckbox = document.getElementById("custom-item-is-magic");
+customItemIsMagicCheckbox.addEventListener("change", () => {
+  document.getElementById("custom-magic-bonus-fields").classList.toggle("hidden", !customItemIsMagicCheckbox.checked);
+});
+
+function updateCustomItemFieldsVisibility() {
+  const category = customItemCategorySelect.value;
+  ["weapon", "armor", "shield", "accessory"].forEach(cat => {
+    const group = document.getElementById(`custom-fields-${cat}`);
+    if (group) group.classList.toggle("hidden", cat !== category);
+  });
+}
 
 function populateCatalogItemSelect() {
   const category = catalogCategorySelect.value;
@@ -1912,7 +2864,8 @@ document.getElementById("add-item-modal-confirm").addEventListener("click", () =
     newItem.qty = qty;
     character.inventory.push(newItem);
     showToast(`${itemName} adicionado ao inventário.`);
-  } else {
+
+  } else if (addItemModalTab === "generic") {
     const name = document.getElementById("generic-item-name").value.trim();
     const qty = parseInt(document.getElementById("generic-item-qty").value) || 1;
     const weight = parseFloat(document.getElementById("generic-item-weight").value) || 0;
@@ -1933,6 +2886,80 @@ document.getElementById("add-item-modal-confirm").addEventListener("click", () =
       baseData: null, equippedSlot: null, damageBonus: 0, modifierText: ""
     });
     showToast(`${name} adicionado ao inventário.`);
+
+  } else if (addItemModalTab === "custom") {
+    const category = document.getElementById("custom-item-category").value;
+    const name = document.getElementById("custom-item-name").value.trim();
+    const weight = parseFloat(document.getElementById("custom-item-weight").value) || 0;
+    const note = document.getElementById("custom-item-note").value.trim();
+    if (!name) { showToast("Dê um nome ao item personalizado antes de adicionar."); return; }
+    pendingWeight = weight;
+    itemLabel = name;
+
+    const carry = calcCarryCapacity(character);
+    const currentWeight = calcTotalWeight(character);
+    if (round1(currentWeight + pendingWeight) > carry) {
+      const space = round1(carry - currentWeight);
+      showToast(`Carga máxima excedida! Faltam ${round1(pendingWeight - (space > 0 ? space : 0))}kg de espaço livre (${space > 0 ? space : 0}kg disponíveis).`);
+      return;
+    }
+
+    // Monta o baseData no mesmo formato dos itens de catálogo, conforme a categoria escolhida
+    let baseData = null;
+    if (category === "weapon") {
+      const dmg = document.getElementById("custom-weapon-dmg").value.trim() || "1d4";
+      const req = document.getElementById("custom-weapon-req").value.trim() || "—";
+      const defenseRaw = document.getElementById("custom-weapon-defense").value;
+      const defenseDegrade = defenseRaw === "null" ? null : parseInt(defenseRaw);
+      baseData = { name, dmg, req, weight, defenseDegrade, slot: ["primary", "secondary"], note: note || undefined };
+    } else if (category === "armor") {
+      baseData = {
+        name,
+        physDefense: parseInt(document.getElementById("custom-armor-physdef").value) || 0,
+        magDefense: parseInt(document.getElementById("custom-armor-magdef").value) || 0,
+        weight,
+        movePenalty: parseInt(document.getElementById("custom-armor-movepenalty").value) || 0,
+        req: document.getElementById("custom-armor-req").value.trim() || "—",
+        note: note || undefined
+      };
+    } else if (category === "shield") {
+      baseData = {
+        name,
+        physDefense: parseInt(document.getElementById("custom-shield-physdef").value) || 0,
+        weight,
+        penalty: document.getElementById("custom-shield-penalty").value.trim() || "Nenhuma",
+        slot: ["shield"],
+        note: note || undefined
+      };
+    } else if (category === "accessory") {
+      const effect = document.getElementById("custom-accessory-effect").value.trim() || "Sem efeito definido.";
+      baseData = { name, weight, effect, note: note || undefined };
+    }
+
+    // Bônus mágicos especiais (opcional, qualquer categoria pode ter)
+    let magicBonus = null;
+    if (document.getElementById("custom-item-is-magic").checked) {
+      const attrKey = document.getElementById("custom-bonus-attr-select").value;
+      const attrValue = parseInt(document.getElementById("custom-bonus-attr-value").value) || 0;
+      magicBonus = {
+        attr: attrKey || null,
+        attrValue: attrKey ? attrValue : 0,
+        hp: parseInt(document.getElementById("custom-bonus-hp").value) || 0,
+        move: parseInt(document.getElementById("custom-bonus-move").value) || 0,
+        actions: parseInt(document.getElementById("custom-bonus-actions").value) || 0,
+        reactions: parseInt(document.getElementById("custom-bonus-reactions").value) || 0,
+        reactionActions: parseInt(document.getElementById("custom-bonus-reaction-actions").value) || 0,
+        spellActions: parseInt(document.getElementById("custom-bonus-spell-actions").value) || 0,
+        dodge: parseInt(document.getElementById("custom-bonus-dodge").value) || 0,
+        slots: parseInt(document.getElementById("custom-bonus-slots").value) || 0
+      };
+    }
+
+    character.inventory.push({
+      instanceId: uid(), name, qty: 1, weight, category,
+      baseData, equippedSlot: null, damageBonus: 0, modifierText: "", isCustom: true, magicBonus
+    });
+    showToast(`${name} (item personalizado) adicionado ao inventário.`);
   }
 
   persistCurrentCharacter();
@@ -1956,15 +2983,33 @@ function renderAbilitiesGlossary(query) {
     if (filtered.length === 0) return;
     html += `<h3 class="glossary-group-title">${cls.icon} ${cls.name}</h3>`;
     html += `<div class="ability-card-grid">`;
-    html += filtered.map(skill => `
-      <div class="ability-card known">
+    html += filtered.map(skill => {
+      const isLevelable = Array.isArray(skill.levels) && skill.levels.length > 1;
+      if (!isLevelable) {
+        return `
+        <div class="ability-card known">
+          <div class="ability-card-head">
+            <span class="ability-card-name">${skill.name}</span>
+          </div>
+          <div class="ability-card-cost">${skill.cost}</div>
+          <p class="ability-card-effect">${skill.effect}</p>
+        </div>`;
+      }
+      return `
+      <div class="ability-card known ability-card-glossary-levels">
         <div class="ability-card-head">
           <span class="ability-card-name">${skill.name}</span>
+          <span class="ability-card-badge">Nivelável (1-${skill.levels.length})</span>
         </div>
-        <div class="ability-card-cost">${skill.cost}</div>
-        <p class="ability-card-effect">${skill.effect}</p>
-      </div>
-    `).join("");
+        ${skill.levels.map((lvl, i) => `
+          <div class="glossary-level-row">
+            <span class="glossary-level-tag">Nível ${i + 1}</span>
+            <span class="glossary-level-cost">${lvl.cost}</span>
+            <p class="glossary-level-effect">${lvl.effect}</p>
+          </div>
+        `).join("")}
+      </div>`;
+    }).join("");
     html += `</div>`;
   });
 
@@ -1988,7 +3033,38 @@ function renderSpellsGlossary(query) {
 
   if (filtered.length === 0) return `<p class="empty-inline-note">Nenhuma magia encontrada para "${escapeHTML(query)}".</p>`;
 
-  // Agrupa por origem para organização visual
+  const catConfig = {
+    buff:      { icon: "⬆", label: "Buffs", color: "#4a90d9" },
+    ritual:    { icon: "🕯", label: "Rituais", color: "#9b59b6" },
+    invocacao: { icon: "🌀", label: "Invocações", color: "#e67e22" }
+  };
+
+  const spellCard = (s) => {
+    const catBadge = s.category && catConfig[s.category]
+      ? `<span class="spell-cat-badge" style="background:${catConfig[s.category].color}">${catConfig[s.category].icon} ${catConfig[s.category].label}</span>`
+      : "";
+    const condNote = s.category === "invocacao" && s.effect.startsWith("Condição:")
+      ? `<div class="spell-condition-note">⚠ ${s.effect.match(/Condição:[^.]+\./)?.[0] || ""}</div>`
+      : "";
+    return `
+      <div class="spell-card spell-level-${s.level}">
+        <div class="spell-card-head">
+          <span class="spell-card-name">${s.name}</span>
+          <div style="display:flex;gap:4px;align-items:center;flex-wrap:wrap;justify-content:flex-end;">
+            ${catBadge}
+            <span class="spell-card-level-badge">Nível ${s.level}</span>
+          </div>
+        </div>
+        ${condNote}
+        <p class="spell-card-effect">${s.effect}</p>
+        <div class="spell-card-meta-row">
+          <span class="spell-meta-tag ${s.castTime && !s.castTime.includes("instantânea") ? "spell-meta-tag-slow" : ""}">⏱ ${s.castTime || "1 Ação"}</span>
+          <span class="spell-meta-tag spell-meta-tag-cooldown">↻ ${s.cooldown || "Sem limite"}</span>
+        </div>
+      </div>`;
+  };
+
+  // Agrupa: primeiro por origem, dentro de Geral por categoria
   const groups = {};
   filtered.forEach(s => {
     if (!groups[s.origin]) groups[s.origin] = [];
@@ -1997,28 +3073,71 @@ function renderSpellsGlossary(query) {
 
   return Object.keys(groups).map(origin => {
     const spells = groups[origin].sort((a, b) => a.level - b.level);
-    return `
-      <h3 class="glossary-group-title">${origin === "Geral" ? "✦ Magias Gerais (qualquer classe)" : getClassIconByName(origin) + " " + origin}</h3>
-      <div class="spell-card-grid">
-        ${spells.map(s => `
-          <div class="spell-card spell-level-${s.level}">
-            <div class="spell-card-head">
-              <span class="spell-card-name">${s.name}</span>
-              <span class="spell-card-level-badge">Nível ${s.level}</span>
-            </div>
-            <p class="spell-card-effect">${s.effect}</p>
-            <div class="spell-card-meta-row">
-              <span class="spell-meta-tag ${s.castTime && !s.castTime.includes("instantânea") ? "spell-meta-tag-slow" : ""}">⏱ ${s.castTime || "1 Ação"}</span>
-              <span class="spell-meta-tag spell-meta-tag-cooldown">↻ ${s.cooldown || "Sem limite"}</span>
-            </div>
-          </div>
-        `).join("")}
-      </div>
-    `;
+    const title = origin === "Geral"
+      ? "✦ Magias Gerais (qualquer classe pode aprender)"
+      : getClassIconByName(origin) + " " + origin;
+
+    if (origin !== "Geral") {
+      return `
+        <h3 class="glossary-group-title">${title}</h3>
+        <div class="spell-card-grid">${spells.map(spellCard).join("")}</div>`;
+    }
+
+    // Para Geral, separa por categoria
+    const cats = ["buff","ritual","invocacao",null];
+    let html = `<h3 class="glossary-group-title">${title}</h3>`;
+    cats.forEach(cat => {
+      const catSpells = cat
+        ? spells.filter(s => s.category === cat)
+        : spells.filter(s => !s.category);
+      if (!catSpells.length) return;
+      const cfg = catConfig[cat];
+      html += cfg
+        ? `<h4 class="damage-subtitle" style="margin:12px 0 8px;color:${cfg.color}">${cfg.icon} ${cfg.label} (${catSpells.length})</h4>`
+        : `<h4 class="damage-subtitle" style="margin:12px 0 8px;">✦ Gerais</h4>`;
+      html += `<div class="spell-card-grid">${catSpells.map(spellCard).join("")}</div>`;
+    });
+    return html;
   }).join("");
 }
 
 /* --- Glossário de Itens (armas, armaduras, escudos, acessórios) --- */
+
+/* Badge visual para tiers especiais (só Raro+) */
+const TIER_CONFIG = {
+  raro:      { label: "Raro",      color: "#4a90d9" },
+  magico:    { label: "Mágico",    color: "#9b59b6" },
+  lendario:  { label: "Lendário",  color: "#e67e22" },
+  unico:     { label: "Único",     color: "#e74c3c" },
+  ancestral: { label: "Ancestral", color: "#8B0000" }
+};
+
+function renderTierBadge(tier) {
+  if (!tier || tier === "comum") return "";
+  const cfg = TIER_CONFIG[tier];
+  if (!cfg) return "";
+  return `<span class="tier-badge" style="background:${cfg.color};">${cfg.label}</span>`;
+}
+
+function renderItemGlossaryCard(item, extraChips = "") {
+  const tierBadge = renderTierBadge(item.tier);
+  const setBadge = item.setName
+    ? `<span class="set-badge">🔗 ${item.setName}</span>`
+    : "";
+  const setBonusHTML = item.setBonus
+    ? `<div class="item-glossary-unique-ability" style="border-left-color:#4a9e50;">🔗 <strong>Bônus de Set (${item.setBonus.pieces} peças):</strong> ${item.setBonus.ability} — ${item.setBonus.effect}</div>`
+    : "";
+  const hasStory = item.story || item.uniqueAbility;
+  return `
+    <div class="item-glossary-card ${item.tier && item.tier !== "comum" ? "item-glossary-card-special" : ""} ${item.tier === "unico" || item.tier === "ancestral" ? "item-glossary-card-unique" : ""}">
+      <div class="item-glossary-name">${item.name} ${tierBadge}${setBadge}</div>
+      <div class="equip-stat-chips">${extraChips}</div>
+      ${item.note ? `<p class="item-glossary-note">✦ ${item.note}</p>` : ""}
+      ${item.story ? `<p class="item-glossary-story">📖 ${item.story}</p>` : ""}
+      ${setBonusHTML}
+      ${item.uniqueAbility ? `<div class="item-glossary-unique-ability">⭐ <strong>Habilidade Única:</strong> ${item.uniqueAbility}</div>` : ""}
+    </div>`;
+}
 
 function renderItemsGlossary(query) {
   const matches = (name) => !query || name.toLowerCase().includes(query);
@@ -2030,79 +3149,73 @@ function renderItemsGlossary(query) {
     { title: "Armas à Distância", list: WEAPONS_RANGED }
   ];
 
+  // Ordena por tier: comum → raro → magico → lendario → unico → ancestral
+  const TIER_ORDER = { comum: 0, raro: 1, magico: 2, lendario: 3, unico: 4, ancestral: 5 };
+  const sortByTier = (a, b) => (TIER_ORDER[a.tier] || 0) - (TIER_ORDER[b.tier] || 0);
+
   let html = "";
 
   weaponSections.forEach(section => {
-    const filtered = section.list.filter(w => matches(w.name));
+    const filtered = section.list.filter(w => matches(w.name)).sort(sortByTier);
     if (filtered.length === 0) return;
     html += `<h3 class="glossary-group-title">⚔ ${section.title}</h3>`;
     html += `<div class="item-glossary-grid">`;
-    html += filtered.map(w => `
-      <div class="item-glossary-card">
-        <div class="item-glossary-name">${w.name}</div>
-        <div class="equip-stat-chips">
-          <span class="equip-stat-chip equip-stat-chip-damage"><span class="equip-stat-chip-label">Dano</span>${w.dmg || "—"}</span>
-          ${w.range ? `<span class="equip-stat-chip equip-stat-chip-neutral"><span class="equip-stat-chip-label">Alcance</span>${w.range} hex</span>` : ""}
-          <span class="equip-stat-chip equip-stat-chip-neutral"><span class="equip-stat-chip-label">Peso</span>${w.weight}kg</span>
-          <span class="equip-stat-chip equip-stat-chip-neutral"><span class="equip-stat-chip-label">Requisito</span>${w.req || "—"}</span>
-        </div>
-        ${w.note ? `<p class="item-glossary-note">✦ ${w.note}</p>` : ""}
-      </div>
-    `).join("");
+    html += filtered.map(w => {
+      const chips = [
+        `<span class="equip-stat-chip equip-stat-chip-damage"><span class="equip-stat-chip-label">Dano</span>${w.dmg || "—"}</span>`,
+        w.range ? `<span class="equip-stat-chip equip-stat-chip-neutral"><span class="equip-stat-chip-label">Alcance</span>${w.range} hex</span>` : "",
+        `<span class="equip-stat-chip equip-stat-chip-neutral"><span class="equip-stat-chip-label">Peso</span>${w.weight}kg</span>`,
+        `<span class="equip-stat-chip equip-stat-chip-neutral"><span class="equip-stat-chip-label">Req.</span>${w.req || "—"}</span>`
+      ].filter(Boolean).join("");
+      return renderItemGlossaryCard(w, chips);
+    }).join("");
     html += `</div>`;
   });
 
-  const filteredShields = SHIELDS.filter(s => matches(s.name));
+  const filteredShields = SHIELDS.filter(s => matches(s.name)).sort(sortByTier);
   if (filteredShields.length > 0) {
     html += `<h3 class="glossary-group-title">🛡 Escudos</h3>`;
     html += `<div class="item-glossary-grid">`;
-    html += filteredShields.map(s => `
-      <div class="item-glossary-card">
-        <div class="item-glossary-name">${s.name}</div>
-        <div class="equip-stat-chips">
-          <span class="equip-stat-chip equip-stat-chip-defense"><span class="equip-stat-chip-label">Def. Física</span>+${s.physDefense}</span>
-          <span class="equip-stat-chip equip-stat-chip-neutral"><span class="equip-stat-chip-label">Peso</span>${s.weight}kg</span>
-          <span class="equip-stat-chip ${s.penalty !== "Nenhuma" ? "equip-stat-chip-warn" : "equip-stat-chip-neutral"}"><span class="equip-stat-chip-label">Penalidade</span>${s.penalty}</span>
-        </div>
-        ${s.note ? `<p class="item-glossary-note">✦ ${s.note}</p>` : ""}
-      </div>
-    `).join("");
+    html += filteredShields.map(s => {
+      const chips = [
+        `<span class="equip-stat-chip equip-stat-chip-defense"><span class="equip-stat-chip-label">Def. Física</span>+${s.physDefense}</span>`,
+        `<span class="equip-stat-chip equip-stat-chip-neutral"><span class="equip-stat-chip-label">Peso</span>${s.weight}kg</span>`,
+        `<span class="equip-stat-chip ${s.penalty !== "Nenhuma" ? "equip-stat-chip-warn" : "equip-stat-chip-neutral"}"><span class="equip-stat-chip-label">Penalidade</span>${s.penalty}</span>`
+      ].join("");
+      return renderItemGlossaryCard(s, chips);
+    }).join("");
     html += `</div>`;
   }
 
-  const filteredArmors = ARMORS.filter(a => matches(a.name));
+  const filteredArmors = ARMORS.filter(a => matches(a.name)).sort(sortByTier);
   if (filteredArmors.length > 0) {
     html += `<h3 class="glossary-group-title">🧥 Armaduras</h3>`;
     html += `<div class="item-glossary-grid">`;
-    html += filteredArmors.map(a => `
-      <div class="item-glossary-card">
-        <div class="item-glossary-name">${a.name}</div>
-        <div class="equip-stat-chips">
-          <span class="equip-stat-chip equip-stat-chip-defense"><span class="equip-stat-chip-label">Def. Física</span>${a.physDefense}</span>
-          <span class="equip-stat-chip equip-stat-chip-magic"><span class="equip-stat-chip-label">Def. Mágica</span>${a.magDefense}</span>
-          <span class="equip-stat-chip equip-stat-chip-neutral"><span class="equip-stat-chip-label">Peso</span>${a.weight}kg</span>
-          <span class="equip-stat-chip equip-stat-chip-neutral"><span class="equip-stat-chip-label">Requisito</span>${a.req || "—"}</span>
-        </div>
-        ${a.note ? `<p class="item-glossary-note">✦ ${a.note}</p>` : ""}
-      </div>
-    `).join("");
+    html += filteredArmors.map(a => {
+      const chips = [
+        `<span class="equip-stat-chip equip-stat-chip-defense"><span class="equip-stat-chip-label">Def. Física</span>${a.physDefense}</span>`,
+        `<span class="equip-stat-chip equip-stat-chip-magic"><span class="equip-stat-chip-label">Def. Mágica</span>${a.magDefense}</span>`,
+        `<span class="equip-stat-chip equip-stat-chip-neutral"><span class="equip-stat-chip-label">Peso</span>${a.weight}kg</span>`,
+        `<span class="equip-stat-chip equip-stat-chip-neutral"><span class="equip-stat-chip-label">Req.</span>${a.req || "—"}</span>`
+      ].join("");
+      return renderItemGlossaryCard(a, chips);
+    }).join("");
     html += `</div>`;
   }
 
-  const filteredAccessories = ACCESSORIES.filter(a => matches(a.name));
+  const filteredAccessories = ACCESSORIES.filter(a => matches(a.name)).sort(sortByTier);
   if (filteredAccessories.length > 0) {
     html += `<h3 class="glossary-group-title">💍 Acessórios</h3>`;
     html += `<div class="item-glossary-grid">`;
-    html += filteredAccessories.map(a => `
-      <div class="item-glossary-card">
-        <div class="item-glossary-name">${a.name}${a.rarity ? ` <span class="rarity-badge rarity-${a.rarity}">${a.rarity}</span>` : ""}</div>
-        <p class="item-glossary-note">${a.effect}</p>
-        <div class="equip-stat-chips"><span class="equip-stat-chip equip-stat-chip-neutral"><span class="equip-stat-chip-label">Peso</span>${a.weight}kg</span></div>
-      </div>
-    `).join("");
+    html += filteredAccessories.map(a => {
+      const chips = `<span class="equip-stat-chip equip-stat-chip-neutral"><span class="equip-stat-chip-label">Peso</span>${a.weight}kg</span>`;
+      const cardWithEffect = renderItemGlossaryCard({ ...a, note: a.effect }, chips);
+      return cardWithEffect;
+    }).join("");
     html += `</div>`;
   }
 
   if (!html) return `<p class="empty-inline-note">Nenhum item encontrado para "${escapeHTML(query)}".</p>`;
   return html;
 }
+
