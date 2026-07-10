@@ -263,12 +263,16 @@ function calcMovement(character) {
 
 /* Ações por turno = AGI + DEX, mínimo 1 */
 /* Ações de Combate por turno:
-   Base: max(1, floor(DEX/3) + floor(AGI/2))
-   Regra: a cada 3 DEX ganha +1 ação; a cada 2 AGI ganha +1 ação */
+   - Progressão garantida por nível: +1 a cada 3 níveis (nível 1→1, 3→2, 6→3, 9→4)
+   - Bônus de AGI: +1 a cada 4 pontos (AGI 4→+1, 8→+2)
+   - Bônus de DEX: +1 a cada 5 pontos (DEX 5→+1) — especialização
+   Garante que todo personagem ganha ações no ritmo do jogo,
+   com atributos funcionando como bônus complementares. */
 function calcActions(character) {
-  const dexBonus = Math.floor(getEffectiveAttr(character, "DEX") / 3);
-  const agiBonus = Math.floor(getEffectiveAttr(character, "AGI") / 2);
-  const base = Math.max(1, dexBonus + agiBonus);
+  const levelBonus = Math.floor((character.level || 1) / 3);        // +1 a cada 3 níveis
+  const agiBonus   = Math.floor(getEffectiveAttr(character, "AGI") / 4); // +1 a cada 4 AGI
+  const dexBonus   = Math.floor(getEffectiveAttr(character, "DEX") / 5); // +1 a cada 5 DEX
+  const base = 1 + levelBonus + agiBonus + dexBonus;
   const bonus = sumAccessoryEffectValue(character, "actions") + sumMagicItemBonus(character, "actions");
   return base + bonus;
 }
@@ -289,10 +293,17 @@ function calcReactionActions(character) {
   return base + bonus;
 }
 
-/* Ações de Magia = max(floor(INT/2), floor(SAB/2)). Só o Mago tem mínimo garantido de 1. */
+/* Ações de Magia por turno:
+   - Progressão garantida por nível para TODAS as classes: +1 a cada 3 níveis
+   - Bônus de INT: +1 a cada 2 pontos de INT (para conjuradores)
+   - Mago: mínimo 1 mesmo sem INT
+   Exemplo: nível 1 com INT 0 = 1 (base nível) | nível 3 com INT 2 = 2 (nível) +1 (INT) = 3 */
 function calcSpellActions(character) {
   const cls = getClassDef(character.classKey);
-  let actions = Math.floor(getEffectiveAttr(character, "INT") / 2);
+  const levelBonus = Math.floor((character.level || 1) / 3);         // +1 a cada 3 níveis (todas as classes)
+  const intBonus   = Math.floor(getEffectiveAttr(character, "INT") / 2); // +1 a cada 2 INT
+  let actions = 1 + levelBonus + intBonus;
+  // Mago mantém mínimo extra de 1 caso fórmula dê 0 (impossível agora, mas por segurança)
   if (cls && cls.name === "Mago" && actions < 1) actions = 1;
   actions += sumAccessoryEffectValue(character, "spellActions");
   actions += sumMagicItemBonus(character, "spellActions");
@@ -1578,10 +1589,10 @@ function renderDerivedSection(character, cls) {
 
   const stats = [
     { label: "Movimento", value: `${move} hex`, tooltip: "Quantos hexágonos você pode andar por turno. Ganha-se 1 por ponto de AGI (base 4), descontando penalidade de armadura/escudo pesado." },
-    { label: "Ações/turno", value: actions, tooltip: "Quantas ações você pode realizar no seu turno (atacar, usar habilidade, etc). Ganha-se 1 a cada 3 pontos de DEX e 1 a cada 2 pontos de AGI. Mínimo de 1." },
+    { label: "Ações/turno", value: actions, tooltip: "Ações de combate por turno. Base: 1 + floor(Nível÷3). Bônus: +1 a cada 4 AGI, +1 a cada 5 DEX. Exemplo: nível 3 = 2 ações; nível 6 = 3 ações. Atributos adicionam bônus extras." },
     { label: "Reações/rodada", value: reactions, tooltip: "Quantas vezes você pode reagir fora do seu turno (defender-se, ataque de oportunidade). Ganha-se 1 reação extra a cada 4 pontos de AGI, começando com 1." },
     { label: "Ações de Reação", value: reactionActions, tooltip: "Recurso separado das Reações comuns, usado especificamente para ações reativas especiais. Ganha-se 1 a cada 3 pontos de AGI. Mínimo de 1." },
-    { label: "Ações de Magia", value: spellActions, tooltip: "Ações reservadas para conjurar magias. Equivale a INT ÷ 2 (arredondado para baixo). O Mago sempre tem no mínimo 1.", highlight: spellActions > 0 },
+    { label: "Ações de Magia", value: spellActions, tooltip: "Ações para conjurar magias. Todas as classes ganham 1 + floor(Nível÷3). Bônus de INT: +1 a cada 2 pontos.", highlight: spellActions > 0 },
     { label: "Defesa Física", value: physDef, tooltip: "Reduz o dano de ataques físicos recebidos. Vem da armadura equipada e do escudo (se houver)." },
     { label: "Defesa Mágica", value: magDef, tooltip: "Reduz o dano de magias e ataques mágicos recebidos. Vem principalmente de armaduras arcanas/sagradas e itens mágicos." },
     { label: "Chance de Esquiva", value: `${dodge} ou menos (d20)`, tooltip: "Role 1d20: se o resultado for igual ou menor que este valor, você esquiva totalmente do ataque. Base 10 + AGI. Armas de duas mãos pesadas (sem a perícia 'Defesa com Armas Pesadas') aplicam −2." },
