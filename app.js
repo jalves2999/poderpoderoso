@@ -1330,6 +1330,20 @@ function renderGlossaryContent() {
     container.innerHTML = renderSpellsGlossary(query);
   } else if (currentGlossaryTab === "items") {
     container.innerHTML = renderItemsGlossary(query);
+  } else if (currentGlossaryTab === "rules") {
+    container.innerHTML = renderRulesTab();
+    // Bind acordeão das regras
+    container.querySelectorAll(".rules-accordion-trigger").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const panel = btn.nextElementSibling;
+        const isOpen = btn.classList.contains("open");
+        container.querySelectorAll(".rules-accordion-trigger.open").forEach(b => {
+          b.classList.remove("open");
+          b.nextElementSibling?.classList.remove("open");
+        });
+        if (!isOpen) { btn.classList.add("open"); panel?.classList.add("open"); }
+      });
+    });
   }
 }
 
@@ -1367,6 +1381,481 @@ const CLASS_TUTORIALS = {
     tip: "Dica: guarde 'Ressurreição Menor' (custa toda a Fé) apenas para emergências reais — um aliado caído há até 3 rodadas pode ser trazido de volta com 50% do HP máximo, uma vez por dia."
   }
 };
+
+/* =====================================================================
+   REGRAS DA MESA — aba de referência rápida com acordeão
+   ===================================================================== */
+
+function renderRulesTab() {
+  const sections = [
+    {
+      id: "xp-niveis",
+      icon: "⭐",
+      title: "XP e Níveis",
+      content: `
+        <div class="rules-block">
+          <p class="rules-intro">O avanço de personagens é medido em <strong>Pontos de Experiência (XP)</strong>. Cada 1.000 XP acumulados equivalem a um nível. O XP não é zerado ao subir de nível — acumula continuamente.</p>
+          <div class="rules-table-wrap">
+            <table class="rules-table">
+              <thead><tr><th>Nível</th><th>XP Total</th><th>Ações (sem attrs)</th><th>Ações de Magia (INT 0)</th></tr></thead>
+              <tbody>
+                ${[1,2,3,4,5,6,7,8,9,10,12,15].map(lvl => {
+                  const act  = 1 + Math.floor(lvl/3);
+                  const sp   = 1 + Math.floor(lvl/3);
+                  return `<tr><td><strong>Nv. ${lvl}</strong></td><td>${(lvl-1)*1000} XP</td><td>${act} ação${act>1?"ões":""}</td><td>${sp} ação${sp>1?"ões":""} magia</td></tr>`;
+                }).join("")}
+              </tbody>
+            </table>
+          </div>
+          <div class="rules-callout rules-callout-gold">
+            <strong>Ao subir de nível você recebe:</strong>
+            <ul class="rules-list">
+              <li>+1 ponto de Atributo para distribuir livremente (use ↺ Redistribuir para realocar os anteriores)</li>
+              <li>+1 ponto de Habilidade para aprender habilidades de classe ou gerais</li>
+              <li>HP máximo cresce automaticamente via <em>hpPerLevel</em> da classe</li>
+              <li>Ações de Combate e Ações de Magia crescem automaticamente a cada 3 níveis</li>
+            </ul>
+          </div>
+          <div class="rules-callout rules-callout-green">
+            <strong>Sugestão de XP por encontro (guia do Mestre):</strong>
+            <ul class="rules-list">
+              <li><span class="rules-badge diff-1">☠ Fácil</span> 50–100 XP por criatura derrotada</li>
+              <li><span class="rules-badge diff-2">☠☠ Equilibrado</span> 100–200 XP por criatura</li>
+              <li><span class="rules-badge diff-3">☠☠☠ Desafiador</span> 200–350 XP por criatura</li>
+              <li><span class="rules-badge diff-4">☠☠☠☠ Muito Forte</span> 350–500 XP por criatura ou evento</li>
+              <li><span class="rules-badge diff-5">☠☠☠☠☠ Chefe</span> 500–1000 XP + XP de narrativa</li>
+            </ul>
+          </div>
+        </div>
+      `
+    },
+    {
+      id: "atributos",
+      icon: "💪",
+      title: "Atributos",
+      content: `
+        <div class="rules-block">
+          <p class="rules-intro">Existem 5 atributos. Na criação o personagem começa com <strong>2 pontos</strong> para distribuir, e ganha <strong>+1 ponto</strong> por nível. Use ↺ Redistribuir na aba Vital para reorganizá-los a qualquer momento.</p>
+          <div class="rules-attr-grid">
+            <div class="rules-attr-card">
+              <span class="rules-attr-badge">FOR</span>
+              <strong>Força</strong>
+              <ul class="rules-list">
+                <li>HP máximo: <code>20 + FOR × hpPerFor</code> (varia por classe)</li>
+                <li>Dano natural corpo a corpo (tabela abaixo)</li>
+                <li>Carga máxima: <code>15 + FOR × 5</code></li>
+              </ul>
+              <div class="rules-sub-table">
+                <div class="rules-sub-row"><span>FOR 0</span><span>—</span></div>
+                <div class="rules-sub-row"><span>FOR 1</span><span>1d4</span></div>
+                <div class="rules-sub-row"><span>FOR 2</span><span>1d6</span></div>
+                <div class="rules-sub-row"><span>FOR 3</span><span>1d8</span></div>
+                <div class="rules-sub-row"><span>FOR 4</span><span>1d10</span></div>
+                <div class="rules-sub-row"><span>FOR 5</span><span>1d12</span></div>
+                <div class="rules-sub-row"><span>FOR 6</span><span>1d20</span></div>
+                <div class="rules-sub-row"><span>FOR 7</span><span>2d20</span></div>
+                <div class="rules-sub-row rules-sub-row-max"><span>FOR 8+</span><span>4d20 ⚡</span></div>
+              </div>
+            </div>
+            <div class="rules-attr-card">
+              <span class="rules-attr-badge">DEX</span>
+              <strong>Destreza</strong>
+              <ul class="rules-list">
+                <li>+1 Ação de Combate a cada 5 DEX</li>
+                <li>Testes de precisão, ladinagem e armas de arremesso</li>
+                <li>Reduz penalidade de requisito de armas leves</li>
+              </ul>
+            </div>
+            <div class="rules-attr-card">
+              <span class="rules-attr-badge">AGI</span>
+              <strong>Agilidade</strong>
+              <ul class="rules-list">
+                <li>+1 Ação de Combate a cada 4 AGI</li>
+                <li>Movimento: <code>4 + AGI − penalidade armadura</code></li>
+                <li>Reações: <code>1 + floor(AGI/4)</code></li>
+                <li>Ações de Reação: <code>1 + floor(AGI/3)</code></li>
+                <li>Esquiva: <code>10 + AGI − penalidades</code></li>
+              </ul>
+            </div>
+            <div class="rules-attr-card">
+              <span class="rules-attr-badge">INT</span>
+              <strong>Inteligência</strong>
+              <ul class="rules-list">
+                <li>+1 Ação de Magia a cada 2 INT</li>
+                <li>Slots de Magia: <code>INT + SAB</code></li>
+                <li>Testes de conhecimento, arcanismo e percepção</li>
+              </ul>
+            </div>
+            <div class="rules-attr-card">
+              <span class="rules-attr-badge">SAB</span>
+              <strong>Sabedoria</strong>
+              <ul class="rules-list">
+                <li>Slots de Magia: <code>INT + SAB</code></li>
+                <li>Bônus de Cura: Clérigo ganha <code>2×SAB</code>, outros <code>SAB</code></li>
+                <li>Testes de resistência mental, percepção e sobrevivência</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      `
+    },
+    {
+      id: "acoes",
+      icon: "⚔",
+      title: "Sistema de Ações",
+      content: `
+        <div class="rules-block">
+          <p class="rules-intro">Em combate, cada personagem tem três tipos de recursos de ação por rodada: <strong>Ações</strong>, <strong>Reações</strong> e <strong>Ações de Reação</strong>. Cada tipo é independente.</p>
+          <div class="rules-callout rules-callout-red">
+            <strong>⚔ Ações de Combate</strong> — o que você faz no seu turno
+            <p>Fórmula: <code>1 + floor(Nível÷3) + floor(AGI÷4) + floor(DEX÷5) + bônus de itens</code></p>
+            <ul class="rules-list">
+              <li>Nível 1 sem attrs: <strong>1 ação</strong></li>
+              <li>Nível 3 sem attrs: <strong>2 ações</strong> (+1 pelo nível)</li>
+              <li>Nível 6 sem attrs: <strong>3 ações</strong> (+2 pelo nível)</li>
+              <li>AGI 4: +1 ação extra | AGI 8: +2 ações extras</li>
+              <li>DEX 5: +1 ação extra | DEX 10: +2 ações extras</li>
+            </ul>
+          </div>
+          <div class="rules-callout rules-callout-blue">
+            <strong>✨ Ações de Magia</strong> — usadas para conjurar magias (todas as classes)
+            <p>Fórmula: <code>1 + floor(Nível÷3) + floor(INT÷2) + bônus de itens</code></p>
+            <ul class="rules-list">
+              <li>Qualquer personagem em Nível 1 tem pelo menos <strong>1 Ação de Magia</strong></li>
+              <li>INT 2: +1 | INT 4: +2 | INT 6: +3</li>
+              <li>Conjurar uma magia de nível 1 custa 1 Ação de Magia e 1 Slot de Magia</li>
+              <li>Magias lentas (ritmos, rituais) custam múltiplos turnos de concentração</li>
+            </ul>
+          </div>
+          <div class="rules-callout rules-callout-green">
+            <strong>🔄 Reações</strong> — usadas fora do seu turno
+            <p>Fórmula: <code>1 + floor(AGI÷4) + bônus de itens</code></p>
+            <ul class="rules-list">
+              <li>Reações são gastas fora do turno (Bloquear, Esquivar, Contra-Atacar)</li>
+              <li>Cada Reação gasta permite executar 1 <em>Ação de Reação</em></li>
+              <li>Reações não utilizadas são perdidas ao início do próximo turno</li>
+            </ul>
+          </div>
+          <div class="rules-callout rules-callout-gold">
+            <strong>↩ Ações de Reação</strong> — o que você pode fazer quando reage
+            <p>Fórmula: <code>max(1, floor(AGI÷3)) + bônus de itens</code></p>
+            <ul class="rules-list">
+              <li>AGI 3: 1 Ação de Reação | AGI 6: 2 | AGI 9: 3</li>
+              <li>Cada Reação gasta ativa o uso de Ações de Reação naquele momento</li>
+            </ul>
+          </div>
+        </div>
+      `
+    },
+    {
+      id: "hp-defesa",
+      icon: "❤",
+      title: "HP, Defesa e Movimento",
+      content: `
+        <div class="rules-block">
+          <div class="rules-callout rules-callout-red">
+            <strong>❤ HP Máximo por classe</strong>
+            <p>Fórmula universal: <code>20 + FOR × hpPerFor + hpPerLevel × (Nível − 1) + bônus de itens</code></p>
+            <div class="rules-table-wrap">
+              <table class="rules-table">
+                <thead><tr><th>Classe</th><th>HP/FOR</th><th>HP/Nível</th><th>Carga/Nível</th></tr></thead>
+                <tbody>
+                  <tr><td>⚔ Guerreiro</td><td>+5</td><td>+10/nv</td><td>+5/nv</td></tr>
+                  <tr><td>✨ Mago</td><td>+2</td><td>+6/nv</td><td>+2/nv</td></tr>
+                  <tr><td>🏹 Arqueiro</td><td>+3</td><td>+8/nv</td><td>+4/nv</td></tr>
+                  <tr><td>🗡 Ladino</td><td>+3</td><td>+7/nv</td><td>+3/nv</td></tr>
+                  <tr><td>✝ Clérigo</td><td>+4</td><td>+9/nv</td><td>+4/nv</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="rules-callout rules-callout-blue">
+            <strong>🛡 Defesa Física e Mágica</strong>
+            <ul class="rules-list">
+              <li>Defesa Física vem de armaduras, escudos e habilidades</li>
+              <li>Defesa Mágica vem de vestes, foco e habilidades arcanas</li>
+              <li>Cada ponto de Defesa reduz o dano daquela categoria em 1 ponto</li>
+              <li>Algumas armaduras pesadas aplicam penalidade de Movimento</li>
+            </ul>
+          </div>
+          <div class="rules-callout rules-callout-green">
+            <strong>🏃 Movimento</strong>
+            <p>Fórmula: <code>4 + AGI − penalidade de armadura/escudo</code></p>
+            <ul class="rules-list">
+              <li>Movimento representa hexágonos percorridos por Ação de Movimento</li>
+              <li>Mover-se custa 1 Ação de Combate por segmento de Movimento usado</li>
+              <li>Terreno difícil (lama, água, escombros) reduz o Movimento pela metade</li>
+            </ul>
+          </div>
+          <div class="rules-callout rules-callout-gold">
+            <strong>📦 Carga</strong>
+            <p>Fórmula: <code>15 + FOR × 5 + carryPerLevel × (Nível−1) + bônus de itens</code></p>
+            <ul class="rules-list">
+              <li>Se o peso total dos itens equipados + inventário exceder a Carga, o personagem fica Sobrecarregado</li>
+              <li>Sobrecarregado: −2 em todos os testes físicos e Movimento reduzido à metade</li>
+            </ul>
+          </div>
+        </div>
+      `
+    },
+    {
+      id: "magia",
+      icon: "✨",
+      title: "Sistema de Magia",
+      content: `
+        <div class="rules-block">
+          <p class="rules-intro">Qualquer personagem pode conjurar magias, mas classes conjuradoras (Mago, Clérigo) têm vantagens significativas em Slots, Ações de Magia e habilidades de amplificação.</p>
+          <div class="rules-callout rules-callout-blue">
+            <strong>🔵 Slots de Magia</strong>
+            <p>Fórmula: <code>INT + SAB</code> (mínimo 1 para Mago e Clérigo)</p>
+            <ul class="rules-list">
+              <li>Cada conjuração gasta 1 Slot, independente do nível da magia</li>
+              <li>Slots recuperam 100% em Descanso Longo e 25% em Descanso Curto</li>
+              <li>Magias equipadas são as que o personagem mantém "na memória"</li>
+              <li>Para conjurar, a magia precisa estar <em>equipada</em> (ativa na aba Magias)</li>
+            </ul>
+          </div>
+          <div class="rules-callout rules-callout-gold">
+            <strong>📋 Níveis de Magia</strong>
+            <div class="rules-table-wrap">
+              <table class="rules-table">
+                <thead><tr><th>Nível</th><th>Poder</th><th>Custo de Tempo</th><th>Acesso</th></tr></thead>
+                <tbody>
+                  <tr><td>1</td><td>Básico</td><td>1 Ação de Magia</td><td>Qualquer conjurador</td></tr>
+                  <tr><td>2</td><td>Significativo</td><td>1 Ação de Magia</td><td>Qualquer conjurador</td></tr>
+                  <tr><td>3</td><td>Poderoso</td><td>1 turno de concentração</td><td>Conjurador experiente</td></tr>
+                  <tr><td>4</td><td>Muito Forte</td><td>2 turnos de concentração</td><td>Mago / Clérigo avançado</td></tr>
+                  <tr><td>5</td><td>Lendário</td><td>Ritual completo + custo extra</td><td>Classe avançada apenas</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="rules-callout rules-callout-green">
+            <strong>🟢 Conjuração e Concentração</strong>
+            <ul class="rules-list">
+              <li>Magias lentas (turnos de concentração) exigem que o personagem não seja interrompido</li>
+              <li>Receber dano durante concentração exige teste de SAB (dificuldade = dano ÷ 5, mínimo 1) ou a magia falha</li>
+              <li>Rituais de Nível 5 geralmente consomem recurso de classe (Mana, Fúria, Foco ou Fé)</li>
+            </ul>
+          </div>
+          <div class="rules-callout rules-callout-red">
+            <strong>🔴 Invocações — Condições por Nível</strong>
+            <ul class="rules-list">
+              <li><strong>Nv 1–2:</strong> Sem condição especial além do custo normal</li>
+              <li><strong>Nv 3:</strong> Requer INT ou SAB ≥ 2</li>
+              <li><strong>Nv 4:</strong> Foco contínuo — gasta 1 Ação de Magia por turno para manter a criatura ativa</li>
+              <li><strong>Nv 5:</strong> Ritual de 1 turno completo + custo de recurso de classe</li>
+            </ul>
+          </div>
+        </div>
+      `
+    },
+    {
+      id: "testes",
+      icon: "🎲",
+      title: "Testes e Dificuldades",
+      content: `
+        <div class="rules-block">
+          <p class="rules-intro">Quando o sucesso não é garantido, o Mestre pede um <strong>Teste</strong>. Role 1d20 e adicione o atributo relevante. Compare com a dificuldade.</p>
+          <div class="rules-table-wrap">
+            <table class="rules-table">
+              <thead><tr><th>Dificuldade</th><th>Resultado Necessário</th><th>Situação Típica</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Fácil</strong></td><td>1d20 + atributo ≥ 8</td><td>Tarefa simples com algum risco</td></tr>
+                <tr><td><strong>Normal</strong></td><td>1d20 + atributo ≥ 12</td><td>Desafio para um aventureiro treinado</td></tr>
+                <tr><td><strong>Difícil</strong></td><td>1d20 + atributo ≥ 16</td><td>Exige habilidade e preparação</td></tr>
+                <tr><td><strong>Crítico</strong></td><td>1d20 + atributo ≥ 20</td><td>Borda do impossível — raramente pedido</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="rules-callout rules-callout-gold">
+            <strong>Teste com Vantagem / Desvantagem</strong>
+            <ul class="rules-list">
+              <li><em>Vantagem:</em> role 2d20 e use o maior resultado</li>
+              <li><em>Desvantagem:</em> role 2d20 e use o menor resultado</li>
+              <li>Nunca se acumulam: vantagem + vantagem ainda é só 2 dados</li>
+            </ul>
+          </div>
+          <div class="rules-callout rules-callout-green">
+            <strong>Acerto Crítico e Falha Crítica</strong>
+            <ul class="rules-list">
+              <li><strong>20 natural (antes de somar)</strong> = Crítico: sucesso automático + efeito especial definido pelo Mestre</li>
+              <li><strong>1 natural (antes de somar)</strong> = Falha Crítica: falha automática + complicação narrativa</li>
+              <li>Em ataques, Crítico significa dano máximo (não rola dados — usa o valor máximo de cada dado)</li>
+            </ul>
+          </div>
+        </div>
+      `
+    },
+    {
+      id: "combate",
+      icon: "🗡",
+      title: "Sequência de Combate",
+      content: `
+        <div class="rules-block">
+          <div class="rules-callout rules-callout-red">
+            <strong>1. Iniciativa</strong>
+            <ul class="rules-list">
+              <li>Cada participante rola 1d20 + AGI</li>
+              <li>Ordem decrescente (maior vai primeiro)</li>
+              <li>Empates: AGI maior vai primeiro; se ainda empatado, joga dado</li>
+            </ul>
+          </div>
+          <div class="rules-callout rules-callout-gold">
+            <strong>2. Turno do Personagem</strong>
+            <ul class="rules-list">
+              <li>Use as Ações de Combate disponíveis para: atacar, usar habilidade, mover-se, interagir com objeto</li>
+              <li>Use as Ações de Magia disponíveis para conjurar magias</li>
+              <li>Ações não usadas no turno são perdidas (não acumulam)</li>
+            </ul>
+          </div>
+          <div class="rules-callout rules-callout-blue">
+            <strong>3. Reações (fora do seu turno)</strong>
+            <ul class="rules-list">
+              <li>Quando um inimigo ataca você, gasta uma Reação para executar Ações de Reação</li>
+              <li>Possíveis Ações de Reação: Bloquear (usar escudo/arma), Esquivar (rolar Esquiva), Contra-Atacar</li>
+              <li>Sem Reações sobrando: você não pode reagir — o ataque acerta automaticamente se tiver acerto</li>
+            </ul>
+          </div>
+          <div class="rules-callout rules-callout-green">
+            <strong>4. Ataque</strong>
+            <ul class="rules-list">
+              <li>Role o dado de acerto da arma (varia por arma e habilidade)</li>
+              <li>Compare com a Esquiva do alvo — se igual ou maior, acerta</li>
+              <li>Se acertar: role o dano da arma + dano natural (FOR) + modificadores</li>
+              <li>O alvo reduz o dano recebido pela Defesa correspondente (física ou mágica)</li>
+            </ul>
+          </div>
+        </div>
+      `
+    },
+    {
+      id: "descanso",
+      icon: "🏕",
+      title: "Descanso e Recuperação",
+      content: `
+        <div class="rules-block">
+          <div class="rules-table-wrap">
+            <table class="rules-table">
+              <thead><tr><th>Tipo</th><th>Duração</th><th>O que recupera</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><strong>Descanso Curto</strong></td>
+                  <td>~1 hora</td>
+                  <td>25% do HP máximo; 25% dos Slots de Magia; Fúria/Foco/Fé zerados (resetam)</td>
+                </tr>
+                <tr>
+                  <td><strong>Descanso Longo</strong></td>
+                  <td>8 horas (dormir)</td>
+                  <td>HP máximo completo; Slots de Magia completos; recurso de classe no máximo; Cargas de Veneno do Ladino resetam</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="rules-callout rules-callout-gold">
+            <strong>Condições que interrompem o descanso longo:</strong>
+            <ul class="rules-list">
+              <li>Sofrer qualquer dano durante as 8 horas</li>
+              <li>Conjurar uma magia (exceto magias de vigia acordada)</li>
+              <li>Qualquer combate — mesmo que curto</li>
+            </ul>
+          </div>
+        </div>
+      `
+    },
+    {
+      id: "condicoes",
+      icon: "⚠",
+      title: "Condições",
+      content: `
+        <div class="rules-block">
+          <p class="rules-intro">Condições são estados que afetam o personagem até serem removidas (cura, habilidade, fim de duração ou teste bem-sucedido).</p>
+          <div class="rules-table-wrap">
+            <table class="rules-table">
+              <thead><tr><th>Condição</th><th>Efeito</th><th>Como Remover</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Atordoado</strong></td><td>Perde todas as Ações no próximo turno</td><td>Fim da duração ou Descanso Curto</td></tr>
+                <tr><td><strong>Derrubado</strong></td><td>−1d4 na Esquiva; levantar custa 1 Ação</td><td>Levantar (1 Ação)</td></tr>
+                <tr><td><strong>Envenenado</strong></td><td>Sofre dano por turno (varia); −1d4 em testes</td><td>Antídoto, Clérigo (Purificar), Descanso Longo</td></tr>
+                <tr><td><strong>Sangramento</strong></td><td>Sofre dano por turno (não acumula além do máximo indicado)</td><td>1 Ação (estabilizar) ou cura mágica</td></tr>
+                <tr><td><strong>Amedrontado</strong></td><td>Não pode se aproximar da fonte do medo; −1d4 em testes enquanto a vê</td><td>Sair do campo de visão da fonte; Descanso Longo</td></tr>
+                <tr><td><strong>Dominado</strong></td><td>Age sob controle do conjurador inimigo</td><td>Fim da duração; sofrer dano (teste SAB); cura mágica</td></tr>
+                <tr><td><strong>Paralisado</strong></td><td>Não pode agir nem reagir; Esquiva cai a 0</td><td>Fim da duração; teste SAB no início de cada turno</td></tr>
+                <tr><td><strong>Corrompido</strong></td><td>Sofre 1d6 por turno; 20% de chance de atacar aliados</td><td>Magia sagrada Nv 3+; Clérigo com Purificar</td></tr>
+                <tr><td><strong>Exausto</strong></td><td>−1d4 em todos os testes por 1–2 rodadas</td><td>Fim da duração</td></tr>
+                <tr><td><strong>Inconsciente</strong></td><td>0 Ações; Esquiva 0; pode ser executado (Ataque Fatal)</td><td>Estabilizar (1 HP); cura; Descanso</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `
+    },
+    {
+      id: "itens-equipamento",
+      icon: "🛡",
+      title: "Itens e Equipamento",
+      content: `
+        <div class="rules-block">
+          <div class="rules-callout rules-callout-gold">
+            <strong>Tiers de Item</strong>
+            <ul class="rules-list">
+              <li><span class="rules-badge tier-comum">Comum</span> Itens mundanos, disponíveis em qualquer cidade</li>
+              <li><span class="rules-badge tier-raro">Raro</span> Itens de qualidade excepcional, raramente encontrados</li>
+              <li><span class="rules-badge tier-magico">Mágico</span> Itens com encantamentos — podem ter <em>magicBonus</em> que alteram estatísticas ao equipar</li>
+              <li><span class="rules-badge tier-lendario">Lendário</span> Artefatos com história e poderes únicos — alguns precisam de aprovação do Mestre</li>
+              <li><span class="rules-badge tier-unico">Único</span> Existe apenas um exemplar no mundo</li>
+              <li><span class="rules-badge tier-ancestral">Ancestral</span> Forjados com fragmentos da Batalha Colossal — poder incomparável</li>
+            </ul>
+          </div>
+          <div class="rules-callout rules-callout-blue">
+            <strong>Conjuntos (Sets)</strong>
+            <ul class="rules-list">
+              <li>Itens do mesmo conjunto têm seu nome entre parênteses: <em>Adaga de Ferro (Sanguinária)</em></li>
+              <li>Equipar todas as peças de um conjunto ativa uma habilidade especial exclusiva</li>
+              <li>Itens de conjunto nunca aparecem no wizard de criação — são encontrados durante a aventura</li>
+            </ul>
+          </div>
+          <div class="rules-callout rules-callout-green">
+            <strong>Bônus Mágicos (magicBonus)</strong>
+            <p>Itens Raros+ podem ter bônus que modificam as estatísticas ao ser equipados:</p>
+            <ul class="rules-list">
+              <li><code>actions</code> — +N Ações de Combate por turno</li>
+              <li><code>reactions</code> — +N Reações por rodada</li>
+              <li><code>reactionActions</code> — +N Ações de Reação</li>
+              <li><code>spellActions</code> — +N Ações de Magia</li>
+              <li><code>hp</code> — +N HP máximo</li>
+              <li><code>carry</code> — +N Carga máxima</li>
+              <li><code>attr + attrValue</code> — +N em um atributo (FOR, DEX, AGI, INT ou SAB)</li>
+            </ul>
+          </div>
+        </div>
+      `
+    }
+  ];
+
+  return `
+    <div class="rules-tab">
+      <div class="rules-header">
+        <h2 class="rules-title">📜 Regras da Mesa</h2>
+        <p class="rules-subtitle">Referência rápida das mecânicas do sistema. Toque em uma seção para expandir.</p>
+      </div>
+      <div class="rules-accordion">
+        ${sections.map(s => `
+          <div class="rules-accordion-item">
+            <button class="rules-accordion-trigger" data-rules-id="${s.id}">
+              <span class="rules-section-icon">${s.icon}</span>
+              <span class="rules-section-title">${s.title}</span>
+              <span class="rules-accordion-arrow">▾</span>
+            </button>
+            <div class="rules-accordion-panel">
+              ${s.content}
+            </div>
+          </div>
+        `).join("")}
+      </div>
+    </div>
+  `;
+}
 
 function renderClassTutorials() {
   return Object.keys(CLASSES).map(key => {

@@ -3202,3 +3202,198 @@ main {
   /* Scroll horizontal interno onde necessário */
   .inventory-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 }
+
+/* ================================================================
+   ABA REGRAS DA MESA
+   ================================================================ */
+
+.rules-tab {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.rules-header {
+  text-align: center;
+  padding: 14px 8px 8px;
+}
+.rules-title {
+  font-family: var(--font-heading);
+  font-size: 20px;
+  margin: 0 0 6px;
+  color: var(--ink);
+}
+.rules-subtitle {
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin: 0;
+  font-style: italic;
+}
+
+/* ── Acordeão ──────────────────────────────────────────────── */
+.rules-accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.rules-accordion-item {
+  border: 1.5px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.3);
+}
+.rules-accordion-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 14px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+  -webkit-tap-highlight-color: transparent;
+  min-height: 52px;
+  transition: background 0.15s;
+}
+.rules-accordion-trigger:active { background: rgba(156,122,60,0.08); }
+.rules-accordion-trigger.open   { background: rgba(156,122,60,0.1); border-bottom: 1px solid var(--line); }
+
+.rules-section-icon { font-size: 20px; flex-shrink: 0; }
+.rules-section-title { flex: 1; min-width: 0; }
+.rules-accordion-arrow {
+  flex-shrink: 0;
+  font-size: 13px;
+  color: var(--ink-soft);
+  transition: transform 0.2s;
+}
+.rules-accordion-trigger.open .rules-accordion-arrow { transform: rotate(180deg); }
+
+.rules-accordion-panel {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease;
+}
+.rules-accordion-panel.open { max-height: 99999px; }
+
+/* ── Conteúdo das seções ─────────────────────────────────── */
+.rules-block {
+  padding: 14px 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.rules-intro {
+  font-size: 13.5px;
+  color: var(--ink-soft);
+  margin: 0;
+  line-height: 1.65;
+  font-style: italic;
+}
+
+/* Callouts coloridos */
+.rules-callout {
+  border-radius: 6px;
+  padding: 10px 12px 12px;
+  font-size: 13.5px;
+  line-height: 1.6;
+  border-left: 4px solid;
+}
+.rules-callout strong { display: block; margin-bottom: 5px; font-family: var(--font-heading); font-size: 14px; }
+.rules-callout p      { margin: 4px 0 6px; font-size: 13px; color: var(--ink-soft); }
+.rules-callout code   { font-family: monospace; background: rgba(0,0,0,0.07); padding: 1px 5px; border-radius: 3px; font-size: 12.5px; }
+
+.rules-callout-red   { background: rgba(125,42,46,0.07);  border-color: var(--wax-red); }
+.rules-callout-blue  { background: rgba(40,80,140,0.07);  border-color: #5080c0; }
+.rules-callout-green { background: rgba(60,100,60,0.08);  border-color: var(--rust-green); }
+.rules-callout-gold  { background: rgba(156,122,60,0.1);  border-color: var(--gold); }
+
+/* Listas dentro de callouts */
+.rules-list {
+  margin: 4px 0 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.rules-list li { font-size: 13px; color: var(--ink); line-height: 1.5; }
+.rules-list strong { font-family: var(--font-heading); }
+.rules-list code   { font-family: monospace; background: rgba(0,0,0,0.07); padding: 1px 4px; border-radius: 3px; font-size: 12px; }
+.rules-list em     { color: var(--ink-soft); }
+
+/* Tabelas */
+.rules-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 4px 0; border-radius: 5px; border: 1px solid var(--line); }
+.rules-table { width: 100%; border-collapse: collapse; font-size: 12.5px; min-width: 0; }
+.rules-table th { background: var(--ink); color: var(--parchment); padding: 7px 9px; font-family: var(--font-heading); font-size: 11.5px; text-align: left; white-space: nowrap; }
+.rules-table td { padding: 7px 9px; border-bottom: 1px solid rgba(0,0,0,0.07); color: var(--ink); vertical-align: top; }
+.rules-table tr:last-child td { border-bottom: none; }
+.rules-table tr:nth-child(even) td { background: rgba(0,0,0,0.025); }
+
+/* Grid de atributos */
+.rules-attr-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+@media (min-width: 600px) { .rules-attr-grid { grid-template-columns: repeat(3, 1fr); } }
+.rules-attr-card {
+  background: rgba(255,255,255,0.5);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 10px 10px 12px;
+  font-size: 13px;
+  color: var(--ink);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.rules-attr-badge {
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 700;
+  background: var(--ink);
+  color: var(--parchment);
+  border-radius: 6px;
+  padding: 2px 8px;
+  align-self: flex-start;
+}
+.rules-attr-card strong { font-family: var(--font-heading); font-size: 13.5px; }
+.rules-attr-card .rules-list { padding-left: 14px; }
+.rules-attr-card .rules-list li { font-size: 12px; }
+
+/* Sub-tabela de dano natural */
+.rules-sub-table { display: flex; flex-direction: column; gap: 2px; margin-top: 6px; }
+.rules-sub-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 3px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+  background: rgba(0,0,0,0.04);
+}
+.rules-sub-row-max { background: rgba(125,42,46,0.1); font-weight: 700; color: var(--wax-red-dark); }
+
+/* Badges inline */
+.rules-badge {
+  display: inline-block;
+  font-family: var(--font-heading);
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 8px;
+  margin-right: 3px;
+}
+.diff-1 { background: rgba(106,158,80,0.2); color: #3a6020; }
+.diff-2 { background: rgba(200,160,32,0.2); color: #7a5000; }
+.diff-3 { background: rgba(192,96,26,0.2);  color: #7a3010; }
+.diff-4 { background: rgba(176,48,48,0.2);  color: #7a1010; }
+.diff-5 { background: rgba(107,0,0,0.2);    color: #6b0000; }
+.tier-comum    { background: rgba(120,120,120,0.15); color: #555; }
+.tier-raro     { background: rgba(30,100,170,0.15);  color: #1a5090; }
+.tier-magico   { background: rgba(100,50,150,0.15);  color: #5a2090; }
+.tier-lendario { background: rgba(200,140,20,0.2);   color: #7a5000; }
+.tier-unico    { background: rgba(125,42,46,0.15);   color: var(--wax-red-dark); }
+.tier-ancestral{ background: rgba(20,80,40,0.15);    color: #1a5028; }
