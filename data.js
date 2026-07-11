@@ -475,7 +475,80 @@ const GENERAL_SPELLS = [
 
   { name: "Invocar a Serpente Imortal", level: 5, category: "invocacao",
     effect: "Condição: ritual de 1 turno + 4 de recurso. Apenas em templos de Jurgmund ou Serpentara. Invoca manifestação da Serpente Imortal Grande (HP 150, Def 8/10, Mordida Divina 2d10+1d8+Veneno 2d6/3r, Constrição 1d12/r, Muda Sagrada 1x: recupera 30 HP). Age com 3 Ações e 1 Reação. Dura 5 rodadas.",
-    castTime: "1 turno completo + custo de recurso", cooldown: "1 uso por semana" }
+    castTime: "1 turno completo + custo de recurso", cooldown: "1 uso por semana" },
+
+  /* ── NOVAS MAGIAS NÍVEL 1 — utilitárias e de combate ──────── */
+
+  { name: "Voz do Comando", level: 1, category: "utilidade",
+    effect: "Pronuncia uma única palavra de comando (Cair, Parar, Largar, Fugir, Dormir) em voz alta. Um alvo visível a até 6 hex com INT ≤ 1 obedece instantaneamente sem teste. Alvos com INT 2+ testam SAB (normal) — se falharem, agem de acordo com o comando por 1 rodada. Criaturas do Deus Marcado são imunes.",
+    castTime: "1 Ação (instantânea)", cooldown: "3 usos por combate" },
+
+  { name: "Escudo de Faíscas", level: 1, category: "defesa",
+    effect: "Conjura um campo de faíscas ao redor do conjurador. Qualquer atacante que acertar corpo a corpo leva 1d4 de dano elétrico automaticamente (sem teste). Dura 3 rodadas ou até ser derrubado por 10+ de dano em um único golpe.",
+    castTime: "1 Ação (instantânea)", cooldown: "3 usos por combate" },
+
+  { name: "Chama Livre", level: 1, category: "ataque",
+    effect: "Projeta uma chama pequena a até 6 hex. Dano: 1d6 de fogo. Objetos inflamáveis atingidos pegam fogo. Se o alvo for de madeira, palha ou tecido, causa 1d6 extra. Não pode ser bloqueado por escudos.",
+    castTime: "1 Ação (instantânea)", cooldown: "Ilimitado" },
+
+  { name: "Mão de Gelo", level: 1, category: "ataque/controle",
+    effect: "Toque: aplica 1d4 de dano de frio e reduz o Movimento do alvo em 2 por 2 rodadas (o frio enrijece). Resistência SAB (normal) anula a redução de Movimento mas não o dano.",
+    castTime: "1 Ação (instantânea)", cooldown: "4 usos por combate" },
+
+  { name: "Salto Arcano", level: 1, category: "mobilidade",
+    effect: "O conjurador salta até 5 hex em linha reta, ignorando terreno difícil no percurso. Pode ser usado no próprio turno como deslocamento ou como Ação de Reação para sair de alcance antes de um ataque ser resolvido (custa 1 Reação).",
+    castTime: "1 Ação / 1 Reação", cooldown: "3 usos por combate" },
+
+  { name: "Sussurro Arcano", level: 1, category: "utilidade",
+    effect: "Transmite uma mensagem de até 30 palavras para qualquer pessoa visível, sem emitir som. A mensagem chega como pensamento. Se usado em combate, pode transmitir ordem tática a aliados sem revelar posição. Alcance: visão direta.",
+    castTime: "1 Ação de Magia", cooldown: "Ilimitado" },
+
+  { name: "Veneno de Contato", level: 1, category: "ataque",
+    effect: "Toque: aplica veneno fraco ao alvo. 1d4 de dano por rodada por 3 rodadas. Resistência SAB (normal) encerra o efeito. Pode ser aplicado em uma arma antes do combate — o próximo acerto com ela aplica o veneno sem custo de Ação adicional (1 uso).",
+    castTime: "1 Ação de Magia", cooldown: "4 usos por combate" },
+
+  { name: "Marca do Alvo", level: 1, category: "suporte",
+    effect: "Marca um alvo visível com um glifo invisível (detectável por Arcanismo). Enquanto marcado, todos os aliados que atacarem o alvo ganham +1d4 de dano. A marca dura 4 rodadas ou até o alvo atingir 0 HP. Apenas um alvo pode estar marcado por conjurador por vez.",
+    castTime: "1 Ação de Magia", cooldown: "3 usos por combate" },
+
+  { name: "Raio Fragmentado", level: 1, category: "ataque",
+    effect: "Dispara 2 raios arcanos menores. Cada raio causa 1d4 de dano e pode atingir alvos diferentes (até 8 hex). Role o acerto separado para cada raio. Se ambos atingirem o mesmo alvo, ele fica com −1d4 na Defesa Mágica por 1 rodada (raios simultâneos desorientam).",
+    castTime: "1 Ação de Magia", cooldown: "Ilimitado" },
+
+  /* ── NOVAS MAGIAS NÍVEL 2 — mais poderosas ────────────────── */
+
+  { name: "Onda de Impacto", level: 2, category: "ataque/controle",
+    effect: "Gera uma onda de força em cone de 3 hex de comprimento. Todos os alvos no cone sofrem 1d8 de dano contundente e são Empurrados 2 hex para trás. Resistência FOR (normal) anula o empurrão mas não o dano. Pode derrubar alvos menores (tamanho pequeno) automaticamente.",
+    castTime: "1 Ação de Magia", cooldown: "3 usos por combate" },
+
+  { name: "Nuvem de Névoa", level: 2, category: "controle/tática",
+    effect: "Cria uma área densa de névoa em raio 4 hex ao redor de um ponto escolhido. Visão dentro da névoa fica limitada a 1 hex. Atacantes na névoa têm −1d6 na Chance de Acerto. Dura 4 rodadas ou até vento forte (vento natural não a dissipa — apenas ventanias ou magia de ar).",
+    castTime: "1 Ação de Magia", cooldown: "2 usos por combate" },
+
+  { name: "Âncora Arcana", level: 2, category: "controle",
+    effect: "Escolhe um alvo visível a até 8 hex. Por 3 rodadas, o alvo não pode se mover mais de 2 hex por turno (como se estivesse carregando peso extremo). Resistência FOR (difícil) cancela. Não afeta criaturas voadoras nem etéreas.",
+    castTime: "1 Ação de Magia", cooldown: "2 usos por combate" },
+
+  { name: "Toque Curativo", level: 2, category: "cura",
+    effect: "Cura 2d6 + SAB HP em um aliado tocado. Se o alvo estiver abaixo de 25% do HP máximo, a cura é dobrada (4d6 + SAB). Pode estabilizar automaticamente um aliado inconsciente sem rolar testes.",
+    castTime: "1 Ação de Magia", cooldown: "3 usos por combate" },
+
+  { name: "Armadura de Vento", level: 2, category: "defesa",
+    effect: "Envolve o alvo tocado em correntes de vento por 3 rodadas: +1d6 na Esquiva e projéteis à distância têm 30% de chance de ser desviados (rola 1d10 — em 1, 2 ou 3, o projétil erra automaticamente). Não afeta ataques corpo a corpo.",
+    castTime: "1 Ação de Magia", cooldown: "2 usos por combate" },
+
+  { name: "Terreno Traiçoeiro", level: 2, category: "controle/tática",
+    effect: "Encanta uma área de 3x3 hex por 4 rodadas. Qualquer criatura que se mover dentro da área gasta 1 Ação extra de Movimento por hex (terreno extremamente difícil) e testa AGI (normal) ou fica Derrubada ao entrar. Aliados designados pelo conjurador são imunes.",
+    castTime: "1 Ação de Magia", cooldown: "2 usos por combate" },
+
+  { name: "Drenar Energia", level: 2, category: "ataque/suporte",
+    effect: "Toque ou alcance de 4 hex: drena 1d8 de HP do alvo e transfere metade (arredondado para baixo) para o conjurador como cura. Resistência SAB (difícil) anula a cura do conjurador mas não o dano. Criaturas do Deus Marcado sofrem 1d8 extra.",
+    castTime: "1 Ação de Magia", cooldown: "3 usos por combate" },
+
+  { name: "Glifo de Alarme", level: 2, category: "utilidade/defesa",
+    effect: "Traça um glifo invisível em uma superfície tocada. Quando uma criatura não-designada cruzar o glifo, ele explode causando 2d6 de dano e aplicando Atordoado por 1 rodada (Resistência SAB normal cancela o Atordoado mas não o dano). O glifo pode ser preparado antes do combate e dura até 8 horas ou ser disparado.",
+    castTime: "1 Ação de Magia (armadilha prévia) ou 2 Ações (combate)", cooldown: "2 usos por sessão" }
+
 ];
 
 /* ---------------------------------------------------------------------- */
@@ -539,7 +612,28 @@ const WEAPONS_ONE_HAND = [
     story: "Arma criada no momento exato de um eclipse que ocorreu durante a Grande Invasão de Atrelon. O ferreiro morreu no processo — a espada absorveu sua alma. O espírito ainda sussurra estratégias de batalha ao portador durante combates.",
     note: "Passivo: +1d8 de dano contra mortos-vivos e entidades de outro plano. Uma vez por combate: ataque extra gratuito ao reduzir um inimigo a 0 HP. Não degrada a Defesa enquanto equipada." },
 
-  /* --- ÚNICOS (novos) --- */
+  
+  /* ── Raros com alto dano e desvantagens de balanceamento ── */
+  { tier: "raro", name: "Machado da Ira Cega", dmg: "2d8 + 1d6", req: "FOR", weight: 6, defenseDegrade: 3, slot: ["primary"],
+    story: "Forjado de ferro vulcânico de Karloth, a lâmina emite calor leve e canta um som grave ao cortar o ar.",
+    note: "⚠ Após usar esta arma para atacar, você perde 1 Ação de Combate no próximo turno (o peso desequilibra). Compensa em dano bruto." },
+  { tier: "raro", name: "Lâmina do Sangramento Vivo", dmg: "1d10 + 1d8", req: "DEX", weight: 3, defenseDegrade: 1, slot: ["primary","secondary"],
+    story: "Espada com entalhes que retêm sangue do portador. Quando ativada, o sangue cobre a lâmina e amplifica o dano.",
+    note: "⚠ Para usar o dado extra (1d8), o portador sofre 1d4 de dano a si mesmo antes de atacar. Se preferir, causa só 1d10 sem custo." },
+  { tier: "raro", name: "Punhal da Abertura Vital", dmg: "2d6 + 1d4", req: "DEX/AGI", weight: 1, defenseDegrade: 2, slot: ["primary","secondary"],
+    story: "Lâmina triangular que cria feridas que não fecham. Artesanato de um assassino que estudou anatomia por décadas.",
+    note: "⚠ Acertos causam Sangramento (1d6/rodada, 3 rodadas). Em Falha Crítica (1 natural), o portador sofre o sangramento em si mesmo." },
+  { tier: "raro", name: "Maul da Pedra Viva", dmg: "2d10", req: "FOR alta", weight: 15, defenseDegrade: null, slot: ["primary"], heavyTwoHanded: true,
+    story: "Maul talhado de uma única pedra das Montanhas de Atrelon. Mais pesado que qualquer arma forjada.",
+    note: "⚠ Usa DUAS Ações de Combate por ataque. Em compensação, ignora 3 pontos de Defesa Física do alvo." },
+  { tier: "raro", name: "Espada do Eco Duplo", dmg: "1d10 + 1d8", req: "AGI/DEX", weight: 3, defenseDegrade: 1, slot: ["primary","secondary"],
+    story: "Espada com lâmina vibrante que ressoa na segunda passagem. O segundo golpe aproveita o eco cinético do primeiro.",
+    note: "⚠ Uma vez por turno, ao acertar, pode atacar o mesmo alvo imediatamente sem custo de Ação (metade do dano, sem rolar). Se errar o segundo ataque, perde 1 Reação nesta rodada." },
+  { tier: "raro", name: "Cutelo da Exaustão", dmg: "2d6 + 1d6", req: "FOR/DEX", weight: 5, defenseDegrade: 2, slot: ["primary","secondary"],
+    story: "Lâmina larga que drena energia do alvo. Útil contra criaturas resistentes — pesado demais para combates longos.",
+    note: "⚠ Cada acerto aplica Exaustão Leve ao alvo (−1 Ação por 2 rodadas, máx −2). Após 4 ataques com esta arma no mesmo combate, o portador perde 1 Ação de Combate até o fim." },
+
+/* --- ÚNICOS (novos) --- */
   { tier: "unico", name: "Garras da Alcateia", dmg: "1d12 + 1d12 + 1d6", req: "AGI/FOR", weight: 2, defenseDegrade: 1, slot: ["primary","secondary"],
     story: "Par de garras rituais criadas com as unhas de um Alfa do Vazio — criatura entre o mundo e o plano do Deus Marcado. Nenhum humano sobreviveu ao forjamento mais de uma vez. As garras reconhecem quem tem o Sangue da Marca.",
     uniqueAbility: "Uivo da Alcateia (1x/combate): ao acertar um ataque, o portador emite um uivo sobrenatural. Todos os aliados em até 6 hexágonos podem realizar imediatamente um ataque extra gratuito contra o mesmo alvo ou qualquer inimigo adjacente a eles. Os ataques extras usam o dano natural de cada aliado.",
@@ -621,6 +715,17 @@ const WEAPONS_TWO_HAND = [
     magicBonus: { actions: 2, reactions: 1 },
     story: "Réplica encantada da lança do Herói Arqueiro Ferrath. O original foi destruído na Batalha Colossal, mas forjadores de Arcath conseguiram recriar parte do encantamento estudando fragmentos encontrados nas planícies.",
     note: "+2 Ações de Combate e +1 Reação por rodada. Ataques com esta lança alcançam 3 hexágonos em corpo a corpo e 12 hexágonos como arma arremessada (retorna ao portador)." },
+
+  /* ── Raros 2M com alto dano e desvantagens ── */
+  { tier: "raro", name: "Alabarda do Vento Cortante", dmg: "1d12 + 1d10", req: "FOR/AGI", weight: 8, defenseDegrade: null, slot: ["primary"], heavyTwoHanded: true,
+    story: "Lâmina em crescente que cria vácuo de ar ao girar. O giro é poderoso demais para ser controlado com precisão.",
+    note: "⚠ Ataques atingem uma área de arco (até 2 inimigos adjacentes com uma Ação), mas o portador não pode usar Reações na rodada em que atacar com esta arma — o giro o desprotege completamente." },
+  { tier: "raro", name: "Claymore do Colapso", dmg: "2d8 + 1d8", req: "FOR alta", weight: 10, defenseDegrade: null, slot: ["primary"], heavyTwoHanded: true,
+    story: "Espada de duas mãos com lâmina que aumenta de peso ao descer — a inércia é brutal mas incontrolável.",
+    note: "⚠ Após cada ataque (acerto ou erro), o portador move-se obrigatoriamente 1 hexágono na direção do alvo (sem custo de Ação, mas involuntário). Se houver parede/obstáculo, para. Se acertar, o alvo é Derrubado automaticamente além do dano." },
+  { tier: "raro", name: "Bazão da Cobra Invertida", dmg: "1d12 + 1d8", req: "INT/SAB", weight: 4, defenseDegrade: null, slot: ["primary"], heavyTwoHanded: true,
+    story: "Cajado de um sacerdote de Jurgmund que inverteu os rituais — canaliza veneno em vez de cura. O símbolo da cobra está de cabeça para baixo.",
+    note: "⚠ Magias conjuradas com este cajado adicionam +1d8 de veneno ao dano ou +1d8 à cura. MAS uma vez por combate, ao rolar 1 natural em qualquer teste enquanto o cajado está equipado, o veneno vaza e o portador sofre 1d8 de veneno (não evitável)." },
 
   /* --- ÚNICOS --- */
   { tier: "unico", name: "Cajado da Tormenta", dmg: "1d10 + 1d6", req: "INT", weight: 5, defenseDegrade: null, slot: ["primary"],
@@ -819,7 +924,21 @@ const ARMORS = [
   { tier: "unico", name: "Couraça do Aralto Capturado", physDefense: 8, magDefense: 8, weight: 12, movePenalty: 1, req: "FOR/INT",
     story: "Armadura forjada com o fragmento da essência de um Aralto capturado e neutralizado — a primeira vez na história que isso aconteceu. O processo foi longo e perigoso; metade dos artesãos não sobreviveu. A armadura retém algo da natureza entre-planos do Aralto: quem a veste é parcialmente visível em ambos os planos simultaneamente.",
     uniqueAbility: "Forma Liminar (1x/dia, 4 rodadas): o portador existe em dois planos simultaneamente. Efeitos: ataques físicos têm 35% de chance de atravessar o portador sem causar dano; o portador pode ver e atacar criaturas invisíveis ou espectrais normalmente; criaturas do Deus Marcado testam SAB (difícil) ao início de cada turno ou ficam Aterrorizadas pelo portador por 1 rodada.",
-    note: "Passivo: imune a efeitos de Corrupção da Marca. Detecta presença de Araltos em raio 50m (o portador sente um formigamento no pescoço)." }
+    note: "Passivo: imune a efeitos de Corrupção da Marca. Detecta presença de Araltos em raio 50m (o portador sente um formigamento no pescoço)." },
+  /* ── Raras com tradeoffs ── */
+  { tier: "raro", name: "Armadura de Osso Reforçado", physDefense: 7, magDefense: 0, weight: 14, movePenalty: 2, req: "FOR",
+    story: "Placas de osso de criatura colossal, reforçadas com metal. Extremamente resistente mas pesada e sem proteção mágica alguma.",
+    note: "⚠ Defesa Física alta mas −2 em Movimento e vulnerabilidade mágica: dano mágico é aumentado em +1d4 (o osso conduz energia mágica)." },
+  { tier: "raro", name: "Malha do Reflexo Invertido", physDefense: 4, magDefense: 4, weight: 7, movePenalty: 0, req: "AGI",
+    story: "Malha encantada que absorve energia cinética e a redistribui — mas a redistribuição não é sempre previsível.",
+    note: "⚠ Ao receber dano, rola 1d4: (1) 50% do dano é refletido ao atacante; (2-3) funciona normalmente; (4) o portador sofre +1d4 extra (o encantamento sobrecarrega). Defesa equilibrada mas imprevisível." },
+  { tier: "raro", name: "Couro do Predador", physDefense: 3, magDefense: 2, weight: 4, movePenalty: -1, req: "AGI",
+    story: "Couro de uma criatura das planícies que caçava em silêncio absoluto. Ao vestir, o portador herda parte do instinto do animal.",
+    note: "+1 Movimento (movePenalty negativo = bônus). +1d6 em testes de Furtividade. MAS o portador fica levemente mais agressivo — ao receber dano em combate, faz Teste de Força de Vontade (normal) ou usa sua próxima Ação para atacar o agressor (não para mover ou usar habilidade)." },
+  { tier: "raro", name: "Placa do Guardião Imóvel", physDefense: 9, magDefense: 1, weight: 20, movePenalty: 3, req: "FOR alta",
+    story: "A armadura mais pesada que pode ser forjada sem magia. Um guerreiro que a usa é uma fortaleza — que não se move.",
+    note: "⚠ Defesa Física máxima para tier raro, mas −3 Movimento e imobilidade parcial: se o portador não se mover neste turno, ganha +2 de Defesa Física adicional (bônus passivo de posição). Ideal para tanques que seguram linha." },
+
 ];
 
 const ACCESSORIES = [
@@ -946,6 +1065,31 @@ const ACCESSORIES = [
     effect: "+2 Ações de Combate, +2 Ações de Reação e +2 Movimento por rodada.",
     story: "Criadas por um Aralto que foi capturado e convertido — um raro caso de redenção. O ex-Aralto usou o conhecimento de movimento do Vazio para criar botas que permitem ao portador mover-se com a velocidade que os servos do Deus Marcado usavam para fugir. Foram deixadas como legado para 'aqueles que precisam alcançar o que o mal alcança'.",
     note: "Passivo: o portador nunca provoca Ataques de Oportunidade ao se mover." },
+
+  /* ── Raros com tradeoffs ── */
+  { tier: "raro", name: "Anel do Eco de Sangue", weight: 0.1,
+    effect: "Uma vez por combate, quando reduzido a ≤ 25% HP, os próximos 2 ataques causam +1d10 de dano extra (raiva desesperada). Mas ao ativar, perde todas as Reações nesta rodada.",
+    story: "Anel com pedra vermelha que pulsa quando o portador está perto da morte. Encontrado no cadáver de um gladiador que venceu 40 combates antes de perder o 41°." },
+  { tier: "raro", name: "Amuleto da Memória de Batalha", weight: 0.3,
+    effect: "Passivo: o portador nunca esquece a sequência de ataques que recebeu — após sofrer 2 ataques do mesmo inimigo, ganha +1d4 na Esquiva contra aquele inimigo específico pelo resto do combate. MAS o amuleto consome atenção: −1 em testes de Percepção durante todo o combate enquanto está focando no padrão.",
+    story: "Amuleto com fragmento de espelho dentro do cristal — literalmente para 'enxergar os seus erros'. Criado por um duelista que sobreviveu ao primeiro golpe de todo combate por 20 anos." },
+  { tier: "raro", name: "Cinto da Sobrecarga Controlada", weight: 0.5,
+    magicBonus: { carry: 15 },
+    effect: "+15 de Carga máxima. Uma vez por sessão, pode carregar o dobro do peso normal por 1 hora sem penalidade. Após a hora, fica Exausto (−1d4 em todos os testes) por 30 minutos.",
+    story: "Cinto de anões da Cidadela do Casco, projetado para as corridas de evacuação durante os mergulhos de Magnalaga. Funciona em surtos." },
+  { tier: "raro", name: "Luvas do Golpe Certeiro", weight: 0.4,
+    effect: "Uma vez por turno, ao usar a primeira Ação de Combate para atacar, pode re-rolar o dado de acerto e usar o melhor resultado. MAS se ambos os resultados forem falha, a luva 'trava' — não pode usar esta habilidade novamente até o fim do combate.",
+    story: "Luvas com mecanismo de mola na palma que aumenta a velocidade do primeiro soco ou golpe. Xingadas por seus donos tanto quanto amadas." },
+  { tier: "raro", name: "Botas do Passo Tardio", weight: 0.9,
+    effect: "+2 Movimento. Uma vez por turno, pode mover-se como Ação de Reação (fora do turno) para sair do alcance de um ataque antes que ele seja resolvido. MAS usar o Passo Tardio custa 1 Ação de Combate do seu próximo turno.",
+    story: "Botas com solas encantadas para reagir ao perigo — mas o encantamento é antiquado e lento para se 'recarregar', custando energia do próximo turno." },
+  { tier: "raro", name: "Capuz do Predador Noturno", weight: 0.5,
+    effect: "Visão no escuro (enxerga até 10 hex em escuridão total). +1d6 em Furtividade. MAS em ambientes bem iluminados (luz solar ou mágica intensa), −1d4 em Percepção e Acerto (sensibilidade à luz).",
+    story: "Capuz de um caçador que viveu nas cavernas sob as Montanhas de Atrelon por décadas. Os olhos se adaptaram. O portador herda a adaptação — e o custo." },
+  { tier: "raro", name: "Elmo do Ódio Canalizado", weight: 2,
+    magicBonus: { hp: 8 },
+    effect: "+8 HP máximo. Passivo: ao receber qualquer dano, o próximo ataque do portador neste turno (ou no seguinte, se já atacou) adiciona +1d6 de dano. A raiva alimenta o golpe. MAS o portador tem −1d4 em testes de Força de Vontade enquanto o elmo está equipado — a raiva é difícil de controlar.",
+    story: "Elmo com viseira que projeta a silhueta de quem causou dano. Portadores relatam que parece 'ensinar' quem merece sofrer em seguida." },
 
   /* --- ÚNICOS (novos) --- */
   { tier: "unico", name: "Olho de Jurgmund", weight: 0.1, effect: "Substitui um olho do portador permanentemente. Vê no escuro absoluto, vê através de invisibilidade e ilusão, e detecta mentiras automaticamente. Uma vez por dia: lança 'Visão do Abismo' — olha para além do plano físico por 1 minuto, vendo espíritos, entidades e segredos que o mundo material esconde.",
@@ -1088,6 +1232,7 @@ const SKILL_TESTS = [
   /* ---- Físico e Força ---- */
   { name: "Atletismo",          icon: "💪",  attrKeys: ["FOR","AGI"],  desc: "Escalar, nadar, correr longas distâncias e arrombar portas.", learned: false },
   { name: "Resistência",        icon: "🦾",  attrKeys: ["FOR"],        desc: "Resistir a venenos, fadiga extrema e efeitos físicos debilitantes.", learned: false },
+  { name: "Força de Vontade",   icon: "🧠",  attrKeys: ["INT","FOR"],  desc: "Resistir a efeitos mentais, manter-se firme sob pressão extrema e superar a exaustão pela determinação. Combina disciplina mental (INT) com teimosia física (FOR).", example: "Resistir ao domínio de um Aralto que tenta controlar sua mente, ou continuar lutando com 1 HP por pura obstinação.", learned: false },
   { name: "Briga",              icon: "👊",  attrKeys: ["FOR","AGI"],  desc: "Lutar sem armas: socas, agarrões, chaves e quedas.", learned: false },
 
   /* ---- Combate: Geral ---- */
