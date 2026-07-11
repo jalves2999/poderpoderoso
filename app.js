@@ -3070,9 +3070,9 @@ function initSkillPicker(character, cls) {
   const combatSkillNames = new Set(SKILL_TESTS.filter(t => t.combat).map(t => t.name));
 
   // Montar catálogo completo de aprendíveis
-  const classItems    = cls ? cls.skillsClass.filter(s => !knownClass.includes(s.name)).map(s => ({ ...s, _type: "class",   _typeLabel: "Perícia de Classe",  _attr: s.attr })) : [];
-  const generalItems  = GENERAL_SKILLS.filter(s => !knownGeneral.includes(s.name)).map(s => ({ ...s, _type: "general", _typeLabel: "Perícia Geral",      _attr: s.attr }));
-  const combatItems   = SKILL_TESTS.filter(t => t.combat && !allKnown.includes(t.name)).map(t => ({ name: t.name, desc: t.desc || t.combatDesc || "", _type: "combat",  _typeLabel: "Perícia de Combate", _attr: t.attrKeys.join("+"), _icon: t.icon }));
+  const classItems    = cls ? cls.skillsClass.filter(s => !knownClass.includes(s.name)).map(s => ({ ...s, _type: "class",   _typeLabel: "Perícia de Classe",  _attr: s.attr, example: s.example })) : [];
+  const generalItems  = GENERAL_SKILLS.filter(s => !knownGeneral.includes(s.name)).map(s => ({ ...s, _type: "general", _typeLabel: "Perícia Geral",      _attr: s.attr, example: s.example }));
+  const combatItems   = SKILL_TESTS.filter(t => t.combat && !allKnown.includes(t.name)).map(t => ({ name: t.name, desc: t.combatDesc || t.desc || "", _type: "combat",  _typeLabel: "Perícia de Combate", _attr: t.attrKeys.join("+"), _icon: t.icon }));
   const allItems = [...classItems, ...generalItems, ...combatItems];
 
   let skillFilters = { type: "", search: "" };
@@ -3145,6 +3145,19 @@ function initSkillPicker(character, cls) {
     const desc = s.desc || s.description || s.effect || "";
     const example = s.example ? `<p class="learn-preview-example"><em>Exemplo: ${escapeHTML(s.example)}</em></p>` : "";
     const cost = s.cost ? `<div class="learn-preview-meta"><span>Custo: ${escapeHTML(s.cost)}</span></div>` : "";
+
+    // Para perícias de combate, mostrar também os valores N/D/C calculados
+    let combatValuesHTML = "";
+    if (s._type === "combat") {
+      const fullTest = SKILL_TESTS.find(t => t.name === s.name);
+      if (fullTest) {
+        const char = arguments[1] || null; // passa character se disponível
+        combatValuesHTML = `<div class="learn-preview-meta" style="gap:6px;">
+          <span style="font-size:11px;color:var(--ink-soft);">Atributos: <strong>${fullTest.attrKeys.join(" + ")}</strong></span>
+        </div>`;
+      }
+    }
+
     el.classList.remove("hidden");
     el.innerHTML = `
       <div class="learn-preview-header">
@@ -3153,6 +3166,7 @@ function initSkillPicker(character, cls) {
       </div>
       ${s._attr ? `<div class="learn-preview-meta"><span>Atributo: <strong>${s._attr}</strong></span></div>` : ""}
       ${desc ? `<p class="learn-preview-effect">${escapeHTML(desc)}</p>` : ""}
+      ${combatValuesHTML}
       ${example}${cost}`;
   };
 
