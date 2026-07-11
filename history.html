@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>História do Mundo — Grimório de Personagens</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { margin: 0; min-height: 100vh; }
+
+    /* ── Toolbar ─────────────────────────────────────────────── */
+    .hist-toolbar {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 14px;
+      background: var(--parchment);
+      border-bottom: 2px solid var(--line);
+      position: sticky; top: 0; z-index: 30;
+      backdrop-filter: blur(4px);
+    }
+    .hist-back {
+      font-family: var(--font-heading); font-size: 13px;
+      color: var(--ink-soft); background: none; border: none;
+      cursor: pointer; padding: 8px 4px; text-decoration: none;
+      min-height: 44px; display: flex; align-items: center;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .hist-title { font-family: var(--font-heading); font-size: 17px; margin: 0; color: var(--ink); flex: 1; }
+
+    /* ── Content ─────────────────────────────────────────────── */
+    .hist-content { padding: 12px 12px 48px; display: flex; flex-direction: column; gap: 8px; }
+
+    /* ── Acordeão nível 1 — Seções principais ────────────────── */
+    .hist-section-block { border-radius: 8px; overflow: hidden; border: 1.5px solid var(--line); }
+
+    .hist-section-trigger {
+      width: 100%; display: flex; align-items: center; gap: 10px;
+      padding: 13px 14px; background: none; border: none; cursor: pointer;
+      font-family: var(--font-heading); font-size: 15px; font-weight: 700;
+      color: var(--ink); text-align: left; min-height: 52px;
+      background: linear-gradient(135deg, rgba(156,122,60,0.12), rgba(248,243,232,0.8));
+      -webkit-tap-highlight-color: transparent;
+    }
+    .hist-section-trigger.open { border-bottom: 1px solid var(--line); }
+    .hist-section-icon { font-size: 22px; flex-shrink: 0; }
+    .hist-section-name { flex: 1; }
+    .hist-arrow { margin-left: auto; flex-shrink: 0; font-size: 13px; color: var(--ink-soft); transition: transform 0.2s; }
+    .hist-section-trigger.open .hist-arrow { transform: rotate(180deg); }
+
+    .hist-section-panel { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; }
+    .hist-section-panel.open { max-height: 99999px; }
+
+    /* ── Acordeão nível 2 — Entradas ────────────────────────── */
+    .hist-entry-block { border-top: 1px solid rgba(0,0,0,0.06); }
+    .hist-entry-trigger {
+      width: 100%; display: flex; align-items: center; gap: 10px;
+      padding: 10px 14px 10px 20px; background: none; border: none;
+      cursor: pointer; font-family: var(--font-heading); font-size: 13.5px;
+      color: var(--ink); text-align: left; min-height: 46px;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .hist-entry-trigger.open { background: rgba(248,243,232,0.7); }
+    .hist-entry-badge {
+      font-family: var(--font-heading); font-size: 10px;
+      padding: 2px 8px; border-radius: 8px; flex-shrink: 0;
+    }
+    .hist-badge-era    { background: rgba(90,60,120,0.18); color: #4a2a7a; }
+    .hist-badge-evento { background: rgba(156,122,60,0.2); color: #7a5c10; }
+    .hist-badge-main   { background: rgba(125,42,46,0.18); color: var(--wax-red-dark); }
+    .hist-badge-side   { background: rgba(60,100,156,0.15); color: #2a4a8a; }
+
+    .hist-entry-name { flex: 1; min-width: 0; overflow-wrap: break-word; }
+    .hist-entry-panel { background: rgba(255,255,255,0.5); max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+    .hist-entry-panel.open { max-height: 99999px; }
+
+    /* ── Blocos de conteúdo dentro de entradas ─────────────── */
+    .hist-body { padding: 12px 14px 16px; display: flex; flex-direction: column; gap: 10px; }
+
+    .hist-lore {
+      font-size: 13.5px; color: var(--ink); line-height: 1.7;
+      border-left: 3px solid var(--gold); padding: 8px 10px;
+      background: rgba(58,42,29,0.04); border-radius: 0 4px 4px 0;
+    }
+    .hist-lore p { margin: 0 0 8px; }
+    .hist-lore p:last-child { margin: 0; }
+
+    .hist-field-row {
+      display: flex; flex-direction: column; gap: 3px;
+      padding: 7px 9px; background: rgba(255,255,255,0.5);
+      border-radius: 4px; font-size: 13px; color: var(--ink);
+    }
+    .hist-field-label {
+      font-family: var(--font-label); font-size: 9.5px;
+      text-transform: uppercase; letter-spacing: 0.4px; color: var(--gold);
+    }
+    .hist-field-alert { background: rgba(125,42,46,0.07); border-left: 2px solid var(--wax-red); }
+    .hist-field-green { background: rgba(60,100,60,0.07); border-left: 2px solid var(--rust-green); }
+    .hist-field-blue  { background: rgba(40,80,140,0.07); border-left: 2px solid #5080c0; }
+    .hist-field-purple{ background: rgba(90,60,120,0.08); border-left: 2px solid #7060b0; }
+
+    .hist-section-title {
+      font-family: var(--font-heading); font-size: 11px;
+      text-transform: uppercase; letter-spacing: 0.4px;
+      color: var(--ink-soft); padding-bottom: 4px;
+      border-bottom: 1px dashed var(--line); margin-top: 4px;
+    }
+    .hist-list {
+      margin: 4px 0 0; padding-left: 18px; font-size: 13px;
+      color: var(--ink); line-height: 1.8; display: flex;
+      flex-direction: column; gap: 3px;
+    }
+    .hist-list li { overflow-wrap: break-word; }
+
+    /* Monstros possíveis */
+    .hist-monsters { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+    .hist-monster-chip {
+      font-family: var(--font-heading); font-size: 11px;
+      padding: 3px 9px; border-radius: 10px; border: 1px solid;
+    }
+    .diff-chip-1 { background: rgba(106,158,80,0.15); color: #3a6020; border-color: rgba(106,158,80,0.3); }
+    .diff-chip-2 { background: rgba(200,160,32,0.15); color: #7a5000; border-color: rgba(200,160,32,0.3); }
+    .diff-chip-3 { background: rgba(192,96,26,0.15);  color: #7a3010; border-color: rgba(192,96,26,0.3); }
+    .diff-chip-4 { background: rgba(176,48,48,0.15);  color: #7a1010; border-color: rgba(176,48,48,0.3); }
+    .diff-chip-5 { background: rgba(107,0,0,0.15);    color: #6b0000; border-color: rgba(107,0,0,0.3); }
+
+    /* Recompensas */
+    .hist-rewards { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+    .hist-reward-chip {
+      font-family: var(--font-heading); font-size: 11px;
+      padding: 3px 9px; border-radius: 10px;
+      background: rgba(156,122,60,0.14); color: #7a5c10;
+      border: 1px solid rgba(156,122,60,0.3);
+    }
+
+    /* Missão principal: borda especial */
+    .hist-mission-main > .hist-entry-trigger { background: rgba(125,42,46,0.05); }
+    .hist-mission-main > .hist-entry-trigger.open { background: rgba(125,42,46,0.1); }
+
+    /* Maldição especial */
+    .hist-curse-block {
+      background: rgba(90,60,120,0.08);
+      border: 1.5px solid rgba(90,60,120,0.3);
+      border-radius: 6px; padding: 12px 14px;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .hist-curse-title {
+      font-family: var(--font-heading); font-size: 14px;
+      font-weight: 700; color: #4a2a7a;
+    }
+    .hist-curse-stage {
+      padding: 7px 9px; border-radius: 5px;
+      font-size: 13px; color: var(--ink); line-height: 1.5;
+    }
+    .hist-curse-stage-1 { background: rgba(200,160,32,0.12); border-left: 3px solid #c8a020; }
+    .hist-curse-stage-2 { background: rgba(192,96,26,0.12);  border-left: 3px solid #c06010; }
+    .hist-curse-stage-3 { background: rgba(125,42,46,0.12);  border-left: 3px solid var(--wax-red); }
+    .hist-curse-stage-num { font-family: var(--font-heading); font-size: 10px; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 2px; }
+
+    /* Caixa do Mestre */
+    .hist-master-box {
+      background: rgba(40,80,140,0.06); border: 1px solid rgba(40,80,140,0.2);
+      border-radius: 6px; padding: 10px 12px;
+    }
+    .hist-master-box-title { font-family: var(--font-heading); font-size: 11px; color: #2a4a8a; text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 6px; }
+
+    @media (min-width: 640px) {
+      .hist-content { padding: 16px 20px 48px; gap: 10px; }
+      .hist-body { padding: 14px 18px; }
+    }
+  </style>
+</head>
+<body>
+<div style="display:flex;flex-direction:column;min-height:100vh;">
+
+  <header class="hist-toolbar">
+    <a href="index.html" class="hist-back">← Grimório</a>
+    <h1 class="hist-title">🗺 História do Mundo</h1>
+  </header>
+
+  <div class="hist-content">
+    <div id="history-container">
+      <p style="text-align:center;color:var(--ink-soft);padding:20px;">Carregando…</p>
+    </div>
+  </div>
+
+</div>
+<script src="data.js"></script>
+<script src="history.js"></script>
+</body>
+</html>

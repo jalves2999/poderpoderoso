@@ -1292,6 +1292,10 @@ function openLocations() {
   window.open("locations.html", "_blank");
 }
 
+function openHistory() {
+  window.open("history.html", "_blank");
+}
+
 function openGlossary() {
   currentGlossaryTab = "classes";
   document.querySelectorAll("#glossary-tabs .tab-btn").forEach(b => b.classList.toggle("active", b.dataset.glossarytab === "classes"));
