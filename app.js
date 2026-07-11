@@ -2284,27 +2284,39 @@ function renderSkillsSection(character, cls) {
       }).join("")}
     </div>` : ""}
 
-    <h4 class="learn-subtitle">Aprender Nova Perícia (com um NPC)</h4>
-    <div class="learn-row">
-      <select class="learn-select" id="learn-class-skill-select">
-        <option value="">Perícia de classe...</option>
-        ${learnableClass.map(s => `<option value="${s.name}">${s.name} (${s.attr})</option>`).join("")}
+    <h4 class="learn-subtitle">Aprender Nova Perícia ou Habilidade</h4>
+    <div class="learn-picker" id="skill-picker">
+      <!-- Busca -->
+      <div class="learn-picker-search-row">
+        <input type="text" class="learn-picker-search" id="skill-picker-search" placeholder="🔍 Buscar perícia ou habilidade...">
+      </div>
+      <!-- Chips de tipo -->
+      <div class="learn-picker-filter-group">
+        <span class="learn-picker-filter-label">Tipo</span>
+        <div class="learn-picker-chips" id="skill-type-chips">
+          <button class="learn-chip active" data-skill-type="">Todos</button>
+          <button class="learn-chip" data-skill-type="class">Perícia de Classe</button>
+          <button class="learn-chip" data-skill-type="general">Perícia Geral</button>
+          <button class="learn-chip" data-skill-type="combat">Perícia de Combate</button>
+        </div>
+      </div>
+      <!-- Contagem -->
+      <div class="learn-picker-count" id="skill-picker-count"></div>
+      <!-- Lista -->
+      <div class="learn-picker-list" id="skill-picker-list"></div>
+      <!-- Preview -->
+      <div class="learn-picker-preview hidden" id="skill-picker-preview"></div>
+      <!-- Selects ocultos legado -->
+      <select id="learn-class-skill-select" style="display:none">
+        ${learnableClass.map(s => `<option value="${s.name}">${s.name}</option>`).join("")}
       </select>
-      <button class="btn-secondary" id="btn-learn-class-skill">Aprender</button>
-    </div>
-    <div class="learn-row">
-      <select class="learn-select" id="learn-general-skill-select">
-        <option value="">Perícia geral...</option>
-        ${learnableGeneral.map(s => `<option value="${s.name}">${s.name} (${s.attr})</option>`).join("")}
+      <select id="learn-general-skill-select" style="display:none">
+        ${learnableGeneral.map(s => `<option value="${s.name}">${s.name}</option>`).join("")}
       </select>
-      <button class="btn-secondary" id="btn-learn-general-skill">Aprender</button>
-    </div>
-    <div class="learn-row">
-      <select class="learn-select" id="learn-combat-skill-select">
-        <option value="">Perícia de combate...</option>
-        ${SKILL_TESTS.filter(t => t.combat && !allKnown.includes(t.name)).map(t => `<option value="${t.name}">${t.name} (${t.attrKeys.join("+")})</option>`).join("")}
+      <select id="learn-combat-skill-select" style="display:none">
+        ${SKILL_TESTS.filter(t => t.combat && !allKnown.includes(t.name)).map(t => `<option value="${t.name}">${t.name}</option>`).join("")}
       </select>
-      <button class="btn-secondary" id="btn-learn-combat-skill">Aprender</button>
+      <button class="btn-primary learn-picker-confirm" id="btn-learn-skill-unified">+ Aprender Selecionada</button>
     </div>
   </div>`;
 }
@@ -2409,16 +2421,43 @@ function renderSpellsSection(character, cls) {
     </div>
 
     <h4 class="learn-subtitle">Aprender Nova Magia (em um grimório)</h4>
-    <div class="learn-row">
-      <select class="learn-select" id="learn-spell-select">
-        <option value="">Selecione uma magia...</option>
-        ${Object.keys(groups).map(origin => `
-          <optgroup label="${origin}">
-            ${groups[origin].map(s => `<option value="${s.name}">${s.name} (Nível ${s.level} · ${s.cooldown || "sem limite"})</option>`).join("")}
-          </optgroup>
-        `).join("")}
-      </select>
-      <button class="btn-secondary" id="btn-learn-spell">Aprender</button>
+    <div class="learn-picker" id="spell-picker">
+      <!-- Busca -->
+      <div class="learn-picker-search-row">
+        <input type="text" class="learn-picker-search" id="spell-picker-search" placeholder="🔍 Buscar magia...">
+      </div>
+      <!-- Chips de nível -->
+      <div class="learn-picker-filter-group">
+        <span class="learn-picker-filter-label">Nível</span>
+        <div class="learn-picker-chips" id="spell-level-chips">
+          <button class="learn-chip active" data-spell-level="">Todos</button>
+          ${[1,2,3,4,5].map(n => `<button class="learn-chip" data-spell-level="${n}">Nv ${n}</button>`).join("")}
+        </div>
+      </div>
+      <!-- Chips de categoria -->
+      <div class="learn-picker-filter-group">
+        <span class="learn-picker-filter-label">Categoria</span>
+        <div class="learn-picker-chips" id="spell-cat-chips">
+          <button class="learn-chip active" data-spell-cat="">Todas</button>
+          <button class="learn-chip" data-spell-cat="ataque">Ataque</button>
+          <button class="learn-chip" data-spell-cat="defesa">Defesa</button>
+          <button class="learn-chip" data-spell-cat="cura">Cura</button>
+          <button class="learn-chip" data-spell-cat="controle">Controle</button>
+          <button class="learn-chip" data-spell-cat="buff">Buff</button>
+          <button class="learn-chip" data-spell-cat="invocacao">Invocação</button>
+          <button class="learn-chip" data-spell-cat="ritual">Ritual</button>
+          <button class="learn-chip" data-spell-cat="utilidade">Utilidade</button>
+        </div>
+      </div>
+      <!-- Contagem -->
+      <div class="learn-picker-count" id="spell-picker-count"></div>
+      <!-- Lista -->
+      <div class="learn-picker-list" id="spell-picker-list"></div>
+      <!-- Preview -->
+      <div class="learn-picker-preview hidden" id="spell-picker-preview"></div>
+      <!-- Botão + select oculto (legado) -->
+      <select id="learn-spell-select" style="display:none"></select>
+      <button class="btn-primary learn-picker-confirm" id="btn-learn-spell">+ Aprender Magia Selecionada</button>
     </div>
   </div>`;
 }
@@ -2882,6 +2921,277 @@ function buildPrintableSheet(character, cls, maxHP, resourceMax) {
 }
 
 
+/* =====================================================================
+   PICKER DE MAGIAS — chips de nível/categoria + lista + preview
+   ===================================================================== */
+
+function initSpellPicker(character) {
+  const known    = character.spells || [];
+  const allSpells = getAllSpellsInGame();
+  const learnable = allSpells.filter(s => !known.includes(s.name));
+
+  let spellFilters = { level: "", cat: "", search: "" };
+  let spellSelected = null;
+
+  const getFiltered = () => {
+    let items = learnable;
+    if (spellFilters.level) items = items.filter(s => String(s.level) === spellFilters.level);
+    if (spellFilters.cat)   items = items.filter(s => (s.category || "").toLowerCase().includes(spellFilters.cat));
+    if (spellFilters.search) {
+      const q = spellFilters.search;
+      items = items.filter(s => s.name.toLowerCase().includes(q) || (s.effect||"").toLowerCase().includes(q) || (s.origin||"").toLowerCase().includes(q));
+    }
+    return items;
+  };
+
+  const render = () => {
+    const items = getFiltered();
+    const listEl    = document.getElementById("spell-picker-list");
+    const countEl   = document.getElementById("spell-picker-count");
+    const previewEl = document.getElementById("spell-picker-preview");
+    if (!listEl) return;
+
+    if (countEl) countEl.textContent = `${items.length} magia${items.length !== 1 ? "s" : ""}`;
+
+    if (items.length === 0) {
+      listEl.innerHTML = `<p class="learn-picker-empty">Nenhuma magia encontrada.</p>`;
+      if (previewEl) previewEl.classList.add("hidden");
+      spellSelected = null;
+      return;
+    }
+
+    listEl.innerHTML = items.map((s, i) => {
+      const isSel = spellSelected && spellSelected.name === s.name;
+      const lvlColor = ["","#6a9e50","#c8a020","#c0601a","#b03030","#6b0000"][s.level] || "#888";
+      return `
+        <div class="learn-picker-item ${isSel ? "selected" : ""}" data-picker-idx="${i}">
+          <div class="learn-picker-item-main">
+            <span class="learn-picker-item-name">${escapeHTML(s.name)}</span>
+            <div class="learn-picker-item-meta">
+              <span class="learn-picker-badge" style="background:${lvlColor}20;color:${lvlColor};border:1px solid ${lvlColor}40">Nv ${s.level}</span>
+              ${s.origin ? `<span class="learn-picker-badge learn-picker-badge-origin">${escapeHTML(s.origin)}</span>` : ""}
+              ${s.category ? `<span class="learn-picker-badge learn-picker-badge-cat">${s.category}</span>` : ""}
+            </div>
+            <div class="learn-picker-item-sub">⏱ ${s.castTime || "1 Ação"} · ↻ ${s.cooldown || "Ilimitado"}</div>
+          </div>
+          <span class="learn-picker-item-check">${isSel ? "✓" : ""}</span>
+        </div>`;
+    }).join("");
+
+    // Seleciona o primeiro automaticamente
+    if (!spellSelected && items.length > 0) {
+      spellSelected = items[0];
+      const hiddenSel = document.getElementById("learn-spell-select");
+      if (hiddenSel) { hiddenSel.innerHTML = `<option value="${escapeHTML(items[0].name)}">${escapeHTML(items[0].name)}</option>`; hiddenSel.value = items[0].name; }
+      renderPreview(items[0]);
+    }
+
+    // Handlers de clique
+    listEl.querySelectorAll(".learn-picker-item").forEach((el, i) => {
+      el.addEventListener("click", () => {
+        spellSelected = items[i];
+        const hiddenSel = document.getElementById("learn-spell-select");
+        if (hiddenSel) { hiddenSel.innerHTML = `<option value="${escapeHTML(items[i].name)}">${escapeHTML(items[i].name)}</option>`; hiddenSel.value = items[i].name; }
+        renderPreview(items[i]);
+        render();
+      });
+    });
+  };
+
+  const renderPreview = (s) => {
+    const el = document.getElementById("spell-picker-preview");
+    if (!el) return;
+    const dmgMatch = s.effect.match(/(\d+d\d+(?:\s*[+\-]\s*\d+d\d+)*)\s*de\s*dano/i);
+    const healMatch = s.effect.match(/cura\s+(\d+d\d+)/i) || s.effect.match(/recupera\s+(\d+d\d+)/i);
+    el.classList.remove("hidden");
+    el.innerHTML = `
+      <div class="learn-preview-header">
+        <span class="learn-preview-name">${escapeHTML(s.name)}</span>
+        <span class="learn-picker-badge" style="background:rgba(58,42,29,0.1)">Nível ${s.level}</span>
+      </div>
+      ${dmgMatch ? `<div class="learn-preview-hl learn-preview-hl-dmg">⚔ Dano: ${dmgMatch[1]}</div>` : ""}
+      ${healMatch ? `<div class="learn-preview-hl learn-preview-hl-heal">💚 Cura: ${healMatch[1]}</div>` : ""}
+      <p class="learn-preview-effect">${escapeHTML(s.effect)}</p>
+      <div class="learn-preview-meta">
+        <span>⏱ ${escapeHTML(s.castTime || "1 Ação")}</span>
+        <span>↻ ${escapeHTML(s.cooldown || "Ilimitado")}</span>
+        <span>📚 ${escapeHTML(s.origin || "Geral")}</span>
+      </div>`;
+  };
+
+  // Bind chips de nível
+  document.querySelectorAll("#spell-level-chips .learn-chip").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll("#spell-level-chips .learn-chip").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      spellFilters.level = btn.dataset.spellLevel;
+      spellSelected = null;
+      render();
+    });
+  });
+  // Bind chips de categoria
+  document.querySelectorAll("#spell-cat-chips .learn-chip").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll("#spell-cat-chips .learn-chip").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      spellFilters.cat = btn.dataset.spellCat;
+      spellSelected = null;
+      render();
+    });
+  });
+  // Bind busca
+  document.getElementById("spell-picker-search")?.addEventListener("input", e => {
+    spellFilters.search = e.target.value.trim().toLowerCase();
+    spellSelected = null;
+    render();
+  });
+  // Bind confirmar
+  document.getElementById("btn-learn-spell")?.addEventListener("click", () => {
+    const val = document.getElementById("learn-spell-select")?.value;
+    if (!val) { showToast("Selecione uma magia para aprender."); return; }
+    if (!character.spells) character.spells = [];
+    character.spells.push(val);
+    persistCurrentCharacter();
+    renderSheet();
+    showToast(`Magia "${val}" aprendida em um grimório.`);
+  });
+
+  render();
+}
+
+/* =====================================================================
+   PICKER DE PERÍCIAS/HABILIDADES — chips de tipo + lista + preview
+   ===================================================================== */
+
+function initSkillPicker(character, cls) {
+  const knownClass   = character.skills.class   || [];
+  const knownGeneral = character.skills.general  || [];
+  const allKnown = [...knownClass, ...knownGeneral];
+  const combatSkillNames = new Set(SKILL_TESTS.filter(t => t.combat).map(t => t.name));
+
+  // Montar catálogo completo de aprendíveis
+  const classItems    = cls ? cls.skillsClass.filter(s => !knownClass.includes(s.name)).map(s => ({ ...s, _type: "class",   _typeLabel: "Perícia de Classe",  _attr: s.attr })) : [];
+  const generalItems  = GENERAL_SKILLS.filter(s => !knownGeneral.includes(s.name)).map(s => ({ ...s, _type: "general", _typeLabel: "Perícia Geral",      _attr: s.attr }));
+  const combatItems   = SKILL_TESTS.filter(t => t.combat && !allKnown.includes(t.name)).map(t => ({ name: t.name, desc: t.desc || t.combatDesc || "", _type: "combat",  _typeLabel: "Perícia de Combate", _attr: t.attrKeys.join("+"), _icon: t.icon }));
+  const allItems = [...classItems, ...generalItems, ...combatItems];
+
+  let skillFilters = { type: "", search: "" };
+  let skillSelected = null;
+
+  const getFiltered = () => {
+    let items = allItems;
+    if (skillFilters.type)   items = items.filter(s => s._type === skillFilters.type);
+    if (skillFilters.search) {
+      const q = skillFilters.search;
+      items = items.filter(s => s.name.toLowerCase().includes(q) || (s.desc||s.description||"").toLowerCase().includes(q) || (s._attr||"").toLowerCase().includes(q));
+    }
+    return items;
+  };
+
+  const typeColor = { class: "#7a5c10", general: "#2a4a8a", combat: "#7a1010" };
+  const typeBg    = { class: "rgba(156,122,60,0.15)", general: "rgba(40,80,140,0.12)", combat: "rgba(125,42,46,0.12)" };
+
+  const render = () => {
+    const items   = getFiltered();
+    const listEl  = document.getElementById("skill-picker-list");
+    const countEl = document.getElementById("skill-picker-count");
+    const prevEl  = document.getElementById("skill-picker-preview");
+    if (!listEl) return;
+
+    if (countEl) countEl.textContent = `${items.length} perícia${items.length !== 1 ? "s" : ""}`;
+
+    if (items.length === 0) {
+      listEl.innerHTML = `<p class="learn-picker-empty">Nenhuma perícia disponível.</p>`;
+      if (prevEl) prevEl.classList.add("hidden");
+      skillSelected = null;
+      return;
+    }
+
+    listEl.innerHTML = items.map((s, i) => {
+      const isSel = skillSelected && skillSelected.name === s.name;
+      const desc = s.desc || s.description || "";
+      return `
+        <div class="learn-picker-item ${isSel ? "selected" : ""}" data-skill-idx="${i}">
+          <div class="learn-picker-item-main">
+            <span class="learn-picker-item-name">${s._icon ? s._icon + " " : ""}${escapeHTML(s.name)}</span>
+            <div class="learn-picker-item-meta">
+              <span class="learn-picker-badge" style="background:${typeBg[s._type]||"rgba(0,0,0,0.07)"};color:${typeColor[s._type]||"#555"}">${s._typeLabel}</span>
+              ${s._attr ? `<span class="learn-picker-badge learn-picker-badge-origin">${s._attr}</span>` : ""}
+            </div>
+            ${desc ? `<div class="learn-picker-item-sub">${escapeHTML(desc.slice(0, 60))}${desc.length > 60 ? "…" : ""}</div>` : ""}
+          </div>
+          <span class="learn-picker-item-check">${isSel ? "✓" : ""}</span>
+        </div>`;
+    }).join("");
+
+    // Auto-seleciona o primeiro
+    if (!skillSelected && items.length > 0) {
+      skillSelected = items[0];
+      renderSkillPreview(items[0]);
+    }
+
+    listEl.querySelectorAll(".learn-picker-item").forEach((el, i) => {
+      el.addEventListener("click", () => {
+        skillSelected = items[i];
+        renderSkillPreview(items[i]);
+        render();
+      });
+    });
+  };
+
+  const renderSkillPreview = (s) => {
+    const el = document.getElementById("skill-picker-preview");
+    if (!el) return;
+    const desc = s.desc || s.description || s.effect || "";
+    const example = s.example ? `<p class="learn-preview-example"><em>Exemplo: ${escapeHTML(s.example)}</em></p>` : "";
+    const cost = s.cost ? `<div class="learn-preview-meta"><span>Custo: ${escapeHTML(s.cost)}</span></div>` : "";
+    el.classList.remove("hidden");
+    el.innerHTML = `
+      <div class="learn-preview-header">
+        <span class="learn-preview-name">${s._icon ? s._icon + " " : ""}${escapeHTML(s.name)}</span>
+        <span class="learn-picker-badge" style="background:${typeBg[s._type]};color:${typeColor[s._type]}">${s._typeLabel}</span>
+      </div>
+      ${s._attr ? `<div class="learn-preview-meta"><span>Atributo: <strong>${s._attr}</strong></span></div>` : ""}
+      ${desc ? `<p class="learn-preview-effect">${escapeHTML(desc)}</p>` : ""}
+      ${example}${cost}`;
+  };
+
+  // Bind chips de tipo
+  document.querySelectorAll("#skill-type-chips .learn-chip").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll("#skill-type-chips .learn-chip").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      skillFilters.type = btn.dataset.skillType;
+      skillSelected = null;
+      render();
+    });
+  });
+  // Bind busca
+  document.getElementById("skill-picker-search")?.addEventListener("input", e => {
+    skillFilters.search = e.target.value.trim().toLowerCase();
+    skillSelected = null;
+    render();
+  });
+  // Bind confirmar
+  document.getElementById("btn-learn-skill-unified")?.addEventListener("click", () => {
+    if (!skillSelected) { showToast("Selecione uma perícia para aprender."); return; }
+    const name  = skillSelected.name;
+    const type  = skillSelected._type;
+    if (type === "class") {
+      if (!character.skills.class.includes(name)) character.skills.class.push(name);
+    } else if (type === "general") {
+      if (!character.skills.general.includes(name)) character.skills.general.push(name);
+    } else if (type === "combat") {
+      if (!character.skills.class.includes(name)) character.skills.class.push(name);
+    }
+    persistCurrentCharacter();
+    renderSheet();
+    showToast(`"${name}" aprendida!`);
+  });
+
+  render();
+}
+
 function attachSheetHandlers(character) {
   const cls = getClassDef(character.classKey);
   const maxHP = calcMaxHP(character);
@@ -3096,54 +3406,11 @@ function attachSheetHandlers(character) {
     });
   });
 
-  // Learn class skill
-  const learnClassBtn = document.getElementById("btn-learn-class-skill");
-  if (learnClassBtn) learnClassBtn.addEventListener("click", () => {
-    const select = document.getElementById("learn-class-skill-select");
-    const value = select.value;
-    if (!value) { showToast("Selecione uma perícia para aprender."); return; }
-    character.skills.class.push(value);
-    persistCurrentCharacter();
-    renderSheet();
-    showToast(`Perícia "${value}" aprendida com um instrutor.`);
-  });
+  // ── Picker de Perícias ────────────────────────────────────────
+  initSkillPicker(character, cls);
 
-  // Learn general skill
-  const learnGeneralBtn = document.getElementById("btn-learn-general-skill");
-  if (learnGeneralBtn) learnGeneralBtn.addEventListener("click", () => {
-    const select = document.getElementById("learn-general-skill-select");
-    const value = select.value;
-    if (!value) { showToast("Selecione uma perícia para aprender."); return; }
-    character.skills.general.push(value);
-    persistCurrentCharacter();
-    renderSheet();
-    showToast(`Perícia "${value}" aprendida com um instrutor.`);
-  });
-
-  // Learn combat skill
-  const learnCombatBtn = document.getElementById("btn-learn-combat-skill");
-  if (learnCombatBtn) learnCombatBtn.addEventListener("click", () => {
-    const select = document.getElementById("learn-combat-skill-select");
-    const value = select.value;
-    if (!value) { showToast("Selecione uma perícia de combate para aprender."); return; }
-    // Perícias de combate ficam em skills.class para serem encontradas pelo sistema de testes
-    character.skills.class.push(value);
-    persistCurrentCharacter();
-    renderSheet();
-    showToast(`Perícia de Combate "${value}" aprendida!`);
-  });
-
-  // Learn spell
-  const learnSpellBtn = document.getElementById("btn-learn-spell");
-  if (learnSpellBtn) learnSpellBtn.addEventListener("click", () => {
-    const select = document.getElementById("learn-spell-select");
-    const value = select.value;
-    if (!value) { showToast("Selecione uma magia para aprender."); return; }
-    character.spells.push(value);
-    persistCurrentCharacter();
-    renderSheet();
-    showToast(`Magia "${value}" aprendida em um grimório.`);
-  });
+  // ── Picker de Magias ──────────────────────────────────────────
+  initSpellPicker(character);
 
   // Equip from inventory / unequip back to inventory
   document.querySelectorAll(".equip-select").forEach(select => {
