@@ -2348,7 +2348,7 @@ function renderSpellsSection(character, cls) {
   const known = character.spells || [];
   if (!character.activeSpells) character.activeSpells = [];
   const active = character.activeSpells;
-  const allSpells = getAllSpellsInGame();
+  const allSpells = getSpellsForCharacter(character); // só magias da classe + gerais
   const totalSlots = calcSpellSlots(character);
   const usedSlots = active.length;
   const learnable = allSpells.filter(s => !known.includes(s.name));
@@ -2760,7 +2760,7 @@ function buildPrintableSheet(character, cls, maxHP, resourceMax) {
   const physDef = calcPhysicalDefense(character);
   const magDef = calcMagicDefense(character);
   const dmg = calcDamageBreakdown(character);
-  const allSpells = getAllSpellsInGame();
+  const allSpells = getSpellsForCharacter(character); // só magias da classe + gerais
 
   const knownAbilities = (cls && character.skills.abilities) ? character.skills.abilities : [];
   const knownClassSkills = character.skills.class || [];
@@ -2927,7 +2927,7 @@ function buildPrintableSheet(character, cls, maxHP, resourceMax) {
 
 function initSpellPicker(character) {
   const known    = character.spells || [];
-  const allSpells = getAllSpellsInGame();
+  const allSpells = getSpellsForCharacter(character); // só magias da classe + gerais
   const learnable = allSpells.filter(s => !known.includes(s.name));
 
   let spellFilters = { level: "", cat: "", search: "" };

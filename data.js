@@ -1178,6 +1178,26 @@ function getAllSpellsInGame() {
   return list;
 }
 
+/* Retorna apenas as magias que o personagem pode aprender:
+   - Magias de Mago: só para Mago
+   - Magias de Clérigo: só para Clérigo
+   - GENERAL_SPELLS: para todas as classes */
+function getSpellsForCharacter(character) {
+  const charClassName = getClassDef(character.classKey)?.name || "";
+  const list = [];
+  Object.keys(CLASSES).forEach(key => {
+    const cls = CLASSES[key];
+    if (cls.spellsFull) {
+      // Magias exclusivas só aparecem para a própria classe
+      if (cls.name === charClassName) {
+        cls.spellsFull.forEach(s => list.push({ ...s, origin: cls.name }));
+      }
+    }
+  });
+  GENERAL_SPELLS.forEach(s => list.push({ ...s, origin: "Geral" }));
+  return list;
+}
+
 /* Categorias de item para o modal "Adicionar item do mundo" */
 const WORLD_ITEM_CATALOG = {
   weapon: ALL_WEAPONS.map(w => ({ ...w, category: "weapon" })),
