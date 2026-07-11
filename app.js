@@ -3354,11 +3354,8 @@ function updateAddItemWeightPreview() {
 
   let pendingWeight = 0;
   if (addItemModalTab === "catalog") {
-    const category = catalogCategorySelect.value;
-    const itemName = document.getElementById("catalog-item-select").value;
     const qty = parseInt(document.getElementById("catalog-item-qty").value) || 1;
-    const sourceItem = (WORLD_ITEM_CATALOG[category] || []).find(i => i.name === itemName);
-    pendingWeight = sourceItem ? (sourceItem.weight || 0) * qty : 0;
+    pendingWeight = catalogSelectedItem ? (catalogSelectedItem.weight || 0) * qty : 0;
   } else if (addItemModalTab === "generic") {
     const qty = parseInt(document.getElementById("generic-item-qty").value) || 1;
     const weight = parseFloat(document.getElementById("generic-item-weight").value) || 0;
@@ -3398,9 +3395,9 @@ document.querySelectorAll("#add-item-tabs .tab-btn").forEach(btn => {
   });
 });
 
-const catalogCategorySelect = document.getElementById("catalog-category-select");
+const catalogCategorySelect = document.getElementById("catalog-category-select"); // oculto — legado
 catalogCategorySelect.addEventListener("change", () => {
-  populateCatalogItemSelect();
+  renderCatalogItemList();
   updateAddItemWeightPreview();
 });
 
@@ -3422,14 +3419,214 @@ function updateCustomItemFieldsVisibility() {
   });
 }
 
-function populateCatalogItemSelect() {
-  const category = catalogCategorySelect.value;
-  const itemSelect = document.getElementById("catalog-item-select");
-  const items = WORLD_ITEM_CATALOG[category] || [];
-  itemSelect.innerHTML = items.map(i => {
-    const rarityTag = i.rarity ? ` [${i.rarity}]` : "";
-    return `<option value="${i.name}">${i.name}${i.weight !== undefined ? " · " + i.weight + "kg" : ""}${rarityTag}</option>`;
+/* ── Estado dos filtros do catálogo ─────────────────────────── */
+let catalogFilters = { type: "", tier: "", search: "" };
+let catalogSelectedItem = null; // { item, sourceCategory }
+
+/* Mapeamento de tipo-chip → categoria e predicado */
+function getItemsByType(type) {
+  switch (type) {
+    case "weapon1h":     return WEAPONS_ONE_HAND.map(i  => ({ ...i, _cat: "weapon" }));
+    case "weapon2h":     return WEAPONS_TWO_HAND.map(i  => ({ ...i, _cat: "weapon" }));
+    case "weaponranged": return WEAPONS_RANGED.map(i    => ({ ...i, _cat: "weapon" }));
+    case "weaponmagic":  return WEAPONS_MAGIC.map(i     => ({ ...i, _cat: "weapon" }));
+    case "shield":       return SHIELDS.map(i            => ({ ...i, _cat: "shield" }));
+    case "armorleve":    return ARMORS.filter(a => (a.weight||0) <= 5 && !(a.movePenalty > 0)).map(i => ({ ...i, _cat: "armor" }));
+    case "armormedia":   return ARMORS.filter(a => (a.weight||0) > 5 && (a.weight||0) <= 12).map(i => ({ ...i, _cat: "armor" }));
+    case "armorpesada":  return ARMORS.filter(a => (a.weight||0) > 12 || (a.movePenalty > 0)).map(i => ({ ...i, _cat: "armor" }));
+    case "accessory":    return ACCESSORIES.map(i        => ({ ...i, _cat: "accessory" }));
+    default: return [
+      ...WEAPONS_ONE_HAND.map(i  => ({ ...i, _cat: "weapon" })),
+      ...WEAPONS_TWO_HAND.map(i  => ({ ...i, _cat: "weapon" })),
+      ...WEAPONS_RANGED.map(i    => ({ ...i, _cat: "weapon" })),
+      ...WEAPONS_MAGIC.map(i     => ({ ...i, _cat: "weapon" })),
+      ...SHIELDS.map(i           => ({ ...i, _cat: "shield" })),
+      ...ARMORS.map(i            => ({ ...i, _cat: "armor" })),
+      ...ACCESSORIES.map(i       => ({ ...i, _cat: "accessory" })),
+    ];
+  }
+}
+
+function getFilteredCatalogItems() {
+  let items = getItemsByType(catalogFilters.type);
+  if (catalogFilters.tier) {
+    items = items.filter(i => (i.tier || "comum") === catalogFilters.tier);
+  }
+  if (catalogFilters.search) {
+    const q = catalogFilters.search.toLowerCase();
+    items = items.filter(i =>
+      i.name.toLowerCase().includes(q) ||
+      (i.story || "").toLowerCase().includes(q) ||
+      (i.note || "").toLowerCase().includes(q) ||
+      (i.effect || "").toLowerCase().includes(q)
+    );
+  }
+  return items;
+}
+
+function tierLabel(tier) {
+  return { comum:"Comum", raro:"Raro", magico:"Mágico", lendario:"Lendário", unico:"Único", ancestral:"Ancestral" }[tier] || tier || "Comum";
+}
+function tierClass(tier) {
+  return { comum:"tier-comum", raro:"tier-raro", magico:"tier-magico", lendario:"tier-lendario", unico:"tier-unico", ancestral:"tier-ancestral" }[tier] || "tier-comum";
+}
+function typeLabel(item) {
+  if (item._cat === "shield")    return "Escudo";
+  if (item._cat === "armor")     return "Armadura";
+  if (item._cat === "accessory") return "Acessório";
+  if (item.heavyTwoHanded || (item.slot && item.slot.includes("primary") && !item.slot.includes("secondary"))) {
+    if (item.range) return "Arma Ranged";
+    return WEAPONS_TWO_HAND.some(w => w.name === item.name) ? "Arma 2M" :
+           WEAPONS_MAGIC.some(w => w.name === item.name)    ? "Arma Arcana" : "Arma 1M";
+  }
+  return WEAPONS_RANGED.some(w => w.name === item.name) ? "Arma Ranged" :
+         WEAPONS_MAGIC.some(w => w.name === item.name)  ? "Arma Arcana" :
+         WEAPONS_TWO_HAND.some(w => w.name === item.name) ? "Arma 2M" : "Arma 1M";
+}
+
+function renderCatalogItemList() {
+  const container = document.getElementById("catalog-item-list");
+  const countEl   = document.getElementById("catalog-result-count");
+  const items = getFilteredCatalogItems();
+
+  if (countEl) countEl.textContent = `${items.length} ite${items.length !== 1 ? "ns" : "m"}`;
+
+  if (items.length === 0) {
+    container.innerHTML = `<p class="catalog-empty">Nenhum item encontrado. Tente outros filtros.</p>`;
+    catalogSelectedItem = null;
+    updateCatalogItemPreview();
+    return;
+  }
+
+  container.innerHTML = items.map((item, idx) => {
+    const tier  = item.tier || "comum";
+    const isSelected = catalogSelectedItem && catalogSelectedItem.name === item.name;
+    const stat = item.dmg ? `⚔ ${item.dmg}` :
+                 item.physDefense !== undefined ? `🛡 ${item.physDefense} Def.` :
+                 item.effect ? item.effect.slice(0, 42) + (item.effect.length > 42 ? "…" : "") : "";
+    return `
+      <div class="catalog-list-item ${isSelected ? "selected" : ""}" data-catalog-idx="${idx}" title="${escapeHTML(item.name)}">
+        <div class="catalog-list-item-main">
+          <div class="catalog-list-item-name">${escapeHTML(item.name)}</div>
+          <div class="catalog-list-item-meta">
+            <span class="catalog-item-tier ${tierClass(tier)}">${tierLabel(tier)}</span>
+            <span class="catalog-item-type">${typeLabel(item)}</span>
+            ${item.weight !== undefined ? `<span class="catalog-item-weight">${item.weight}kg</span>` : ""}
+          </div>
+          ${stat ? `<div class="catalog-list-item-stat">${stat}</div>` : ""}
+        </div>
+        <span class="catalog-list-item-check">${isSelected ? "✓" : ""}</span>
+      </div>`;
   }).join("");
+
+  // Handlers de seleção
+  container.querySelectorAll(".catalog-list-item").forEach((el, idx) => {
+    el.addEventListener("click", () => {
+      const item = items[idx];
+      catalogSelectedItem = item;
+      // Sincroniza selects ocultos (legado de peso)
+      const hiddenSel = document.getElementById("catalog-item-select");
+      const hiddenCat = document.getElementById("catalog-category-select");
+      if (hiddenCat) hiddenCat.value = item._cat;
+      if (hiddenSel) {
+        hiddenSel.innerHTML = `<option value="${escapeHTML(item.name)}">${escapeHTML(item.name)}</option>`;
+        hiddenSel.value = item.name;
+      }
+      renderCatalogItemList();
+      updateCatalogItemPreview();
+      updateAddItemWeightPreview();
+    });
+  });
+
+  // Seleciona o primeiro automaticamente se nenhum está selecionado
+  if (!catalogSelectedItem && items.length > 0) {
+    catalogSelectedItem = items[0];
+    const hiddenSel = document.getElementById("catalog-item-select");
+    const hiddenCat = document.getElementById("catalog-category-select");
+    if (hiddenCat) hiddenCat.value = items[0]._cat;
+    if (hiddenSel) {
+      hiddenSel.innerHTML = `<option value="${escapeHTML(items[0].name)}">${escapeHTML(items[0].name)}</option>`;
+      hiddenSel.value = items[0].name;
+    }
+    updateCatalogItemPreview();
+  }
+}
+
+function updateCatalogItemPreview() {
+  const preview = document.getElementById("catalog-item-preview");
+  if (!preview) return;
+  const item = catalogSelectedItem;
+  if (!item) { preview.classList.add("hidden"); return; }
+  preview.classList.remove("hidden");
+
+  const magicBonusLines = item.magicBonus ? Object.entries(item.magicBonus)
+    .filter(([k]) => k !== "attr" && k !== "attrValue")
+    .map(([k,v]) => {
+      const labels = { actions:"Ações",reactions:"Reações",reactionActions:"Ações de Reação",spellActions:"Ações de Magia",hp:"HP",carry:"Carga",slots:"Slots",move:"Movimento" };
+      return v > 0 ? `<span class="catalog-preview-bonus">+${v} ${labels[k]||k}</span>` : null;
+    }).filter(Boolean).join("") : "";
+  const attrBonus = item.magicBonus?.attr ? `<span class="catalog-preview-bonus">+${item.magicBonus.attrValue} ${item.magicBonus.attr}</span>` : "";
+
+  const setInfo = item.setName ? `<div class="catalog-preview-set">Conjunto: <em>${item.setName}</em></div>` : "";
+  const req = item.req ? `<div class="catalog-preview-row"><span>Req.:</span> <strong>${item.req}</strong></div>` : "";
+  const dmg = item.dmg ? `<div class="catalog-preview-row"><span>Dano:</span> <strong>${item.dmg}</strong></div>` : "";
+  const def = item.physDefense !== undefined ? `<div class="catalog-preview-row"><span>Def. Física:</span> <strong>${item.physDefense}</strong></div>` : "";
+  const defMag = item.magDefense !== undefined ? `<div class="catalog-preview-row"><span>Def. Mágica:</span> <strong>${item.magDefense}</strong></div>` : "";
+  const pen = item.movePenalty ? `<div class="catalog-preview-row"><span>Pen. Mov.:</span> <strong>−${item.movePenalty}</strong></div>` : "";
+  const wt  = item.weight !== undefined ? `<div class="catalog-preview-row"><span>Peso:</span> <strong>${item.weight}kg</strong></div>` : "";
+  const eff = item.effect ? `<div class="catalog-preview-effect">${escapeHTML(item.effect)}</div>` : "";
+  const story = item.story ? `<div class="catalog-preview-story">"${escapeHTML(item.story)}"</div>` : "";
+  const note  = item.note  ? `<div class="catalog-preview-note">📌 ${escapeHTML(item.note)}</div>` : "";
+
+  preview.innerHTML = `
+    <div class="catalog-preview-header">
+      <span class="catalog-preview-name">${escapeHTML(item.name)}</span>
+      <span class="catalog-item-tier ${tierClass(item.tier || "comum")}">${tierLabel(item.tier || "comum")}</span>
+    </div>
+    ${setInfo}
+    <div class="catalog-preview-stats">${dmg}${def}${defMag}${pen}${wt}${req}</div>
+    ${magicBonusLines || attrBonus ? `<div class="catalog-preview-bonuses">${magicBonusLines}${attrBonus}</div>` : ""}
+    ${eff}${note}${story}
+  `;
+}
+
+// Bind dos chips de tipo e tier
+document.querySelectorAll("#catalog-type-chips .catalog-chip").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll("#catalog-type-chips .catalog-chip").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    catalogFilters.type = btn.dataset.catalogType;
+    catalogSelectedItem = null;
+    renderCatalogItemList();
+    updateAddItemWeightPreview();
+  });
+});
+document.querySelectorAll("#catalog-tier-chips .catalog-chip").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll("#catalog-tier-chips .catalog-chip").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    catalogFilters.tier = btn.dataset.catalogTier;
+    catalogSelectedItem = null;
+    renderCatalogItemList();
+    updateAddItemWeightPreview();
+  });
+});
+document.getElementById("catalog-search").addEventListener("input", e => {
+  catalogFilters.search = e.target.value.trim().toLowerCase();
+  catalogSelectedItem = null;
+  renderCatalogItemList();
+  updateAddItemWeightPreview();
+});
+
+function populateCatalogItemSelect() {
+  // Mantido por retrocompatibilidade — agora só renderiza a lista nova
+  catalogFilters = { type: "", tier: "", search: "" };
+  catalogSelectedItem = null;
+  document.querySelectorAll("#catalog-type-chips .catalog-chip").forEach(b => b.classList.toggle("active", !b.dataset.catalogType));
+  document.querySelectorAll("#catalog-tier-chips .catalog-chip").forEach(b => b.classList.toggle("active", !b.dataset.catalogTier));
+  const srch = document.getElementById("catalog-search");
+  if (srch) srch.value = "";
+  renderCatalogItemList();
 }
 
 // Recalcula o preview de peso sempre que qualquer campo relevante do modal mudar
@@ -3451,27 +3648,22 @@ document.getElementById("add-item-modal-confirm").addEventListener("click", () =
   let itemLabel = "";
 
   if (addItemModalTab === "catalog") {
-    const category = catalogCategorySelect.value;
-    const itemName = document.getElementById("catalog-item-select").value;
+    const sourceItem = catalogSelectedItem;
     const qty = parseInt(document.getElementById("catalog-item-qty").value) || 1;
-    if (!itemName) { showToast("Selecione um item do compêndio."); return; }
-    const sourceItem = (WORLD_ITEM_CATALOG[category] || []).find(i => i.name === itemName);
-    if (!sourceItem) return;
-    pendingWeight = (sourceItem.weight || 0) * qty;
-    itemLabel = itemName;
-
+    if (!sourceItem) { showToast("Selecione um item da lista."); return; }
+    const pendingWeight = (sourceItem.weight || 0) * qty;
     const carry = calcCarryCapacity(character);
     const currentWeight = calcTotalWeight(character);
     if (round1(currentWeight + pendingWeight) > carry) {
       const space = round1(carry - currentWeight);
-      showToast(`Carga máxima excedida! Faltam ${pendingWeight - space < 0 ? 0 : round1(pendingWeight - space)}kg de espaço livre (${space > 0 ? space : 0}kg disponíveis).`);
+      showToast(`Carga máxima excedida! Faltam ${round1(pendingWeight - Math.max(space, 0))}kg de espaço livre (${Math.max(space, 0)}kg disponíveis).`);
       return;
     }
-
+    const category = sourceItem._cat || "weapon";
     const newItem = makeInventoryItem({ ...sourceItem, kind: category }, null);
     newItem.qty = qty;
     character.inventory.push(newItem);
-    showToast(`${itemName} adicionado ao inventário.`);
+    showToast(`${sourceItem.name} adicionado ao inventário.`);
 
   } else if (addItemModalTab === "generic") {
     const name = document.getElementById("generic-item-name").value.trim();
