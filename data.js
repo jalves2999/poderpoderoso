@@ -1217,7 +1217,7 @@ const NAV_PAGES = [
   { icon: "📖", label: "Glossário & Tutoriais", available: true, action: "openGlossary" },
   { icon: "🐺", label: "Bestiário", available: true, action: "openBestiary" },
   { icon: "🗺", label: "História do Mundo", available: true, action: "openHistory" },
-  { icon: "📜", label: "Regras da Mesa", available: false },
+  { icon: "📅", label: "Acompanhamento", available: true, action: "openCampaignLog" },
   { icon: "🏰", label: "Locais & Reinos", available: true, action: "openLocations" },
   { icon: "🧙", label: "NPCs Notáveis", available: false }
 ];

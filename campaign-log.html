@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Acompanhamento — Grimório de Personagens</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* ── Base ────────────────────────────────────────────────── */
+    body { margin: 0; min-height: 100vh; }
+    .cl-page { display: flex; flex-direction: column; min-height: 100vh; }
+
+    /* ── Toolbar ─────────────────────────────────────────────── */
+    .cl-toolbar {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 14px;
+      background: var(--parchment);
+      border-bottom: 2px solid var(--line);
+      position: sticky; top: 0; z-index: 30;
+    }
+    .cl-back { font-family: var(--font-heading); font-size: 13px; color: var(--ink-soft);
+      background: none; border: none; cursor: pointer; padding: 8px 4px;
+      text-decoration: none; min-height: 44px; display: flex; align-items: center; }
+    .cl-title { font-family: var(--font-heading); font-size: 17px; margin: 0; color: var(--ink); flex: 1; }
+    .cl-day-badge {
+      font-family: var(--font-heading); font-size: 12px;
+      background: var(--ink); color: var(--parchment);
+      padding: 4px 10px; border-radius: 10px;
+    }
+
+    /* ── Layout principal ───────────────────────────────────── */
+    .cl-body {
+      display: flex; flex: 1; overflow: hidden; height: calc(100vh - 53px);
+    }
+
+    /* ── Coluna esquerda: linha do tempo ──────────────────────── */
+    .cl-timeline-col {
+      width: 220px; flex-shrink: 0;
+      border-right: 1px solid var(--line);
+      display: flex; flex-direction: column;
+      background: rgba(248,243,232,0.6);
+      overflow: hidden;
+    }
+    .cl-timeline-header {
+      padding: 10px 12px 8px;
+      border-bottom: 1px solid var(--line);
+      display: flex; align-items: center; justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .cl-timeline-title { font-family: var(--font-heading); font-size: 13px; color: var(--ink); }
+    .cl-btn-add-day {
+      background: var(--ink); color: var(--parchment);
+      border: none; border-radius: 6px; padding: 5px 10px;
+      font-family: var(--font-heading); font-size: 12px; cursor: pointer;
+      min-height: 32px; white-space: nowrap;
+    }
+    .cl-btn-add-day:active { opacity: 0.8; }
+
+    .cl-timeline-list {
+      flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
+      padding: 8px 0;
+    }
+
+    .cl-day-entry {
+      padding: 9px 12px; cursor: pointer; border-left: 3px solid transparent;
+      transition: background 0.1s; position: relative;
+    }
+    .cl-day-entry:active { background: rgba(156,122,60,0.1); }
+    .cl-day-entry.active {
+      background: rgba(156,122,60,0.12); border-left-color: var(--gold);
+    }
+    .cl-day-entry.has-event::after {
+      content: "⚡"; position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+      font-size: 11px; color: var(--wax-red);
+    }
+    .cl-day-num { font-family: var(--font-heading); font-size: 13px; font-weight: 700; color: var(--ink); }
+    .cl-day-title-small { font-size: 11px; color: var(--ink-soft); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 160px; }
+
+    /* Separador de eventos futuros */
+    .cl-timeline-sep {
+      padding: 6px 12px 3px;
+      font-family: var(--font-label); font-size: 9px; text-transform: uppercase;
+      letter-spacing: 0.5px; color: var(--wax-red); border-top: 1px dashed var(--line);
+      margin-top: 4px;
+    }
+
+    /* ── Coluna direita: conteúdo ──────────────────────────── */
+    .cl-content-col {
+      flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
+      padding: 16px 16px 40px;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+
+    /* ── Estado vazio ──────────────────────────────────────── */
+    .cl-empty {
+      flex: 1; display: flex; flex-direction: column; align-items: center;
+      justify-content: center; text-align: center; padding: 40px 20px;
+      color: var(--ink-soft);
+    }
+    .cl-empty-icon { font-size: 48px; margin-bottom: 12px; }
+    .cl-empty-title { font-family: var(--font-heading); font-size: 16px; margin: 0 0 8px; color: var(--ink); }
+    .cl-empty-sub { font-size: 13px; line-height: 1.6; margin: 0; }
+
+    /* ── Card de dia (conteúdo central) ─────────────────────── */
+    .cl-day-card {
+      background: rgba(255,255,255,0.5); border: 1.5px solid var(--line);
+      border-radius: 8px; overflow: hidden;
+    }
+    .cl-day-card-header {
+      padding: 12px 14px; background: linear-gradient(135deg, rgba(156,122,60,0.12), rgba(248,243,232,0.8));
+      border-bottom: 1px solid var(--line);
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    }
+    .cl-day-label {
+      font-family: var(--font-heading); font-size: 11px; text-transform: uppercase;
+      letter-spacing: 0.4px; color: var(--gold);
+    }
+    .cl-day-card-title {
+      font-family: var(--font-heading); font-size: 15px; font-weight: 700;
+      color: var(--ink); flex: 1; min-width: 0; overflow-wrap: break-word;
+    }
+    .cl-day-card-actions { display: flex; gap: 6px; margin-left: auto; }
+    .cl-icon-btn {
+      background: none; border: 1px solid var(--line); border-radius: 6px;
+      padding: 4px 8px; font-size: 14px; cursor: pointer; color: var(--ink-soft);
+      min-height: 32px; min-width: 32px;
+    }
+    .cl-icon-btn:active { background: var(--ink); color: var(--parchment); border-color: var(--ink); }
+    .cl-icon-btn.danger:active { background: var(--wax-red); border-color: var(--wax-red); color: #fff; }
+
+    .cl-day-card-body { padding: 12px 14px; }
+    .cl-relato {
+      font-size: 13.5px; color: var(--ink); line-height: 1.75;
+      white-space: pre-wrap; word-break: break-word;
+    }
+    .cl-relato-empty { font-size: 13px; color: var(--ink-soft); font-style: italic; }
+
+    /* ── Eventos planejados no dia ───────────────────────────── */
+    .cl-events-section { display: flex; flex-direction: column; gap: 8px; }
+    .cl-events-title {
+      font-family: var(--font-heading); font-size: 11px; text-transform: uppercase;
+      letter-spacing: 0.4px; color: var(--wax-red); padding-bottom: 6px;
+      border-bottom: 1px dashed var(--line); display: flex; align-items: center; gap: 6px;
+    }
+
+    .cl-event-card {
+      border: 1.5px solid; border-radius: 8px; overflow: hidden;
+    }
+    .cl-event-card.status-pending  { border-color: rgba(156,122,60,0.4); background: rgba(156,122,60,0.05); }
+    .cl-event-card.status-resolved { border-color: rgba(60,100,60,0.35); background: rgba(60,100,60,0.05); }
+    .cl-event-card.status-skipped  { border-color: rgba(0,0,0,0.15); background: rgba(0,0,0,0.03); opacity: 0.7; }
+
+    .cl-event-header {
+      padding: 9px 12px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+      border-bottom: 1px solid rgba(0,0,0,0.07);
+    }
+    .cl-event-status-badge {
+      font-family: var(--font-heading); font-size: 10px; padding: 2px 7px; border-radius: 8px;
+    }
+    .status-pending  .cl-event-status-badge { background: rgba(156,122,60,0.2); color: #7a5c10; }
+    .status-resolved .cl-event-status-badge { background: rgba(60,100,60,0.2); color: #3a6020; }
+    .status-skipped  .cl-event-status-badge { background: rgba(0,0,0,0.1); color: #666; }
+
+    .cl-event-title { font-family: var(--font-heading); font-size: 13.5px; font-weight: 700; color: var(--ink); flex: 1; }
+    .cl-event-body { padding: 9px 12px; font-size: 13px; color: var(--ink-soft); line-height: 1.6; }
+
+    /* Opções do evento */
+    .cl-options { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+    .cl-option {
+      border: 1px solid var(--line); border-radius: 6px; overflow: hidden;
+      transition: border-color 0.15s;
+    }
+    .cl-option.chosen { border-color: var(--rust-green); }
+    .cl-option-header {
+      padding: 8px 10px; display: flex; align-items: center; gap: 8px;
+      cursor: pointer; -webkit-tap-highlight-color: transparent;
+    }
+    .cl-option.chosen .cl-option-header { background: rgba(60,100,60,0.08); }
+    .cl-option-radio {
+      width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--line);
+      flex-shrink: 0; background: white; position: relative;
+    }
+    .cl-option.chosen .cl-option-radio { border-color: var(--rust-green); background: var(--rust-green); }
+    .cl-option.chosen .cl-option-radio::after {
+      content: ""; position: absolute; inset: 3px; border-radius: 50%; background: white;
+    }
+    .cl-option-text { font-size: 13px; font-weight: 600; color: var(--ink); flex: 1; }
+    .cl-option-consequence {
+      padding: 6px 10px 8px 34px; font-size: 12px; color: var(--ink-soft);
+      line-height: 1.55; border-top: 1px dashed rgba(0,0,0,0.07);
+      background: rgba(0,0,0,0.02);
+    }
+    .cl-option-consequence::before { content: "↳ Consequência: "; font-weight: 600; color: var(--ink); }
+
+    /* ── Botão adicionar evento ──────────────────────────────── */
+    .cl-btn-add-event {
+      display: flex; align-items: center; gap: 6px; padding: 8px 12px;
+      background: none; border: 1.5px dashed rgba(125,42,46,0.3); border-radius: 8px;
+      color: var(--wax-red-dark); font-family: var(--font-heading); font-size: 13px;
+      cursor: pointer; width: 100%; text-align: left;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .cl-btn-add-event:active { background: rgba(125,42,46,0.06); }
+
+    /* ── Botão planejar evento futuro ───────────────────────── */
+    .cl-plan-section {
+      background: rgba(125,42,46,0.05); border: 1px dashed rgba(125,42,46,0.3);
+      border-radius: 8px; padding: 12px 14px; display: flex; align-items: center;
+      gap: 10px; cursor: pointer; -webkit-tap-highlight-color: transparent;
+    }
+    .cl-plan-section:active { background: rgba(125,42,46,0.1); }
+    .cl-plan-icon { font-size: 22px; }
+    .cl-plan-text { flex: 1; }
+    .cl-plan-text strong { font-family: var(--font-heading); display: block; font-size: 13px; color: var(--ink); }
+    .cl-plan-text span { font-size: 12px; color: var(--ink-soft); }
+
+    /* ── Modal ───────────────────────────────────────────────── */
+    .cl-modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+      z-index: 500; display: none; align-items: flex-end;
+    }
+    .cl-modal-overlay.open { display: flex; }
+    .cl-modal {
+      background: var(--parchment); width: 100%; max-height: 92vh;
+      border-radius: 16px 16px 0 0; display: flex; flex-direction: column;
+      overflow: hidden;
+    }
+    .cl-modal-header {
+      padding: 14px 16px; border-bottom: 1px solid var(--line);
+      display: flex; align-items: center; gap: 10px; flex-shrink: 0;
+    }
+    .cl-modal-title { font-family: var(--font-heading); font-size: 16px; flex: 1; margin: 0; color: var(--ink); }
+    .cl-modal-close {
+      background: none; border: 1px solid var(--line); border-radius: 6px;
+      padding: 6px 10px; font-size: 16px; cursor: pointer; color: var(--ink-soft);
+    }
+    .cl-modal-body { flex: 1; overflow-y: auto; padding: 14px 16px; display: flex; flex-direction: column; gap: 12px; }
+    .cl-modal-footer { padding: 10px 16px; border-top: 1px solid var(--line); display: flex; gap: 8px; flex-shrink: 0; }
+
+    /* Campos do modal */
+    .cl-field { display: flex; flex-direction: column; gap: 5px; }
+    .cl-label { font-family: var(--font-label); font-size: 10px; text-transform: uppercase; letter-spacing: 0.4px; color: var(--gold); }
+    .cl-input, .cl-textarea {
+      padding: 9px 12px; border: 1px solid var(--line); border-radius: 6px;
+      font-size: 14px; background: rgba(255,255,255,0.8); color: var(--ink);
+      font-family: inherit; box-sizing: border-box; width: 100%;
+    }
+    .cl-textarea { resize: vertical; min-height: 80px; line-height: 1.6; }
+    .cl-input:focus, .cl-textarea:focus { outline: none; border-color: var(--gold); }
+
+    /* Opções no modal de evento */
+    .cl-options-builder { display: flex; flex-direction: column; gap: 8px; }
+    .cl-option-builder-item {
+      background: rgba(255,255,255,0.6); border: 1px solid var(--line);
+      border-radius: 6px; padding: 10px 12px; display: flex; flex-direction: column; gap: 7px;
+    }
+    .cl-option-builder-head { display: flex; align-items: center; gap: 8px; }
+    .cl-option-num {
+      font-family: var(--font-heading); font-size: 11px; background: var(--ink);
+      color: var(--parchment); border-radius: 50%; width: 20px; height: 20px;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .cl-btn-remove-opt {
+      background: none; border: none; color: var(--wax-red-dark); font-size: 18px;
+      cursor: pointer; padding: 0 4px; margin-left: auto; line-height: 1;
+    }
+    .cl-btn-add-opt {
+      background: none; border: 1px dashed var(--line); border-radius: 6px;
+      padding: 7px 12px; color: var(--ink-soft); font-family: var(--font-heading);
+      font-size: 12px; cursor: pointer; text-align: left;
+    }
+    .cl-btn-add-opt:active { background: rgba(0,0,0,0.05); }
+
+    /* Botões de ação do modal */
+    .cl-btn-primary {
+      flex: 1; padding: 12px; background: var(--ink); color: var(--parchment);
+      border: none; border-radius: 8px; font-family: var(--font-heading);
+      font-size: 14px; cursor: pointer; min-height: 46px;
+    }
+    .cl-btn-primary:active { opacity: 0.85; }
+    .cl-btn-secondary {
+      padding: 12px 16px; background: none; border: 1px solid var(--line);
+      border-radius: 8px; font-family: var(--font-heading); font-size: 14px;
+      cursor: pointer; color: var(--ink-soft);
+    }
+
+    /* Mobile: timeline fica em baixo se tela pequena */
+    @media (max-width: 520px) {
+      .cl-body { flex-direction: column; height: auto; overflow: visible; }
+      .cl-timeline-col { width: 100%; max-height: 140px; border-right: none; border-bottom: 1px solid var(--line); }
+      .cl-timeline-list { padding: 4px 0; }
+      .cl-content-col { padding: 12px 12px 40px; }
+    }
+  </style>
+</head>
+<body>
+<div class="cl-page">
+
+  <header class="cl-toolbar">
+    <a href="index.html" class="cl-back">← Grimório</a>
+    <h1 class="cl-title">📅 Acompanhamento</h1>
+    <span class="cl-day-badge" id="current-day-badge">Dia 1</span>
+  </header>
+
+  <div class="cl-body">
+
+    <!-- Coluna esquerda: linha do tempo -->
+    <aside class="cl-timeline-col">
+      <div class="cl-timeline-header">
+        <span class="cl-timeline-title">Linha do Tempo</span>
+        <button class="cl-btn-add-day" id="btn-add-day">+ Dia</button>
+      </div>
+      <div class="cl-timeline-list" id="timeline-list">
+        <!-- gerado por JS -->
+      </div>
+    </aside>
+
+    <!-- Coluna direita: conteúdo do dia selecionado -->
+    <div class="cl-content-col" id="content-col">
+      <!-- gerado por JS -->
+    </div>
+
+  </div>
+
+  <!-- ── Modal: Adicionar / Editar Dia ─────────────────────── -->
+  <div class="cl-modal-overlay" id="modal-day">
+    <div class="cl-modal">
+      <div class="cl-modal-header">
+        <h2 class="cl-modal-title" id="modal-day-title">Registrar Dia</h2>
+        <button class="cl-modal-close" id="btn-close-day-modal">✕</button>
+      </div>
+      <div class="cl-modal-body">
+        <div class="cl-field">
+          <label class="cl-label">Dia da Campanha</label>
+          <input type="number" class="cl-input" id="field-day-num" min="1" max="9999" placeholder="Ex: 1">
+        </div>
+        <div class="cl-field">
+          <label class="cl-label">Título (resumo do dia)</label>
+          <input type="text" class="cl-input" id="field-day-title" placeholder="Ex: Fuga de Margem das Pedras" maxlength="80">
+        </div>
+        <div class="cl-field">
+          <label class="cl-label">Relato do Dia</label>
+          <textarea class="cl-textarea" id="field-day-relato" rows="6" placeholder="Escreva aqui o que aconteceu neste dia da sessão..."></textarea>
+        </div>
+      </div>
+      <div class="cl-modal-footer">
+        <button class="cl-btn-secondary" id="btn-cancel-day">Cancelar</button>
+        <button class="cl-btn-primary" id="btn-save-day">Salvar Dia</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Modal: Planejar / Editar Evento ─────────────────────── -->
+  <div class="cl-modal-overlay" id="modal-event">
+    <div class="cl-modal">
+      <div class="cl-modal-header">
+        <h2 class="cl-modal-title" id="modal-event-title">Planejar Evento</h2>
+        <button class="cl-modal-close" id="btn-close-event-modal">✕</button>
+      </div>
+      <div class="cl-modal-body">
+        <div class="cl-field">
+          <label class="cl-label">Dia de Ocorrência</label>
+          <input type="number" class="cl-input" id="field-event-day" min="1" max="9999" placeholder="Em qual dia do RPG este evento ocorre?">
+        </div>
+        <div class="cl-field">
+          <label class="cl-label">Título do Evento</label>
+          <input type="text" class="cl-input" id="field-event-title" placeholder="Ex: Guerra entre Valdris e Sombrath" maxlength="80">
+        </div>
+        <div class="cl-field">
+          <label class="cl-label">Descrição / Gatilho (para o Mestre)</label>
+          <textarea class="cl-textarea" id="field-event-desc" rows="3" placeholder="Descreva o que acontece, por que ocorre e como os jogadores são apresentados ao evento..."></textarea>
+        </div>
+        <div class="cl-field">
+          <label class="cl-label">Opções de Escolha dos Jogadores</label>
+          <div class="cl-options-builder" id="options-builder">
+            <!-- gerado por JS -->
+          </div>
+          <button class="cl-btn-add-opt" id="btn-add-option">+ Adicionar Opção</button>
+        </div>
+      </div>
+      <div class="cl-modal-footer">
+        <button class="cl-btn-secondary" id="btn-cancel-event">Cancelar</button>
+        <button class="cl-btn-primary" id="btn-save-event">Salvar Evento</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+<script src="campaign-log.js"></script>
+</body>
+</html>
