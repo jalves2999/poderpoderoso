@@ -547,7 +547,43 @@ const GENERAL_SPELLS = [
 
   { name: "Glifo de Alarme", level: 2, category: "utilidade/defesa",
     effect: "Traça um glifo invisível em uma superfície tocada. Quando uma criatura não-designada cruzar o glifo, ele explode causando 2d6 de dano e aplicando Atordoado por 1 rodada (Resistência SAB normal cancela o Atordoado mas não o dano). O glifo pode ser preparado antes do combate e dura até 8 horas ou ser disparado.",
-    castTime: "1 Ação de Magia (armadilha prévia) ou 2 Ações (combate)", cooldown: "2 usos por sessão" }
+    castTime: "1 Ação de Magia (armadilha prévia) ou 2 Ações (combate)", cooldown: "2 usos por sessão" },
+
+
+  /* ══════════════════════════════════════════════════════════
+     MAGIAS AMALDIÇOADAS — Grande poder, grande custo
+     ══════════════════════════════════════════════════════════ */
+
+  { name: "Explosão de Mana", level: 5, category: "ataque/sacrifício", cursed: true,
+    effect: "EXCLUSIVA DO BÁCULO DA EXPLOSÃO DE MANA. O conjurador sacrifica HP MÁXIMO permanentemente (não retorna com descanso). A cada 5 HP máx sacrificados, causa +1d20 de dano numa área 3x3 hex. Sem limite de sacrifício por conjuração. Se chegar a 0 HP máx, morre instantaneamente e o báculo explode causando o total de dano em raio 10 hex.",
+    castTime: "1 Ação de Magia (sacrifício declarado antes)", cooldown: "Ilimitado — o custo é HP máximo permanente",
+    note: "⚠ AMALDIÇOADA: Só conjurável com o Báculo da Explosão de Mana. Não pode ser aprendida por grimório." },
+
+  { name: "Rito dos Pombos", level: 2, category: "buff/maldição", cursed: true,
+    effect: "Garante que o próximo ataque feito pelo conjurador ou aliado visível seja Crítico Automático (dano máximo). MAS no turno SEGUINTE ao crítico, qualquer 20 natural nos dados do mesmo portador vira Falha Crítica — o equilíbrio cósmico se inverte.",
+    castTime: "1 Ação de Magia", cooldown: "2 usos por combate",
+    note: "⚠ AMALDIÇOADA: O ciclo de inversão não pode ser cancelado por magia. Usar o Rito durante a inversão cria novo Crítico mas a inversão dura mais 1 turno." },
+
+  { name: "Invocação do Duplo Sombrio", level: 4, category: "invocação/maldição", cursed: true,
+    effect: "Invoca uma cópia sombria do conjurador com 80% de suas estatísticas por 4 rodadas. O Duplo ataca aliados e inimigos aleatoriamente. O conjurador pode controlar o Duplo gastando 1 Ação de Magia por turno + Força de Vontade (difícil). Ao morrer, o Duplo explode: 2d10 sombrio em raio 3 hex.",
+    castTime: "2 turnos de concentração", cooldown: "1 uso por semana",
+    note: "⚠ AMALDIÇOADA: Se o Duplo matar um aliado, o conjurador ganha 1 nível de Corrupção da Marca permanentemente." },
+
+  { name: "Pacto do Último Fôlego", level: 3, category: "buff/sacrifício", cursed: true,
+    effect: "Por 5 rodadas: imune a Inconsciente, +1d12 em todos os ataques, +1d8 em todos os testes. Ao fim, o conjurador cai a 1 HP automaticamente e fica Incapacitado por 2 rodadas.",
+    castTime: "1 Ação de Magia", cooldown: "1 uso por combate",
+    note: "⚠ AMALDIÇOADA: Se o pacto terminar com menos de 20% HP, Força de Vontade (crítico) ou entra em fúria e ataca o aliado mais próximo por 1 rodada." },
+
+  { name: "Despertar do Morto-Vivo", level: 3, category: "invocação/necromancia", cursed: true,
+    effect: "Ressuscita um cadáver morto há menos de 1 hora como aliado Morto-Vivo (60% HP original, mantém habilidades físicas). O Morto-Vivo age com 2 Ações no turno do conjurador. Dura até o fim do combate.",
+    castTime: "1 turno de concentração", cooldown: "1 uso por sessão",
+    note: "⚠ AMALDIÇOADA: Se o Morto-Vivo matar um inimigo, o conjurador ganha 1d8 HP mas fica com olhos pretos por 24h — reconhecido como usuário de magia proibida." },
+
+  { name: "Fissura Mental", level: 2, category: "controle/maldição", cursed: true,
+    effect: "2d8 de dano psíquico a um alvo visível em até 10 hex. Alvo fica Confuso por 3 rodadas (1-2=ataca aliado mais próximo, 3-4=parado, 5-6=age normalmente). Resistência SAB (difícil) anula a Confusão mas não o dano.",
+    castTime: "1 Ação de Magia", cooldown: "2 usos por combate",
+    note: "⚠ AMALDIÇOADA: Se o conjurador falhar em qualquer teste nesta rodada, sofre 1d8 de dano psíquico — a fissura reflete parcialmente." }
+
 
 ];
 
@@ -668,7 +704,45 @@ const WEAPONS_ONE_HAND = [
   { tier: "unico", name: "Fang de Vassk — A Espada da Cobra Real", dmg: "1d12 + 1d10 + 1d6", req: "FOR/SAB", weight: 4, defenseDegrade: 0, slot: ["primary"],
     story: "A espada do Rei Vassk, forjada pelo próprio ferreiro do Castelo da Cobra com metal das câmaras do Crânio de Jurgmund. Vassk a empunhou por 30 anos de governo justo antes de ser corrompido. A lâmina ainda guarda fragmentos da Julgund — o brilho esverdeado pulsa levemente como respiração.",
     uniqueAbility: "Comando da Cobra Real (1x/combate): ao acertar, declara uma ordem de uma frase ao alvo. O alvo testa SAB (difícil); se falhar, obedece à ordem por 1 rodada sem perceber que está sendo controlado. Ordens impossíveis ou suicidas quebram o efeito automaticamente. Se o portador tiver as Provas do Aralto, pode usar 2x/combate.",
-    note: "Obtida se Vassk for libertado (ele a oferece) ou derrotado. Não pode ser destruída por meios físicos — apenas pela vontade de Jurgmund." }
+    note: "Obtida se Vassk for libertado (ele a oferece) ou derrotado. Não pode ser destruída por meios físicos — apenas pela vontade de Jurgmund." },
+
+  /* ══════════════════════════════════════════════════════════
+     ITENS AMALDIÇOADOS — Grande poder, grande custo
+     ══════════════════════════════════════════════════════════ */
+
+  /* ── ÚNICOS AMALDIÇOADOS — Armas de 1M ── */
+  { tier: "unico", cursed: true,
+    name: "Cabeça da Serpente", dmg: "1d8 + 1d4", req: "DEX", weight: 1, defenseDegrade: 1,
+    slot: ["primary","secondary"], setName: "Serpentes Gêmeas",
+    setBonus: { pieces: 2, ability: "Acúmulo Sanguíneo", effect: "Cada acerto no MESMO alvo acumula veneno: 1°=1d4, 2°=2d4, 3°=4d4, 4°=8d4, 5°=16d4 de veneno. Ao matar o alvo no 5° acúmulo, ele EXPLODE causando 16d4 de veneno a todos em raio 2 hex. Ao trocar de alvo o acúmulo reinicia." },
+    setBonusNote: "2 peças: Acúmulo Sanguíneo — veneno multiplica por acerto no mesmo alvo, explode no 5° acúmulo.",
+    story: "Uma das duas adagas rituais forjadas pelo Assassino Sem Nome, que matou 40 vítimas com as mesmas lâminas sem nunca trocar. As adagas 'aprendem' o veneno de cada alvo — quanto mais você ataca o mesmo inimigo, mais o veneno o conhece. Encontrada no bolso interno de um mensageiro morto às margens do Rio Carmesim, sem nenhuma pista de quem o enviou.",
+    note: "⚠ AMALDIÇOADA: Enquanto equipada, o portador tem compulsão de atacar o mesmo alvo até a morte — ao iniciar combate, faz Força de Vontade (normal) ou é obrigado a focar o alvo mais próximo, ignorando ordens táticas. Nunca pode ser voluntariamente retirada do inventário enquanto houver um inimigo vivo no campo de visão.",
+    curseDetails: "Dungeon de origem: Catacumbas do Assassino Sem Nome (sob Sombrath). O par completo está dividido — esta em circulação, a outra guardada pelo Chefe da Guilda." },
+
+  { tier: "unico", cursed: true,
+    name: "Corpo da Serpente", dmg: "1d8 + 1d4", req: "DEX", weight: 1, defenseDegrade: 1,
+    slot: ["primary","secondary"], setName: "Serpentes Gêmeas",
+    setBonus: { pieces: 2, ability: "Acúmulo Sanguíneo", effect: "Cada acerto no MESMO alvo acumula veneno: 1°=1d4, 2°=2d4, 3°=4d4, 4°=8d4, 5°=16d4 de veneno. Ao matar no 5° acúmulo, o alvo EXPLODE causando 16d4 a todos em raio 2 hex. Trocar de alvo reinicia o acúmulo." },
+    setBonusNote: "2 peças: Acúmulo Sanguíneo — veneno multiplica por acerto no mesmo alvo, explode no 5° acúmulo.",
+    story: "A segunda adaga do par. Enquanto separada da Cabeça da Serpente sente que algo está incompleto — o portador sonha com a outra adaga todas as noites, vendo fragmentos de memórias do Assassino Sem Nome. Encontrada selada em um cofre trancado com três fechaduras, na sala de armas pessoal do Chefe da Guilda de Sombrath.",
+    note: "⚠ AMALDIÇOADA: Mesma maldição da Cabeça da Serpente. Quando as duas adagas são reunidas no mesmo portador, a maldição se intensifica: Força de Vontade agora é DIFÍCIL ou o portador entra em transe de combate até o alvo morrer.",
+    curseDetails: "Parte do conjunto. Boss associado: Chefe da Guilda Kin Silêncio (dif.3) — Catacumbas de Sombrath." },
+
+  { tier: "lendario", cursed: true,
+    name: "Machado de Batalha dos Sentinelas de Kurak", dmg: "1d12 + 1d8", req: "FOR", weight: 7,
+    defenseDegrade: 2, slot: ["primary"], heavyTwoHanded: false,
+    story: "Forjado pelos Sentinelas de Kurak — ordem militar que defendeu a fronteira sul por 200 anos antes de ser aniquilada. O machado 'aprende' com cada combate, acumulando o ímpeto dos golpes bem-sucedidos. O último Sentinela morreu empunhando este machado, e dizem que o sangue na lâmina nunca secou completamente.",
+    note: "⚠ AMALDIÇOADA — Ímpeto de Batalha: A cada acerto bem-sucedido CONSECUTIVO neste turno, adiciona +1d6 de dano (1°=+1d6, 2°=+2d6, 3°=+3d6, sem limite). MAS ao RECEBER qualquer dano: perde TODO o bônus acumulado E perde o próximo turno inteiro (o golpe quebra o ímpeto e causa desorientação temporária). Zero tolerância a dano — um arranhão zera tudo.",
+    curseDetails: "Localização: Ruínas do Forte Kurak (Montanhas de Atrelon, dif.3). Boss: Último Sentinela Não-Morto (dif.4, imune a medo, usa o mesmo machado)." },
+
+  { tier: "lendario", cursed: true,
+    name: "Punhal do Eco Eterno", dmg: "2d6 + 1d8", req: "DEX", weight: 1, defenseDegrade: 1,
+    slot: ["primary","secondary"],
+    story: "Criado por um assassino que queria que cada golpe contasse duas vezes. O punhal copia o último ataque feito com ele — mas não distingue amigo de inimigo ao ecoar.",
+    note: "⚠ AMALDIÇOADA — Eco Cópia: Imediatamente após qualquer ataque com este punhal (acerto ou erro), o punhal executa SOZINHO um segundo ataque idêntico num alvo ALEATÓRIO no raio 3 hex (inclui aliados). O portador não controla o eco. +1d8 de dano no acerto mas o risco de acertar aliados é real.",
+    curseDetails: "Dungeon: Câmaras do Espelho Partido (dif.3). O punhal foi dividido em dois — o eco é o reflexo da outra metade." },
+
 ];
 
 const WEAPONS_TWO_HAND = [
@@ -751,7 +825,23 @@ const WEAPONS_TWO_HAND = [
   { tier: "unico", name: "Báculo do Crânio de Jurgmund", dmg: "1d12 + 1d8 + 1d6", req: "INT/SAB", weight: 5, defenseDegrade: null, slot: ["primary"], heavyTwoHanded: true,
     story: "Fragmento do próprio crânio de Jurgmund, moldado pelos primeiros Serpentarianos em forma de báculo. Pulsa com calor vivo e ocasionalmente emite sons que só quem empunha consegue ouvir — sussurros em língua de serpente que descrevem eventos que ainda não aconteceram.",
     uniqueAbility: "Profecia da Cobra (1x/sessão): ao conjurar uma magia, pode escolher ver o resultado antes de confirmar o gasto do Slot. Se o resultado não for satisfatório, pode cancelar a magia sem custo — mas fica Atordoado por 1 rodada pela sobrecarga profética. Não acumula com outras magias de visão.",
-    note: "Magias de veneno e cobra conjuradas com este báculo adicionam +1d12. Imunidade completa a venenos enquanto equipado. Aliados em raio 3 hex ganham resistência a veneno (+1d4 de Defesa Mágica contra venenos)." }
+    note: "Magias de veneno e cobra conjuradas com este báculo adicionam +1d12. Imunidade completa a venenos enquanto equipado. Aliados em raio 3 hex ganham resistência a veneno (+1d4 de Defesa Mágica contra venenos)." },
+
+  /* ── ÚNICOS AMALDIÇOADOS — Armas de 2M ── */
+  { tier: "lendario", cursed: true,
+    name: "Báculo da Explosão de Mana", dmg: "1d6 + 1d4", req: "INT alta", weight: 3,
+    defenseDegrade: null, slot: ["primary"], heavyTwoHanded: true,
+    story: "Criado por um mago que descobriu que HP é apenas mana condensada em carne. Usou o báculo durante 10 anos antes de morrer — não em batalha, mas de velhice precoce, com 34 anos de idade real mas aparência de 90. O báculo estava em perfeito estado ao seu lado.",
+    note: "⚠ AMALDIÇOADA — Explosão de Mana: Ao conjurar a magia Explosão de Mana através deste báculo, o conjurador pode sacrificar HP permanentemente (não retorna com descanso — é HP máximo perdido para sempre). A cada 5 HP máx sacrificados, adiciona +1d20 de dano numa área 3x3 hex. Não há limite de sacrifício por conjuração. Se o conjurador chegar a 0 HP máx, morre instantaneamente e o báculo explode causando dano igual ao HP sacrificado em raio 10 hex.",
+    curseDetails: "Localização: Torre do Arquimago Louco (Reinos de Akaen, dif.4). A magia Explosão de Mana só existe neste báculo — não pode ser aprendida por grimório." },
+
+  { tier: "unico", cursed: true,
+    name: "Arco Celeste de Akaen", dmg: "2d10 + 1d8", req: "DEX/AGI", weight: 2,
+    defenseDegrade: null, slot: ["primary"], heavyTwoHanded: true, range: 18,
+    story: "Arco sem corda — as flechas aparecem de energia pura quando a intenção de disparar é formada. Pertenceu ao Arqueiro Herói Ferrath, que o usou para disparar a flecha que destruiu o núcleo do Deus Marcado. Mas o poder de criar flechas do nada vem de uma âncora: o portador doa seu movimento ao arco.",
+    note: "⚠ AMALDIÇOADA — Ancorado: Não requer flechas e tem alcance 18 hex. MAS enquanto equipado, Movimento = 0 (o portador não pode se mover em combate de nenhuma forma — incluindo habilidades de movimento, empurrão involuntário ou qualquer deslocamento). Reações de movimento também são bloqueadas.",
+    curseDetails: "Item único do Herói Ferrath. Localização: Arquivo Secreto dos Arcanistas de Akaen (dif.3). Para recuperá-lo é preciso resolver o enigma dos Cinco Marcos." },
+
 ];
 
 const WEAPONS_MAGIC = [
@@ -937,7 +1027,22 @@ const ARMORS = [
     note: "+1 Movimento (movePenalty negativo = bônus). +1d6 em testes de Furtividade. MAS o portador fica levemente mais agressivo — ao receber dano em combate, faz Teste de Força de Vontade (normal) ou usa sua próxima Ação para atacar o agressor (não para mover ou usar habilidade)." },
   { tier: "raro", name: "Placa do Guardião Imóvel", physDefense: 9, magDefense: 1, weight: 20, movePenalty: 3, req: "FOR alta",
     story: "A armadura mais pesada que pode ser forjada sem magia. Um guerreiro que a usa é uma fortaleza — que não se move.",
-    note: "⚠ Defesa Física máxima para tier raro, mas −3 Movimento e imobilidade parcial: se o portador não se mover neste turno, ganha +2 de Defesa Física adicional (bônus passivo de posição). Ideal para tanques que seguram linha." },
+    note: "⚠ Defesa Física máxima para tier raro, mas −3 Movimento e imobilidade parcial: se o portador não se mover neste turno, ganha +2 de Defesa Física adicional (bônus passivo de posição). Ideal para tanques que seguram linha." },,
+
+
+  /* ── AMALDIÇOADAS — Armaduras ── */
+  { tier: "unico", cursed: true,
+    name: "Armadura do Sofrimento", physDefense: 0, magDefense: 0, weight: 8, movePenalty: 0, req: "FOR/SAB",
+    story: "Armadura sem placas visíveis — apenas superfície polida que reflete a dor do portador. Quem a usa não sente a armadura, mas sente tudo o que a armadura absorve de volta, dobrado. Construída por um clérigo que acreditava que sofrimento era o caminho para a divindade.",
+    note: "⚠ AMALDIÇOADA — Dor Dobrada: HP máximo é DOBRADO enquanto equipada (os dois extras aparecem na ficha). MAS TODOS os recursos de combate são reduzidos pela metade arredondado para baixo: Ações÷2, Reações÷2, Ações de Reação÷2, Ações de Magia÷2, Movimento÷2. Além disso, todo dano sofrido causa dor real — o portador faz Força de Vontade (normal) ou fica Atordoado por 1 rodada (a dor é insuportável mesmo que a armadura aguente).",
+    magicBonus: { hp: 999 },
+    curseDetails: "Dungeon: Templo do Sofrimento Eterno (Deserto Carmesim, dif.4). O HP dobrado é calculado pelo app como +999 HP — o Mestre deve aplicar manualmente o dobro e reverter os recursos." },
+
+  { tier: "lendario", cursed: true,
+    name: "Casca do Caranguejo Primordial", physDefense: 12, magDefense: 0, weight: 25, movePenalty: 4, req: "FOR alta",
+    story: "Não é uma armadura forjada — é a casca real de um Caranguejo Primordial que habitava o fundo do Grande Lago antes de Magnalaga existir. Quando o portador a veste, a casca se funde parcialmente com seu corpo. Difícil de tirar. Muito difícil.",
+    note: "⚠ AMALDIÇOADA — Fusão Parcial: Defesa Física 12 (a maior do mundo). Mas −4 Movimento, imune a Empurrão e Derrubada (bom) E também imune a Recuar e Movimento Voluntário (ruim — o portador literalmente não consegue se mover mais de 1 hex por Ação de Movimento). Para TIRAR a armadura: requer 30 minutos e teste de FOR (crítico) ou assistência de um clérigo. Se forçar a remoção sem o teste, perde 2d10 HP máx permanentemente.",
+    curseDetails: "Localização: Fundo do lago, na câmara do Caranguejo Primordial (dif.4, único encontro no jogo com esta criatura)." },
 
 ];
 
@@ -1143,7 +1248,81 @@ const ACCESSORIES = [
   { tier: "unico", name: "Símbolo das Cinco Classes — Herança dos Heróis", weight: 0.3,
     effect: "Medalha que os cinco heróis fundadores criaram juntos no dia em que decidiram fundar reinos. Passou de mão em mão por 500 anos até encontrar o portador atual. Passivo: o portador conta como treinado em qualquer perícia de qualquer classe para fins de testes de Perícia (sem bônus de dano ou habilidade — só o +2 de treinado nos testes). Uma vez por semana: Chamado dos Heróis — por 5 rodadas, o portador acessa uma habilidade aleatória de uma classe que não é a sua (rola 1d4: 1=Golpe Pesado, 2=Tiro Certeiro, 3=Golpe Envenenado, 4=Repreensão Sagrada).",
     story: "Os Cinco Marcos dos Heróis começaram a brilhar quando este símbolo chegou às mãos do portador atual — como se reconhecessem que o ciclo estava se completando.",
-    uniqueAbility: "Herança Completa (ativa quando os 5 Marcos são visitados com o símbolo): o portador recebe permanentemente a habilidade passiva de nível 1 de cada uma das outras 4 classes. Este efeito é permanente e não conta como equipamento." }
+    uniqueAbility: "Herança Completa (ativa quando os 5 Marcos são visitados com o símbolo): o portador recebe permanentemente a habilidade passiva de nível 1 de cada uma das outras 4 classes. Este efeito é permanente e não conta como equipamento." },
+
+  /* ══════════════════════════════════════════════════════════
+     ACESSÓRIOS AMALDIÇOADOS
+     ══════════════════════════════════════════════════════════ */
+
+  /* Amuleto da Muralha Imóvel */
+  { tier: "magico", cursed: true,
+    name: "Amuleto da Muralha Imóvel", weight: 0.4,
+    magicBonus: { reactions: 0 },
+    effect: "+5 Defesa Física e +5 Defesa Mágica enquanto equipado.",
+    story: "Amuleto com o símbolo de uma muralha inquebrável. Proteção absoluta — mas o preço é que a muralha não se move.",
+    note: "⚠ AMALDIÇOADA: +5 Def. Física e +5 Def. Mágica (passivo). MAS o portador só pode ter 1 Ação de Combate e 1 Ação de Magia por turno, independente de outros bônus ou habilidades. Qualquer bônus de ação é ignorado. A muralha defende mas não ataca.",
+    curseDetails: "Forjado pelos Construtores Anões de Durrak como teste. O arquiteto que o criou nunca se moveu de seu banco de trabalho — foi encontrado morto sentado, sorrindo, com o amuleto no pescoço." },
+
+  /* Cinto da Brutalidade */
+  { tier: "magico", cursed: true,
+    name: "Cinto da Brutalidade", weight: 0.6,
+    magicBonus: { actions: 2 },
+    effect: "+2 Ações de Combate por turno enquanto equipado.",
+    story: "Cinto de couro de Lobo do Vazio, cravejado com dentes do mesmo animal. Quem o usa sente a fome do lobo — a necessidade de atacar sobrepõe qualquer pensamento complexo.",
+    note: "⚠ AMALDIÇOADA: +2 Ações de Combate por turno. MAS o portador PERDE TODAS as Ações de Magia (não pode conjurar nada enquanto equipado, independente de INT ou itens). Magias já ativas continuam, mas não pode iniciar novas. A brutalidade física suprime a mente arcana.",
+    curseDetails: "Encontrado no pescoço do Alfa da Alcateia do Vazio (dif.4) — a criatura usava o cinto como troféu de uma batalha antiga." },
+
+  /* Brincos da Dor Eterna */
+  { tier: "unico", cursed: true,
+    name: "Brincos da Dor Eterna", weight: 0.1,
+    effect: "Permite conjurar magias sem gastar Slots de Magia. A magia ainda consome Ação de Magia, mas não usa Slot.",
+    story: "Par de brincos de osso vermelho que parecem cobras enroscadas. Foram usados por uma maga que se recusou a parar de conjurar mesmo depois de esgotar toda sua mana — ela descobriu como fazê-lo. O custo foi deixar de dormir por 3 anos.",
+    note: "⚠ AMALDIÇOADA — Incapacidade da Dor: Conjura sem gastar Slots. MAS antes de cada conjuração, faz Força de Vontade (normal). Se FALHAR: sente dor agonizante — perde TODAS as Ações deste turno (combate e magia) e fica Atordoado. Se PASSAR: conjura normalmente. A dor piora: a cada 3 magias conjuradas neste combate, a dificuldade sobe (normal→difícil→crítico).",
+    curseDetails: "Localização: Câmaras da Maga Sem Sono (Montanhas de Atrelon, dif.3). A própria maga ainda está lá — não morreu, não dorme, apenas conjura eternamente, completamente louca." },
+
+  /* Anel do Rito dos Pombos */
+  { tier: "magico", cursed: true,
+    name: "Anel do Rito dos Pombos", weight: 0.1,
+    effect: "Ativa o Rito dos Pombos: garante Crítico automático no próximo ataque. Ver nota para custo.",
+    story: "Anel com uma pomba gravada em posição estranha — de cabeça para baixo. O Rito dos Pombos é uma magia de inversão: para garantir que algo bom aconteça, você aceita que o oposto também seja garantido.",
+    note: "⚠ AMALDIÇOADA — Inversão: Ao usar o Rito dos Pombos (1 Ação de Magia), o PRÓXIMO ataque do portador é Crítico Automático (dano máximo). MAS no turno SEGUINTE ao crítico, qualquer Crítico Natural (20) automaticamente vira Falha Crítica (1) — o equilíbrio se inverte. O anel pode ser usado novamente para garantir outro crítico, mas o ciclo de inversão persiste.",
+    curseDetails: "Item comum em uma torre de magos excêntricos. Não tem dungeon associada — pode ser vendido por um comerciante que não sabe o que tem." },
+
+  /* Broche do Pacto de Sangue */
+  { tier: "lendario", cursed: true,
+    name: "Broche do Pacto de Sangue", weight: 0.2,
+    magicBonus: { hp: 30, spellActions: 2 },
+    effect: "+30 HP máximo e +2 Ações de Magia enquanto equipado.",
+    story: "Broche com uma gota de sangue cristalizado no centro. O sangue pertencia a um mago que fez um pacto com uma entidade do plano arcano: poder ilimitado em troca de cada gota de vida. O mago viveu 3 anos depois do pacto — os 3 anos mais produtivos da história arcana de Akaen.",
+    note: "⚠ AMALDIÇOADA — Pacto de Sangue: +30 HP e +2 Ações de Magia. MAS a cada sessão (não combate — SESSÃO), o portador perde 5 HP MÁXIMO permanentemente enquanto o broche estiver equipado. O broche não pode ser removido voluntariamente sem um Ritual de Quebra de Pacto (nível 4, apenas Clérigos de Sanctum sabem fazer). Se o portador morrer com o broche, o HP máximo perdido não retorna na ressurreição.",
+    curseDetails: "Localização: Biblioteca Proibida de Arcath (dif.3). O ritual de remoção custa 500 moedas de ouro e exige que o Clérigo seja de Sanctum." },
+
+  /* Máscara do Doppelganger */
+  { tier: "unico", cursed: true,
+    name: "Máscara do Doppelganger", weight: 0.5,
+    effect: "Transforma o portador em cópia perfeita de qualquer pessoa vista. A transformação é completa: voz, aparência, cheiro. Dura até ser voluntariamente encerrada.",
+    story: "Ninguém sabe quem criou esta máscara — porque quem a usa esquece quem é. Encontrada em uma câmara com 7 espelhos, cada um mostrando um rosto diferente.",
+    note: "⚠ AMALDIÇOADA — Identidade Dissolvida: A cada 24 horas disfarçado como outra pessoa, o portador faz Força de Vontade (difícil) ou esquece um detalhe da própria identidade (nome, relacionamento, memória). Acumula. Se acumular 5 esquecimentos, o portador PASSA A SER a pessoa imitada permanentemente — a memória original se dissolve. Cura: apenas Magia de Restauração de Memória (nível 5, raríssima).",
+    curseDetails: "Dungeon: Câmara dos Sete Espelhos (em qualquer cidade grande — o Mestre escolhe). O item está lá desde antes da fundação dos reinos." },
+
+  /* Sandálias do Passo Além */
+  { tier: "lendario", cursed: true,
+    name: "Sandálias do Passo Além", weight: 0.4,
+    magicBonus: { move: 4 },
+    effect: "+4 Movimento. Permite atravessar paredes e obstáculos sólidos durante o movimento.",
+    story: "Sandálias feitas com couro de uma criatura que existe parcialmente em outro plano. Quem as usa literalmente toca dois mundos ao mesmo tempo — e dois mundos também tocam quem as usa.",
+    note: "⚠ AMALDIÇOADA — Entre Mundos: +4 Movimento e atravessa paredes. MAS a cada vez que atravessa uma parede ou obstáculo sólido, faz SAB (normal) ou fica Preso Entre Planos por 1 rodada (não pode agir, atacar ou ser atacado — existe em outro estado). Além disso, o portador é parcialmente visível no plano das sombras: criaturas etéreas e espectrais podem atacá-lo normalmente.",
+    curseDetails: "Localização: Fissura do Grande Lago (dif.4). As sandálias estão num pedestal no plano adjacente — só alguém parcialmente etéreo pode alcançá-las." },
+
+  /* Coração de Cristal */
+  { tier: "unico", cursed: true,
+    name: "Coração de Cristal", weight: 0.3,
+    magicBonus: { hp: 50, reactions: 2 },
+    effect: "+50 HP máximo e +2 Reações. Visualmente: cristal que pulsa como coração.",
+    story: "O coração literalmente removido de um Golem de Cristal de Atrelon que havia desenvolvido consciência. O Golem pediu para ser desativado — mas seu coração continuou pulsando. Quem o carrega ouve, em momentos de silêncio, um segundo coração batendo.",
+    note: "⚠ AMALDIÇOADA — Segundo Coração: +50 HP e +2 Reações. MAS o cristal sente dor. Cada vez que o portador recebe dano, o cristal emite um som suave. Ao chegar abaixo de 50% HP, o cristal chora — e o portador é compelido a se proteger (Força de Vontade difícil ou usa Reações apenas para se defender, nunca para atacar). Se o portador morrer, o cristal explode causando 3d10 em raio 3 hex.",
+    curseDetails: "Localização: Núcleo do Golem Consciente (Ruínas de Atrelon, dif.4). O Golem pode ser encontrado antes de ser completamente desativado — e pode PEDIR que os aventureiros levem seu coração para alguém que o mereça." },
+
 ];
 
 const ALL_WEAPONS = [...WEAPONS_ONE_HAND, ...WEAPONS_TWO_HAND, ...WEAPONS_MAGIC, ...WEAPONS_RANGED];
