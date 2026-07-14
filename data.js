@@ -582,7 +582,102 @@ const GENERAL_SPELLS = [
   { name: "Fissura Mental", level: 2, category: "controle/maldição", cursed: true,
     effect: "2d8 de dano psíquico a um alvo visível em até 10 hex. Alvo fica Confuso por 3 rodadas (1-2=ataca aliado mais próximo, 3-4=parado, 5-6=age normalmente). Resistência SAB (difícil) anula a Confusão mas não o dano.",
     castTime: "1 Ação de Magia", cooldown: "2 usos por combate",
-    note: "⚠ AMALDIÇOADA: Se o conjurador falhar em qualquer teste nesta rodada, sofre 1d8 de dano psíquico — a fissura reflete parcialmente." }
+    note: "⚠ AMALDIÇOADA: Se o conjurador falhar em qualquer teste nesta rodada, sofre 1d8 de dano psíquico — a fissura reflete parcialmente." },
+
+
+
+  /* ══════════════════════════════════════════════════════════
+     MAGIAS DIVINAS — Concedidas pelas divindades das raças
+     Disponíveis apenas para portadores de itens sagrados
+     da respectiva divindade ou com permissão do Mestre
+     ══════════════════════════════════════════════════════════ */
+
+  /* ── AETHEA — Deusa dos Elfos (Luz e Memória) ── */
+  { name: "Claridade de Aethea", level: 3, category: "cura/buff", divine: "Aethea",
+    effect: "Cria uma aura de luz dourada em raio 5 hex por 4 rodadas. Aliados na aura recuperam 1d6 HP por turno (passivo). Inimigos na aura têm −1d4 em testes de Resistência mental. Uma vez durante a duração: pode revelar a 'verdade' de uma mentira ou ilusão — desfaz disfarces e Ilusões de nível 3 ou menor automaticamente.",
+    castTime: "1 Ação de Magia", cooldown: "1 uso por combate",
+    note: "🌟 Só pode ser conjurada por portadores da Lágrima de Aethea, da Lâmina do Crepúsculo ou elfos com bênção ativa de Aethea." },
+
+  { name: "Memória dos Elfos Caídos", level: 4, category: "invocação/buff", divine: "Aethea",
+    effect: "Invoca as memórias de guerreiros elfos mortos na escravidão — não corpos, mas ecos que podem agir. Por 3 rodadas, 1d4 Ecos Élficos (HP 20, Def.3, Dano 1d8) aparecem ao lado do conjurador e agem em seu turno. Ao destruídos, cada Eco emite luz que cura 1d8 em aliados adjacentes.",
+    castTime: "1 turno de concentração", cooldown: "1 uso por sessão",
+    note: "🌟 Divina — os Ecos falam em élfico antigo antes de desaparecer. O Mestre pode usar isto para revelar fragmentos do lore élfico." },
+
+  { name: "Luz Eterna de Aethea", level: 5, category: "cura/purificação", divine: "Aethea",
+    effect: "O conjurador se transforma em pura luz por 1 rodada. Durante este estado: imune a todo dano, todos os aliados visíveis são curados em 3d10+SAB, todas as maldições de nível 3 ou menor são removidas de aliados em raio 8 hex, e todos os inimigos de origem corrupta (Araltos, undead, corrompidos) sofrem 4d10 de dano sagrado.",
+    castTime: "2 turnos de concentração", cooldown: "1 uso por semana",
+    note: "🌟 A magia mais sagrada de Aethea. Ao conjurar, o portador brilha com intensidade solar por 6 horas — não pode se esconder." },
+
+  /* ── THURGOMUR — Deus dos Anões (Forja e Terra) ── */
+  { name: "Punho de Thurgomur", level: 2, category: "ataque/controle", divine: "Thurgomur",
+    effect: "Invoca um punho de pedra de 1 hex que emerge do chão sob um alvo visível a até 8 hex. Dano: 2d8 + o alvo é Derrubado automaticamente. O punho persiste por 2 rodadas como obstáculo (pode ser destruído com 15+ dano). Se o alvo já estiver Derrubado quando o punho emerge: dano é dobrado.",
+    castTime: "1 Ação de Magia", cooldown: "3 usos por combate",
+    note: "🌟 Portadores da Bigorna ou Couraça de Thurgomur podem usar gratuitamente após receber dano (1x/rodada)." },
+
+  { name: "Fortaleza de Thurgomur", level: 3, category: "defesa/buff", divine: "Thurgomur",
+    effect: "Cria uma barreira de pedra em linha de 4 hex (altura 2 hex) em qualquer orientação. A barreira tem 40 HP e Defesa Física 8. Aliados atrás da barreira têm cobertura total contra projéteis. Dura até ser destruída ou o combate acabar. Uma vez por combate: pode 'pulsar' a barreira — ela avança 2 hex empurrando inimigos que estejam em sua trajetória (2d6 dano + Empurrão).",
+    castTime: "1 Ação de Magia", cooldown: "1 uso por combate",
+    note: "🌟 Divina de Thurgomur — anões conjuram sem custo de slot (a terra sempre obedece filhos da pedra)." },
+
+  /* ── THION — Deus dos Humanos (Ambição e Mudança) ── */
+  { name: "Golpe da Mudança", level: 2, category: "ataque/buff", divine: "Thion",
+    effect: "O próximo ataque do portador ignora TODA a Defesa do alvo (física e mágica). Se o ataque causar dano, o conjurador pode imediatamente trocar de posição com qualquer aliado visível (teleporte de troca). Thion acredita que cada golpe deve mudar alguma coisa.",
+    castTime: "1 Ação de Magia", cooldown: "2 usos por combate",
+    note: "🌟 Portadores da Moeda de Thion ou da Adaga do Conquistador aplicam esta magia sem custo de slot uma vez por combate." },
+
+  { name: "Ambição de Thion", level: 4, category: "buff/transformação", divine: "Thion",
+    effect: "O conjurador declara um objetivo ambicioso para este combate (ex: 'derrotar o chefe sozinho', 'proteger todos os aliados'). Por 5 rodadas, ganha bônus progressivo à medida que se aproxima do objetivo: +1d6 por rodada em que age em direção ao objetivo (acumula). Se completar o objetivo dentro das 5 rodadas: o bônus se torna permanente para este combate. Se falhar: perde 1d6 HP máximo temporariamente (retorna após descanso).",
+    castTime: "1 Ação de Magia", cooldown: "1 uso por combate",
+    note: "🌟 Thion só abençoa quem realmente tenta. Se o objetivo for muito fácil, o bônus é reduzido pela metade (o deus percebe quando está sendo enganado)." },
+
+  /* ── RAS'KURU — Deus dos Orcs (Guerra e Resistência) ── */
+  { name: "Rugido de Ras'kuru", level: 2, category: "controle/buff", divine: "Ras'kuru",
+    effect: "O conjurador emite um rugido devastador. Todos os inimigos em raio 5 hex testam Força de Vontade (difícil) ou ficam Amedrontados por 3 rodadas. Aliados no mesmo raio ganham +1d6 de dano por 2 rodadas (o rugido inspira). Se o conjurador estiver abaixo de 50% HP: o raio dobra para 10 hex e a dificuldade sobe para Crítico.",
+    castTime: "1 Ação de Magia", cooldown: "2 usos por combate",
+    note: "🌟 Portadores do Dente de Ras'kuru ou da Capa de Sangue usam esta magia sem custo de Ação de Magia (sai como reação ao entrar em combate)." },
+
+  { name: "Última Resistência de Ras'kuru", level: 3, category: "buff/sacrifício", divine: "Ras'kuru",
+    effect: "Pode ser conjurada MESMO enquanto Inconsciente ou em estado de 0 HP. O conjurador retorna a 1 HP e por 3 rodadas torna-se imune a Inconsciente e Morte (qualquer dano que o reduziria a 0 HP é ignorado — o corpo rejeita a morte). No final das 3 rodadas: o conjurador cai Inconsciente automaticamente independente do HP atual. Ras'kuru exige que a batalha seja terminada ou alguém cuide do guerreiro.",
+    castTime: "Reação (sem custo de Ação)", cooldown: "1 uso por sessão",
+    note: "🌟 Só disponível para portadores de item de Ras'kuru ou orcs que sobreviveram a uma batalha com 1 HP de diferença." },
+
+  /* ── TOBI — Deus dos Goblins (Travessura e Oportunidade) ── */
+  { name: "Sorte do Goblin", level: 1, category: "utilidade/buff", divine: "Tobi",
+    effect: "Tobi intervém. Uma vez neste turno, pode re-rolar qualquer dado (seu ou de um inimigo) e usar o resultado preferido. OU: faz qualquer objeto próximo 'cair no lugar certo' — uma chave cai de um bolso, uma faca desliza para a mão, uma porta estava destrancada. O Mestre decide o que é 'próximo' e 'lugar certo'.",
+    castTime: "1 Ação de Magia (pode ser usada fora do turno como Reação)", cooldown: "3 usos por combate",
+    note: "🌟 Portadores do Dado Viciado ou do Estilingue de Tobi têm 4 usos em vez de 3. Tobi aprecia usuários frequentes." },
+
+  { name: "Travessura de Tobi", level: 2, category: "controle/utilidade", divine: "Tobi",
+    effect: "Escolhe até 3 alvos visíveis. Cada alvo é afetado por uma travessura aleatória por 2 rodadas (1d6 por alvo): 1=Cego, 2=Surdo, 3=Escorregam (Derrubados), 4=Trocam de lugar entre si, 5=Atacam a si mesmos com dano mínimo, 6=Tobi aparece e assusta (Amedrontados). O conjurador não escolhe — Tobi decide.",
+    castTime: "1 Ação de Magia", cooldown: "2 usos por combate",
+    note: "🌟 Aviso de Tobi: pode afetar aliados se o Mestre rolar 1 natural para determinar os alvos. Tobi não garante precisão." },
+
+  /* ── JURGMUND — Divindade dos Serpentarianos (A Cobra Colossal) ── */
+  { name: "Veneno Sagrado de Jurgmund", level: 2, category: "ataque/debuff", divine: "Jurgmund",
+    effect: "Aplica veneno sagrado em um alvo tocado ou a até 6 hex. O veneno é diferente do natural: não pode ser curado por antídotos mundanos — apenas magia sagrada o remove. Dano: 1d8 por rodada por 5 rodadas (se curado por magia, apenas interrompe; se curado por Clérigo de Jurgmund, remove completamente). Enquanto envenenado, o alvo não pode usar magias de cura.",
+    castTime: "1 Ação de Magia", cooldown: "3 usos por combate",
+    note: "🌟 Portadores de itens de Jurgmund adicionam +1d8 ao dano do veneno por rodada." },
+
+  { name: "Forma da Cobra Sagrada", level: 4, category: "transformação/buff", divine: "Jurgmund",
+    effect: "O conjurador assume parcialmente a forma de cobra por 5 rodadas: Movimento +4, Esquiva +4, pode se mover por espaços impossíveis (rachar paredes, água, altura), ataques corpo a corpo adicionam veneno automático (1d6/rodada, 3 rodadas) e o conjurador não pode ser Agarrado ou Paralisado (serpentes escapam de tudo). MAS enquanto na forma: não pode usar armas convencionais.",
+    castTime: "1 turno de concentração", cooldown: "1 uso por combate",
+    note: "🌟 Só conjurável por Serpentarianos ou por quem passou pela Câmara das Três Escamas." },
+
+  { name: "Sussurro Profético de Jurgmund", level: 3, category: "utilidade/visão", divine: "Jurgmund",
+    effect: "Jurgmund sussurra um fragmento do futuro próximo ao conjurador. O Mestre revela secretamente um evento que VAI acontecer nos próximos 10 minutos reais de jogo — sem revelar como evitá-lo. O conjurador então pode compartilhar ou não com o grupo. Uma vez por sessão: a visão pode ser de um evento mais distante (próxima sessão) — mas a visão fica mais fragmentada e difícil de interpretar.",
+    castTime: "1 Ação de Magia (fora de combate preferível)", cooldown: "1 uso por sessão",
+    note: "🌟 O Mestre usa esta magia para semear plot hooks ou avisar de perigos reais. Nunca deve ser uma armadilha — Jurgmund fala verdade." },
+
+  /* ── VERMELHÃO — Deus dos Karlacs (O Fogo que Cresce) ── */
+  { name: "Chama de Karloth", level: 2, category: "ataque/buff", divine: "Vermelhão",
+    effect: "O conjurador envolve a si mesmo ou um aliado em chamas sagradas por 3 rodadas. Dano passivo: 1d6 a todo inimigo que atacar corpo a corpo o portador das chamas. Além disso, a cada rodada que a chama dura sem ser extinta, o dano sobe em +1d6 (acumula — rodada 1=1d6, rodada 2=2d6, rodada 3=3d6). Água e magia de frio tentam extinguir (1 turno de concentração do inimigo).",
+    castTime: "1 Ação de Magia", cooldown: "2 usos por combate",
+    note: "🌟 Portadores de itens de Vermelhão ativam esta magia gratuitamente ao receber dano de fogo pela primeira vez no combate." },
+
+  { name: "Erupção do Vermelhão", level: 5, category: "ataque/área", divine: "Vermelhão",
+    effect: "O conjurador canaliza o fogo interno de Vermelhão e libera em explosão: área 5x5 hex centralizada no conjurador. Dano: 3d10 + 1d6 por rodada que o conjurador passou neste combate (o fogo acumulado). O conjurador fica no centro mas é imune ao próprio fogo. Todos os objetos inflamáveis na área pegam fogo. O campo fica coberto de brasas por 2 rodadas (2d6 a quem cruzar).",
+    castTime: "2 turnos de concentração", cooldown: "1 uso por combate",
+    note: "🌟 Só conjurável por portadores da Chama-Viva de Karloth ou das Cinzas de Karloth Sagrado. O dano base é 3d10 mesmo sem rodadas acumuladas." }
 
 
 ];
@@ -743,6 +838,35 @@ const WEAPONS_ONE_HAND = [
     note: "⚠ AMALDIÇOADA — Eco Cópia: Imediatamente após qualquer ataque com este punhal (acerto ou erro), o punhal executa SOZINHO um segundo ataque idêntico num alvo ALEATÓRIO no raio 3 hex (inclui aliados). O portador não controla o eco. +1d8 de dano no acerto mas o risco de acertar aliados é real.",
     curseDetails: "Dungeon: Câmaras do Espelho Partido (dif.3). O punhal foi dividido em dois — o eco é o reflexo da outra metade." },
 
+
+  /* ══════════════════════════════════════════════════════════
+     ARMAS DIVINAS — Presenteadas pelas divindades
+     ══════════════════════════════════════════════════════════ */
+
+  /* ── AETHEA (Divindade dos Elfos — Deusa da Luz e Memória) ── */
+  { tier: "ancestral", divine: "Aethea", race: "elfo",
+    name: "Lâmina do Crepúsculo Eterno", dmg: "1d10 + 1d8 + 1d6", req: "DEX/INT", weight: 2, defenseDegrade: 0,
+    slot: ["primary","secondary"],
+    story: "Forjada pela própria Aethea na última aurora antes de os elfos serem escravizados. Aethea chorou ao forjá-la — as lágrimas caíram sobre o metal e solidificaram como gemas que nunca perderam o brilho. A lâmina foi enterrada junto com o primeiro elfo que foi capturado, como promessa de que a luz voltaria. Encontrada por arqueólogos que escavavam o Palácio Central de Akaen.",
+    note: "🌟 DIVINO — Memória da Luz: a lâmina lembra todos os ataques bem-sucedidos do portador. Após 3 acertos no mesmo combate, o próximo ataque é guiado por Aethea — acerto automático (sem rolar), dano máximo de todos os dados. Uma vez por dia ao sol: pode invocar 'Claridade de Aethea' — todos os aliados em raio 6 hex são curados em 2d8 e ficam imunes a Medo por 3 rodadas.",
+    curseDetails: "Localização: Câmara da Última Aurora (ruínas do Palácio élfico sob Akaen, dif.4). Só pode ser empunhada por quem carrega um item élfico ou tem sangue élfico." },
+
+  /* ── THION (Divindade dos Humanos — Deus da Ambição e Mudança) ── */
+  { tier: "ancestral", divine: "Thion", race: "humano",
+    name: "Adaga do Conquistador", dmg: "1d8 + 1d6", req: "qualquer", weight: 1, defenseDegrade: 1,
+    slot: ["primary","secondary"],
+    story: "Thion não forjou esta adaga. Um humano a forjou — o primeiro humano a matar um elfo mago na Era da Escravidão. Thion tocou a lâmina naquele momento e a consagrou retroativamente. O deus da ambição acredita que ferramentas dos mortais valem mais que presentes divinos. A adaga passou por 47 mãos diferentes em 500 anos, cada dono adicionando uma marca na empunhadura.",
+    note: "🌟 DIVINO — Ambição de Thion: o dano base aumenta permanentemente a cada nível do portador (+1d4 por nível, acumula — nível 5 = +5d4 além do base). Uma vez por combate: 'Golpe da Mudança' — o próximo ataque ignora TODA Defesa do alvo (física e mágica). O bônus de nível reseta se o portador abandonar voluntariamente uma missão pela segunda vez.",
+    curseDetails: "Localização: Câmara das 47 Marcas (museu secreto em Sombrath). O dono anterior deve aceitar passar a adaga — não pode ser roubada de alguém vivo." },
+
+  /* ── RAS'KURU (Divindade dos Orcs — Deus da Guerra e Resistência) ── */
+  { tier: "ancestral", divine: "Ras'kuru", race: "orc",
+    name: "Garra de Ras'kuru", dmg: "2d8 + 1d10", req: "FOR alta", weight: 5, defenseDegrade: 3,
+    slot: ["primary"],
+    story: "Ras'kuru perdeu a mão direita na primeira batalha que os orcs travaram ao lado de humanos contra os elfos. A mão caiu e no chão se transformou em esta garra de metal que nunca enferruja. Orcs acreditam que a garra é literalmente a mão do deus — que ele escolheu um orc para empunhá-la cada geração. O portador atual sente os sonhos de todos os portadores anteriores.",
+    note: "🌟 DIVINO — Resistência de Ras'kuru: ao receber dano que reduziria o portador abaixo de 50% HP, pode declarar 'Resistência' (1x/combate) — o dano é reduzido à metade e o portador ganha +1d10 de dano nos próximos 2 turnos (raiva purificada). Passivo: imune a Derrubada e Atordoado. Se o portador morrer empunhando a Garra, todos os aliados em raio 6 hex ganham +2d8 de dano por 1 rodada (sacrifício inspira).",
+    curseDetails: "Localização: Tumba do Último Chefe Orc (Grande Planície, dif.3). O guardião é um Orc ancestral não-morto que só entrega a garra se for derrotado em combate singular." },
+
 ];
 
 const WEAPONS_TWO_HAND = [
@@ -842,6 +966,23 @@ const WEAPONS_TWO_HAND = [
     note: "⚠ AMALDIÇOADA — Ancorado: Não requer flechas e tem alcance 18 hex. MAS enquanto equipado, Movimento = 0 (o portador não pode se mover em combate de nenhuma forma — incluindo habilidades de movimento, empurrão involuntário ou qualquer deslocamento). Reações de movimento também são bloqueadas.",
     curseDetails: "Item único do Herói Ferrath. Localização: Arquivo Secreto dos Arcanistas de Akaen (dif.3). Para recuperá-lo é preciso resolver o enigma dos Cinco Marcos." },
 
+
+  /* ── THURGOMUR (Divindade dos Anões — Deus da Forja e da Terra) ── */
+  { tier: "ancestral", divine: "Thurgomur", race: "anão",
+    name: "Martelo de Thurgomur — O Primeiro Golpe", dmg: "2d10 + 1d8", req: "FOR", weight: 12, defenseDegrade: null,
+    slot: ["primary"], heavyTwoHanded: true,
+    story: "O primeiro martelo que existiu — ou pelo menos os anões acreditam nisso. Thurgomur usou este martelo para bater a primeira pedra e criar as Montanhas de Atrelon. Depois o enterrou no núcleo da montanha como semente. Quando a Tartaruga Magnalaga absoveu a contaminação do Grande Lago, o vibração do processo fez o martelo subir à superfície pela primeira vez em 500 anos.",
+    note: "🌟 DIVINO — Golpe da Criação: acertos com este martelo deixam marcas permanentes no campo de batalha — cada acerto cria um obstáculo de pedra de 1 hex (impassável, pode ser destruído com 20+ de dano). Passivo: o portador não pode ser movido contra sua vontade (raízes de pedra seguram). Uma vez por dia: 'Forja Divina' — toca um aliado e repara magicamente uma armadura ou arma quebrada E adiciona +1d6 de dano permanente a ela.",
+    curseDetails: "Localização: Núcleo da Tartaruga Magnalaga (acessível apenas durante um mergulho de Magnalaga, dif.4). Os Anões do Casco são os guardiões — podem ser aliados ou obstáculos." },
+
+  /* ── TOBI (Divindade dos Goblins — Deus da Travessura e Oportunidade) ── */
+  { tier: "lendario", divine: "Tobi", race: "goblin",
+    name: "Estilingue de Oportunidade de Tobi", dmg: "1d6 + 1d6", req: "DEX", weight: 0.5, defenseDegrade: null,
+    slot: ["primary"], range: 10,
+    story: "Tobi não é um deus sério. Ele é o que os goblins chamam de deus mas que todos os outros chamariam de 'problema'. O estilingue foi construído pelo Goblin Mais Sortudo que Existiu, que nunca teve mais que 3 moedas mas sempre aparecia com comida, informações valiosas e às vezes cavalos que claramente não eram seus. Tobi abençoou o estilingue porque achou graça.",
+    note: "🌟 DIVINO — Oportunidade de Tobi: cada projétil disparado tem 25% de chance (1d4=1) de acertar TAMBÉM um segundo alvo aleatório no raio (Tobi sempre aproveita oportunidades). Passivo: ao usar Furtividade no mesmo turno, o dano é triplicado (sneak attack divino). Uma vez por sessão: 'Sorte do Goblin' — troca qualquer resultado de dado (seu ou do inimigo) por outro resultado à sua escolha.",
+    curseDetails: "Localização: Toca do Goblin Mais Sortudo (qualquer cidade — Tobi move o item aleatoriamente entre sessões). O Mestre joga 1d6 no início de cada sessão para determinar onde está." },
+
 ];
 
 const WEAPONS_MAGIC = [
@@ -859,7 +1000,16 @@ const WEAPONS_MAGIC = [
   /* --- LENDÁRIOS --- */
   { tier: "lendario", name: "Bastão das Entranhas do Mundo", dmg: "1d8 + 1d6 + 1d4", req: "INT/SAB", weight: 4, defenseDegrade: null, slot: ["primary"],
     story: "Encontrado nas profundezas abaixo de Serpentara, onde o calor da terra se mistura com a energia primordial de Jurgmund. Os anéis de cobra que formam seu cabo nunca param de se mover levemente — como se estivessem vivos.",
-    note: "Passivo: +1d6 em todas as magias de veneno, terra ou natureza. Três vezes por dia, ao conjurar qualquer magia, pode adicionar um efeito de paralisia leve (alvo perde 1 Ação de Reação).", heavyTwoHanded: true }
+    note: "Passivo: +1d6 em todas as magias de veneno, terra ou natureza. Três vezes por dia, ao conjurar qualquer magia, pode adicionar um efeito de paralisia leve (alvo perde 1 Ação de Reação).", heavyTwoHanded: true },
+
+  /* ── DEUS DO VERMELHÃO (Divindade dos Karlacs — O Fogo que Cresce) ── */
+  { tier: "ancestral", divine: "Vermelhão", race: "karlac",
+    name: "Chama-Viva de Karloth", dmg: "2d8 + 1d12", req: "FOR/SAB", weight: 4, defenseDegrade: null,
+    slot: ["primary"], heavyTwoHanded: true,
+    story: "O Deus do Vermelhão não tem nome — os Karlacs o chamam de Vermelhão porque é a cor do fogo que consome os fragmentos do Deus Marcado. Este cajado foi formado espontaneamente na boca do Vulcão de Karloth quando a Grande Salamandra Karlac passou pela área pela primeira vez. Os Karlacs acreditam que o cajado é um pedaço do coração do vulcão que Vermelhão exteriorizou para o povo que vive nele.",
+    note: "🌟 DIVINO — Fogo Crescente: a cada rodada de combate, o dano aumenta em +1d6 (acumula sem limite — rodada 1=+1d6, rodada 2=+2d6, rodada 3=+3d6...). Se o portador receber dano de fogo ou de fonte da Karlac: o acúmulo não é zerado — é dobrado (+2d6 por rodada no acúmulo). Uma vez por combate: 'Vermelhão Desperto' — libera todo o fogo acumulado em área 4x4 hex (dano = todo o dano acumulado até este momento).",
+    curseDetails: "Localização: Boca do Vulcão de Karloth (acessível apenas durante erupção menor, dif.4). O Dragão Dourado é o guardião — não ataca, mas exige que o portador prove que entende a natureza do fogo crescente." },
+
 ];
 
 const WEAPONS_RANGED = [
@@ -912,7 +1062,16 @@ const WEAPONS_RANGED = [
   { tier: "unico", name: "Besta dos Círculos de Karlac", dmg: "1d12 + 1d8", range: 14, req: "DEX/FOR", weight: 6, defenseDegrade: null, slot: ["primary"],
     story: "Forjada pelos Karlacs com escama de Karlac filhote e osso de criatura do deserto, temperada no calor direto da cauda da grande salamandra. Nenhum Karlac a vendia — mas um aventureiro que salvou a Cidade Viva de um ataque recebeu-a como presente do Grande Karlac Yorven.",
     uniqueAbility: "Chama de Karlac (2x/dia): carrega uma flecha especial de fogo que ao acertar cria uma mancha de fogo no hexágono do alvo. A mancha dura 3 rodadas: qualquer criatura que entrar ou ficar na mancha sofre 2d8 de fogo por turno. Alvo atingido pela flecha sofre 3d10 de fogo imediato. O fogo de Karlac consome restos do Deus Marcado — criaturas corrompidas sofrem dano dobrado.",
-    note: "Passivo: todas as flechas têm +1d4 de fogo. Imune ao calor do Deserto Carmesim e de criaturas de fogo enquanto equipada." }
+    note: "Passivo: todas as flechas têm +1d4 de fogo. Imune ao calor do Deserto Carmesim e de criaturas de fogo enquanto equipada." },
+
+  /* ── JULGMUND (Divindade dos Serpentarianos — A Cobra Colossal) ── */
+  { tier: "ancestral", divine: "Jurgmund", race: "serpentariano",
+    name: "Arco das Escamas de Jurgmund", dmg: "1d12 + 1d10", req: "DEX/SAB", weight: 3, defenseDegrade: null,
+    slot: ["primary"], heavyTwoHanded: true, range: 16,
+    story: "Três escamas de Jurgmund caíram durante a Batalha Colossal e foram encontradas por Serpentarianos que testemunharam o confronto. Um artesão passou 40 anos moldando as escamas em forma de arco — as escamas resistiam ao calor, ao frio e a qualquer ferramenta. Ele finalmente conseguiu curvá-las quando pediu ajuda em oração. No dia seguinte o arco estava pronto na sua bancada. O artesão nunca mais falou sobre como foi feito.",
+    note: "🌟 DIVINO — Veneno Sagrado de Jurgmund: flechas feitas de qualquer material tornam-se flechas de veneno sagrado ao passar pelo arco. Dano: 1d12+1d10 + veneno (1d8/rodada, 4 rodadas). Resistência SAB (difícil) reduz o veneno à metade. Uma vez por combate: 'Alento da Cobra' — dispara uma flecha de veneno colossal que atravessa TODOS os inimigos em linha reta (linha de 12 hex de comprimento), causando dano completo a cada um.",
+    curseDetails: "Localização: Câmara das Três Escamas (interior do Castelo da Cobra, Montanhas de Atrelon). Só pode ser empunhado por Serpentarianos ou por quem recebeu a bênção de Jurgmund." },
+
 ];
 
 const SHIELDS = [
@@ -1027,7 +1186,7 @@ const ARMORS = [
     note: "+1 Movimento (movePenalty negativo = bônus). +1d6 em testes de Furtividade. MAS o portador fica levemente mais agressivo — ao receber dano em combate, faz Teste de Força de Vontade (normal) ou usa sua próxima Ação para atacar o agressor (não para mover ou usar habilidade)." },
   { tier: "raro", name: "Placa do Guardião Imóvel", physDefense: 9, magDefense: 1, weight: 20, movePenalty: 3, req: "FOR alta",
     story: "A armadura mais pesada que pode ser forjada sem magia. Um guerreiro que a usa é uma fortaleza — que não se move.",
-    note: "⚠ Defesa Física máxima para tier raro, mas −3 Movimento e imobilidade parcial: se o portador não se mover neste turno, ganha +2 de Defesa Física adicional (bônus passivo de posição). Ideal para tanques que seguram linha." },,
+    note: "⚠ Defesa Física máxima para tier raro, mas −3 Movimento e imobilidade parcial: se o portador não se mover neste turno, ganha +2 de Defesa Física adicional (bônus passivo de posição). Ideal para tanques que seguram linha." },
 
 
   /* ── AMALDIÇOADAS — Armaduras ── */
@@ -1043,6 +1202,35 @@ const ARMORS = [
     story: "Não é uma armadura forjada — é a casca real de um Caranguejo Primordial que habitava o fundo do Grande Lago antes de Magnalaga existir. Quando o portador a veste, a casca se funde parcialmente com seu corpo. Difícil de tirar. Muito difícil.",
     note: "⚠ AMALDIÇOADA — Fusão Parcial: Defesa Física 12 (a maior do mundo). Mas −4 Movimento, imune a Empurrão e Derrubada (bom) E também imune a Recuar e Movimento Voluntário (ruim — o portador literalmente não consegue se mover mais de 1 hex por Ação de Movimento). Para TIRAR a armadura: requer 30 minutos e teste de FOR (crítico) ou assistência de um clérigo. Se forçar a remoção sem o teste, perde 2d10 HP máx permanentemente.",
     curseDetails: "Localização: Fundo do lago, na câmara do Caranguejo Primordial (dif.4, único encontro no jogo com esta criatura)." },
+
+
+  /* ══════════════════════════════════════════════════════════
+     ARMADURAS DIVINAS
+     ══════════════════════════════════════════════════════════ */
+
+  /* ── AETHEA ── */
+  { tier: "ancestral", divine: "Aethea", race: "elfo",
+    name: "Véu da Memória de Aethea", physDefense: 4, magDefense: 8, weight: 1, movePenalty: 0, req: "INT/SAB",
+    story: "Não é uma armadura no sentido tradicional — é uma névoa de luz solidificada que se adapta ao corpo. Tecida por Aethea a partir de memórias dos elfos que morreram sob escravidão. O portador às vezes vê flashes das memórias dos mortos — não é assustador, é como estar cercado de família.",
+    note: "🌟 DIVINO: Defesa Mágica 8 (a maior do jogo). Passivo: o portador não pode ser alvo de magia de ilusão, domínio ou controle mental — Aethea guarda a mente. Uma vez por combate: 'Véu dos Mortos' — por 2 rodadas torna-se parcialmente intangível, reduzindo dano físico em 75% (arredondado para baixo). Aliados em raio 4 hex veem as memórias dos elfos e ganham +1d6 em Força de Vontade." },
+
+  /* ── THURGOMUR ── */
+  { tier: "ancestral", divine: "Thurgomur", race: "anão",
+    name: "Couraça de Pedra Viva de Thurgomur", physDefense: 11, magDefense: 3, weight: 22, movePenalty: 2, req: "FOR",
+    story: "Thurgomur fundiu sua própria 'pele de rocha' — a camada de pedra que protege o núcleo da montanha — em forma de armadura para o primeiro Rei Anão. A armadura respira. Literalmente. O portador sente o ritmo de respiração da terra enquanto a usa.",
+    note: "🌟 DIVINO: Defesa Física 11. Passivo: ao receber qualquer dano, a armadura gera 1 ponto de 'Pedra Acumulada'. A cada 5 pontos: a armadura lança uma réplica de pedra em um inimigo (2d8 dano, testa FOR dif.normal ou Derrubado). Não há limite de acúmulo. Uma vez por dia: 'Coração da Montanha' — torna-se completamente imune a dano por 1 rodada (a pedra absorve tudo)." },
+
+  /* ── RAS'KURU ── */
+  { tier: "lendario", divine: "Ras'kuru", race: "orc",
+    name: "Capa de Sangue de Ras'kuru", physDefense: 5, magDefense: 2, weight: 3, movePenalty: 0, req: "FOR",
+    story: "Não é armadura — é uma capa de couro de um ser que nunca existiu no plano material, presenteada a orcs que sobreviveram a batalhas impossíveis. A capa tem a cor do sangue seco e nunca mancha com sangue novo — simplesmente absorve e escurece. Orcs velhos dizem que cada mancha é uma batalha que a capa lembra.",
+    note: "🌟 DIVINO: Passivo — a cada dano recebido, ganha +1 de Defesa Física temporária para o próximo ataque recebido (acumula até +6, reseta a cada turno). Quando ativada 'Clamor de Ras'kuru' (1x/combate): por 3 rodadas, todo dano sofrido é convertido em 50% de cura (sofre dano mas recupera metade como HP)." },
+
+  /* ── TOBI ── */
+  { tier: "lendario", divine: "Tobi", race: "goblin",
+    name: "Capuz Invisível de Tobi", physDefense: 2, magDefense: 2, weight: 0.3, movePenalty: -1, req: "DEX/AGI",
+    story: "Tobi desapareceu por 3 horas uma vez e voltou com este capuz. Ninguém sabe onde ele esteve. O capuz tem um remendo em formato de estrela que não combina com o resto do tecido — provavelmente de outro capuz completamente diferente. Goblins que o usaram relatam que às vezes o capuz ri baixinho no escuro.",
+    note: "🌟 DIVINO: +1 Movimento. Passivo: a primeira vez que alguém ataca o portador em cada combate, o ataque tem 50% de chance de errar automaticamente (Tobi 'desvia' o portador sem ele perceber). Uma vez por combate: 'Sumiço do Tobi' — o portador se torna completamente invisível por 2 rodadas (ataques contra ele têm 75% de chance de errar; ele pode atacar normalmente)." },
 
 ];
 
@@ -1322,6 +1510,67 @@ const ACCESSORIES = [
     story: "O coração literalmente removido de um Golem de Cristal de Atrelon que havia desenvolvido consciência. O Golem pediu para ser desativado — mas seu coração continuou pulsando. Quem o carrega ouve, em momentos de silêncio, um segundo coração batendo.",
     note: "⚠ AMALDIÇOADA — Segundo Coração: +50 HP e +2 Reações. MAS o cristal sente dor. Cada vez que o portador recebe dano, o cristal emite um som suave. Ao chegar abaixo de 50% HP, o cristal chora — e o portador é compelido a se proteger (Força de Vontade difícil ou usa Reações apenas para se defender, nunca para atacar). Se o portador morrer, o cristal explode causando 3d10 em raio 3 hex.",
     curseDetails: "Localização: Núcleo do Golem Consciente (Ruínas de Atrelon, dif.4). O Golem pode ser encontrado antes de ser completamente desativado — e pode PEDIR que os aventureiros levem seu coração para alguém que o mereça." },
+
+
+  /* ══════════════════════════════════════════════════════════
+     ACESSÓRIOS DIVINOS
+     ══════════════════════════════════════════════════════════ */
+
+  /* ── AETHEA (Elfos) ── */
+  { tier: "ancestral", divine: "Aethea", race: "elfo",
+    name: "Lágrima de Aethea", weight: 0.1,
+    magicBonus: { slots: 4, spellActions: 1 },
+    effect: "+4 Slots de Magia e +1 Ação de Magia. Passivo: magias de cura conjuradas pelo portador curam +1d8 adicional. Uma vez por sessão: 'Restauração de Memória' — restaura um personagem inconsciente ou morto (dentro de 1 hora da morte) com metade do HP máximo. Aethea permite que a memória da pessoa retorne.",
+    story: "Uma lágrima cristalizada de Aethea, colhida por uma elfa que estava presente quando a deusa chorou pela escravidão de seu povo. A lágrima nunca derreteu. Passa calor suave para quem a segura — como a mão de alguém que te conhece há muito tempo.",
+    curseDetails: "Localização: Tumba da Última Sacerdotisa de Aethea (floresta queimada nos Reinos de Akaen). Só brilha quando uma elfa a toca ou quando está perto de uma memória feliz de elvos." },
+
+  /* ── THURGOMUR (Anões) ── */
+  { tier: "ancestral", divine: "Thurgomur", race: "anão",
+    name: "Bigorna Miniatura de Thurgomur", weight: 0.8,
+    magicBonus: { hp: 20, carry: 20 },
+    effect: "+20 HP máximo e +20 Carga. Passivo: ao descansar em qualquer local, pode 'forjar' — conserta qualquer item danificado e pode aprimorar um item por sessão: adiciona +1d4 ao dano de uma arma ou +1 de Defesa a uma armadura (efeito permanente, máximo 3 aprimoramentos por item). Uma vez por dia: 'Bênção da Forja' — o próximo item forjado ou aprimorado pelo portador é abençoado por Thurgomur e ganha um bônus aleatório extra.",
+    story: "Uma miniatura da bigorna original de Thurgomur. Quando usada para trabalho real, assume tamanho completo — depois volta ao normal. Anões tocam a bigorna antes de entrar em batalha como ritual. O metal tem a temperatura do centro da terra.",
+    curseDetails: "Localização: Oficina de Thurgomur (interior da Tartaruga Magnalaga, câmara mais profunda). Só anões ou ferreiros dedicados podem encontrá-la." },
+
+  /* ── THION (Humanos) ── */
+  { tier: "ancestral", divine: "Thion", race: "humano",
+    name: "Moeda da Ambição de Thion", weight: 0.1,
+    effect: "Passivo: o portador pode aprender qualquer perícia de qualquer classe pagando o custo normal (Thion abre portas). Uma vez por sessão: 'Barganha de Thion' — o portador faz uma proposta a Thion (declarada em voz alta): 'Thion, faço X acontecer e em troca Y acontece'. Thion aceita se a proposta for interessante, ambiciosa e não garantida. O Mestre decide o que Thion acha interessante — geralmente envolve risco real.",
+    story: "Uma moeda de ouro com um rosto diferente em cada lado — nunca o mesmo rosto duas vezes que olha. É a única coisa que Thion carrega pessoalmente. Ele a perdeu em uma aposta com outro deus e tem viajado de mortal em mortal esperando que alguém eventualmente a devolva. Ele nunca vai pedí-la de volta diretamente porque isso implicaria que ele quer algo.",
+    magicBonus: {},
+    curseDetails: "Localização: não tem dungeon — aparece 'por acidente'. Um mendigo a dá como troco. Um pássaro a deixa cair. Thion não tem paciência para dungeons." },
+
+  /* ── RAS'KURU (Orcs) ── */
+  { tier: "lendario", divine: "Ras'kuru", race: "orc",
+    name: "Dente de Ras'kuru", weight: 0.3,
+    magicBonus: { hp: 15, reactions: 1 },
+    effect: "+15 HP máximo e +1 Reação. Passivo: ao chegar abaixo de 30% HP, entra em 'Fúria de Guerra' automaticamente — +2d6 em todos os ataques por 2 rodadas (Ras'kuru admira quem luta até o fim). Uma vez por combate: 'Rugido de Ras'kuru' — emite um rugido que aplica Amedrontado a todos os inimigos em raio 5 hex por 2 rodadas (Força de Vontade difícil para resistir).",
+    story: "Um dente de Ras'kuru que caiu durante a batalha que os orcs travaram pela primeira vez ao lado de Arcath. O deus não precisava de dentes para lutar, mas achou que dar um dente era mais honesto que dar uma espada. Orcs que empunham o dente não ficam com medo — o dente lembra que a morte já lutou ao lado deles antes.",
+    curseDetails: "Localização: Pedra Sangrenta (monumento orc na Grande Planície). O Dente está dentro da pedra — só aparece para orcs ou aliados de orcs que derrotaram algo mais forte que eles." },
+
+  /* ── TOBI (Goblins) ── */
+  { tier: "lendario", divine: "Tobi", race: "goblin",
+    name: "Dado Viciado de Tobi", weight: 0.1,
+    effect: "Uma vez por sessão: role o dado de Tobi (o Mestre rola 1d20 em segredo). Resultado 1-5: algo muito ruim acontece para o portador (Tobi errou o alvo). 6-10: nada. 11-15: algo moderadamente bom acontece (item, informação, saída). 16-19: algo muito bom acontece (o Mestre define). 20: Tobi aparece pessoalmente por 1 rodada e resolve um problema à sua maneira — que pode ser pior que o problema original.",
+    story: "Um dado de osso com a cara de um goblin em todos os lados — mas números diferentes em cada face. Tobi o usa para decidir praticamente tudo. Ele perde e reencontra este dado mais vezes do que qualquer divindade deveria. Goblins tratam este dado como relíquia sagrada. Não-goblins tratam como lixo perigoso.",
+    magicBonus: {},
+    curseDetails: "Localização: Mesa de jogo da Taverna Mais Animada de Aether (o Mestre define qual cidade). Tobi frequenta a taverna disfarçado de goblin comum — pode ser identificado porque nunca perde." },
+
+  /* ── JURGMUND (Serpentarianos) ── */
+  { tier: "ancestral", divine: "Jurgmund", race: "serpentariano",
+    name: "Escama do Coração de Jurgmund", weight: 0.5,
+    magicBonus: { hp: 25, slots: 3 },
+    effect: "+25 HP máximo e +3 Slots de Magia. Passivo: o portador é imune a veneno natural e mágico — Jurgmund é a maior cobra, e cobra não envenena cobra. Magias de veneno e cura conjuradas pelo portador são amplificadas: +1d8 ao efeito. Uma vez por sessão: 'Sussurro de Jurgmund' — o portador recebe uma visão do futuro próximo (próximos 10 minutos de tempo real de jogo) como viu no momento em que Jurgmund partiu. O Mestre descreve um evento que VAI acontecer, sem garantir como.",
+    story: "Uma escama do coração de Jurgmund, diferente das escamas externas — translúcida, com veias de ouro que pulsam levemente. Os Serpentarianos a guardam como objeto mais sagrado do mundo. A Alta Sacerdotisa sabe onde está mas nunca a tocou — Jurgmund deixou claro que a escama esperaria por quem fosse buscá-la, não por quem apenas a guardasse.",
+    curseDetails: "Localização: Câmara do Coração (mais profunda do Castelo da Cobra, atrás de um quebra-cabeça de veneno e tempo, dif.4). Só pode ser carregada por alguém em paz com cobras — literalmente: cobras selvagens não atacam o portador." },
+
+  /* ── VERMELHÃO (Karlacs) ── */
+  { tier: "ancestral", divine: "Vermelhão", race: "karlac",
+    name: "Cinzas de Karloth Sagrado", weight: 0.2,
+    magicBonus: { hp: 20, spellActions: 2 },
+    effect: "+20 HP máximo e +2 Ações de Magia. Passivo: o portador é imune a dano de fogo comum. Dano de fogo sagrado (do Vermelhão ou da Salamandra Karlac) ainda afeta. Ao receber dano de fogo de qualquer fonte: 25% do dano é convertido em cura. Uma vez por combate: 'Chama de Karloth' — envolve o portador em fogo sagrado por 3 rodadas, causando 1d8 a qualquer inimigo que o atacar corpo a corpo (o fogo defende).",
+    story: "Cinzas do primeiro ponto que Karloth explodiu durante a Batalha Colossal. Os Karlacs as carregam em pequenos potes — mas este pote em particular tem cinzas que nunca esfriaram. O pote está morno ao toque. Os Karlacs acreditam que estas são as cinzas do momento exato em que Vermelhão acordou para defender seu povo.",
+    curseDetails: "Localização: Primeiro Ponto de Erupção (no núcleo mais antigo do vulcão Karloth, dif.4). O Dragão Dourado guarda a entrada — não para impedir, mas para guiar quem merecedor." },
 
 ];
 
