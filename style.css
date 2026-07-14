@@ -3804,3 +3804,43 @@ main {
   min-height: 44px;
   font-size: 14px;
 }
+
+/* ================================================================
+   ACESSÓRIOS — contador X/4
+   ================================================================ */
+
+.acc-counter {
+  font-family: var(--font-heading);
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 8px;
+  background: rgba(156,122,60,0.15);
+  color: var(--gold);
+  margin-left: 6px;
+  vertical-align: middle;
+}
+.acc-counter-full {
+  background: rgba(125,42,46,0.18);
+  color: var(--wax-red-dark);
+  animation: pulse-badge 1s infinite alternate;
+}
+.equip-slot-full {
+  border-color: rgba(125,42,46,0.4) !important;
+}
+
+/* ================================================================
+   CATÁLOGO — chips de subcategoria misc com indentação visual
+   ================================================================ */
+
+#catalog-type-chips .catalog-chip[data-catalog-type^="misc-"] {
+  font-size: 11px;
+  padding: 3px 9px;
+  background: rgba(156,122,60,0.06);
+  border-style: dashed;
+  margin-left: 4px;
+}
+#catalog-type-chips .catalog-chip[data-catalog-type^="misc-"].active {
+  background: var(--ink);
+  color: var(--parchment);
+  border-style: solid;
+}

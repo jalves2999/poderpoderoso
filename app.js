@@ -2558,8 +2558,8 @@ function renderEquipmentSection(character) {
   const availableAccessories = character.inventory.filter(i => i.category === "accessory" && !i.equippedSlot);
 
   const accessoriesHTML = `
-    <div class="equip-slot equip-slot-accessories ${equippedAccessories.length ? "filled" : ""}" style="grid-column: 1 / -1;">
-      <div class="equip-slot-label">💍 Acessórios equipados</div>
+    <div class="equip-slot equip-slot-accessories ${equippedAccessories.length ? "filled" : ""} ${equippedAccessories.length >= 4 ? "equip-slot-full" : ""}" style="grid-column: 1 / -1;">
+      <div class="equip-slot-label">💍 Acessórios equipados <span class="acc-counter ${equippedAccessories.length >= 4 ? "acc-counter-full" : ""}">${equippedAccessories.length}/4</span></div>
       ${equippedAccessories.length ? `
         <div class="accessory-cards-grid">
           ${equippedAccessories.map(item => {
@@ -3453,10 +3453,15 @@ function attachSheetHandlers(character) {
     if (!instanceId) { showToast("Selecione um acessório do inventário para equipar."); return; }
     const item = character.inventory.find(i => i.instanceId === instanceId);
     if (!item) return;
+    const currentlyEquipped = getEquippedItem(character, "accessory");
+    if (currentlyEquipped.length >= 4) {
+      showToast("Limite de 4 acessórios equipados atingido. Remova um para equipar outro.");
+      return;
+    }
     item.equippedSlot = "accessory";
     persistCurrentCharacter();
     renderSheet();
-    showToast(`${item.name} equipado.`);
+    showToast(`${item.name} equipado (${currentlyEquipped.length + 1}/4).`);
   });
 
   document.querySelectorAll("[data-unequip-accessory]").forEach(btn => {
@@ -3703,16 +3708,22 @@ let catalogSelectedItem = null; // { item, sourceCategory }
 
 /* Mapeamento de tipo-chip → categoria e predicado */
 function getItemsByType(type) {
+  const miscCat = (sub) => (MISC_ITEMS || []).filter(i => !sub || i.subcategory === sub).map(i => ({ ...i, _cat: "misc" }));
   switch (type) {
-    case "weapon1h":     return WEAPONS_ONE_HAND.map(i  => ({ ...i, _cat: "weapon" }));
-    case "weapon2h":     return WEAPONS_TWO_HAND.map(i  => ({ ...i, _cat: "weapon" }));
-    case "weaponranged": return WEAPONS_RANGED.map(i    => ({ ...i, _cat: "weapon" }));
-    case "weaponmagic":  return WEAPONS_MAGIC.map(i     => ({ ...i, _cat: "weapon" }));
-    case "shield":       return SHIELDS.map(i            => ({ ...i, _cat: "shield" }));
-    case "armorleve":    return ARMORS.filter(a => (a.weight||0) <= 5 && !(a.movePenalty > 0)).map(i => ({ ...i, _cat: "armor" }));
-    case "armormedia":   return ARMORS.filter(a => (a.weight||0) > 5 && (a.weight||0) <= 12).map(i => ({ ...i, _cat: "armor" }));
-    case "armorpesada":  return ARMORS.filter(a => (a.weight||0) > 12 || (a.movePenalty > 0)).map(i => ({ ...i, _cat: "armor" }));
-    case "accessory":    return ACCESSORIES.map(i        => ({ ...i, _cat: "accessory" }));
+    case "weapon1h":      return WEAPONS_ONE_HAND.map(i  => ({ ...i, _cat: "weapon" }));
+    case "weapon2h":      return WEAPONS_TWO_HAND.map(i  => ({ ...i, _cat: "weapon" }));
+    case "weaponranged":  return WEAPONS_RANGED.map(i    => ({ ...i, _cat: "weapon" }));
+    case "weaponmagic":   return WEAPONS_MAGIC.map(i     => ({ ...i, _cat: "weapon" }));
+    case "shield":        return SHIELDS.map(i            => ({ ...i, _cat: "shield" }));
+    case "armorleve":     return ARMORS.filter(a => (a.weight||0) <= 5 && !(a.movePenalty > 0)).map(i => ({ ...i, _cat: "armor" }));
+    case "armormedia":    return ARMORS.filter(a => (a.weight||0) > 5 && (a.weight||0) <= 12).map(i => ({ ...i, _cat: "armor" }));
+    case "armorpesada":   return ARMORS.filter(a => (a.weight||0) > 12 || (a.movePenalty > 0)).map(i => ({ ...i, _cat: "armor" }));
+    case "accessory":     return ACCESSORIES.map(i        => ({ ...i, _cat: "accessory" }));
+    case "misc":          return miscCat(null);
+    case "misc-potion":   return miscCat("potion");
+    case "misc-scroll":   return miscCat("scroll");
+    case "misc-artefato": return miscCat("artefato");
+    case "misc-gear":     return miscCat("gear");
     default: return [
       ...WEAPONS_ONE_HAND.map(i  => ({ ...i, _cat: "weapon" })),
       ...WEAPONS_TWO_HAND.map(i  => ({ ...i, _cat: "weapon" })),
@@ -3721,6 +3732,7 @@ function getItemsByType(type) {
       ...SHIELDS.map(i           => ({ ...i, _cat: "shield" })),
       ...ARMORS.map(i            => ({ ...i, _cat: "armor" })),
       ...ACCESSORIES.map(i       => ({ ...i, _cat: "accessory" })),
+      ...miscCat(null),
     ];
   }
 }
@@ -3752,14 +3764,13 @@ function typeLabel(item) {
   if (item._cat === "shield")    return "Escudo";
   if (item._cat === "armor")     return "Armadura";
   if (item._cat === "accessory") return "Acessório";
-  if (item.heavyTwoHanded || (item.slot && item.slot.includes("primary") && !item.slot.includes("secondary"))) {
-    if (item.range) return "Arma Ranged";
-    return WEAPONS_TWO_HAND.some(w => w.name === item.name) ? "Arma 2M" :
-           WEAPONS_MAGIC.some(w => w.name === item.name)    ? "Arma Arcana" : "Arma 1M";
+  if (item._cat === "misc") {
+    return { potion:"🧪 Poção", scroll:"📜 Pergaminho", artefato:"💎 Artefato", gear:"🎒 Equipamento" }[item.subcategory] || "Misc.";
   }
-  return WEAPONS_RANGED.some(w => w.name === item.name) ? "Arma Ranged" :
-         WEAPONS_MAGIC.some(w => w.name === item.name)  ? "Arma Arcana" :
-         WEAPONS_TWO_HAND.some(w => w.name === item.name) ? "Arma 2M" : "Arma 1M";
+  if (item.heavyTwoHanded || WEAPONS_TWO_HAND.some(w => w.name === item.name)) return "Arma 2M";
+  if (WEAPONS_RANGED.some(w => w.name === item.name)) return "Arma Ranged";
+  if (WEAPONS_MAGIC.some(w => w.name === item.name))  return "Arma Arcana";
+  return "Arma 1M";
 }
 
 function renderCatalogItemList() {
@@ -3852,6 +3863,7 @@ function updateCatalogItemPreview() {
   const defMag = item.magDefense !== undefined ? `<div class="catalog-preview-row"><span>Def. Mágica:</span> <strong>${item.magDefense}</strong></div>` : "";
   const pen = item.movePenalty ? `<div class="catalog-preview-row"><span>Pen. Mov.:</span> <strong>−${item.movePenalty}</strong></div>` : "";
   const wt  = item.weight !== undefined ? `<div class="catalog-preview-row"><span>Peso:</span> <strong>${item.weight}kg</strong></div>` : "";
+  const cons = item.consumable ? `<div class="catalog-preview-row" style="color:var(--wax-red-dark)"><span>Tipo:</span> <strong>🔥 Consumível (uso único)</strong></div>` : "";
   const eff = item.effect ? `<div class="catalog-preview-effect">${escapeHTML(item.effect)}</div>` : "";
   const story = item.story ? `<div class="catalog-preview-story">"${escapeHTML(item.story)}"</div>` : "";
   const note  = item.note  ? `<div class="catalog-preview-note">📌 ${escapeHTML(item.note)}</div>` : "";
@@ -3862,7 +3874,7 @@ function updateCatalogItemPreview() {
       <span class="catalog-item-tier ${tierClass(item.tier || "comum")}">${tierLabel(item.tier || "comum")}</span>
     </div>
     ${setInfo}
-    <div class="catalog-preview-stats">${dmg}${def}${defMag}${pen}${wt}${req}</div>
+    <div class="catalog-preview-stats">${dmg}${def}${defMag}${pen}${wt}${req}${cons}</div>
     ${magicBonusLines || attrBonus ? `<div class="catalog-preview-bonuses">${magicBonusLines}${attrBonus}</div>` : ""}
     ${eff}${note}${story}
   `;

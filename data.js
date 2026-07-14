@@ -1594,6 +1594,190 @@ const STARTER_GEAR = [
 /* Cada magia carrega a tag de qual classe é "originária", só para exibição */
 /* ---------------------------------------------------------------------- */
 
+
+/* ================================================================
+   MISCELÂNIAS — Consumíveis, equipamento geral e pergaminhos
+   Categorias: potion | scroll | artefato | gear
+   ================================================================ */
+const MISC_ITEMS = [
+
+  /* ── POÇÕES ──────────────────────────────────────────────── */
+  { name: "Poção de Cura Menor",       category: "misc", subcategory: "potion", tier: "comum",   weight: 0.3, consumable: true,
+    effect: "Recupera 2d6+2 HP ao beber. Usar como Ação de Combate ou fora de combate instantaneamente.",
+    story: "Vermelho, cheiro de maçã podre. Vendida em qualquer entreposto — qualidade duvidosa, resultado razoável." },
+
+  { name: "Poção de Cura",             category: "misc", subcategory: "potion", tier: "comum",   weight: 0.3, consumable: true,
+    effect: "Recupera 3d8+4 HP ao beber.",
+    story: "Vermelho escuro, brilha levemente. A escolha de qualquer aventureiro que sabe o que está fazendo." },
+
+  { name: "Poção de Cura Superior",    category: "misc", subcategory: "potion", tier: "raro",    weight: 0.3, consumable: true,
+    effect: "Recupera 6d8+8 HP ao beber.",
+    story: "Carmesim com partículas douradas. Cara, mas vale a diferença quando o guerreiro está de joelhos." },
+
+  { name: "Poção de Cura Suprema",     category: "misc", subcategory: "potion", tier: "magico",  weight: 0.3, consumable: true,
+    effect: "Restaura HP máximo completo ao beber.",
+    story: "Dourada, quase líquida-luz. Dizem que foi destilada da aurora de um dia em que nenhuma guerra aconteceu." },
+
+  { name: "Poção de Mana",             category: "misc", subcategory: "potion", tier: "comum",   weight: 0.3, consumable: true,
+    effect: "Restaura 3 Slots de Magia. Usar como Ação de Magia ou fora de combate.",
+    story: "Azul translúcido, efervescente. Mágos a chamam de 'caldo de sonhos baratos'." },
+
+  { name: "Poção de Mana Superior",    category: "misc", subcategory: "potion", tier: "raro",    weight: 0.3, consumable: true,
+    effect: "Restaura todos os Slots de Magia.",
+    story: "Azul-violeta, espessa. Cada gole sabe diferente — às vezes metal, às vezes relâmpago, às vezes nada." },
+
+  { name: "Poção de Antídoto",         category: "misc", subcategory: "potion", tier: "comum",   weight: 0.3, consumable: true,
+    effect: "Remove qualquer veneno não-sagrado do portador. Cancela Sangramento e para dano por veneno imediatamente.",
+    story: "Verde-lima, amarga. O cheiro faz a maioria dos venenos recuarem por conta própria." },
+
+  { name: "Poção de Antídoto Sagrado", category: "misc", subcategory: "potion", tier: "magico",  weight: 0.3, consumable: true,
+    effect: "Remove venenos sagrados (de Jurgmund e similares) e venenos comuns. Restaura 1d8 HP por rodada de veneno que havia restado.",
+    story: "Branca com veias douradas. Clérigos de Jurgmund a chamam de 'blasfêmia engarrafada' — mas a compram assim mesmo." },
+
+  { name: "Poção de Força",            category: "misc", subcategory: "potion", tier: "raro",    weight: 0.3, consumable: true,
+    effect: "+2 FOR temporariamente por 10 minutos (1 combate). O bônus conta para dano natural, HP e Carga.",
+    story: "Laranja opaca, cheiro de terra molhada. Deixa os dentes levemente marrom por algumas horas." },
+
+  { name: "Poção de Velocidade",       category: "misc", subcategory: "potion", tier: "raro",    weight: 0.3, consumable: true,
+    effect: "+2 Ações de Combate e +3 Movimento por 3 rodadas. Após os efeitos: −1 Ação de Combate por 2 rodadas (queda do pico).",
+    story: "Amarela, borbulhante. O sabor desaparece antes de chegar à garganta. Você só percebe que tomou quando já está correndo." },
+
+  { name: "Poção de Invisibilidade",   category: "misc", subcategory: "potion", tier: "magico",  weight: 0.3, consumable: true,
+    effect: "Torna o portador invisível por 5 rodadas ou até atacar/conjurar. Ataques contra o portador têm 75% de chance de errar enquanto invisível.",
+    story: "Clara, inodora. Parece água. Vários aventureiros já tentaram economizar e beberam a versão errada." },
+
+  { name: "Poção de Resistência ao Fogo", category: "misc", subcategory: "potion", tier: "comum", weight: 0.3, consumable: true,
+    effect: "Imunidade a dano de fogo comum por 1 hora. Dano de fogo sagrado reduzido em 50%.",
+    story: "Vermelha-tijolo, fria ao toque paradoxalmente. Inventada por Karlacs que vivem perto do vulcão." },
+
+  { name: "Elixir da Ressurreição",    category: "misc", subcategory: "potion", tier: "lendario", weight: 0.4, consumable: true,
+    effect: "Usada em alguém morto há menos de 1 hora: restaura a vida com 1 HP. Usada em alguém com 0 HP (inconsciente): restaura 3d10 HP. Não funciona em mortos-vivos ou mortes por causa divina.",
+    story: "Dourada com luz própria. Existe em lendas há 300 anos. Alguns dizem que só funciona se a pessoa QUISER voltar." },
+
+  { name: "Poção de Veneno",           category: "misc", subcategory: "potion", tier: "comum",   weight: 0.3, consumable: true,
+    effect: "Pode ser aplicada em uma arma (próximo acerto: +2d6 veneno, 3 rodadas) ou jogada como projétil (1d8 dano de impacto + 1d6 veneno/rodada 3 rodadas). Resistência SAB normal anula o veneno contínuo.",
+    story: "Preta esverdeada. Cheiro de cogumelo. Ladinos compram em dúzia." },
+
+  /* ── PERGAMINHOS ─────────────────────────────────────────── */
+  { name: "Pergaminho de Identificar",   category: "misc", subcategory: "scroll", tier: "comum",  weight: 0.1, consumable: true,
+    effect: "Revela todas as propriedades de um item mágico tocado — bônus, maldições, história e divindade de origem. Equivale a conjurar Identificar (nível 2) sem custo de Slot.",
+    story: "Couro de serpente com tinta que nunca seca. Ao ler, a tinta se reorganiza para descrever o item analisado." },
+
+  { name: "Pergaminho de Teletransporte", category: "misc", subcategory: "scroll", tier: "magico", weight: 0.1, consumable: true,
+    effect: "Teleporta o portador e até 4 aliados voluntários a qualquer local já visitado pelo conjurador. Falha crítica (1 natural no SAB para conjurar): teleporta para local aleatório no raio de 10 km.",
+    story: "Cheiro de ozônio. As letras pulsam quando você pensa em um destino. O destino errado é possível se a concentração falhar." },
+
+  { name: "Pergaminho de Mapa Arcano",   category: "misc", subcategory: "scroll", tier: "raro",   weight: 0.1, consumable: true,
+    effect: "Ao destruir o pergaminho (queimar ou rasgar), cria um mapa mágico da área em raio 500m ao redor, revelando: salas, criaturas vivas (pontos luminosos), armadilhas (marcas vermelhas) e saídas. O mapa dura 10 minutos.",
+    story: "Em branco até ser destruído. Um estudioso passou 20 anos tentando lê-lo sem destruí-lo. Falhou." },
+
+  { name: "Pergaminho de Barreira",      category: "misc", subcategory: "scroll", tier: "raro",   weight: 0.1, consumable: true,
+    effect: "Cria uma barreira mágica impassável de 3x3m por 5 rodadas. Física (Def.10) e mágica (Def.8). Pode ser criada em qualquer orientação. Inimigos empurradores testam FOR (crítico) para atravessar.",
+    story: "Escrito em sangue de basilisco seco. O leitor não precisa saber o idioma — as palavras entram diretamente na mente." },
+
+  { name: "Pergaminho de Maldição Menor", category: "misc", subcategory: "scroll", tier: "comum",  weight: 0.1, consumable: true,
+    effect: "Aplica uma maldição menor a um alvo visível: −1d4 em todos os testes por 24 horas. Resistência SAB (normal) anula. Clérigos detectam a maldição automaticamente.",
+    story: "Preto total, com símbolo vermelho. Vendido por magas ressentidas e lojas de bruxaria de beira de estrada." },
+
+  { name: "Pergaminho de Proteção Divina", category: "misc", subcategory: "scroll", tier: "magico", weight: 0.1, consumable: true,
+    effect: "Cria um escudo divino em torno do portador por 3 rodadas: +4 Def.Física e +4 Def.Mágica. Enquanto ativo, ataques de Araltos e criaturas corrompidas causam metade do dano.",
+    story: "Brilha levemente no escuro. Selado com o símbolo de Sanctum. Clérigos os produzem como doação a aventureiros de confiança." },
+
+  /* ── ARTEFATOS ───────────────────────────────────────────── */
+  { name: "Fragmento do Deus Marcado",  category: "misc", subcategory: "artefato", tier: "unico",  weight: 0.5,
+    effect: "⚠ PERIGOSO: Carregar este fragmento durante mais de 1 hora sem contenção (bolsa antimagia) causa Corrupção progressiva (−1 SAB por hora). Usos: 1) Atrai Araltos e criaturas corrompidas num raio de 1 km (perigoso mas pode ser usado como isca). 2) Usado em rituais de Clérigos: fornece energia para magias de nível 5 sem custo de recurso (1 uso por fragmento antes de ser consumido).",
+    story: "Cristal carmesim que emite calor suave. Não pesa, mas parece sempre mais pesado do que deveria. Às vezes escuta-se um sussurro." },
+
+  { name: "Escama de Jurgmund",         category: "misc", subcategory: "artefato", tier: "lendario", weight: 0.2,
+    effect: "Pode ser usada por um ferreiro ou Clérigo de Jurgmund para forjar um item: adiciona propriedade divina permanente a qualquer arma ou armadura (o Mestre define o bônus, tipicamente +1d6 de veneno ou +2 Def. Mágica). Alternativa: pode ser presenteada a Serpentarianos como token de aliança — equivale a 3 meses de passagem livre pelo Castelo.",
+    story: "Translúcida, com veios dourados que pulsam levemente. Quente ao toque, nunca esfria. Cheiro de chuva." },
+
+  { name: "Cristal de Mana Bruta",      category: "misc", subcategory: "artefato", tier: "magico",  weight: 0.4,
+    effect: "Pode ser usado de 3 formas: 1) Absorver: ao receber dano mágico, rola SAB (normal) para absorver até 1d10 do dano no cristal (armazena). 2) Liberar: libera toda a energia acumulada em 1d10 por ponto absorvido numa direção. 3) Catalisar: usar como material para criar itens mágicos menores (reduz custo em 50%).",
+    story: "Faz a mão formigarem quem o toca. Conjuradores sentindo o cristal conseguem ouvir fragmentos de feitiços antigos." },
+
+  { name: "Tinta de Sangue de Monstro", category: "misc", subcategory: "artefato", tier: "raro",    weight: 0.2,
+    effect: "Um frasco de tinta feita de sangue de criatura mágica. Pode ser usada para: 1) Escrever Pergaminho de qualquer magia conhecida (equivale a criar uma cópia do pergaminho). 2) Marcar superfície com rastreador arcano (qualquer Clérigo ou Mago pode detectar a marca em raio 1 km). 3) Traçar runa de alarme simples (1 uso).",
+    story: "A cor muda conforme o ângulo — nunca exatamente preta, nunca exatamente outra cor." },
+
+  { name: "Ampulheta do Tempo Parado",  category: "misc", subcategory: "artefato", tier: "unico",   weight: 0.8,
+    effect: "Ao virar: para o tempo por 6 segundos reais (1 rodada de jogo). O portador age normalmente; tudo ao redor congela. Após o uso: a ampulheta racha e fica inutilizável (item de uso único). O tempo parado não pode ser usado para causar dano direto (ética de Thion) — apenas para mover, falar, preparar.",
+    story: "O areia dentro não cai. Nunca. Até ser girada pela primeira vez. Quem a encontrou não sabia que era de uso único. Aprendeu." },
+
+  /* ── EQUIPAMENTO GERAL (GEAR) ────────────────────────────── */
+  { name: "Corda (15m)",               category: "misc", subcategory: "gear", tier: "comum",   weight: 1.5,
+    effect: "Corda resistente de 15 metros. Suporta até 200kg sem arrebentar. Pode ser usada para escalar (reduz dificuldade de Atletismo em 1 grau), amarrar (teste de FOR para escapar), ou construir armadilha simples.",
+    story: "Cânhamo trançado. Sem história — é uma corda." },
+
+  { name: "Corda de Seda Mágica",      category: "misc", subcategory: "gear", tier: "magico",  weight: 0.5,
+    effect: "Corda de 20 metros que obedece comandos simples ('enrolar', 'segurar', 'soltar'). Resiste a qualquer peso (não tem limite). Pode ser ancorada a qualquer superfície por ordem verbal. Não pode ser cortada por armas não-mágicas.",
+    story: "Suave, branca, nunca suja. Parece estar sempre levemente tensa, como se esperasse algo." },
+
+  { name: "Bolsa de Guardar",           category: "misc", subcategory: "gear", tier: "magico",  weight: 0.5,
+    effect: "+20 Carga máxima (o interior é maior que o exterior). Itens dentro não pesam para efeito de carga. Máximo de 100kg de objetos dentro. Atenção: se a bolsa for destruída, os itens aparecem em local aleatório em raio 1 km.",
+    story: "Parece normal por fora. Por dentro: escuro, silencioso, ligeiramente frio. Itens às vezes mudam de posição sozinhos." },
+
+  { name: "Kit de Escalada",            category: "misc", subcategory: "gear", tier: "comum",   weight: 2,
+    effect: "Picaretas, grampos e cinto especializado. Reduz a dificuldade de testes de Atletismo para escalar em 1 grau. Em superfícies completamente lisas: permite a escalada com teste Normal em vez de Impossível.",
+    story: "Surrado mas confiável. O grampo central tem uma marca de dente — o dono anterior teve um argumento com um penhasco." },
+
+  { name: "Lanterna de Óleo",           category: "misc", subcategory: "gear", tier: "comum",   weight: 1,
+    effect: "Ilumina raio 6 hex por até 6 horas com um frasco de óleo. Pode ser lançada como projétil (1d6 fogo, incendeia área 1 hex). Flame-sensitive: apaga em vento forte ou chuva.",
+    story: "Latão amassado com vidro espesso. Funciona." },
+
+  { name: "Lanterna de Cristal Arcano", category: "misc", subcategory: "gear", tier: "raro",    weight: 0.5,
+    effect: "Ilumina raio 10 hex indefinidamente (sem óleo). A cor da luz pode ser ajustada por comando (branca, vermelha, azul). Modo 'sombra': emite luz apenas visível ao portador. Não apaga em nenhuma condição ambiental.",
+    story: "Cristal aquecido por dentro, nunca queima. Anões de Thurgomur as vendem como 'ferramentas básicas'. Para não-anões, são relíquias." },
+
+  { name: "Kits de Primeiros Socorros (×3)", category: "misc", subcategory: "gear", tier: "comum", weight: 1,
+    effect: "3 usos. Cada uso: estabiliza um aliado Inconsciente (volta a 1 HP) sem teste. Fora de combate: cura 1d6 HP adicional com 10 minutos de tratamento. Requer 2 mãos livres.",
+    story: "Bandagens, ervas secas, alfinetes. O manual de instruções está em anão." },
+
+  { name: "Ferramentas de Ladrão",      category: "misc", subcategory: "gear", tier: "comum",   weight: 0.5,
+    effect: "Reduz dificuldade de testes de Furtividade para abrir fechaduras e desativar mecanismos em 1 grau. Sem as ferramentas, esses testes sobem 1 grau. Em fechaduras mágicas: não reduz, mas permite tentativa.",
+    story: "Estojo de couro com 12 ferramentas minúsculas. Quem sabe usá-las não precisa explicar. Quem não sabe, não consegue mesmo com a explicação." },
+
+  { name: "Espelho de Bolso",           category: "misc", subcategory: "gear", tier: "comum",   weight: 0.1,
+    effect: "Permite espiar ao redor de cantos sem expor o corpo. Usado para verificar armadilhas visuais. Reflete feitiços de olhar (Medusa, Basilisco, etc.) — o portador rola SAB Normal ou o efeito se volta ao criador.",
+    story: "Cabo de osso, espelho de prata. Pequeno o suficiente para esconder em qualquer bolso. Essencial para exploradores cuidadosos." },
+
+  { name: "Armadilha de Urso (×2)",     category: "misc", subcategory: "gear", tier: "comum",   weight: 3,
+    effect: "Cada armadilha: posicionar leva 1 Ação. Acionada por peso (+10kg): prende o alvo (imóvel, FOR Difícil para escapar, 1 tentativa por turno). Causa 1d8 de dano ao acionar. Pode ser usada em combate mas ativa apenas no próximo turno de quem pisou.",
+    story: "Ferro escurecido. Dedos de muitos ferreiros foram testados nessas molas. Involuntariamente." },
+
+  { name: "Tenda para 4 Pessoas",       category: "misc", subcategory: "gear", tier: "comum",   weight: 5,
+    effect: "Abrigo para até 4 pessoas. Permite Descanso Longo em condições adversas (chuva, vento, neve) sem penalidade. Montagem: 10 minutos. Em regiões de clima extremo: reduz o risco de condição climática por 1 grau de severidade.",
+    story: "Lona encerada, hastes de madeira. Cheira a outras aventuras de quem a vendeu." },
+
+  { name: "Rações de Viagem (7 dias)",  category: "misc", subcategory: "gear", tier: "comum",   weight: 3.5,
+    effect: "Alimentação para 1 pessoa por 7 dias. Sem rações em viagem: testa FOR (Normal) após cada dia ou sofre −1d4 em todos os testes por exaustão (cumulativo). Rações impedem o teste.",
+    story: "Carne seca, biscoito duro, nozes. Saboroso comparado com estar com fome. Insaboroso em qualquer outro contexto." },
+
+  { name: "Sino de Aviso (×3)",         category: "misc", subcategory: "gear", tier: "comum",   weight: 0.3,
+    effect: "Fio com sino que alarma quando cruzado. Configurar: 1 minuto. Detectar sem acionar: teste de Percepção Difícil. Bônus: inimigos que acionam o sino ficam Surpresos por 1 rodada (não agem no primeiro turno).",
+    story: "Cobre barato que ressoa mais do que deveria. Ladinos odeiam. Todo mundo mais ama." },
+
+  { name: "Luneta de Alcance",          category: "misc", subcategory: "gear", tier: "raro",    weight: 0.4,
+    effect: "Triplica o alcance de visão. Permite identificar inimigos, lições de terreno e detalhes a grandes distâncias. Armas à distância usadas com a luneta têm alcance dobrado (1 turno para mirar antes de atirar). Não funciona no escuro.",
+    story: "Latão e vidro, lentes de cristal de qualidade. Artesanato de anão — nunca fosca, nunca quebra facilmente." },
+
+  { name: "Bolsa Antimagia",            category: "misc", subcategory: "gear", tier: "magico",  weight: 0.8,
+    effect: "Contém qualquer artefato mágico ou item perigoso de forma segura. Itens dentro: não emitem energia (indetectáveis magicamente), não afetam o portador, não irradiam maldições. Capacidade: até 2kg de itens. Fechar leva 1 Ação.",
+    story: "Pano cinza sem costura visível. O interior parece ligeiramente fora de foco quando aberto. Alquimistas usam para transportar reagentes instáveis." },
+
+  { name: "Pedra de Afiação Rúnica",    category: "misc", subcategory: "gear", tier: "raro",    weight: 0.3,
+    effect: "Afia uma arma entre combates: adiciona +1d4 de dano para o próximo combate (efeito se perde ao fim do combate, pode ser reaplicado). 10 usos. O bônus não se acumula — apenas 1 aplicação por arma por combate.",
+    story: "Pedra negra com runa suave. Enquanto você afia, parece que a pedra aprende a arma — cada fio fica no ângulo certo sem que você precise calcular." },
+
+  { name: "Mapa em Branco (cartografia)", category: "misc", subcategory: "gear", tier: "comum",  weight: 0.3,
+    effect: "Papel de alta qualidade para cartografia. Mapas feitos com cuidado (10+ minutos) reduzem chance de se perder a zero na área mapeada. Mapas vendidos a guildas valem entre 5-50 moedas dependendo da raridade da área.",
+    story: "Couro fino de animal tratado. Resistente à água e ao tempo. Espera para contar uma história." },
+
+  { name: "Giz Arcano (×5)",            category: "misc", subcategory: "gear", tier: "magico",  weight: 0.2,
+    effect: "Cada pedaço escreve marcas visíveis apenas para quem conjurou. Útil para: marcar passagens já exploradas, deixar mensagens para aliados específicos, traçar símbolos de alerta. Dura 24 horas ou até ser apagado com água benta.",
+    story: "Branco, inodoro. Parece giz comum até a segunda olhada. Na segunda olhada, você percebe que estava olhando sem enxergar." }
+];
+
 function getAllSpellsInGame() {
   const list = [];
   Object.keys(CLASSES).forEach(key => {
