@@ -2649,6 +2649,335 @@ const BESTIARY = [
       { item: "Memória da Contaminação (cristal — contém a experiência de absorver a batalha inteira)", chance: 35, qty: "1" }
     ],
     isElite: true
-  }
+  },
+
+  /* ══════════════════════════════════════════════════════════
+     NOVOS MONSTROS — Categorias variadas
+     ══════════════════════════════════════════════════════════ */
+
+  /* ── MORTOS-VIVOS ── */
+  { id:"zumbi-comum", name:"Zumbi Comum", difficulty:1, size:"normal", category:"Morto-Vivo",
+    location:["Cemitério","Ruínas","Dungeon"], hp:28, physDefense:1, magDefense:0, dodge:8,
+    actions:1, reactions:0, damage:"1d6 (mordida podre)",
+    abilities:[
+      { name:"Infatigável", desc:"Imune a Atordoado, Exaustão e Medo. Nunca foge." },
+      { name:"Mordida Infecciosa", desc:"Acerto: alvo testa FOR (normal) ou fica Envenenado (1d4 por rodada, 4 rodadas). Cura mágica ou antídoto remove." },
+      { name:"Resistência Morta", desc:"Recebe metade do dano de armas cortantes e perfurantes. Dano contundente e fogo são normais." }
+    ],
+    spells:[],
+    behavior:"Age em grupos de 3-8. Lento (Movimento 2) mas incansável. Avança em linha reta para o alvo mais próximo. Não tem táticas.",
+    loot:[{item:"Nada de valor",chance:100,qty:"—"},{item:"Fragmento de roupa com pista",chance:15,qty:"1"}] },
+
+  { id:"zumbi-abissal", name:"Zumbi Abissal", difficulty:3, size:"normal", category:"Morto-Vivo",
+    location:["Fissura do Lago","Dungeon Profunda","Território do Deus Marcado"], hp:80, physDefense:4, magDefense:3, dodge:10,
+    actions:2, reactions:1, damage:"1d10+1d6 (garras abissais)",
+    abilities:[
+      { name:"Aura de Corrupção", desc:"Passivo: aliados em raio 2 hex têm −1 em todos os testes enquanto a aura estiver ativa. Clérigos imunes." },
+      { name:"Morte Explosiva", desc:"Ao chegar a 0 HP, explode em energia abissal: 2d8 dano sombrio a todos em raio 2 hex (SAB normal para metade)." },
+      { name:"Regeneração Sombria", desc:"Recupera 5 HP por rodada enquanto estiver em terreno escuro ou área corrompida. Fogo sagrado cancela por 3 rodadas." },
+      { name:"Garras que Rasgam o Véu", desc:"Ataques ignoram 3 pontos de Defesa Física (as garras tocam parcialmente o plano espiritual)." }
+    ],
+    spells:[],
+    behavior:"Guardião territorial. Protege áreas corrompidas. Ataca o alvo com mais luz ou energia divina (odeia clérigos). Não foge — morre no posto.",
+    loot:[{item:"Cristal Abissal (reagente)",chance:40,qty:"1"},{item:"Pedaço de Armadura Corrompida",chance:25,qty:"1"}] },
+
+  { id:"esqueleto-guerreiro", name:"Esqueleto Guerreiro", difficulty:1, size:"normal", category:"Morto-Vivo",
+    location:["Tumba","Dungeon","Ruínas Élficas"], hp:18, physDefense:3, magDefense:0, dodge:11,
+    actions:2, reactions:1, damage:"1d8 (espada enferrujada)",
+    abilities:[
+      { name:"Osso Vazio", desc:"Imune a veneno, dano psíquico e condições mentais. Vulnerável a dano contundente (+1d4 extra)." },
+      { name:"Sem Dor", desc:"Nunca sofre penalidade por HP baixo. Luta com 100% de eficiência até 0 HP." }
+    ],
+    spells:[],
+    behavior:"Guarda tumbas e tesouros sem pensar. Ataca qualquer vivo que entrar na área. Pode ser comandado por um necromante — obedece ordens simples.",
+    loot:[{item:"Osso de Qualidade (material)",chance:60,qty:"1d4"},{item:"Moedas Antigas",chance:30,qty:"1d8"},{item:"Arma Enferrujada Recuperável",chance:20,qty:"1"}] },
+
+  { id:"esqueleto-gigante", name:"Esqueleto Colossal", difficulty:4, size:"colossal", category:"Morto-Vivo",
+    location:["Tumba Ancestral","Dungeon Profunda","Ruínas Élficas"], hp:140, physDefense:8, magDefense:2, dodge:9,
+    actions:3, reactions:1, damage:"2d10+1d8 (golpe de osso colossal)",
+    abilities:[
+      { name:"Pisar Esmagador", desc:"1 Ação: pisa em área 2x2 hex. Todos nessa área sofrem 2d8 dano contundente e testam AGI (difícil) ou ficam Derrubados." },
+      { name:"Tamanho Colossal", desc:"Ocupa 3 hexágonos. Não pode ser Derrubado ou Empurrado por meios mundanos (apenas magia de nível 3+)." },
+      { name:"Fragmentar", desc:"Ao chegar a 50% HP, perde o braço direito: −1 Ação mas partes dos ossos tornam-se 1d4 Esqueletos Guerreiros ativos." },
+      { name:"Ossos Encantados", desc:"Imune a dano cortante. Resistência a perfurante (−2 dano por dado). Fogo e magia sagrada causam dano normal." }
+    ],
+    spells:[],
+    behavior:"Guardião de tumbas antigas. Ignora criaturas pequenas (goblins, ratos) mas ataca humanoides. Movimento lento (3 hexágonos) mas alcance de 2 hexágonos nos ataques.",
+    loot:[{item:"Osso Ancestral Encantado",chance:70,qty:"1d3"},{item:"Cristal de Alma Aprisionada",chance:30,qty:"1"},{item:"Artefato da Tumba",chance:20,qty:"1"}] },
+
+  { id:"vampiro-nobre", name:"Vampiro Nobre", difficulty:4, size:"normal", category:"Morto-Vivo",
+    location:["Castelo Abandonado","Cidade","Ruínas Nobres"], hp:120, physDefense:6, magDefense:7, dodge:16,
+    actions:3, reactions:3, damage:"1d10+1d8 (mordida drenante)",
+    abilities:[
+      { name:"Mordida Drenante", desc:"Cada mordida rouba 1d8 HP do alvo e cura o vampiro pelo mesmo valor. Alvos drenados 3x seguidas ficam sob Domínio Parcial." },
+      { name:"Névoa Carmesim", desc:"1x/combate: transforma-se em névoa por 2 rodadas — imune a dano físico, pode se mover por frestas. Ao retornar, regenera 2d8 HP." },
+      { name:"Domínio do Olhar", desc:"1 Ação: alvo visível a até 6 hex testa Força de Vontade (difícil) ou fica Dominado por 2 rodadas (age sob comando do vampiro)." },
+      { name:"Regeneração Noturna", desc:"Regenera 10 HP por rodada enquanto não estiver exposto a luz solar ou fogo sagrado. Clérigos podem cancelar com Luz Sagrada." },
+      { name:"Fraqueza à Luz", desc:"Em luz solar direta ou sob Claridade de Aethea: −2 em todos os testes e sem regeneração." }
+    ],
+    spells:["Névoa da Mente (controle, nível 3)","Chamar Morcegos (invocação, nível 2)"],
+    behavior:"Inteligente e calculista. Tenta dominar um aliado primeiro, depois negocia com os demais. Foge se chegar a 30% HP para regenerar. Nunca subestima — se os jogadores sobrevivem ao primeiro encontro, prepara emboscada melhor no próximo.",
+    loot:[{item:"Coração de Vampiro (ingrediente)",chance:80,qty:"1"},{item:"Manto Nobre (item raro)",chance:50,qty:"1"},{item:"Anel de Sigilo (acessório mágico)",chance:30,qty:"1"},{item:"Moedas de Ouro Antigas",chance:90,qty:"2d20"}] },
+
+  { id:"lobisomem", name:"Lobisomem", difficulty:3, size:"grande", category:"Metamorfo",
+    location:["Floresta","Aldeia","Montanha"], hp:95, physDefense:5, magDefense:3, dodge:14,
+    actions:3, reactions:2, damage:"1d10+1d8 (garras e mordida)",
+    abilities:[
+      { name:"Regeneração Selvagem", desc:"Regenera 8 HP por rodada. Prata, fogo e magia sagrada cancelam a regeneração por 2 rodadas. Dano de prata causa 1d4 extra permanente (não regenera)." },
+      { name:"Mordida Lycântropa", desc:"Humanoides mordidos testam FOR (crítico). Falha: ficam Envenenados com Lycantrofia — precisam de cura sagrada dentro de 1 hora ou transformam-se na próxima lua cheia." },
+      { name:"Faro Perfeito", desc:"Imune a Furtividade. Detecta criaturas invisíveis ou em sombras em raio 8 hex. Não pode ser surpreendido." },
+      { name:"Fúria Lunar", desc:"Se estiver em noite de lua cheia (Mestre determina): +2 Ações, +1d8 de dano e Fúria passiva (não pode se render)." }
+    ],
+    spells:[],
+    behavior:"Durante o dia: pode ser um humano normal (NPC aliado ou inocente). À noite transforma-se involuntariamente. Em combate: ataca o inimigo mais frágil primeiro, tenta morder ao invés de matar (instinto de propagar a maldição).",
+    loot:[{item:"Pele de Lobisomem (material raro)",chance:50,qty:"1"},{item:"Amuleto de Prata (do humano que era)",chance:30,qty:"1"}] },
+
+  /* ── HUMANOIDES COM HABILIDADES ── */
+  { id:"kobold-armadilheiro", name:"Kobold Armadilheiro", difficulty:1, size:"pequeno", category:"Humanoide",
+    location:["Caverna","Dungeon","Floresta Profunda"], hp:14, physDefense:2, magDefense:1, dodge:13,
+    actions:2, reactions:1, damage:"1d4+1d4 (faca e armadilha)",
+    abilities:[
+      { name:"Armadilheiro Expert", desc:"Prepara armadilhas durante o combate (1 Ação). A armadilha ativa no próximo alvo que cruzar o hex: 1d6 dano + Preso (FOR normal para escapar). Pode ter até 3 armadilhas ativas." },
+      { name:"Fuga Tática", desc:"Se ficar abaixo de 50% HP, usa 1 Reação para mover 3 hex sem provocar ataque de oportunidade e desaparecer em pequenos túneis." },
+      { name:"Enxame de Kobolds", desc:"Por cada Kobold aliado em raio 2 hex: +1d4 de dano e +1 na Esquiva (acumula até +3d4/+3)." }
+    ],
+    spells:[],
+    behavior:"Covardes em combate direto mas perigosos em grupos e com preparação. Fogem ao primeiro sinal de desvantagem para buscar reforços. Adoram emboscadas e terrenos armadilhados.",
+    loot:[{item:"Kit de Ferramentas de Armadilha",chance:50,qty:"1"},{item:"Moedas de Cobre",chance:80,qty:"1d6"},{item:"Pedra de Sílex Especial",chance:20,qty:"1d3"}] },
+
+  { id:"orc-berserker", name:"Orc Berserker", difficulty:2, size:"grande", category:"Humanoide",
+    location:["Planície","Acampamento","Floresta"], hp:55, physDefense:3, magDefense:1, dodge:11,
+    actions:3, reactions:1, damage:"1d12+1d6 (machado de guerra)",
+    abilities:[
+      { name:"Fúria do Sangue", desc:"Ao receber qualquer dano: entra em Fúria automaticamente por 3 rodadas. Em Fúria: +1d8 de dano mas não pode recuar nem usar itens." },
+      { name:"Sede de Sangue", desc:"Se matar um inimigo: recupera 1d10 HP imediatamente e ganha +1 Ação extra neste turno." },
+      { name:"Provocação", desc:"1 Ação: força um alvo visível a testear Força de Vontade (normal) ou atacar somente o orc no próximo turno." }
+    ],
+    spells:[],
+    behavior:"Combate frontal agressivo. Ignora aliados em desvantagem — foca no inimigo mais forte. Nunca recua voluntariamente. Pode ser convencido por um guerreiro orc de respeito.",
+    loot:[{item:"Machado de Guerra Orc (arma rara)",chance:40,qty:"1"},{item:"Dente de Criatura Colossal (troféu)",chance:60,qty:"1d3"},{item:"Provisões de Acampamento",chance:70,qty:"1"}] },
+
+  { id:"elfo-sombrio", name:"Elfo das Sombras", difficulty:3, size:"normal", category:"Humanoide",
+    location:["Floresta Profunda","Ruínas Élficas","Território Élfico"], hp:68, physDefense:3, magDefense:6, dodge:17,
+    actions:3, reactions:3, damage:"1d8+1d6 (lâmina da meia-luz)",
+    abilities:[
+      { name:"Passo das Sombras", desc:"Se estiver em área de sombra ou escuridão: teleporta para qualquer outra sombra em raio 8 hex como Ação gratuita (1x/turno)." },
+      { name:"Flechas Envenenadas", desc:"Ataques à distância (alcance 10): adiciona veneno élfico (1d6/rodada, 3 rodadas). Resistência AGI (difícil) para anular." },
+      { name:"Reflexos da Floresta", desc:"Passivo: 30% de chance de esquivar automaticamente de ataques à distância (rola 1d10 — em 1, 2 ou 3, esquiva)." },
+      { name:"Sentinela Silenciosa", desc:"Em furtividade, primeiro ataque é Crítico automático e não revela posição (pode atacar de novo furtivamente na mesma rodada)." }
+    ],
+    spells:["Névoa das Sombras (obscurece área 3x3, nível 2)"],
+    behavior:"Tático e paciente. Nunca entra em combate aberto — favorece emboscadas, veneno e retiradas estratégicas. Alvo prioritário: conjuradores e portadores de luz. Foge se a furtividade for quebrada.",
+    loot:[{item:"Lâmina Élfica da Meia-Luz (raro)",chance:25,qty:"1"},{item:"Extrato de Veneno Élfico (×3)",chance:60,qty:"1"},{item:"Cristal de Memória Élfica",chance:15,qty:"1"}] },
+
+  { id:"necromante-errante", name:"Necromante Errante", difficulty:3, size:"normal", category:"Humanoide",
+    location:["Cemitério","Dungeon","Floresta Sombria"], hp:55, physDefense:1, magDefense:7, dodge:12,
+    actions:2, reactions:1, damage:"1d6 (cajado ossado)",
+    abilities:[
+      { name:"Comandar Mortos", desc:"1 Ação: levanta até 2 esqueletos ou zumbis de cadáveres presentes no campo. Cada morto-vivo tem HP=20, dano=1d6. Máximo de 4 ativos." },
+      { name:"Escudo de Ossos", desc:"Passivo: enquanto tiver mortos-vivos aliados ativos, recebe −2 dano de todos os ataques físicos (os ossos absorvem)." },
+      { name:"Drenar Vital", desc:"1 Ação Mágica: drena 2d8 HP de um alvo visível a 6 hex. Cura o necromante pela metade. Resistência SAB (difícil) para metade." },
+      { name:"Ritual de Sacrifício", desc:"Se um morto-vivo aliado for destruído: o necromante recupera 1d10 HP e ganha +1d6 no próximo ataque mágico." }
+    ],
+    spells:["Drenar Vital (nível 2)","Levantar Morto-Vivo (nível 3)"],
+    behavior:"Usa mortos-vivos como escudo. Fica na retaguarda conjurando e drenando. Foge se ficar sem mortos-vivos aliados e abaixo de 40% HP. Barganha conhecimento proibido em troca da vida.",
+    loot:[{item:"Grimório de Necromancia (magia proibida)",chance:40,qty:"1"},{item:"Pó de Osso (reagente ×5)",chance:80,qty:"1"},{item:"Amuleto de Osso (acessório mágico)",chance:30,qty:"1"}] },
+
+  /* ── CRIATURAS DE FLORESTA ── */
+  { id:"ent-guardiao", name:"Ent Guardião da Floresta", difficulty:4, size:"colossal", category:"Planta Viva",
+    location:["Floresta Ancestral","Floresta Profunda"], hp:160, physDefense:9, magDefense:2, dodge:8,
+    actions:3, reactions:1, damage:"2d8+1d10 (galhos colossais)",
+    abilities:[
+      { name:"Raízes Aprisionadoras", desc:"1 Ação: raízes emergem em área 3x3 hex. Todos no terreno testam AGI (difícil) ou ficam Presos (Imóveis) por 2 rodadas. Liberar: FOR (normal) por Ação." },
+      { name:"Casca Invulnerável", desc:"Imune a dano cortante e perfurante. Dano por fogo é dobrado. Dano mágico de terra cura em vez de machucar (+1d8 por acerto terrestre)." },
+      { name:"Chamado da Floresta", desc:"1x/combate: invoca 1d4 Treants Jovens (HP 30, dano 1d8, Dif.2) do terreno florestal. Só funciona em floresta real." },
+      { name:"Pisoteio Colossal", desc:"Se mover pelo menos 2 hex: pode pisotear um hex no caminho — 2d10 dano a tudo nele, sem teste de resistência." }
+    ],
+    spells:[],
+    behavior:"Protetor territorial, não predador. Avisa antes de atacar — dá 1 rodada de aviso visual (chacoalha galhos) antes de agir. Se o grupo recuar e não desmatar, para. Inimigo irreconciliável apenas de Karlacs e Salamandras.",
+    loot:[{item:"Coração de Ent (material lendário)",chance:30,qty:"1"},{item:"Lenha Sagrada (material)",chance:90,qty:"1d6"},{item:"Resina Curativa (3 usos, cura 2d8)",chance:50,qty:"1"}] },
+
+  { id:"treant-jovem", name:"Treant Jovem", difficulty:2, size:"grande", category:"Planta Viva",
+    location:["Floresta","Bosque","Planície com Árvores"], hp:60, physDefense:6, magDefense:1, dodge:9,
+    actions:2, reactions:1, damage:"1d10+1d6 (galho poderoso)",
+    abilities:[
+      { name:"Enraizar", desc:"1 Ação: cria raízes em 1 hex adjacente — terreno difícil que custa 2 Ações para cruzar. Persiste até o treant morrer." },
+      { name:"Regeneração Vegetal", desc:"Recupera 4 HP por rodada em terreno natural (floresta, grama). Fogo cancela a regeneração por 2 rodadas." }
+    ],
+    spells:[],
+    behavior:"Solitário ou sob comando de um Ent maior. Defende a área onde nasceu. Recua se receber dano de fogo (instinto de sobrevivência).",
+    loot:[{item:"Casca de Treant (armadura material)",chance:50,qty:"1"},{item:"Resina Curativa (1 uso)",chance:40,qty:"1"}] },
+
+  { id:"sombra-florestal", name:"Sombra Florestal", difficulty:2, size:"normal", category:"Espírito",
+    location:["Floresta Profunda","Área Corrompida","Noite"], hp:40, physDefense:0, magDefense:6, dodge:18,
+    actions:2, reactions:2, damage:"1d8 (toque das sombras — dano sombrio)",
+    abilities:[
+      { name:"Intangível", desc:"Imune a dano físico de armas não-mágicas. Armas mágicas e magias causam dano normal. Fogo e luz sagrada causam 1d4 extra." },
+      { name:"Drenar Força", desc:"Cada toque bem-sucedido reduz o atributo FOR do alvo em 1 temporariamente (retorna após descanso longo). Se FOR chegar a 0: alvo fica Incapacitado." },
+      { name:"Fundir nas Sombras", desc:"Em áreas escuras: torna-se invisível como Ação gratuita. Ataques contra ela têm 50% de chance de errar automaticamente." }
+    ],
+    spells:[],
+    behavior:"Predador silencioso. Ataca à noite, foge à luz do dia. Foca em alvos isolados. Não pode ser negociado — é puro instinto predatório.",
+    loot:[{item:"Essência de Sombra (componente mágico)",chance:50,qty:"1"}] },
+
+  /* ── CRIATURAS GRANDES ── */
+  { id:"mamute-das-planícies", name:"Mamute das Planícies", difficulty:3, size:"colossal", category:"Besta",
+    location:["Grande Planície","Estepe","Neve"], hp:130, physDefense:7, magDefense:1, dodge:8,
+    actions:2, reactions:1, damage:"2d8+1d10 (chifres e pisoteio)",
+    abilities:[
+      { name:"Carga Imparável", desc:"Se mover 3+ hex em linha reta e atacar: dano dobrado e o alvo é Empurrado 3 hex e Derrubado (sem teste). Muro ou obstáculo: 1d10 para ambos." },
+      { name:"Pisoteio em Área", desc:"1 Ação: pisa em 2 hexágonos adjacentes simultaneamente — 2d6 dano a cada criatura nesses hexágonos." },
+      { name:"Pele Grossa", desc:"Reduz dano de projéteis em 4 por ataque. Flechas e lanças causam mínimo de dano a menos que acertem pontos vulneráveis (olhos, barriga: +1d6 se descrito)." },
+      { name:"Brado Colossal", desc:"1x/combate: grunhido ensurdecedor em raio 5 hex — todos testam FOR (normal) ou ficam Atordoados por 1 rodada." }
+    ],
+    spells:[],
+    behavior:"Passivo se não ameaçado. Se um aliado ou filhote for atacado, entra em modo de proteção total — prioriza ameaças maiores. Pode ser acalmado com um teste de SAB (difícil) se um xamã estiver presente.",
+    loot:[{item:"Marfim de Mamute (material valioso)",chance:60,qty:"1d2"},{item:"Pele de Mamute (armadura material)",chance:50,qty:"1"},{item:"Músculo de Mamute (reagente de força)",chance:30,qty:"1"}] },
+
+  { id:"gigante-das-pedras", name:"Gigante das Pedras", difficulty:4, size:"colossal", category:"Gigante",
+    location:["Montanha","Caverna Grande","Ruínas"], hp:180, physDefense:10, magDefense:3, dodge:9,
+    actions:3, reactions:1, damage:"2d10+1d8 (punho de pedra)",
+    abilities:[
+      { name:"Arremesso de Pedra", desc:"1 Ação: arremessa pedra a até 12 hex. Dano: 2d8 + alvo e todos em raio 1 hex testam AGI (difícil) ou Derrubados." },
+      { name:"Corpo de Pedra", desc:"Imune a dano perfurante. Resistência −3 a dano cortante. Vulnerável a dano de terra (magia de Thurgomur causa +1d10)." },
+      { name:"Terremoto Local", desc:"1x/combate: soca o chão — todas as criaturas em raio 4 hex testam AGI (difícil) ou ficam Derrubadas. Estruturas frágeis colapsam." },
+      { name:"Escudo de Pedra", desc:"1 Reação: ergue um bloco de pedra bloqueando 1 ataque completamente (absorve todo o dano). O bloco é destruído após isso." }
+    ],
+    spells:[],
+    behavior:"Territorial e orgulhoso. Não ataca sem provocação mas não recua. Pode ser negociado com ofertas de alimentos raros ou itens de pedra valiosa (INT moderada). Em combate: primeiro arremessa pedras, depois corpo a corpo.",
+    loot:[{item:"Coração de Pedra Viva (material divino de Thurgomur)",chance:20,qty:"1"},{item:"Ouro nas Veias da Pele",chance:40,qty:"1d10 moedas de ouro"},{item:"Pedra de Força (reagente)",chance:50,qty:"1d3"}] },
+
+  /* ── CRIATURAS VOADORAS ── */
+  { id:"harpia", name:"Harpia Caçadora", difficulty:2, size:"normal", category:"Voadora",
+    location:["Penhasco","Floresta","Montanha"], hp:45, physDefense:2, magDefense:3, dodge:16,
+    actions:3, reactions:2, damage:"1d8+1d6 (garras cortantes)",
+    abilities:[
+      { name:"Voadora", desc:"Ocupa hex aéreo (altitude 3). Ataques corpo a corpo de aliados no chão têm −1d4 de acerto. Ataques à distância são normais. Pode mergulhar: +1d6 de dano num ataque por rodada." },
+      { name:"Canto Encantador", desc:"1 Ação (1x/combate): todos em raio 5 hex testam SAB (difícil) ou ficam Enfeitiçados por 2 rodadas (não atacam a harpia, caminham em sua direção)." },
+      { name:"Rasante Mortal", desc:"Voa sobre um hex adjacente sem custo de Ação e ataca — o alvo não pode usar Reação (o ataque vem de cima em alta velocidade)." },
+      { name:"Vulnerabilidade ao Chão", desc:"Se forçada ao chão (magia, rede, projétil específico): Esquiva cai para 10 e perde voo por 1d3 rodadas." }
+    ],
+    spells:[],
+    behavior:"Caçadora inteligente. Usa o Canto para separar o grupo, depois ataca isolados com rasantes. Trabalha em pares. Foge se uma parceira morrer.",
+    loot:[{item:"Pena de Harpia (material mágico)",chance:80,qty:"1d6"},{item:"Ovo de Harpia (valioso para alquimistas)",chance:15,qty:"1"},{item:"Moedas (roubadas de vítimas)",chance:50,qty:"1d20"}] },
+
+  { id:"grifo", name:"Grifo das Montanhas", difficulty:3, size:"grande", category:"Voadora",
+    location:["Montanha","Penhasco Alto","Região de Atrelon"], hp:90, physDefense:5, magDefense:3, dodge:15,
+    actions:3, reactions:2, damage:"1d10+1d8 (bico de águia + garras de leão)",
+    abilities:[
+      { name:"Voador de Altitude", desc:"Ocupa hex aéreo altitude 5 (muito alto). Fora do alcance de ataques corpo a corpo. Projéteis têm −1d4. Magias de área alcançam normalmente." },
+      { name:"Mergulho Devastador", desc:"1x/rodada: pode mergulhar de altitude máxima para atacar — dano triplo mas fica em altitude 0 após o ataque (no chão, vulnerável)." },
+      { name:"Bico Perfurante", desc:"Ataques de bico ignoram 4 pontos de Defesa Física. Alvos com armadura pesada sofrem dano normal (o bico encontra frestas)." },
+      { name:"Lealdade ao Cavaleiro", desc:"Se tiver um cavaleiro montado: o grifo tem +1 Ação e +1d6 de dano. Ambos atuam na mesma iniciativa. O cavaleiro pode redirecionar ataques do grifo." }
+    ],
+    spells:[],
+    behavior:"Nobre e orgulhoso. Pode ser domado com tempo e respeito (missão secundária). Em estado selvagem: caça para alimentar filhotes. Não persegue presas que entram em cavernas.",
+    loot:[{item:"Pena de Grifo (item lendário — sela de voar)",chance:30,qty:"1"},{item:"Garras de Grifo (arma material)",chance:50,qty:"1d4"},{item:"Ovo de Grifo (montaria potencial)",chance:10,qty:"1"}] },
+
+  { id:"basilisco-asa", name:"Basilisco Voador", difficulty:4, size:"grande", category:"Voadora",
+    location:["Dungeon Alta","Penhasco","Ruína de Atrelon"], hp:110, physDefense:7, magDefense:4, dodge:13,
+    actions:3, reactions:1, damage:"1d10+1d8 (mordida petrificante)",
+    abilities:[
+      { name:"Olhar Petrificante", desc:"1 Ação: todos em cone 4 hex à frente testam FOR (difícil) ou ficam Paralisados por 1 rodada. 1 falha acumulada = Paralisado 2 rodadas. 2 falhas = Petrificado permanente (reversível por magia de nível 4+)." },
+      { name:"Couro Calcificado", desc:"Reduz dano de qualquer fonte em 2. Magia de terra ou dano sagrado ignora essa redução." },
+      { name:"Voo Errático", desc:"Em altitude 3: difícil de prever trajetória — ataques à distância têm −1d6 de acerto. Magia de área é normal." },
+      { name:"Mordida Calcificante", desc:"Mordida com sucesso: parte do corpo atingida começa a calcificar — −1 em ações que usem aquele membro por 3 rodadas (acumula)." }
+    ],
+    spells:[],
+    behavior:"Solitário. Ataca qualquer coisa que entre em seu território. Usa Olhar primeiro para imobilizar, depois mergulha. Não foge — terreno é tudo para ele.",
+    loot:[{item:"Olho de Basilisco (ingrediente petrificante)",chance:40,qty:"1"},{item:"Escama de Basilisco (armadura material)",chance:50,qty:"1d6"},{item:"Cristal de Carne Calcificada",chance:25,qty:"1"}] },
+
+  /* ── CORROMPIDOS PELO DEUS MARCADO ── */
+  { id:"urso-corrompido-marca", name:"Urso Corrompido pela Marca", difficulty:3, size:"grande", category:"Besta Corrompida",
+    location:["Floresta Corrompida","Território dos Araltos"], hp:100, physDefense:6, magDefense:3, dodge:11,
+    actions:3, reactions:1, damage:"1d12+1d8 (garras corrompidas)",
+    abilities:[
+      { name:"Aura Corruptora", desc:"Passivo: aliados em raio 3 hex têm −1d4 em todos os testes. Clérigos de Jurgmund ou Sanctum imunes." },
+      { name:"Garras do Deus Marcado", desc:"Cada acerto aplica 1 nível de Corrupção da Marca ao alvo (acumulável). 3 níveis = alvo começa a agir erráticamente (Mestre determina)." },
+      { name:"Fúria Sombria", desc:"Ao ficar abaixo de 50% HP: a Corrupção toma controle total — +2 Ações, +1d10 de dano. Não foge mais. Ataca tudo incluindo outros corrompidos." },
+      { name:"Regeneração Marcada", desc:"Regenera 6 HP por rodada. Magia sagrada ou fogo divino cancela por 2 rodadas." }
+    ],
+    spells:[],
+    behavior:"Erratico e agressivo. Ataca aliados corrompidos se em Fúria Sombria. Araltos podem controlá-lo parcialmente com símbolo da Marca (teste de INT).",
+    loot:[{item:"Pele Corrompida (material amaldiçoado)",chance:60,qty:"1"},{item:"Fragmento da Marca (cristal corrompido)",chance:40,qty:"1"}] },
+
+  { id:"golem-marcado", name:"Golem da Marca", difficulty:4, size:"grande", category:"Construto Corrompido",
+    location:["Fortaleza dos Araltos","Dungeon Corrompida"], hp:150, physDefense:9, magDefense:5, dodge:9,
+    actions:3, reactions:2, damage:"2d8+1d8 (punho marcado)",
+    abilities:[
+      { name:"Núcleo da Marca", desc:"No centro do peito há um cristal carmesim. Atacar o cristal (−2 para acerto, requer mira declarada): causa dano duplo e pode desestabilizar o golem (SAB difícil ou Atordoado 1 rodada)." },
+      { name:"Pulso de Corrupção", desc:"1 Ação: emite pulso de energia corrompida em raio 3 hex — 2d6 dano sombrio a todos (SAB normal para metade)." },
+      { name:"Inabalável", desc:"Imune a Derrubado, Empurrado e Paralisado. Efeitos de medo não funcionam." },
+      { name:"Absorção Sombria", desc:"Ao receber dano mágico (exceto sagrado): absorve 25% como cura. Magia sagrada causa 1d6 extra." }
+    ],
+    spells:[],
+    behavior:"Guardião autômato programado pelos Araltos. Protege áreas específicas ou portadores da Marca. Não negocia. Persegue indefinidamente se ativado.",
+    loot:[{item:"Cristal da Marca (valioso e perigoso)",chance:80,qty:"1"},{item:"Peças de Metal Corrompido",chance:60,qty:"1d4"},{item:"Núcleo de Golem (pode ser reprogramado)",chance:20,qty:"1"}] },
+
+  /* ── CORROMPIDOS PELO SANGUE DA SERPENTE (não agressivos) ── */
+  { id:"cobra-sangue-Jurgmund", name:"Cobra do Sangue de Jurgmund", difficulty:2, size:"normal", category:"Besta Sagrada",
+    location:["Montanhas de Atrelon","Castelo da Cobra","Florestas Próximas ao Lago"], hp:45, physDefense:3, magDefense:5, dodge:16,
+    abilities:[
+      { name:"Não Agressiva por Natureza", desc:"Não ataca primeiro. Se atacada: defende-se e tenta se afastar. Apenas ataca 3x seguidas se encurralada." },
+      { name:"Veneno Sagrado Passivo", desc:"Qualquer contato físico (atacar sem luvas, capturar): 1d6 de veneno sagrado por rodada por 3 rodadas. Antídoto mundano não funciona — precisa de cura mágica." },
+      { name:"Guia de Jurgmund", desc:"Serpentarianos que a seguem (em vez de atacar) são guiados até um local de interesse próximo (tesouro, saída, área sagrada). O Mestre escolhe o destino." },
+      { name:"Escamas Douradas", desc:"Suas escamas brilham levemente dourado. Clérigos de Jurgmund que a vejam ganham +1 Slot de Magia enquanto ela estiver visível." }
+    ],
+    spells:[],
+    actions:2, reactions:2, damage:"1d8 + veneno sagrado (defensivo)",
+    behavior:"Anda pelo mundo como mensageira de Jurgmund. Observa, guia, eventualmente some. Nunca é morta sem consequência — Serpentarianos ficam hostis se virem um grupo matar uma.",
+    loot:[{item:"Escama Dourada de Jurgmund (material divino)",chance:70,qty:"1d3"},{item:"Veneno Sagrado Residual (frasco)",chance:30,qty:"1"}] },
+
+  { id:"lagarto-cristal-cobra", name:"Lagarto de Cristal Cobriforme", difficulty:1, size:"pequeno", category:"Besta Sagrada",
+    location:["Cavernas de Atrelon","Beira do Lago","Perto do Castelo"], hp:20, physDefense:4, magDefense:2, dodge:15,
+    abilities:[
+      { name:"Completamente Inofensivo", desc:"Nunca ataca voluntariamente. Foge de qualquer confronto. Se capturado e tratado bem: torna-se familiar (bônus de +1 em testes de Percepção e +1 Slot de Magia)." },
+      { name:"Detector de Corrupção", desc:"Passivo: o lagarto brilha intensamente em vermelho ao detectar qualquer criatura corrompida pelo Deus Marcado em raio 10 hex. Excelente alarme." },
+      { name:"Pele de Cristal", desc:"Passivo: dano físico causa 1d4 de dano reflexivo ao atacante (o cristal é muito afiado). Não intencional — é sua defesa natural." }
+    ],
+    spells:[],
+    actions:1, reactions:1, damage:"— (não ataca)",
+    behavior:"Curioso e dócil. Se os jogadores ficarem quietos por 1 rodada completa, ele se aproxima. Pode ser capturado sem combate com DEX (normal).",
+    loot:[{item:"Escama de Cristal Cobra (material decorativo e mágico)",chance:90,qty:"1d4"}] },
+
+  /* ── CRIATURAS COM MAGIAS ÚNICAS ── */
+  { id:"maga-da-floresta", name:"Maga da Floresta Antiga", difficulty:3, size:"normal", category:"Humanoide",
+    location:["Floresta Ancestral","Círculo de Pedras","Bosque Sagrado"], hp:65, physDefense:2, magDefense:8, dodge:13,
+    actions:2, reactions:2, damage:"1d6 (cajado de madeira viva) + magia",
+    abilities:[
+      { name:"Controle da Flora", desc:"1 Ação: controla toda a vegetação em raio 6 hex por 3 rodadas. Pode: criar terreno difícil, fazer raízes aprisionarem (AGI difícil) ou criar paredes de galhos (Def.5, 20 HP)." },
+      { name:"Forma Animal", desc:"1x/combate: transforma-se em animal selvagem (urso dif.2) por 4 rodadas. Mantém INT mas ganha todas as estatísticas da forma." },
+      { name:"Cura da Terra", desc:"1 Ação Mágica: cura 3d8 HP em aliados que estiverem em contato com solo natural. Não funciona em dungeon ou pedra artificial." },
+      { name:"Maldição da Floresta", desc:"1 Ação Mágica (1x/combate): maldição permanente até próximo descanso longo — alvo não consegue se mover mais de 2 hex por rodada sem força exterior." }
+    ],
+    spells:["Controle da Flora (nível 3)","Forma Animal (nível 3)","Cura da Terra (nível 2)","Maldição da Floresta (nível 3)"],
+    behavior:"Protetora, não agressora. Ataca quem desmata ou polui a floresta. Pode ser aliada se o grupo mostrar respeito pela natureza. Oferece cura e informações em troca de promessas mantidas.",
+    loot:[{item:"Cajado de Madeira Viva (arma mágica)",chance:30,qty:"1"},{item:"Sementes de Cura (3 usos — cura 2d8)",chance:60,qty:"1"},{item:"Mapa de Locais Sagrados",chance:40,qty:"1"}] },
+
+  { id:"draconico-menor", name:"Dracônico Menor", difficulty:3, size:"normal", category:"Dracônico",
+    location:["Montanhas","Cavernas","Ruínas de Atrelon"], hp:80, physDefense:6, magDefense:5, dodge:14,
+    actions:3, reactions:2, damage:"1d10+1d6 (garras e chama)",
+    abilities:[
+      { name:"Sopro de Chama", desc:"1 Ação (1x a cada 2 rodadas): sopro de fogo em cone 4 hex — 3d8 dano de fogo, metade com AGI (normal). Imune a fogo próprio." },
+      { name:"Escalas Dragonínicas", desc:"Resistência a fogo (-4 por dado). Vulnerável a frio (+1d4 por dado de dano de gelo)." },
+      { name:"Voo de Combate", desc:"Pode voar em altitude 2 (acima do alcance corpo a corpo). Pousa para usar Sopro ou atacar com garras — ficar preso no chão por 1 rodada após pousar." },
+      { name:"Orgulho Dracônico", desc:"Se receber um Crítico: fica Enraivecido por 3 rodadas — +1d8 de dano mas foca somente em quem acertou o crítico." }
+    ],
+    spells:[],
+    behavior:"Quer tesouro e respeito, nesta ordem. Pode ser negociado com ofertas de ouro ou itens valiosos. É inimigo de quem invade sua caverna. Nunca se une a outros dracônicos menores (competição de território).",
+    loot:[{item:"Escama de Dracônico (armadura material)",chance:60,qty:"1d6"},{item:"Garra de Dracônico (arma material)",chance:40,qty:"1d2"},{item:"Fragmento de Tesouro do Dracônico",chance:70,qty:"1d20 ouro"}] },
+
+  { id:"espirito-fogo", name:"Espírito do Fogo Primordial", difficulty:4, size:"normal", category:"Elemental",
+    location:["Vulcão Karloth","Deserto Carmesim","Área de Erupção"], hp:95, physDefense:0, magDefense:8, dodge:17,
+    actions:3, reactions:2, damage:"2d8 (toque de chama pura)",
+    abilities:[
+      { name:"Corpo de Fogo", desc:"Imune a fogo e dano físico mundano. Dano de gelo causa 1d6 extra e reduz 1 Ação por rodada por 2 rodadas. Água apaga temporariamente (1 rodada)." },
+      { name:"Aura Flamejante", desc:"Passivo: qualquer criatura a 1 hex sofre 1d6 de calor por rodada. Objetos inflamáveis nos hexágonos adjacentes pegam fogo." },
+      { name:"Explosão de Calor", desc:"1x/combate: libera toda a energia em raio 4 hex — 4d8 dano de fogo a todos (AGI difícil para metade). O espírito fica com −2 Ações por 2 rodadas após." },
+      { name:"Dividir", desc:"Se receber 20+ de dano em 1 golpe: divide em 2 espíritos menores (HP 25, dano 1d8, Dif.2). Os dois somem se o espírito original tivesse sido derrotado." }
+    ],
+    spells:[],
+    behavior:"Não tem intenção maligna — simplesmente existe e queima. Fica quieto se ninguém se aproximar demais (3 hex). Portadores de itens de Vermelhão: o espírito reconhece a divindade e não ataca.",
+    loot:[{item:"Essência de Fogo Primordial (material divino)",chance:60,qty:"1"},{item:"Cristal de Calor Permanente (luz eterna)",chance:30,qty:"1"}] }
 
 ];
