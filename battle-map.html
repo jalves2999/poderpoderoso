@@ -10,103 +10,166 @@
     html,body{height:100%;overflow:hidden;background:#1a120a;font-family:var(--font-heading,'Georgia',serif)}
 
     /* ── Toolbar ─────────────────────────────────── */
-    .bm-toolbar{position:fixed;top:0;left:0;right:0;height:48px;z-index:100;display:flex;align-items:center;gap:8px;padding:0 12px;background:rgba(22,14,8,0.95);border-bottom:1px solid rgba(156,122,60,0.3)}
-    .bm-back{color:rgba(248,243,232,0.7);background:none;border:none;font-size:13px;cursor:pointer;font-family:inherit;min-height:40px;padding:0 4px;text-decoration:none}
+    /* ── Toolbar ─────────────────────────────────────────── */
+    .bm-toolbar{position:fixed;top:0;left:0;right:0;height:48px;z-index:200;display:flex;align-items:center;gap:6px;padding:0 10px;background:rgba(22,14,8,0.97);border-bottom:1px solid rgba(156,122,60,0.3);flex-wrap:nowrap;overflow-x:auto}
+    .bm-back{color:rgba(248,243,232,0.7);background:none;border:none;font-size:13px;cursor:pointer;font-family:inherit;min-height:40px;padding:0 4px;text-decoration:none;white-space:nowrap;flex-shrink:0}
     .bm-back:hover{color:var(--gold,#9c7a3c)}
-    .bm-title{font-size:15px;color:var(--gold,#9c7a3c);font-weight:700;flex:1}
-    .bm-btn{background:rgba(248,243,232,0.1);border:1px solid rgba(156,122,60,0.4);color:rgba(248,243,232,0.85);border-radius:6px;padding:0 10px;height:34px;font-size:12px;cursor:pointer;font-family:inherit;white-space:nowrap}
+    .bm-title{font-size:14px;color:var(--gold,#9c7a3c);font-weight:700;flex:1;white-space:nowrap;min-width:0;overflow:hidden;text-overflow:ellipsis}
+    .bm-btn{background:rgba(248,243,232,0.1);border:1px solid rgba(156,122,60,0.4);color:rgba(248,243,232,0.85);border-radius:6px;padding:0 8px;height:32px;font-size:11.5px;cursor:pointer;font-family:inherit;white-space:nowrap;flex-shrink:0}
     .bm-btn:active{background:rgba(156,122,60,0.3)}
     .bm-btn.danger{border-color:rgba(200,60,60,0.5);color:rgba(255,120,120,0.9)}
     .bm-btn.danger:active{background:rgba(200,60,60,0.25)}
-    .bm-map-name{background:rgba(248,243,232,0.08);border:1px solid rgba(156,122,60,0.35);color:rgba(248,243,232,0.85);border-radius:6px;padding:0 8px;height:34px;font-size:13px;font-family:inherit;min-width:100px;max-width:160px}
-    .bm-sep{width:1px;height:28px;background:rgba(156,122,60,0.2);margin:0 2px}
+    .bm-map-name{background:rgba(248,243,232,0.08);border:1px solid rgba(156,122,60,0.35);color:rgba(248,243,232,0.85);border-radius:6px;padding:0 7px;height:32px;font-size:12px;font-family:inherit;width:120px;flex-shrink:0}
+    .bm-sep{width:1px;height:26px;background:rgba(156,122,60,0.2);margin:0 1px;flex-shrink:0}
 
-    /* ── Layout ──────────────────────────────────── */
-    .bm-layout{position:fixed;inset:48px 0 0 0;display:flex;overflow:hidden}
+    /* ══ DESKTOP (> 768px) — 3 colunas ══════════════════════ */
+    .bm-layout{position:fixed;inset:48px 0 0 0;display:flex;flex-direction:row;overflow:hidden}
 
-    /* ── Painel esquerdo — paleta ─────────────────── */
-    .bm-palette{width:200px;flex-shrink:0;background:rgba(22,14,8,0.92);border-right:1px solid rgba(156,122,60,0.25);display:flex;flex-direction:column;overflow:hidden}
-    .bm-palette-header{padding:10px 12px 6px;font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:rgba(156,122,60,0.8);border-bottom:1px solid rgba(156,122,60,0.15)}
-    .bm-palette-scroll{flex:1;overflow-y:auto;padding:6px 6px 12px}
-    .palette-section{margin-bottom:8px}
-    .palette-section-title{font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:rgba(248,243,232,0.4);padding:4px 6px 3px}
-    .palette-item{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:6px;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .1s;margin-bottom:2px;border:1.5px solid transparent}
+    .bm-palette{width:192px;flex-shrink:0;background:rgba(22,14,8,0.95);border-right:1px solid rgba(156,122,60,0.25);display:flex;flex-direction:column;overflow:hidden}
+    .bm-palette-header{padding:8px 12px 5px;font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:rgba(156,122,60,0.8);border-bottom:1px solid rgba(156,122,60,0.15);flex-shrink:0}
+    .bm-palette-scroll{flex:1;overflow-y:auto;padding:5px 5px 10px;-webkit-overflow-scrolling:touch}
+    .palette-section{margin-bottom:6px}
+    .palette-section-title{font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:rgba(248,243,232,0.4);padding:3px 6px 2px}
+    .palette-item{display:flex;align-items:center;gap:7px;padding:6px 7px;border-radius:6px;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .1s;margin-bottom:2px;border:1.5px solid transparent}
     .palette-item:hover{background:rgba(156,122,60,0.12)}
     .palette-item.active{background:rgba(156,122,60,0.22);border-color:rgba(156,122,60,0.5)}
-    .palette-item.active:hover{background:rgba(156,122,60,0.28)}
-    .pi-icon{font-size:18px;flex-shrink:0;width:24px;text-align:center}
+    .palette-item.eraser.active{background:rgba(200,60,60,0.18);border-color:rgba(200,60,60,0.45)}
+    .pi-icon{font-size:17px;flex-shrink:0;width:22px;text-align:center}
     .pi-text{flex:1;min-width:0}
     .pi-name{font-size:12px;color:rgba(248,243,232,0.9);line-height:1.2}
-    .pi-desc{font-size:10px;color:rgba(248,243,232,0.45);line-height:1.3;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+    .pi-desc{font-size:10px;color:rgba(248,243,232,0.4);line-height:1.3;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
 
-    /* Modo eraser */
-    .palette-item.eraser.active{background:rgba(200,60,60,0.18);border-color:rgba(200,60,60,0.45)}
-
-    /* ── Área central — canvas ────────────────────── */
-    .bm-canvas-area{flex:1;overflow:auto;position:relative;-webkit-overflow-scrolling:touch}
+    .bm-canvas-area{flex:1;overflow:auto;position:relative;-webkit-overflow-scrolling:touch;min-width:0}
     #hex-canvas{display:block;cursor:crosshair;touch-action:none}
     #hex-canvas.erasing{cursor:cell}
 
-    /* ── Painel direito — detalhes ─────────────────── */
-    .bm-details{width:220px;flex-shrink:0;background:rgba(22,14,8,0.92);border-left:1px solid rgba(156,122,60,0.25);display:flex;flex-direction:column;overflow:hidden}
-    .bm-details-header{padding:10px 12px 6px;font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:rgba(156,122,60,0.8);border-bottom:1px solid rgba(156,122,60,0.15)}
+    .bm-details{width:210px;flex-shrink:0;background:rgba(22,14,8,0.95);border-left:1px solid rgba(156,122,60,0.25);display:flex;flex-direction:column;overflow:hidden}
+    .bm-details-header{padding:8px 12px 5px;font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:rgba(156,122,60,0.8);border-bottom:1px solid rgba(156,122,60,0.15);flex-shrink:0}
     .bm-details-body{flex:1;overflow-y:auto;padding:10px 10px 20px;display:flex;flex-direction:column;gap:8px}
     .det-empty{font-size:12px;color:rgba(248,243,232,0.3);text-align:center;margin-top:20px;font-style:italic}
     .det-cell-coord{font-size:11px;color:rgba(156,122,60,0.8);margin-bottom:2px}
     .det-field{display:flex;flex-direction:column;gap:3px}
     .det-label{font-size:9.5px;text-transform:uppercase;letter-spacing:.4px;color:rgba(156,122,60,0.7)}
     .det-input,.det-select,.det-textarea{background:rgba(248,243,232,0.08);border:1px solid rgba(156,122,60,0.3);color:rgba(248,243,232,0.9);border-radius:5px;padding:5px 8px;font-size:12px;font-family:inherit;width:100%}
-    .det-textarea{min-height:64px;resize:vertical;line-height:1.5}
+    .det-textarea{min-height:60px;resize:vertical;line-height:1.5}
     .det-input:focus,.det-select:focus,.det-textarea:focus{outline:none;border-color:rgba(156,122,60,0.6)}
     .det-select option{background:#1a120a;color:#f8f3e8}
     .det-btn-save{background:rgba(156,122,60,0.25);border:1px solid rgba(156,122,60,0.5);color:rgba(248,243,232,0.9);border-radius:6px;padding:7px;font-size:12px;font-family:inherit;cursor:pointer;width:100%}
     .det-btn-save:active{background:rgba(156,122,60,0.4)}
     .det-btn-clear{background:rgba(200,60,60,0.15);border:1px solid rgba(200,60,60,0.35);color:rgba(255,120,120,0.9);border-radius:6px;padding:6px;font-size:11px;font-family:inherit;cursor:pointer;width:100%}
     .det-section-title{font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:rgba(248,243,232,0.3);padding:4px 0 2px;border-top:1px dashed rgba(156,122,60,0.15);margin-top:4px}
-
-    /* Legenda de ícones */
-    .det-legend{display:flex;flex-direction:column;gap:4px;padding:6px 0}
+    .det-legend{display:flex;flex-direction:column;gap:4px;padding:4px 0}
     .det-leg-item{display:flex;align-items:center;gap:6px;font-size:11px;color:rgba(248,243,232,0.6)}
-    .det-leg-icon{font-size:14px;width:20px;text-align:center}
+    .det-leg-icon{font-size:13px;width:18px;text-align:center}
 
-    /* ── Modal de mapas ───────────────────────────── */
-    .bm-modal-ov{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,0.7);display:none;align-items:center;justify-content:center;padding:20px}
-    .bm-modal-ov.open{display:flex}
-    .bm-modal{background:#2a1a0e;border:1px solid rgba(156,122,60,0.4);border-radius:12px;width:100%;max-width:440px;max-height:80vh;display:flex;flex-direction:column;overflow:hidden}
-    .bm-modal-h{padding:14px 16px;border-bottom:1px solid rgba(156,122,60,0.2);display:flex;align-items:center;gap:10px}
-    .bm-modal-title{font-size:16px;color:var(--gold,#9c7a3c);flex:1;font-weight:700}
-    .bm-modal-close{background:none;border:1px solid rgba(156,122,60,0.3);border-radius:6px;color:rgba(248,243,232,0.6);font-size:16px;width:32px;height:32px;cursor:pointer}
-    .bm-modal-body{flex:1;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
-    .bm-modal-footer{padding:10px 16px;border-top:1px solid rgba(156,122,60,0.2);display:flex;gap:8px}
-    .bm-field{display:flex;flex-direction:column;gap:4px}
-    .bm-field label{font-size:10px;text-transform:uppercase;letter-spacing:.4px;color:rgba(156,122,60,0.8)}
-    .bm-input,.bm-select{background:rgba(248,243,232,0.08);border:1px solid rgba(156,122,60,0.3);color:rgba(248,243,232,0.9);border-radius:6px;padding:8px 10px;font-size:13px;font-family:inherit;width:100%}
-    .bm-input:focus,.bm-select:focus{outline:none;border-color:rgba(156,122,60,0.6)}
-    .bm-select option{background:#1a120a;color:#f8f3e8}
-    .bm-mbtn{flex:1;padding:10px;border-radius:7px;font-size:13px;font-family:inherit;cursor:pointer;border:none}
-    .bm-mbtn.primary{background:rgba(156,122,60,0.4);color:#f8f3e8;border:1px solid rgba(156,122,60,0.5)}
-    .bm-mbtn.primary:active{background:rgba(156,122,60,0.6)}
-    .bm-mbtn.secondary{background:rgba(248,243,232,0.08);color:rgba(248,243,232,0.7);border:1px solid rgba(156,122,60,0.25)}
-
-    /* Lista de mapas salvos */
-    .saved-map-item{display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(248,243,232,0.05);border:1px solid rgba(156,122,60,0.2);border-radius:7px;cursor:pointer}
-    .saved-map-item:hover{background:rgba(248,243,232,0.1)}
-    .saved-map-name{font-size:13px;color:rgba(248,243,232,0.9);flex:1}
-    .saved-map-info{font-size:10px;color:rgba(248,243,232,0.4)}
-    .saved-map-del{background:none;border:none;color:rgba(255,80,80,0.6);font-size:16px;cursor:pointer;padding:0 4px;line-height:1}
-    .saved-map-del:hover{color:rgba(255,80,80,0.9)}
-
-    /* Zoom do canvas */
+    /* Zoom buttons */
     .canvas-zoom-row{position:absolute;bottom:10px;right:10px;display:flex;gap:4px;z-index:10}
     .cz-btn{background:rgba(22,14,8,0.85);border:1px solid rgba(156,122,60,0.4);color:rgba(248,243,232,0.8);border-radius:6px;width:32px;height:32px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
     .cz-btn:active{background:rgba(156,122,60,0.3)}
 
-    /* Mobile: painel esquerdo vira drawer */
-    @media(max-width:640px){
-      .bm-palette{position:fixed;left:-200px;top:48px;bottom:0;z-index:50;transition:left .2s}
-      .bm-palette.open{left:0}
-      .bm-details{display:none}
-      .bm-title{font-size:13px}
+    /* ══ TABLET / LANDSCAPE MOBILE (481–768px ou landscape ≤ 900px) ══ */
+    @media (max-width: 768px) and (orientation: landscape) {
+      /* Horizontal: paleta fica em baixo como barra, detalhes some (sheet ao clicar) */
+      .bm-layout{ flex-direction: column; }
+
+      .bm-palette{
+        width: 100%; height: 90px; flex-shrink: 0;
+        border-right: none; border-top: 1px solid rgba(156,122,60,0.25);
+        flex-direction: row; order: 2;
+      }
+      .bm-palette-header{ display: none; }
+      .bm-palette-scroll{
+        display: flex; flex-direction: row; flex-wrap: nowrap;
+        overflow-x: auto; overflow-y: hidden;
+        padding: 6px 8px; gap: 5px; align-items: center;
+        -webkit-overflow-scrolling: touch;
+      }
+      .palette-section{ display: contents; }
+      .palette-section-title{ display: none; }
+      .palette-item{
+        flex-direction: column; gap: 2px; padding: 5px 6px;
+        min-width: 56px; height: 76px; justify-content: center;
+        border-radius: 8px; flex-shrink: 0;
+      }
+      .pi-icon{ font-size: 20px; width: auto; }
+      .pi-name{ font-size: 10px; text-align: center; line-height: 1.2; }
+      .pi-desc{ display: none; }
+
+      .bm-canvas-area{ flex: 1; order: 1; min-height: 0; }
+      .bm-details{ display: none; } /* substituído pelo sheet móvel */
+    }
+
+    /* ══ PORTRAIT MOBILE (≤ 640px vertical) ══════════════════ */
+    @media (max-width: 640px) and (orientation: portrait) {
+      .bm-layout{ flex-direction: column; }
+
+      /* Canvas ocupa o centro */
+      .bm-canvas-area{ flex: 1; order: 1; min-height: 0; }
+
+      /* Paleta em baixo — tabs horizontais roláveis */
+      .bm-palette{
+        width: 100%; height: 96px; flex-shrink: 0;
+        border-right: none; border-top: 1px solid rgba(156,122,60,0.3);
+        flex-direction: row; order: 2;
+        background: rgba(14,8,4,0.97);
+      }
+      .bm-palette-header{ display: none; }
+      .bm-palette-scroll{
+        display: flex; flex-direction: row; flex-wrap: nowrap;
+        overflow-x: auto; overflow-y: hidden;
+        padding: 8px 8px 8px; gap: 6px; align-items: center;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
+      }
+      .palette-section{ display: contents; }
+      .palette-section-title{ display: none; }
+      .palette-item{
+        flex-direction: column; gap: 3px;
+        padding: 6px 8px; min-width: 60px; height: 78px;
+        justify-content: center; align-items: center;
+        border-radius: 8px; flex-shrink: 0;
+        scroll-snap-align: start;
+      }
+      .pi-icon{ font-size: 22px; width: auto; }
+      .pi-name{ font-size: 10px; text-align: center; line-height: 1.25; white-space: normal; }
+      .pi-desc{ display: none; }
+
+      /* Painel de detalhes — sheet que sobe da base ao selecionar */
+      .bm-details{
+        display: flex; position: fixed; left: 0; right: 0; bottom: 96px;
+        height: 0; max-height: 55vh; z-index: 150;
+        border-left: none; border-top: 2px solid rgba(156,122,60,0.4);
+        border-radius: 12px 12px 0 0; width: 100%;
+        transition: height 0.25s ease; overflow: hidden;
+        background: rgba(14,8,4,0.97);
+      }
+      .bm-details.open{ height: 55vh; }
+      .bm-details-header{
+        padding: 10px 14px 7px; font-size: 11px;
+        display: flex; align-items: center; justify-content: space-between;
+      }
+      .bm-details-header::before{
+        content:""; display:block; width:40px; height:4px;
+        background:rgba(156,122,60,0.4); border-radius:2px;
+        position:absolute; top:6px; left:50%; transform:translateX(-50%);
+      }
+      /* botão para fechar o sheet */
+      #btn-close-sheet{
+        background:none; border:none; color:rgba(248,243,232,0.5);
+        font-size:18px; cursor:pointer; padding:0 4px; line-height:1;
+      }
+
+      /* Toolbar menor */
+      .bm-title{ font-size:12px; }
+      .bm-map-name{ width: 90px; }
+    }
+
+    /* ══ PORTRAIT MUITO PEQUENO (≤ 400px) ═══════════════════ */
+    @media (max-width: 400px) and (orientation: portrait) {
+      .bm-palette{ height: 88px; }
+      .palette-item{ min-width: 54px; height: 72px; padding: 5px 6px; }
+      .pi-icon{ font-size: 20px; }
+      .pi-name{ font-size: 9.5px; }
     }
   </style>
 </head>
@@ -122,8 +185,6 @@
   <button class="bm-btn" id="btn-open-maps">📂 Mapas</button>
   <button class="bm-btn" id="btn-new-map">+ Novo</button>
   <button class="bm-btn danger" id="btn-clear-map">🗑 Limpar</button>
-  <!-- Mobile toggle da paleta -->
-  <button class="bm-btn" id="btn-palette-toggle" style="display:none">🎨</button>
 </header>
 
 <!-- Layout -->
@@ -148,7 +209,10 @@
 
   <!-- Painel de detalhes -->
   <aside class="bm-details" id="bm-details">
-    <div class="bm-details-header">📋 Célula Selecionada</div>
+    <div class="bm-details-header">
+      📋 Célula Selecionada
+      <button id="btn-close-sheet" title="Fechar">✕</button>
+    </div>
     <div class="bm-details-body" id="details-body">
       <p class="det-empty">Clique em uma célula para ver ou editar seus detalhes.</p>
       <div class="det-section-title">Legenda rápida</div>
@@ -625,9 +689,13 @@ function renderDetails() {
   document.getElementById("det-clear")?.addEventListener("click", () => {
     delete state.cells[`${selectedCell.c},${selectedCell.r}`];
     selectedCell = null;
+    closeSheet();
     renderDetails();
     drawMap();
   });
+
+  // Abre o sheet no portrait mobile
+  openSheet();
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -636,16 +704,23 @@ function renderDetails() {
 let painting = false;
 let lastPainted = null;
 
-function applyToCell(c, r) {
+function applyToCell(c, r, selectAfter = false) {
   const key = `${c},${r}`;
   if (selectedElement.id === "empty") {
     delete state.cells[key];
+    if (selectedCell && selectedCell.c === c && selectedCell.r === r) {
+      selectedCell = null;
+      closeSheet();
+      renderDetails();
+    }
   } else {
     if (!state.cells[key] || state.cells[key].id !== selectedElement.id) {
       state.cells[key] = { id: selectedElement.id, label: "", notes: "" };
     }
-    selectedCell = { c, r };
-    renderDetails();
+    if (selectAfter) {
+      selectedCell = { c, r };
+      renderDetails(); // abre sheet via openSheet() dentro de renderDetails
+    }
   }
   drawMap();
 }
@@ -671,7 +746,7 @@ canvas.addEventListener("mousedown", e => {
   if (!hex) return;
   painting = true;
   lastPainted = `${hex.c},${hex.r}`;
-  applyToCell(hex.c, hex.r);
+  applyToCell(hex.c, hex.r, false); // pintura sem abrir sheet
 });
 canvas.addEventListener("mousemove", e => {
   if (!painting) return;
@@ -681,37 +756,55 @@ canvas.addEventListener("mousemove", e => {
   const key = `${hex.c},${hex.r}`;
   if (key === lastPainted) return;
   lastPainted = key;
-  applyToCell(hex.c, hex.r);
+  applyToCell(hex.c, hex.r, false);
 });
 window.addEventListener("mouseup", () => { painting = false; });
 
-// Clique simples para selecionar célula (sem pintar)
+// Clique simples para selecionar célula e abrir detalhes
 canvas.addEventListener("click", e => {
   const { cx, cy } = getCanvasPoint(e);
   const hex = pixelToHex(cx, cy, state.cols, state.rows, hexSize);
   if (!hex) return;
+  if (selectedElement.id === "empty") {
+    // ao apagar, só apaga sem selecionar
+    return;
+  }
   selectedCell = { c: hex.c, r: hex.r };
   renderDetails();
   drawMap();
 });
 
-// Touch
+// Touch — tap curto seleciona, arrastar pinta
 let touchPainting = false;
+let touchMoved = false;
 canvas.addEventListener("touchstart", e => {
   e.preventDefault();
-  touchPainting = true;
+  touchPainting = true; touchMoved = false;
   const { cx, cy } = getCanvasPoint(e);
   const hex = pixelToHex(cx, cy, state.cols, state.rows, hexSize);
-  if (hex) applyToCell(hex.c, hex.r);
+  if (hex) applyToCell(hex.c, hex.r, false);
 }, { passive: false });
 canvas.addEventListener("touchmove", e => {
   e.preventDefault();
+  touchMoved = true;
   if (!touchPainting) return;
   const { cx, cy } = getCanvasPoint(e);
   const hex = pixelToHex(cx, cy, state.cols, state.rows, hexSize);
-  if (hex) applyToCell(hex.c, hex.r);
+  if (hex) applyToCell(hex.c, hex.r, false);
 }, { passive: false });
-canvas.addEventListener("touchend", () => { touchPainting = false; });
+canvas.addEventListener("touchend", e => {
+  touchPainting = false;
+  // tap curto (sem arrastar) → seleciona e abre sheet
+  if (!touchMoved) {
+    const { cx, cy } = getCanvasPoint({ clientX: e.changedTouches[0].clientX, clientY: e.changedTouches[0].clientY });
+    const hex = pixelToHex(cx, cy, state.cols, state.rows, hexSize);
+    if (hex) {
+      selectedCell = { c: hex.c, r: hex.r };
+      renderDetails();
+      drawMap();
+    }
+  }
+});
 
 /* ══════════════════════════════════════════════════════════
    ZOOM DO CANVAS
@@ -830,13 +923,18 @@ function showFlash(msg) {
   el._t = setTimeout(() => { el.style.opacity = "0"; }, 1800);
 }
 
-/* Mobile toggle paleta */
-const paletteEl = document.getElementById("bm-palette");
-const toggleBtn = document.getElementById("btn-palette-toggle");
-if (window.innerWidth <= 640) {
-  toggleBtn.style.display = "";
-  toggleBtn.onclick = () => paletteEl.classList.toggle("open");
+/* ══════════════════════════════════════════════════════════
+   PAINEL DE DETALHES + SHEET MOBILE
+   ══════════════════════════════════════════════════════════ */
+const detailsPanel = document.getElementById("bm-details");
+const closeSheetBtn = document.getElementById("btn-close-sheet");
+
+function isPortraitMobile() {
+  return window.innerWidth <= 640 && window.innerHeight > window.innerWidth;
 }
+function openSheet()  { if (isPortraitMobile()) detailsPanel.classList.add("open"); }
+function closeSheet() { detailsPanel.classList.remove("open"); selectedCell = null; drawMap(); }
+closeSheetBtn?.addEventListener("click", closeSheet);
 
 /* ══════════════════════════════════════════════════════════
    INIT
