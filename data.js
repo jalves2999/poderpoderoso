@@ -2978,6 +2978,261 @@ const BESTIARY = [
     ],
     spells:[],
     behavior:"Não tem intenção maligna — simplesmente existe e queima. Fica quieto se ninguém se aproximar demais (3 hex). Portadores de itens de Vermelhão: o espírito reconhece a divindade e não ataca.",
-    loot:[{item:"Essência de Fogo Primordial (material divino)",chance:60,qty:"1"},{item:"Cristal de Calor Permanente (luz eterna)",chance:30,qty:"1"}] }
+    loot:[{item:"Essência de Fogo Primordial (material divino)",chance:60,qty:"1"},{item:"Cristal de Calor Permanente (luz eterna)",chance:30,qty:"1"}] },
+
+  /* ══════════════════════════════════════════════════════════
+     NOVOS MONSTROS — Dificuldade 2 e 3
+     ══════════════════════════════════════════════════════════ */
+
+  /* ─── DIFICULDADE 2 ─────────────────────────────────────── */
+
+  { id:"aranha-gigante", name:"Aranha Gigante da Caverna", difficulty:2, size:"grande", category:"Besta",
+    location:["Caverna","Dungeon","Floresta Sombria"],
+    hp:42, physDefense:3, magDefense:1, dodge:14,
+    actions:2, reactions:2, damage:"1d8+1d4 (presas venenosas)",
+    abilities:[
+      { name:"Teia Aprisionadora", desc:"1 Ação: dispara teia a até 6 hex. Alvo testa AGI (normal) ou fica Preso (imóvel, pode gastar 1 Ação por turno para testar FOR normal e escapar). Pode ter até 3 teias ativas." },
+      { name:"Veneno de Paralisia", desc:"Cada mordida aplica veneno: 1d4 de dano por rodada + reduz AGI em 1 por rodada (acumula). Se AGI chegar a 0: Paralisado por 2 rodadas. Antídoto ou cura mágica remove." },
+      { name:"Andar pelas Paredes", desc:"Pode se mover em paredes e tetos sem penalidade. Alvos no chão que atacam uma aranha no teto têm -1d4 de acerto." },
+      { name:"Sentido de Vibração", desc:"Detecta qualquer movimento em raio 8 hex via teia ou chão. Imune a Furtividade se estiver em teia ou área de teia." }
+    ],
+    spells:[], behavior:"Tece teias antes do combate para cobrir saídas. Usa Paralisia para prender presas e guarda para comer depois. Foge se perder mais da metade dos pontos de vida em 2 rodadas.",
+    loot:[{item:"Seda de Aranha Gigante (material — corda ou roupa)",chance:70,qty:"1d4"},{item:"Veneno de Aranha (3 doses)",chance:40,qty:"1"},{item:"Casulo com item preso (variado)",chance:30,qty:"1"}] },
+
+  { id:"gnoll-guerreiro", name:"Gnoll Guerreiro", difficulty:2, size:"normal", category:"Humanoide",
+    location:["Planície","Deserto","Acampamento Nômade"],
+    hp:48, physDefense:3, magDefense:1, dodge:12,
+    actions:2, reactions:1, damage:"1d10+1d4 (lança serrilhada)",
+    abilities:[
+      { name:"Riso de Hiena", desc:"Ao reduzir um inimigo a 0 HP: emite um grito/riso aterrorizante. Todos os inimigos em raio 4 hex testam SAB (normal) ou ficam com -1d4 em todos os testes por 1 rodada." },
+      { name:"Faro de Sangue", desc:"Detecta criaturas com menos de 50% HP em raio 10 hex. Prioriza atacar alvos enfraquecidos — reorienta ataque automaticamente se alvo mais ferido aparecer." },
+      { name:"Mochila de Trofeus", desc:"Carrega partes de vítimas anteriores como intimidação. Primeiros inimigos que o veem testam SAB (fácil) ou ficam com -1 na iniciativa (os trofeus são perturbadores)." }
+    ],
+    spells:[], behavior:"Caça em grupos de 3-6. O gnoll mais forte lidera. Foca em alvos caídos para garantir a morte. Foge se o líder morrer, mas volta com reforços.",
+    loot:[{item:"Lança Serrilhada (arma comum)",chance:60,qty:"1"},{item:"Provisões (comida questionável)",chance:50,qty:"1d3"},{item:"Moedas Diversas",chance:40,qty:"1d10"},{item:"Trofeu de Osso (intimidação)",chance:30,qty:"1"}] },
+
+  { id:"serpente-constritora", name:"Serpente Constritora das Ruínas", difficulty:2, size:"grande", category:"Besta",
+    location:["Ruínas","Floresta","Caverna"],
+    hp:50, physDefense:3, magDefense:2, dodge:13,
+    actions:2, reactions:1, damage:"1d8+1d6 (mordida e constrição)",
+    abilities:[
+      { name:"Constrição Letal", desc:"Após qualquer mordida com acerto: a serpente envolve o alvo. Por rodada que permanecer envolvida: 1d8 de dano automático + alvo tem -1 Ação. Escapar: FOR (difícil) como Ação." },
+      { name:"Resistência a Veneno", desc:"Imune a todos os venenos. Ataques com veneno aplicado não têm efeito sobre ela." },
+      { name:"Engolir Inteiro", desc:"Se um alvo com menos de 25% HP for mordido: pode tentar engolir (FOR vs FOR do alvo). Se engolir: alvo fica Incapacitado e sofre 1d6 ácido por rodada até ser liberado (matar a serpente libera)." }
+    ],
+    spells:[], behavior:"Predadora oportunista. Espera imóvel até que algo passe a 2 hex. Foca em um alvo por vez até matar ou o alvo escapar.",
+    loot:[{item:"Pele de Serpente Constritora",chance:60,qty:"1"},{item:"Veneno Constritora (2 doses, causa Lentidão)",chance:25,qty:"1"},{item:"Ovo de Serpente (incubado)",chance:15,qty:"1d3"}] },
+
+  { id:"feiticeiro-goblin", name:"Feiticeiro Goblin", difficulty:2, size:"pequeno", category:"Humanoide",
+    location:["Caverna","Acampamento Goblin","Dungeon"],
+    hp:30, physDefense:1, magDefense:5, dodge:14,
+    actions:2, reactions:1, damage:"1d4 (cajadinho) + magias",
+    abilities:[
+      { name:"Maldição do Azar", desc:"1 Ação Mágica: um alvo a até 8 hex fica Azarado por 3 rodadas — todo 20 natural nos dados desse alvo vira 1 (o azar inverte os críticos)." },
+      { name:"Explosão Caótica", desc:"1 Ação Mágica: bola de energia instável lançada a 6 hex. Dano 2d6 em raio 2 hex. 1 em 6 chances do goblin também sofrer 1d6 (mira péssima)." },
+      { name:"Invocar Trasgo", desc:"1 Ação Mágica (1x/combate): invoca 1d3 Goblins Batedeira (Dif.1) de um buraco no chão. Os goblins chegam no próximo turno." },
+      { name:"Teleporte Pânico", desc:"Ao receber qualquer dano: 50% de chance de teleportar para hex aleatório em raio 4 hex (o pânico ativa a magia involuntariamente)." }
+    ],
+    spells:[], behavior:"Caótico e imprevisível. Fica na retaguarda lançando magias aleatórias. Invoca reforços ao sentir perigo. Foge se ficar sozinho.",
+    loot:[{item:"Cajadinho Mágico Goblin (arma peculiar)",chance:30,qty:"1"},{item:"Poção Instável (efeito aleatório 1d6)",chance:50,qty:"1d2"},{item:"Moedas",chance:60,qty:"1d8"},{item:"Componente Mágico Roubado",chance:25,qty:"1"}] },
+
+  { id:"mumia-menor", name:"Múmia Menor", difficulty:2, size:"normal", category:"Morto-Vivo",
+    location:["Tumba","Pirâmide","Deserto Carmesim"],
+    hp:45, physDefense:4, magDefense:3, dodge:10,
+    actions:2, reactions:1, damage:"1d8+1d4 (golpe ressecante)",
+    abilities:[
+      { name:"Maldição da Múmia", desc:"Toque com acerto: alvo fica Amaldiçoado (Maldição da Ressecação) — recupera metade do HP de curas por 24 horas. Cura mágica de nível 2+ ou Clérigo remove." },
+      { name:"Imune ao Fogo", desc:"Completamente imune a dano de fogo. Magia de água ou frio causa 1d6 extra (a umidade corrói as bandagens)." },
+      { name:"Aura de Desespero", desc:"Passivo: primeira vez que alguém entra em raio 3 hex, testa SAB (normal) ou fica com -1d4 em testes de ataque por 2 rodadas (a presença da morte pesa)." }
+    ],
+    spells:[], behavior:"Guardião silencioso de tumbas. Não persegue além dos limites da tumba. Protege o sarcófago central acima de tudo.",
+    loot:[{item:"Bandagem Impregnada (material alquímico)",chance:60,qty:"1d4"},{item:"Amuleto de Proteção Antigo",chance:30,qty:"1"},{item:"Ouro Funerário",chance:50,qty:"2d8"}] },
+
+  { id:"doppelganger-menor", name:"Imitador (Doppelganger Menor)", difficulty:2, size:"normal", category:"Aberração",
+    location:["Cidade","Taverna","Dungeon Profunda"],
+    hp:38, physDefense:2, magDefense:4, dodge:15,
+    actions:2, reactions:2, damage:"1d8 (golpe surpresa)",
+    abilities:[
+      { name:"Copiar Aparência", desc:"Pode copiar a aparência de qualquer humanoide que tenha observado por 1 rodada. A cópia é perfeita visualmente mas SAB (difícil) detecta algo errado no comportamento." },
+      { name:"Golpe de Traição", desc:"Se estiver disfarçado de aliado: primeiro ataque é Crítico automático e causa Atordoado por 1 rodada (o choque da traição é devastador)." },
+      { name:"Ler Superfície Mental", desc:"Pode sentir as emoções e pensamentos superficiais de qualquer criatura em raio 2 hex — usa isso para imitar melhor e antecipar ataques (+1d4 na Esquiva)." },
+      { name:"Escorregadio", desc:"Se capturado ou Preso: escorrega automaticamente (corpo se deforma) sem custo de Ação. Imune a ser Agarrado." }
+    ],
+    spells:[], behavior:"Prefere infiltração a combate. Assume identidade de alguém do grupo e ataca quando menos esperam. Foge se a cobertura for exposta. Nunca luta se pode enganar.",
+    loot:[{item:"Essência de Imitador (componente)",chance:50,qty:"1"},{item:"Itens da última vítima (variado)",chance:70,qty:"1d3"}] },
+
+  { id:"golem-gelo", name:"Golem de Gelo", difficulty:2, size:"grande", category:"Construto",
+    location:["Neve","Montanha","Dungeon Gelada"],
+    hp:55, physDefense:5, magDefense:2, dodge:8,
+    actions:2, reactions:1, damage:"1d10+1d6 (soco de gelo)",
+    abilities:[
+      { name:"Aura de Frio", desc:"Passivo: criaturas a 1 hex sofrem 1d4 de frio por rodada. Líquidos nessa área congelam. Movimento de criaturas em raio 2 hex é reduzido em 1." },
+      { name:"Fragmentação de Gelo", desc:"Ao receber dano contundente: explode em estilhaços — todos em raio 2 hex sofrem 1d6 de dano de gelo perfurante (AGI normal para metade)." },
+      { name:"Vulnerabilidade ao Fogo", desc:"Dano de fogo causa 1d6 extra e derrete 1 hex do golem (reduz tamanho — perde 1 Ação quando abaixo de 50% HP)." },
+      { name:"Imobilidade no Calor", desc:"Em ambientes quentes (próximo a chamas grandes, deserto): Movimento reduzido à metade e -1 Ação." }
+    ],
+    spells:[], behavior:"Guardião sem inteligência. Patrulha área designada. Não persegue além do território. Pode ser confundido com escultura até se mover.",
+    loot:[{item:"Núcleo de Gelo Eterno (material mágico)",chance:40,qty:"1"},{item:"Água de Fonte de Gelo Puro",chance:60,qty:"1d4 frascos"}] },
+
+  { id:"naiad-corrompida", name:"Náiade Corrompida", difficulty:2, size:"normal", category:"Espírito",
+    location:["Rio","Grande Lago","Pântano"],
+    hp:40, physDefense:1, magDefense:6, dodge:16,
+    actions:2, reactions:2, damage:"1d6+1d4 (toque aquoso)",
+    abilities:[
+      { name:"Forma Aquosa", desc:"Em contato com água: regenera 3 HP por rodada e Esquiva +2. Fora da água: perde esses bônus e fica Enfraquecida (-1d4 nos ataques)." },
+      { name:"Canção das Profundezas", desc:"1 Ação: canto que drena voluntade — alvo a 8 hex testa SAB (normal) ou caminha em direção à água mais próxima por 2 rodadas (como Enfeitiçado)." },
+      { name:"Bolha de Afogamento", desc:"Toque com sucesso em alvo adjacente à água: envolve cabeça do alvo em bolha d'água. Alvo testa FOR (normal) por rodada ou sofre 1d8 de sufocação. A bolha estoura se o alvo receber 10+ dano em 1 golpe." },
+      { name:"Merging", desc:"Pode entrar em qualquer corpo d'água como Ação livre e emergir de qualquer outro ponto com água no campo de batalha." }
+    ],
+    spells:[], behavior:"Outrora protetora de rios, corrompida pela energia do Grande Lago ou do Deus Marcado. Atrai viajantes para a água. Pode ser purificada por Clérigo de Jurgmund (missão secundária).",
+    loot:[{item:"Lágrima de Náiade (componente mágico de água)",chance:60,qty:"1"},{item:"Pedra do Rio Polida (amuleto simples)",chance:40,qty:"1"}] },
+
+  /* ─── DIFICULDADE 3 ─────────────────────────────────────── */
+
+  { id:"minotauro-perdido", name:"Minotauro Perdido", difficulty:3, size:"grande", category:"Humanoide",
+    location:["Labirinto","Dungeon","Ruínas"],
+    hp:95, physDefense:6, magDefense:2, dodge:11,
+    actions:3, reactions:1, damage:"1d12+1d10 (machado colossal)",
+    abilities:[
+      { name:"Carga do Labirinto", desc:"Se mover 3+ hex em linha reta antes de atacar: dano dobrado + alvo testado AGI (difícil) ou Derrubado e Empurrado 2 hex. O minotauro não para — segue em frente 1 hex extra." },
+      { name:"Sentido de Labirinto", desc:"Nunca se perde. Em dungeon ou labirinto: sempre sabe o caminho para qualquer ponto visitado. Imune a magias de desorientação ou névoa mental." },
+      { name:"Fúria de Sangue", desc:"Ao receber qualquer crítico: entra em Fúria por 3 rodadas — +2 Ações, ignora penalidades de ferimento mas não pode usar Reações defensivas." },
+      { name:"Brado Ensurdecedor", desc:"1x/combate: grito poderoso em raio 4 hex — todos testam FOR (normal) ou ficam Atordoados por 1 rodada e com -1d4 em Percepção por 2 rodadas." }
+    ],
+    spells:[], behavior:"Territorial e traumatizado. Patrulha seu labirinto com fúria silenciosa. Pode ser apaziguado por alguém que mostre respeito genuíno (SAB crítico + falar em Orc antigo).",
+    loot:[{item:"Chifre de Minotauro (instrumento/arma)",chance:50,qty:"1"},{item:"Machado de Minotauro (arma grande)",chance:40,qty:"1"},{item:"Fio de Minotauro (sempre leva ao centro)",chance:20,qty:"1"}] },
+
+  { id:"quimera-jovem", name:"Quimera Jovem", difficulty:3, size:"grande", category:"Besta",
+    location:["Montanha","Planície","Dungeon de Elite"],
+    hp:88, physDefense:5, magDefense:4, dodge:13,
+    actions:3, reactions:2, damage:"1d10+1d6 (cabeças alternadas)",
+    abilities:[
+      { name:"Três Cabeças", desc:"Cada turno, a Quimera ataca com a cabeça dominante (Mestre escolhe ou rola 1d3): 1=Leão (mordida 1d10, Derruba), 2=Bode (chifrada 1d8, Empurra 2 hex), 3=Dragão (sopro 2d6 fogo cone 3 hex)." },
+      { name:"Sopro de Dragão", desc:"Cabeça de Dragão: 1x a cada 2 rodadas — cone 4 hex, 2d8 de fogo, AGI normal para metade." },
+      { name:"Confusão de Combate", desc:"Ao matar uma das cabeças (estrutura narrativa): a Quimera fica Atordoada por 1 rodada mas em compensação fica Enfurecida — +1d8 de dano pelas rodadas restantes." },
+      { name:"Voar Pesado", desc:"Pode voar em altitude 2 mas é lenta — move apenas 2 hex ao voar. Ataques em voo reduzem para 2 Ações." }
+    ],
+    spells:[], behavior:"Caçadora territorial. Planeja atacar de cima com sopro, pousar para corpo a corpo. Não tem estratégia sofisticada — confia no poder bruto das três cabeças.",
+    loot:[{item:"Escama de Quimera (material raro)",chance:60,qty:"1d6"},{item:"Garra de Quimera",chance:50,qty:"1d4"},{item:"Coração Triplo de Quimera (reagente lendário)",chance:20,qty:"1"}] },
+
+  { id:"bruxa-das-ervas", name:"Bruxa das Ervas Venenosas", difficulty:3, size:"normal", category:"Humanoide",
+    location:["Pântano","Floresta Profunda","Ruínas"],
+    hp:60, physDefense:1, magDefense:8, dodge:14,
+    actions:2, reactions:2, damage:"1d6 (cajado venenoso) + veneno",
+    abilities:[
+      { name:"Nuvem de Esporos", desc:"1 Ação Mágica: nuvem em raio 3 hex por 3 rodadas. Todos dentro testam SAB (normal) a cada rodada: falha = Envenenado (1d6/rodada) E Confuso (age aleatoriamente) por 2 rodadas." },
+      { name:"Maldição do Espelho", desc:"1 Ação Mágica (1x/combate): reflete a próxima magia que atingir a bruxa de volta ao conjurador com dano dobrado. Dura até ser usada ou 3 rodadas." },
+      { name:"Poções de Combate", desc:"Tem 3 poções especiais em cinturão que usa como Ação Livre: Fraqueza (alvo -2 FOR/AGI, 3 rodadas), Cegueira (alvo Cego, 2 rodadas), Sono (alvo SAB crítico ou dorme 1d4 rodadas)." },
+      { name:"Familiar Venenoso", desc:"Acompanhada por cobra venenosa pequena (HP 12, dano 1d4+veneno 1d6/rodada). A bruxa ganha +1d4 em Percepção enquanto o familiar estiver vivo." }
+    ],
+    spells:["Nuvem de Esporos (nível 2)","Maldição do Espelho (nível 3)","Poção de Fraqueza (nível 1)"],
+    behavior:"Hábil manipuladora. Tenta negociar primeiro (tem informações valiosas). Em combate: abre com Esporos para confundir, usa poções nos mais fortes, guarda Maldição do Espelho para o conjurador.",
+    loot:[{item:"Grimório de Venenos (receitas raras)",chance:40,qty:"1"},{item:"Ervas Venenosas Raras (×5)",chance:70,qty:"1"},{item:"Poção Especial da Bruxa (efeito variado)",chance:50,qty:"1d2"},{item:"Olho de Bruxa (componente)",chance:25,qty:"1"}] },
+
+  { id:"cavaleiro-sem-cabeca", name:"Cavaleiro Sem Cabeça", difficulty:3, size:"normal", category:"Morto-Vivo",
+    location:["Estrada","Floresta","Cemitério Nobre"],
+    hp:85, physDefense:7, magDefense:3, dodge:13,
+    actions:3, reactions:2, damage:"1d10+1d8 (espada do julgamento)",
+    abilities:[
+      { name:"Sem Cabeça", desc:"Imune a Cegueira, Atordoado por som e qualquer efeito que exija visão ou audição para funcionar. Veneno via mordida também não funciona (sem boca)." },
+      { name:"Julgamento dos Mortos", desc:"Ao aproximar de um alvo a 1 hex: o alvo sente o peso do julgamento — testa SAB (normal) ou fica com -1d4 em todos os ataques enquanto o Cavaleiro estiver adjacente." },
+      { name:"Cabeça Voadora", desc:"1x/combate: a cabeça destacada voa para um alvo a 8 hex e o morde (1d6 + Atordoado 1 rodada). A cabeça retorna no próximo turno. Sem a cabeça: o Cavaleiro perde o bônus de Julgamento dos Mortos." },
+      { name:"Invulnerabilidade Parcial", desc:"Dano cortante é reduzido em 3 (a armadura espectral absorve). Fogo sagrado e magia divina causam 1d6 extra." }
+    ],
+    spells:[], behavior:"Busca quem fez algum juramento não cumprido — ataca priorizando personagens com dívidas de honra. Pode ser apaziguado se um juramento antigo for cumprido na sua presença.",
+    loot:[{item:"Armadura do Cavaleiro (set incompleto, mágico)",chance:50,qty:"1"},{item:"Espada do Julgamento (arma lendária)",chance:20,qty:"1"},{item:"Medalhão da Ordem (identifica a nobreza que serviu)",chance:70,qty:"1"}] },
+
+  { id:"escorpiao-gigante", name:"Escorpião Gigante do Deserto", difficulty:3, size:"grande", category:"Besta",
+    location:["Deserto Carmesim","Planície Árida","Caverna"],
+    hp:80, physDefense:7, magDefense:1, dodge:11,
+    actions:3, reactions:1, damage:"1d10+1d6 (pinças) + 1d8 (ferrão)",
+    abilities:[
+      { name:"Dupla Pinça", desc:"Pode atacar com ambas as pinças em 1 Ação. Cada pinça que acerta: alvo testado FOR (normal) ou fica Agarrado. Se ambas agarrarem: alvo fica Imóvel." },
+      { name:"Ferrão de Neurotoxina", desc:"O ferrão aplica neurotoxina — 1d8 por rodada, reduz 1 AGI por rodada (não regenera até antídoto). 3 rodadas de ferrão sem cura: alvo fica Paralisado. Resistência FOR (difícil) para metade." },
+      { name:"Exoesqueleto Reforçado", desc:"Reduz todo dano perfurante em 4. Magia de terra ou dano contundente é normal." },
+      { name:"Instinto de Enterrar", desc:"Em terreno arenoso ou de terra macia: pode enterrar-se como Ação (fica invisível até atacar). O próximo ataque de emboscada causa dano duplo." }
+    ],
+    spells:[], behavior:"Caçador paciente. Espera enterrado até que uma presa se aproxime. Sempre tenta prender com as pinças antes de usar o ferrão. Foge se perder ambas as pinças.",
+    loot:[{item:"Veneno de Escorpião Gigante (componente raro, ×3)",chance:60,qty:"1"},{item:"Exoesqueleto (material de armadura)",chance:40,qty:"1"},{item:"Ferrão (arma improvisada)",chance:30,qty:"1"}] },
+
+  { id:"esfinx-menor", name:"Esfinge Menor", difficulty:3, size:"grande", category:"Besta Mística",
+    location:["Deserto","Ruínas Élficas","Templo"],
+    hp:90, physDefense:6, magDefense:7, dodge:13,
+    actions:3, reactions:2, damage:"1d10+1d8 (garras e bico)",
+    abilities:[
+      { name:"O Enigma", desc:"No início do combate: apresenta um enigma ao grupo. Se resolverem corretamente (1 minuto de discussão): a Esfinge para de atacar e responde 1 pergunta verdadeira. Se errarem: entra em Fúria por 3 rodadas (+1d8 de dano, +1 Ação)." },
+      { name:"Olho do Destino", desc:"1 Ação Mágica: vê 1 rodada no futuro — o próximo ataque contra ela erra automaticamente (previsão perfeita). Usa 1x a cada 3 rodadas." },
+      { name:"Rugido da Verdade", desc:"1 Ação Mágica (1x/combate): rugido em raio 4 hex — todos que mentiram nas últimas 24 horas testam SAB (crítico) ou ficam Atordoados 2 rodadas." },
+      { name:"Voo Majestoso", desc:"Altitude 3. Ataques à distância têm -1d4. Pode atacar de altitude e retornar sem custo." }
+    ],
+    spells:["Olho do Destino (nível 3)","Rugido da Verdade (nível 3)"],
+    behavior:"Prefere muito mais o enigma ao combate. Não luta se pode falar. Em combate: usa Olho do Destino defensivamente, mantém altitude e usa garras em mergulhos. Nunca persegue quem foge.",
+    loot:[{item:"Pena de Esfinge (componente de magia de previsão)",chance:50,qty:"1d3"},{item:"Cristal de Conhecimento (responde 1 pergunta sim/não)",chance:25,qty:"1"},{item:"Ouro do Tesouro Guardado",chance:60,qty:"3d20"}] },
+
+  { id:"elemental-terra", name:"Elemental de Terra", difficulty:3, size:"grande", category:"Elemental",
+    location:["Montanha","Caverna","Planície Pedregosa"],
+    hp:100, physDefense:9, magDefense:2, dodge:8,
+    actions:2, reactions:1, damage:"2d8+1d6 (soco de pedra)",
+    abilities:[
+      { name:"Corpo de Rocha", desc:"Imune a dano cortante e perfurante. Resistência a dano contundente (-2 por dado). Fogo causa dano normal. Magia de terra cura (+1d8 por acerto de magia terrestre)." },
+      { name:"Fundir no Chão", desc:"Em terreno natural (pedra, terra): pode submergir no chão como Ação livre. Emerge em qualquer ponto a até 8 hex no próximo turno. Enquanto submerso: imune a dano físico." },
+      { name:"Tremor Local", desc:"1 Ação (1x/combate): soca o chão criando tremor em raio 3 hex — todos no chão testam AGI (normal) ou ficam Derrubados. Estruturas frágeis próximas tomam 10 de dano." },
+      { name:"Golpe Sísmico", desc:"A cada 2 acertos consecutivos: o terceiro ataque causa +1d10 de dano extra (a força acumulada encontra o ponto fraco)." }
+    ],
+    spells:[], behavior:"Invocado ou guardião natural. Segue o caminho de menor resistência (vai pelo chão). Imperturbável e lento. Podem ser negociados por Clérigos de Thurgomur.",
+    loot:[{item:"Coração de Pedra Viva (material divino)",chance:30,qty:"1"},{item:"Pedra Elemental (componente de magia de terra)",chance:70,qty:"1d4"},{item:"Cristal Geodo (decorativo e valioso)",chance:50,qty:"1d3"}] },
+
+  { id:"gargoyle", name:"Gárgula Guardiã", difficulty:3, size:"normal", category:"Construto",
+    location:["Castelo","Ruínas","Templo","Topo de Torre"],
+    hp:75, physDefense:8, magDefense:4, dodge:13,
+    actions:3, reactions:2, damage:"1d8+1d6 (garras de pedra e chifres)",
+    abilities:[
+      { name:"Pedra Viva", desc:"Quando imóvel por 1 rodada completa: parece escultura de pedra (Percepção crítico para notar que está viva). Primeiro ataque após mimetismo: Crítico automático." },
+      { name:"Voadora de Pedra", desc:"Altitude 2. Apesar do peso: voa de forma silenciosa. Ataques à distância têm -1d4 (corpo de pedra desvia projéteis). Pode carregar um alvo no voo (AGI difícil para escapar)." },
+      { name:"Resistência Elemental", desc:"Reduz 3 pontos de todo dano físico. Dano de fogo reduzido pela metade. Magia de terra ou divina causa 1d6 extra (o encantamento que a criou é vulnerável)." },
+      { name:"Guardiã Eterna", desc:"Nunca abandona o ponto que guarda. Persegue qualquer ameaça em raio 10 hex do ponto de guarda, mas para imediatamente se ultrapassar esse limite." }
+    ],
+    spells:[], behavior:"Guarda um ponto específico eternamente. Não ataca quem passa sem ameaçar o local. Pode ser confundida com decoração. Responde a palavra de comando de quem a criou.",
+    loot:[{item:"Fragmento de Gárgula (material de pedra encantada)",chance:70,qty:"1d4"},{item:"Cristal de Encantamento (nucleo que a anima)",chance:30,qty:"1"}] },
+
+  { id:"mercenario-elite", name:"Mercenário de Elite", difficulty:3, size:"normal", category:"Humanoide",
+    location:["Cidade","Dungeon Contratada","Estrada"],
+    hp:72, physDefense:6, magDefense:3, dodge:15,
+    actions:3, reactions:3, damage:"1d10+1d6 (espada longa ou arco)",
+    abilities:[
+      { name:"Veterano de Batalha", desc:"Nunca entra em pânico ou fica Amedrontado. Imune à primeira Condição negativa de cada combate. +1d4 em todos os testes de combate." },
+      { name:"Estrategista", desc:"1 Ação (1x/combate): analisa o campo de batalha — escolhe 1 alvo. Todos os ataques contra esse alvo pelo grupo ganham +1d4 de acerto por 2 rodadas." },
+      { name:"Contra-Ataque Expert", desc:"Ao usar uma Reação defensiva com sucesso: pode imediatamente fazer 1 ataque contra o atacante sem custo adicional." },
+      { name:"Arsenal Variado", desc:"Tem 3 opções de ataque disponíveis: (1) Espada + Escudo — +1 Def.Física, (2) Espada Dupla — +1 Ação de ataque, (3) Arco (alcance 10) — sem bonus/penalidade." }
+    ],
+    spells:[], behavior:"Profissional calculista. Avalia ameaças e prioriza as maiores. Pode ser corrompido por oferta maior que quem o contratou (INT alta). Em desvantagem clara: oferece trégua e informações.",
+    loot:[{item:"Armadura de Mercenário (item raro)",chance:40,qty:"1"},{item:"Espada de Elite (arma rara)",chance:30,qty:"1"},{item:"Contrato de Contratante (pista)",chance:60,qty:"1"},{item:"Moedas de Ouro",chance:80,qty:"2d10"}] },
+
+  { id:"serpente-vento", name:"Serpente do Vento", difficulty:3, size:"normal", category:"Besta Elemental",
+    location:["Montanhas de Atrelon","Penhasco","Planície Aberta"],
+    hp:65, physDefense:3, magDefense:6, dodge:19,
+    actions:3, reactions:3, damage:"1d8+1d6 (mordida + vento cortante)",
+    abilities:[
+      { name:"Corpo de Vento", desc:"Pode se mover através de qualquer espaço não-sólido. Esquiva base 19 (o corpo é parcialmente intangível ao vento). Ataques físicos têm 25% de chance de passar sem dano (rola 1d4 — em 1, o golpe atravessa)." },
+      { name:"Rajada Cegante", desc:"1 Ação: libera rajada em cone 3 hex — todos testam AGI (normal) ou ficam Cegos por 1 rodada e Empurrados 2 hex." },
+      { name:"Corte de Vento", desc:"Pode atacar à distância de até 4 hex sem projétil — o vento que controla corta o ar. Alvo não pode usar escudo contra este ataque." },
+      { name:"Véu de Ventos", desc:"Passivo: projéteis que a tenham como alvo têm 40% de chance de ser desviados pelo vento ao redor (rola 1d10 — em 1-4, o projétil desvia)." }
+    ],
+    spells:[], behavior:"Curiosa e fugaz. Ataca por breve períodos e recua. Nunca luta até a morte — foge quando abaixo de 40% HP. Serpentarianos que entendem Jurgmund podem comunicar-se com ela.",
+    loot:[{item:"Escama de Vento (material leve, resistente)",chance:50,qty:"1d4"},{item:"Essência de Vento (componente mágico)",chance:40,qty:"1"}] },
+
+  { id:"golem-carne", name:"Golem de Carne", difficulty:3, size:"grande", category:"Construto",
+    location:["Laboratório do Necromante","Dungeon Profunda"],
+    hp:105, physDefense:5, magDefense:2, dodge:9,
+    actions:2, reactions:1, damage:"1d12+1d8 (soco brutal)",
+    abilities:[
+      { name:"Tecido Morto", desc:"Imune a veneno e condições mentais. Vulnerável a fogo (+1d6 por dado). Dano cortante causa sangramento no golem — perde 1d4 HP por rodada por 3 rodadas (o sangue escorre)." },
+      { name:"Partes Extras", desc:"Tem 6 braços adicionais costurados. Para cada 30 HP perdidos: perde 1 Ação mas ganha Reação de Agarrar automática quando atacado corpo a corpo." },
+      { name:"Absorver Partes", desc:"Ao matar uma criatura adjacente: pode absorver parte do corpo — recupera 1d8 HP e ganha +1d4 no próximo ataque (a parte fresca adiciona força)." },
+      { name:"Grito do Criador", desc:"Se o necromante que o criou estiver vivo e gritar uma ordem: o golem a obedece instantaneamente como Reação (mesmo que não seja seu turno)." }
+    ],
+    spells:[], behavior:"Robô de carne sem inteligência. Segue ordens simples do criador. Sem ordens: defende o espaço onde está. Foco em um alvo por vez até destruído.",
+    loot:[{item:"Partes de Golem (material grotesco mas útil)",chance:60,qty:"1d4"},{item:"Núcleo de Animação (componente do necromante)",chance:30,qty:"1"},{item:"Diário do Criador (pista)",chance:20,qty:"1"}] }
+
 
 ];
