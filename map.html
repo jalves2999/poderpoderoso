@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Mapa de Aether</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%;overflow:hidden;background:#1a120a}
+    .map-toolbar{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;gap:10px;padding:8px 14px;background:rgba(22,14,8,0.92);backdrop-filter:blur(6px);border-bottom:1px solid rgba(156,122,60,0.3);height:48px}
+    .map-back{font-family:var(--font-heading);font-size:13px;color:rgba(248,243,232,0.7);background:none;border:none;cursor:pointer;text-decoration:none;min-height:40px;display:flex;align-items:center;padding:0 4px}
+    .map-back:hover{color:var(--gold)}
+    .map-title{font-family:var(--font-heading);font-size:16px;color:var(--gold);flex:1}
+    .map-zoom-btns{display:flex;gap:4px;align-items:center}
+    .map-zoom-btn{background:rgba(248,243,232,0.1);border:1px solid rgba(156,122,60,0.4);color:rgba(248,243,232,0.85);border-radius:6px;width:34px;height:34px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+    .map-zoom-btn:active{background:rgba(156,122,60,0.3)}
+    .map-zoom-label{font-family:var(--font-heading);font-size:12px;color:rgba(248,243,232,0.5);min-width:42px;text-align:center}
+    .map-reset-btn{font-family:var(--font-heading);font-size:12px;background:rgba(248,243,232,0.08);border:1px solid rgba(156,122,60,0.35);color:rgba(248,243,232,0.7);border-radius:6px;padding:0 10px;height:34px;cursor:pointer}
+    .map-reset-btn:active{background:rgba(156,122,60,0.25)}
+
+    .map-viewport{position:fixed;inset:48px 0 0 0;overflow:hidden;cursor:grab;touch-action:none}
+    .map-viewport.dragging{cursor:grabbing}
+    .map-container{position:absolute;transform-origin:0 0;will-change:transform;user-select:none}
+    .map-img{display:block;width:1376px;height:768px;pointer-events:none}
+
+    .hotspot{position:absolute;border-radius:50%;cursor:pointer;transform:translate(-50%,-50%);transition:transform 0.15s;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent}
+    .hotspot:hover{transform:translate(-50%,-50%) scale(1.25)}
+    .hotspot:active{transform:translate(-50%,-50%) scale(1.1)}
+    .hs-region{width:52px;height:52px;background:rgba(156,122,60,0.15);border:2px solid rgba(156,122,60,0.5)}
+    .hs-region:hover{background:rgba(156,122,60,0.3);border-color:var(--gold)}
+    .hs-city{width:30px;height:30px;background:rgba(248,243,232,0.2);border:2px solid rgba(248,243,232,0.6)}
+    .hs-city:hover{background:rgba(248,243,232,0.35);border-color:white}
+    .hs-boss{width:38px;height:38px;background:rgba(125,42,46,0.2);border:2px solid rgba(200,60,60,0.7)}
+    .hs-boss:hover{background:rgba(125,42,46,0.4);border-color:#ff4444}
+    .hs-divine{width:30px;height:30px;background:rgba(200,170,40,0.2);border:2px solid rgba(220,190,60,0.7)}
+    .hs-divine:hover{background:rgba(200,170,40,0.4);border-color:#ffd700}
+    .hotspot-icon{font-size:18px;line-height:1;filter:drop-shadow(0 1px 2px rgba(0,0,0,0.8));pointer-events:none}
+    .hs-region .hotspot-icon{font-size:22px}
+    .hotspot-tip{position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:rgba(22,14,8,0.92);border:1px solid rgba(156,122,60,0.5);color:rgba(248,243,232,0.9);font-family:var(--font-heading);font-size:11px;padding:4px 8px;border-radius:5px;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity 0.15s;z-index:10}
+    .hotspot:hover .hotspot-tip{opacity:1}
+    .tip-diff{font-size:10px;color:rgba(220,80,80,0.9);margin-left:5px}
+
+    .map-legend{position:fixed;bottom:14px;left:12px;z-index:50;background:rgba(22,14,8,0.85);backdrop-filter:blur(4px);border:1px solid rgba(156,122,60,0.35);border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;gap:5px}
+    .legend-title{font-family:var(--font-heading);font-size:10px;color:var(--gold);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px}
+    .legend-item{display:flex;align-items:center;gap:6px;font-family:var(--font-heading);font-size:10px;color:rgba(248,243,232,0.75)}
+    .legend-dot{width:12px;height:12px;border-radius:50%;border:1.5px solid;flex-shrink:0}
+    .ld-region{background:rgba(156,122,60,0.2);border-color:rgba(156,122,60,0.7)}
+    .ld-city{background:rgba(248,243,232,0.2);border-color:rgba(248,243,232,0.7)}
+    .ld-boss{background:rgba(125,42,46,0.2);border-color:rgba(200,60,60,0.7)}
+    .ld-divine{background:rgba(200,170,40,0.2);border-color:rgba(220,190,60,0.7)}
+
+    .map-modal-overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.65);backdrop-filter:blur(2px);display:none;align-items:flex-end;justify-content:center}
+    .map-modal-overlay.open{display:flex}
+    .map-modal{background:var(--parchment);width:100%;max-width:560px;max-height:82vh;border-radius:16px 16px 0 0;display:flex;flex-direction:column;overflow:hidden;animation:slideUp 0.2s ease}
+    @keyframes slideUp{from{transform:translateY(50px);opacity:0}to{transform:translateY(0);opacity:1}}
+    .modal-drag-handle{width:40px;height:4px;border-radius:2px;background:rgba(0,0,0,0.15);margin:10px auto 0;flex-shrink:0}
+    .modal-header{padding:10px 16px 12px;border-bottom:1px solid var(--line);flex-shrink:0;display:flex;align-items:flex-start;gap:10px}
+    .modal-region-icon{font-size:28px;flex-shrink:0}
+    .modal-header-text{flex:1;min-width:0}
+    .modal-title{font-family:var(--font-heading);font-size:18px;color:var(--ink);line-height:1.2}
+    .modal-subtitle{font-size:12px;color:var(--ink-soft);margin-top:3px}
+    .modal-close{background:none;border:1px solid var(--line);border-radius:6px;padding:6px 10px;font-size:16px;color:var(--ink-soft);cursor:pointer;flex-shrink:0}
+    .modal-body{flex:1;overflow-y:auto;padding:14px 16px 24px;display:flex;flex-direction:column;gap:12px}
+    .modal-diff{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:6px;font-family:var(--font-heading);font-size:13px}
+    .d0{background:rgba(0,0,0,0.06);color:var(--ink-soft)}
+    .d1{background:rgba(106,158,80,0.15);color:#3a6020}
+    .d2{background:rgba(200,160,32,0.15);color:#7a5000}
+    .d3{background:rgba(192,96,26,0.15);color:#7a3010}
+    .d4{background:rgba(176,48,48,0.15);color:#7a1010}
+    .d5{background:rgba(107,0,0,0.15);color:#6b0000}
+    .modal-section{display:flex;flex-direction:column;gap:5px}
+    .modal-section-title{font-family:var(--font-heading);font-size:10.5px;text-transform:uppercase;letter-spacing:0.5px;color:var(--gold);padding-bottom:4px;border-bottom:1px dashed var(--line)}
+    .modal-desc{font-size:13.5px;color:var(--ink);line-height:1.7}
+    .modal-list{margin:0;padding-left:18px;font-size:13px;color:var(--ink);line-height:1.8}
+    .modal-tag{display:inline-block;font-family:var(--font-heading);font-size:11px;padding:2px 8px;border-radius:8px;margin:2px 3px 2px 0}
+    .tg{background:rgba(156,122,60,0.18);color:#7a5c10}
+    .tr{background:rgba(125,42,46,0.15);color:#7a1010}
+    .tb{background:rgba(40,80,140,0.15);color:#2a4a8a}
+    .tp{background:rgba(90,60,120,0.15);color:#5a2a8a}
+    .tn{background:rgba(60,100,60,0.15);color:#3a6020}
+    .modal-submap-btn{display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(156,122,60,0.1);border:1.5px solid rgba(156,122,60,0.35);border-radius:8px;color:var(--ink);font-family:var(--font-heading);font-size:13px;cursor:pointer;text-decoration:none;width:100%;-webkit-tap-highlight-color:transparent}
+    .modal-submap-btn:active{background:rgba(156,122,60,0.25)}
+    @media(min-width:640px){.map-modal-overlay{align-items:center}.map-modal{max-height:78vh;border-radius:12px}}
+  </style>
+</head>
+<body>
+<header class="map-toolbar">
+  <a href="index.html" class="map-back">← Grimório</a>
+  <span class="map-title">🗾 Aether — 500 Anos Após</span>
+  <div class="map-zoom-btns">
+    <button class="map-zoom-btn" id="btn-zoom-out">−</button>
+    <span class="map-zoom-label" id="zoom-label">100%</span>
+    <button class="map-zoom-btn" id="btn-zoom-in">+</button>
+  </div>
+  <button class="map-reset-btn" id="btn-reset">↺</button>
+</header>
+
+<div class="map-viewport" id="map-viewport">
+  <div class="map-container" id="map-container">
+    <img src="mapa.jpg" class="map-img" id="map-img" draggable="false" alt="Mapa de Aether">
+
+    <!-- REGIÕES -->
+    <div class="hotspot hs-region" data-loc="montanhas-atrelon" style="left:585px;top:140px">
+      <span class="hotspot-icon">🏔</span>
+      <div class="hotspot-tip">Montanhas de Atrelon<span class="tip-diff">☠☠☠☠</span></div>
+    </div>
+    <div class="hotspot hs-region" data-loc="deserto-carmesim" style="left:240px;top:430px">
+      <span class="hotspot-icon">🏜</span>
+      <div class="hotspot-tip">Deserto Carmesim<span class="tip-diff">☠☠☠</span></div>
+    </div>
+    <div class="hotspot hs-region" data-loc="grande-planicie" style="left:850px;top:555px">
+      <span class="hotspot-icon">🌿</span>
+      <div class="hotspot-tip">Grande Planície Sudeste<span class="tip-diff">☠☠</span></div>
+    </div>
+    <div class="hotspot hs-region" data-loc="reinos-akaen" style="left:1085px;top:370px">
+      <span class="hotspot-icon">🏛</span>
+      <div class="hotspot-tip">Reinos de Akaen<span class="tip-diff">☠☠</span></div>
+    </div>
+    <div class="hotspot hs-region" data-loc="grande-lago" style="left:615px;top:420px">
+      <span class="hotspot-icon">💧</span>
+      <div class="hotspot-tip">Grande Lago Central<span class="tip-diff">☠☠☠</span></div>
+    </div>
+    <!-- CRIATURAS / CHEFES -->
+    <div class="hotspot hs-boss" data-loc="castelo-cobra" style="left:586px;top:218px">
+      <span class="hotspot-icon">🐍</span>
+      <div class="hotspot-tip">Castelo da Cobra<span class="tip-diff">☠☠☠☠</span></div>
+    </div>
+    <div class="hotspot hs-boss" data-loc="monte-karloth" style="left:210px;top:262px">
+      <span class="hotspot-icon">🌋</span>
+      <div class="hotspot-tip">Monte Karloth — Dragão Dourado<span class="tip-diff">☠☠☠☠☠</span></div>
+    </div>
+    <div class="hotspot hs-boss" data-loc="tartaruga-magnalaga" style="left:617px;top:455px">
+      <span class="hotspot-icon">🐢</span>
+      <div class="hotspot-tip">Tartaruga Magnalaga<span class="tip-diff">☠☠☠☠</span></div>
+    </div>
+    <div class="hotspot hs-boss" data-loc="salamandra-karlac" style="left:232px;top:548px">
+      <span class="hotspot-icon">🦎</span>
+      <div class="hotspot-tip">Grande Salamandra Karlac<span class="tip-diff">☠☠☠☠☠</span></div>
+    </div>
+    <!-- CIDADES / LOCAIS -->
+    <div class="hotspot hs-city" data-loc="capital-valdris" style="left:1055px;top:362px">
+      <span class="hotspot-icon">⭐</span>
+      <div class="hotspot-tip">Capital de Valdris</div>
+    </div>
+    <div class="hotspot hs-divine" data-loc="tower-arcath" style="left:1138px;top:315px">
+      <span class="hotspot-icon">🔮</span>
+      <div class="hotspot-tip">Torre de Arcath</div>
+    </div>
+    <div class="hotspot hs-divine" data-loc="sanctum" style="left:1092px;top:438px">
+      <span class="hotspot-icon">✝</span>
+      <div class="hotspot-tip">Sanctum</div>
+    </div>
+    <div class="hotspot hs-city" data-loc="margem-pedras" style="left:758px;top:392px">
+      <span class="hotspot-icon">🏘</span>
+      <div class="hotspot-tip">Margem das Pedras ★ início</div>
+    </div>
+  </div>
+</div>
+
+<div class="map-legend">
+  <div class="legend-title">Legenda</div>
+  <div class="legend-item"><div class="legend-dot ld-region"></div>Região</div>
+  <div class="legend-item"><div class="legend-dot ld-city"></div>Cidade</div>
+  <div class="legend-item"><div class="legend-dot ld-boss"></div>Chefe / Criatura</div>
+  <div class="legend-item"><div class="legend-dot ld-divine"></div>Local Sagrado</div>
+</div>
+
+<div class="map-modal-overlay" id="modal-overlay">
+  <div class="map-modal">
+    <div class="modal-drag-handle"></div>
+    <div class="modal-header">
+      <span class="modal-region-icon" id="modal-icon">📍</span>
+      <div class="modal-header-text">
+        <div class="modal-title" id="modal-title">—</div>
+        <div class="modal-subtitle" id="modal-subtitle"></div>
+      </div>
+      <button class="modal-close" id="modal-close">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+const LOCS = {
+  "montanhas-atrelon":{icon:"🏔",title:"Montanhas de Atrelon",sub:"Região — Lar dos Serpentarianos",diff:4,diffLabel:"☠☠☠☠ Muito Perigoso",tags:[["tg","Serpentarianos"],["tr","Aralto Sussurrante"],["tg","Castelo da Cobra"]],desc:"Cordilheira formada quando a cabeça de Jurgmund tocou a terra na Batalha Colossal. As montanhas carregam a memória da cobra — serpentes de todos os tipos habitam as fendas, e os Serpentarianos governam a região com o Rei Vassk como soberano, manipulado há 15 anos pelo Aralto Sussurrante.",sections:[{t:"Habitantes",c:"Serpentarianos — humanos com escamas parciais, língua bífida e resistência a venenos. Governados pelo Rei Vassk. A Alta Sacerdotisa Sss'era desconfia do emissário misterioso mas precisa de provas."},{t:"Perigos",c:"Patrulhas Serpentarianas nas fronteiras (☠☠). Sacerdotes corrompidos (☠☠☠). O Aralto Sussurrante em forma oculta (☠☠☠☠)."},{t:"Missão Secundária disponível",c:"A Verdade do Emissário Falso — Sss'era pede provas de que o emissário do Rei é um Aralto disfarçado."}],npcs:["Rei Vassk (manipulado, mas libertável)","Alta Sacerdotisa Sss'era (aliada)","O Aralto Sussurrante (antagonista final aqui)"]},
+
+  "deserto-carmesim":{icon:"🏜",title:"Deserto Carmesim",sub:"Região — Lar dos Karlacs",diff:3,diffLabel:"☠☠☠ Desafiador",tags:[["tr","Karlacs"],["tg","Vermelhão"],["tr","Fragmentos do Deus Marcado"]],desc:"Vasto deserto de areia vermelha formado pelos restos da essência do Deus Marcado. A areia carmesim é energia corrompida solidificada. O povo Karlac vive sobre a Grande Salamandra Karlac, que circula o deserto consumindo esses fragmentos eternamente.",sections:[{t:"Os Karlacs",c:"Povo que vive em cidades móveis sobre a Salamandra. Resistentes ao calor, veneram o Deus do Vermelhão. Não são hostis mas exigem respeito à sua divindade e à Salamandra."},{t:"Perigos",c:"Calor extremo: 1d4 de dano por hora sem proteção. Karlac Filhotes errantes (☠). Cristais carmesins com Corrupção (SAB ou −1 SAB por hora de exposição)."},{t:"O Mistério Central",c:"O que acontece quando a Salamandra consumir o último fragmento do Deus Marcado? Os Araltos sabem — e estão tentando interferir."}],npcs:["Xamã Erkha (guia tribal das planícies)","Chefe Karlac Bras'vor (neutro, pode ser aliado)","Sacerdote Vermelho Kalras (líder espiritual)"]},
+
+  "grande-planicie":{icon:"🌿",title:"Grande Planície Sudeste",sub:"Região — Tribos e Ruínas Élficas",diff:2,diffLabel:"☠☠ Equilibrado",tags:[["tn","Tribos Nômades"],["tg","Ruínas Élficas"],["tg","Monte Karloth"]],desc:"Extensas planícies onde tribos humanas e de raças mistas vivem em relativa paz. Salpicada de ruínas élficas pré-Primeira Era. No horizonte noroeste, o vulcão Monte Karloth brilha dourado ao entardecer.",sections:[{t:"Tribos da Planície",c:"Diversas tribos com culturas distintas — algumas veneram Jurgmund, outras Thion ou os Cinco Heróis. A Xamã Erkha é figura de neutralidade respeitada."},{t:"Ruínas Élficas",c:"Marcam territórios sagrados dos elfos. Algumas têm armadilhas ativas (☠☠). Os Cinco Marcos dos Heróis estão escondidos nestas ruínas — começaram a brilhar à noite recentemente."},{t:"Margem das Pedras",c:"Pequeno entreposto comercial na borda com as montanhas. Ponto de partida da campanha atual."}],npcs:["Xamã Erkha (neutra, necessária para audiência com o Dragão)","Chefe Orc Garrak (potencial aliado)"]},
+
+  "reinos-akaen":{icon:"🏛",title:"Reinos de Akaen",sub:"Região — Os Cinco Reinos Humanos",diff:2,diffLabel:"☠☠ Equilibrado (política perigosa)",tags:[["tb","5 Reinos"],["tr","Aralto Infiltrado em Sombrath"],["tg","Fundados pelos Heróis"]],desc:"Os cinco reinos fundados pelos Heróis após a libertação da Era Élfica. Valdris, Arcath, Ferrath, Sombrath e Sanctum. O Reino de Sombrath foi infiltrado por um Aralto que manipula o rei há mais de uma geração.",sections:[{t:"Os Cinco Reinos",c:"Valdris: maior exército. Arcath: conhecimento arcano. Ferrath: arqueiros e rangers. Sombrath: comércio e espionagem (infiltrado por Aralto). Sanctum: religião e cura."},{t:"Os Cinco Marcos",c:"Monumentos aos heróis espalhados pelos reinos. Começaram a brilhar à noite — a profecia de Valdris diz que quando os cinco brilharem juntos, o caminho se revelará."},{t:"A Ameaça",c:"O diário profético de Valdris tem uma página nova não escrita por ninguém, descrevendo um traidor no coração do poder."}],npcs:["Rei Aldric de Valdris (aliado potencial)","Capitã Lyra da Guarda (desconfia de todos)"]},
+
+  "grande-lago":{icon:"💧",title:"Grande Lago Central",sub:"Região — Abertura da Batalha Colossal",diff:3,diffLabel:"☠☠☠ Desafiador",tags:[["tb","Anões do Casco"],["tp","Tartaruga Magnalaga"],["tr","A Fissura"]],desc:"O lago foi aberto quando a Batalha Colossal rasgou o continente. A Tartaruga Magnalaga absorveu a contaminação para proteger as águas — os Anões construíram a Cidadela do Casco sobre ela. Nas profundezas há a Fissura: cicatriz permanente que ninguém explorou completamente.",sections:[{t:"Cidadela do Casco",c:"Cidade-fortaleza anã sobre o casco de Magnalaga. Mergulhos duram 90 segundos a 20 minutos — os anões têm 90 segundos para se recolher aos abrigos herméticos."},{t:"A Fissura",c:"Profundidade desconhecida. Magnalaga mergulha até ela periodicamente. Criaturas das Profundezas começaram a emergir recentemente. O Martelo de Thurgomur está no núcleo da tartaruga."}],npcs:["Rainha Durra dos Anões (autoridade da Cidadela)","Mergulhador Torvik (explorador da Fissura)"]},
+
+  "castelo-cobra":{icon:"🐍",title:"Castelo da Cobra",sub:"Dungeon — Objetivo da Missão Principal",diff:4,diffLabel:"☠☠☠☠ Muito Perigoso",tags:[["tr","Missão Principal"],["tp","Câmara do Olho"],["tg","Escamas de Jurgmund"]],desc:"Fortaleza construída dentro e ao redor da cabeça de Jurgmund, que ficou nas Montanhas de Atrelon após a Batalha Colossal. A pedra é diferente — mais dura, com veios dourados que pulsam. Local mais sagrado dos Serpentarianos.",sections:[{t:"A Câmara do Olho",c:"Centro da Espiral Interior. Só ilumina na lua cheia. É onde a menina muda precisa usar o Colar do Coração da Serpente. Acesso pela Espiral Central ou passagem secreta de Sss'era."},{t:"Câmara das Três Escamas",c:"Guarda o Arco das Escamas de Jurgmund. Quebra-cabeça de veneno e tempo (dif.4). Só pode ser carregado por quem está em paz com cobras."},{t:"Perigos",c:"Patrulhas (☠-☠☠). Sacerdote Corrompido (☠☠☠). Kobolds guardiões (☠). Aralto Sussurrante — confronto final (☠☠☠☠). Lobo do Vazio se o Arauto chegar primeiro (☠☠☠☠)."}],npcs:["Alta Sacerdotisa Sss'era (aliada)","Rei Vassk (obstáculo ou aliado)","O Aralto Sussurrante (antagonista final)","A Menina Muda (objetivo a proteger)"]},
+
+  "monte-karloth":{icon:"🌋",title:"Monte Karloth",sub:"Vulcão — Lar do Dragão Dourado",diff:5,diffLabel:"☠☠☠☠☠ Extremamente Perigoso",tags:[["tg","Dragão Dourado"],["tr","Aspecto de Jurgmund"],["tp","Chama-Viva de Karloth"]],desc:"Vulcão ativo com brilho dourado visível de qualquer ponto das planícies — o Dragão Dourado. Aspecto de Jurgmund que ficou no mundo após a Batalha. Não ataca visitantes respeitosos, mas causa Amedrontamento automático a 100m do topo.",sections:[{t:"O Dragão Dourado",c:"Manifestação da vontade de Jurgmund. Fornece informações absolutamente verdadeiras. Uma audiência exige provar intenção genuína. A Xamã Erkha sabe como se aproximar com segurança."},{t:"O Teste de Dignidade",c:"O dragão pode oferecer uma Escama Dourada para quem responder uma pergunta com honestidade. A pergunta é diferente para cada personagem. Resposta evasiva: silêncio, sem punição."},{t:"Itens",c:"A Chama-Viva de Karloth está na boca do vulcão, acessível durante erupção menor. O dragão exige que o portador prove entender a natureza do fogo crescente."}],npcs:["Dragão Dourado de Karloth (neutro-benevolente)","Xamã Erkha (necessária para audiência)"]},
+
+  "tartaruga-magnalaga":{icon:"🐢",title:"Tartaruga Magnalaga",sub:"Criatura Colossal — Cidadela do Casco",diff:4,diffLabel:"☠☠☠☠ Muito Perigoso",tags:[["tb","Anões do Casco"],["tp","Fissura"],["tg","Martelo de Thurgomur"]],desc:"A Tartaruga absorveu voluntariamente a contaminação da Batalha Colossal. Mergulha periodicamente para depositar energia purificada na Fissura. Os Anões construíram a Cidadela do Casco sobre ela em gratidão.",sections:[{t:"Cidadela do Casco",c:"Cidade viva que se move com Magnalaga. Mergulhos com 90 segundos de aviso. A cidade tem mercados, forjas e a câmara onde o Martelo de Thurgomur está guardado."},{t:"Os Mergulhos",c:"Ficaram mais frequentes e longos recentemente. Os anões mais velhos dizem que Magnalaga está 'procurando algo' na Fissura."}],npcs:["Rainha Durra (autoridade)","Forjador Anão Brok (guarda o Martelo)"]},
+
+  "salamandra-karlac":{icon:"🦎",title:"Grande Salamandra Karlac",sub:"Criatura Colossal — ☠☠☠☠☠ Não-combatível",diff:5,diffLabel:"☠☠☠☠☠ Força da Natureza",tags:[["tr","Fragmentos do Deus Marcado"],["tr","Cresce Indefinidamente"],["tg","Karlacs"]],desc:"Traça círculos eternos pelo Deserto Carmesim consumindo fragmentos do Deus Marcado. Não é hostil — simplesmente existe. O povo Karlac vive sobre ela. Cada fragmento consumido a faz crescer. Ninguém sabe o que acontece quando o último fragmento for consumido.",sections:[{t:"A Questão Central",c:"Ao consumir o último fragmento: (a) o Deus Marcado morre permanentemente? (b) a Salamandra se transforma? (c) os fragmentos renascem? Os Araltos sabem e estão interferindo."},{t:"Os Karlacs",c:"Vivem em casas fixadas nas escamas com ganchos especiais. Cada tremor ao consumir fragmentos maiores é chamado de 'bênção do Vermelhão'."}],npcs:["Sacerdote Vermelho Kalras (líder espiritual)","Chefe Bras'vor (decisor político)"]},
+
+  "capital-valdris":{icon:"⭐",title:"Capital de Valdris",sub:"Cidade — Maior Reino de Akaen",diff:1,diffLabel:"☆ Área segura (politicamente instável)",tags:[["tb","Capital"],["tg","Marco do Herói Valdris"],["tr","Tensão política"]],desc:"A maior cidade dos Reinos de Akaen. Centro militar e comercial. O Marco de Valdris na praça central começou a brilhar levemente nas últimas semanas.",sections:[{t:"Serviços",c:"Mercado de equipamentos (tier raro e abaixo). Guilda dos Aventureiros. Clérigos de Sanctum (cura e remoção de maldições). Forjadores anões visitantes (aprimoramento)."},{t:"O Marco Brilhante",c:"O Rei Aldric contratou estudiosos sem resultado. Um Clérigo de Arcath disse que 'o marco está esperando alguém'."}],npcs:["Rei Aldric de Valdris (cauteloso)","Capitã Lyra (desconfia de todos)"]},
+
+  "tower-arcath":{icon:"🔮",title:"Torre de Arcath",sub:"Local Sagrado — Centro do Conhecimento Arcano",diff:2,diffLabel:"☠☠ Equilibrado (testes de conhecimento)",tags:[["tp","Arcano"],["tg","Biblioteca Proibida"],["tb","Arcanistas"]],desc:"Construída em honra à Maga Arcath. Maior repositório de conhecimento arcano de Aether. A Biblioteca Proibida nos subsolos guarda textos proibidos, registros dos Araltos e o Arco Celeste de Akaen (pertenceu ao Herói Ferrath).",sections:[{t:"A Biblioteca Proibida",c:"Contém: pesquisas sobre o Deus Marcado, registros dos Araltos, a Moeda da Ambição de Thion, textos élficos. Acesso: Mestre Arcano ou Arcanismo (crítico)."},{t:"Os Arcanistas",c:"Ordem de magos guardiões. Neutros politicamente. Possuem o Arco Celeste de Akaen nos arquivos secretos."}],npcs:["Arquimestra Selene (guardiã dos segredos)","Estudante Phen (curioso demais, aliado improvável)"]},
+
+  "sanctum":{icon:"✝",title:"Sanctum",sub:"Local Sagrado — Centro da Fé",diff:1,diffLabel:"☆ Área sagrada (combate proibido)",tags:[["tn","Clérigos"],["tg","Herói Sanctum"],["tn","Cura e Proteção"]],desc:"Templo-cidade fundado pelo Clérigo Sanctum. Único lugar em Aether onde toda luta é proibida. Clérigos de Sanctum são os únicos que sabem o Ritual de Quebra do Pacto de Sangue.",sections:[{t:"Serviços",c:"Cura completa de doença ou veneno (donativo). Remoção de maldições até nível 4. Ritual de Quebra do Pacto de Sangue (500 moedas, apenas aqui). Ressurreição (raro, exige julgamento)."},{t:"O Marco de Sanctum",c:"Único Marco que não brilhou — mas sacerdotes dizem que o templo 'respira diferente' ultimamente."}],npcs:["Alto Sacerdote Brennus (justo e severo)","Sacerdotisa Lira (jovem, questiona as regras)"]},
+
+  "margem-pedras":{icon:"🏘",title:"Margem das Pedras",sub:"Cidade — Onde a Campanha Começa",diff:2,diffLabel:"☠☠ Equilibrado",tags:[["tr","★ Início da Campanha"],["tr","Lobos Avermelhados"],["tg","Theodor"]],desc:"Pequeno entreposto comercial na borda entre as planícies e as montanhas. Lugar comum, irrelevante para a história do mundo — até que Theodor chega com seus escravos e uma menina muda. A noite do ataque dos Lobos Avermelhados marca o início de tudo.",sections:[{t:"A Noite do Ataque — Sessão 1",c:"Lobos avermelhados (imbuídos com energia do Deus Marcado) atacam a caravana. O Arauto do Deus Marcado quer a menina. Theodor enfrenta o Arauto sozinho enquanto os jogadores fogem com a menina."},{t:"Investigação Possível",c:"O Guarda Vero é um espião dos Araltos. Um morador viu o Arauto chegar antes da caravana. A Maldição dos Três Fios é lançada pelos jogadores antes que Theodor se vire."},{t:"Serviços",c:"Taverna (descanso, rumores). Mercador básico. Ferreiro (reparo apenas). 3 guardas locais (1 espião)."}],npcs:["Theodor (liberta os jogadores, desaparece)","A Menina Muda (objetivo a proteger)","Guarda Vero (espião oculto)","Estalajadeira Marta (sabe de tudo, fala com ninguém)"]}
+};
+
+/* PAN + ZOOM */
+const vp=document.getElementById("map-viewport"),
+      mc=document.getElementById("map-container");
+const IW=1376,IH=768;
+let sc=1,mn=0.35,mx=3,ox=0,oy=0;
+
+function applyT(){
+  mc.style.transform=`translate(${ox}px,${oy}px) scale(${sc})`;
+  document.getElementById("zoom-label").textContent=Math.round(sc*100)+"%";
+}
+function clamp(){
+  const vw=vp.clientWidth,vh=vp.clientHeight,mw=IW*sc,mh=IH*sc;
+  const px=Math.max(vw*.15,60),py=Math.max(vh*.15,60);
+  ox=Math.min(px,Math.max(ox,vw-mw-px));
+  oy=Math.min(py,Math.max(oy,vh-mh-py));
+}
+function fit(){
+  const vw=vp.clientWidth,vh=vp.clientHeight;
+  sc=Math.min(vw/IW,vh/IH,1); mn=Math.min(sc*.7,.35);
+  ox=(vw-IW*sc)/2; oy=(vh-IH*sc)/2; applyT();
+}
+function zoom(f,cx,cy){
+  const ns=Math.min(mx,Math.max(mn,sc*f)),r=ns/sc;
+  ox=cx-r*(cx-ox); oy=cy-r*(cy-oy); sc=ns; clamp(); applyT();
+}
+
+document.getElementById("btn-zoom-in") .onclick=()=>zoom(1.3,vp.clientWidth/2,vp.clientHeight/2);
+document.getElementById("btn-zoom-out").onclick=()=>zoom(1/1.3,vp.clientWidth/2,vp.clientHeight/2);
+document.getElementById("btn-reset")   .onclick=fit;
+vp.addEventListener("wheel",e=>{e.preventDefault();const r=vp.getBoundingClientRect();zoom(e.deltaY<0?1.15:1/1.15,e.clientX-r.left,e.clientY-r.top);},{passive:false});
+
+let drag=false,lx=0,ly=0,moved=false;
+vp.addEventListener("mousedown",e=>{if(e.button!==0)return;drag=true;moved=false;lx=e.clientX;ly=e.clientY;vp.classList.add("dragging")});
+window.addEventListener("mousemove",e=>{if(!drag)return;const dx=e.clientX-lx,dy=e.clientY-ly;if(Math.abs(dx)+Math.abs(dy)>3)moved=true;ox+=dx;oy+=dy;lx=e.clientX;ly=e.clientY;clamp();applyT()});
+window.addEventListener("mouseup",()=>{drag=false;vp.classList.remove("dragging")});
+
+let lt=[];
+vp.addEventListener("touchstart",e=>{lt=Array.from(e.touches).map(t=>({x:t.clientX,y:t.clientY}));moved=false},{passive:true});
+vp.addEventListener("touchmove",e=>{
+  e.preventDefault();
+  const ts=Array.from(e.touches).map(t=>({x:t.clientX,y:t.clientY}));
+  if(ts.length===1&&lt.length===1){const dx=ts[0].x-lt[0].x,dy=ts[0].y-lt[0].y;if(Math.abs(dx)+Math.abs(dy)>3)moved=true;ox+=dx;oy+=dy;clamp();applyT();}
+  else if(ts.length===2&&lt.length===2){const d0=Math.hypot(lt[0].x-lt[1].x,lt[0].y-lt[1].y),d1=Math.hypot(ts[0].x-ts[1].x,ts[0].y-ts[1].y);if(d0>0){moved=true;const r=vp.getBoundingClientRect(),cx=(ts[0].x+ts[1].x)/2-r.left,cy=(ts[0].y+ts[1].y)/2-r.top;zoom(d1/d0,cx,cy);}}
+  lt=ts;
+},{passive:false});
+
+/* MODAL */
+const ov=document.getElementById("modal-overlay");
+document.getElementById("modal-close").onclick=()=>ov.classList.remove("open");
+ov.addEventListener("click",e=>{if(e.target===ov)ov.classList.remove("open")});
+
+function openModal(id){
+  const L=LOCS[id]; if(!L) return;
+  document.getElementById("modal-icon").textContent=L.icon;
+  document.getElementById("modal-title").textContent=L.title;
+  document.getElementById("modal-subtitle").textContent=L.sub;
+  const dc=["d0","d1","d2","d3","d4","d5"][Math.min(L.diff||0,5)];
+  const tags=(L.tags||[]).map(([c,t])=>`<span class="modal-tag ${c}">${t}</span>`).join("");
+  const secs=(L.sections||[]).map(s=>`<div class="modal-section"><div class="modal-section-title">${s.t}</div><p class="modal-desc">${s.c}</p></div>`).join("");
+  const npcs=L.npcs?.length?`<div class="modal-section"><div class="modal-section-title">🧙 NPCs</div><ul class="modal-list">${L.npcs.map(n=>`<li>${n}</li>`).join("")}</ul></div>`:"";
+  document.getElementById("modal-body").innerHTML=`<div class="modal-diff ${dc}">💀 ${L.diffLabel}</div>${tags?`<div>${tags}</div>`:""}<p class="modal-desc">${L.desc}</p>${secs}${npcs}`;
+  ov.classList.add("open");
+}
+
+document.querySelectorAll(".hotspot").forEach(el=>{
+  el.addEventListener("click",e=>{if(moved)return;e.stopPropagation();openModal(el.dataset.loc)});
+  el.addEventListener("touchend",e=>{if(moved)return;e.preventDefault();openModal(el.dataset.loc)});
+});
+
+window.addEventListener("load",fit);
+window.addEventListener("resize",fit);
+</script>
+</body>
+</html>

@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Campo de Batalha — Grimório de Personagens</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%;overflow:hidden;background:#1a120a;font-family:var(--font-heading,'Georgia',serif)}
+
+    /* ── Toolbar ─────────────────────────────────── */
+    .bm-toolbar{position:fixed;top:0;left:0;right:0;height:48px;z-index:100;display:flex;align-items:center;gap:8px;padding:0 12px;background:rgba(22,14,8,0.95);border-bottom:1px solid rgba(156,122,60,0.3)}
+    .bm-back{color:rgba(248,243,232,0.7);background:none;border:none;font-size:13px;cursor:pointer;font-family:inherit;min-height:40px;padding:0 4px;text-decoration:none}
+    .bm-back:hover{color:var(--gold,#9c7a3c)}
+    .bm-title{font-size:15px;color:var(--gold,#9c7a3c);font-weight:700;flex:1}
+    .bm-btn{background:rgba(248,243,232,0.1);border:1px solid rgba(156,122,60,0.4);color:rgba(248,243,232,0.85);border-radius:6px;padding:0 10px;height:34px;font-size:12px;cursor:pointer;font-family:inherit;white-space:nowrap}
+    .bm-btn:active{background:rgba(156,122,60,0.3)}
+    .bm-btn.danger{border-color:rgba(200,60,60,0.5);color:rgba(255,120,120,0.9)}
+    .bm-btn.danger:active{background:rgba(200,60,60,0.25)}
+    .bm-map-name{background:rgba(248,243,232,0.08);border:1px solid rgba(156,122,60,0.35);color:rgba(248,243,232,0.85);border-radius:6px;padding:0 8px;height:34px;font-size:13px;font-family:inherit;min-width:100px;max-width:160px}
+    .bm-sep{width:1px;height:28px;background:rgba(156,122,60,0.2);margin:0 2px}
+
+    /* ── Layout ──────────────────────────────────── */
+    .bm-layout{position:fixed;inset:48px 0 0 0;display:flex;overflow:hidden}
+
+    /* ── Painel esquerdo — paleta ─────────────────── */
+    .bm-palette{width:200px;flex-shrink:0;background:rgba(22,14,8,0.92);border-right:1px solid rgba(156,122,60,0.25);display:flex;flex-direction:column;overflow:hidden}
+    .bm-palette-header{padding:10px 12px 6px;font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:rgba(156,122,60,0.8);border-bottom:1px solid rgba(156,122,60,0.15)}
+    .bm-palette-scroll{flex:1;overflow-y:auto;padding:6px 6px 12px}
+    .palette-section{margin-bottom:8px}
+    .palette-section-title{font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:rgba(248,243,232,0.4);padding:4px 6px 3px}
+    .palette-item{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:6px;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .1s;margin-bottom:2px;border:1.5px solid transparent}
+    .palette-item:hover{background:rgba(156,122,60,0.12)}
+    .palette-item.active{background:rgba(156,122,60,0.22);border-color:rgba(156,122,60,0.5)}
+    .palette-item.active:hover{background:rgba(156,122,60,0.28)}
+    .pi-icon{font-size:18px;flex-shrink:0;width:24px;text-align:center}
+    .pi-text{flex:1;min-width:0}
+    .pi-name{font-size:12px;color:rgba(248,243,232,0.9);line-height:1.2}
+    .pi-desc{font-size:10px;color:rgba(248,243,232,0.45);line-height:1.3;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+
+    /* Modo eraser */
+    .palette-item.eraser.active{background:rgba(200,60,60,0.18);border-color:rgba(200,60,60,0.45)}
+
+    /* ── Área central — canvas ────────────────────── */
+    .bm-canvas-area{flex:1;overflow:auto;position:relative;-webkit-overflow-scrolling:touch}
+    #hex-canvas{display:block;cursor:crosshair;touch-action:none}
+    #hex-canvas.erasing{cursor:cell}
+
+    /* ── Painel direito — detalhes ─────────────────── */
+    .bm-details{width:220px;flex-shrink:0;background:rgba(22,14,8,0.92);border-left:1px solid rgba(156,122,60,0.25);display:flex;flex-direction:column;overflow:hidden}
+    .bm-details-header{padding:10px 12px 6px;font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:rgba(156,122,60,0.8);border-bottom:1px solid rgba(156,122,60,0.15)}
+    .bm-details-body{flex:1;overflow-y:auto;padding:10px 10px 20px;display:flex;flex-direction:column;gap:8px}
+    .det-empty{font-size:12px;color:rgba(248,243,232,0.3);text-align:center;margin-top:20px;font-style:italic}
+    .det-cell-coord{font-size:11px;color:rgba(156,122,60,0.8);margin-bottom:2px}
+    .det-field{display:flex;flex-direction:column;gap:3px}
+    .det-label{font-size:9.5px;text-transform:uppercase;letter-spacing:.4px;color:rgba(156,122,60,0.7)}
+    .det-input,.det-select,.det-textarea{background:rgba(248,243,232,0.08);border:1px solid rgba(156,122,60,0.3);color:rgba(248,243,232,0.9);border-radius:5px;padding:5px 8px;font-size:12px;font-family:inherit;width:100%}
+    .det-textarea{min-height:64px;resize:vertical;line-height:1.5}
+    .det-input:focus,.det-select:focus,.det-textarea:focus{outline:none;border-color:rgba(156,122,60,0.6)}
+    .det-select option{background:#1a120a;color:#f8f3e8}
+    .det-btn-save{background:rgba(156,122,60,0.25);border:1px solid rgba(156,122,60,0.5);color:rgba(248,243,232,0.9);border-radius:6px;padding:7px;font-size:12px;font-family:inherit;cursor:pointer;width:100%}
+    .det-btn-save:active{background:rgba(156,122,60,0.4)}
+    .det-btn-clear{background:rgba(200,60,60,0.15);border:1px solid rgba(200,60,60,0.35);color:rgba(255,120,120,0.9);border-radius:6px;padding:6px;font-size:11px;font-family:inherit;cursor:pointer;width:100%}
+    .det-section-title{font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:rgba(248,243,232,0.3);padding:4px 0 2px;border-top:1px dashed rgba(156,122,60,0.15);margin-top:4px}
+
+    /* Legenda de ícones */
+    .det-legend{display:flex;flex-direction:column;gap:4px;padding:6px 0}
+    .det-leg-item{display:flex;align-items:center;gap:6px;font-size:11px;color:rgba(248,243,232,0.6)}
+    .det-leg-icon{font-size:14px;width:20px;text-align:center}
+
+    /* ── Modal de mapas ───────────────────────────── */
+    .bm-modal-ov{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,0.7);display:none;align-items:center;justify-content:center;padding:20px}
+    .bm-modal-ov.open{display:flex}
+    .bm-modal{background:#2a1a0e;border:1px solid rgba(156,122,60,0.4);border-radius:12px;width:100%;max-width:440px;max-height:80vh;display:flex;flex-direction:column;overflow:hidden}
+    .bm-modal-h{padding:14px 16px;border-bottom:1px solid rgba(156,122,60,0.2);display:flex;align-items:center;gap:10px}
+    .bm-modal-title{font-size:16px;color:var(--gold,#9c7a3c);flex:1;font-weight:700}
+    .bm-modal-close{background:none;border:1px solid rgba(156,122,60,0.3);border-radius:6px;color:rgba(248,243,232,0.6);font-size:16px;width:32px;height:32px;cursor:pointer}
+    .bm-modal-body{flex:1;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+    .bm-modal-footer{padding:10px 16px;border-top:1px solid rgba(156,122,60,0.2);display:flex;gap:8px}
+    .bm-field{display:flex;flex-direction:column;gap:4px}
+    .bm-field label{font-size:10px;text-transform:uppercase;letter-spacing:.4px;color:rgba(156,122,60,0.8)}
+    .bm-input,.bm-select{background:rgba(248,243,232,0.08);border:1px solid rgba(156,122,60,0.3);color:rgba(248,243,232,0.9);border-radius:6px;padding:8px 10px;font-size:13px;font-family:inherit;width:100%}
+    .bm-input:focus,.bm-select:focus{outline:none;border-color:rgba(156,122,60,0.6)}
+    .bm-select option{background:#1a120a;color:#f8f3e8}
+    .bm-mbtn{flex:1;padding:10px;border-radius:7px;font-size:13px;font-family:inherit;cursor:pointer;border:none}
+    .bm-mbtn.primary{background:rgba(156,122,60,0.4);color:#f8f3e8;border:1px solid rgba(156,122,60,0.5)}
+    .bm-mbtn.primary:active{background:rgba(156,122,60,0.6)}
+    .bm-mbtn.secondary{background:rgba(248,243,232,0.08);color:rgba(248,243,232,0.7);border:1px solid rgba(156,122,60,0.25)}
+
+    /* Lista de mapas salvos */
+    .saved-map-item{display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(248,243,232,0.05);border:1px solid rgba(156,122,60,0.2);border-radius:7px;cursor:pointer}
+    .saved-map-item:hover{background:rgba(248,243,232,0.1)}
+    .saved-map-name{font-size:13px;color:rgba(248,243,232,0.9);flex:1}
+    .saved-map-info{font-size:10px;color:rgba(248,243,232,0.4)}
+    .saved-map-del{background:none;border:none;color:rgba(255,80,80,0.6);font-size:16px;cursor:pointer;padding:0 4px;line-height:1}
+    .saved-map-del:hover{color:rgba(255,80,80,0.9)}
+
+    /* Zoom do canvas */
+    .canvas-zoom-row{position:absolute;bottom:10px;right:10px;display:flex;gap:4px;z-index:10}
+    .cz-btn{background:rgba(22,14,8,0.85);border:1px solid rgba(156,122,60,0.4);color:rgba(248,243,232,0.8);border-radius:6px;width:32px;height:32px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+    .cz-btn:active{background:rgba(156,122,60,0.3)}
+
+    /* Mobile: painel esquerdo vira drawer */
+    @media(max-width:640px){
+      .bm-palette{position:fixed;left:-200px;top:48px;bottom:0;z-index:50;transition:left .2s}
+      .bm-palette.open{left:0}
+      .bm-details{display:none}
+      .bm-title{font-size:13px}
+    }
+  </style>
+</head>
+<body>
+
+<!-- Toolbar -->
+<header class="bm-toolbar">
+  <a href="index.html" class="bm-back">← Grimório</a>
+  <div class="bm-sep"></div>
+  <span class="bm-title">⚔ Campo de Batalha</span>
+  <input type="text" class="bm-map-name" id="bm-map-name" placeholder="Nome do mapa" value="Novo Campo">
+  <button class="bm-btn" id="btn-save-map">💾 Salvar</button>
+  <button class="bm-btn" id="btn-open-maps">📂 Mapas</button>
+  <button class="bm-btn" id="btn-new-map">+ Novo</button>
+  <button class="bm-btn danger" id="btn-clear-map">🗑 Limpar</button>
+  <!-- Mobile toggle da paleta -->
+  <button class="bm-btn" id="btn-palette-toggle" style="display:none">🎨</button>
+</header>
+
+<!-- Layout -->
+<div class="bm-layout">
+
+  <!-- Paleta de elementos -->
+  <aside class="bm-palette" id="bm-palette">
+    <div class="bm-palette-header">🎨 Elementos</div>
+    <div class="bm-palette-scroll" id="palette-scroll">
+      <!-- gerado por JS -->
+    </div>
+  </aside>
+
+  <!-- Canvas -->
+  <div class="bm-canvas-area" id="canvas-area">
+    <canvas id="hex-canvas"></canvas>
+    <div class="canvas-zoom-row">
+      <button class="cz-btn" id="cz-out">−</button>
+      <button class="cz-btn" id="cz-in">+</button>
+    </div>
+  </div>
+
+  <!-- Painel de detalhes -->
+  <aside class="bm-details" id="bm-details">
+    <div class="bm-details-header">📋 Célula Selecionada</div>
+    <div class="bm-details-body" id="details-body">
+      <p class="det-empty">Clique em uma célula para ver ou editar seus detalhes.</p>
+      <div class="det-section-title">Legenda rápida</div>
+      <div class="det-legend" id="legend-mini"></div>
+    </div>
+  </aside>
+
+</div>
+
+<!-- Modal: Gerenciar Mapas -->
+<div class="bm-modal-ov" id="modal-maps">
+  <div class="bm-modal">
+    <div class="bm-modal-h">
+      <span class="bm-modal-title">📂 Mapas Salvos</span>
+      <button class="bm-modal-close" id="btn-close-maps">✕</button>
+    </div>
+    <div class="bm-modal-body" id="maps-list-body"><!-- gerado por JS --></div>
+    <div class="bm-modal-footer">
+      <button class="bm-mbtn secondary" id="btn-close-maps2">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Novo Mapa -->
+<div class="bm-modal-ov" id="modal-new">
+  <div class="bm-modal">
+    <div class="bm-modal-h">
+      <span class="bm-modal-title">+ Novo Campo de Batalha</span>
+      <button class="bm-modal-close" id="btn-close-new">✕</button>
+    </div>
+    <div class="bm-modal-body">
+      <div class="bm-field">
+        <label>Nome do Campo</label>
+        <input type="text" class="bm-input" id="new-map-name" placeholder="Ex: Taverna do Dragão Cansado" maxlength="60">
+      </div>
+      <div class="bm-field">
+        <label>Colunas (largura) — 5 a 24</label>
+        <input type="number" class="bm-input" id="new-map-cols" value="14" min="5" max="24">
+      </div>
+      <div class="bm-field">
+        <label>Linhas (altura) — 4 a 16</label>
+        <input type="number" class="bm-input" id="new-map-rows" value="9" min="4" max="16">
+      </div>
+      <div class="bm-field">
+        <label>Ambiente / Cenário</label>
+        <select class="bm-select" id="new-map-env">
+          <option value="dungeon">🕯 Dungeon — pedra fria, tocha</option>
+          <option value="floresta">🌲 Floresta — árvores, raízes</option>
+          <option value="planicie">🌿 Planície — grama aberta</option>
+          <option value="deserto">🏜 Deserto — areia, calor</option>
+          <option value="neve">❄ Neve / Montanha</option>
+          <option value="cidade">🏘 Cidade — ruas, prédios</option>
+          <option value="pantano">🌊 Pântano / Água</option>
+          <option value="vulcao">🌋 Vulcão / Magma</option>
+          <option value="custom">✏ Personalizado</option>
+        </select>
+      </div>
+    </div>
+    <div class="bm-modal-footer">
+      <button class="bm-mbtn secondary" id="btn-cancel-new">Cancelar</button>
+      <button class="bm-mbtn primary" id="btn-create-new">Criar Campo</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════════════════
+   DEFINIÇÕES DE ELEMENTOS
+   ══════════════════════════════════════════════════════════ */
+const ELEMENTS = [
+  // Apagador
+  { id:"empty",    cat:"_",       icon:"◻",  name:"Apagar",         desc:"Remove o elemento da célula",            color:"#333",   bg:"" },
+
+  // Terreno
+  { id:"terreno-dificil", cat:"Terreno", icon:"🌊", name:"Terreno Difícil", desc:"Lama, neve, pedregulho — custa 2 movimentos por hex", color:"#4a6080", bg:"rgba(74,96,128,0.35)" },
+  { id:"agua",     cat:"Terreno", icon:"💧", name:"Água / Rio",     desc:"Landa, rio, poça — impassável sem nadar", color:"#2060a0", bg:"rgba(32,96,160,0.35)" },
+  { id:"magma",    cat:"Terreno", icon:"🔥", name:"Magma / Lava",   desc:"1d6 dano por rodada ao entrar. Impassável sem proteção", color:"#c04010", bg:"rgba(192,64,16,0.4)" },
+  { id:"gelo",     cat:"Terreno", icon:"❄",  name:"Gelo",           desc:"AGI (normal) ao se mover ou cai Derrubado", color:"#80c0e0", bg:"rgba(128,192,224,0.3)" },
+  { id:"nevoa",    cat:"Terreno", icon:"🌫", name:"Névoa Densa",    desc:"Visão limitada a 1 hex. Ataques à distância têm −1d6", color:"#909090", bg:"rgba(144,144,144,0.3)" },
+
+  // Estruturas
+  { id:"muralha",  cat:"Estrutura", icon:"🧱", name:"Muralha / Parede", desc:"Impassável. Fornece cobertura total para aliados atrás", color:"#806040", bg:"rgba(128,96,64,0.55)" },
+  { id:"ruina",    cat:"Estrutura", icon:"🏚", name:"Ruína / Escombro",  desc:"Terreno difícil. Cobertura parcial (−1d4 ao ser atingido)", color:"#706050", bg:"rgba(112,96,80,0.4)" },
+  { id:"lugar-alto",cat:"Estrutura",icon:"🪜", name:"Lugar Alto",       desc:"Vantagem visual: +1 hex de alcance em ataques à distância. Requer 1 Ação extra para subir", color:"#806828", bg:"rgba(128,104,40,0.4)" },
+  { id:"porta",    cat:"Estrutura", icon:"🚪", name:"Porta / Passagem", desc:"Trancada, aberta ou secreta. Pode ser arrombada (FOR dif.normal)", color:"#a06030", bg:"rgba(160,96,48,0.4)" },
+  { id:"altar",    cat:"Estrutura", icon:"⛩", name:"Altar / Estrutura Sagrada", desc:"Pode ter efeito divino ao interagir. Clérigos recuperam 1 Slot ao tocar", color:"#c0a020", bg:"rgba(192,160,32,0.3)" },
+  { id:"fogueira", cat:"Estrutura", icon:"🔥", name:"Fogueira / Tocha", desc:"Ilumina raio 3 hex. Pode ser apagada. Fonte de fogo para incendiar objetos", color:"#e06000", bg:"rgba(224,96,0,0.3)" },
+  { id:"caixa",    cat:"Estrutura", icon:"📦", name:"Caixas / Barris",  desc:"Cobertura parcial. Pode ser derrubada sobre inimigos (1d6 dano, FOR normal)", color:"#907050", bg:"rgba(144,112,80,0.35)" },
+  { id:"armadilha-basic",cat:"Perigo",icon:"⚠",name:"Armadilha",  desc:"Armadilha oculta. Clique duplo para configurar nível e tipo", color:"#c04040", bg:"rgba(192,64,64,0.25)" },
+  { id:"espinho",  cat:"Perigo",  icon:"🌵", name:"Espinhos / Estacas", desc:"1d4 de dano a quem entrar. Reduz Movimento em 1 enquanto estiver neste hex", color:"#60a040", bg:"rgba(96,160,64,0.3)" },
+  { id:"poco",     cat:"Perigo",  icon:"🕳", name:"Poço / Buraco",    desc:"Queda de 1d6 por nível do poço. Percepção (normal) para notar antes de cair", color:"#202020", bg:"rgba(20,20,20,0.6)" },
+  { id:"veneno",   cat:"Perigo",  icon:"☣", name:"Névoa de Veneno",  desc:"1d6 de veneno por rodada nesta área. Veneno persiste por 3 rodadas após sair", color:"#409040", bg:"rgba(64,144,64,0.3)" },
+
+  // Coberturas / Ocultações
+  { id:"cobertura", cat:"Cobertura", icon:"🛡", name:"Cobertura Total",   desc:"Atrás deste obstáculo: ataques à distância erram automaticamente", color:"#4060a0", bg:"rgba(64,96,160,0.3)" },
+  { id:"sombra",   cat:"Cobertura", icon:"🌑", name:"Sombra / Escuridão",desc:"Invisibilidade natural. Ataques contra alvo nas sombras têm −1d6 de acerto", color:"#303050", bg:"rgba(32,32,64,0.55)" },
+
+  // Inimigos
+  { id:"inimigo",  cat:"Inimigo",  icon:"💀", name:"Inimigo",           desc:"Inimigo oculto ou visível. Clique duplo para configurar nome/dificuldade", color:"#c04040", bg:"rgba(192,64,64,0.2)" },
+  { id:"inimigo-oculto",cat:"Inimigo",icon:"👻",name:"Inimigo Oculto",  desc:"Emboscada! Só revelado quando um aliado entrar no raio 2 hex", color:"#804060", bg:"rgba(128,64,96,0.2)" },
+  { id:"reforcod", cat:"Inimigo",  icon:"🔔", name:"Ponto de Reforço",  desc:"Inimigos chegam por aqui em reforços. Clique duplo para configurar rodada", color:"#a03030", bg:"rgba(160,48,48,0.25)" },
+
+  // Objetivos / Especiais
+  { id:"tesouro",  cat:"Objetivo", icon:"💰", name:"Tesouro / Item",    desc:"Baú, item no chão ou recompensa. Clicar duplo para descrever o conteúdo", color:"#c0a020", bg:"rgba(192,160,32,0.25)" },
+  { id:"objetivo", cat:"Objetivo", icon:"⭐", name:"Objetivo Principal",  desc:"Alvo da missão: capturar, defender, alcançar este ponto", color:"#e0c000", bg:"rgba(224,192,0,0.25)" },
+  { id:"zona-def", cat:"Objetivo", icon:"🚩", name:"Zona a Defender",    desc:"Os jogadores devem manter pelo menos 1 aliado nesta área", color:"#40a080", bg:"rgba(64,160,128,0.25)" },
+  { id:"saida",    cat:"Objetivo", icon:"🚪", name:"Saída / Escapar",    desc:"Alcançar este hex = sucesso para aquele personagem", color:"#00c060", bg:"rgba(0,192,96,0.25)" },
+
+  // Aliados / Neutros
+  { id:"aliado",   cat:"Aliado",   icon:"🟢", name:"Aliado / NPC",      desc:"Aliado controlado pelo Mestre. Clique duplo para nome e HP", color:"#20a040", bg:"rgba(32,160,64,0.2)" },
+  { id:"neutro",   cat:"Aliado",   icon:"🟡", name:"Neutro / Civil",     desc:"NPC neutro. Matar ou deixar morrer pode ter consequências", color:"#c0a000", bg:"rgba(192,160,0,0.2)" },
+
+  // Início
+  { id:"inicio",   cat:"Posição",  icon:"🔵", name:"Posição Inicial",    desc:"Onde os personagens dos jogadores começam o combate", color:"#2060c0", bg:"rgba(32,96,192,0.25)" },
+];
+
+/* ══════════════════════════════════════════════════════════
+   ESTADO DO MAPA
+   ══════════════════════════════════════════════════════════ */
+const STORAGE_KEY = "bm_maps_v1";
+let state = {
+  name: "Novo Campo",
+  cols: 14, rows: 9,
+  env: "dungeon",
+  cells: {},   // "col,row" → { id, label, notes, trapLevel, enemyName, enemyDiff }
+};
+let selectedElement = ELEMENTS[1]; // começa com terreno difícil
+let selectedCell = null;
+let hexSize = 36;  // raio do hexágono
+const MIN_HEX = 20, MAX_HEX = 64;
+
+function loadMaps() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
+  catch { return []; }
+}
+function saveMaps(maps) { localStorage.setItem(STORAGE_KEY, JSON.stringify(maps)); }
+function getMapKey(name) { return name.toLowerCase().replace(/\s+/g,"_"); }
+
+function saveCurrentMap() {
+  const maps = loadMaps();
+  const key  = getMapKey(state.name);
+  const idx  = maps.findIndex(m => m.key === key);
+  const entry = { key, name: state.name, cols: state.cols, rows: state.rows, env: state.env, cells: state.cells, savedAt: Date.now() };
+  if (idx >= 0) maps[idx] = entry; else maps.push(entry);
+  saveMaps(maps);
+}
+
+/* ══════════════════════════════════════════════════════════
+   GEOMETRIA HEXAGONAL (flat-top)
+   ══════════════════════════════════════════════════════════ */
+function hexW(s)  { return s * 2; }
+function hexH(s)  { return Math.sqrt(3) * s; }
+function hexCenter(col, row, s) {
+  const w = hexW(s), h = hexH(s);
+  const x = col * w * 0.75 + s;
+  const y = row * h + (col % 2 === 0 ? h / 2 : h) ;
+  return { x, y };
+}
+function hexCorners(cx, cy, s) {
+  const pts = [];
+  for (let i = 0; i < 6; i++) {
+    const angle = Math.PI / 180 * (60 * i);
+    pts.push({ x: cx + s * Math.cos(angle), y: cy + s * Math.sin(angle) });
+  }
+  return pts;
+}
+function canvasSize(cols, rows, s) {
+  const w = hexW(s), h = hexH(s);
+  const W = Math.ceil(cols * w * 0.75 + w * 0.25 + 4);
+  const H = Math.ceil(rows * h + h + 4);
+  return { W, H };
+}
+function pixelToHex(px, py, cols, rows, s) {
+  let best = null, bestD = Infinity;
+  for (let c = 0; c < cols; c++) {
+    for (let r = 0; r < rows; r++) {
+      const {x,y} = hexCenter(c, r, s);
+      const d = Math.hypot(px - x, py - y);
+      if (d < bestD) { bestD = d; best = {c, r}; }
+    }
+  }
+  return bestD < s * 1.1 ? best : null;
+}
+
+/* ══════════════════════════════════════════════════════════
+   RENDERIZAÇÃO DO CANVAS
+   ══════════════════════════════════════════════════════════ */
+const canvas = document.getElementById("hex-canvas");
+const ctx    = canvas.getContext("2d");
+
+const ENV_COLORS = {
+  dungeon:  { bg:"#1a1208", grid:"#4a3828", sel:"#9c7a3c" },
+  floresta: { bg:"#0a1a08", grid:"#2a4a20", sel:"#6a9c3c" },
+  planicie: { bg:"#0e1a06", grid:"#304a18", sel:"#7ab030" },
+  deserto:  { bg:"#1a1408", grid:"#5a4818", sel:"#c09830" },
+  neve:     { bg:"#0e1420", grid:"#304060", sel:"#80b0d0" },
+  cidade:   { bg:"#141418", grid:"#404050", sel:"#9c8c6c" },
+  pantano:  { bg:"#0a1410", grid:"#2a4030", sel:"#4a8060" },
+  vulcao:   { bg:"#1a0808", grid:"#5a2010", sel:"#c05020" },
+  custom:   { bg:"#0e0e0e", grid:"#404040", sel:"#9c7a3c" },
+};
+
+function getEnvColor() { return ENV_COLORS[state.env] || ENV_COLORS.dungeon; }
+
+function drawMap() {
+  const { cols, rows } = state;
+  const s = hexSize;
+  const { W, H } = canvasSize(cols, rows, s);
+  canvas.width  = W;
+  canvas.height = H;
+  const env = getEnvColor();
+
+  // Fundo
+  ctx.fillStyle = env.bg;
+  ctx.fillRect(0, 0, W, H);
+
+  for (let c = 0; c < cols; c++) {
+    for (let r = 0; r < rows; r++) {
+      const { x, y } = hexCenter(c, r, s);
+      const key  = `${c},${r}`;
+      const cell = state.cells[key];
+      const el   = cell ? ELEMENTS.find(e => e.id === cell.id) : null;
+      const isSel = selectedCell && selectedCell.c === c && selectedCell.r === r;
+
+      // Fundo da célula
+      ctx.beginPath();
+      const pts = hexCorners(x, y, s - 1);
+      ctx.moveTo(pts[0].x, pts[0].y);
+      for (let i = 1; i < 6; i++) ctx.lineTo(pts[i].x, pts[i].y);
+      ctx.closePath();
+
+      if (el && el.bg) {
+        ctx.fillStyle = el.bg;
+      } else {
+        ctx.fillStyle = "rgba(255,255,255,0.03)";
+      }
+      ctx.fill();
+
+      // Borda
+      ctx.strokeStyle = isSel ? env.sel : env.grid;
+      ctx.lineWidth   = isSel ? 2.5 : 1;
+      ctx.stroke();
+
+      // Ícone do elemento
+      if (el && el.id !== "empty") {
+        ctx.font = `${Math.max(14, s * 0.58)}px serif`;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(el.icon, x, y - (s > 28 ? 2 : 1));
+
+        // Label customizado
+        if (cell.label && s >= 28) {
+          ctx.font = `bold ${Math.max(8, s * 0.24)}px sans-serif`;
+          ctx.fillStyle = el.color || "#fff";
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          // texto cortado
+          const maxW = s * 1.4;
+          let txt = cell.label;
+          if (ctx.measureText(txt).width > maxW) {
+            while (txt.length > 3 && ctx.measureText(txt + "…").width > maxW) txt = txt.slice(0,-1);
+            txt += "…";
+          }
+          ctx.fillText(txt, x, y + s * 0.38);
+          ctx.fillStyle = "white";
+        }
+
+        // Indicador de nível de armadilha
+        if (el.id === "armadilha-basic" && cell.trapLevel) {
+          drawBadge(x + s * 0.55, y - s * 0.55, "☠".repeat(parseInt(cell.trapLevel) || 1), "#c04040", s);
+        }
+        // Dificuldade de inimigo
+        if ((el.id === "inimigo" || el.id === "inimigo-oculto") && cell.enemyDiff) {
+          drawBadge(x + s * 0.55, y - s * 0.55, "☠".repeat(parseInt(cell.enemyDiff) || 1), "#802020", s);
+        }
+      }
+
+      // Coordenada (pequena, apenas com hexSize suficiente)
+      if (s >= 36) {
+        ctx.font = `${Math.max(7, s * 0.2)}px monospace`;
+        ctx.fillStyle = "rgba(255,255,255,0.18)";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "bottom";
+        ctx.fillText(`${c+1},${r+1}`, x, y + s - 2);
+      }
+    }
+  }
+}
+
+function drawBadge(bx, by, txt, color, s) {
+  ctx.font = `bold ${Math.max(9, s * 0.22)}px sans-serif`;
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  const w = ctx.measureText(txt).width + 4;
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.roundRect(bx - w/2, by - 8, w, 16, 4);
+  ctx.fill();
+  ctx.fillStyle = "#fff";
+  ctx.fillText(txt, bx, by);
+}
+
+/* ══════════════════════════════════════════════════════════
+   PALETA
+   ══════════════════════════════════════════════════════════ */
+function buildPalette() {
+  const scroll = document.getElementById("palette-scroll");
+  const cats   = [...new Set(ELEMENTS.map(e => e.cat))];
+  scroll.innerHTML = cats.map(cat => {
+    const items = ELEMENTS.filter(e => e.cat === cat);
+    const catLabel = cat === "_" ? "Ferramentas" : cat;
+    return `
+      <div class="palette-section">
+        <div class="palette-section-title">${catLabel}</div>
+        ${items.map(el => `
+          <div class="palette-item ${el.id === "empty" ? "eraser" : ""} ${selectedElement.id === el.id ? "active" : ""}"
+               data-el="${el.id}" title="${el.desc}">
+            <div class="pi-icon">${el.icon}</div>
+            <div class="pi-text">
+              <div class="pi-name">${el.name}</div>
+              <div class="pi-desc">${el.desc}</div>
+            </div>
+          </div>`).join("")}
+      </div>`;
+  }).join("");
+
+  scroll.querySelectorAll(".palette-item").forEach(el => {
+    el.addEventListener("click", () => {
+      selectedElement = ELEMENTS.find(e => e.id === el.dataset.el);
+      buildPalette();
+      canvas.classList.toggle("erasing", selectedElement.id === "empty");
+    });
+  });
+}
+
+function buildLegendMini() {
+  const leg = document.getElementById("legend-mini");
+  if (!leg) return;
+  leg.innerHTML = ELEMENTS.filter(e => e.cat !== "_").slice(0,12).map(e =>
+    `<div class="det-leg-item"><span class="det-leg-icon">${e.icon}</span>${e.name}</div>`
+  ).join("");
+}
+
+/* ══════════════════════════════════════════════════════════
+   PAINEL DE DETALHES
+   ══════════════════════════════════════════════════════════ */
+function renderDetails() {
+  const body = document.getElementById("details-body");
+  if (!selectedCell) {
+    body.innerHTML = `<p class="det-empty">Clique em uma célula para ver ou editar seus detalhes.</p>
+      <div class="det-section-title">Legenda rápida</div>
+      <div class="det-legend" id="legend-mini"></div>`;
+    buildLegendMini();
+    return;
+  }
+  const { c, r } = selectedCell;
+  const key  = `${c},${r}`;
+  const cell = state.cells[key] || {};
+  const el   = ELEMENTS.find(e => e.id === cell.id) || null;
+
+  // Campos variáveis por tipo de elemento
+  let extraFields = "";
+  if (cell.id === "armadilha-basic") {
+    extraFields += `
+      <div class="det-field">
+        <span class="det-label">Nível da Armadilha</span>
+        <select class="det-select" id="det-trap-level">
+          ${[1,2,3,4,5].map(n=>`<option value="${n}" ${cell.trapLevel==n?"selected":""}>${"☠".repeat(n)} Nível ${n}</option>`).join("")}
+        </select>
+      </div>
+      <div class="det-field">
+        <span class="det-label">Tipo de Armadilha</span>
+        <select class="det-select" id="det-trap-type">
+          <option value="fisica" ${cell.trapType==="fisica"?"selected":""}>⚔ Física (flechas, lâminas)</option>
+          <option value="magica" ${cell.trapType==="magica"?"selected":""}>✨ Mágica (runa, glifo)</option>
+          <option value="veneno" ${cell.trapType==="veneno"?"selected":""}>☣ Veneno</option>
+          <option value="queda"  ${cell.trapType==="queda" ?"selected":""}>🕳 Queda / Buraco</option>
+          <option value="alarme" ${cell.trapType==="alarme"?"selected":""}>🔔 Alarme / Chamariz</option>
+          <option value="imob"   ${cell.trapType==="imob"  ?"selected":""}>🕸 Imobilização</option>
+        </select>
+      </div>`;
+  }
+  if (cell.id === "inimigo" || cell.id === "inimigo-oculto") {
+    extraFields += `
+      <div class="det-field">
+        <span class="det-label">Nome do Inimigo</span>
+        <input type="text" class="det-input" id="det-enemy-name" value="${cell.enemyName||""}" placeholder="Ex: Cultista do Aralto">
+      </div>
+      <div class="det-field">
+        <span class="det-label">Dificuldade</span>
+        <select class="det-select" id="det-enemy-diff">
+          ${[1,2,3,4,5].map(n=>`<option value="${n}" ${cell.enemyDiff==n?"selected":""}>${"☠".repeat(n)} Dif. ${n}</option>`).join("")}
+        </select>
+      </div>
+      <div class="det-field">
+        <span class="det-label">HP Atual / Máximo</span>
+        <input type="text" class="det-input" id="det-enemy-hp" value="${cell.enemyHp||""}" placeholder="Ex: 32 / 45">
+      </div>`;
+  }
+  if (cell.id === "tesouro" || cell.id === "objetivo") {
+    extraFields += `
+      <div class="det-field">
+        <span class="det-label">Conteúdo / Descrição</span>
+        <textarea class="det-textarea" id="det-treasure-content" placeholder="Ex: Baú com 200 moedas, Pergaminho de Identificar, Poção de Cura">${cell.treasureContent||""}</textarea>
+      </div>`;
+  }
+  if (cell.id === "reforcod") {
+    extraFields += `
+      <div class="det-field">
+        <span class="det-label">Rodada de Chegada</span>
+        <input type="number" class="det-input" id="det-reinforce-round" value="${cell.reinforceRound||3}" min="1" max="20">
+      </div>
+      <div class="det-field">
+        <span class="det-label">Quem Chega</span>
+        <input type="text" class="det-input" id="det-reinforce-who" value="${cell.reinforceWho||""}" placeholder="Ex: 2× Cultista do Aralto">
+      </div>`;
+  }
+  if (cell.id === "aliado" || cell.id === "neutro") {
+    extraFields += `
+      <div class="det-field">
+        <span class="det-label">Nome do Aliado / NPC</span>
+        <input type="text" class="det-input" id="det-npc-name" value="${cell.npcName||""}" placeholder="Ex: Theodor">
+      </div>
+      <div class="det-field">
+        <span class="det-label">HP Atual / Máximo</span>
+        <input type="text" class="det-input" id="det-npc-hp" value="${cell.npcHp||""}" placeholder="Ex: 28 / 40">
+      </div>`;
+  }
+
+  body.innerHTML = `
+    <div class="det-cell-coord">Célula ${c+1}, ${r+1} ${el ? `— ${el.icon} ${el.name}` : "(vazia)"}</div>
+    <div class="det-field">
+      <span class="det-label">Rótulo (exibido no mapa)</span>
+      <input type="text" class="det-input" id="det-label" value="${cell.label||""}" placeholder="Nome curto" maxlength="20">
+    </div>
+    ${extraFields}
+    <div class="det-field">
+      <span class="det-label">Notas do Mestre</span>
+      <textarea class="det-textarea" id="det-notes" placeholder="Detalhes, gatilhos, lore...">${cell.notes||""}</textarea>
+    </div>
+    <button class="det-btn-save" id="det-save">✔ Aplicar Alterações</button>
+    <button class="det-btn-clear" id="det-clear">🗑 Apagar Célula</button>
+  `;
+
+  document.getElementById("det-save")?.addEventListener("click", () => {
+    const updated = {
+      ...cell,
+      label: document.getElementById("det-label")?.value || "",
+      notes: document.getElementById("det-notes")?.value || "",
+    };
+    if (cell.id === "armadilha-basic") {
+      updated.trapLevel = document.getElementById("det-trap-level")?.value;
+      updated.trapType  = document.getElementById("det-trap-type")?.value;
+    }
+    if (cell.id === "inimigo" || cell.id === "inimigo-oculto") {
+      updated.enemyName = document.getElementById("det-enemy-name")?.value || "";
+      updated.enemyDiff = document.getElementById("det-enemy-diff")?.value;
+      updated.enemyHp   = document.getElementById("det-enemy-hp")?.value || "";
+    }
+    if (cell.id === "tesouro" || cell.id === "objetivo") {
+      updated.treasureContent = document.getElementById("det-treasure-content")?.value || "";
+    }
+    if (cell.id === "reforcod") {
+      updated.reinforceRound = document.getElementById("det-reinforce-round")?.value;
+      updated.reinforceWho   = document.getElementById("det-reinforce-who")?.value || "";
+    }
+    if (cell.id === "aliado" || cell.id === "neutro") {
+      updated.npcName = document.getElementById("det-npc-name")?.value || "";
+      updated.npcHp   = document.getElementById("det-npc-hp")?.value || "";
+    }
+    state.cells[`${selectedCell.c},${selectedCell.r}`] = updated;
+    drawMap();
+  });
+  document.getElementById("det-clear")?.addEventListener("click", () => {
+    delete state.cells[`${selectedCell.c},${selectedCell.r}`];
+    selectedCell = null;
+    renderDetails();
+    drawMap();
+  });
+}
+
+/* ══════════════════════════════════════════════════════════
+   INTERAÇÃO COM O CANVAS
+   ══════════════════════════════════════════════════════════ */
+let painting = false;
+let lastPainted = null;
+
+function applyToCell(c, r) {
+  const key = `${c},${r}`;
+  if (selectedElement.id === "empty") {
+    delete state.cells[key];
+  } else {
+    if (!state.cells[key] || state.cells[key].id !== selectedElement.id) {
+      state.cells[key] = { id: selectedElement.id, label: "", notes: "" };
+    }
+    selectedCell = { c, r };
+    renderDetails();
+  }
+  drawMap();
+}
+
+function getCanvasPoint(e) {
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = canvas.width  / rect.width;
+  const scaleY = canvas.height / rect.height;
+  let cx, cy;
+  if (e.touches) {
+    cx = (e.touches[0].clientX - rect.left) * scaleX;
+    cy = (e.touches[0].clientY - rect.top)  * scaleY;
+  } else {
+    cx = (e.clientX - rect.left) * scaleX;
+    cy = (e.clientY - rect.top)  * scaleY;
+  }
+  return { cx, cy };
+}
+
+canvas.addEventListener("mousedown", e => {
+  const { cx, cy } = getCanvasPoint(e);
+  const hex = pixelToHex(cx, cy, state.cols, state.rows, hexSize);
+  if (!hex) return;
+  painting = true;
+  lastPainted = `${hex.c},${hex.r}`;
+  applyToCell(hex.c, hex.r);
+});
+canvas.addEventListener("mousemove", e => {
+  if (!painting) return;
+  const { cx, cy } = getCanvasPoint(e);
+  const hex = pixelToHex(cx, cy, state.cols, state.rows, hexSize);
+  if (!hex) return;
+  const key = `${hex.c},${hex.r}`;
+  if (key === lastPainted) return;
+  lastPainted = key;
+  applyToCell(hex.c, hex.r);
+});
+window.addEventListener("mouseup", () => { painting = false; });
+
+// Clique simples para selecionar célula (sem pintar)
+canvas.addEventListener("click", e => {
+  const { cx, cy } = getCanvasPoint(e);
+  const hex = pixelToHex(cx, cy, state.cols, state.rows, hexSize);
+  if (!hex) return;
+  selectedCell = { c: hex.c, r: hex.r };
+  renderDetails();
+  drawMap();
+});
+
+// Touch
+let touchPainting = false;
+canvas.addEventListener("touchstart", e => {
+  e.preventDefault();
+  touchPainting = true;
+  const { cx, cy } = getCanvasPoint(e);
+  const hex = pixelToHex(cx, cy, state.cols, state.rows, hexSize);
+  if (hex) applyToCell(hex.c, hex.r);
+}, { passive: false });
+canvas.addEventListener("touchmove", e => {
+  e.preventDefault();
+  if (!touchPainting) return;
+  const { cx, cy } = getCanvasPoint(e);
+  const hex = pixelToHex(cx, cy, state.cols, state.rows, hexSize);
+  if (hex) applyToCell(hex.c, hex.r);
+}, { passive: false });
+canvas.addEventListener("touchend", () => { touchPainting = false; });
+
+/* ══════════════════════════════════════════════════════════
+   ZOOM DO CANVAS
+   ══════════════════════════════════════════════════════════ */
+document.getElementById("cz-in") .onclick = () => { hexSize = Math.min(MAX_HEX, hexSize + 4); drawMap(); };
+document.getElementById("cz-out").onclick = () => { hexSize = Math.max(MIN_HEX, hexSize - 4); drawMap(); };
+document.getElementById("canvas-area").addEventListener("wheel", e => {
+  e.preventDefault();
+  hexSize = Math.min(MAX_HEX, Math.max(MIN_HEX, hexSize + (e.deltaY < 0 ? 2 : -2)));
+  drawMap();
+}, { passive: false });
+
+/* ══════════════════════════════════════════════════════════
+   TOOLBAR — Salvar / Mapas / Novo / Limpar
+   ══════════════════════════════════════════════════════════ */
+document.getElementById("btn-save-map").onclick = () => {
+  state.name = document.getElementById("bm-map-name").value.trim() || "Sem Nome";
+  document.getElementById("bm-map-name").value = state.name;
+  saveCurrentMap();
+  showFlash("💾 Mapa salvo!");
+};
+
+document.getElementById("btn-clear-map").onclick = () => {
+  if (!confirm("Apagar todos os elementos do mapa atual?")) return;
+  state.cells = {};
+  selectedCell = null;
+  renderDetails();
+  drawMap();
+};
+
+// Modal Mapas
+const modalMaps = document.getElementById("modal-maps");
+function openMapsModal() {
+  const maps = loadMaps();
+  const body = document.getElementById("maps-list-body");
+  if (!maps.length) {
+    body.innerHTML = `<p style="color:rgba(248,243,232,0.4);font-size:13px;text-align:center">Nenhum mapa salvo ainda.</p>`;
+  } else {
+    body.innerHTML = maps.sort((a,b) => b.savedAt - a.savedAt).map(m => `
+      <div class="saved-map-item" data-map-key="${m.key}">
+        <div>
+          <div class="saved-map-name">${m.name}</div>
+          <div class="saved-map-info">${m.cols}×${m.rows} hex · ${Object.keys(m.cells||{}).length} elementos · ${new Date(m.savedAt).toLocaleDateString("pt-BR")}</div>
+        </div>
+        <button class="saved-map-del" data-del-key="${m.key}" title="Excluir">🗑</button>
+      </div>`).join("");
+    body.querySelectorAll(".saved-map-item").forEach(el => {
+      el.addEventListener("click", e => {
+        if (e.target.closest("[data-del-key]")) return;
+        const maps2 = loadMaps();
+        const m = maps2.find(x => x.key === el.dataset.mapKey);
+        if (!m) return;
+        state = { name: m.name, cols: m.cols, rows: m.rows, env: m.env || "dungeon", cells: m.cells || {} };
+        document.getElementById("bm-map-name").value = state.name;
+        selectedCell = null;
+        renderDetails();
+        drawMap();
+        modalMaps.classList.remove("open");
+      });
+    });
+    body.querySelectorAll("[data-del-key]").forEach(btn => {
+      btn.addEventListener("click", e => {
+        e.stopPropagation();
+        if (!confirm(`Excluir mapa "${btn.dataset.delKey}"?`)) return;
+        const maps2 = loadMaps().filter(m => m.key !== btn.dataset.delKey);
+        saveMaps(maps2);
+        openMapsModal();
+      });
+    });
+  }
+  modalMaps.classList.add("open");
+}
+document.getElementById("btn-open-maps").onclick = openMapsModal;
+document.getElementById("btn-close-maps") .onclick = () => modalMaps.classList.remove("open");
+document.getElementById("btn-close-maps2").onclick = () => modalMaps.classList.remove("open");
+modalMaps.addEventListener("click", e => { if (e.target === modalMaps) modalMaps.classList.remove("open"); });
+
+// Modal Novo
+const modalNew = document.getElementById("modal-new");
+document.getElementById("btn-new-map").onclick = () => modalNew.classList.add("open");
+document.getElementById("btn-close-new").onclick = () => modalNew.classList.remove("open");
+document.getElementById("btn-cancel-new").onclick = () => modalNew.classList.remove("open");
+document.getElementById("btn-create-new").onclick = () => {
+  const name = document.getElementById("new-map-name").value.trim() || "Novo Campo";
+  const cols = Math.min(24, Math.max(5, parseInt(document.getElementById("new-map-cols").value) || 14));
+  const rows = Math.min(16, Math.max(4, parseInt(document.getElementById("new-map-rows").value) || 9));
+  const env  = document.getElementById("new-map-env").value || "dungeon";
+  state = { name, cols, rows, env, cells: {} };
+  document.getElementById("bm-map-name").value = name;
+  selectedCell = null;
+  renderDetails();
+  drawMap();
+  modalNew.classList.remove("open");
+};
+modalNew.addEventListener("click", e => { if (e.target === modalNew) modalNew.classList.remove("open"); });
+
+/* ══════════════════════════════════════════════════════════
+   FEEDBACK FLASH
+   ══════════════════════════════════════════════════════════ */
+function showFlash(msg) {
+  let el = document.getElementById("bm-flash");
+  if (!el) {
+    el = document.createElement("div");
+    el.id = "bm-flash";
+    Object.assign(el.style, {
+      position:"fixed",bottom:"24px",left:"50%",transform:"translateX(-50%)",
+      background:"rgba(156,122,60,0.92)",color:"#fff",padding:"8px 18px",
+      borderRadius:"20px",fontFamily:"var(--font-heading,Georgia)",fontSize:"13px",
+      zIndex:"9999",transition:"opacity .3s",pointerEvents:"none"
+    });
+    document.body.appendChild(el);
+  }
+  el.textContent = msg;
+  el.style.opacity = "1";
+  clearTimeout(el._t);
+  el._t = setTimeout(() => { el.style.opacity = "0"; }, 1800);
+}
+
+/* Mobile toggle paleta */
+const paletteEl = document.getElementById("bm-palette");
+const toggleBtn = document.getElementById("btn-palette-toggle");
+if (window.innerWidth <= 640) {
+  toggleBtn.style.display = "";
+  toggleBtn.onclick = () => paletteEl.classList.toggle("open");
+}
+
+/* ══════════════════════════════════════════════════════════
+   INIT
+   ══════════════════════════════════════════════════════════ */
+buildPalette();
+renderDetails();
+drawMap();
+</script>
+</body>
+</html>

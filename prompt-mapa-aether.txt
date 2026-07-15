@@ -1,0 +1,39 @@
+PROMPT PARA GERAÇÃO DE MAPA — MUNDO DE AETHER
+
+Estilo: Mapa de RPG de fantasia medieval, estilo cartográfico com textura de pergaminho envelhecido, bordas ornamentadas com motivos de cobra e lobo, paleta de cores quentes (ocre, vermelho carmesim, verde-musgo, azul-profundo para o lago).
+
+LAYOUT DO CONTINENTE (único, não há ilhas):
+- Forma geral: continente irregular, mais largo que alto, com uma reentrância ao centro (onde o lago se formou)
+- Norte: Montanhas de Atrelon (cordilheira com pico central em espiral — o Castelo da Cobra)
+- Oeste: Deserto Carmesim (área de areia vermelha, marcas circulares visíveis — trilhas da salamandra)
+- Centro: Grande Lago Central (lago enorme que toca as 3 regiões ao redor, tão grande que não se vê outra margem)
+- Centro-Sul/Sudeste: Grande Planície Sudeste (campos abertos, um vulcão a noroeste da planície)
+- Leste: Reinos de Akaen (área mais urbanizada, com cidades marcadas)
+
+CRIATURAS COLOSSAIS VISÍVEIS NO MAPA (ícones em escala exagerada para impacto visual):
+1. GRANDE SALAMANDRA KARLAC: no Deserto Carmesim, forma espiral/circular, com uma miniatura de cidade no seu dorso. Cor: laranja-avermelhado. Deixa rastros circulares na areia.
+2. TARTARUGA MAGNALAGA: no centro do Grande Lago Central, emerge da água, com uma cidadela anã visível em seu casco. Cor: verde-escuro com pedra cinza no casco.
+3. DRAGÃO DOURADO DE KARLOTH: no vulcão da Grande Planície, em repouso no cume, emanando brilho dourado visível. Cor: ouro brilhante.
+
+LOCAIS MARCADOS (com ícones temáticos):
+- Castelo da Cobra (⛰ + 🐍): pico das Montanhas de Atrelon em espiral, símbolo de cobra
+- Cinco marcos dos heróis (⭐): espalhados por Akaen
+- Oásis/Posto de Comércio de Areia Vermelha (🏕): Deserto Carmesim
+- Capital de Valdris (🏰⚔): Reinos de Akaen, maior cidade
+- Torre de Arcath (🗼✨): Reinos de Akaen
+- Cidadela do Casco sobre Magnalaga (🏔🐢): centro do lago
+- Ruínas da Era Élfica (💀): espalhadas pelo continente, mais concentradas na planície e em Akaen
+- Memorial Élfico (🌊): margem norte do lago
+- Árvore de Jurgmund (🌳): Sanctum, Reinos de Akaen
+- Centro do Círculo de Karlac (🔴): deserto, ponto mais escuro
+
+TEXTO NO MAPA:
+- Título principal (centro superior): "AETHER — 500 Anos Após a Batalha Colossal"
+- Rosa dos ventos no canto
+- Legenda no rodapé com os símbolos
+- Nomes das 5 regiões em fontes diferentes (caligrafia grande e estilizada)
+- Pequenas notas históricas nas margens: "Onde a cobra caiu", "O solo que lembra", "Onde o mundo foi aberto"
+
+ATMOSFERA: O mapa deve transmitir que este é um mundo em recuperação de uma guerra titânica — há cicatrizes no território (o lago, o deserto vermelho, a formação em espiral das montanhas) mas também vida e reconstrução. O brilho dourado do dragão deve ser o elemento mais visível e esperançoso do mapa.
+
+FERRAMENTAS RECOMENDADAS: Midjourney, DALL-E 3, ou Stable Diffusion com LoRA de mapas de fantasia. Para melhor resultado, usar uma ferramenta especializada em mapas como Inkarnate ou Wonderdraft com esses elementos como referência.

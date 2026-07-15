@@ -1284,10 +1284,12 @@ document.getElementById("btn-back-sheet").addEventListener("click", () => {
 let currentGlossaryTab = "classes";
 
 
-function openBestiary()     { window.open("bestiary.html",    "_blank"); }
-function openLocations()    { window.open("locations.html",   "_blank"); }
-function openHistory()      { window.open("history.html",     "_blank"); }
-function openCampaignLog()  { window.open("campaign-log.html","_blank"); }
+function openBestiary()    { window.open("bestiary.html",    "_blank"); }
+function openLocations()   { window.open("locations.html",   "_blank"); }
+function openHistory()     { window.open("history.html",     "_blank"); }
+function openCampaignLog() { window.open("campaign-log.html","_blank"); }
+function openMap()         { window.open("map.html",         "_blank"); }
+function openBattleMap()   { window.open("battle-map.html",  "_blank"); }
 
 function openGlossary() {
   currentGlossaryTab = "classes";

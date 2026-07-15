@@ -1826,12 +1826,13 @@ const WORLD_ITEM_CATALOG = {
 /* ---------------------------------------------------------------------- */
 
 const NAV_PAGES = [
-  { icon: "📖", label: "Glossário & Tutoriais", available: true, action: "openGlossary" },
-  { icon: "🐺", label: "Bestiário", available: true, action: "openBestiary" },
-  { icon: "🗺", label: "História do Mundo", available: true, action: "openHistory" },
-  { icon: "📅", label: "Acompanhamento", available: true, action: "openCampaignLog" },
-  { icon: "🏰", label: "Locais & Reinos", available: true, action: "openLocations" },
-  { icon: "🧙", label: "NPCs Notáveis", available: false }
+  { icon: "📖", label: "Glossário & Tutoriais", available: true,  action: "openGlossary" },
+  { icon: "🐺", label: "Bestiário",             available: true,  action: "openBestiary" },
+  { icon: "🗺", label: "História do Mundo",     available: true,  action: "openHistory" },
+  { icon: "📅", label: "Acompanhamento",        available: true,  action: "openCampaignLog" },
+  { icon: "🏰", label: "Locais & Reinos",       available: true,  action: "openLocations" },
+  { icon: "🗾", label: "Mapa de Aether",        available: true,  action: "openMap" },
+  { icon: "⚔",  label: "Campo de Batalha",      available: true,  action: "openBattleMap" }
 ];
 
 /* ---------------------------------------------------------------------- */
