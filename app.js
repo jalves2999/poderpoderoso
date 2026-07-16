@@ -4084,14 +4084,161 @@ document.getElementById("add-item-modal-confirm").addEventListener("click", () =
 
 renderCharacterList();
 
+/* ── Impressão do Glossário ──────────────────────────────────────── */
+
+function _openPrintWindow(title, bodyHTML) {
+  const w = window.open("", "_blank", "width=900,height=700");
+  if (!w) { alert("Pop-up bloqueado. Permita pop-ups para esta página e tente novamente."); return; }
+  w.document.write(`<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>${title} — Grimório</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Crimson Text',Georgia,serif;font-size:12pt;color:#2a1a0e;background:#fff;padding:15mm 14mm;line-height:1.5}
+    h1{font-family:'IM Fell English',Georgia,serif;font-size:20pt;text-align:center;margin-bottom:4mm;border-bottom:2px solid #9c7a3c;padding-bottom:3mm;color:#3a2810}
+    h2{font-family:'IM Fell English',Georgia,serif;font-size:15pt;margin:6mm 0 3mm;color:#3a2810;border-bottom:1px solid #ccc;padding-bottom:1mm}
+    h3{font-family:'IM Fell English',Georgia,serif;font-size:12pt;margin:4mm 0 2mm;color:#5c3a1a}
+    .subtitle{text-align:center;color:#8a6a50;font-style:italic;margin-bottom:5mm;font-size:10pt}
+    .print-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:4mm;margin-bottom:5mm}
+    .card{border:1px solid #c8a87a;border-left:4px solid #9c7a3c;border-radius:4px;padding:3mm 4mm;break-inside:avoid;background:#fffdf8}
+    .card-name{font-family:'IM Fell English',Georgia,serif;font-size:13pt;color:#2a1a0e;margin-bottom:1mm}
+    .card-meta{display:flex;flex-wrap:wrap;gap:3mm;margin-bottom:2mm}
+    .badge{font-size:8pt;padding:1px 6px;border-radius:8px;font-family:sans-serif;color:#fff}
+    .bg-gold{background:#9c7a3c} .bg-green{background:#566248} .bg-red{background:#7a2a2e}
+    .bg-purple{background:#6a3a7a} .bg-blue{background:#2a5a8a} .bg-gray{background:#666}
+    .card-effect{font-size:10.5pt;color:#3a2810;line-height:1.55;margin-bottom:1.5mm}
+    .card-note{font-size:9.5pt;color:#5a4030;font-style:italic;border-left:2px solid #9c7a3c;padding-left:2mm;margin-top:1.5mm}
+    .card-story{font-size:9pt;color:#8a6a50;font-style:italic;margin-top:1mm}
+    .tags{display:flex;flex-wrap:wrap;gap:3mm;margin:1.5mm 0}
+    .tag{font-size:8.5pt;background:#f0e8d8;padding:1px 5px;border-radius:4px;color:#5a4030}
+    .print-footer{text-align:right;font-size:9pt;color:#aaa;margin-top:8mm;border-top:1px solid #eee;padding-top:2mm}
+    @media print{body{padding:8mm 10mm}.card{break-inside:avoid}h2{page-break-after:avoid}}
+  </style>
+</head>
+<body>
+  <h1>📖 ${title}</h1>
+  <p class="subtitle">Grimório de Personagens · Mundo de Aether · ${new Date().toLocaleDateString("pt-BR")}</p>
+  ${bodyHTML}
+  <div class="print-footer">Impresso via Grimório de Personagens</div>
+  <script>window.onload=()=>setTimeout(()=>window.print(),400)<\/script>
+</body></html>`);
+  w.document.close();
+}
+
+function printGlossarySpells() {
+  const query = document.getElementById("glossary-search").value.trim().toLowerCase();
+  const allSpells = getAllSpellsInGame();
+  const filtered = allSpells.filter(s => !query || s.name.toLowerCase().includes(query) || s.effect.toLowerCase().includes(query));
+  const byOrigin = {};
+  filtered.forEach(s => { if (!byOrigin[s.origin]) byOrigin[s.origin] = []; byOrigin[s.origin].push(s); });
+
+  let bodyHTML = "";
+  Object.keys(byOrigin).forEach(origin => {
+    const spells = byOrigin[origin].sort((a,b) => a.level - b.level);
+    bodyHTML += `<h2>${origin === "Geral" ? "✦ Magias Gerais" : origin} (${spells.length})</h2><div class="print-grid">`;
+    bodyHTML += spells.map(s => `
+      <div class="card">
+        <div class="card-name">${s.name}</div>
+        <div class="card-meta">
+          <span class="badge bg-gold">Nível ${s.level}</span>
+          ${s.cursed ? '<span class="badge bg-red">⚠ Amaldiçoada</span>' : ""}
+          ${s.divine ? `<span class="badge bg-purple">🌟 ${s.divine}</span>` : ""}
+          ${s.category ? `<span class="badge bg-gray">${s.category}</span>` : ""}
+        </div>
+        <p class="card-effect">${s.effect}</p>
+        <div class="tags">
+          <span class="tag">⏱ ${s.castTime || "1 Ação"}</span>
+          <span class="tag">↻ ${s.cooldown || "Sem limite"}</span>
+        </div>
+        ${s.note ? `<p class="card-note">${s.note}</p>` : ""}
+      </div>`).join("");
+    bodyHTML += `</div>`;
+  });
+  _openPrintWindow(`Glossário de Magias${query ? ` — "${query}"` : ""}`, bodyHTML);
+}
+
+function printGlossaryAbilities() {
+  const query = document.getElementById("glossary-search").value.trim().toLowerCase();
+  let bodyHTML = "";
+  Object.keys(CLASSES).forEach(key => {
+    const cls = CLASSES[key];
+    const skills = cls.skills.filter(s => !query || s.name.toLowerCase().includes(query) || s.effect.toLowerCase().includes(query));
+    if (!skills.length) return;
+    bodyHTML += `<h2>${cls.icon} ${cls.name} (${skills.length})</h2><div class="print-grid">`;
+    bodyHTML += skills.map(sk => {
+      const isLev = Array.isArray(sk.levels) && sk.levels.length > 1;
+      const levsHTML = isLev ? sk.levels.map((lv,i) => `<p class="card-note"><strong>Nv${i+1}:</strong> ${lv.effect}</p>`).join("") : "";
+      return `
+        <div class="card">
+          <div class="card-name">${sk.name}</div>
+          <div class="card-meta">
+            <span class="badge bg-green">${sk.cost}</span>
+            ${sk.attr ? `<span class="tag">${sk.attr}</span>` : ""}
+            ${isLev ? `<span class="badge bg-purple">Nivelável 1–${sk.levels.length}</span>` : ""}
+          </div>
+          <p class="card-effect">${sk.effect}</p>
+          ${levsHTML}
+          ${sk.example ? `<p class="card-story">Ex: ${sk.example}</p>` : ""}
+        </div>`;
+    }).join("");
+    bodyHTML += `</div>`;
+  });
+  _openPrintWindow(`Glossário de Perícias${query ? ` — "${query}"` : ""}`, bodyHTML);
+}
+
+function printGlossaryItems() {
+  const query = document.getElementById("glossary-search").value.trim().toLowerCase();
+  const matches = n => !query || n.toLowerCase().includes(query);
+  const TIER_ORDER = { comum:0, raro:1, magico:2, lendario:3, unico:4, ancestral:5 };
+  const TIER_COL   = { comum:"bg-gray", raro:"bg-blue", magico:"bg-purple", lendario:"bg-red", unico:"bg-red", ancestral:"bg-red" };
+  const sortByTier = (a,b) => (TIER_ORDER[a.tier]||0) - (TIER_ORDER[b.tier]||0);
+
+  const card = (it, statTags) => `
+    <div class="card">
+      <div class="card-name">${it.name}</div>
+      <div class="card-meta">
+        ${it.tier  ? `<span class="badge ${TIER_COL[it.tier]||"bg-gray"}">${it.tier}</span>` : ""}
+        ${it.cursed ? '<span class="badge bg-red">⚠ Amaldiçoado</span>' : ""}
+        ${it.divine ? `<span class="badge bg-purple">🌟 ${it.divine}</span>` : ""}
+      </div>
+      <div class="tags">${statTags}</div>
+      ${it.effect ? `<p class="card-effect">${it.effect}</p>` : ""}
+      ${it.note   ? `<p class="card-note">${it.note}</p>` : ""}
+      ${it.story  ? `<p class="card-story">"${it.story}"</p>` : ""}
+    </div>`;
+
+  const sections = [
+    { t:"⚔ Armas de Uma Mão",   l:WEAPONS_ONE_HAND,  s:it=>[it.dmg?`<span class="tag">⚔ ${it.dmg}</span>`:"",`<span class="tag">⚖ ${it.weight}kg</span>`,it.req?`<span class="tag">${it.req}</span>`:""].filter(Boolean).join("") },
+    { t:"⚔ Armas de Duas Mãos", l:WEAPONS_TWO_HAND,  s:it=>[it.dmg?`<span class="tag">⚔ ${it.dmg}</span>`:"",`<span class="tag">⚖ ${it.weight}kg</span>`].filter(Boolean).join("") },
+    { t:"🔮 Armas Mágicas",     l:WEAPONS_MAGIC,     s:it=>[it.dmg?`<span class="tag">⚔ ${it.dmg}</span>`:"",it.range?`<span class="tag">🎯 ${it.range}hex</span>`:""  ].filter(Boolean).join("") },
+    { t:"🏹 Armas à Distância", l:WEAPONS_RANGED,    s:it=>[it.dmg?`<span class="tag">⚔ ${it.dmg}</span>`:"",it.range?`<span class="tag">🎯 ${it.range}hex</span>`:""  ].filter(Boolean).join("") },
+    { t:"🛡 Escudos",           l:SHIELDS,           s:it=>[`<span class="tag">🛡+${it.physDefense}</span>`,`<span class="tag">⚖ ${it.weight}kg</span>`].join("") },
+    { t:"🧥 Armaduras",         l:ARMORS,            s:it=>[`<span class="tag">🛡 Fís.${it.physDefense}</span>`,`<span class="tag">✨ Mag.${it.magDefense||0}</span>`,`<span class="tag">⚖ ${it.weight}kg</span>`].join("") },
+    { t:"💍 Acessórios",        l:ACCESSORIES,       s:it=>[`<span class="tag">⚖ ${it.weight}kg</span>`].join("") },
+  ];
+  let bodyHTML = "";
+  sections.forEach(sec => {
+    const fil = sec.l.filter(i => matches(i.name)).sort(sortByTier);
+    if (!fil.length) return;
+    bodyHTML += `<h2>${sec.t} (${fil.length})</h2><div class="print-grid">`;
+    bodyHTML += fil.map(it => card(it, sec.s(it))).join("");
+    bodyHTML += `</div>`;
+  });
+  _openPrintWindow(`Glossário de Itens${query ? ` — "${query}"` : ""}`, bodyHTML);
+}
+
 /* --- Glossário de Habilidades (todas as classes) --- */
 
 function renderAbilitiesGlossary(query) {
+  let totalCount = 0;
   let html = "";
   Object.keys(CLASSES).forEach(key => {
     const cls = CLASSES[key];
     const filtered = cls.skills.filter(s => !query || s.name.toLowerCase().includes(query) || s.effect.toLowerCase().includes(query));
     if (filtered.length === 0) return;
+    totalCount += filtered.length;
     html += `<h3 class="glossary-group-title">${cls.icon} ${cls.name}</h3>`;
     html += `<div class="ability-card-grid">`;
     html += filtered.map(skill => {
@@ -4125,7 +4272,14 @@ function renderAbilitiesGlossary(query) {
   });
 
   if (!html) return `<p class="empty-inline-note">Nenhuma habilidade encontrada para "${escapeHTML(query)}".</p>`;
-  return html;
+
+  const printBtn = `
+    <div class="glossary-print-bar">
+      <span class="glossary-print-info">📖 ${totalCount} perícia(s)/habilidade(s)${query ? ` para "${escapeHTML(query)}"` : ""}</span>
+      <button class="glossary-print-btn" onclick="printGlossaryAbilities()">🖨 Imprimir Perícias</button>
+    </div>`;
+
+  return printBtn + html;
 }
 
 /* --- Glossário de Magias (todas, classe + gerais) --- */
@@ -4143,6 +4297,12 @@ function renderSpellsGlossary(query) {
   const filtered = allSpells.filter(s => !query || s.name.toLowerCase().includes(query) || s.effect.toLowerCase().includes(query));
 
   if (filtered.length === 0) return `<p class="empty-inline-note">Nenhuma magia encontrada para "${escapeHTML(query)}".</p>`;
+
+  const printBtn = `
+    <div class="glossary-print-bar">
+      <span class="glossary-print-info">📖 ${filtered.length} magia(s)${query ? ` para "${escapeHTML(query)}"` : ""}</span>
+      <button class="glossary-print-btn" onclick="printGlossarySpells()">🖨 Imprimir Magias</button>
+    </div>`;
 
   const catConfig = {
     buff:      { icon: "⬆", label: "Buffs", color: "#4a90d9" },
@@ -4182,7 +4342,7 @@ function renderSpellsGlossary(query) {
     groups[s.origin].push(s);
   });
 
-  return Object.keys(groups).map(origin => {
+  const bodyHTML = Object.keys(groups).map(origin => {
     const spells = groups[origin].sort((a, b) => a.level - b.level);
     const title = origin === "Geral"
       ? "✦ Magias Gerais (qualquer classe pode aprender)"
@@ -4210,6 +4370,8 @@ function renderSpellsGlossary(query) {
     });
     return html;
   }).join("");
+
+  return printBtn + bodyHTML;
 }
 
 /* --- Glossário de Itens (armas, armaduras, escudos, acessórios) --- */
@@ -4252,6 +4414,7 @@ function renderItemGlossaryCard(item, extraChips = "") {
 
 function renderItemsGlossary(query) {
   const matches = (name) => !query || name.toLowerCase().includes(query);
+  let totalCount = 0;
 
   const weaponSections = [
     { title: "Armas de Uma Mão", list: WEAPONS_ONE_HAND },
@@ -4269,6 +4432,7 @@ function renderItemsGlossary(query) {
   weaponSections.forEach(section => {
     const filtered = section.list.filter(w => matches(w.name)).sort(sortByTier);
     if (filtered.length === 0) return;
+    totalCount += filtered.length;
     html += `<h3 class="glossary-group-title">⚔ ${section.title}</h3>`;
     html += `<div class="item-glossary-grid">`;
     html += filtered.map(w => {
@@ -4285,6 +4449,7 @@ function renderItemsGlossary(query) {
 
   const filteredShields = SHIELDS.filter(s => matches(s.name)).sort(sortByTier);
   if (filteredShields.length > 0) {
+    totalCount += filteredShields.length;
     html += `<h3 class="glossary-group-title">🛡 Escudos</h3>`;
     html += `<div class="item-glossary-grid">`;
     html += filteredShields.map(s => {
@@ -4300,6 +4465,7 @@ function renderItemsGlossary(query) {
 
   const filteredArmors = ARMORS.filter(a => matches(a.name)).sort(sortByTier);
   if (filteredArmors.length > 0) {
+    totalCount += filteredArmors.length;
     html += `<h3 class="glossary-group-title">🧥 Armaduras</h3>`;
     html += `<div class="item-glossary-grid">`;
     html += filteredArmors.map(a => {
@@ -4316,6 +4482,7 @@ function renderItemsGlossary(query) {
 
   const filteredAccessories = ACCESSORIES.filter(a => matches(a.name)).sort(sortByTier);
   if (filteredAccessories.length > 0) {
+    totalCount += filteredAccessories.length;
     html += `<h3 class="glossary-group-title">💍 Acessórios</h3>`;
     html += `<div class="item-glossary-grid">`;
     html += filteredAccessories.map(a => {
@@ -4327,6 +4494,13 @@ function renderItemsGlossary(query) {
   }
 
   if (!html) return `<p class="empty-inline-note">Nenhum item encontrado para "${escapeHTML(query)}".</p>`;
-  return html;
+
+  const printBtn = `
+    <div class="glossary-print-bar">
+      <span class="glossary-print-info">📖 ${totalCount} item(ns)${query ? ` para "${escapeHTML(query)}"` : ""}</span>
+      <button class="glossary-print-btn" onclick="printGlossaryItems()">🖨 Imprimir Itens</button>
+    </div>`;
+
+  return printBtn + html;
 }
 
