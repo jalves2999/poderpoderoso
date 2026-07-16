@@ -2366,53 +2366,72 @@ function renderSpellsSection(character, cls) {
     <p class="section-hint">Qualquer classe pode aprender qualquer magia através de grimórios. Equipe até <strong>${totalSlots} magia(s)</strong> nos slots disponíveis (INT + SAB = ${totalSlots}). Cada magia equipada consome 1 slot.</p>
 
     <div class="spell-card-grid">
-      ${known.map(name => {
-        const s = allSpells.find(x => x.name === name);
-        if (!s) return "";
-        const isSlow = s.castTime && !s.castTime.includes("instantânea") && !s.castTime.includes("1 Ação");
-        const isActive = active.includes(name);
-        const canEquip = !isActive && usedSlots < totalSlots;
+      ${(() => {
+          const sortedKnown = [...known].sort((a, b) => {
+            const aActive = active.includes(a) ? 0 : 1;
+            const bActive = active.includes(b) ? 0 : 1;
+            return aActive - bActive;
+          });
+          const activeKnown   = sortedKnown.filter(n => active.includes(n));
+          const inactiveKnown = sortedKnown.filter(n => !active.includes(n));
+          const needsSeparator = activeKnown.length > 0 && inactiveKnown.length > 0;
 
-        // Extrai dados mecânicos importantes do effect para destacar
-        const dmgMatch = s.effect.match(/(\d+d\d+(?:\s*[+\-]\s*\d+d\d+)*)\s*de\s*dano/i);
-        const healMatch = s.effect.match(/recupera\s+(\d+d\d+[^,.;]*(?:HP|vida))/i) || s.effect.match(/cura\s+(\d+d\d+[^,.;]*)/i);
-        const rangeMatch = s.effect.match(/raio\s+(\d+(?:\s*hex)?)|alcance\s+(\d+(?:\s*hex)?)/i);
-        const areaMatch = s.effect.match(/área\s+([\d]+x[\d]+(?:\s*hex)?)/i);
-        const durationMatch = s.effect.match(/por\s+(\d+\s*rodadas?)/i) || s.effect.match(/por\s+(\d+\s*turnos?)/i);
-        const isRestrictedCooldown = s.cooldown && (s.cooldown.includes("dia") || s.cooldown.includes("semana") || s.cooldown.includes("sessão"));
+          const renderCard = name => {
+            const s = allSpells.find(x => x.name === name);
+            if (!s) return "";
+            const isSlow = s.castTime && !s.castTime.includes("instantânea") && !s.castTime.includes("1 Ação");
+            const isActive = active.includes(name);
+            const canEquip = !isActive && usedSlots < totalSlots;
 
-        const highlights = [
-          dmgMatch   && `<span class="spell-hl spell-hl-dmg">⚔ ${dmgMatch[1]}</span>`,
-          healMatch  && `<span class="spell-hl spell-hl-heal">💚 ${healMatch[1]}</span>`,
-          areaMatch  && `<span class="spell-hl spell-hl-area">📐 ${areaMatch[1]}</span>`,
-          rangeMatch && `<span class="spell-hl spell-hl-range">🎯 ${rangeMatch[1] || rangeMatch[2]}</span>`,
-          durationMatch && `<span class="spell-hl spell-hl-duration">⏳ ${durationMatch[1]}</span>`,
-        ].filter(Boolean).join("");
+            const dmgMatch  = s.effect.match(/(\d+d\d+(?:\s*[+\-]\s*\d+d\d+)*)\s*de\s*dano/i);
+            const healMatch = s.effect.match(/recupera\s+(\d+d\d+[^,.;]*(?:HP|vida))/i) || s.effect.match(/cura\s+(\d+d\d+[^,.;]*)/i);
+            const rangeMatch   = s.effect.match(/raio\s+(\d+(?:\s*hex)?)|alcance\s+(\d+(?:\s*hex)?)/i);
+            const areaMatch    = s.effect.match(/área\s+([\d]+x[\d]+(?:\s*hex)?)/i);
+            const durationMatch = s.effect.match(/por\s+(\d+\s*rodadas?)/i) || s.effect.match(/por\s+(\d+\s*turnos?)/i);
 
-        return `
-        <div class="spell-card spell-level-${s.level} ${isActive ? "spell-card-active" : ""}">
-          <div class="spell-card-head">
-            <span class="spell-card-name">${name}</span>
-            <div style="display:flex;gap:5px;align-items:center;">
-              <span class="spell-card-level-badge">Nível ${s.level}</span>
-              <button class="skill-remove-btn" data-remove-spell="${escapeHTML(name)}" title="Esquecer esta magia">×</button>
-            </div>
-          </div>
-          <span class="spell-card-origin">${s.origin}</span>
-          ${highlights ? `<div class="spell-highlights">${highlights}</div>` : ""}
-          <p class="spell-card-effect">${s.effect}</p>
-          <div class="spell-card-meta-row">
-            <span class="spell-meta-tag ${isSlow ? "spell-meta-tag-slow" : ""}">⏱ ${s.castTime || "1 Ação"}</span>
-            <span class="spell-meta-tag spell-meta-tag-cooldown">↻ ${s.cooldown || "Sem limite"}</span>
-          </div>
-          <button class="spell-equip-btn ${isActive ? "spell-equip-btn-active" : ""}"
-            data-${isActive ? "unequip" : "equip"}-spell="${escapeHTML(name)}"
-            ${!isActive && !canEquip ? "disabled" : ""}>
-            ${isActive ? "🔮 Em Uso — Desequipar" : canEquip ? "⚡ Equipar (usar slot)" : "🔒 Sem slots disponíveis"}
-          </button>
-        </div>`;
-      }).join("")}
+            const highlights = [
+              dmgMatch      && `<span class="spell-hl spell-hl-dmg">⚔ ${dmgMatch[1]}</span>`,
+              healMatch     && `<span class="spell-hl spell-hl-heal">💚 ${healMatch[1]}</span>`,
+              areaMatch     && `<span class="spell-hl spell-hl-area">📐 ${areaMatch[1]}</span>`,
+              rangeMatch    && `<span class="spell-hl spell-hl-range">🎯 ${rangeMatch[1] || rangeMatch[2]}</span>`,
+              durationMatch && `<span class="spell-hl spell-hl-duration">⏳ ${durationMatch[1]}</span>`,
+            ].filter(Boolean).join("");
+
+            return `
+            <div class="spell-card spell-level-${s.level} ${isActive ? "spell-card-active" : ""}">
+              <div class="spell-card-head">
+                <span class="spell-card-name">${name}</span>
+                <div style="display:flex;gap:5px;align-items:center;">
+                  <span class="spell-card-level-badge">Nível ${s.level}</span>
+                  <button class="skill-remove-btn" data-remove-spell="${escapeHTML(name)}" title="Esquecer esta magia">×</button>
+                </div>
+              </div>
+              <span class="spell-card-origin">${s.origin}</span>
+              ${highlights ? `<div class="spell-highlights">${highlights}</div>` : ""}
+              <p class="spell-card-effect">${s.effect}</p>
+              <div class="spell-card-meta-row">
+                <span class="spell-meta-tag ${isSlow ? "spell-meta-tag-slow" : ""}">⏱ ${s.castTime || "1 Ação"}</span>
+                <span class="spell-meta-tag spell-meta-tag-cooldown">↻ ${s.cooldown || "Sem limite"}</span>
+              </div>
+              <button class="spell-equip-btn ${isActive ? "spell-equip-btn-active" : ""}"
+                data-${isActive ? "unequip" : "equip"}-spell="${escapeHTML(name)}"
+                ${!isActive && !canEquip ? "disabled" : ""}>
+                ${isActive ? "🔮 Em Uso — Desequipar" : canEquip ? "⚡ Equipar (usar slot)" : "🔒 Sem slots disponíveis"}
+              </button>
+            </div>`;
+          };
+
+          const equipadasHTML  = activeKnown.map(renderCard).join("");
+          const separadorHTML  = needsSeparator
+            ? `<div class="spell-separator">Não equipadas (${inactiveKnown.length})</div>`
+            : "";
+          const restantesHTML  = inactiveKnown.map(renderCard).join("");
+
+          return equipadasHTML + separadorHTML + restantesHTML;
+        })()}
       ${known.length === 0 ? `<p class="empty-inline-note">Nenhuma magia conhecida ainda.</p>` : ""}
+    </div>
+
     </div>
 
     <h4 class="learn-subtitle">Aprender Nova Magia (em um grimório)</h4>

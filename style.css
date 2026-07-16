@@ -3844,3 +3844,105 @@ main {
   color: var(--parchment);
   border-style: solid;
 }
+
+/* ================================================================
+   MAGIAS EQUIPADAS — background destacado e separador visual
+   ================================================================ */
+
+/* Remove o estilo anterior mínimo e aplica background forte */
+.spell-card-active {
+  background: linear-gradient(135deg,
+    rgba(156,122,60,0.18) 0%,
+    rgba(186,152,80,0.10) 100%) !important;
+  border-left: 4px solid var(--gold) !important;
+  box-shadow: 0 0 0 2px rgba(156,122,60,0.45), 0 2px 8px rgba(156,122,60,0.12);
+  position: relative;
+}
+
+/* Sobreposição de nível de cor — garantir que o background domina */
+.spell-level-3.spell-card-active {
+  background: linear-gradient(135deg,
+    rgba(86,98,74,0.22) 0%,
+    rgba(156,122,60,0.10) 100%) !important;
+  box-shadow: 0 0 0 2px rgba(86,98,74,0.55), 0 2px 8px rgba(86,98,74,0.12);
+}
+.spell-level-4.spell-card-active,
+.spell-level-5.spell-card-active {
+  background: linear-gradient(135deg,
+    rgba(125,42,46,0.15) 0%,
+    rgba(156,122,60,0.08) 100%) !important;
+  box-shadow: 0 0 0 2px rgba(125,42,46,0.45), 0 2px 8px rgba(125,42,46,0.10);
+}
+
+/* Badge "🔮 Em Uso" — cor mais visível */
+.spell-card-active::before {
+  background: var(--gold) !important;
+  color: var(--parchment) !important;
+  font-weight: 700;
+  padding: 2px 8px !important;
+  border-radius: 0 0 6px 6px !important;
+  letter-spacing: 0.3px;
+}
+
+/* Separador visual entre equipadas e não equipadas */
+.spell-card-grid .spell-separator {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 0;
+  margin: 6px 0 2px;
+  color: var(--ink-soft);
+  font-family: var(--font-heading);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.spell-card-grid .spell-separator::before,
+.spell-card-grid .spell-separator::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+
+/* ================================================================
+   MOBILE — font-size aumentado para textos de descrição
+   ================================================================ */
+
+@media (max-width: 480px) {
+  /* Textos de efeito / descrição em cards */
+  .spell-card-effect       { font-size: 14px !important; line-height: 1.6 !important; }
+  .ability-card-effect     { font-size: 14px !important; line-height: 1.6 !important; }
+  .ability-card-example    { font-size: 13px !important; }
+  .pick-item-desc          { font-size: 14px !important; }
+  .pick-item-example       { font-size: 13px !important; }
+  .skill-test-combat-desc  { font-size: 13px !important; line-height: 1.55 !important; }
+
+  /* Hints e notas de seção */
+  .section-hint            { font-size: 13.5px !important; line-height: 1.6 !important; }
+  .empty-inline-note       { font-size: 14px !important; }
+  .equip-slot-empty-note   { font-size: 13px !important; }
+  .carry-meter-note        { font-size: 13px !important; }
+
+  /* Preview do catálogo de itens */
+  .catalog-preview-effect  { font-size: 13px !important; line-height: 1.6 !important; }
+  .catalog-preview-note    { font-size: 13px !important; }
+  .catalog-preview-story   { font-size: 12.5px !important; }
+
+  /* Notas e histórias de itens no glossário */
+  .item-glossary-note      { font-size: 13px !important; }
+  .item-glossary-story     { font-size: 12.5px !important; }
+  .item-glossary-unique-ability { font-size: 13px !important; }
+
+  /* Tags de magia (castTime, cooldown) */
+  .spell-meta-tag          { font-size: 12.5px !important; padding: 5px 10px !important; }
+
+  /* Textos de habilidades no picker */
+  .attr-row-desc           { font-size: 13px !important; }
+  .choice-desc             { font-size: 13px !important; }
+
+  /* Bestiário mobile */
+  .monster-ability-desc    { font-size: 13px !important; line-height: 1.6 !important; }
+  .monster-behavior        { font-size: 13px !important; }
+}
