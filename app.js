@@ -2084,7 +2084,7 @@ function renderDerivedSection(character, cls) {
     { label: "Defesa Física", value: physDef, tooltip: "Reduz o dano de ataques físicos recebidos. Vem da armadura equipada e do escudo (se houver)." },
     { label: "Defesa Mágica", value: magDef, tooltip: "Reduz o dano de magias e ataques mágicos recebidos. Vem principalmente de armaduras arcanas/sagradas e itens mágicos." },
     { label: "Chance de Esquiva", value: `${dodge} ou menos (d20)`, tooltip: "Role 1d20: se o resultado for igual ou menor que este valor, você esquiva totalmente do ataque. Base 10 + AGI. Armas de duas mãos pesadas (sem a perícia 'Defesa com Armas Pesadas') aplicam −2." },
-    { label: "Slots de Magia", value: slots, tooltip: "Quantas magias você pode conjurar antes de descansar. Equivale a INT + SAB. Classes conjuradoras têm garantia de pelo menos 1." },
+    { label: "Slots de Magia", value: `${(character.activeSpells||[]).length}/${slots}`, tooltip: "Slots em uso / total disponível (INT + SAB). Cada magia equipada consome 1 slot. Desequipe magias para liberar slots. Classes conjuradoras têm garantia de pelo menos 1." },
     { label: "Carga", value: `${weight} / ${carry}`, tooltip: "Peso atual carregado / capacidade máxima. Base 15 + (FOR × 5), mais um bônus fixo por nível que varia por classe." }
   ];
 
@@ -2360,10 +2360,10 @@ function renderSpellsSection(character, cls) {
     <h3 class="sheet-section-title">
       Magias Conhecidas
       <span class="spell-slots-counter ${usedSlots >= totalSlots ? "spell-slots-full" : ""}">
-        ${usedSlots}/${totalSlots} slots
+        ${usedSlots}/${totalSlots} slots em uso
       </span>
     </h3>
-    <p class="section-hint">Qualquer classe pode aprender qualquer magia através de grimórios. Equipe até <strong>${totalSlots} magia(s)</strong> nos slots disponíveis para que estejam em uso durante a aventura.</p>
+    <p class="section-hint">Qualquer classe pode aprender qualquer magia através de grimórios. Equipe até <strong>${totalSlots} magia(s)</strong> nos slots disponíveis (INT + SAB = ${totalSlots}). Cada magia equipada consome 1 slot.</p>
 
     <div class="spell-card-grid">
       ${known.map(name => {
