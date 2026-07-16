@@ -371,7 +371,7 @@ function calcSkillTest(character, skillTest) {
   };
 }
 
-/* Capacidade de Carga = 15 + FOR*5 + carryPerLevel da classe * (nivel - 1) */
+/* Capacidade de Carga = 20 + FOR*5 + carryPerLevel da classe * (nivel - 1) */
 function calcCarryCapacity(character) {
   const cls = getClassDef(character.classKey);
   const carryPerLevel = cls && cls.carryPerLevel ? cls.carryPerLevel : 0;
@@ -1442,7 +1442,7 @@ function renderRulesTab() {
               <ul class="rules-list">
                 <li>HP máximo: <code>20 + FOR × hpPerFor</code> (varia por classe)</li>
                 <li>Dano natural corpo a corpo (tabela abaixo)</li>
-                <li>Carga máxima: <code>15 + FOR × 5</code></li>
+                <li>Carga máxima: <code>20 + FOR × 5</code></li>
               </ul>
               <div class="rules-sub-table">
                 <div class="rules-sub-row"><span>FOR 0</span><span>—</span></div>
@@ -1588,7 +1588,7 @@ function renderRulesTab() {
           </div>
           <div class="rules-callout rules-callout-gold">
             <strong>📦 Carga</strong>
-            <p>Fórmula: <code>15 + FOR × 5 + carryPerLevel × (Nível−1) + bônus de itens</code></p>
+            <p>Fórmula: <code>20 + FOR × 5 + carryPerLevel × (Nível−1) + bônus de itens</code></p>
             <ul class="rules-list">
               <li>Se o peso total dos itens equipados + inventário exceder a Carga, o personagem fica Sobrecarregado</li>
               <li>Sobrecarregado: −2 em todos os testes físicos e Movimento reduzido à metade</li>
@@ -2085,7 +2085,7 @@ function renderDerivedSection(character, cls) {
     { label: "Defesa Mágica", value: magDef, tooltip: "Reduz o dano de magias e ataques mágicos recebidos. Vem principalmente de armaduras arcanas/sagradas e itens mágicos." },
     { label: "Chance de Esquiva", value: `${dodge} ou menos (d20)`, tooltip: "Role 1d20: se o resultado for igual ou menor que este valor, você esquiva totalmente do ataque. Base 10 + AGI. Armas de duas mãos pesadas (sem a perícia 'Defesa com Armas Pesadas') aplicam −2." },
     { label: "Slots de Magia", value: `${(character.activeSpells||[]).length}/${slots}`, tooltip: "Slots em uso / total disponível (INT + SAB). Cada magia equipada consome 1 slot. Desequipe magias para liberar slots. Classes conjuradoras têm garantia de pelo menos 1." },
-    { label: "Carga", value: `${weight} / ${carry}`, tooltip: "Peso atual carregado / capacidade máxima. Base 15 + (FOR × 5), mais um bônus fixo por nível que varia por classe." }
+    { label: "Carga", value: `${weight} / ${carry}`, tooltip: "Peso atual carregado / capacidade máxima. Base 20 + (FOR × 5), mais um bônus fixo por nível que varia por classe." }
   ];
 
   if (healBonus > 0) {
