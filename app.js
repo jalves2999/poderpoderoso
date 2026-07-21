@@ -41,7 +41,7 @@ let currentSheetId = null;
 
 /* Wizard draft state */
 let wizard = null;
-const WIZARD_STEPS = 7;
+const WIZARD_STEPS = 8;
 
 function freshWizardDraft() {
   return {
@@ -49,6 +49,8 @@ function freshWizardDraft() {
     origin: "",
     rosterType: "pc",
     classKey: null,
+    subclass: null,       // chave da subclasse (ex: "necromante")
+    subclassSkills: [],   // IDs das 2 habilidades escolhidas
     attrs: { FOR: 0, DEX: 0, AGI: 0, INT: 0, SAB: 0 },
     attrPointsLeft: CREATION_ATTR_POINTS,
     classSkills: [],
@@ -693,11 +695,12 @@ function goToWizardStep(step) {
   renderWizardProgress();
 
   // Render content needed for this step right before showing it
-  if (step === 3) renderAttributeStep();
-  if (step === 4) renderSkillStep();
-  if (step === 5) renderSpellStep();
-  if (step === 6) renderEquipmentStep();
-  if (step === 7) renderReviewStep();
+  if (step === 3) renderSubclassStep();
+  if (step === 4) renderAttributeStep();
+  if (step === 5) renderSkillStep();
+  if (step === 6) renderSpellStep();
+  if (step === 7) renderEquipmentStep();
+  if (step === 8) renderReviewStep();
 
   const backBtn = document.getElementById("btn-wizard-back");
   const nextBtn = document.getElementById("btn-wizard-next");
@@ -724,15 +727,20 @@ function validateStep(step) {
     return true;
   }
   if (step === 3) {
-    if (wizard.attrPointsLeft > 0) { showToast(`Ainda restam ${wizard.attrPointsLeft} ponto(s) de atributo para distribuir.`); return false; }
+    if (!wizard.subclass) { showToast("Escolha uma subclasse para continuar."); return false; }
+    if (wizard.subclassSkills.length !== 2) { showToast("Selecione exatamente 2 habilidades da subclasse."); return false; }
     return true;
   }
   if (step === 4) {
+    if (wizard.attrPointsLeft > 0) { showToast(`Ainda restam ${wizard.attrPointsLeft} ponto(s) de atributo para distribuir.`); return false; }
+    return true;
+  }
+  if (step === 5) {
     if (wizard.classSkills.length !== 2) { showToast("Escolha exatamente 2 perícias de classe."); return false; }
     if (wizard.generalSkills.length !== 1) { showToast("Escolha 1 perícia geral."); return false; }
     return true;
   }
-  if (step === 5) {
+  if (step === 6) {
     if (isCasterClass() && !wizard.startSpell) { showToast("Escolha uma magia inicial."); return false; }
     return true;
   }
@@ -742,14 +750,14 @@ function validateStep(step) {
 document.getElementById("btn-wizard-next").addEventListener("click", () => {
   if (!validateStep(wizardCurrentStep)) return;
   let next = wizardCurrentStep + 1;
-  // pular etapa 5 se a classe não conjura magia
-  if (next === 5 && !isCasterClass()) next = 6;
+  // pular etapa 6 (magia) se a classe não conjura magia
+  if (next === 6 && !isCasterClass()) next = 7;
   if (next <= WIZARD_STEPS) goToWizardStep(next);
 });
 
 document.getElementById("btn-wizard-back").addEventListener("click", () => {
   let prev = wizardCurrentStep - 1;
-  if (prev === 5 && !isCasterClass()) prev = 4;
+  if (prev === 6 && !isCasterClass()) prev = 5;
   if (prev >= 1) goToWizardStep(prev);
 });
 
@@ -817,6 +825,111 @@ function renderClassDetail() {
     <p>${cls.resourceDesc}</p>
     <div class="class-detail-bonus">Bônus inicial ao escolher esta classe: <strong>+1 ${cls.startBonusAttr} (${ATTR_NAMES[cls.startBonusAttr]})</strong></div>
   `;
+}
+
+/* --- Etapa 3: Subclasse --- */
+
+function renderSubclassStep() {
+  const classKey  = wizard.classKey;
+  const choiceRow = document.getElementById("choice-subclass");
+  const detailBox = document.getElementById("subclass-detail");
+
+  choiceRow.innerHTML = Object.entries(SUBCLASSES).map(([key, sc]) => {
+    const hasSynergy = sc.sinergyClasses.includes(classKey);
+    const isChosen   = wizard.subclass === key;
+    return `
+      <div class="choice-card ${isChosen ? "selected" : ""} ${hasSynergy ? "choice-card-synergy" : ""}"
+           data-subclass="${key}">
+        <div class="choice-icon">${sc.icon}</div>
+        <div class="choice-name">${sc.name}</div>
+        ${hasSynergy ? `<div class="choice-synergy-badge">✨ Sinergia</div>` : ""}
+      </div>`;
+  }).join("");
+
+  choiceRow.querySelectorAll("[data-subclass]").forEach(card => {
+    card.addEventListener("click", () => {
+      wizard.subclass      = card.dataset.subclass;
+      wizard.subclassSkills = [];
+      document.querySelectorAll("#choice-subclass .choice-card").forEach(c => c.classList.remove("selected"));
+      card.classList.add("selected");
+      renderSubclassDetail();
+    });
+  });
+
+  if (wizard.subclass) renderSubclassDetail();
+  else detailBox.classList.add("hidden");
+}
+
+function renderSubclassDetail() {
+  const sc     = SUBCLASSES[wizard.subclass];
+  const detail = document.getElementById("subclass-detail");
+  if (!sc) { detail.classList.add("hidden"); return; }
+  detail.classList.remove("hidden");
+
+  const classKey   = wizard.classKey;
+  const hasSynergy = sc.sinergyClasses.includes(classKey);
+  const chosen     = wizard.subclassSkills;
+
+  detail.innerHTML = `
+    <div class="subclass-header">
+      <span class="subclass-icon-lg">${sc.icon}</span>
+      <div class="subclass-header-text">
+        <h3 class="subclass-title">${sc.name}</h3>
+        <p class="subclass-desc">${sc.description}</p>
+        ${hasSynergy ? `<p class="subclass-synergy-note">✨ <strong>Sinergia com sua classe:</strong> ${sc.sinergyNote}</p>` : ""}
+      </div>
+    </div>
+    <p class="subclass-pick-hint">
+      Escolha <strong>2 habilidades</strong> para adicionar à sua ficha — essas ficam disponíveis para evoluir com pontos de nível. As outras 2 ficam inacessíveis.
+      <span class="pick-counter" id="subclass-skill-counter">${chosen.length}/2</span>
+    </p>
+    <div class="subclass-skills-grid" id="subclass-skills-grid">
+      ${sc.skills.map(sk => {
+        const isChosen   = chosen.includes(sk.id);
+        const isSynergy  = !sk.commonToAll && Array.isArray(sk.sinergyClasses) && sk.sinergyClasses.includes(classKey);
+        const isCommon   = sk.commonToAll;
+        const isDisabled = !isChosen && chosen.length >= 2;
+        return `
+          <div class="subclass-skill-card ${isChosen ? "ssc-chosen" : ""} ${isDisabled ? "ssc-disabled" : ""} ${isSynergy ? "ssc-synergy" : ""}"
+               data-skill-id="${sk.id}">
+            <div class="ssc-header">
+              <span class="ssc-name">${sk.name}</span>
+              <div class="ssc-badges">
+                ${isCommon  ? `<span class="ssc-badge ssc-badge-common">Qualquer classe</span>` : ""}
+                ${isSynergy ? `<span class="ssc-badge ssc-badge-synergy">✨ Sinergia</span>`    : ""}
+                <span class="ssc-badge ssc-badge-tier">${sk.cost}</span>
+              </div>
+            </div>
+            <p class="ssc-effect">${sk.effect}</p>
+            <div class="ssc-levels">
+              ${sk.levels.map(lv => `<p class="ssc-level"><strong>Nível ${lv.level}:</strong> ${lv.effect}</p>`).join("")}
+            </div>
+            ${sk.example ? `<p class="ssc-example">"${sk.example}"</p>` : ""}
+            <button class="ssc-choose-btn ${isChosen ? "ssc-chosen" : ""}" data-btn-skill="${sk.id}" ${isDisabled ? "disabled" : ""}>
+              ${isChosen ? "✔ Selecionada — remover" : isDisabled ? "🔒 Limite atingido" : "+ Selecionar"}
+            </button>
+          </div>`;
+      }).join("")}
+    </div>`;
+
+  detail.querySelectorAll("[data-skill-id]").forEach(card => {
+    card.addEventListener("click", e => {
+      if (e.target.closest("button")) return; // handled by button
+    });
+  });
+  detail.querySelectorAll("[data-btn-skill]").forEach(btn => {
+    btn.addEventListener("click", e => {
+      e.stopPropagation();
+      const id = btn.dataset.btnSkill;
+      if (wizard.subclassSkills.includes(id)) {
+        wizard.subclassSkills = wizard.subclassSkills.filter(x => x !== id);
+      } else {
+        if (wizard.subclassSkills.length >= 2) return;
+        wizard.subclassSkills.push(id);
+      }
+      renderSubclassDetail();
+    });
+  });
 }
 
 /* --- Etapa 3: Atributos --- */
@@ -1070,6 +1183,18 @@ function renderReviewStep() {
       <h4>Classe</h4>
       <p>${cls.icon} ${cls.name} — ${cls.role}</p>
     </div>
+    ${wizard.subclass ? (() => {
+      const sc = SUBCLASSES[wizard.subclass];
+      const skillNames = (wizard.subclassSkills || []).map(id => {
+        const sk = sc?.skills.find(s => s.id === id);
+        return sk ? sk.name : id;
+      });
+      return `<div class="review-block">
+        <h4>Subclasse</h4>
+        <p>${sc?.icon || ""} ${sc?.name || wizard.subclass}</p>
+        <p style="font-size:12px;color:var(--ink-soft);margin-top:4px">Habilidades: ${skillNames.join(" · ") || "—"}</p>
+      </div>`;
+    })() : ""}
     <div class="review-block">
       <h4>Atributos finais (com bônus de classe)</h4>
       <div class="review-attr-chips">
@@ -1101,18 +1226,25 @@ function finalizeCharacterCreation() {
     name: wizard.name.trim(),
     origin: wizard.origin.trim(),
     classKey: wizard.classKey,
+    subclassKey: wizard.subclass || null,         // subclasse escolhida
     level: 1,
     xp: 0,
     unspentAttrPoints: 0,
     unspentSkillPoints: 0,
     attrs: finalAttrs,
-    currentHP: null, // será setado para maxHP após cálculo
+    currentHP: null,
     currentResource: 0,
     skills: {
       class: [...wizard.classSkills, ...(wizard.combatSkills || [])],
       general: [...wizard.generalSkills],
-      abilities: cls.skills.length > 0 ? [cls.skills[0].name] : [], // 1ª habilidade V1 gratuita no nível 1
-      abilityLevels: cls.skills.length > 0 ? { [cls.skills[0].name]: 1 } : {}, // nível atual de cada habilidade V1
+      abilities: [
+        ...(cls.skills.length > 0 ? [cls.skills[0].name] : []),
+        ...(wizard.subclassSkills || [])           // habilidades de subclasse escolhidas
+      ],
+      abilityLevels: {
+        ...(cls.skills.length > 0 ? { [cls.skills[0].name]: 1 } : {}),
+        ...(wizard.subclassSkills || []).reduce((acc, id) => ({ ...acc, [id]: 1 }), {})
+      },
     },
     spells: wizard.startSpell ? [wizard.startSpell] : [],
     activeSpells: [], // magias preparadas/equipadas em uso (limitado pelos Slots de Magia)

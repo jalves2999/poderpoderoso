@@ -23,7 +23,7 @@ const ATTR_DESC = {
 
 const CREATION_ATTR_POINTS = 2;
 const XP_PER_LEVEL = 1000;
-const CARRY_BASE = 15;
+const CARRY_BASE = 20;
 const CARRY_PER_FOR = 5;
 const ABILITY_MAX_LEVEL = 3;
 
@@ -1777,6 +1777,426 @@ const MISC_ITEMS = [
     effect: "Cada pedaço escreve marcas visíveis apenas para quem conjurou. Útil para: marcar passagens já exploradas, deixar mensagens para aliados específicos, traçar símbolos de alerta. Dura 24 horas ou até ser apagado com água benta.",
     story: "Branco, inodoro. Parece giz comum até a segunda olhada. Na segunda olhada, você percebe que estava olhando sem enxergar." }
 ];
+
+
+/* ================================================================
+   SUBCLASSES — Escolhidas após a classe no wizard
+   Cada subclasse tem 4 habilidades; o jogador escolhe 2 para
+   adicionar à ficha como habilidades disponíveis para comprar.
+   sinergyClasses: classes que têm bônus extras com esta subclasse
+   commonToAll: true = qualquer classe pode pegar
+   ================================================================ */
+const SUBCLASSES = {
+
+  necromante: {
+    name: "Necromante",
+    icon: "💀",
+    description: "Estuda o limite entre vida e morte. Invoca aliados dos mortos, drena energia vital e comanda exércitos de ossos e carne corrompida.",
+    sinergyClasses: ["mago", "clerigo"],
+    sinergyNote: "Magos e Clérigos: mortos-vivos invocados têm +25% de HP e +1d4 de dano.",
+    skills: [
+      {
+        id: "sub-necro-levanta",
+        name: "Levantar das Cinzas",
+        cost: "2 pontos",
+        tier: 1,
+        commonToAll: true,
+        effect: "1 vez por combate: levanta um cadáver adjacente como Morto-Vivo Menor aliado (HP=30, dano=1d6, age no seu turno). Máximo de 1 morto ativo com este nível.",
+        levels: [
+          { level: 1, effect: "1 Morto-Vivo Menor (HP 30, dano 1d6, dura o combate)." },
+          { level: 2, effect: "2 Mortos-Vivos simultaneamente. HP 40, dano 1d8." },
+          { level: 3, effect: "3 Mortos. HP 55, dano 1d10. Ao morrer, cada um explode (1d6 raio 1 hex)." }
+        ],
+        example: "O feiticeiro aponta para o guarda caído — a carcaça se levanta como escudo de ossos."
+      },
+      {
+        id: "sub-necro-drenar",
+        name: "Drenar Essência",
+        cost: "2 pontos",
+        tier: 1,
+        commonToAll: true,
+        effect: "Ação de Magia: drena 1d8+SAB HP de um alvo vivo visível em até 6 hex. Cura o necromante pela metade (arredondado para cima). Resistência FOR (normal) para metade do dano.",
+        levels: [
+          { level: 1, effect: "1d8+SAB de dano, cura metade." },
+          { level: 2, effect: "2d8+SAB de dano, cura metade. Falha na resistência: reduz 1 FOR temporariamente." },
+          { level: 3, effect: "3d8+SAB, cura total (não metade). FOR afetada retorna só após descanso longo." }
+        ],
+        example: "A vitalidade da vítima flui como névoa dourada até as mãos do necromante."
+      },
+      {
+        id: "sub-necro-aura",
+        name: "Aura dos Sepulcros",
+        cost: "3 pontos",
+        tier: 2,
+        commonToAll: false,
+        sinergyClasses: ["mago", "clerigo"],
+        effect: "Passivo: emana uma aura de 3 hex que causa −1d4 em todos os testes de inimigos nessa área. Mortos-vivos aliados no raio ganham +2 de Defesa Física e regeneram 2 HP/rodada.",
+        levels: [
+          { level: 1, effect: "Aura 3 hex. −1d4 nos testes de inimigos. Mortos: +2 Def e regen 2 HP/r." },
+          { level: 2, effect: "Aura 5 hex. −1d6. Mortos: +3 Def e regen 4 HP/r." },
+          { level: 3, effect: "Aura 7 hex. −1d8. Mortos ganham Imunidade a Medo e regeneram 6 HP/r." }
+        ],
+        example: "O ar ao redor do necromante cheira a tumba — os aliados mortos-vivos ficam mais eretos, mais fortes."
+      },
+      {
+        id: "sub-necro-lich",
+        name: "Forma Lich Parcial",
+        cost: "4 pontos",
+        tier: 2,
+        commonToAll: false,
+        sinergyClasses: ["mago"],
+        effect: "Ativa por 3 rodadas (1x/combate): o necromante torna-se parcialmente não-morto — imune a veneno e dano psíquico, ganha +1d6 em magias de necromancia, e ao morrer durante a forma, pode rolar SAB (crítico) para estabilizar em 1 HP em vez de morrer.",
+        levels: [
+          { level: 1, effect: "3 rodadas. Imune a veneno e psíquico. +1d6 em magias de necromancia." },
+          { level: 2, effect: "5 rodadas. +2d6. Ao estabilizar: retorna com 1d10 HP." },
+          { level: 3, effect: "Combate inteiro. +3d6. Imune a Derrubado/Empurrado. Retorna com 2d10 HP." }
+        ],
+        example: "Seus olhos ficam ocos por um momento — nem vivo, nem morto. Uma fronteira que nenhum outro mortal cruza em vida."
+      }
+    ]
+  },
+
+  bardo: {
+    name: "Bardo",
+    icon: "🎭",
+    description: "Arte como arma. O bardo usa música, palavras e ilusão para inspirar aliados, desconcertar inimigos e dobrar a realidade ao redor de sua performance.",
+    sinergyClasses: ["mago", "ladino"],
+    sinergyNote: "Magos e Ladinos: bônus de buff dura +1 rodada extra e Furtividade após performance tem −1 grau de dificuldade.",
+    skills: [
+      {
+        id: "sub-bardo-inspira",
+        name: "Inspiração Bardíca",
+        cost: "2 pontos",
+        tier: 1,
+        commonToAll: true,
+        effect: "Ação de Magia: escolhe um aliado visível. Ele ganha +1d6 em todos os ataques e testes por 2 rodadas. Pode ser usado no turno do aliado (como Reação).",
+        levels: [
+          { level: 1, effect: "+1d6 em ataques e testes por 2 rodadas. 2 usos/combate." },
+          { level: 2, effect: "+1d8. 3 usos. Pode afetar 2 aliados diferentes por uso." },
+          { level: 3, effect: "+1d10. Ilimitado. Aliados afetados também curam 1d6 HP ao receber o bônus." }
+        ],
+        example: "Uma frase no momento certo pode valer mais que qualquer espada."
+      },
+      {
+        id: "sub-bardo-persuasao",
+        name: "Palavras de Mel",
+        cost: "2 pontos",
+        tier: 1,
+        commonToAll: true,
+        effect: "Fora de combate: +1d6 em todos os testes de Persuasão, Sedução, Negociação e Enganação. Em combate: 1 Ação de Magia para tentar convencer 1 inimigo a não atacar por 1 rodada (SAB difícil para resistir).",
+        levels: [
+          { level: 1, effect: "+1d6 social. Convencer inimigo: SAB difícil." },
+          { level: 2, effect: "+1d8 social. Pode convencer até 2 inimigos com 1 Ação. SAB difícil." },
+          { level: 3, effect: "+1d10 social. Inimigos convencidos ficam Amistosos por 1d3 rodadas se não forem atacados." }
+        ],
+        example: "O guarda que deveria chamar reforços de repente acha que aqueles aventureiros são velhos amigos."
+      },
+      {
+        id: "sub-bardo-performance",
+        name: "Performance de Batalha",
+        cost: "3 pontos",
+        tier: 2,
+        commonToAll: false,
+        sinergyClasses: ["mago", "ladino"],
+        effect: "1 Ação: performance que afeta todos os aliados em raio 5 hex por 3 rodadas. Eles ganham +1 Ação de Combate extra por turno E +1d4 em Esquiva. Enquanto durar: o bardo deve gastar ao menos 1 Ação por turno na performance (se não puder, ela encerra).",
+        levels: [
+          { level: 1, effect: "+1 Ação e +1d4 Esquiva para aliados em raio 5. Dura 3 rodadas." },
+          { level: 2, effect: "Raio 7. Dura 4 rodadas. +1d6 Esquiva." },
+          { level: 3, effect: "Raio 10. Dura combate inteiro. +1d8 Esquiva. Aliados também ficam imunes a Medo." }
+        ],
+        example: "A melodia cresce. Os aliados sentem cada movimento fluir — como dançar em combate."
+      },
+      {
+        id: "sub-bardo-ilusao",
+        name: "Ilusão Magistral",
+        cost: "3 pontos",
+        tier: 2,
+        commonToAll: false,
+        sinergyClasses: ["ladino"],
+        effect: "Ação de Magia: cria uma ilusão perfeita (visual+sonora) de qualquer cena ou pessoa em raio 3 hex por 5 rodadas. Inimigos que interagem testam INT (normal) para perceber. Pode criar ilusão de si mesmo para confundir ataques (30% chance de o ataque acertar a ilusão em vez do bardo).",
+        levels: [
+          { level: 1, effect: "Ilusão área 3x3 hex, 5 rodadas. 30% desvio." },
+          { level: 2, effect: "Área 5x5. 8 rodadas. 50% desvio. INT difícil para perceber." },
+          { level: 3, effect: "Área livre. Combate inteiro. 60% desvio. Ilusão pode mover-se e agir." }
+        ],
+        example: "O dragão que os inimigos veem não existe. O medo, porém, é absolutamente real."
+      }
+    ]
+  },
+
+  paladino: {
+    name: "Paladino",
+    icon: "⚔️",
+    description: "A fé como armadura. O paladino combina poder marcial com graça divina, protegendo aliados e punindo inimigos com magias sagradas.",
+    sinergyClasses: ["guerreiro", "clerigo"],
+    sinergyNote: "Guerreiros e Clérigos: +1 Ação de Magia gratuita por combate e +2 em Defesa Física quando abaixo de 50% HP.",
+    skills: [
+      {
+        id: "sub-palad-escudo",
+        name: "Escudo da Fé",
+        cost: "2 pontos",
+        tier: 1,
+        commonToAll: true,
+        effect: "Ação de Magia: cria um escudo de luz sagrada em si mesmo ou em um aliado. Concede +2 Defesa Física e +2 Defesa Mágica por 3 rodadas. Ataques de criaturas corrompidas (Araltos, mortos-vivos) são reduzidos em +1d4 adicional.",
+        levels: [
+          { level: 1, effect: "+2 Def.Fís e +2 Def.Mag por 3 rodadas." },
+          { level: 2, effect: "+3/+3. 4 rodadas. O escudo devolve 1d4 de luz sagrada a quem atacar o portador." },
+          { level: 3, effect: "+4/+4. 5 rodadas. Qualquer aliado que encostar no portador também recebe o bônus." }
+        ],
+        example: "A luz não cega. Ela só incomoda quem caminha nas trevas."
+      },
+      {
+        id: "sub-palad-slot",
+        name: "Fervor Sagrado",
+        cost: "2 pontos",
+        tier: 1,
+        commonToAll: true,
+        effect: "Passivo: +1 Slot de Magia permanente. Além disso, 1 vez por descanso longo: recupera todos os Slots de Magia instantaneamente por 1 turno de oração (não pode agir neste turno).",
+        levels: [
+          { level: 1, effect: "+1 Slot permanente. 1x/descanso longo: recupera todos os Slots." },
+          { level: 2, effect: "+2 Slots permanentes. 1x/sessão: recupera Slots sem perder turno." },
+          { level: 3, effect: "+3 Slots permanentes. 1x/combate: recupera metade dos Slots como Ação Livre." }
+        ],
+        example: "Onde outros ficam exaustos de magia, o paladino encontra mais uma reserva — a fé não esgota."
+      },
+      {
+        id: "sub-palad-punir",
+        name: "Punição Divina",
+        cost: "3 pontos",
+        tier: 2,
+        commonToAll: false,
+        sinergyClasses: ["guerreiro", "clerigo"],
+        effect: "Ao acertar um ataque físico: pode gastar 1 Slot de Magia para adicionar 1d8+SAB de dano sagrado ao golpe. Criaturas corrompidas ou mortas-vivas sofrem 1d8+SAB extra (dobro deles). Resistência SAB (normal) para metade.",
+        levels: [
+          { level: 1, effect: "+1d8+SAB sagrado ao acertar (gasta 1 Slot). Dobro em corrompidos." },
+          { level: 2, effect: "+2d8+SAB. Corrompidos ficam Cegos por 1 rodada." },
+          { level: 3, effect: "+3d8+SAB. Corrompidos são Empurrados 3 hex e ficam Atordoados 1 rodada." }
+        ],
+        example: "O golpe não é do guerreiro. É da convicção que move o braço dele."
+      },
+      {
+        id: "sub-palad-aura",
+        name: "Aura de Proteção",
+        cost: "3 pontos",
+        tier: 2,
+        commonToAll: false,
+        sinergyClasses: ["clerigo"],
+        effect: "Passivo: todos os aliados em raio 3 hex ganham +1 em todos os testes de Resistência e +1d4 em Força de Vontade. 1 vez por combate: pode absorver o próximo dano que um aliado adjacente sofreria (o paladino recebe o dano em vez do aliado).",
+        levels: [
+          { level: 1, effect: "Raio 3. +1 resistências e +1d4 Força de Vontade para aliados." },
+          { level: 2, effect: "Raio 5. +1d6 Força de Vontade. Absorção 2x/combate." },
+          { level: 3, effect: "Raio 7. +1d8. Absorção ilimitada. O paladino recebe 50% do dano absorvido (não total)." }
+        ],
+        example: "Eles não precisam saber que ele está absorvendo os golpes. Só precisam estar vivos."
+      }
+    ]
+  },
+
+  alquimista: {
+    name: "Alquimista",
+    icon: "⚗️",
+    description: "Ciência como arte. O alquimista transforma ingredientes em poções, pergaminhos e artefatos — e usa esses itens com maestria que nenhum outro possui.",
+    sinergyClasses: ["mago", "arqueiro"],
+    sinergyNote: "Magos e Arqueiros: poções criadas têm +50% de efeito e pergaminhos criados podem conter magias de nível +1 acima do normal.",
+    skills: [
+      {
+        id: "sub-alq-criacao",
+        name: "Criação de Poções",
+        cost: "2 pontos",
+        tier: 1,
+        commonToAll: true,
+        effect: "Durante descanso longo: cria 1d3 poções de um tipo à escolha (cura menor, veneno básico, antídoto, força, velocidade). Requer ingredientes (ervas ou componentes — Mestre define disponibilidade). Poções criadas têm efeito +1d4 a mais que as padrão.",
+        levels: [
+          { level: 1, effect: "Cria 1d3 poções simples. +1d4 de efeito. Tipos: cura/veneno/antídoto/força." },
+          { level: 2, effect: "Cria 1d4 poções. +1d6. Novos tipos: invisibilidade, mana, resistência a elemento." },
+          { level: 3, effect: "Cria 1d6 poções. +1d8. Pode criar Elixir da Ressurreição (1x por semana, exige ingredientes raros)." }
+        ],
+        example: "Três ervas, um pouco de fel de dragão e dez minutos. O ferido vai estar de pé antes do amanhecer."
+      },
+      {
+        id: "sub-alq-pergaminho",
+        name: "Inscrição de Pergaminhos",
+        cost: "2 pontos",
+        tier: 1,
+        commonToAll: true,
+        effect: "Durante descanso longo: copia uma magia conhecida em um pergaminho (gasta 1 Slot de Magia permanentemente até o próximo descanso longo). O pergaminho pode ser usado por qualquer um — mesmo sem conhecer a magia. Pergaminhos duram até serem usados.",
+        levels: [
+          { level: 1, effect: "Cria pergaminho de magia nível 1-2. Qualquer um pode usar." },
+          { level: 2, effect: "Magias nível 1-3. Pode criar 2 pergaminhos por descanso longo." },
+          { level: 3, effect: "Magias nível 1-5. 3 pergaminhos por descanso. Não gasta Slot — é puro talento." }
+        ],
+        example: "O arqueiro não sabe conjurar. Mas sabe segurar o pergaminho certo na hora certa."
+      },
+      {
+        id: "sub-alq-bomba",
+        name: "Bomba Alquímica",
+        cost: "3 pontos",
+        tier: 2,
+        commonToAll: false,
+        sinergyClasses: ["arqueiro", "ladino"],
+        effect: "Cria e lança bombas especiais em combate (Ação): alcance 8 hex, área 2x2 hex. Tipos: Ácido (2d6 imediato + 1d4/rodada 3r), Fogo (2d8 imediato + incendeia), Gelo (1d8 + Lentidão 2r), Fumaça (cria nuvem cegante 3 rodadas). 3 bombas por descanso longo.",
+        levels: [
+          { level: 1, effect: "3 bombas/descanso. Alcance 8. Área 2x2. Escolhe tipo." },
+          { level: 2, effect: "4 bombas. Área 3x3. Pode misturar 2 tipos na mesma bomba (+1 ingrediente)." },
+          { level: 3, effect: "5 bombas. Área 4x4 ou linha 8 hex. Bombas misturadas causam efeito extra único." }
+        ],
+        example: "Não é explosão. É precisão com resultados explosivos."
+      },
+      {
+        id: "sub-alq-transmuta",
+        name: "Transmutação Rápida",
+        cost: "3 pontos",
+        tier: 2,
+        commonToAll: false,
+        sinergyClasses: ["mago"],
+        effect: "Ação de Magia: transmuta um objeto não-mágico tocado em outro de peso similar (madeira em metal, pedra em vidro, água em óleo). O efeito é permanente. Em combate: pode transmutir a arma de um inimigo adjacente (AGI difícil para resistir — a arma vira pão, chumbo etc.). Ou: transmuta veneno em antídoto (remove veneno de aliado).",
+        levels: [
+          { level: 1, effect: "Transmuta objetos simples. Arma inimiga: AGI difícil ou vira objeto inútil." },
+          { level: 2, effect: "Objetos maiores. Pode transmutir armadura (vira pano por 2 rodadas)." },
+          { level: 3, effect: "Transmuta qualquer não-mágico. Pode reverter transmutação com Ação livre." }
+        ],
+        example: "A espada do inimigo vira pão no meio do golpe. O ataque continua — o resultado, não."
+      }
+    ]
+  },
+
+  druida: {
+    name: "Druida",
+    icon: "🌿",
+    description: "A voz da natureza. O druida invoca animais, manipula o terreno e transforma o campo de batalha numa extensão da floresta primordial.",
+    sinergyClasses: ["arqueiro", "clerigo"],
+    sinergyNote: "Arqueiros e Clérigos: animais invocados têm +50% de HP e o druida pode invocar um animal como Ação Livre (sem custo) 1x/combate.",
+    skills: [
+      {
+        id: "sub-druid-invocar",
+        name: "Invocar Animal",
+        cost: "2 pontos",
+        tier: 1,
+        commonToAll: true,
+        effect: "Ação de Magia: invoca um animal aliado que age no seu turno. Escolhe o tipo (lobo, águia, urso, cobra). O animal some ao morrer ou ao fim do combate. 2 usos por combate.",
+        levels: [
+          { level: 1, effect: "1 animal por vez. Lobo (HP 25, dano 1d8), Águia (HP 18, voa, 1d6), Cobra (1d4+veneno), Urso (HP 35, 1d10)." },
+          { level: 2, effect: "2 animais simultâneos. Criaturas maiores: Grifo (HP 40, voa, 1d10), Leão (HP 45, 1d12)." },
+          { level: 3, effect: "3 animais. Criatura especial: Elemental da Floresta (HP 80, 2d8, Raízes como Ação)." }
+        ],
+        example: "O druida assobia uma vez. Da floresta emergem olhos amarelos no escuro."
+      },
+      {
+        id: "sub-druid-terreno",
+        name: "Moldar Terreno",
+        cost: "2 pontos",
+        tier: 1,
+        commonToAll: true,
+        effect: "Ação de Magia: altera o terreno em área 3x3 hex ao redor de um ponto visível. Tipos: Raízes (terreno difícil, quem tentar correr testa AGI normal ou cai), Espinhos (1d4 dano ao cruzar), Névoa (visibilidade 1 hex), Água (lama — −2 Movimento). Efeito dura 4 rodadas.",
+        levels: [
+          { level: 1, effect: "Área 3x3. Duração 4 rodadas. 2 usos/combate." },
+          { level: 2, effect: "Área 5x5. 5 rodadas. Pode combinar 2 efeitos na mesma área." },
+          { level: 3, effect: "Área 7x7. Duração combate inteiro. 3 combinações simultâneas." }
+        ],
+        example: "O campo de batalha escolhido pelo inimigo. O campo de batalha que o druida remolda em segundos."
+      },
+      {
+        id: "sub-druid-forma",
+        name: "Forma Selvagem",
+        cost: "3 pontos",
+        tier: 2,
+        commonToAll: false,
+        sinergyClasses: ["arqueiro"],
+        effect: "Ação: transforma-se em animal por 4 rodadas (1x/combate). Mantém INT e SAB; ganha todas as estatísticas físicas e habilidades do animal. Formas: Urso (HP +50, Dano 2d8, Garras), Lobo (Movimento +3, ataque derruba), Águia (voa altitude 4, 1d8+velocidade), Cobra Gigante (Constrição 1d8/r).",
+        levels: [
+          { level: 1, effect: "4 rodadas. 1x/combate. Formas básicas: urso, lobo, águia, cobra." },
+          { level: 2, effect: "6 rodadas. 2x/combate. Formas avançadas: Tigre-Dente-de-Sabre (2d10, ignora 4 def.), Crocodilo (Agarrar automático)." },
+          { level: 3, effect: "Combate inteiro. Ilimitado. Forma Híbrida: mantém equipamentos e pode conjurar magias na forma." }
+        ],
+        example: "O arqueiro abaixa o arco. O urso já não precisa de flechas."
+      },
+      {
+        id: "sub-druid-cura",
+        name: "Cura da Natureza",
+        cost: "3 pontos",
+        tier: 2,
+        commonToAll: false,
+        sinergyClasses: ["clerigo"],
+        effect: "Ação de Magia: cura 2d8+SAB HP em 1 aliado tocado ou a até 4 hex. Remove 1 condição negativa (veneno, sangramento, paralisia). Em terreno natural (floresta, grama, rio): cura dobrada e remove 2 condições. 3 usos por combate.",
+        levels: [
+          { level: 1, effect: "2d8+SAB HP. Remove 1 condição. 3 usos. Dobro em terreno natural." },
+          { level: 2, effect: "3d8+SAB HP. Remove 2 condições. Pode afetar 2 alvos com 1 uso em terreno natural." },
+          { level: 3, effect: "4d8+SAB HP. Remove todas as condições. Em terreno natural: cura todos os aliados no raio 5 hex de uma vez." }
+        ],
+        example: "As raízes do chão reconhecem a mão do druida — e trazem vida de volta à superfície."
+      }
+    ]
+  },
+
+  berserker: {
+    name: "Berserker",
+    icon: "🔥",
+    description: "Dor como combustível. O berserker troca vida por poder — quanto mais ferido, mais perigoso. A linha entre guerreiro e fera se apaga na fúria.",
+    sinergyClasses: ["guerreiro", "ladino"],
+    sinergyNote: "Guerreiros e Ladinos: habilidades de Fúria têm +1d6 de dano extra e penalidades de HP são reduzidas em 25%.",
+    skills: [
+      {
+        id: "sub-berserk-furia",
+        name: "Fúria de Batalha",
+        cost: "2 pontos",
+        tier: 1,
+        commonToAll: true,
+        effect: "Ação Livre (1x/combate): entra em Fúria por 4 rodadas. Em Fúria: +1d8 de dano em todos os ataques físicos, +1 Ação de Combate por turno, imune a Medo e Atordoado. Custo: perde 3 HP por rodada enquanto em Fúria (dano da adrenalina). Ao sair da Fúria: 1 rodada de Exaustão (−1 Ação).",
+        levels: [
+          { level: 1, effect: "4 rodadas. +1d8 dano, +1 Ação. Perde 3 HP/r. Exaustão 1 rodada." },
+          { level: 2, effect: "5 rodadas. +1d10 dano. Sem penalidade de exaustão." },
+          { level: 3, effect: "Combate inteiro. +1d12 dano, +2 Ações. Sem custo de HP por rodada." }
+        ],
+        example: "A ferida no ombro parou de doer. Isso nunca é bom sinal para quem está na frente."
+      },
+      {
+        id: "sub-berserk-sangue",
+        name: "Sede de Sangue",
+        cost: "2 pontos",
+        tier: 1,
+        commonToAll: true,
+        effect: "Passivo: ao reduzir um inimigo a 0 HP, recupera 1d8 HP imediatamente e ganha +1d6 no próximo ataque (o momentum da matança). Se em Fúria, recupera 1d10 HP e ganha +1 Ação extra neste turno.",
+        levels: [
+          { level: 1, effect: "Matar → +1d8 HP e +1d6 no próximo ataque." },
+          { level: 2, effect: "+1d10 HP e +1d8. Em Fúria: +1 Ação e a Fúria é estendida em 1 rodada por morte." },
+          { level: 3, effect: "+2d8 HP. Em Fúria: recupera HP igual ao dano do golpe final (câmbio total)." }
+        ],
+        example: "O corpo caiu. O berserker nem percebeu — já escolheu o próximo."
+      },
+      {
+        id: "sub-berserk-escudo-carne",
+        name: "Escudo de Carne",
+        cost: "3 pontos",
+        tier: 2,
+        commonToAll: false,
+        sinergyClasses: ["guerreiro"],
+        effect: "Passivo: pode gastar HP próprio (até 10 por Ação de Reação) para reduzir o dano de um aliado adjacente pelo mesmo valor — o berserker absorve o golpe com o corpo. Ao fazer isso: ganha +1d6 de dano no próximo ataque (a dor se converte em raiva).",
+        levels: [
+          { level: 1, effect: "Absorve até 10 HP de dano de aliado por Reação. +1d6 no próximo ataque." },
+          { level: 2, effect: "Absorve até 20 HP. +1d8. Pode absorver 2x por rodada." },
+          { level: 3, effect: "Absorve qualquer valor. +1d10 por absorção. O aliado protegido ganha +1 Ação no próximo turno (por saber que alguém morreu pelo dele)." }
+        ],
+        example: "— Atrás de mim. / — Você vai— / — Atrás. De mim."
+      },
+      {
+        id: "sub-berserk-limiar",
+        name: "No Limiar da Morte",
+        cost: "3 pontos",
+        tier: 2,
+        commonToAll: false,
+        sinergyClasses: ["ladino"],
+        effect: "Passivo: ao ficar abaixo de 30% HP, entra em estado de Limiar automaticamente — o dano de todos os ataques é aumentado em +2d6, ganha Imunidade a Inconsciente (não cai a 0 HP — fica a 1 HP em vez de cair) e Movimento +2. O estado dura até o combate acabar ou o berserker ser curado acima de 50% HP.",
+        levels: [
+          { level: 1, effect: "Abaixo de 30%: +2d6 dano, imune a Inconsciente, +2 Mov." },
+          { level: 2, effect: "+3d6. Imunidade dura 2 rodadas após ser curado acima de 50%." },
+          { level: 3, effect: "+4d6. Imune a Inconsciente o combate inteiro. Quando entra no Limiar: todos os inimigos em raio 3 hex testam SAB ou ficam Amedrontados por 2 rodadas." }
+        ],
+        example: "Ele sangra. Ele sorri. São os inimigos que começam a ter medo."
+      }
+    ]
+  }
+
+};
 
 function getAllSpellsInGame() {
   const list = [];

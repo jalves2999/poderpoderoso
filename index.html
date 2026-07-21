@@ -91,9 +91,17 @@
         <div id="class-detail" class="class-detail hidden"></div>
       </div>
 
-      <!-- Etapa 3: Atributos -->
+      <!-- Etapa 3: Subclasse -->
       <div class="wizard-step" data-step="3">
-        <h2 class="step-title">Etapa 3 — Atributos</h2>
+        <h2 class="step-title">Etapa 3 — Subclasse</h2>
+        <p class="step-desc">A subclasse define a especialização do personagem. Escolha uma e depois selecione <strong>2 habilidades</strong> da lista — essas ficam disponíveis para comprar com pontos de nível.</p>
+        <div class="choice-row choice-row-subclasses" id="choice-subclass"></div>
+        <div id="subclass-detail" class="subclass-detail hidden"></div>
+      </div>
+
+            <!-- Etapa 4: Atributos -->
+      <div class="wizard-step" data-step="4">
+        <h2 class="step-title">Etapa 4 — Atributos</h2>
         <p class="step-desc">Todo aventureiro nasce com os atributos em branco. Distribua <strong id="attr-points-total">2</strong> pontos entre eles — depois, sua classe concederá um bônus inicial automaticamente.</p>
 
         <div class="attr-points-tracker">
@@ -106,8 +114,8 @@
       </div>
 
       <!-- Etapa 4: Perícias -->
-      <div class="wizard-step" data-step="4">
-        <h2 class="step-title">Etapa 4 — Perícias</h2>
+      <div class="wizard-step" data-step="5">
+        <h2 class="step-title">Etapa 5 — Perícias</h2>
         <p class="step-desc">No 1º nível, você conhece <strong>2 perícias de classe</strong>, <strong>1 perícia geral</strong> e pode opcionalmente escolher <strong>1 perícia de combate</strong>.</p>
 
         <h3 class="subsection-title">Perícias de Classe <span class="pick-counter" id="class-skill-counter">(0/2)</span></h3>
@@ -122,24 +130,24 @@
       </div>
 
       <!-- Etapa 5: Magia inicial (condicional) -->
-      <div class="wizard-step" data-step="5">
-        <h2 class="step-title">Etapa 5 — Magia Inicial</h2>
+      <div class="wizard-step" data-step="6">
+        <h2 class="step-title">Etapa 6 — Magia Inicial</h2>
         <p class="step-desc" id="spell-step-desc">Conjuradores começam conhecendo uma magia de Nível 1, extraída de seu grimório de estudos.</p>
         <div class="pick-list" id="spell-pick-list"></div>
         <p class="step-skip-note" id="spell-skip-note"></p>
       </div>
 
       <!-- Etapa 6: Equipamento inicial -->
-      <div class="wizard-step" data-step="6">
-        <h2 class="step-title">Etapa 6 — Equipamento Inicial</h2>
+      <div class="wizard-step" data-step="7">
+        <h2 class="step-title">Etapa 7 — Equipamento Inicial</h2>
         <p class="step-desc">Escolha o equipamento básico com que seu personagem inicia a jornada. Tudo isso entra na mochila — depois você decide o que equipar.</p>
         <div class="pick-list" id="equipment-pick-list"></div>
         <div class="weight-preview" id="weight-preview"></div>
       </div>
 
       <!-- Etapa 7: Revisão -->
-      <div class="wizard-step" data-step="7">
-        <h2 class="step-title">Etapa 7 — Selar o Pergaminho</h2>
+      <div class="wizard-step" data-step="8">
+        <h2 class="step-title">Etapa 8 — Selar o Pergaminho</h2>
         <p class="step-desc">Revise a ficha antes de dar vida ao seu personagem.</p>
         <div id="review-summary" class="review-summary"></div>
       </div>
