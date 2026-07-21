@@ -4102,3 +4102,41 @@ main {
   .ssc-effect { font-size: 14px !important; }
   .ssc-level  { font-size: 12.5px !important; }
 }
+
+/* ================================================================
+   FICHA — Habilidades de Subclasse
+   ================================================================ */
+
+/* Badge de classe comum / sinergia nos cards da ficha */
+.ability-card .badge-common {
+  background: rgba(60,100,60,0.15); color: #3a6020;
+}
+.ability-card .badge-synergy {
+  background: rgba(156,122,60,0.2); color: #7a5c10;
+}
+
+/* Card de subclasse — destaque suave */
+.ability-card-subclass {
+  border-left: 3px solid rgba(156,122,60,0.5) !important;
+}
+.ability-card-synergy.ability-card-subclass {
+  border-left-color: var(--gold) !important;
+  background: linear-gradient(135deg, rgba(156,122,60,0.06), transparent);
+}
+
+/* Habilidades de subclasse bloqueadas */
+.ability-locked-subclass-row {
+  margin-top: 12px;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.ability-locked-subclass-label {
+  font-family: var(--font-heading);
+  font-size: 11px; color: var(--ink-soft);
+  text-transform: uppercase; letter-spacing: 0.4px;
+  padding: 6px 10px; background: rgba(0,0,0,0.04);
+  border-radius: 5px; border-left: 3px solid rgba(0,0,0,0.12);
+}
+.ability-card-subclass-locked {
+  opacity: 0.45 !important;
+  cursor: default !important;
+}

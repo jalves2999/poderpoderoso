@@ -2276,9 +2276,59 @@ function renderDerivedSection(character, cls) {
 function renderClassAbilitiesSection(character, cls) {
   if (!character.skills.abilities) character.skills.abilities = [];
   if (!character.skills.abilityLevels) character.skills.abilityLevels = {};
-  const known = character.skills.abilities;
+  const known  = character.skills.abilities;
   const levels = character.skills.abilityLevels;
   const points = character.unspentSkillPoints || 0;
+
+  // ── Habilidades de subclasse (pelo ID, não pelo nome) ───────────
+  const sc       = character.subclassKey ? SUBCLASSES[character.subclassKey] : null;
+  const scSkills = sc ? sc.skills.filter(sk => known.includes(sk.id)) : [];
+
+  const renderSubclassAbilityCard = (sk) => {
+    const currentLevel = levels[sk.id] || 1;
+    const maxLevel     = sk.levels.length;
+    const canUpgrade   = currentLevel < maxLevel;
+    const currentData  = sk.levels[currentLevel - 1];
+    const isClassSyn   = Array.isArray(sk.sinergyClasses) && sk.sinergyClasses.includes(character.classKey);
+
+    return `
+      <div class="ability-card known ability-card-subclass ${isClassSyn ? "ability-card-synergy" : ""}">
+        <div class="ability-card-head">
+          <span class="ability-card-name">${sk.name}</span>
+          <div style="display:flex;gap:5px;flex-wrap:wrap;">
+            ${sk.commonToAll ? `<span class="ability-card-badge badge-common">Qualquer classe</span>` : ""}
+            ${isClassSyn    ? `<span class="ability-card-badge badge-synergy">✨ Sinergia</span>` : ""}
+          </div>
+        </div>
+        <div class="ability-level-dots" title="Nível ${currentLevel} de ${maxLevel}">
+          ${Array.from({ length: maxLevel }).map((_,i) =>
+            `<span class="ability-level-dot ${i < currentLevel ? "filled" : ""}"></span>`
+          ).join("")}
+          <span class="ability-level-text">Nível ${currentLevel}/${maxLevel}</span>
+        </div>
+        <p class="ability-card-effect">${currentData.effect}</p>
+        ${canUpgrade ? `
+          <button class="btn-secondary btn-upgrade-ability"
+            data-upgrade-ability="${sk.id}" ${points > 0 ? "" : "disabled"}>
+            ${points > 0 ? `Evoluir para Nível ${currentLevel + 1} (1 ponto)` : "Sem pontos disponíveis"}
+          </button>` : `<div class="ability-max-level-note">✦ Nível máximo alcançado</div>`}
+      </div>`;
+  };
+
+  // ── Habilidades de subclasse NÃO escolhidas (aparecem como bloqueadas) ─
+  const scSkillsLocked = sc ? sc.skills.filter(sk => !known.includes(sk.id)) : [];
+  const lockedSubclassHTML = scSkillsLocked.length ? `
+    <div class="ability-locked-subclass-row">
+      <div class="ability-locked-subclass-label">🔒 Habilidades da subclasse não escolhidas no início — indisponíveis</div>
+      ${scSkillsLocked.map(sk => `
+        <div class="ability-card locked ability-card-subclass-locked">
+          <div class="ability-card-head">
+            <span class="ability-card-name">${sk.name}</span>
+            <span class="ability-card-badge" style="background:rgba(0,0,0,0.1);color:var(--ink-soft)">Indisponível</span>
+          </div>
+          <p class="ability-card-effect" style="opacity:.5">${sk.effect}</p>
+        </div>`).join("")}
+    </div>` : "";
 
   return `
   <div class="sheet-section">
@@ -2288,12 +2338,12 @@ function renderClassAbilitiesSection(character, cls) {
 
     <div class="ability-card-grid">
       ${cls.skills.map(skill => {
-        const isKnown = known.includes(skill.name);
+        const isKnown    = known.includes(skill.name);
         const isLevelable = Array.isArray(skill.levels) && skill.levels.length > 1;
         const currentLevel = levels[skill.name] || 1;
-        const maxLevel = isLevelable ? skill.levels.length : 1;
-        const currentData = isLevelable ? skill.levels[currentLevel - 1] : skill;
-        const canUpgrade = isKnown && isLevelable && currentLevel < maxLevel;
+        const maxLevel     = isLevelable ? skill.levels.length : 1;
+        const currentData  = isLevelable ? skill.levels[currentLevel - 1] : skill;
+        const canUpgrade   = isKnown && isLevelable && currentLevel < maxLevel;
 
         return `
         <div class="ability-card ${isKnown ? "known" : "locked"}">
@@ -2303,7 +2353,7 @@ function renderClassAbilitiesSection(character, cls) {
           </div>
           ${isLevelable ? `
             <div class="ability-level-dots" title="Nível ${currentLevel} de ${maxLevel}">
-              ${Array.from({ length: maxLevel }).map((_, i) => `<span class="ability-level-dot ${i < currentLevel ? "filled" : ""}"></span>`).join("")}
+              ${Array.from({ length: maxLevel }).map((_,i) => `<span class="ability-level-dot ${i < currentLevel ? "filled" : ""}"></span>`).join("")}
               <span class="ability-level-text">Nível ${currentLevel}/${maxLevel}</span>
             </div>
           ` : ""}
@@ -2319,6 +2369,16 @@ function renderClassAbilitiesSection(character, cls) {
         </div>
       `}).join("")}
     </div>
+
+    ${scSkills.length ? `
+    <h3 class="sheet-section-title" style="margin-top:18px">
+      ${sc.icon} Habilidades de Subclasse — ${sc.name}
+    </h3>
+    <div class="ability-card-grid">
+      ${scSkills.map(renderSubclassAbilityCard).join("")}
+    </div>` : ""}
+
+    ${lockedSubclassHTML}
   </div>`;
 }
 
@@ -3484,15 +3544,24 @@ function attachSheetHandlers(character) {
   document.querySelectorAll("[data-upgrade-ability]").forEach(btn => {
     btn.addEventListener("click", () => {
       if ((character.unspentSkillPoints || 0) <= 0) { showToast("Sem pontos de habilidade disponíveis. Ganhe XP para subir de nível."); return; }
-      const abilityName = btn.dataset.upgradeAbility;
+      const abilityId = btn.dataset.upgradeAbility;
       if (!character.skills.abilityLevels) character.skills.abilityLevels = {};
-      const currentLevel = character.skills.abilityLevels[abilityName] || 1;
-      if (currentLevel >= ABILITY_MAX_LEVEL) { showToast("Esta habilidade já está no nível máximo."); return; }
-      character.skills.abilityLevels[abilityName] = currentLevel + 1;
+      const currentLevel = character.skills.abilityLevels[abilityId] || 1;
+
+      // Determinar o nível máximo: subclasse tem níveis próprios, habilidade de classe usa ABILITY_MAX_LEVEL
+      let maxLevel = ABILITY_MAX_LEVEL;
+      if (character.subclassKey) {
+        const sc = SUBCLASSES[character.subclassKey];
+        const scSkill = sc?.skills.find(sk => sk.id === abilityId);
+        if (scSkill) maxLevel = scSkill.levels.length;
+      }
+
+      if (currentLevel >= maxLevel) { showToast("Esta habilidade já está no nível máximo."); return; }
+      character.skills.abilityLevels[abilityId] = currentLevel + 1;
       character.unspentSkillPoints -= 1;
       persistCurrentCharacter();
       renderSheet();
-      showToast(`"${abilityName}" evoluiu para o Nível ${currentLevel + 1}!`);
+      showToast(`Habilidade evoluiu para Nível ${currentLevel + 1}!`);
     });
   });
 
