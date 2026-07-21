@@ -677,9 +677,300 @@ const GENERAL_SPELLS = [
   { name: "Erupção do Vermelhão", level: 5, category: "ataque/área", divine: "Vermelhão",
     effect: "O conjurador canaliza o fogo interno de Vermelhão e libera em explosão: área 5x5 hex centralizada no conjurador. Dano: 3d10 + 1d6 por rodada que o conjurador passou neste combate (o fogo acumulado). O conjurador fica no centro mas é imune ao próprio fogo. Todos os objetos inflamáveis na área pegam fogo. O campo fica coberto de brasas por 2 rodadas (2d6 a quem cruzar).",
     castTime: "2 turnos de concentração", cooldown: "1 uso por combate",
-    note: "🌟 Só conjurável por portadores da Chama-Viva de Karloth ou das Cinzas de Karloth Sagrado. O dano base é 3d10 mesmo sem rodadas acumuladas." }
+    note: "🌟 Só conjurável por portadores da Chama-Viva de Karloth ou das Cinzas de Karloth Sagrado. O dano base é 3d10 mesmo sem rodadas acumuladas." },
 
 
+
+  /* ══════════════════════════════════════════════════════════
+     MAGIAS DAS SUBCLASSES
+     ══════════════════════════════════════════════════════════ */
+
+  /* ─── 💀 NECROMANTE ──────────────────────────────────────── */
+
+  { name: "Exército dos Mortos", level: 4, category: "invocacao/necromancia", subclass: "necromante",
+    effect: "Invoca 1d4+2 Esqueletos Guerreiros (HP 18, dano 1d8) ou Zumbis Comuns (HP 28, dano 1d6) de cadáveres presentes na área ou do chão em raio 6 hex. Os mortos-vivos agem no turno do conjurador. Duram até o fim do combate. Máximo de 6 mortos-vivos simultâneos com esta magia.",
+    castTime: "2 turnos de concentração", cooldown: "1 uso por combate",
+    note: "Subclasse Necromante: mortos-vivos invocados têm +25% HP e +1d4 de dano se o conjurador for Mago ou Clérigo." },
+
+  { name: "Toque Necrótico", level: 2, category: "ataque/necromancia", subclass: "necromante",
+    effect: "Toca um alvo (ou projeta a energia a até 3 hex): 2d8+INT de dano necrótico que não pode ser reduzido por Defesa Física. O alvo fica Enfraquecido por 2 rodadas (−1d4 em todos os ataques). Se o alvo morrer nos próximos 2 turnos, pode ser levantado como Zumbi Menor gratuitamente (sem custo de Slot).",
+    castTime: "1 Ação de Magia", cooldown: "3 usos por combate",
+    note: "Funciona como tentativa de pré-marcar alvos para o Levantar das Cinzas sem gastar recursos extras." },
+
+  { name: "Pacto Sombrio", level: 3, category: "ritual/necromancia", subclass: "necromante",
+    effect: "Fora de combate: realiza um pacto com um espírito de morto recente (até 24h). O espírito responde até 5 perguntas com informações que sabia em vida (Mestre determina o que sabe). Em combate: pode invocar o espírito por 3 rodadas como aliado etéreo (HP 30, dano 1d6 psíquico, intangível a físico).",
+    castTime: "10 minutos (fora de combate) ou 2 Ações (combate)", cooldown: "1 uso por sessão",
+    note: "O espírito não é obrigado a cooperar. Necromantes com Aura dos Sepulcros ativa ganham acesso automático ao espírito sem teste de persuasão." },
+
+  { name: "Dreno de Alma", level: 5, category: "ataque/necromancia", subclass: "necromante",
+    effect: "Projeta um feixe de energia necrótica a até 10 hex: 4d10+INT de dano sombrio. Se o alvo morrer com este golpe, sua alma é capturada em um cristal — o conjurador recupera todos os Slots de Magia e ganha +2d6 em todos os ataques por 3 rodadas. O cristal contém a alma até ser destruído ou libertado.",
+    castTime: "1 Ação de Magia", cooldown: "1 uso por combate",
+    note: "Capturar almas é considerado crime em Sanctum e heresia pelos Clérigos de Jurgmund. O cristal é detectável por qualquer Clérigo." },
+
+  /* ─── 🎭 BARDO ───────────────────────────────────────────── */
+
+  { name: "Balada do Caos", level: 3, category: "controle/buff", subclass: "bardo",
+    effect: "Entoa uma melodia caótica por 3 rodadas (concentração): a cada rodada, rola 1d6 por aliado e inimigo em raio 6 hex — resultado determina efeito: 1=Confuso (age aleatoriamente), 2=Acelerado (+1 Ação), 3=Lento (−1 Ação), 4=Inspirado (+1d6 em ataques), 5=Amedrontado (recua), 6=Nada. O conjurador controla seus próprios aliados mas não os inimigos.",
+    castTime: "1 Ação de Magia (mantém por rodada)", cooldown: "1 uso por combate",
+    note: "Bardo com Performance de Batalha ativa: aliados afetados por 2 ou 4 têm o bônus dobrado." },
+
+  { name: "Conto do Herói", level: 2, category: "buff", subclass: "bardo",
+    effect: "Narra em voz alta as façanhas de um aliado visível — real ou inventada. Por 4 rodadas, o aliado acredita genuinamente que é um herói: +1d8 em todos os testes e ataques, imune a Medo, e ao matar um inimigo recupera 1d6 HP (o herói que o conto descreve não morre facilmente).",
+    castTime: "1 Ação de Magia", cooldown: "2 usos por combate",
+    note: "Pode ser usado no turno do aliado como Reação. Se o aliado falhar criticamente enquanto sob efeito: a 'decepção' do conto causa 1d4 de dano psíquico (narrativa tem consequências)." },
+
+  { name: "Eco Ilusório", level: 1, category: "ilusão/utilidade", subclass: "bardo",
+    effect: "Cria sons e imagens ilusórias perfeitas em raio 5 hex — passos, vozes, objetos visuais, multidões. Os ilusórios não causam dano mas são completamente convincentes. Inimigos que interagem testam INT (normal). Dura 5 minutos ou até o conjurador parar de se concentrar.",
+    castTime: "1 Ação de Magia", cooldown: "Ilimitado (concentração)",
+    note: "Combinado com Ilusão Magistral: as duas ilusões se complementam e a dificuldade de detectar sobe para INT (difícil)." },
+
+  { name: "Sinfonia da Destruição", level: 5, category: "ataque/buff", subclass: "bardo",
+    effect: "Canaliza toda a arte em destruição: por 4 rodadas, cada palavra ou som que o bardo emite causa 2d6 de dano sônico a todos em raio 4 hex (aliados imunes). Aliados no raio ganham +1d10 em ataques (inspirados pela intensidade). O bardo não pode usar outras magias durante a Sinfonia mas pode atacar normalmente.",
+    castTime: "1 Ação de Magia", cooldown: "1 uso por combate",
+    note: "Criaturas sem audição são imunes ao dano. Estruturas de vidro ou cristal na área são destruídas automaticamente." },
+
+  /* ─── ⚔ PALADINO ─────────────────────────────────────────── */
+
+  { name: "Juramento Sagrado", level: 2, category: "buff/ritual", subclass: "paladino",
+    effect: "Declara um juramento em voz alta (ex: 'proteger este aliado', 'derrotar este inimigo'). Enquanto age em direção ao juramento: +1d8 em todos os ataques e +2 Defesa Física. Se quebrar o juramento voluntariamente: perde todos os bônus e perde 1d10 HP. Se cumprir: recupera todos os Slots de Magia.",
+    castTime: "1 Ação de Magia", cooldown: "1 uso por combate",
+    note: "O Mestre avalia se as ações são coerentes com o juramento. Um paladino não pode declarar o mesmo juramento duas vezes no mesmo combate." },
+
+  { name: "Luz do Julgamento", level: 3, category: "ataque/defesa", subclass: "paladino",
+    effect: "Projeta um raio de luz sagrada a até 8 hex: 3d8+SAB de dano sagrado. Criaturas corrompidas, mortas-vivas ou de origem demônica sofrem +2d8 adicional e ficam Cegas por 2 rodadas (sem resistência). Aliados no caminho do raio (linha) recuperam 1d6 HP ao serem tocados pela luz.",
+    castTime: "1 Ação de Magia", cooldown: "2 usos por combate",
+    note: "Com Punição Divina ativa: o dano base sobe para 4d8+SAB e o Cegamento dura 3 rodadas." },
+
+  { name: "Imposição das Mãos", level: 1, category: "cura", subclass: "paladino",
+    effect: "Toca um aliado: cura 2d6+SAB HP e remove 1 condição negativa (veneno, sangramento, medo, paralisia). Pode ser usada em si mesmo. 4 usos por combate — o poder vem da fé, não de Slots de Magia (não consome Slot).",
+    castTime: "1 Ação de Magia ou Reação", cooldown: "4 usos por combate (não consome Slot)",
+    note: "Com Fervor Sagrado nível 2+: pode usar Imposição das Mãos sem gastar Ação (como parte de qualquer outra ação) 1x por combate." },
+
+  { name: "Martelo Divino", level: 4, category: "ataque", subclass: "paladino",
+    effect: "Invoca um martelo de luz pura e o arremessa a até 10 hex: 4d8+SAB de dano sagrado em área 2x2 hex. Criaturas na área são Empurradas 2 hex e Derrubadas (sem teste). O martelo persiste por 2 rodadas — pode ser relançado como Ação Livre, mas dano cai para 2d8.",
+    castTime: "1 Ação de Magia", cooldown: "1 uso por combate",
+    note: "Com Aura de Proteção ativa: aliados na área de impacto recebem +2 Defesa Física por 2 rodadas (a luz os protege)." },
+
+  /* ─── ⚗ ALQUIMISTA ───────────────────────────────────────── */
+
+  { name: "Elixir de Batalha", level: 2, category: "buff", subclass: "alquimista",
+    effect: "Cria e aplica instantaneamente um elixir em si mesmo ou em aliado adjacente: escolha 1 efeito — (a) +2d6 em todos os ataques por 3 rodadas, (b) recupera 3d8 HP imediatamente, (c) +2 Ações de Combate por 2 rodadas (com fadiga posterior: −1 Ação por 1 rodada). O elixir tem efeito imediato.",
+    castTime: "1 Ação de Magia", cooldown: "3 usos por combate",
+    note: "Alquimista com Criação de Poções nível 2+: pode criar elixires com 2 efeitos simultâneos (escolhe dois da lista)." },
+
+  { name: "Névoa Ácida", level: 2, category: "controle/ataque", subclass: "alquimista",
+    effect: "Lança um frasco de ácido que cria nuvem corrosiva em área 3x3 hex por 3 rodadas. Qualquer criatura que entrar ou permanecer na nuvem sofre 1d6 de ácido por rodada + −1 em toda Defesa Física (o ácido corrói equipamentos). Visibilidade na nuvem: 1 hex.",
+    castTime: "1 Ação de Magia", cooldown: "2 usos por combate",
+    note: "Com Bomba Alquímica: a Névoa Ácida pode ser combinada com uma Bomba de Fogo para criar uma explosão de fogo ácido (+1d8 de dano imediato a todos na área)." },
+
+  { name: "Catalisador de Magia", level: 3, category: "buff/arcano", subclass: "alquimista",
+    effect: "Cria e bebe (ou aplica em aliado) um catalisador arcano: a próxima magia conjurada pelo alvo tem seu dano ou cura dobrados, e não consome Slot de Magia. Efeito dura até a próxima magia ser usada ou 3 rodadas (o que vier primeiro).",
+    castTime: "1 Ação de Magia", cooldown: "2 usos por combate",
+    note: "Com Pergaminhos: um pergaminho usado sob efeito do Catalisador tem poder de nível +1 (magia de nível 2 equivale a nível 3)." },
+
+  { name: "Grande Explosão Alquímica", level: 5, category: "ataque/área", subclass: "alquimista",
+    effect: "Arremessa um grande frasco instável a até 10 hex: explode em área 5x5 hex causando 5d8 de dano (fogo + ácido + impacto simultâneos). Todos na área testam AGI (difícil) ou ficam Derrubados e Cegos por 1 rodada. O terreno na área fica coberto de resíduos ácidos por 2 rodadas (1d4 de dano ao cruzar).",
+    castTime: "1 Ação de Magia", cooldown: "1 uso por combate",
+    note: "Alquimista com Bomba Alquímica nível 3: pode lançar esta magia sem custo de Slot (o talento substitui o conhecimento arcano)." },
+
+  /* ─── 🌿 DRUIDA ───────────────────────────────────────────── */
+
+  { name: "Chamado da Tempestade", level: 4, category: "ataque/controle", subclass: "druida",
+    effect: "Invoca uma tempestade local sobre a área de combate por 4 rodadas. A cada rodada: 1d4 raios caem em hexes aleatórios (Mestre rola posição), cada um causando 2d8 de dano elétrico. Terreno fica encharcado (−2 Movimento para todos). Criaturas de metal (armaduras pesadas) sofrem +1d6 por raio.",
+    castTime: "2 Ações de Magia", cooldown: "1 uso por combate",
+    note: "Druida com Moldar Terreno: pode direcionar 1 raio por rodada para um hex específico em vez de aleatório." },
+
+  { name: "Enredar", level: 1, category: "controle", subclass: "druida",
+    effect: "Raízes e trepadeiras emergem em área 3x3 hex em terreno natural. Todos no área testam AGI (normal) ou ficam Presos (imóveis) por 3 rodadas. Liberar: FOR (normal) por Ação. O terreno torna-se difícil mesmo após as raízes sumam. Animais e criaturas de natureza testam com dificuldade +1 grau para resistir.",
+    castTime: "1 Ação de Magia", cooldown: "3 usos por combate",
+    note: "Druida com Forma Selvagem: na forma animal, pode usar Enredar como Ação Livre (os instintos canalizam naturalmente)." },
+
+  { name: "Pele de Pedra", level: 2, category: "defesa/buff", subclass: "druida",
+    effect: "Endurece a pele de um aliado tocado com a resistência da rocha. Por 4 rodadas: +3 Defesa Física, resistência a dano cortante e perfurante (−2 por dado), e imunidade a Empurrão e Derrubada. A aparência muda levemente — pele acinzentada, textura pedregosa.",
+    castTime: "1 Ação de Magia", cooldown: "2 usos por combate",
+    note: "Com Cura da Natureza: ao aplicar Pele de Pedra e Cura da Natureza no mesmo aliado, o alvo também fica imune a veneno por 2 rodadas." },
+
+  { name: "Fúria da Natureza", level: 5, category: "ataque/invocacao", subclass: "druida",
+    effect: "A natureza responde à vontade do druida: em raio 8 hex, surgem simultaneamente — 2 Treants Jovens (HP 60, dano 1d10), o terreno torna-se completamente hostil a inimigos (terreno difícil + Enredar automático), e 1d4 raios de tempestade caem em inimigos (2d8 cada). Dura 3 rodadas.",
+    castTime: "2 Ações de Magia", cooldown: "1 uso por sessão",
+    note: "Só pode ser conjurada em terreno natural (floresta, campo, montanha, rio). Em dungeon ou cidade: não funciona." },
+
+  /* ─── 🔥 BERSERKER ───────────────────────────────────────── */
+
+  { name: "Grito de Guerra", level: 1, category: "buff/controle", subclass: "berserker",
+    effect: "Solta um grito ensurdecedor. Todos os aliados em raio 5 hex ganham +1d6 em ataques por 2 rodadas (o grito inspira). Todos os inimigos em raio 5 hex testam SAB (normal) ou ficam Amedrontados por 1 rodada. Pode ser usada no começo do combate antes de agir (iniciativa livre).",
+    castTime: "1 Ação Livre (no início do turno)", cooldown: "2 usos por combate",
+    note: "Berserker em Fúria de Batalha: o Grito de Guerra tem raio dobrado (10 hex) e aliados recebem +1d8 em vez de +1d6." },
+
+  { name: "Sangue por Poder", level: 2, category: "buff/sacrifício", subclass: "berserker",
+    effect: "Sacrifica HP próprio para converter em poder bruto: gasta até 15 HP (não pode ir abaixo de 1 HP) — a cada 5 HP gastos, ganha +1d8 de dano nos próximos ataques por 3 rodadas. Máximo de 3d8 extra (15 HP gastos). O HP sacrificado não retorna com cura normal — apenas com descanso longo.",
+    castTime: "1 Ação Livre", cooldown: "2 usos por combate",
+    note: "Em Limiar da Morte (abaixo de 30% HP): o custo em HP é reduzido à metade (5 HP = +1d8, máximo 7 HP = 3d8)." },
+
+  { name: "Impacto Devastador", level: 3, category: "ataque", subclass: "berserker",
+    effect: "Concentra toda a raiva em um único golpe: o próximo ataque físico causa dano triplicado (todos os dados × 3) e o alvo é Empurrado 4 hex e Derrubado automaticamente. Se o alvo bater em uma parede ou outro inimigo: +1d10 de dano adicional. Após o golpe: o berserker fica com −1 Ação no próximo turno (exaustão do esforço).",
+    castTime: "1 Ação Livre (ativa o próximo ataque)", cooldown: "1 uso por combate",
+    note: "Combinado com Fúria de Batalha ativa: o dano triplicado inclui o +1d8 da Fúria no cálculo base." },
+
+  { name: "Não Vou Cair", level: 4, category: "buff/sobrevivência", subclass: "berserker",
+    effect: "Ativa uma determinação absoluta por 5 rodadas: o berserker torna-se completamente imune a ser reduzido a 0 HP (qualquer golpe que deveria matar reduz a 1 HP). Ganha +2d6 de dano em todos os ataques. No fim das 5 rodadas ou quando a magia encerra voluntariamente: cai Inconsciente automaticamente independente do HP atual.",
+    castTime: "1 Ação Livre (qualquer turno, inclusive fora do turno)", cooldown: "1 uso por sessão",
+    note: "Esta é a última linha do berserker. Não pode ser cancelada uma vez ativada — as 5 rodadas são completas ou a morte é aceita antecipadamente." }
+
+,
+
+  /* ══════════════════════════════════════════════════════════
+     NOVAS MAGIAS — Invocação, Cura e Ataque
+     ══════════════════════════════════════════════════════════ */
+
+  /* ─── Invocação — Animais ──────────────────────────────── */
+
+  { name: "Invocar Corvo Espião", level: 1, category: "invocacao",
+    effect: "Invoca um corvo mágico aliado (HP 8, foge se atacado diretamente). Em combate: distrai 1 alvo por rodada — alvo tem −1d4 nos ataques tentando espantar o corvo. Fora de combate: voa em raio 200m e o conjurador vê e ouve através dele (concentração).",
+    castTime: "1 Ação de Magia", cooldown: "Ilimitado (concentração)" },
+
+  { name: "Invocar Urso Cinzento", level: 2, category: "invocacao",
+    effect: "Invoca urso cinzento aliado (HP 55, dano 1d10+1d6, Def 4, 2 Ações/turno). 40% de chance de agarrar ao acertar — alvo testa FOR difícil para escapar. Permanece 4 rodadas.",
+    castTime: "1 Ação de Magia", cooldown: "2 usos por combate" },
+
+  { name: "Invocar Matilha de Lobos", level: 2, category: "invocacao",
+    effect: "Invoca 1d4+1 lobos aliados (HP 22, dano 1d8, Mov 6, 1 Ação cada). Tática de matilha: 2+ lobos no mesmo alvo — o alvo testa AGI normal ou cai Derrubado. Permanecem 3 rodadas.",
+    castTime: "1 Ação de Magia", cooldown: "1 uso por combate" },
+
+  { name: "Invocar Águia Trovejante", level: 2, category: "invocacao",
+    effect: "Invoca águia eletrizada (HP 35, dano 1d8+1d4 elétrico, altitude 4, Def 3). Cada acerto: alvo testa AGI normal ou fica Atordoado 1 rodada. Permanece 3 rodadas.",
+    castTime: "1 Ação de Magia", cooldown: "2 usos por combate" },
+
+  { name: "Invocar Pantera das Sombras", level: 3, category: "invocacao",
+    effect: "Invoca pantera das sombras (HP 50, dano 1d10+1d8, Esquiva 18). Em área escura: invisível até atacar. O primeiro ataque por turno em que estava invisível é Crítico automático. Permanece 4 rodadas.",
+    castTime: "1 Ação de Magia", cooldown: "1 uso por combate" },
+
+  { name: "Invocar Crocodilo Colossal", level: 3, category: "invocacao",
+    effect: "Invoca crocodilo colossal (HP 85, dano 2d8+1d6, Def 7, ocupa 2 hexes). Mandíbula de Ferro: ao acertar, alvo fica Agarrado e sofre 1d8 automático por rodada. Liberar: FOR crítico. Permanece 4 rodadas.",
+    castTime: "1 Ação de Magia", cooldown: "1 uso por combate" },
+
+  { name: "Invocar Touro Infernal", level: 4, category: "invocacao",
+    effect: "Invoca touro em chamas (HP 100, dano 2d10+1d8, Def 6). Carga Imparável: mover 3+ hexes e atacar causa dano dobrado + Derrubado automático. Aura de fogo: 1d6 por rodada a criaturas a 1 hex. Permanece 4 rodadas.",
+    castTime: "2 Ações de Magia", cooldown: "1 uso por combate" },
+
+  { name: "Alcateia Primordial", level: 5, category: "invocacao",
+    effect: "Invoca simultaneamente: 1 Urso (HP 80, dano 2d8), 2 Lobos (HP 35, dano 1d10 cada) e 1 Águia (HP 45, dano 1d8 elétrico, altitude 4). Todos agem no turno do conjurador. Druida com set Raiz e Ramo: +50% HP e +1d6 dano em todos. Permanecem até o fim do combate.",
+    castTime: "2 Ações de Magia", cooldown: "1 uso por sessão" },
+
+  /* ─── Invocação — Mortos-Vivos ─────────────────────────── */
+
+  { name: "Invocar Esqueleto Arqueiro", level: 1, category: "invocacao",
+    effect: "Invoca Esqueleto Arqueiro aliado (HP 16, dano 1d8 à distância alcance 8 hex, Def 2, 2 Ações de ataque por turno). Imune a veneno e dano psíquico. Permanece até ser destruído ou fim do combate.",
+    castTime: "1 Ação de Magia", cooldown: "3 usos por combate" },
+
+  { name: "Invocar Espectro Faminto", level: 2, category: "invocacao",
+    effect: "Invoca espectro etéreo (HP 30, dano 1d8 psíquico que ignora Def Física, Esquiva 17). Imune a dano físico mundano. Drena 1d4 SAB ao acertar — se SAB do alvo chegar a 0, fica Inconsciente por 2 rodadas. Permanece 3 rodadas.",
+    castTime: "1 Ação de Magia", cooldown: "2 usos por combate" },
+
+  { name: "Invocar Cavaleiro Esquelético", level: 3, category: "invocacao",
+    effect: "Invoca Cavaleiro Esquelético montado em cavalo-esqueleto (HP 70, dano 1d10+1d8, Def 6, Mov 8, 3 Ações). Carga Mortal: mover 4+ hexes e atacar = dano dobrado + Derrubado automático. Permanece 4 rodadas.",
+    castTime: "1 Ação de Magia", cooldown: "1 uso por combate" },
+
+  { name: "Invocar Banshee", level: 4, category: "invocacao",
+    effect: "Invoca Banshee aliada (HP 55, dano 1d10 psíquico, Esquiva 19, intangível). Lamento da Banshee (1 Ação de Magia): todos em raio 4 hex testam SAB difícil ou ficam Aterrorizados por 2 rodadas. Imune a dano físico. Permanece 3 rodadas.",
+    castTime: "1 Ação de Magia", cooldown: "1 uso por combate" },
+
+  { name: "Levantar Campeão", level: 4, category: "invocacao",
+    effect: "Levanta cadáver de guerreiro ou criatura mortos há menos de 1 hora como Campeão Morto-Vivo com 70% das estatísticas originais e habilidades físicas, 3 Ações por turno. Máximo 1 Campeão ativo por vez. Permanece até ser destruído ou fim do combate.",
+    castTime: "1 turno de concentração", cooldown: "1 uso por sessão",
+    note: "Necromante com Aura dos Sepulcros: 90% das estatísticas e mantém habilidades mágicas simples (nível 1-2)." },
+
+  { name: "Horda dos Mortos", level: 5, category: "invocacao",
+    effect: "Levanta todos os cadáveres em raio 8 hex simultaneamente (até 8 mortos-vivos). Cada um tem HP 40% e dano 60% do original, 1 Ação cada. Ao ser destruído: energia vai para os outros (+2 HP cada). Permanecem até o fim do combate.",
+    castTime: "2 Ações de Magia", cooldown: "1 uso por sessão" },
+
+  /* ─── Cura ─────────────────────────────────────────────── */
+
+  { name: "Toque Restaurador", level: 1, category: "cura",
+    effect: "Toca um aliado: cura 2d6+SAB HP e remove Sangramento. Pode ser usada em si mesmo.",
+    castTime: "1 Ação de Magia", cooldown: "Ilimitado" },
+
+  { name: "Escudo Vital", level: 2, category: "cura",
+    effect: "Escudo de energia em torno de aliado por 3 rodadas: absorve até 15 de dano antes de quebrar. Quando quebra ou termina: aliado recupera HP igual à metade do dano total absorvido.",
+    castTime: "1 Ação de Magia", cooldown: "3 usos por combate" },
+
+  { name: "Pulso de Cura", level: 2, category: "cura",
+    effect: "Onda curativa em raio 3 hex: cura 1d8+SAB HP em todos os aliados na área. Estabiliza aliados Inconscientes na área (retornam com 1 HP).",
+    castTime: "1 Ação de Magia", cooldown: "2 usos por combate" },
+
+  { name: "Regeneração Acelerada", level: 2, category: "cura",
+    effect: "Aliado tocado recupera 1d6+SAB HP no início de cada turno por 4 rodadas. Remove Sangramento e Veneno comum ao ser aplicada. Nova aplicação reinicia o contador.",
+    castTime: "1 Ação de Magia", cooldown: "2 usos por combate" },
+
+  { name: "Bênção do Combate", level: 2, category: "buff",
+    effect: "Aliado abençoado por 3 rodadas: recupera 1d4 HP ao acertar qualquer ataque. Ganha +1d4 em testes de resistência. Pode ser lançada no turno do aliado como Reação.",
+    castTime: "1 Ação de Magia", cooldown: "2 usos por combate" },
+
+  { name: "Cura Maior", level: 3, category: "cura",
+    effect: "Restaura 4d8+SAB HP num aliado tocado ou a até 5 hex. Remove 2 condições negativas à escolha (veneno, paralisia, medo, cegueira, sangramento). Se o alvo estiver abaixo de 25% HP: cura adicional de 1d8.",
+    castTime: "1 Ação de Magia", cooldown: "2 usos por combate" },
+
+  { name: "Cura em Área", level: 3, category: "cura",
+    effect: "Cura 2d8+SAB HP em todos os aliados visíveis em raio 5 hex simultaneamente. Remove Sangramento de todos. Aliados Inconscientes na área são estabilizados e retornam com 1 HP.",
+    castTime: "1 Ação de Magia", cooldown: "1 uso por combate" },
+
+  { name: "Ressurreição de Emergência", level: 4, category: "cura",
+    effect: "Aliado Inconsciente ou morto há menos de 2 rodadas retorna com 2d10+SAB HP e fica imune a Inconsciente por 2 rodadas. Se ainda vivo com 0 HP: cura dobrada (4d10+SAB).",
+    castTime: "1 Ação de Magia", cooldown: "1 uso por combate" },
+
+  { name: "Cura Suprema", level: 5, category: "cura",
+    effect: "Restaura completamente o HP máximo de um aliado tocado. Remove todas as condições negativas, venenos e maldições de nível 3 ou menor. Se estava Inconsciente: retorna com HP completo e ganha +1d10 em todos os testes por 3 rodadas.",
+    castTime: "1 Ação de Magia", cooldown: "1 uso por combate" },
+
+  /* ─── Ataque ────────────────────────────────────────────── */
+
+  { name: "Dardo de Ácido", level: 1, category: "ataque",
+    effect: "Projeta dardo de ácido a até 8 hex: 1d8+INT imediato + 1d4 de ácido por rodada por 2 rodadas. Cada acerto de ácido: −1 Def Física do alvo (acumula até −3).",
+    castTime: "1 Ação de Magia", cooldown: "Ilimitado" },
+
+  { name: "Fragmentos de Pedra", level: 1, category: "ataque",
+    effect: "Saraivada de pedra em cone 3 hex: 1d6+INT em todos na área. Alvos com armadura leve ou nenhuma: +1d4 extra. AGI normal para metade.",
+    castTime: "1 Ação de Magia", cooldown: "Ilimitado" },
+
+  { name: "Flecha de Sombras", level: 2, category: "ataque",
+    effect: "Flecha de energia sombria a até 10 hex: 2d6+INT que ignora completamente Def Física. Em área de sombra ou escuridão: +1d6 adicional.",
+    castTime: "1 Ação de Magia", cooldown: "3 usos por combate" },
+
+  { name: "Mão Fantasma Agressiva", level: 2, category: "ataque",
+    effect: "Mão fantasmagórica agarra alvo a até 8 hex: 1d8+INT imediato. Alvo fica Agarrado por 2 rodadas (FOR difícil para escapar), sofre 1d6 de pressão por rodada e tem −1 Ação. A mão some se receber 10+ de dano.",
+    castTime: "1 Ação de Magia", cooldown: "2 usos por combate" },
+
+  { name: "Explosão Sônica", level: 2, category: "ataque",
+    effect: "Onda de som destruidora em cone 4 hex: 2d6+INT de dano sônico. Alvos testam FOR normal ou ficam Atordoados 1 rodada. Criaturas sem audição são imunes. Objetos de vidro e cristal na área são destruídos automaticamente.",
+    castTime: "1 Ação de Magia", cooldown: "2 usos por combate" },
+
+  { name: "Tempestade de Gelos", level: 3, category: "ataque",
+    effect: "Gelo cai em área 3x3 hex a até 10 hex: 2d8+INT de frio. Terreno coberto de gelo por 3 rodadas (AGI normal para não cair ao se mover). Alvos atingidos testam FOR normal ou ficam Lentos (−2 Movimento) por 2 rodadas.",
+    castTime: "1 Ação de Magia", cooldown: "2 usos por combate" },
+
+  { name: "Corrente de Raios", level: 3, category: "ataque",
+    effect: "Raio salta de alvo em alvo: até 4 alvos em cadeia (cada um a no máximo 4 hex do anterior). Dano decrescente: 2d8+INT no primeiro, −1d4 por salto (2d8→2d4→1d8→1d4). Armadura metálica: dano máximo sem rolar dados.",
+    castTime: "1 Ação de Magia", cooldown: "2 usos por combate" },
+
+  { name: "Coluna de Fogo", level: 3, category: "ataque",
+    effect: "Coluna de fogo em 1 hex a até 12 hex: 3d8+INT de dano. Alvos testam AGI normal ou ficam Queimando (1d6/rodada, 3 rodadas). A coluna persiste 2 rodadas — qualquer criatura que entrar sofre 2d6.",
+    castTime: "1 Ação de Magia", cooldown: "2 usos por combate" },
+
+  { name: "Chuva de Meteoros Menor", level: 4, category: "ataque",
+    effect: "4 fragmentos incandescentes caem em hexes à escolha dentro de raio 10 hex. Cada fragmento: 2d8+INT de fogo+impacto. Alvo atingido por 2+ fragmentos fica Derrubado automaticamente.",
+    castTime: "1 Ação de Magia", cooldown: "1 uso por combate" },
+
+  { name: "Vórtice Arcano", level: 4, category: "ataque",
+    effect: "Vórtice de energia arcana em área 3x3 hex por 3 rodadas. A cada rodada: 2d6+INT de dano + puxa todos 2 hex para o centro (FOR normal para resistir). Aliados podem ser excluídos do dano mas não do puxão.",
+    castTime: "1 Ação de Magia", cooldown: "1 uso por combate" },
+
+  { name: "Meteoro", level: 5, category: "ataque",
+    effect: "Meteoro de rocha ardente cai em ponto visível a até 20 hex: 6d10+INT de fogo+impacto em área 4x4 hex. AGI crítico ou Derrubado e Queimando (2d6/rodada, 3 rodadas). Terreno coberto de fragmentos por 2 rodadas (1d8 ao cruzar). Visível em raio 500m.",
+    castTime: "2 turnos de concentração", cooldown: "1 uso por sessão" },
+
+  { name: "Feixe Desintegrador", level: 5, category: "ataque",
+    effect: "Feixe de energia pura a até 15 hex: 5d10+INT de dano arcano. Se o alvo chegar a 0 HP: é desintegrado completamente (sem cadáver, impossível ressuscitar por meios comuns). SAB crítico para sobreviver com 1 HP em vez de desintegrar.",
+    castTime: "1 Ação de Magia", cooldown: "1 uso por combate" }
 ];
 
 /* ---------------------------------------------------------------------- */
@@ -867,6 +1158,29 @@ const WEAPONS_ONE_HAND = [
     note: "🌟 DIVINO — Resistência de Ras'kuru: ao receber dano que reduziria o portador abaixo de 50% HP, pode declarar 'Resistência' (1x/combate) — o dano é reduzido à metade e o portador ganha +1d10 de dano nos próximos 2 turnos (raiva purificada). Passivo: imune a Derrubada e Atordoado. Se o portador morrer empunhando a Garra, todos os aliados em raio 6 hex ganham +2d8 de dano por 1 rodada (sacrifício inspira).",
     curseDetails: "Localização: Tumba do Último Chefe Orc (Grande Planície, dif.3). O guardião é um Orc ancestral não-morto que só entrega a garra se for derrotado em combate singular." },
 
+
+  /* ══════════════════════════════════════════════════════════
+     COMBOS DE SUBCLASSE — Armas de 1M
+     ══════════════════════════════════════════════════════════ */
+
+  /* ── SET: Manto do Necromante (3 peças) ── */
+  { tier: "magico", subclass: "necromante", setName: "Manto do Necromante",
+    name: "Ceifador (Manto do Necromante)", dmg: "1d8 + 1d6", req: "INT/SAB", weight: 2, defenseDegrade: 1,
+    slot: ["primary","secondary"],
+    story: "Uma foice curta forjada com osso de lich, temperada em névoa das catacumbas. A lâmina parece sempre levemente translúcida — como se existisse em dois planos ao mesmo tempo.",
+    note: "A cada morte com esta lâmina: ganha 1 carga de Alma (máximo 3). Cada carga adiciona +1d4 de dano necrótico nos próximos ataques. Cargas se perdem ao fim do combate.",
+    setBonus: { pieces: 3, ability: "Colheita das Almas",
+      effect: "Com 3 cargas de Alma ativas: pode gastar todas para lançar Toque Necrótico gratuitamente (sem Slot) como Ação Livre. O próximo morto-vivo invocado neste combate tem HP dobrado." } },
+
+  /* ── SET: O Alquimista Errante (3 peças) ── */
+  { tier: "raro", subclass: "alquimista", setName: "O Alquimista Errante",
+    name: "Daga de Extração (O Alquimista Errante)", dmg: "1d6 + 1d4", req: "DEX", weight: 0.8, defenseDegrade: 1,
+    slot: ["primary","secondary"],
+    story: "Daga com lâmina oca e serrilhada — ao perfurar, extrai automaticamente uma amostra da criatura (sangue, veneno, fluido). Alquimistas usam as amostras como ingredientes de alto nível.",
+    note: "Acerto em criatura não-morta: extrai componente que serve como ingrediente raro (1x/criatura). Acerto em criatura venenosa: extrai dose de veneno que pode ser aplicada em arma ou frasco.",
+    setBonus: { pieces: 3, ability: "Laboratório de Campo",
+      effect: "Com 3 peças: pode criar qualquer poção do Nível 1 ou 2 como Ação de Combate (sem descanso longo, mas precisa de ingredientes coletados neste combate). 1x/combate." } },
+
 ];
 
 const WEAPONS_TWO_HAND = [
@@ -983,6 +1297,38 @@ const WEAPONS_TWO_HAND = [
     note: "🌟 DIVINO — Oportunidade de Tobi: cada projétil disparado tem 25% de chance (1d4=1) de acertar TAMBÉM um segundo alvo aleatório no raio (Tobi sempre aproveita oportunidades). Passivo: ao usar Furtividade no mesmo turno, o dano é triplicado (sneak attack divino). Uma vez por sessão: 'Sorte do Goblin' — troca qualquer resultado de dado (seu ou do inimigo) por outro resultado à sua escolha.",
     curseDetails: "Localização: Toca do Goblin Mais Sortudo (qualquer cidade — Tobi move o item aleatoriamente entre sessões). O Mestre joga 1d6 no início de cada sessão para determinar onde está." },
 
+
+  /* ══════════════════════════════════════════════════════════
+     COMBOS DE SUBCLASSE — Armas de 2M
+     ══════════════════════════════════════════════════════════ */
+
+  /* ── SET: Voto de Aço e Luz (3 peças) — Paladino ── */
+  { tier: "lendario", subclass: "paladino", setName: "Voto de Aço e Luz",
+    name: "Martelo do Juramento (Voto de Aço e Luz)", dmg: "1d12 + 1d10", req: "FOR/SAB", weight: 9,
+    defenseDegrade: null, slot: ["primary"], heavyTwoHanded: true,
+    story: "Forjado num altar de Sanctum durante uma guerra que nunca deveria ter acontecido. O ferreiro era clérigo, o clérigo era guerreiro. O martelo carrega ambas as naturezas — esmaga como metal, queima como fé.",
+    note: "Cada acerto adiciona +1d6 de dano sagrado. Se o portador tiver um juramento ativo (magia Juramento Sagrado): o bônus sobe para +1d8 e o alvo fica com −1 em resistências por 2 rodadas.",
+    setBonus: { pieces: 3, ability: "Golpe do Juramento Cumprido",
+      effect: "Com 3 peças: ao cumprir qualquer juramento durante o combate — o próximo acerto causa dano máximo em todos os dados + 3d8 sagrado extra e todos os aliados em raio 5 hex recuperam 1d10 HP." } },
+
+  /* ── SET: Raiz e Ramo (3 peças) — Druida ── */
+  { tier: "magico", subclass: "druida", setName: "Raiz e Ramo",
+    name: "Cajado Raiz-Viva (Raiz e Ramo)", dmg: "1d8 + 1d6", req: "SAB/INT", weight: 3,
+    defenseDegrade: null, slot: ["primary"], heavyTwoHanded: true,
+    story: "Não foi forjado — cresceu. Um druida plantou o galho de uma árvore ancestral em solo sagrado e esperou 40 anos. Quando o retirou, a raiz ainda pulsava. Ainda pulsa.",
+    note: "Ao conjurar Enredar ou Moldar Terreno: a área afetada aumenta em +1 hex em todas as direções. Ao invocar um animal: o animal invocado aparece com 1 nível de força extra (HP+10, dano +1d4).",
+    setBonus: { pieces: 3, ability: "A Floresta Responde",
+      effect: "Com 3 peças: 1x/combate como Ação Livre — o terreno em raio 6 hex torna-se favorável aos aliados (regen 2 HP/r, −2 Movimento inimigos, +1d4 nos testes de aliados). Dura 3 rodadas." } },
+
+  /* ── SET: Fúria Encadeada (3 peças) — Berserker ── */
+  { tier: "lendario", subclass: "berserker", setName: "Fúria Encadeada",
+    name: "Machado Correntes (Fúria Encadeada)", dmg: "1d12 + 1d10", req: "FOR", weight: 10,
+    defenseDegrade: null, slot: ["primary"], heavyTwoHanded: true,
+    story: "Duas lâminas unidas por uma corrente de metal vivo — a corrente não foi fundida, cresceu. O forjador tentou separar as lâminas depois. Não conseguiu. Desistiu. Vendeu o par. O comprador descobriu que a corrente aumenta com a raiva do portador.",
+    note: "Ataques com este machado podem acertar 2 alvos adjacentes com 1 Ação (a corrente estende o alcance). Em Fúria de Batalha: o bônus de +1d8 da Fúria se aplica a AMBOS os alvos do ataque duplo.",
+    setBonus: { pieces: 3, ability: "Corrente Sem Fim",
+      effect: "Com 3 peças: ao entrar em Fúria de Batalha, o efeito dura +2 rodadas extras. Ao sair da Fúria: pode escolher imediatamente entrar em Limiar da Morte (se a habilidade for conhecida) sem custo de ação." } },
+
 ];
 
 const WEAPONS_MAGIC = [
@@ -1009,6 +1355,29 @@ const WEAPONS_MAGIC = [
     story: "O Deus do Vermelhão não tem nome — os Karlacs o chamam de Vermelhão porque é a cor do fogo que consome os fragmentos do Deus Marcado. Este cajado foi formado espontaneamente na boca do Vulcão de Karloth quando a Grande Salamandra Karlac passou pela área pela primeira vez. Os Karlacs acreditam que o cajado é um pedaço do coração do vulcão que Vermelhão exteriorizou para o povo que vive nele.",
     note: "🌟 DIVINO — Fogo Crescente: a cada rodada de combate, o dano aumenta em +1d6 (acumula sem limite — rodada 1=+1d6, rodada 2=+2d6, rodada 3=+3d6...). Se o portador receber dano de fogo ou de fonte da Karlac: o acúmulo não é zerado — é dobrado (+2d6 por rodada no acúmulo). Uma vez por combate: 'Vermelhão Desperto' — libera todo o fogo acumulado em área 4x4 hex (dano = todo o dano acumulado até este momento).",
     curseDetails: "Localização: Boca do Vulcão de Karloth (acessível apenas durante erupção menor, dif.4). O Dragão Dourado é o guardião — não ataca, mas exige que o portador prove que entende a natureza do fogo crescente." },
+
+
+  /* ══════════════════════════════════════════════════════════
+     COMBOS DE SUBCLASSE — Armas Mágicas
+     ══════════════════════════════════════════════════════════ */
+
+  /* ── SET: Manto do Necromante (peça 2) ── */
+  { tier: "magico", subclass: "necromante", setName: "Manto do Necromante",
+    name: "Báculo de Osso Oco (Manto do Necromante)", dmg: "1d6 + 1d4", req: "INT", weight: 2.5,
+    defenseDegrade: null, slot: ["primary"], heavyTwoHanded: false,
+    story: "Feito com a espinha dorsal de um lich derrotado. O osso nunca esfriou completamente — ao toque, tem a temperatura exata de um corpo há uma hora morto. Conjuradores de necromância sentem os dedos formigarem ao segurar.",
+    note: "Magias de necromancia conjuradas com este báculo têm alcance +2 hex e custo de Slot reduzido em 1 (mínimo 0). Pacto Sombrio: o espírito invocado tem HP dobrado.",
+    setBonus: { pieces: 3, ability: "Colheita das Almas",
+      effect: "Com 3 peças do Manto do Necromante: Colheita das Almas ativada (ver Ceifador)." } },
+
+  /* ── SET: Voz e Melodia (3 peças) — Bardo ── */
+  { tier: "raro", subclass: "bardo", setName: "Voz e Melodia",
+    name: "Alaúde de Ossos de Dragão (Voz e Melodia)", dmg: "1d6 + 1d4", req: "SAB/DEX", weight: 1.5,
+    defenseDegrade: null, slot: ["primary"], heavyTwoHanded: false, range: 6,
+    story: "Construído por um bardo que viveu 3 anos numa caverna de dragão. Não o roubou — ficou, aprendeu a linguagem do dragão e pediu permissão para usar seus ossos quando morresse. O dragão disse não. O bardo esperou. O dragão morreu de velhice. O bardo ainda toca.",
+    note: "Magias de buff do Bardo conjuradas enquanto empunha o Alaúde têm duração +1 rodada. Inspiração Bárdica: o bônus sobe de +1d6 para +1d8. Pode ser usada como arma ranged (projeta notas musicais).",
+    setBonus: { pieces: 3, ability: "A Música que Move o Mundo",
+      effect: "Com 3 peças: Performance de Batalha pode ser ativada como Ação Livre (sem custo de Ação de Magia). Ao encerrar a Performance: todos os aliados que estavam no raio recuperam 2d8 HP (a melodia final os restaura)." } },
 
 ];
 
@@ -1104,7 +1473,20 @@ const SHIELDS = [
   /* --- LENDÁRIO: tema Aether --- */
   { tier: "lendario", name: "Casco de Magnalaga", physDefense: 8, weight: 10, penalty: "Nenhuma", slot: ["shield"],
     story: "Fragmento do casco de Magnalaga desprendido durante um de seus mergulhos e polido pelos Anões do Casco ao longo de 50 anos. A superfície é pedra-mas-viva: muda de temperatura, e em batalha parece pulsar levemente. O Rei Burrak o guardou por décadas antes de entregá-lo a aventureiros que protegeram a Cidadela.",
-    note: "Passivo: imune a dano de ácido e veneno. Uma vez por combate, ao ser atingido por magia de qualquer tipo, absorve a magia completamente (sem dano) e converte em 1d8 de HP para o portador. Aliados em raio 2 hex ficam imunes a efeitos de Corrupção enquanto este escudo estiver levantado." }
+    note: "Passivo: imune a dano de ácido e veneno. Uma vez por combate, ao ser atingido por magia de qualquer tipo, absorve a magia completamente (sem dano) e converte em 1d8 de HP para o portador. Aliados em raio 2 hex ficam imunes a efeitos de Corrupção enquanto este escudo estiver levantado." },
+
+  /* ══════════════════════════════════════════════════════════
+     COMBOS DE SUBCLASSE — Escudos
+     ══════════════════════════════════════════════════════════ */
+
+  /* ── SET: Voto de Aço e Luz (peça 2) — Paladino ── */
+  { tier: "lendario", subclass: "paladino", setName: "Voto de Aço e Luz",
+    name: "Égide do Juramento (Voto de Aço e Luz)", physDefense: 5, magDefense: 3, weight: 6, req: "FOR/SAB",
+    story: "Um escudo que não foi feito para atacar. Na borda, gravadas em latim sagrado de Sanctum: 'Eu paro o golpe que devia matar meu irmão.' O escudo tem marca de 43 golpes que pararam.",
+    note: "Escudo da Fé conjurada no portador desta Égide: +1 de bônus em cada Defesa (+3/+3 em vez de +2/+2). Aura de Proteção: o raio da aura aumenta em +2 hex enquanto esta Égide estiver equipada.",
+    setBonus: { pieces: 3, ability: "Golpe do Juramento Cumprido",
+      effect: "Ver Martelo do Juramento (2 peças adicionais ativam o bônus completo)." } },
+
 ];
 
 const ARMORS = [
@@ -1231,6 +1613,43 @@ const ARMORS = [
     name: "Capuz Invisível de Tobi", physDefense: 2, magDefense: 2, weight: 0.3, movePenalty: -1, req: "DEX/AGI",
     story: "Tobi desapareceu por 3 horas uma vez e voltou com este capuz. Ninguém sabe onde ele esteve. O capuz tem um remendo em formato de estrela que não combina com o resto do tecido — provavelmente de outro capuz completamente diferente. Goblins que o usaram relatam que às vezes o capuz ri baixinho no escuro.",
     note: "🌟 DIVINO: +1 Movimento. Passivo: a primeira vez que alguém ataca o portador em cada combate, o ataque tem 50% de chance de errar automaticamente (Tobi 'desvia' o portador sem ele perceber). Uma vez por combate: 'Sumiço do Tobi' — o portador se torna completamente invisível por 2 rodadas (ataques contra ele têm 75% de chance de errar; ele pode atacar normalmente)." },
+
+
+  /* ══════════════════════════════════════════════════════════
+     COMBOS DE SUBCLASSE — Armaduras
+     ══════════════════════════════════════════════════════════ */
+
+  /* ── SET: Manto do Necromante (peça 3) ── */
+  { tier: "magico", subclass: "necromante", setName: "Manto do Necromante",
+    name: "Manto de Névoa Cinza (Manto do Necromante)", physDefense: 1, magDefense: 4, weight: 1, movePenalty: 0, req: "SAB",
+    story: "Um manto que não projeta sombra ao sol. A névoa que o compõe é real — partículas de ecto do plano dos mortos tecidas em fibra. Quem usa sente um frio suave no pescoço. Sempre.",
+    note: "Passivo: o portador é considerado parcialmente etéreo — ataques de criaturas vivas têm 15% de chance de passar (rola 1d20, em 1-3 passa). Mortos-vivos e espíritos atacam normalmente.",
+    setBonus: { pieces: 3, ability: "Colheita das Almas",
+      effect: "Com as 3 peças do Manto: Colheita das Almas (ver Ceifador). Além disso: mortos-vivos inimigos em raio 3 hex têm −1d6 em todos os testes (o manto os desorienta — reconhecem o ecto)." } },
+
+  /* ── SET: Raiz e Ramo (peça 2) — Druida ── */
+  { tier: "magico", subclass: "druida", setName: "Raiz e Ramo",
+    name: "Capa de Casca e Folha (Raiz e Ramo)", physDefense: 3, magDefense: 2, weight: 2, movePenalty: 0, req: "SAB",
+    story: "Tecida com capas de árvores que morreram por causas naturais — nenhuma foi cortada. Druidas passam meses coletando as cascas. A capa eventualmente para de parecer feita por alguém: parece simplesmente que sempre existiu assim.",
+    note: "Em terreno natural: Defesa Física +2 (a capa se adapta ao ambiente). Em forma de animal (Forma Selvagem): a capa incorpora-se à forma e mantém os bônus de defesa na forma animal.",
+    setBonus: { pieces: 3, ability: "A Floresta Responde",
+      effect: "Ver Cajado Raiz-Viva (2 peças adicionais ativam o bônus completo)." } },
+
+  /* ── SET: Fúria Encadeada (peça 2) — Berserker ── */
+  { tier: "lendario", subclass: "berserker", setName: "Fúria Encadeada",
+    name: "Armadura da Cólera (Fúria Encadeada)", physDefense: 6, magDefense: 1, weight: 14, movePenalty: 1, req: "FOR",
+    story: "Chapas de metal pintadas com o sangue do portador original. A pintura nunca seca. O sangue novo se adiciona ao velho. Ninguém sabe quantos portadores a usaram — cada ferida na armadura tem uma história que ela não conta.",
+    note: "Ao receber dano: ganha 1 carga de Ira (máximo 5). Cada carga de Ira adiciona +1d4 de dano no próximo ataque. As cargas resetam ao fim do combate. Em Limiar da Morte: as cargas são dobradas automaticamente.",
+    setBonus: { pieces: 3, ability: "Corrente Sem Fim",
+      effect: "Ver Machado Correntes (2 peças adicionais ativam o bônus completo)." } },
+
+  /* ── SET: Voto de Aço e Luz (peça 3) — Paladino ── */
+  { tier: "lendario", subclass: "paladino", setName: "Voto de Aço e Luz",
+    name: "Couraça do Juramento Eterno (Voto de Aço e Luz)", physDefense: 8, magDefense: 4, weight: 18, movePenalty: 1, req: "FOR/SAB",
+    story: "Armadura forjada sobre um altar de Sanctum durante 7 dias de oração ininterrupta. Cada placa foi banhada em água benta. O ferreiro disse que quando a última placa resfriou, as outras ficaram quentes por 1 hora — como se a armadura estivesse viva.",
+    note: "Passivo: ao receber dano abaixo de 50% HP, um escudo de luz surge — próximo ataque contra o portador tem −1d6 de dano (a luz absorve). Imposição das Mãos usada enquanto usa esta couraça recupera +1d6 HP extra.",
+    setBonus: { pieces: 3, ability: "Golpe do Juramento Cumprido",
+      effect: "Com as 3 peças: ao cumprir um Juramento Sagrado neste combate — próximo acerto é dano máximo + 3d8 sagrado, aliados em raio 5 hex curam 1d10 HP." } },
 
 ];
 
@@ -1571,6 +1990,66 @@ const ACCESSORIES = [
     effect: "+20 HP máximo e +2 Ações de Magia. Passivo: o portador é imune a dano de fogo comum. Dano de fogo sagrado (do Vermelhão ou da Salamandra Karlac) ainda afeta. Ao receber dano de fogo de qualquer fonte: 25% do dano é convertido em cura. Uma vez por combate: 'Chama de Karloth' — envolve o portador em fogo sagrado por 3 rodadas, causando 1d8 a qualquer inimigo que o atacar corpo a corpo (o fogo defende).",
     story: "Cinzas do primeiro ponto que Karloth explodiu durante a Batalha Colossal. Os Karlacs as carregam em pequenos potes — mas este pote em particular tem cinzas que nunca esfriaram. O pote está morno ao toque. Os Karlacs acreditam que estas são as cinzas do momento exato em que Vermelhão acordou para defender seu povo.",
     curseDetails: "Localização: Primeiro Ponto de Erupção (no núcleo mais antigo do vulcão Karloth, dif.4). O Dragão Dourado guarda a entrada — não para impedir, mas para guiar quem merecedor." },
+
+
+  /* ══════════════════════════════════════════════════════════
+     COMBOS DE SUBCLASSE — Acessórios
+     ══════════════════════════════════════════════════════════ */
+
+  /* ── SET: Voz e Melodia (peça 2) — Bardo ── */
+  { tier: "raro", subclass: "bardo", setName: "Voz e Melodia",
+    name: "Brincos de Pena de Sereia (Voz e Melodia)", weight: 0.05,
+    magicBonus: { spellActions: 1 },
+    effect: "+1 Ação de Magia. Passivo: a voz do portador fica permanentemente mais persuasiva — +1d6 em todos os testes sociais (Persuasão, Sedução, Negociação). Palavras de Mel: a dificuldade do alvo sobe 1 grau (de normal para difícil).",
+    story: "Penas de uma sereia que nunca existiu. Ou assim dizem. Os brincos chegam ao mercado periodicamente sem que ninguém saiba de onde vêm. Os anteriores donos não se lembram de onde os compraram.",
+    setBonus: { pieces: 3, ability: "A Música que Move o Mundo",
+      effect: "Ver Alaúde de Ossos de Dragão (2 peças adicionais ativam o bônus completo)." } },
+
+  /* ── SET: Voz e Melodia (peça 3) — Bardo ── */
+  { tier: "raro", subclass: "bardo", setName: "Voz e Melodia",
+    name: "Capa de Palco (Voz e Melodia)", weight: 0.3,
+    magicBonus: { move: 1 },
+    effect: "+1 Movimento. Passivo: enquanto equipada, o portador nunca tropeça, escorrega ou perde equilíbrio involuntariamente — imune a Derrubado por terreno. Ao usar Inspiração Bárdica: o aliado afetado também ganha +1 Movimento por 2 rodadas.",
+    story: "Capa de tecido que parece mudar de cor levemente dependendo da luz. Atores e bardos a chamam de 'a capa que lembra o palco'. Ninguém é desajeitado com ela — o tecido guia os movimentos.",
+    note: "Parte do Set Voz e Melodia — ver Alaúde de Ossos de Dragão para o bônus completo.",
+    setBonus: { pieces: 3, ability: "A Música que Move o Mundo",
+      effect: "Ver Alaúde de Ossos de Dragão." } },
+
+  /* ── SET: O Alquimista Errante (peça 2) — Alquimista ── */
+  { tier: "raro", subclass: "alquimista", setName: "O Alquimista Errante",
+    name: "Cinto de Frascos do Errante (O Alquimista Errante)", weight: 0.8,
+    magicBonus: {},
+    effect: "O cinto tem 6 compartimentos especiais para frascos — poções e bombas armazenadas nele podem ser usadas como Ação Livre (em vez de Ação de Combate). +1 slot de poção disponível por combate (pode usar 1 poção extra além do limite normal).",
+    story: "Cinto de couro endurecido com fechos de latim. Cada compartimento tem amortecedor interno — o alquimista que o fez aprendeu da maneira difícil que frascos explodem quando você cai.",
+    setBonus: { pieces: 3, ability: "Laboratório de Campo",
+      effect: "Ver Daga de Extração (2 peças adicionais ativam o bônus completo)." } },
+
+  /* ── SET: O Alquimista Errante (peça 3) — Alquimista ── */
+  { tier: "magico", subclass: "alquimista", setName: "O Alquimista Errante",
+    name: "Avental Alquímico (O Alquimista Errante)", weight: 0.5,
+    magicBonus: { hp: 10 },
+    effect: "+10 HP máximo. Passivo: imune a efeitos de ácido e veneno não-sagrado (o avental absorve respingos). Ao criar uma poção ou bomba: tem 25% de chance de criar 1 extra sem custo adicional (o processo produz mais do que esperado).",
+    story: "Avental de couro tratado com reagentes que mudaram sua cor permanentemente para um amarelo-esverdeado que nenhum lavador consegue remover. Manchas de coisas indefinidas. Bolsos em lugares onde bolsos não deveriam estar.",
+    setBonus: { pieces: 3, ability: "Laboratório de Campo",
+      effect: "Com as 3 peças: pode criar qualquer poção nível 1-2 como Ação de Combate usando ingredientes coletados neste combate. 1x/combate." } },
+
+  /* ── SET: Raiz e Ramo (peça 3) — Druida ── */
+  { tier: "magico", subclass: "druida", setName: "Raiz e Ramo",
+    name: "Anel da Besta Interior (Raiz e Ramo)", weight: 0.05,
+    magicBonus: { hp: 15 },
+    effect: "+15 HP máximo. Passivo: animais nunca atacam o portador voluntariamente (podem defender-se). Em Forma Selvagem: ganha +2 ao atributo físico primário da forma (urso +2 FOR, águia +2 DEX, lobo +2 AGI).",
+    story: "Anel de madeira de árvore fulminada que brotou novamente. No centro, uma pedra verde que pulsa em ritmo diferente do coração do portador — como se houvesse um segundo coração mais lento, mais antigo.",
+    setBonus: { pieces: 3, ability: "A Floresta Responde",
+      effect: "Com as 3 peças: A Floresta Responde pode ser ativada como Ação Livre, e ao invocar qualquer animal com este set equipado, o animal aparece com +50% HP e +1d6 de dano." } },
+
+  /* ── SET: Fúria Encadeada (peça 3) — Berserker ── */
+  { tier: "lendario", subclass: "berserker", setName: "Fúria Encadeada",
+    name: "Correntes de Sangue (Fúria Encadeada)", weight: 0.4,
+    magicBonus: { reactions: 1 },
+    effect: "+1 Reação. Passivo: ao ativar Fúria de Batalha, as correntes se enrijecem em torno dos pulsos — o portador fica imune a Desarmado e Agarrado pela duração da Fúria. Sede de Sangue: a cura ao matar aumenta em +1d6 com estas correntes.",
+    story: "Correntes de aço que se apertam levemente quando o portador sente raiva. Foram forjadas para conter — mas a raiva sempre ganha. O portador anterior as usou por 10 anos. Depois parou de conseguir tirá-las. Não reclamou.",
+    setBonus: { pieces: 3, ability: "Corrente Sem Fim",
+      effect: "Com as 3 peças: Fúria de Batalha dura +2 rodadas, ao sair pode entrar em Limiar da Morte sem custo. E o machado pode atacar 2 alvos por Ação durante toda a Fúria (não só 1x)." } },
 
 ];
 
