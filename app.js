@@ -3036,11 +3036,49 @@ function buildPrintableSheet(character, cls, maxHP, resourceMax) {
         <div class="print-box-title">Equipamento</div>
         <table class="print-table">
           <tbody>
-            <tr><td class="print-table-label">Arma Primária</td><td>${equippedPrimary ? equippedPrimary.name + (equippedPrimary.baseData ? ` (${equippedPrimary.baseData.dmg || "—"})` : "") : "—"}</td></tr>
-            <tr><td class="print-table-label">Arma Secundária</td><td>${equippedSecondary ? equippedSecondary.name : "—"}</td></tr>
-            <tr><td class="print-table-label">Escudo</td><td>${equippedShield ? equippedShield.name : "—"}</td></tr>
-            <tr><td class="print-table-label">Armadura</td><td>${equippedArmor ? equippedArmor.name : "—"}</td></tr>
-            <tr><td class="print-table-label">Acessórios</td><td>${equippedAccessories.length ? equippedAccessories.map(a => a.name).join(", ") : "—"}</td></tr>
+            ${[
+              { label: "Arma Primária",   item: equippedPrimary   },
+              { label: "Arma Secundária", item: equippedSecondary },
+              { label: "Escudo",          item: equippedShield    },
+              { label: "Armadura",        item: equippedArmor     },
+            ].map(({ label, item }) => {
+              if (!item) return `<tr><td class="print-table-label">${label}</td><td>—</td></tr>`;
+              const bd = item.baseData || {};
+              const tier = bd.tier || "";
+              const isRare = ["raro","magico","lendario","unico","ancestral"].includes(tier);
+              const dmg  = bd.dmg  ? ` · Dano: ${bd.dmg}` : "";
+              const pDef = bd.physDefense != null ? ` · Def.Fís: ${bd.physDefense}` : "";
+              const mDef = bd.magDefense  != null ? ` · Def.Mag: ${bd.magDefense}`  : "";
+              const wt   = bd.weight != null ? ` · ${bd.weight}kg` : "";
+              const tierBadge = isRare ? ` <em style="color:#7a5c10">[${tier}]</em>` : "";
+              const statLine = `${dmg}${pDef}${mDef}${wt}`;
+              const noteLine = isRare && (bd.note || bd.effect)
+                ? `<div style="font-size:7.5pt;color:#555;margin-top:2px;padding-left:4px;border-left:2px solid #c8a87a">${escapeHTML((bd.note || bd.effect || "").substring(0, 180))}${(bd.note || bd.effect || "").length > 180 ? "…" : ""}</div>`
+                : "";
+              return `<tr>
+                <td class="print-table-label" style="vertical-align:top">${label}</td>
+                <td>
+                  <strong>${escapeHTML(item.name)}</strong>${tierBadge}${statLine ? `<br><span style="font-size:7.5pt;color:#666">${statLine}</span>` : ""}
+                  ${noteLine}
+                </td>
+              </tr>`;
+            }).join("")}
+            ${equippedAccessories.length ? `
+            <tr>
+              <td class="print-table-label" style="vertical-align:top">Acessórios</td>
+              <td>
+                ${equippedAccessories.map(a => {
+                  const bd = a.baseData || {};
+                  const tier = bd.tier || "";
+                  const isRare = ["raro","magico","lendario","unico","ancestral"].includes(tier);
+                  const tierBadge = isRare ? ` <em style="color:#7a5c10">[${tier}]</em>` : "";
+                  const noteLine = isRare && (bd.effect || bd.note)
+                    ? `<div style="font-size:7.5pt;color:#555;margin:1px 0 3px 4px;padding-left:4px;border-left:2px solid #c8a87a">${escapeHTML((bd.effect || bd.note || "").substring(0, 140))}${(bd.effect || bd.note || "").length > 140 ? "…" : ""}</div>`
+                    : "";
+                  return `<strong>${escapeHTML(a.name)}</strong>${tierBadge}${noteLine}`;
+                }).join("<br>")}
+              </td>
+            </tr>` : `<tr><td class="print-table-label">Acessórios</td><td>—</td></tr>`}
           </tbody>
         </table>
       </div>
@@ -3072,6 +3110,32 @@ function buildPrintableSheet(character, cls, maxHP, resourceMax) {
         }).join("")}
       </ul>` : `<p class="print-empty-note">Nenhuma habilidade conhecida.</p>`}
     </div>
+
+    ${(() => {
+      const sc = character.subclassKey ? SUBCLASSES[character.subclassKey] : null;
+      if (!sc) return "";
+      const chosen = (character.skills.abilities || []).filter(id =>
+        sc.skills.some(sk => sk.id === id)
+      );
+      if (!chosen.length) return "";
+      const abilityLevels = character.skills.abilityLevels || {};
+      return `
+    <div class="print-box print-box-subclass">
+      <div class="print-box-title">${sc.icon} Habilidades de Subclasse — ${sc.name}</div>
+      <ul class="print-compact-list subclass-list">
+        ${chosen.map(id => {
+          const sk = sc.skills.find(s => s.id === id);
+          if (!sk) return "";
+          const currentLevel = abilityLevels[id] || 1;
+          const levelData = sk.levels[currentLevel - 1];
+          const synTag = !sk.commonToAll && Array.isArray(sk.sinergyClasses) && sk.sinergyClasses.includes(character.classKey)
+            ? " ✨" : "";
+          const commonTag = sk.commonToAll ? " <em style='font-size:7.5pt;color:#7a9a7a'>[qualquer classe]</em>" : "";
+          return `<li><strong>${sk.name}</strong>${synTag}${commonTag} [Nv.${currentLevel}/${sk.levels.length}] (${sk.cost})<br><span style="font-size:8.5pt;color:#444">${levelData.effect}</span></li>`;
+        }).filter(Boolean).join("")}
+      </ul>
+    </div>`;
+    })()}
 
     <div class="print-two-col">
       <div class="print-box">

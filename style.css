@@ -4140,3 +4140,52 @@ main {
   opacity: 0.45 !important;
   cursor: default !important;
 }
+
+/* ================================================================
+   IMPRESSÃO — Ajustes para subclasse e itens com notas
+   ================================================================ */
+
+@media print {
+  /* Item raro: nota abaixo do dano */
+  .print-table td div[style*="border-left"] {
+    font-size: 7.5pt !important;
+    color: #555 !important;
+    margin-top: 2px;
+    line-height: 1.4;
+  }
+
+  /* Badge de tier inline */
+  .print-table td em { font-style: normal; font-size: 8pt; }
+
+  /* Caixa de subclasse — destaque leve */
+  .print-box-subclass {
+    border-left: 3px solid #9c7a3c !important;
+    background: #fffdf5 !important;
+  }
+  .print-box-subclass .print-box-title {
+    color: #7a5c10 !important;
+  }
+
+  /* Lista compacta da subclasse — um pouco menor para caber */
+  .print-compact-list.subclass-list {
+    font-size: 9pt;
+    line-height: 1.5;
+  }
+  .print-compact-list.subclass-list li {
+    margin-bottom: 5px;
+    padding-bottom: 4px;
+    border-bottom: 1px dotted #e0d0b0;
+  }
+  .print-compact-list.subclass-list li:last-child {
+    border-bottom: none;
+  }
+
+  /* Separar visualmente a caixa de subclasse */
+  .print-box + .print-box-subclass {
+    margin-top: 8px;
+  }
+
+  /* Garantir que notas de itens não explodam o layout */
+  .print-table td { word-break: break-word; }
+  .print-table-label { width: 28%; min-width: 70px; }
+}
