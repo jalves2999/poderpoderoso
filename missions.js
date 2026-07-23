@@ -740,4 +740,511 @@ const MISSIONS = [
     master_notes: "Esta missão exige que os jogadores resistam ao impulso de matar. Dê a Tharak uma personalidade rica — mostre as escamas caindo, a tosse ocasional, o olhar nos filhotes. A tragédia humaniza o monstro.",
     duration: "2-3 sessões"
   }
+,
+
+  /* ══════════════════════════════════════════════════════
+     NOVAS MISSÕES FÁCEIS
+     ══════════════════════════════════════════════════════ */
+
+  {
+    id: "m-rival-arqueiro",
+    title: "O Duelo do Arqueiro",
+    difficulty: "facil",
+    icon: "🏹",
+    tags: ["competição", "social", "habilidade"],
+    hook: "Um arqueiro bêbado na taverna desafiou o grupo: 'Aposto 30 moedas que nenhum de vocês acerta 3 alvos consecutivos a 15 passos enquanto eu canto desafinado.' Simples. Exceto que ele é o Campeão Regional de Tiro ao Alvo.",
+    summary: "Competição de habilidade que esconde um segredo: o arqueiro está arruinado e precisa desesperadamente perder para pagar uma dívida com o crime organizado.",
+    start: "A taverna se esvaziou para ver. 5 alvos de madeira foram erguidos no pátio. O arqueiro sourri — sobrancelhas levantadas.",
+    areas: [
+      {
+        name: "Rounds de Classificação",
+        description: "Três rounds: tiro parado, tiro em movimento, tiro de olhos vendados. O arqueiro acerta todos com facilidade provocativa.",
+        puzzle: {
+          type: "Padrão de Fraqueza",
+          description: "SAB ou Percepção (normal) após o 1º round: o arqueiro gela levemente quando mira o alvo mais à direita. INT (difícil) conecta: ele está deliberadamente errando o terceiro alvo por 1 milímetro — parece acerto mas pontuação menor.",
+          solution: "Confrontar discretamente (SAB difícil): ele admite a situação da dívida. Pode ser aliado se o grupo o ajudar com o crime organizado depois."
+        }
+      },
+      {
+        name: "Round Final — A Provocação",
+        description: "O NPC dos Cobradores chega durante o round final e senta na primeira fila, olhando fixo pro arqueiro.",
+        npc: {
+          name: "Cobrador Mors",
+          role: "Traiçoeiro",
+          personality: "Silencioso. Carrasco de bolso. A presença dele deixa o arqueiro em pânico visível se o grupo prestar atenção."
+        }
+      }
+    ],
+    npcs: [
+      { name: "Arqueiro Campeão Vael", role: "Benéfico (se ajudado)", personality: "Orgulhoso mas desesperado. Tem medo mas não pede ajuda — recusa é cultural." },
+      { name: "Cobrador Mors", role: "Traiçoeiro", personality: "Trabalha para a Guilda das Sombras. Não ameaça abertamente — só aparece." }
+    ],
+    enemies_summary: [
+      { name: "Cobrador Mors + 2 capangas (se provoc.)", qty: 3, diff: 2 }
+    ],
+    rewards: [
+      { type: "ouro", desc: "30 moedas da aposta + 50 se ajudarem Vael com a dívida (ele paga o que pode)" },
+      { type: "pericia", desc: "Vael ensina Pontaria Avançada — +1d4 em ataques à distância (treino de 1 semana)" },
+      { type: "item", desc: "Arco de Vael (item mágico, raro) — se ele abandonar a competição por gratidão" },
+      { type: "bonus", desc: "Contato na Guilda das Sombras (Mors pode ser subornado por informação futura)" }
+    ],
+    master_notes: "O duelo em si é resolvido por rolagem de DEX/AGI. O drama está na percepção do esquema de Vael. Um grupo que só luta vai ganhar a aposta mas perder a história.",
+    duration: "1 sessão curta"
+  },
+
+  {
+    id: "m-formiga-gigante",
+    title: "O Formigueiro Debaixo da Cidade",
+    difficulty: "facil",
+    icon: "🐜",
+    tags: ["dungeon-pequeno", "armadilha", "natureza"],
+    hook: "O piso da padaria cedeu durante a madrugada. Embaixo: um formigueiro gigantesco de formigas do tamanho de cachorros. A padeira está presa no porão rodeada de formigas que, estranhamente, não a atacaram ainda.",
+    summary: "Formigueiro subterrâneo com rainha que foi perturbada por construção. As formigas defendem — não atacam por natureza. Solução violenta e pacífica disponíveis.",
+    start: "Buraco de 1,5m no piso da padaria. Escada improvisada. Sons de mandíbulas clicando abaixo.",
+    areas: [
+      {
+        name: "Túneis Superiores",
+        hex: {
+          layout: "8x6",
+          terrain: ["túneis de terra (teto baixo — criaturas grandes têm −1 Ação)", "câmara de ovos (3x3, intocáveis — provocar = todas as formigas atacam)", "saída norte (bloqueada por rainha)"],
+          hint: "Formigas não atacam quem não ameaçar ovos. Mover devagar (metade do Movimento) não as provoca."
+        },
+        enemies: [{ name: "Formiga Gigante (defensiva)", qty: 4, diff: 1, note: "Só atacam se ameaçadas ou se alguém tocar nos ovos" }]
+      },
+      {
+        name: "Câmara da Rainha",
+        description: "A padeira sentada numa pedra com formigas ao redor — mas nenhuma tocou nela. A rainha gigante observa o grupo.",
+        puzzle: {
+          type: "Comunicação com a Rainha",
+          description: "A rainha não é agressiva — ela está esperando. SAB (difícil) ou Druida automaticamente: a rainha quer comida. A construção acima destruiu seus caminhos de forrageamento. Ela está com fome.",
+          solution: "Trazer comida abundante (qualquer alimento do inventário × 5 itens): a rainha aceita, abre passagem para a padeira sair e migra o formigueiro para o jardim externo em 3 dias. Combate: matar a rainha dispersa o formigueiro mas destrói o porão."
+        },
+        npc: { name: "Padeira Elma", role: "Benéfica", personality: "Assustada mas calma. Descobriu que as formigas a respeitas e ficou curiosa — nunca foi atacada." }
+      }
+    ],
+    npcs: [
+      { name: "Padeira Elma", role: "Benéfica", personality: "Grãs pancada com insetos desde criança. Ficou fascinada em vez de em pânico. Recompensa generosamente." }
+    ],
+    enemies_summary: [
+      { name: "Formiga Gigante da Caverna", qty: "4-8", diff: 1, note: "Só atacam se provocadas" },
+      { name: "Rainha das Formigas (se combate)", qty: 1, diff: 2 }
+    ],
+    rewards: [
+      { type: "item", desc: "Mel de Formiga Gigante (5 frascos) — ingrediente alquímico raro (+1d6 em poções de cura se usado)" },
+      { type: "ouro", desc: "25 moedas (Elma) + pão grátis para sempre na padaria" },
+      { type: "bonus", desc: "Se resolução pacífica: Rainha deixa 1 formiga bebê como 'presente' — familiar exótico inofensivo que detecta venenos" },
+      { type: "pericia", desc: "Druida ou quem comunicou com a rainha: aprende Comunicação com Insetos (habilidade narrativa única)" }
+    ],
+    master_notes: "Missão de surpresa — a ameaça não é real se o grupo não agir como predador. Elma sentada cercada de formigas sem medo é uma imagem forte de abertura.",
+    duration: "1 sessão curta"
+  },
+
+  {
+    id: "m-ator-e-ladrao",
+    title: "O Ator e o Ladrão",
+    difficulty: "facil",
+    icon: "🎭",
+    tags: ["social", "investigação", "stealth", "comédia"],
+    hook: "O anel de noivado do nobre Aldric foi roubado durante a peça de teatro que ele financiou. 200 pessoas assistiam. O diretor está histérico. 'Era a única cópia!' (Mentira — mas ele acredita.)",
+    summary: "Investigação nos bastidores de um teatro onde todos têm motivo, alibi e drama excessivo. O ladrão é o ator principal, mas por razão simpática.",
+    start: "Palco vazio. Camarim com atores gritando uns com os outros. O segurança bloqueou todas as saídas.",
+    areas: [
+      {
+        name: "Palco e Plateia",
+        description: "200 testemunhas que viram 'tudo' e se contradizem completamente.",
+        puzzle: {
+          type: "Triangulação de Testemunhos",
+          description: "5 testemunhos que o grupo precisa filtrar: (1) nobre distraído, (2) criança que realmente viu, (3) rival do nobre mentindo, (4) atriz apaixonada pelo ladrão cobrindo, (5) segurança que dormiu.",
+          solution: "INT (normal) compara os 5 relatos: só a criança e o segurança (que acordou na hora certa) têm relatos consistentes. Direção: bastidor esquerdo durante o ato 2."
+        }
+      },
+      {
+        name: "Camarim do Ator Principal",
+        description: "Ator Draven está se maquiando para 'segunda peça'. DEX (normal) nota algo quadrado na pochete do figurino.",
+        npc: {
+          name: "Draven, o Ator",
+          role: "Traiçoeiro (com motivo simpático)",
+          personality: "Dramático mesmo quando culpado. 'Você não entende! O anel pertencia à minha mãe — o nobre a roubou há 20 anos!'",
+          resolution: "Verificar: INT (difícil) ou encontrar evidências no camarim — o anel tem o brasão da família de Draven gravado por dentro. O nobre é que roubou primeiro."
+        }
+      }
+    ],
+    npcs: [
+      { name: "Draven, o Ator", role: "Ambíguo", personality: "Ladrão tecnicamente, vítima historicamente. A moral é do grupo." },
+      { name: "Nobre Aldric", role: "Traiçoeiro disfarçado de vítima", personality: "Confiante demais. Fica nervoso ao ver o anel ser examinado de perto." },
+      { name: "Criança Testemunha", role: "Benéfica", personality: "Única testemunha honesta. Diz exatamente o que viu sem rodeios." }
+    ],
+    enemies_summary: [],
+    rewards: [
+      { type: "ouro", desc: "50 moedas do nobre (se entregarem o anel) OU 30 moedas de Draven (se ficarem com ele — tudo que tem)" },
+      { type: "item", desc: "Anel da Família Draven (item único narrativo) — história de campanha se investigado" },
+      { type: "bonus", desc: "Draven grato: ingresso vitalício + pode ensinar Disfarce como perícia" },
+      { type: "bonus", desc: "Nobre Aldric como inimigo (se exposto) — vilão social menor de campanha" }
+    ],
+    master_notes: "Sem combate. Investigação pura. O momento de revelar a gravação interna do anel é o clímax. Deixe a moral com os jogadores — não há resposta certa.",
+    duration: "1 sessão"
+  },
+
+  /* ══════════════════════════════════════════════════════
+     NOVAS MISSÕES NORMAIS
+     ══════════════════════════════════════════════════════ */
+
+  {
+    id: "m-mercado-negro",
+    title: "O Mercado das Sombras",
+    difficulty: "normal",
+    icon: "🌑",
+    tags: ["infiltração", "social", "stealth", "crime"],
+    hook: "Um boticário foi sequestrado por tentar vender ervas proibidas no mercado negro local. Sua filha pede ajuda: 'Ele foi idiota mas não merece morrer. Entrem, negociem, tirem ele de lá.' O mercado funciona no subsolo do porto toda madrugada.",
+    summary: "Infiltração no mercado negro controlado pela Guilda das Sombras. Múltiplas rotas, disfarce necessário, e a descoberta de que o boticário estava sendo extorquido, não voluntário.",
+    start: "Doca sul. Madrugada. Uma senha precisam obter de qualquer informante da cidade (Persuasão normal) ou observando por 1 hora.",
+    areas: [
+      {
+        name: "Entrada do Mercado",
+        description: "Dois guardas com lanterna. Senha verbal + reconhecimento de rosto (ou disfarce).",
+        trap: { name: "Vigia no Telhado", trigger: "Tentar entrar sem senha ou aparecer suspeito", effect: "Apito de alerta — 4 guardas da Guilda chegam em 2 rodadas (Mercenários Dif.3)", detect: "Percepção (difícil) vê sombra no telhado antes de entrar." }
+      },
+      {
+        name: "Salão Principal",
+        hex: {
+          layout: "12x8",
+          terrain: ["barracas de venda (cobertura)", "saída de emergência (nordeste, trancada)", "escada para cela (sul)", "vigia central no mezanino (visão total)"],
+          hint: "O vigia no mezanino tem visão de 80% do salão. Furtividade só é possível perto das barracas. Disfarce eliminadas as restrições de movimento."
+        },
+        npc: {
+          name: "Mestra Korin — líder do mercado",
+          role: "Traiçoeiro (razoável)",
+          personality: "Pragmática. Não mata sem necessidade — só quando é negócio. Ouve propostas de negócio.",
+          resolution: "Pagar resgate (80 moedas), negociar serviço futuro (missão secundária para Guilda), ou roubar a chave da cela (DEX difícil, detectável)."
+        }
+      },
+      {
+        name: "Cela do Boticário",
+        description: "Alquimista Fenn está furioso — não assustado. 'Eles me forçaram! Três meses de extorsão!'",
+        npc: {
+          name: "Alquimista Fenn",
+          role: "Benéfico (inocente do crime que pensa)",
+          personality: "Arrogante, orgulhoso, mas genuinamente vítima. Tem informações sobre outros negócios da Guilda que podem ser leverage."
+        }
+      }
+    ],
+    npcs: [
+      { name: "Mestra Korin", role: "Ambígua", personality: "Vilã funcional. Pode ser aliada se o grupo provar valor. Nunca pessoal." },
+      { name: "Alquimista Fenn", role: "Benéfico", personality: "Muito orgulhoso para agradecer adequadamente. Dívida enorme que expressam mal." }
+    ],
+    enemies_summary: [
+      { name: "Guardas da Guilda (se alertados)", qty: 4, diff: 2 },
+      { name: "Mercenário de Elite (guarda de Korin)", qty: 2, diff: 3 }
+    ],
+    rewards: [
+      { type: "item", desc: "Poção de Invisibilidade (Fenn cria como agradecimento, 1 hora de duração) — Mágico" },
+      { type: "item", desc: "Kit de Ferramentas de Arrombamento (da Guilda, roubável) — DEX +1d4 em arrombamento" },
+      { type: "bonus", desc: "Contato na Guilda das Sombras (Korin, se negociado) — informação sobre contratos e movimentos criminosos" },
+      { type: "ouro", desc: "60 moedas da filha de Fenn + desconto permanente de 40% na botica de Fenn" },
+      { type: "maldição", desc: "Se Korin for traída após acordo: Maldição do Azar Acumulado (Guilda tem feiticeiros)" }
+    ],
+    master_notes: "Missão de infiltração. Enfatize que violência atrai mais guardas. Korin é excelente NPC recorrente — pragmática o suficiente para ser tanto aliada quanto inimiga.",
+    duration: "2 sessões"
+  },
+
+  {
+    id: "m-crianca-perdida",
+    title: "A Criança que Falava com Pedras",
+    difficulty: "normal",
+    icon: "🪨",
+    tags: ["investigação", "magia", "emocional", "morto-vivo"],
+    hook: "Uma criança de 8 anos desapareceu nas ruínas fora da cidade. Seus pais dizem que ela 'ouvia vozes das pedras' desde que acharam um cristal brilhante no campo. Dois dias desaparecida.",
+    summary: "A criança foi atraída por um Elemental de Terra benevolente que encontrou o cristal. Mas as ruínas têm outros habitantes que não são benevolentes.",
+    start: "Ruínas de fortaleza élfica. 200 anos abandonada. Pedras que parecem arrumar-se sozinhas quando ninguém olha diretamente.",
+    areas: [
+      {
+        name: "Jardim das Ruínas",
+        description: "Pegadas infantis na lama. Mas também marcas de arasto que desaparecem — como se algo muito pesado tivesse sido movido.",
+        trap: { name: "Pedra Rolante Mágica", trigger: "Correr pelas ruínas sem observar", effect: "Pedra que se move autonomamente: 1d8 de impacto + Derrubado. Pode ser evitada: AGI normal após Percepção (normal) que alerta.", detect: "Percepção (normal): as pedras têm padrão de movimento — se movem quando não há ameaça, param quando há." }
+      },
+      {
+        name: "Câmara Central (Subterrânea)",
+        description: "A criança Mira sentada numa pedra, conversando animadamente com... uma rocha enorme que oscila levemente.",
+        npc: {
+          name: "Terrox — Elemental de Terra Jovem",
+          role: "Benéfico",
+          personality: "Curioso sobre humanos. Encontrou Mira e a trouxe para 'mostrar as ruínas'. Não sabia que isso seria problema. Gentil mas enorme.",
+          resolution: "SAB (normal): ele está assustado com o grupo armado. Aproximar sem armas e sentar (DEX normal para se conter) permite conversa. Terrox devolve Mira feliz e oferece presente."
+        },
+        enemies: [{ name: "Terrox (se atacado)", qty: 1, diff: 3, note: "Só ataca em defesa de Mira ou de si mesmo" }]
+      },
+      {
+        name: "Galeria Norte (Caminho de Volta)",
+        description: "Zumbis de soldados élficos da época da queda se levantam ao som de passos — eram guardiões.",
+        hex: {
+          layout: "10x6",
+          terrain: ["pilares élficos (cobertura pesada)", "chão em colapso (3 hexes — 1d6 cair se pisar, AGI normal)", "saída (nordeste)"],
+          hint: "Terrox pode abrir um caminho alternativo pelo chão se o grupo tiver sua confiança — ele simplesmente escava."
+        },
+        enemies: [
+          { name: "Esqueleto Guerreiro", qty: 3, diff: 1 },
+          { name: "Zumbi Comum", qty: 2, diff: 1 }
+        ]
+      }
+    ],
+    npcs: [
+      { name: "Mira, a Criança", role: "Benéfica", personality: "Não tem medo de nada. Vai explicar que 'o Terrox é legal' e ficar brava se o grupo for indelicado com ele." },
+      { name: "Terrox, Elemental de Terra", role: "Benéfico", personality: "Como uma criança enorme feita de pedra. Aprendeu 3 palavras em comum. Aprende rápido se alguém tiver paciência." }
+    ],
+    enemies_summary: [
+      { name: "Esqueleto Guerreiro", qty: 3, diff: 1 },
+      { name: "Zumbi Comum", qty: 2, diff: 1 },
+      { name: "Terrox (somente se atacado)", qty: 1, diff: 3 }
+    ],
+    rewards: [
+      { type: "item", desc: "Cristal de Terrox (presente) — Pedra de Alma: +5 HP máximo, em terreno natural regen 1 HP/turno" },
+      { type: "ouro", desc: "40 moedas dos pais de Mira (tudo que tinham)" },
+      { type: "bonus", desc: "Terrox como aliado narrativo — pode ser convocado 1x por mês para ajuda em terreno natural (cava, move pedras, informa sobre subterrâneos)" },
+      { type: "benção", desc: "Bênção Vigor Abençoado (Thurgomur aprecia quem respeita elementais de terra)" }
+    ],
+    master_notes: "A emoção do encontro com Terrox é o coração. Faça-o se comunicar com gestos e palavras truncadas antes de melhorar ao longo da conversa. Mira 'traduzindo' é hilária.",
+    duration: "1-2 sessões"
+  },
+
+  {
+    id: "m-navio-fantasma",
+    title: "O Navio Sem Tripulação",
+    difficulty: "normal",
+    icon: "⛵",
+    tags: ["naval", "morto-vivo", "puzzle", "assombrado"],
+    hook: "Um navio mercante entrou no porto sem velas abertas e sem ninguém no convés. A carga está intacta. Os camarotes estão trancados por dentro. Ninguém ouviu nada durante a noite. As autoridades do porto pedem investigação antes de tocar no navio.",
+    summary: "Navio assombrado onde a tripulação foi transformada em espíritos pela magia de uma Caixa de Música amaldiçoada no porão. A música os prendeu mas também os protegeu de algo pior.",
+    start: "Cais 7. Navio de 30 metros. Cheiro de sal e algo mais — flores? À noite. O convés está perfeitamente limpo.",
+    areas: [
+      {
+        name: "Convés Principal",
+        description: "Tudo no lugar. Nenhum sinal de luta. Mas a bússola gira sozinha.",
+        puzzle: {
+          type: "Bússola do Destino",
+          description: "A bússola não aponta para o norte — aponta para o porão. INT (normal): é uma bússola mágica sintonizada com magia, não com norte magnético.",
+          solution: "Seguir a bússola leva ao porão em vez dos camarotes — atalho para a fonte do problema."
+        }
+      },
+      {
+        name: "Camarotes (Andares Inferiores)",
+        description: "Trancados por dentro. Gritos abafados? Não — é música? Ao forçar entrada: camarote vazio mas a cama está feita como se alguém levantou há pouco.",
+        npc: {
+          name: "Espíritos da Tripulação (12 membros)",
+          role: "Benéfico (desesperado)",
+          personality: "Presos na forma de sussurros. Aparecem como sombras translúcidas ao por do sol. Tentam comunicar: 'Porão. Música. Não parem a música ainda.'",
+          resolution: "SAB (normal): entender o aviso. A música está os mantendo presos mas também mantendo algo PIOR selado no porão junto com eles."
+        }
+      },
+      {
+        name: "Porão do Navio",
+        description: "A Caixa de Música: pequena, prata, toca uma melodia de ninar eternamente. Ao redor: marcas de garras no assoalho — antigas, de uma criatura que tentou sair.",
+        puzzle: {
+          type: "A Escolha da Caixa",
+          description: "Parar a música: tripulação é libertada MAS a criatura no espaço entre os mundos também é. Deixar tocando: tripulação fica presa eternamente. Terceira opção: Bardo ou conjurador pode reprogramar a melodia (SAB crítico) para prender apenas a criatura e liberar a tripulação.",
+          solution: "Parar: combate com Banshee (o que estava preso). Reprogramar: SAB crítico + 3 rodadas de concentração enquanto os espíritos ajudam defendendo. Deixar: missão fracassa moralmente."
+        },
+        enemies: [{ name: "Banshee (se música parada sem reprogramar)", qty: 1, diff: 4 }]
+      }
+    ],
+    npcs: [
+      { name: "Capitã Voss (espírito)", role: "Benéfica", personality: "Autoritária mesmo como sombra translúcida. 'Resolvam isso. Temos carga para entregar.'" }
+    ],
+    enemies_summary: [
+      { name: "Banshee (condicional)", qty: 1, diff: 4 },
+      { name: "Espíritos Hostis (se música parada sem cuidado)", qty: "1d4", diff: 1 }
+    ],
+    rewards: [
+      { type: "item", desc: "Caixa de Música Reprogramada (Mágico) — pode ser usada 1x/dia para criar área de silêncio 5x5 hex por 3 rodadas" },
+      { type: "item", desc: "Carga do navio (liberada pela Capitã Voss): especiarias e tecidos raros, valor 200 moedas" },
+      { type: "bonus", desc: "Capitã Voss (liberta) como contato naval — acesso a rotas e transporte marítimo" },
+      { type: "magia", desc: "Reprogramar a Caixa ensina ao Bardo/conjurador Aprisionamento Sônico (nova magia nível 3)" }
+    ],
+    master_notes: "A escolha da caixa é o coração. Deixe os espíritos da tripulação darem pistas, não respostas. A Banshee presa é uma ameaça genuína — reforce isso com as marcas de garras.",
+    duration: "2 sessões"
+  },
+
+  {
+    id: "m-olimpiadas-goblins",
+    title: "As Olimpíadas dos Goblins",
+    difficulty: "normal",
+    icon: "🏆",
+    tags: ["competição", "social", "comédia", "habilidade"],
+    hook: "A Chefia Goblin enviou pergaminho formal (com muitos erros ortográficos) convidando representantes humanos para 'As Olimpíadas Sagradas de Tobi'. Participar é diplomaticamente importante — os goblins controlam a única ponte entre duas regiões. Ganhar é opcional. Sobreviver às provas é recomendado.",
+    summary: "Festival de provas físicas e de habilidade criado por goblins, para goblins, com regras que mudam quando os goblins estão perdendo. Diplomacia e humor são mais úteis que força.",
+    start: "Aldeia goblin decorada com bandeirolas de tecido roubado. 300 goblins nas arquibancadas. Música de flauta desafinada. O árbitro é um goblin de 1 metro usando chapéu de mago roubado.",
+    areas: [
+      {
+        name: "Prova 1 — Corrida do Lodo",
+        hex: {
+          layout: "14x4",
+          terrain: ["lodo (4 hexes centrais — movimento pela metade)", "trampolim goblin (hex 3,2 — lança 3 hexes para frente)", "armadilha de rede (hex 10 — AGI normal ou Preso)", "linha de chegada (hex 14)"],
+          hint: "Os corredores goblins trapaceiam abertamente — empurram, usam atalhos, jogam lodo. O árbitro ignora. A plateia aplaude trapaças goblins e vaia trapaças humanas. DEX/AGI contest."
+        }
+      },
+      {
+        name: "Prova 2 — Lançamento de Tobi",
+        description: "Lançar uma estátua de Tobi (de barro, 2kg) o mais longe possível. Simples. Exceto que a estátua morde.",
+        trap: { name: "Tobi Morde", trigger: "Pegar a estátua sem luvas", effect: "Mordida: 1d4 de dano e −1d4 na rolagem de lançamento (surpresa). Luvas: sem penalidade.", detect: "Percepção (fácil): a estátua está olhando diferente a cada vez que você olha para ela." }
+      },
+      {
+        name: "Prova Final — Charada do Rei",
+        description: "O Rei Goblin Zikzik faz uma charada. 'O que é meu mas vocês usam mais do que eu?' — pausa dramática enorme — '...Meu nome! HA!'",
+        puzzle: {
+          type: "Charada Goblin",
+          description: "O rei continua com 3 charadas progressivamente mais absurdas. A última não tem resposta certa — ele muda a resposta dependendo de quão bem recebida for.",
+          solution: "INT (normal) percebe que Zikzik quer aprovação, não resposta certa. Rir na hora certa (SAB normal) ou elogiar a charada (Persuasão normal) faz ele declarar vitória partilhada."
+        },
+        npc: { name: "Rei Zikzik", role: "Benéfico (se bem-humorado)", personality: "Orgulhoso, barulhento, genuinamente quer que a cerimônia seja boa. Detesta perder mas ama uma boa festa." }
+      }
+    ],
+    npcs: [
+      { name: "Rei Zikzik", role: "Benéfico (com cautela)", personality: "Muda de regras quando perde mas fica feliz quando todos se divertem. Pragmático à sua maneira." }
+    ],
+    enemies_summary: [
+      { name: "Goblins Furiosos (se grupo trapacear errado)", qty: 6, diff: 1 }
+    ],
+    rewards: [
+      { type: "ouro", desc: "50 moedas + uso gratuito da ponte por 1 ano" },
+      { type: "item", desc: "Troféu das Olimpíadas (objeto único) — reconhecido por goblins em toda região como símbolo de aliança" },
+      { type: "bonus", desc: "Aliança com a Chefia Goblin — 200 goblins como aliados improváveis numa batalha futura" },
+      { type: "bonus", desc: "Rei Zikzik como contato: sabe coisas surpreendentemente úteis sobre rotas comerciais (e sobre aonde foram parar 47 itens roubados)" }
+    ],
+    master_notes: "Missão de comédia e diplomacia. As provas são rolagens de habilidade mas o contexto absurdo é o que importa. Zikzik virar aliado é o prêmio verdadeiro.",
+    duration: "1 sessão longa"
+  },
+
+  /* ══════════════════════════════════════════════════════
+     NOVAS MISSÕES DIFÍCEIS
+     ══════════════════════════════════════════════════════ */
+
+  {
+    id: "m-juiz-morto",
+    title: "O Julgamento do Morto",
+    difficulty: "dificil",
+    icon: "⚖",
+    tags: ["político", "morto-vivo", "puzzle", "escolha moral"],
+    hook: "O Grande Juiz Theron morreu antes de proferir o veredito no julgamento mais importante da região: o herdeiro do trono é acusado de envenenar o rei anterior. 'Nós precisamos que ele diga o veredito. Qualquer... forma que isso seja possível.'",
+    summary: "O grupo precisa ressuscitar temporariamente o espírito do Juiz para que ele profira o veredito. Mas o juiz foi envenenado antes de morrer — e sabe quem fez.",
+    start: "Câmara mortuária do Palácio de Justiça. O corpo do Juiz Theron em câmara fria. Um Necromante de Sanctum oferece serviços. 'Posso trazê-lo de volta por 10 minutos. Não mais. Escolham as perguntas com cuidado.'",
+    areas: [
+      {
+        name: "Câmara de Investigação (Antes da Ressurreição)",
+        description: "O grupo tem 2 horas para reunir evidências antes de chamar o juiz — caso contrário, o espírito pode ser manipulado por informações que o grupo não verificou.",
+        puzzle: {
+          type: "Preparação do Julgamento",
+          description: "3 depoimentos contraditórios, 2 documentos suspeitos, 1 testemunha que some quando o grupo se aproxima. O puzzle é determinar que perguntas fazer ao Juiz nos 10 minutos de ressurreição.",
+          solution: "INT (difícil) ou investigação de todos os 3 elementos: a testemunha sumida é o VERDADEIRO envenenador — não o herdeiro. O herdeiro é inocente. Mas revelar isso derruba a nobreza que financiou o julgamento."
+        }
+      },
+      {
+        name: "A Ressurreição",
+        description: "O Juiz Theron, transparente e severo, emerge. '10 minutos. Façam valer.'",
+        npc: {
+          name: "Espírito do Juiz Theron",
+          role: "Benéfico (imparcial absoluto)",
+          personality: "Não tem agenda pessoal. Só quer justiça. Responde perguntas com total honestidade mas só o que é perguntado — não elabora. Se o grupo fez a investigação, tem as perguntas certas.",
+          resolution: "Com as evidências certas: Theron profere veredito que exonera o herdeiro e implica o verdadeiro culpado. Sem investigação: o grupo desperdiça o tempo com perguntas erradas."
+        }
+      },
+      {
+        name: "A Fuga (Após o Veredito)",
+        description: "O Conselheiro Mrak (o verdadeiro culpado, presente na sala) ataca antes que o veredito possa ser documentado.",
+        hex: {
+          layout: "12x8",
+          terrain: ["tribunal (mesas — cobertura)", "galeria superior (arqueiros de Mrak — 3 posições)", "porta sul (saída para o povo)", "saída do juiz (selada magicamente até fim da sessão)"],
+          hint: "Mrak tem 4 guardas pessoais (Dif.2) + 3 arqueiros no andar superior (Dif.1). Objetivo: proteger o escrivão enquanto ele documenta o veredito (3 rodadas de escrita)."
+        },
+        enemies: [
+          { name: "Guardas de Mrak", qty: 4, diff: 2 },
+          { name: "Arqueiros do Conselheiro", qty: 3, diff: 1 },
+          { name: "Mrak (se enfrentado diretamente)", qty: 1, diff: 3 }
+        ]
+      }
+    ],
+    npcs: [
+      { name: "Conselheiro Mrak", role: "Traiçoeiro", personality: "O assassino original. Calculista. Foge se em desvantagem clara — volta com mais recursos." },
+      { name: "Herdeiro Inocente", role: "Benéfico", personality: "Assustado, grato, tem poder real se for ao trono. Aliado de campanha poderoso." }
+    ],
+    enemies_summary: [
+      { name: "Guardas de Mrak", qty: 4, diff: 2 },
+      { name: "Arqueiros", qty: 3, diff: 1 },
+      { name: "Conselheiro Mrak", qty: 1, diff: 3 }
+    ],
+    rewards: [
+      { type: "ouro", desc: "500 moedas (tesouro real, liberado pelo herdeiro agradecido)" },
+      { type: "item", desc: "Selo Real (item único) — garante audiência imediata com qualquer nobre do reino" },
+      { type: "bonus", desc: "O Herdeiro ao trono como aliado político permanente — favor significativo uma vez por campanha" },
+      { type: "magia", desc: "O Necromante de Sanctum ensina Levantar Campeão ou Invocar Banshee como gratidão" },
+      { type: "maldição", desc: "Se o grupo favorecer Mrak: Maldição do Peso das Almas (Theron amaldiçoa da outra vida)" }
+    ],
+    master_notes: "A investigação prévia É a missão. O combate é consequência. Grupos que pulam a investigação têm o espírito do Juiz disponível mas as perguntas erradas — e desperdiçam o único recurso.",
+    duration: "3 sessões"
+  },
+
+  {
+    id: "m-corcunda-de-aether",
+    title: "A Montanha que Respira",
+    difficulty: "dificil",
+    icon: "🏔",
+    tags: ["exploração", "elemental", "puzzle", "natureza", "boss"],
+    hook: "A Montanha de Atrelon começou a tremer — não earthquakes, mas pulsações rítmicas, como uma respiração. Aldeões nas encostas ouviram vozes dentro da pedra. Um Druida ancião diz apenas: 'Ela acordou. Não deveria ter acordado ainda. Isso não é natural.'",
+    summary: "No coração da montanha existe um Espírito Primordial da Terra que estava em sono milenar. Algo — ou alguém — o acordou prematuramente. O grupo precisa descobrir o que, acalmar o espírito e selar a câmara antes que as erupções comecem.",
+    start: "Encosta norte de Atrelon. Fenda aberta por tremor recente — nunca existiu antes. Ar quente saindo. Sons de pedra rangendo como palavras.",
+    areas: [
+      {
+        name: "Corredor de Entrada (Nível 1)",
+        description: "Pedras que se reorganizam quando o grupo passa — testando intenções.",
+        trap: {
+          name: "Pedras Julgadoras",
+          trigger: "Carregar arma desembainhada na entrada",
+          effect: "Pedras formam muro bloqueante (HP 60, Def 8). Se o grupo embainha as armas, o muro abre. Se lutam, mais pedras surgem indefinidamente.",
+          detect: "SAB (normal): a reorganização das pedras segue o olhar — elas notam as armas."
+        }
+      },
+      {
+        name: "Câmara dos Fragmentos (Nível 2)",
+        description: "5 fragmentos de cristal negro espalhados — cada um com uma memória do Espírito. Tocar revela visão.",
+        puzzle: {
+          type: "Memórias do Espírito",
+          description: "Cada fragmento mostra: (1) O sono milenar, (2) O primeiro tremor que acordou, (3) Uma figura com tocha descendo a montanha há 3 semanas, (4) A tocha tocando um cristal vermelho específico, (5) O cristal vermelho ainda presente — 2 níveis abaixo.",
+          solution: "INT (normal) conecta: alguém deliberadamente acordou o Espírito tocando o cristal ativador. A figura nas visões é identificável — é o Aralto que reaparece da Fissura Corrompida (ligação com missão anterior se o grupo jogou)."
+        }
+      },
+      {
+        name: "Lago de Lava (Nível 3)",
+        hex: {
+          layout: "14x10",
+          terrain: ["plataformas de pedra (ilhas — 3m² cada)", "lago de lava (dano 3d8 por rodada em contato)", "pontes naturais instáveis (Dif AGI normal por cruzamento, 1d4 colapsam aleatoriamente)", "cristal vermelho (centro — hex 7,5)"],
+          hint: "Elemental do Fogo Primordial guarda o cristal (Dif.4). Portadores de itens de Vermelhão: elemental reconhece e não ataca. Druida com Forma Selvagem: forma de pássaro voa sobre o lago."
+        },
+        enemies: [{ name: "Espírito do Fogo Primordial", qty: 1, diff: 4, note: "Guarda o cristal vermelho ativador. Não é inimigo por natureza — está protegendo o espírito primordial." }]
+      },
+      {
+        name: "Câmara do Coração (Nível 4)",
+        description: "O Espírito Primordial: uma presença enorme de pedra e memória, confuso e com dor.",
+        puzzle: {
+          type: "Acalmar o Espírito",
+          description: "Não é combate — é comunicação. O Espírito comunica por tremores e imagens de pedra. Ele está com dor (o cristal ativador foi sua âncora de sono — remover vai livrá-lo da dor mas também o deixará acordado). O grupo precisa decidir: (1) Recriar o sono (o cristal deve ser destruído de forma ritual pelo Druida — 5 rodadas de ritual), (2) Deixar acordar completamente (o Espírito fica ativo — tremores controlados, mas a montanha muda) ou (3) Encontrar um 3º caminho (SAB crítico + algum elemento do grupo que conecte os dois mundos).",
+          solution: "Todas funcionam com consequências. O ritual precisa de 5 rodadas — o Aralto aparece para interromper nos últimos 2 rodadas."
+        },
+        enemies: [{ name: "Aralto da Marca — Forma Menor", qty: 1, diff: 3, note: "Aparece nos 2 últimos rounds do ritual para interromper" }]
+      }
+    ],
+    npcs: [
+      { name: "Druida Ancião Faryn", role: "Benéfico", personality: "Não pode entrar — está velho demais. Dá orientação, não soluções. 'A montanha julgará suas intenções antes de qualquer pedra se mover.'" }
+    ],
+    enemies_summary: [
+      { name: "Espírito do Fogo Primordial", qty: 1, diff: 4 },
+      { name: "Aralto da Marca", qty: 1, diff: 3 }
+    ],
+    rewards: [
+      { type: "item", desc: "Fragmento do Coração da Montanha (material único) — pode ser forjado em Armadura ou Arma com propriedades de Elemental de Terra" },
+      { type: "magia", desc: "O Espírito Primordial (se acalmado) ensina Fúria da Natureza ou Chamado da Tempestade ao Druida/conjurador" },
+      { type: "ouro", desc: "Os aldeões se organizam: 300 moedas de contribuição coletiva + alojamento permanente em Atrelon" },
+      { type: "benção", desc: "Se ritual de sono: Bênção Canal de Mana Pura (Thurgomur bendiz quem protegeu sua montanha)" },
+      { type: "bonus", desc: "Se Espírito acordado: a montanha 'responde' ao grupo — nunca haverá avalanche ou colapso de caverna que os prejudique em Atrelon" }
+    ],
+    master_notes: "Esta missão é sobre escolhas com peso real. O Espírito Primordial deve ser apresentado com dignidade — não é monstro, é consciência antiga com dor. O Aralto aparecendo nos últimos 2 rounds cria tensão sem ser barato.",
+    duration: "3-4 sessões"
+  }
 ];

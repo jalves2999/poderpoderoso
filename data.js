@@ -2254,7 +2254,74 @@ const MISC_ITEMS = [
 
   { name: "Giz Arcano (×5)",            category: "misc", subcategory: "gear", tier: "magico",  weight: 0.2,
     effect: "Cada pedaço escreve marcas visíveis apenas para quem conjurou. Útil para: marcar passagens já exploradas, deixar mensagens para aliados específicos, traçar símbolos de alerta. Dura 24 horas ou até ser apagado com água benta.",
-    story: "Branco, inodoro. Parece giz comum até a segunda olhada. Na segunda olhada, você percebe que estava olhando sem enxergar." }
+    story: "Branco, inodoro. Parece giz comum até a segunda olhada. Na segunda olhada, você percebe que estava olhando sem enxergar." },
+
+  /* ── Itens de Recompensa de Missões ── */
+
+  { name: "Kit de Ferramentas de Armadilha", category: "misc", subcategory: "gear",
+    tier: "raro", weight: 1.2, consumable: false,
+    magicBonus: {},
+    effect: "+1d4 em todos os testes de armar ou desarmar armadilhas. Contém: snares, fio de tripwire, pontas, colas especiais (12 usos de componentes). Permite criar armadilhas simples durante descanso curto.",
+    story: "Pertencia ao Goblin Armadilheiro líder do ninho. Cada peça foi roubada de um aventureiro diferente — e cada uma funciona melhor do que deveria." },
+
+  { name: "Anel de Comunicação com Animais", category: "misc", subcategory: "gear",
+    tier: "raro", weight: 0.05, consumable: false,
+    magicBonus: {},
+    effect: "Permite comunicação rudimentar com qualquer animal não-mágico — intenções simples, emoções, imagens recentes. 3 usos por dia. Em combate: pode pedir a animais na área que recuem ou se aproximem (SAB normal para o animal obedecer).",
+    story: "Feito por encomendeiro que perdeu sua cachorra há 20 anos e queria entendê-la. A cachorra morreu antes de ele receber o anel. Ele nunca o usou." },
+
+  { name: "Colar da Família Braun", category: "misc", subcategory: "gear",
+    tier: "raro", weight: 0.1, consumable: false,
+    magicBonus: { hp: 5 },
+    effect: "+5 HP máximo. Passivo: sempre quente ao toque, mesmo no frio mais extremo. O portador tem +1 em testes de resistência contra maldições de frio e ambientes gelados. O calor é reconfortante — aliados adjacentes que estejam com menos de 30% HP recuperam 1 HP no início do turno do portador.",
+    story: "Colar de prata da família Braun, passado de mãe para filho por três gerações. O moleiro o encontrou no bolso da mortalha do filho. Ficou guardado. Nunca deveria ter ficado." },
+
+  { name: "Poção de Transmutação Metálica", category: "misc", subcategory: "potion",
+    tier: "raro", weight: 0.4, consumable: true,
+    effect: "Aplicada em até 1kg de metal comum (ferro, bronze, cobre): converte em metal de qualidade superior da mesma categoria. Ferro vira aço temperado, cobre vira latão reforçado. Um ferreiro pode usar isso para melhorar uma arma ou armadura: +1d4 de dano ou +1 Defesa por item. 1 uso.",
+    story: "O Professor Venz a cria em 10 minutos de 'trabalho emergencial'. Cheira a enxofre e maçã. Funciona perfeitamente uma vez. Na segunda vez pode explodir — ele nunca testou duas vezes." },
+
+  { name: "Varinha de Eldrath", category: "misc", subcategory: "gear",
+    tier: "lendario", weight: 0.4, consumable: false,
+    magicBonus: { spellActions: 1, slots: 2 },
+    effect: "+1 Ação de Magia por turno. +2 Slots de Magia (temporários — retornam após combate). Magias de ataque mágico causam +1d10 de dano extra. Criada pelo Archmago Eldrath após 40 anos de refinamento — cada entalhe na madeira é uma magia diferente comprimida.",
+    story: "Eldrath a deu de bom grado. 'Tenho outras. E francamente, ficar preso dentro de um cristal por um mês me fez repensar meus apegos a objetos materiais.'" },
+
+  { name: "Medalhão de Controle do Golem", category: "misc", subcategory: "artefato",
+    tier: "magico", weight: 0.2, consumable: false,
+    magicBonus: {},
+    effect: "Controla o Golem de Pedra Antiga ou Golem da Marca vinculado a ele. Comando de 1 Ação: o Golem age no turno do portador com 2 Ações. O Golem obedece comandos simples. Alcance de controle: 20 hex. Se o portador ficar Inconsciente: Golem fica inativo. 1 Golem vinculado por medalhão.",
+    story: "O Lorde Marcino nunca imaginou que alguém fosse roubá-lo durante o combate de arena. Por isso não usava corrente." },
+
+  { name: "Ficha de Agente Real", category: "misc", subcategory: "gear",
+    tier: "raro", weight: 0.02, consumable: true,
+    effect: "Apresentada a qualquer guarda, oficial ou funcionário real: garante passagem imediata para 1 local restrito à escolha. Guardas reconhecem o símbolo. 1 uso — a ficha é retida após uso. Alternativa: usada para solicitar audiência urgente com funcionário de alto escalão (sem espera).",
+    story: "O mensageiro Rael tem 3 dessas. Deu uma ao grupo sem hesitar. 'Vocês salvaram minha vida. Uma ficha de papel é pouco.'" },
+
+  { name: "Pele de Lobisomem (Cura Pendente)", category: "misc", subcategory: "gear",
+    tier: "raro", weight: 3.0, consumable: false,
+    magicBonus: {},
+    effect: "Material raro com dupla utilidade. (1) Para Alquimistas: componente para Antídoto de Lycantrofia (junto com 2 ingredientes do Livro de Lycantrofia). (2) Para Ferreiros: pode ser processada em Armadura de Lobisomem (+2 Def.Física, regenera 2 HP/turno quando abaixo de 50% HP). Requer ferreiro especializado.",
+    story: "Dron não sabia o que acontecia com seu corpo durante as noites de lua cheia. A pele que sobra ao amanhecer nunca estava onde ele havia dormido." },
+
+  { name: "Livro de Lycantrofia", category: "misc", subcategory: "gear",
+    tier: "raro", weight: 0.8, consumable: false,
+    magicBonus: {},
+    effect: "Contém: história completa da maldição lycântropa, 3 receitas de Antídoto (requerem ingredientes raros — Mestre define disponibilidade), e rituais de contenção. Qualquer personagem que o leia por 1 hora pode fazer testes de Conhecimento sobre Lycantrofia com +1d6. Clérigos podem usar o ritual de contenção como habilidade.",
+    story: "O Padre Meln o escondeu por 15 anos. Conhecimento perigoso nas mãos erradas. Mais perigoso ainda nas mãos que não sabem o que têm." },
+
+  { name: "Cristal da Marca Selado", category: "misc", subcategory: "artefato",
+    tier: "unico", weight: 0.6, consumable: false,
+    cursed: true,
+    magicBonus: {},
+    effect: "Contém um fragmento físico da energia do Deus Marcado, selado mas não destruído. AMALDIÇOADO: portador ganha +1d6 de dano em todos os ataques, mas criaturas santas a 3 hex sofrem 1d4 de dano sombrio passivo (involuntário). Clérigos de qualquer divindade sentem o cristal imediatamente. Pode ser usado como ingrediente para ritual de banimento ou como fonte de poder proibido.",
+    story: "A fissura estava selada. O cristal estava no centro. Alguém tinha que carregá-lo." },
+
+  { name: "Escama de Dracônico Adulto", category: "misc", subcategory: "gear",
+    tier: "lendario", weight: 1.5, consumable: false,
+    magicBonus: {},
+    effect: "Material lendário doado voluntariamente por Tharak. Pode ser processada por ferreiro de elite em: (1) Armadura de Escama de Dragão (+5 Def.Física, resistência a fogo — reduz dano de fogo em 4/dado) ou (2) Escudo Dracônico (+4 Def.Física, +3 Def.Mágica, 1x/combate absorve sopro de dragão completamente). Requer 2 semanas de trabalho e 100 moedas.",
+    story: "Tharak a arrancou do próprio flanco sem piscar. 'Doerá por uma semana. Mas minhas escamas crescem de volta. A amizade não cresce.'" }
 ];
 
 
