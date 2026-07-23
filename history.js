@@ -531,3 +531,189 @@ function renderEntryContent(content) {
 
   return parts.join("");
 }
+
+/* ================================================================
+   MISSÕES ALEATÓRIAS
+   ================================================================ */
+
+document.addEventListener("DOMContentLoaded", () => {
+  // Navegação entre abas
+  document.querySelectorAll("[data-hist-view]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll("[data-hist-view]").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      const view = btn.dataset.histView;
+      document.getElementById("hist-view-history").style.display = view === "history" ? "" : "none";
+      document.getElementById("hist-view-missions").style.display = view === "missions" ? "" : "none";
+      if (view === "missions") renderMissions("all");
+    });
+  });
+
+  // Accordion de missões
+  document.getElementById("missions-container").addEventListener("click", e => {
+    const trigger = e.target.closest(".mission-card-trigger");
+    if (trigger) {
+      trigger.classList.toggle("open");
+      const body = trigger.nextElementSibling;
+      body?.classList.toggle("open");
+    }
+  });
+});
+
+let currentMissionFilter = "all";
+
+function renderMissions(filter) {
+  currentMissionFilter = filter;
+  const container = document.getElementById("missions-container");
+  const missions = typeof MISSIONS !== "undefined" ? MISSIONS : [];
+
+  const filtered = filter === "all" ? missions : missions.filter(m => m.difficulty === filter);
+  const counts = { facil:0, normal:0, dificil:0 };
+  missions.forEach(m => counts[m.difficulty] = (counts[m.difficulty]||0)+1);
+
+  const DIFF_LABELS = { facil:"Fácil", normal:"Normal", dificil:"Difícil" };
+  const REWARD_ICONS = { ouro:"🪙", item:"⚔", magia:"✨", pericia:"📚", benção:"🌟", maldição:"💀", bonus:"⭐", info:"📖" };
+
+  const renderArea = (area) => {
+    const trapHTML = area.trap ? `
+      <div class="mission-trap-box">
+        <div class="mission-trap-name">⚠ Armadilha: ${area.trap.name}</div>
+        <div class="mission-trap-text"><strong>Gatilho:</strong> ${area.trap.trigger}<br><strong>Efeito:</strong> ${area.trap.effect}${area.trap.detect?`<br><strong>Detectar:</strong> ${area.trap.detect}`:""}</div>
+      </div>` : "";
+
+    const puzzleHTML = area.puzzle ? `
+      <div class="mission-puzzle-box">
+        <div class="mission-puzzle-name">🔐 Puzzle: ${area.puzzle.type}</div>
+        <div class="mission-puzzle-text">${area.puzzle.description}${area.puzzle.hint?`<br><em>Dica: ${area.puzzle.hint}</em>`:""}</div>
+        <div class="mission-puzzle-solution">✓ Solução: ${area.puzzle.solution}</div>
+      </div>` : "";
+
+    const hexHTML = area.hex ? `
+      <div class="mission-hex-box">
+        <div class="mission-hex-title">🗾 Campo Hexagonal (${area.hex.layout})</div>
+        <div class="mission-hex-terrain">${area.hex.terrain.map(t=>`• ${t}`).join("<br>")}${area.hex.hint?`<br><em>💡 ${area.hex.hint}</em>`:""}</div>
+      </div>` : "";
+
+    const enemiesHTML = area.enemies?.length ? `
+      <div class="mission-enemies-grid">
+        ${area.enemies.map(e=>`<span class="mission-enemy-chip diff-chip-${e.diff}">☠${"☠".repeat(Math.min(e.diff-1,4))} ${e.name}${e.qty>1?` ×${e.qty}`:""}${e.note?` — ${e.note}`:""}</span>`).join("")}
+      </div>` : "";
+
+    const npcHTML = area.npc ? `
+      <div class="mission-npc-box">
+        <div class="mission-npc-name ${area.npc.role.includes("Benéfic")?"mission-npc-role-ben":area.npc.role.includes("Traiçoeiro")?"mission-npc-role-tra":"mission-npc-role-neu"}">
+          ${area.npc.role.includes("Benéfic")?"🤝":"⚠"} ${area.npc.name} — ${area.npc.role}
+        </div>
+        <div class="mission-npc-text">${area.npc.personality}${area.npc.resolution?`<br><strong>Resolução:</strong> ${area.npc.resolution}`:""}</div>
+      </div>` : "";
+
+    return `
+      <div class="mission-area">
+        <div class="mission-area-name">📍 ${area.name}</div>
+        ${area.description?`<p class="mission-area-desc">${area.description}</p>`:""}
+        ${hexHTML}${trapHTML}${puzzleHTML}${enemiesHTML}${npcHTML}
+      </div>`;
+  };
+
+  const renderCard = (m) => {
+    const diffLabel = DIFF_LABELS[m.difficulty] || m.difficulty;
+    const tagsHTML = m.tags?.map(t=>`<span class="mission-tag">${t}</span>`).join("") || "";
+
+    const enemiesTotal = m.enemies_summary?.map(e=>
+      `<span class="mission-enemy-chip diff-chip-${e.diff}">☠${"☠".repeat(Math.min(e.diff-1,4))} ${e.name}${e.qty&&e.qty!==1?` ×${e.qty}`:""}${e.note?` (${e.note})`:""}</span>`
+    ).join("") || "";
+
+    const rewardsHTML = m.rewards?.map(r=>`
+      <div class="mission-reward-item reward-${r.type}">
+        <span>${REWARD_ICONS[r.type]||"▸"}</span>
+        <span>${r.desc}</span>
+      </div>`).join("") || "";
+
+    const npcsHTML = m.npcs?.map(n=>`
+      <div class="mission-npc-box" style="margin-bottom:5px">
+        <div class="mission-npc-name ${n.role.includes("Benéfic")?"mission-npc-role-ben":n.role.includes("Traiçoeiro")?"mission-npc-role-tra":"mission-npc-role-neu"}">
+          ${n.role.includes("Benéfic")?"🤝":"⚠"} ${n.name} — ${n.role}
+        </div>
+        <div class="mission-npc-text">${n.personality}</div>
+      </div>`).join("") || "";
+
+    const areasHTML = m.areas?.map(renderArea).join("") || "";
+
+    return `
+      <div class="mission-card" id="mcard-${m.id}">
+        <button class="mission-card-trigger">
+          <span class="mission-icon">${m.icon}</span>
+          <div class="mission-head">
+            <div class="mission-title">${m.title}</div>
+            <div class="mission-sub">${m.summary}</div>
+          </div>
+          <span class="mission-diff-badge diff-${m.difficulty}">${diffLabel}</span>
+          <span class="mission-arrow">▾</span>
+        </button>
+        <div class="mission-body">
+          <div class="mission-tags">${tagsHTML}</div>
+          <p class="mission-hook">"${m.hook}"</p>
+
+          <div class="mission-section">
+            <div class="mission-section-title">🚪 Como Começa</div>
+            <p style="font-size:12.5px;color:var(--ink);line-height:1.6;margin:0">${m.start}</p>
+          </div>
+
+          ${areasHTML ? `<div class="mission-section"><div class="mission-section-title">🗺 Áreas e Encontros</div>${areasHTML}</div>` : ""}
+
+          ${m.npcs?.length ? `<div class="mission-section"><div class="mission-section-title">🧙 NPCs Principais</div>${npcsHTML}</div>` : ""}
+
+          ${m.enemies_summary?.length ? `
+          <div class="mission-section">
+            <div class="mission-section-title">⚔ Inimigos</div>
+            <div class="mission-enemies-grid">${enemiesTotal}</div>
+          </div>` : ""}
+
+          <div class="mission-section">
+            <div class="mission-section-title">🎁 Recompensas Possíveis</div>
+            <div class="mission-rewards-grid">${rewardsHTML}</div>
+          </div>
+
+          ${m.master_notes ? `
+          <div class="mission-master-box">
+            <div class="mission-master-title">📋 Notas para o Mestre</div>
+            <div class="mission-master-text">${m.master_notes}</div>
+          </div>` : ""}
+
+          <div style="font-size:11px;color:var(--ink-soft);margin-top:8px;text-align:right">⏱ Duração estimada: ${m.duration}</div>
+        </div>
+      </div>`;
+  };
+
+  container.innerHTML = `
+    <div class="missions-filter-row">
+      <button class="mission-filter-btn ${filter==="all"?"active":""}" onclick="renderMissions('all')">🎲 Todas (${missions.length})</button>
+      <button class="mission-filter-btn facil ${filter==="facil"?"active":""}" onclick="renderMissions('facil')">🟢 Fácil (${counts.facil||0})</button>
+      <button class="mission-filter-btn normal ${filter==="normal"?"active":""}" onclick="renderMissions('normal')">🟡 Normal (${counts.normal||0})</button>
+      <button class="mission-filter-btn dificil ${filter==="dificil"?"active":""}" onclick="renderMissions('dificil')">🔴 Difícil (${counts.dificil||0})</button>
+      <button class="mission-roll-btn" onclick="rollRandomMission()">🎲 Missão Aleatória</button>
+    </div>
+    <div class="missions-grid">
+      ${filtered.length ? filtered.map(renderCard).join("") : '<p style="color:var(--ink-soft);text-align:center;padding:20px">Nenhuma missão encontrada.</p>'}
+    </div>`;
+}
+
+function rollRandomMission() {
+  const missions = typeof MISSIONS !== "undefined" ? MISSIONS : [];
+  const filtered = currentMissionFilter === "all" ? missions : missions.filter(m => m.difficulty === currentMissionFilter);
+  if (!filtered.length) return;
+  const picked = filtered[Math.floor(Math.random() * filtered.length)];
+  // Expandir o card sorteado e scroll até ele
+  renderMissions(currentMissionFilter);
+  setTimeout(() => {
+    const card = document.getElementById("mcard-" + picked.id);
+    if (!card) return;
+    const trigger = card.querySelector(".mission-card-trigger");
+    const body = card.querySelector(".mission-body");
+    trigger?.classList.add("open");
+    body?.classList.add("open");
+    card.classList.add("mission-rolled-highlight");
+    card.scrollIntoView({ behavior: "smooth", block: "start" });
+    setTimeout(() => card.classList.remove("mission-rolled-highlight"), 600);
+  }, 50);
+}

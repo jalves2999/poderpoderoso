@@ -166,6 +166,159 @@
       .hist-content { padding: 16px 20px 48px; gap: 10px; }
       .hist-body { padding: 14px 18px; }
     }
+
+    /* ── Tab bar ─────────────────────────────────────────────── */
+    .hist-tab-bar {
+      display: flex; gap: 0;
+      background: var(--parchment);
+      border-bottom: 2px solid var(--line);
+      position: sticky; top: 58px; z-index: 25;
+    }
+    .hist-tab-btn {
+      flex: 1; padding: 10px 8px;
+      font-family: var(--font-heading); font-size: 13px;
+      background: none; border: none; cursor: pointer;
+      color: var(--ink-soft); border-bottom: 3px solid transparent;
+      transition: all 0.15s; min-height: 44px;
+    }
+    .hist-tab-btn.active { color: var(--ink); border-bottom-color: var(--gold); }
+
+    /* ── Missões ─────────────────────────────────────────────── */
+    .missions-header {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 0 6px; margin-bottom: 8px;
+    }
+    .missions-filter-row {
+      display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px;
+    }
+    .mission-filter-btn {
+      padding: 5px 12px; border-radius: 14px;
+      font-family: var(--font-heading); font-size: 12px;
+      border: 1px solid var(--line); background: none;
+      color: var(--ink-soft); cursor: pointer; transition: all 0.15s;
+    }
+    .mission-filter-btn.active { background: var(--ink); color: var(--parchment); border-color: var(--ink); }
+    .mission-filter-btn.facil.active  { background: #3a6020; border-color: #3a6020; }
+    .mission-filter-btn.normal.active { background: #7a5c10; border-color: #7a5c10; }
+    .mission-filter-btn.dificil.active{ background: #7a2020; border-color: #7a2020; }
+
+    .mission-roll-btn {
+      margin-left: auto; padding: 7px 14px; border-radius: 8px;
+      background: var(--gold); color: var(--parchment); border: none;
+      font-family: var(--font-heading); font-size: 13px; cursor: pointer;
+      font-weight: 700; transition: filter 0.15s;
+    }
+    .mission-roll-btn:active { filter: brightness(0.85); }
+
+    .missions-grid {
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .mission-card {
+      border: 1.5px solid var(--line); border-radius: 10px;
+      overflow: hidden; background: rgba(248,243,232,0.03);
+    }
+    .mission-card-trigger {
+      width: 100%; display: flex; align-items: center; gap: 10px;
+      padding: 12px 14px; background: none; border: none; cursor: pointer;
+      text-align: left; font-family: inherit;
+    }
+    .mission-card-trigger:hover { background: rgba(156,122,60,0.05); }
+    .mission-icon { font-size: 22px; flex-shrink: 0; }
+    .mission-head { flex: 1; min-width: 0; }
+    .mission-title { font-family: var(--font-heading); font-size: 14px; color: var(--ink); }
+    .mission-sub { font-size: 11.5px; color: var(--ink-soft); margin-top: 2px; }
+    .mission-diff-badge {
+      font-family: var(--font-heading); font-size: 10px; font-weight: 700;
+      padding: 3px 9px; border-radius: 10px; flex-shrink: 0; text-transform: uppercase;
+    }
+    .diff-facil   { background: rgba(58,96,32,0.2);  color: #5a9030; }
+    .diff-normal  { background: rgba(156,122,60,0.2); color: #9c7a3c; }
+    .diff-dificil { background: rgba(122,32,32,0.2);  color: #c04040; }
+    .mission-arrow { color: var(--ink-soft); font-size: 12px; transition: transform 0.2s; }
+    .mission-card-trigger.open .mission-arrow { transform: rotate(180deg); }
+
+    .mission-body { display: none; padding: 0 14px 14px; border-top: 1px solid var(--line); }
+    .mission-body.open { display: block; }
+
+    .mission-section { margin-top: 12px; }
+    .mission-section-title {
+      font-family: var(--font-heading); font-size: 11px;
+      text-transform: uppercase; letter-spacing: 0.5px;
+      color: var(--ink-soft); margin-bottom: 6px;
+      padding-bottom: 3px; border-bottom: 1px solid var(--line);
+    }
+    .mission-hook { font-size: 13.5px; line-height: 1.65; color: var(--ink); font-style: italic; margin-top: 8px; }
+    .mission-tags { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 6px; }
+    .mission-tag { font-size: 10.5px; padding: 2px 8px; border-radius: 8px; background: rgba(0,0,0,0.06); color: var(--ink-soft); font-family: var(--font-heading); }
+
+    .mission-area {
+      border: 1px solid var(--line); border-radius: 7px;
+      padding: 10px 11px; margin-bottom: 7px;
+      background: rgba(248,243,232,0.04);
+    }
+    .mission-area-name { font-family: var(--font-heading); font-size: 13px; color: var(--ink); margin-bottom: 4px; }
+    .mission-area-desc { font-size: 12.5px; color: var(--ink-soft); margin: 0 0 6px; line-height: 1.5; }
+
+    .mission-trap-box { background: rgba(180,40,40,0.07); border-left: 3px solid #c05050; border-radius: 4px; padding: 6px 8px; margin-top: 5px; }
+    .mission-trap-name { font-family: var(--font-heading); font-size: 11.5px; color: #c05050; }
+    .mission-trap-text { font-size: 11.5px; color: var(--ink-soft); line-height: 1.5; }
+
+    .mission-puzzle-box { background: rgba(80,40,120,0.07); border-left: 3px solid #8060c0; border-radius: 4px; padding: 6px 8px; margin-top: 5px; }
+    .mission-puzzle-name { font-family: var(--font-heading); font-size: 11.5px; color: #8060c0; }
+    .mission-puzzle-text { font-size: 11.5px; color: var(--ink-soft); line-height: 1.5; }
+    .mission-puzzle-solution { font-size: 11px; color: #7040a0; border-top: 1px dashed rgba(80,40,120,0.3); margin-top: 4px; padding-top: 4px; }
+
+    .mission-hex-box { background: rgba(40,80,140,0.07); border-left: 3px solid #4060b0; border-radius: 4px; padding: 6px 8px; margin-top: 5px; }
+    .mission-hex-title { font-family: var(--font-heading); font-size: 11.5px; color: #4060b0; margin-bottom: 3px; }
+    .mission-hex-terrain { font-size: 11px; color: var(--ink-soft); }
+
+    .mission-npc-box { background: rgba(40,120,80,0.07); border-left: 3px solid #408060; border-radius: 4px; padding: 6px 8px; margin-top: 5px; }
+    .mission-npc-name { font-family: var(--font-heading); font-size: 11.5px; }
+    .mission-npc-role-ben { color: #3a8040; }
+    .mission-npc-role-tra { color: #c05050; }
+    .mission-npc-role-neu { color: #8a6020; }
+    .mission-npc-text { font-size: 11px; color: var(--ink-soft); line-height: 1.5; }
+
+    .mission-enemies-grid { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 4px; }
+    .mission-enemy-chip {
+      font-size: 11px; padding: 3px 9px; border-radius: 8px;
+      font-family: var(--font-heading);
+    }
+    .diff-chip-1 { background: rgba(58,96,32,0.15);  color: #5a9030; }
+    .diff-chip-2 { background: rgba(156,122,60,0.15); color: #9c7a3c; }
+    .diff-chip-3 { background: rgba(180,100,20,0.15); color: #b06010; }
+    .diff-chip-4 { background: rgba(160,40,40,0.2);   color: #c03030; }
+    .diff-chip-5 { background: rgba(100,20,20,0.25);  color: #e02020; }
+
+    .mission-rewards-grid { display: flex; flex-direction: column; gap: 4px; margin-top: 4px; }
+    .mission-reward-item {
+      font-size: 12px; padding: 5px 9px; border-radius: 5px;
+      line-height: 1.4; display: flex; align-items: flex-start; gap: 6px;
+    }
+    .reward-ouro    { background: rgba(156,122,60,0.12); }
+    .reward-item    { background: rgba(74,144,217,0.1);  }
+    .reward-magia   { background: rgba(106,58,122,0.1);  }
+    .reward-pericia { background: rgba(40,120,80,0.1);   }
+    .reward-benção  { background: rgba(40,160,80,0.1);   }
+    .reward-maldição{ background: rgba(160,40,40,0.1);   }
+    .reward-bonus   { background: rgba(200,160,30,0.1);  }
+    .reward-info    { background: rgba(80,120,180,0.1);  }
+
+    .mission-master-box {
+      background: rgba(156,122,60,0.06); border: 1px dashed rgba(156,122,60,0.3);
+      border-radius: 7px; padding: 10px 12px; margin-top: 6px;
+    }
+    .mission-master-title { font-family: var(--font-heading); font-size: 11px; color: var(--gold); text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 4px; }
+    .mission-master-text { font-size: 12.5px; color: var(--ink); line-height: 1.6; }
+
+    .mission-rolled-highlight {
+      animation: missionPulse 0.5s ease;
+    }
+    @keyframes missionPulse {
+      0%   { box-shadow: 0 0 0 0 rgba(156,122,60,0.5); }
+      50%  { box-shadow: 0 0 0 8px rgba(156,122,60,0.0); }
+      100% { box-shadow: none; }
+    }
   </style>
 </head>
 <body>
@@ -173,11 +326,22 @@
 
   <header class="hist-toolbar">
     <a href="index.html" class="hist-back">← Grimório</a>
-    <h1 class="hist-title">🗺 História do Mundo</h1>
+    <h1 class="hist-title" id="hist-title-main">🗺 História do Mundo</h1>
   </header>
 
-  <div class="hist-content">
+  <div class="hist-tab-bar">
+    <button class="hist-tab-btn active" data-hist-view="history">📜 História</button>
+    <button class="hist-tab-btn" data-hist-view="missions">⚔ Missões</button>
+  </div>
+
+  <div class="hist-content" id="hist-view-history">
     <div id="history-container">
+      <p style="text-align:center;color:var(--ink-soft);padding:20px;">Carregando…</p>
+    </div>
+  </div>
+
+  <div class="hist-content" id="hist-view-missions" style="display:none">
+    <div id="missions-container">
       <p style="text-align:center;color:var(--ink-soft);padding:20px;">Carregando…</p>
     </div>
   </div>
@@ -185,5 +349,6 @@
 </div>
 <script src="data.js"></script>
 <script src="history.js"></script>
+<script src="missions.js"></script>
 </body>
 </html>
