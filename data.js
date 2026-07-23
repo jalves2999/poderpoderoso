@@ -2770,6 +2770,118 @@ const CURSES = [
     duration: "Quase permanente",
     mechanical: { penalty: "−2 Def.Mágica vs. sagrado, hostilidade de Clérigos", bonus: "Criaturas corrompidas hesitam; sussurros do Deus Marcado" },
     removal: "Ritual de Exorcismo da Marca (nível 5, requer fragmento da Cruz Inversa de Sanctum), morte e ressurreição, remissão de divindade contrária"
+  },
+
+
+
+  /* ─── MALDIÇÕES MENORES ADICIONAIS ─────────────────────────── */
+  {
+    id: "curse-maos-frias", name: "Mãos de Gelo", tier: "menor",
+    icon: "🖐", origin: "Toque de espectro, dormência mágica, feitiço de rival",
+    effect: "As mãos do personagem estão permanentemente geladas e insensíveis. −1d4 em testes que exigem tato fino (abrir fechaduras, cirurgia, escrever magias em pergaminhos, desativar armadilhas). Armas escapam das mãos com 5% de chance por acerto crítico recebido — rola 1d20, em 1 ou 2 a arma cai.",
+    duration: "Permanente até aquecimento mágico ou ritual de sensibilidade",
+    mechanical: { penalty: "−1d4 em testes de tato fino, 5% de soltar arma ao receber crítico" },
+    removal: "Ritual do Calor de Vermelhão, Clérigo de Thurgomur (forja sagrada), poção de circulação"
+  },
+  {
+    id: "curse-sombra-nao-acompanha", name: "Sombra Atrasada", tier: "menor",
+    icon: "🔆", origin: "Truque de feiticeiro, magia de ilusão mal direcionada",
+    effect: "A sombra do personagem tem 1 segundo de atraso — se move depois do corpo. É inofensivo para o personagem mas NPCs que notem testam SAB (normal) ou ficam desconfiados/assustados. Testes de Furtividade em ambientes iluminados têm −1d4 (a sombra entrega a posição).",
+    duration: "Permanente até exorcismo menor",
+    mechanical: { penalty: "−1d4 Furtividade em áreas iluminadas, NPCs desconfiam" },
+    removal: "Qualquer magia de luz de nível 1+, ritual simples de reancoragem de sombra"
+  },
+  {
+    id: "curse-fome-insaciavel", name: "Fome Insaciável", tier: "menor",
+    icon: "🍖", origin: "Maldição de cozinheiro ofendido, espírito de gulodice, área de escassez mágica",
+    effect: "O personagem precisa comer o dobro do normal. Se não comer uma refeição completa antes de cada aventura: −1 em todos os atributos por 24h (fica distraído pela fome). Nunca sente satisfação — sempre parece levemente faminto. Em negociações sobre comida ou suprimentos: sempre perde o juízo (+1d4 na dificuldade de negociar sobre esses temas).",
+    duration: "Permanente até purificação de cozinheiro ou Clérigo de Tobi",
+    mechanical: { penalty: "−1 atributos sem refeição dupla, +1d4 dificuldade em negociações de suprimentos" },
+    removal: "Banquete sagrado de Tobi (pelo menos 10 pessoas), bênção de cozinheiro goblin, poção de saciedade permanente"
+  },
+  {
+    id: "curse-espelhos", name: "Maldição dos Espelhos", tier: "menor",
+    icon: "🪞", origin: "Quebrar espelho mágico, olhar para reflectante amaldiçoado, vaidade punida",
+    effect: "O personagem não tem reflexo — espelhos, água parada e superfícies polidas não o mostram. Inofensivo para ele, mas NPCs que notem ficam aterrorizados ou desconfiados. Vampiros e mortos-vivos reconhecem a semelhança e hesitam 1 rodada antes de atacar (acham que é um deles). Testes de autoimagem e disfarce que dependam de ver a própria aparência têm −1d6.",
+    duration: "Permanente até ritual de restauração de reflexo",
+    mechanical: { penalty: "Sem reflexo, −1d6 em disfarces, NPCs desconfiam; mortos-vivos hesitam" },
+    removal: "Ritual com espelho não-quebrado e sangue do personagem, Clérigo de Aethea (magia de verdade)"
+  },
+  {
+    id: "curse-som-errado", name: "Eco Maldito", tier: "menor",
+    icon: "🔊", origin: "Blasfêmia num lugar sagrado, Bardo ofendido, área de ressonância mágica",
+    effect: "Tudo que o personagem faz gera um eco levemente errado — passos um segundo atrasados, voz com harmônico estranhão. Em Furtividade: sempre −2 (o eco entrega). Em interações com músicos, bardos e criaturas sensíveis a som: −1d4 na reação inicial. Uma vez por sessão, o Mestre pode usar o eco para revelar a presença do personagem num momento inconveniente.",
+    duration: "Permanente até silêncio mágico ou bênção de Bardo",
+    mechanical: { penalty: "−2 permanente em Furtividade, −1d4 com criaturas auditivas, eco delata 1x/sessão" },
+    removal: "Bênção de Bardo de nível 3+, Ritual do Silêncio (3 dias de silêncio absoluto), item Pedra do Silêncio"
+  },
+
+  /* ─── MALDIÇÕES MÉDIAS ADICIONAIS ──────────────────────────── */
+  {
+    id: "curse-dreno-mana", name: "Dreno Arcano", tier: "media",
+    icon: "🔵", origin: "Sobrecarregar canal mágico, usar artefato corrompido, falha em ritual",
+    effect: "O personagem tem −1 Slot de Magia permanente enquanto a maldição estiver ativa (mínimo 0 — não pode conjurar se chegar a 0). Toda vez que conjura uma magia, rola 1d6: em 1, a magia funciona mas drena 1d4 HP adicional (o canal mágico vaza energia vital). Magias de nível 4+ custam +1 Slot extra.",
+    duration: "Permanente até purificação arcana",
+    mechanical: { penalty: "−1 Slot de Magia, 1d4 HP extra em rolar 1 ao conjurar, magias nv4+ +1 Slot" },
+    removal: "Ritual de Selagem de Canal (Mago de nível alto), poção de mana pura, descanso em área de magia forte"
+  },
+  {
+    id: "curse-ferro-quente", name: "Ferro em Brasa", tier: "media",
+    icon: "🔥", origin: "Maldição de ferreiro traído, item de Vermelhão mal manuseado, pacto de calor quebrado",
+    effect: "Armas e armaduras metálicas ficam quentes ao toque do personagem — não causam dano, mas são desconfortáveis. Em situações de stress (combate, tensão), os metais aquecem o suficiente para queimar: −1d4 em ataques com armas metálicas. Em ambientes quentes (deserto, vulcão, perto de fogo grande): −2 em todos os testes. Mas em frio extremo: o personagem é imune a penalidades de frio.",
+    duration: "Permanente — bônus e penalidades coexistem",
+    mechanical: { penalty: "−1d4 ataques com armas metálicas, −2 em calor extremo", bonus: "Imune a penalidades de frio" },
+    removal: "Mergulho em lago glacial sagrado, Ritual da Têmpera de Thurgomur, Clérigo de Vermelhão"
+  },
+  {
+    id: "curse-olhos-mortos", name: "Olhos dos Mortos", tier: "media",
+    icon: "👀", origin: "Ver algo que não deveria ser visto, magia de clarividência corrompida, Banshee",
+    effect: "Os olhos do personagem mudam — ficam levemente opacos, esbranquiçados. Ele passa a ver espíritos e mortos-vivos invisíveis normalmente. Porém: visão no mundo real fica turva — Percepção visual −1d4. Em ambientes com muitos espíritos (cemitérios, dungeons antigas): é sobrecarregado por visões, −1d6 em todos os testes por estar distraído. Mortos-vivos sentem que ele os vê — reagem com hostilidade ou curiosidade (Mestre decide).",
+    duration: "Permanente",
+    mechanical: { penalty: "−1d4 Percepção visual, −1d6 em locais com espíritos", bonus: "Vê espíritos e mortos-vivos invisíveis" },
+    removal: "Ritual de Purificação da Visão (Clérigo de Aethea nível 3+), lágrimas de espírito livre, poção de visão clara"
+  },
+  {
+    id: "curse-peso-almas", name: "Peso das Almas", tier: "media",
+    icon: "⚖", origin: "Matar inocentes, trair aliados de confiança, acumular dívidas kármicas",
+    effect: "O personagem carrega o peso literal de seus atos. −1 em Movimento permanente (os pés pesam). Em descanso longo após combate onde inocentes foram prejudicados: não recupera HP normalmente (só recupera metade). Clérigos de qualquer divindade sentem a carga — −1d6 em interações com eles. Porém: esse peso o torna firme — imune a efeitos de Empurrão e Derrubada involuntária.",
+    duration: "Progressiva — piora com cada ato moralmente pesado",
+    mechanical: { penalty: "−1 Movimento, metade de HP em descanso pós-ato pesado, −1d6 com Clérigos", bonus: "Imune a Empurrão e Derrubada" },
+    removal: "Ato de redenção genuíno reconhecido por divindade, penitência formal em templo, perdão do ofendido"
+  },
+  {
+    id: "curse-lingua-verdade", name: "Língua da Verdade", tier: "media",
+    icon: "🗨", origin: "Bênção de divindade que virou maldição, juramento de honestidade excessivo",
+    effect: "O personagem é incapaz de mentir conscientmente — qualquer tentativa de mentira resulta em tosse, gaguejos ou saída da língua verdadeira. Pode omitir e silenciar, mas não inventar. Enganação e Blefe são impossíveis. Negociação e Persuasão têm +1d4 (as pessoas confiam em quem não consegue mentir), mas situações que exigem diplomacia falsa tornam-se muito mais complexas.",
+    duration: "Permanente — considerada bênção por alguns, maldição por outros",
+    mechanical: { penalty: "Incapaz de mentir, Enganação impossível", bonus: "+1d4 em Persuasão e Negociação (confiança)" },
+    removal: "Ato deliberado de traição (quebra a maldição mas causa consequências), Ritual da Máscara de Mercúrio"
+  },
+
+  /* ─── MALDIÇÕES PODEROSAS ADICIONAIS ───────────────────────── */
+  {
+    id: "curse-sangue-frio", name: "Sangue Frio da Serpente", tier: "poderosa",
+    icon: "🐍", origin: "Morder ou ser mordido por serpente sagrada de Jurgmund sem ser serpentariano, profanar templo",
+    effect: "A temperatura do personagem cai gradualmente. Em uma semana: pele fica fria ao toque. Em um mês: começa a desenvolver escamas sutis nas extremidades. Mecanicamente: −2 AGI permanente (movimentos ficam rígidos no frio). Em ambientes quentes: volta a AGI normal. Aliados que dormem próximos notam o frio e acordam desconfortáveis. Clérigos de Jurgmund reconhecem a marca e podem tanto ajudar quanto explorar isso.",
+    duration: "Progressiva — se não tratada, em 3 meses o personagem começa a hibernar",
+    mechanical: { penalty: "−2 AGI (revertível em calor), aliados perturbados ao dormir próximo" },
+    removal: "Ritual de Purificação de Jurgmund (requer Clérigo serpentariano de nível 4+), banho em fonte sagrada de calor, sangue de Serpente Dourada voluntariamente oferecido"
+  },
+  {
+    id: "curse-eco-morte", name: "Eco da Morte", tier: "poderosa",
+    icon: "🔔", origin: "Morrer e ser ressuscitado, visitar o plano dos mortos, falhar em ritual de necromância",
+    effect: "O personagem tem um eco do plano dos mortos — mortos-vivos o reconhecem como 'parcialmente deles' e não atacam automaticamente (testam SAB, falha: tratam como aliado). Humanos sensíveis (Clérigos, bardos, crianças) sentem algo errado — −1d6 em interações espontâneas. Uma vez por sessão, o Mestre pode fazer o personagem ouvir vozes de mortos que conheceu. HP máximo reduzido em 10 permanentemente (parte dele ainda está no outro plano).",
+    duration: "Permanente — parte do personagem ficou lá",
+    mechanical: { penalty: "−10 HP máximo permanente, −1d6 interações espontâneas", bonus: "Mortos-vivos não atacam automaticamente" },
+    removal: "Ritual de Âncora da Vida (exige presença de 3 Clérigos), item Chave do Retorno, ato de amor ou conexão profunda com um vivo"
+  },
+  {
+    id: "curse-fragmento-marca", name: "Fragmento da Marca Negra", tier: "poderosa",
+    icon: "⚠", origin: "Sobreviver a um Aralto Maior, tocar núcleo da Marca, ser usado como canal do Deus Marcado",
+    effect: "Uma pequena porção da corrupção do Deus Marcado reside no personagem. Em situações de raiva ou desespero extremo, o Mestre pode ativar o fragmento — o personagem ganha +2d6 de dano por 2 rodadas mas perde controle de 1 ação por rodada (age de forma corruptamente). Criaturas santas sofrem 1d4 de dano sombrio ao tocar o personagem (involuntário). Araltos sentem a marca e podem tentar recrutar ao invés de matar.",
+    duration: "Permanente — o fragmento cresce com o tempo se não removido",
+    mechanical: { penalty: "+2d6 dano mas perde 1 ação (ativação Mestre), toque causa 1d4 sombrio a criaturas santas", bonus: "Araltos hesitam, tentam recrutar" },
+    removal: "Exorcismo completo por Clérigo de Aethea nível 5 (processo de 3 sessões), destruir o Aralto que implantou, artefato sagrado específico"
   }
 ];
 
@@ -2851,6 +2963,97 @@ const BLESSINGS = [
     duration: "Duração: 1 missão completa; renovável com grande ato",
     mechanical: { bonus: "Imune a morte mundana, regen 1d6/r Inconsciente, +2 resistências, +1d6 Intimidação" }
   }
+
+  /* ─── BENÇÃOS MENORES ADICIONAIS ───────────────────────────── */
+  ,{
+    id: "bless-sono-cura", name: "Sono Reparador", tier: "menor",
+    icon: "🌙", origin: "Bênção de Aethea, gratidão de espírito de sonho, poção consagrada",
+    effect: "O personagem recupera HP adicional em cada descanso longo: +1d8 HP além do normal. Sonhos são sempre claros e informativos — o Mestre pode dar 1 pista ou informação relevante por semana de jogo como 'visão de sonho'. Imune à maldição Pesadelos Perpétuos enquanto esta bênção estiver ativa.",
+    duration: "Permanente enquanto o personagem mantiver boa reputação com espíritos",
+    mechanical: { bonus: "+1d8 HP por descanso longo, visão de sonho 1x/semana, imune a Pesadelos" }
+  },
+  {
+    id: "bless-passos-leves", name: "Passos Leves", tier: "menor",
+    icon: "🦶", origin: "Bênção de Ladino lendário, favor de espírito da floresta, treino espiritual",
+    effect: "+1 em Movimento. Em terreno natural (floresta, montanha, campo): +2 em Furtividade. O personagem nunca escorrega em superfícies difíceis (gelo, lama, pedra molhada) — imune a penalidades de terreno para Movimento. Deixa pegadas menos profundas — rastreadores têm +1 grau de dificuldade para seguí-lo.",
+    duration: "Permanente",
+    mechanical: { bonus: "+1 Movimento, +2 Furtividade em terreno natural, imune a penalidades de terreno" }
+  },
+  {
+    id: "bless-olhos-aguia", name: "Olhos de Águia", tier: "menor",
+    icon: "🦅", origin: "Bênção de Druida, favor de Águia Trovejante invocada, ritual de visão",
+    effect: "+1d6 em todos os testes de Percepção visual. Alcance de visão efetiva duplicado — enxerga o dobro da distância normal com clareza. Não é enganado por ilusões visuais simples (nível 1-2) — testa automaticamente para perceber. Em ambientes escuros: enxerga em penumbra como se fosse meia-luz.",
+    duration: "Permanente",
+    mechanical: { bonus: "+1d6 Percepção, alcance visual dobrado, resistência a ilusões nv1-2, visão em penumbra" }
+  },
+  {
+    id: "bless-mao-firme", name: "Mão Firme", tier: "menor",
+    icon: "🎯", origin: "Bênção de Arqueiro ancestral, favor de Thurgomur (artesanato), ritualde pontaria",
+    effect: "+1d4 em todos os ataques à distância. Nunca sofre penalidade por movimento ao atirar (pode correr e atirar sem −1d4). Uma vez por combate: pode declarar um Tiro Perfeito — o próximo ataque à distância não pode errar por fator de cobertura (ignora cobertura parcial completamente).",
+    duration: "Permanente enquanto o personagem não use ataques desonrosos",
+    mechanical: { bonus: "+1d4 ataques à distância, sem penalidade ao mover, 1x/combate ignora cobertura" }
+  },
+  {
+    id: "bless-sangue-quente", name: "Sangue Quente", tier: "menor",
+    icon: "🌡", origin: "Bênção de Vermelhão, sobreviver a incêndio, ritual de iniciação de Karlac",
+    effect: "Imune a penalidades de frio e ambientes gelados. Em temperatura muito baixa: em vez de penalidades, ganha +1d4 em testes de resistência física (o calor interno se intensifica). Testes de FOR têm +1d4 adicional em qualquer temperatura. Aliados que se aqueçam ao lado do personagem recuperam 1d4 HP por hora de descanso (o calor é reconfortante).",
+    duration: "Permanente",
+    mechanical: { bonus: "Imune a frio, +1d4 FOR, aliados recuperam 1d4 HP/hora de descanso próximos" }
+  },
+
+  /* ─── BENÇÃOS MÉDIAS ADICIONAIS ────────────────────────────── */
+  {
+    id: "bless-reflexo-predador", name: "Reflexo de Predador", tier: "media",
+    icon: "⚡", origin: "Bênção de espírito animal, sobreviver a emboscada mortal, ritual de caçador",
+    effect: "+2 em Iniciativa permanente. Nunca é surpreendido — mesmo em emboscadas, age normalmente no primeiro turno. 1 vez por combate: ao ser atacado, pode gastar 1 Ação para contra-atacar imediatamente (fora do turno) com dano normal. Percepção de ameaças à vida tem +1d6 — o personagem sente antes de ver.",
+    duration: "Permanente",
+    mechanical: { bonus: "+2 Iniciativa, imune a Surpresa, 1x/combate contra-ataque imediato, +1d6 percepção de ameaças" }
+  },
+  {
+    id: "bless-cura-acelerada", name: "Cura Acelerada", tier: "media",
+    icon: "💉", origin: "Bênção de Clérigo de Aethea, ritual de regeneração, poção ancestral de Thurgomur",
+    effect: "O personagem regenera HP naturalmente em combate — recupera 2 HP no início de cada turno. Descanso curto (1 hora) recupera 2d8 HP em vez do normal. Ferimentos que deixariam cicatrizes em outros curam sem marca. Condições de Sangramento são removidas automaticamente no início do turno do personagem. Venenos comuns têm duração reduzida à metade.",
+    duration: "Permanente",
+    mechanical: { bonus: "Regen 2 HP/turno em combate, descanso curto +2d8 HP, Sangramento auto-removido, venenos comuns −50% duração" }
+  },
+  {
+    id: "bless-armadura-luz", name: "Armadura de Luz", tier: "media",
+    icon: "🛡", origin: "Bênção de Paladino ancestral, ato de proteção de inocente, Clérigo de Thion",
+    effect: "+2 em Defesa Física permanente (bônusespiritual, não de armadura real). Uma vez por combate, ao receber um ataque que causaria 15+ de dano: reduz o dano à metade automaticamente (a luz absorve o excesso). Em ambientes de luz natural ou sagrada: +1 em todos os testes defensivos. Aliados adjacentes ao personagem têm +1 Defesa Física (a luz transborda).",
+    duration: "Permanente enquanto o personagem proteger inocentes",
+    mechanical: { bonus: "+2 Def.Física, 1x/combate metade do dano de ataques 15+, aliados adj. +1 Def.Física em luz" }
+  },
+  {
+    id: "bless-mana-pura", name: "Canal de Mana Pura", tier: "media",
+    icon: "🔮", origin: "Meditação em nodo de mana, bênção de Mago ancestral, completar grimório lendário",
+    effect: "+1 Slot de Magia permanente. Magias de nível 1-3 têm custo de conjuração reduzido — não consomem Ação de Magia (são lançadas como Ação Livre, 1x cada por turno). Ao rolar 20 natural em qualquer teste de conjuração: a magia é lançada sem consumir Slot. A magia flui mais naturalmente — nunca falha por interferência mágica ambiental.",
+    duration: "Permanente enquanto o personagem estudar regularmente",
+    mechanical: { bonus: "+1 Slot, magias nv1-3 como Ação Livre 1x/turno, 20 natural = sem consumo de Slot" }
+  },
+
+  /* ─── BENÇÃOS PODEROSAS ADICIONAIS ─────────────────────────── */
+  {
+    id: "bless-avatar-guerra", name: "Avatar da Guerra", tier: "poderosa",
+    icon: "🗡", origin: "Sobreviver a batalha impossível, ser o último de pé numa guerra, bênção de divindade marcial",
+    effect: "Em combate: +1d8 de dano em todos os ataques, +1 Ação de Combate por turno, e a cada rodada que sobreviver (não ficou abaixo de 50% HP): ganha 1 carga de Momento (máximo 5). Cada carga de Momento adiciona +1d4 de dano. Ao chegar a 5 cargas: pode declarar Forma de Avatar por 3 rodadas — todas as estatísticas de combate dobradas. Após a Forma: fica Exausto por 2 rodadas (−1 Ação).",
+    duration: "Permanente — a bênção cresce com vitórias em batalha",
+    mechanical: { bonus: "+1d8 dano, +1 Ação, acumula Momento (+1d4/carga), Forma de Avatar (stats dobradas, 3r) 1x/combate" }
+  },
+  {
+    id: "bless-toque-divino", name: "Toque Divino", tier: "poderosa",
+    icon: "🌟", origin: "Contato físico com objeto verdadeiramente sagrado, presença direta de divindade, sacrifício de item ancestral",
+    effect: "As mãos do personagem canalizam energia divina. Ataques físicos causam +1d6 sagrado adicional. Pode curar tocando aliados: 1 Ação = cura 2d8+SAB HP em aliado tocado (3x por combate, sem custo de Slot ou Magia). Mortos-vivos e criaturas corrompidas sofrem +2d6 extra ao ser tocados. Uma vez por sessão: pode purificar um item corrompido ou remover uma maldição de tier menor de um aliado pelo toque.",
+    duration: "Permanente enquanto o personagem agir em nome da divindade que concedeu",
+    mechanical: { bonus: "+1d6 sagrado, cura por toque 2d8+SAB (3x/combate), +2d6 vs. corrompidos, purificação 1x/sessão" }
+  },
+  {
+    id: "bless-nome-lenda", name: "Nome que Vira Lenda", tier: "poderosa",
+    icon: "📜", origin: "Completar missão de escala épica, ser cantado por Bardo famoso, marca de divindade confirmada",
+    effect: "O nome do personagem começou a espalhar-se. NPCs que ouviram falar dele (Mestre determina quais) têm reação inicial positiva ou de respeito. Em negociações: +1d8 adicional simplesmente por ser identificado. Em combate: inimigos que o reconheçam testam SAB (normal) ou ficam com −1d4 em ataques (intimidados pela reputação). Uma vez por sessão: pode invocar a reputação para conseguir acesso, favor ou informação que normalmente exigiria esforço.",
+    duration: "Permanente — e cresce com o tempo",
+    mechanical: { bonus: "+1d8 negociações, −1d4 ataques de inimigos que reconheçam, favor de reputação 1x/sessão" }
+  }
+
 ];
 
 function getAllSpellsInGame() {
