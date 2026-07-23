@@ -1447,6 +1447,8 @@ function renderGlossaryContent() {
     container.innerHTML = renderSpellsGlossary(query);
   } else if (currentGlossaryTab === "items") {
     container.innerHTML = renderItemsGlossary(query);
+  } else if (currentGlossaryTab === "curses") {
+    container.innerHTML = renderCursesGlossary(query);
   } else if (currentGlossaryTab === "rules") {
     container.innerHTML = renderRulesTab();
     // Bind acordeão das regras
@@ -2023,6 +2025,7 @@ function renderSheet() {
       ${renderAttributesSection(character, cls)}
       ${renderDerivedSection(character, cls)}
       ${renderEquippedItemsPanel(character)}
+      ${renderCursesSection(character)}
     `,
     habilidades: `
       ${cls ? renderClassAbilitiesSection(character, cls) : ""}
@@ -3848,6 +3851,44 @@ function attachSheetHandlers(character) {
     });
   });
 
+  // Handlers de Maldições & Bênçãos
+  const cbAddCurse = document.getElementById("cb-btn-add-curse");
+  if (cbAddCurse) cbAddCurse.addEventListener("click", () => {
+    const sel = document.getElementById("cb-select-curse");
+    const id  = sel?.value;
+    if (!id) return;
+    if (!character.activeCurses) character.activeCurses = [];
+    if (!character.activeCurses.includes(id)) {
+      character.activeCurses.push(id);
+      persistCurrentCharacter();
+      renderSheet();
+      showToast("Maldição aplicada.");
+    }
+  });
+
+  const cbAddBlessing = document.getElementById("cb-btn-add-blessing");
+  if (cbAddBlessing) cbAddBlessing.addEventListener("click", () => {
+    const sel = document.getElementById("cb-select-blessing");
+    const id  = sel?.value;
+    if (!id) return;
+    if (!character.activeCurses) character.activeCurses = [];
+    if (!character.activeCurses.includes(id)) {
+      character.activeCurses.push(id);
+      persistCurrentCharacter();
+      renderSheet();
+      showToast("Bênção concedida.");
+    }
+  });
+
+  document.querySelectorAll("[data-remove-curse]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const id = btn.dataset.removeCurse;
+      character.activeCurses = (character.activeCurses || []).filter(x => x !== id);
+      persistCurrentCharacter();
+      renderSheet();
+    });
+  });
+
   // Modifier fields (text + damage bonus) on equipped items
   document.querySelectorAll("[data-modifier-text]").forEach(textarea => {
     textarea.addEventListener("blur", () => {
@@ -4577,6 +4618,165 @@ function printGlossaryItems() {
     bodyHTML += `</div>`;
   });
   _openPrintWindow(`Glossário de Itens${query ? ` — "${query}"` : ""}`, bodyHTML);
+}
+
+/* ── Glossário de Maldições & Bênçãos ─────────────────────────── */
+
+function renderCursesGlossary(query) {
+  const q = (query || "").toLowerCase();
+
+  const TIER_CFG = {
+    menor:    { label: "Menor",    color: "#7a9a7a", icon: "⚬", order: 1 },
+    media:    { label: "Média",    color: "#c09040", icon: "◆", order: 2 },
+    poderosa: { label: "Poderosa", color: "#c04040", icon: "★", order: 3 },
+  };
+
+  const renderCard = (item, type) => {
+    if (q && !item.name.toLowerCase().includes(q) && !item.effect.toLowerCase().includes(q) && !(item.origin||"").toLowerCase().includes(q)) return "";
+    const tc = TIER_CFG[item.tier] || TIER_CFG.menor;
+    const isCurse = type === "curse";
+    const borderColor = isCurse ? "rgba(180,40,40,0.35)" : "rgba(40,160,80,0.35)";
+    const mechHTML = item.mechanical ? Object.entries(item.mechanical).map(([k,v]) =>
+      `<span class="curse-mech-tag curse-mech-${k}">${k === "bonus" ? "✦ Bônus: " : k === "penalty" ? "▼ Penalidade: " : "⬡ "}${v}</span>`
+    ).join("") : "";
+    return `
+      <div class="curse-card ${isCurse ? "curse-card-curse" : "curse-card-blessing"}">
+        <div class="curse-card-head">
+          <span class="curse-card-icon">${item.icon}</span>
+          <div class="curse-card-titles">
+            <span class="curse-card-name">${item.name}</span>
+            <span class="curse-card-origin">${item.origin || ""}</span>
+          </div>
+          <span class="curse-tier-badge" style="color:${tc.color};border-color:${tc.color}">${tc.icon} ${tc.label}</span>
+        </div>
+        <p class="curse-card-effect">${item.effect}</p>
+        ${mechHTML ? `<div class="curse-mech-row">${mechHTML}</div>` : ""}
+        <div class="curse-card-footer">
+          <span class="curse-duration">⏳ ${item.duration || "Permanente"}</span>
+          ${item.removal ? `<span class="curse-removal">🔑 ${item.removal}</span>` : ""}
+        </div>
+      </div>`;
+  };
+
+  const cursesHTML  = CURSES.sort((a,b)=>  (TIER_CFG[a.tier]?.order||0)-(TIER_CFG[b.tier]?.order||0)).map(c=>renderCard(c,"curse")).join("");
+  const blessHTML   = BLESSINGS.sort((a,b)=>(TIER_CFG[a.tier]?.order||0)-(TIER_CFG[b.tier]?.order||0)).map(b=>renderCard(b,"blessing")).join("");
+
+  const printBar = `
+    <div class="glossary-print-bar">
+      <span class="glossary-print-info">⚫ ${CURSES.length} maldições · ✨ ${BLESSINGS.length} bênçãos</span>
+      <button class="glossary-print-btn" onclick="printCursesGlossary()">🖨 Imprimir</button>
+    </div>`;
+
+  const noResults = !cursesHTML.trim() && !blessHTML.trim()
+    ? `<p class="empty-inline-note">Nenhuma maldição ou bênção encontrada para "${escapeHTML(query)}".</p>` : "";
+
+  return `${printBar}
+    ${noResults}
+    ${cursesHTML || blessHTML ? `
+    <h3 class="glossary-group-title" style="color:#c05050">💀 Maldições</h3>
+    <div class="curse-grid">${cursesHTML || '<p class="empty-inline-note">Nenhuma encontrada.</p>'}</div>
+    <h3 class="glossary-group-title" style="color:#40a060;margin-top:20px">✨ Bênçãos</h3>
+    <div class="curse-grid">${blessHTML || '<p class="empty-inline-note">Nenhuma encontrada.</p>'}</div>
+    ` : ""}`;
+}
+
+function printCursesGlossary() {
+  const TIER_CFG = { menor:{label:"Menor",col:"#4a7a4a"}, media:{label:"Média",col:"#8a6020"}, poderosa:{label:"Poderosa",col:"#8a2020"} };
+  const card = (item, type) => {
+    const tc = TIER_CFG[item.tier] || TIER_CFG.menor;
+    const mechHTML = item.mechanical ? Object.entries(item.mechanical).map(([k,v]) =>
+      `<span class="tag">${k==="bonus"?"✦ ":"▼ "}${v}</span>`).join("") : "";
+    return `<div class="card" style="border-left-color:${type==="curse"?"#c05050":"#40a060"}">
+      <div class="card-name">${item.icon} ${item.name}</div>
+      <div class="card-meta">
+        <span class="badge" style="background:${tc.col}">${tc.label}</span>
+        <span class="badge bg-gray">${type==="curse"?"Maldição":"Bênção"}</span>
+      </div>
+      <p class="card-effect">${item.effect}</p>
+      <div class="tags">${mechHTML}</div>
+      ${item.duration?`<p class="card-note">⏳ ${item.duration}</p>`:""}
+      ${item.removal?`<p class="card-note">🔑 ${item.removal}</p>`:""}
+      ${item.origin?`<p class="card-story">${item.origin}</p>`:""}
+    </div>`;
+  };
+  const body = `<h2 style="color:#c05050">💀 Maldições</h2><div class="print-grid">${CURSES.map(c=>card(c,"curse")).join("")}</div>
+    <h2 style="color:#40a060;margin-top:10mm">✨ Bênçãos</h2><div class="print-grid">${BLESSINGS.map(b=>card(b,"blessing")).join("")}</div>`;
+  _openPrintWindow("Maldições & Bênçãos — Grimório de Aether", body);
+}
+
+/* ── Seção de Maldições & Bênçãos na Ficha (aba Vital) ──────── */
+
+function renderCursesSection(character) {
+  const active = character.activeCurses || [];
+  const TIER_ORDER = { menor:1, media:2, poderosa:3 };
+  const ALL = [
+    ...CURSES.map(c    => ({ ...c, type:"curse"    })),
+    ...BLESSINGS.map(b => ({ ...b, type:"blessing" })),
+  ].sort((a,b) => (TIER_ORDER[a.tier]||0)-(TIER_ORDER[b.tier]||0));
+
+  const TIER_LABELS = { menor:"Menor", media:"Média", poderosa:"Poderosa" };
+  const TIER_COLORS = { menor:"#7a9a7a", media:"#c09040", poderosa:"#c04040" };
+
+  const activeCards = active.map(id => {
+    const entry = ALL.find(x => x.id === id);
+    if (!entry) return "";
+    const isCurse = entry.type === "curse";
+    const tc = TIER_LABELS[entry.tier] || entry.tier;
+    const mechHTML = entry.mechanical ? Object.entries(entry.mechanical).map(([k,v]) =>
+      `<span class="cb-mech ${isCurse?"cb-mech-bad":"cb-mech-good"}">${k==="bonus"?"✦ ":k==="penalty"?"▼ ":"⬡ "}${v}</span>`
+    ).join("") : "";
+    return `
+      <div class="cb-active-card ${isCurse ? "cb-card-curse" : "cb-card-blessing"}">
+        <div class="cb-active-head">
+          <span class="cb-active-icon">${entry.icon}</span>
+          <div style="flex:1;min-width:0">
+            <div class="cb-active-name">${entry.name}</div>
+            <div class="cb-active-tier" style="color:${TIER_COLORS[entry.tier]||"#888"}">${isCurse?"💀 Maldição":"✨ Bênção"} · ${tc}</div>
+          </div>
+          <button class="skill-remove-btn" data-remove-curse="${entry.id}" title="Remover">×</button>
+        </div>
+        <p class="cb-active-effect">${entry.effect}</p>
+        ${mechHTML ? `<div class="cb-mech-row">${mechHTML}</div>` : ""}
+        ${entry.duration ? `<div class="cb-duration">⏳ ${entry.duration}</div>` : ""}
+        ${entry.removal && isCurse ? `<div class="cb-removal">🔑 ${entry.removal}</div>` : ""}
+      </div>`;
+  }).join("");
+
+  // Select para adicionar
+  const available = ALL.filter(x => !active.includes(x.id));
+  const curseOptions   = available.filter(x=>x.type==="curse"   ).map(x=>`<option value="${x.id}">[${TIER_LABELS[x.tier]}] ${x.icon} ${x.name}</option>`).join("");
+  const blessOptions   = available.filter(x=>x.type==="blessing").map(x=>`<option value="${x.id}">[${TIER_LABELS[x.tier]}] ${x.icon} ${x.name}</option>`).join("");
+
+  return `
+  <div class="sheet-section">
+    <h3 class="sheet-section-title">⚫ Maldições & ✨ Bênçãos Ativas</h3>
+    <p class="section-hint">Adicione maldições ou bênçãos que o personagem carrega. Os efeitos são informativos — aplique-os manualmente nas cenas. Veja o Glossário para detalhes completos de cada uma.</p>
+
+    ${active.length ? `<div class="cb-active-grid">${activeCards}</div>` : `<p class="empty-inline-note">Nenhuma maldição ou bênção ativa no momento.</p>`}
+
+    <div class="cb-add-row">
+      <div class="cb-add-group">
+        <span class="cb-add-label">💀 Adicionar Maldição</span>
+        <div style="display:flex;gap:6px">
+          <select id="cb-select-curse" class="cb-select">
+            <option value="">Escolher...</option>
+            ${curseOptions}
+          </select>
+          <button class="cb-add-btn cb-btn-curse" id="cb-btn-add-curse">+ Aplicar</button>
+        </div>
+      </div>
+      <div class="cb-add-group">
+        <span class="cb-add-label">✨ Adicionar Bênção</span>
+        <div style="display:flex;gap:6px">
+          <select id="cb-select-blessing" class="cb-select">
+            <option value="">Escolher...</option>
+            ${blessOptions}
+          </select>
+          <button class="cb-add-btn cb-btn-blessing" id="cb-btn-add-blessing">+ Aplicar</button>
+        </div>
+      </div>
+    </div>
+  </div>`;
 }
 
 /* --- Glossário de Habilidades (todas as classes) --- */

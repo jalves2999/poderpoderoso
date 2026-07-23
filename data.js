@@ -2677,6 +2677,182 @@ const SUBCLASSES = {
 
 };
 
+
+/* ================================================================
+   MALDIÇÕES E BENÇÃOS — Sistema de Condições Permanentes
+   Tier: menor | media | poderosa
+   type: "curse" | "blessing"
+   ================================================================ */
+
+const CURSES = [
+
+  /* ─── MALDIÇÕES MENORES ─────────────────────────────────────── */
+  {
+    id: "curse-olho-mau", name: "Olho Mau", tier: "menor",
+    icon: "👁", origin: "Feitiço de bruxa ou inveja acumulada",
+    effect: "O personagem tem −1d4 em todos os testes de sorte e em situações aleatórias (como rolagens de encontro ou eventos do mestre). Objetos que carrega têm 10% de chance de quebrar ao ser usados de forma intensa.",
+    duration: "Permanente até ser removida por Clérigo ou ritual de purificação (nível 1+)",
+    mechanical: { penalty: "-1d4 em testes de sorte", special: "10% de quebra de objetos" },
+    removal: "Cura mágica (nível 1+), água benta, visita a santuário"
+  },
+  {
+    id: "curse-pesadelos", name: "Pesadelos Perpétuos", tier: "menor",
+    icon: "😴", origin: "Dormir em local amaldiçoado, trauma não resolvido, magia negra",
+    effect: "A cada descanso longo, o personagem testa SAB (normal). Falha: não recupera HP durante o descanso (acorda exausto). Sucesso: descansa normalmente. Cumulativo — 3 falhas seguidas causam −1 em todos os atributos temporariamente (retorna com descanso curado).",
+    duration: "Permanente até ser removida",
+    mechanical: { penalty: "SAB normal para descansar" },
+    removal: "Ritual de Sonho Claro (nível 1), poção de sono profundo, visita a Clérigo de Aethea"
+  },
+  {
+    id: "curse-lingua-podre", name: "Língua Podre", tier: "menor",
+    icon: "🗣", origin: "Maldição de bardo ofendido, juramento quebrado",
+    effect: "Toda vez que o personagem tenta Persuadir, Seduzir ou Negociar com NPCs neutros ou positivos, rola com −1d6 adicional. Palavras saem erradas, tom é sempre inadequado. Animais reagem negativamente à presença do personagem.",
+    duration: "Permanente até ser removida",
+    mechanical: { penalty: "-1d6 em testes sociais", special: "Animais hostis" },
+    removal: "Pedir desculpas formais ao ofendido, bênção de bardo de nível 3+, Clérigo de Tobi"
+  },
+
+  /* ─── MALDIÇÕES MÉDIAS ──────────────────────────────────────── */
+  {
+    id: "curse-toque-frio", name: "Toque do Frio Eterno", tier: "media",
+    icon: "🧊", origin: "Contato com morto-vivo poderoso, Aura dos Sepulcros",
+    effect: "O personagem irradia frio. Aliados adjacentes sofrem −1 em todos os testes (o frio distrai). Em combate, ao acertar um ataque corpo a corpo, o alvo testa FOR (normal) ou fica Lento (−2 Movimento) por 1 rodada. Porém: o personagem é vulnerável a fogo (+1d6 por dado de dano de fogo recebido).",
+    duration: "Permanente até ser removida por Clérigo ou calor sagrado",
+    mechanical: { penalty: "Aliados adj. -1 em testes, vulnerável a fogo", bonus: "Ataques corp. causam Lentidão" },
+    removal: "Chama Sagrada de Vermelhão, Clérigo de nível 2+, Ritual do Calor (requer 3 tochas sagradas)"
+  },
+  {
+    id: "curse-sombra-viva", name: "Sombra Viva", tier: "media",
+    icon: "🌑", origin: "Magia de necromante, traição grave, área corrompida pelo Deus Marcado",
+    effect: "A sombra do personagem age independente com intenções próprias. Em momentos de tensão (combate, negociação crucial), o Mestre pode fazer a sombra sabotar sutilmente: derrubar um objeto, gesticular de forma errada, assustar um NPC. O personagem nunca sabe quando a sombra vai agir. −2 em Percepção (a sombra distrai).",
+    duration: "Permanente até exorcismo",
+    mechanical: { penalty: "-2 em Percepção, sombra autônoma (Mestre controla)" },
+    removal: "Exorcismo de Clérigo (nível 3+), luz solar direta por 7 dias seguidos, item Cristal da Luz Pura"
+  },
+  {
+    id: "curse-marca-sangue", name: "Marca de Sangue", tier: "media",
+    icon: "🩸", origin: "Ritual de vingança, maldição familiar, contrato quebrado",
+    effect: "O personagem sangra magicamente quando usa poder — a cada uso de magia ou habilidade especial, perde 1d4 HP (o sangue é o custo). Aliados dentro de 2 hex do personagem em combate podem ser respingados (Mestre decide quando é dramático). A marca é visível: −1d4 em testes de interação com desconhecidos (assusta).",
+    duration: "Permanente até ritual de purificação de sangue",
+    mechanical: { penalty: "−1d4 HP por uso de magia/habilidade, −1d4 interação social" },
+    removal: "Ritual de Purificação de Sangue (Clérigo nível 2), poção de cura ancestral, Clérigo de Jurgmund"
+  },
+  {
+    id: "curse-azar-acumulado", name: "Azar Acumulado", tier: "media",
+    icon: "🎲", origin: "Provocar uma divindade, maldição de mercador, quebrnar talismã",
+    effect: "Todo resultado natural 20 nos dados do personagem é tratado como 1 (azar inverte os críticos positivos). Todo resultado natural 1 é tratado como 1 normalmente (os críticos negativos permanecem). Uma vez por sessão, um evento aleatório negativo ocorre — algo que o Mestre determina como consequência do azar acumulado.",
+    duration: "Permanente até ser removida",
+    mechanical: { penalty: "20 natural vira 1, evento negativo 1x/sessão" },
+    removal: "Oferta em templo (50 moedas de ouro mínimo), bênção de divindade favorável, reverter o ato que causou a maldição"
+  },
+
+  /* ─── MALDIÇÕES PODEROSAS ───────────────────────────────────── */
+  {
+    id: "curse-consumido", name: "Consumido por Dentro", tier: "poderosa",
+    icon: "💀", origin: "Magia de nível 5 de necromante, artefato amaldiçoado, sacrifício falho",
+    effect: "O personagem perde 1d4 HP máximo permanentemente a cada semana de jogo (retira do máximo, não cura). Abaixo de 50% HP máximo original: começa a exalar fumaça negra — detectável por Clérigos e mortos-vivos (que o reconhecem como 'quase um deles'). A condição acelera se o personagem usar magia de necromância.",
+    duration: "Progressiva — sem remoção simples",
+    mechanical: { penalty: "−1d4 HP máximo/semana, detectável por mortos-vivos" },
+    removal: "Ritual Maior de Purificação (Clérigo nível 5+), Cura Suprema usada por Clérigo de Aethea, sacrifício de item ancestral"
+  },
+  {
+    id: "curse-espiral-loucura", name: "Espiral de Loucura", tier: "poderosa",
+    icon: "🌀", origin: "Ver a forma verdadeira de uma entidade, área de corrupção máxima, falha em ritual proibido",
+    effect: "A cada combate intenso (3+ rodadas), o personagem testa SAB (difícil) ou ganha 1 Nível de Instabilidade (máximo 3). Nível 1: age normalmente mas faz comentários erráticos. Nível 2: Mestre pode fazer o personagem agir de forma irracional 1x por combate. Nível 3: o Mestre controla 1 ação por rodada. Níveis reduzem com descanso longo e tratamento.",
+    duration: "Progressiva — acumula com o tempo",
+    mechanical: { penalty: "Teste SAB difícil ou +1 Instabilidade por combate" },
+    removal: "Tratamento de Clérigo de Aethea por 7 dias, ritual de ancoragem mental (Nível 4), experiência que reverta o trauma"
+  },
+  {
+    id: "curse-deus-marcado-olho", name: "Olhar do Deus Marcado", tier: "poderosa",
+    icon: "⚫", origin: "Contato direto com Aralto de alto nível, fragmento da Marca, traição aos aliados do Deus Marcado",
+    effect: "O personagem carrega a marca do Deus Marcado. Criaturas corrompidas o reconhecem como potencial aliado e hesitam 1 rodada antes de atacar. Clérigos de Sanctum e Aethea testam SAB ao ver o personagem (falha: tratam como inimigo). Uma vez por sessão, o Deus Marcado pode sussurrar algo verdadeiro ao personagem (o Mestre usa isso narrativamente). −2 em DEF Mágica contra magia sagrada.",
+    duration: "Quase permanente",
+    mechanical: { penalty: "−2 Def.Mágica vs. sagrado, hostilidade de Clérigos", bonus: "Criaturas corrompidas hesitam; sussurros do Deus Marcado" },
+    removal: "Ritual de Exorcismo da Marca (nível 5, requer fragmento da Cruz Inversa de Sanctum), morte e ressurreição, remissão de divindade contrária"
+  }
+];
+
+const BLESSINGS = [
+
+  /* ─── BENÇÃOS MENORES ───────────────────────────────────────── */
+  {
+    id: "bless-sorte", name: "Toque de Boa Sorte", tier: "menor",
+    icon: "🍀", origin: "Gratidão de NPC, favor de Tobi, completar uma missão honrosa",
+    effect: "1 vez por sessão, o jogador pode re-rolar qualquer dado (inclusive do Mestre se afeta o personagem) e ficar com o melhor resultado. O dado re-rolado brilha levemente — efeito visual que NPCs próximos notam.",
+    duration: "Até ser usada ou até o fim da campanha",
+    mechanical: { bonus: "1x/sessão re-rola qualquer dado, melhor resultado" },
+    removal: "Gasta ao ser usada (pode ser renovada)"
+  },
+  {
+    id: "bless-vigor", name: "Vigor Abençoado", tier: "menor",
+    icon: "💪", origin: "Bênção de Thurgomur, completar desafio físico extremo, ritual anão",
+    effect: "+5 HP máximo permanente enquanto a bênção estiver ativa. Uma vez por combate, quando o personagem ficaria Derrubado, pode testar FOR (normal) para permanecer em pé com 1 HP.",
+    duration: "Permanente enquanto honrar as tradições de Thurgomur (ou até ser removida)",
+    mechanical: { bonus: "+5 HP máximo, 1x/combate: teste para não cair" }
+  },
+  {
+    id: "bless-voz", name: "Voz Abençoada", tier: "menor",
+    icon: "🎵", origin: "Bênção de Bardo famoso, gratidão de Tobi, performance em local sagrado",
+    effect: "+1d6 em todos os testes de Persuasão, Sedução, Negociação e Performance. NPCs neutros começam com disposição ligeiramente positiva ao personagem. A voz tem uma qualidade que é difícil de descrever — simplesmente agradável de ouvir.",
+    duration: "Permanente enquanto o personagem usar a voz honestamente",
+    mechanical: { bonus: "+1d6 testes sociais, NPCs neutros começam positivos" }
+  },
+
+  /* ─── BENÇÃOS MÉDIAS ────────────────────────────────────────── */
+  {
+    id: "bless-escudo-fe", name: "Escudo de Fé Divina", tier: "media",
+    icon: "✨", origin: "Bênção direta de Aethea ou Thion, ato de sacrifício genuíno",
+    effect: "Passivo: +2 em Defesa Mágica. Uma vez por combate, ao receber dano mágico que reduziria o personagem a 0 HP, o escudo absorve todo o dano (fica a 1 HP). O escudo brilha visivelmente quando ativado. Clérigos de Aethea e Thion reconhecem a bênção.",
+    duration: "Até ser usada 3 vezes ou até o fim da campanha",
+    mechanical: { bonus: "+2 Def.Mágica, absorção total de dano 1x/combate (3 usos totais)" }
+  },
+  {
+    id: "bless-lâmina-sagrada", name: "Lâmina Sagrada", tier: "media",
+    icon: "⚔", origin: "Unção em altar de Sanctum, bênção de Paladino de nível alto, ritual de guerra",
+    effect: "Ataques físicos do personagem causam +1d6 de dano sagrado adicional. Contra criaturas corrompidas (Araltos, mortos-vivos) e de origem demônica: +1d8 adicional em vez de +1d6. Uma vez por sessão: pode declarar um Golpe de Julgamento — o próximo ataque causa dano máximo em todos os dados automaticamente.",
+    duration: "Permanente enquanto o personagem não cometer atos contra o código de Sanctum",
+    mechanical: { bonus: "+1d6 sagrado (ou +1d8 vs. corrompidos), 1x/sessão dano máximo" }
+  },
+  {
+    id: "bless-mente-acurada", name: "Mente Acurada", tier: "media",
+    icon: "🧠", origin: "Bênção de sábio ancião, ritual de Aethea, completar estudo de grimório lendário",
+    effect: "+2 em INT e SAB temporariamente (dura enquanto a bênção estiver ativa, não é permanente no atributo base mas conta para todos os cálculos). +1 Slot de Magia adicional. Magias de nível 1 e 2 custam 0 Slots (o conhecimento flui naturalmente).",
+    duration: "Duração: 1 semana de jogo; renovável com rituais",
+    mechanical: { bonus: "+2 INT e SAB, +1 Slot, magias nv1-2 sem custo de slot" }
+  },
+  {
+    id: "bless-sombra-aliada", name: "Sombra Aliada", tier: "media",
+    icon: "🌒", origin: "Bênção de espírito benevolente, pacto honrado com criatura das sombras, gratidão de Ladino lendário",
+    effect: "Em áreas de sombra ou escuridão: +2 em Esquiva e +1d4 em todos os ataques (a sombra guia os movimentos). 1 vez por combate: pode desaparecer nas sombras como Ação Livre (invisível por 1 rodada, próximo ataque é Crítico automático). Detectável por visão de verdade ou magia de luz.",
+    duration: "Permanente enquanto o personagem respeitar os acordos com espíritos",
+    mechanical: { bonus: "+2 Esquiva e +1d4 ataques em sombra, 1x desaparece e crítico automático" }
+  },
+
+  /* ─── BENÇÃOS PODEROSAS ─────────────────────────────────────── */
+  {
+    id: "bless-sangue-heroi", name: "Sangue de Herói", tier: "poderosa",
+    icon: "🔥", origin: "Ato de heroísmo genuíno testemunhado por divindade, sacrifício em campo de batalha",
+    effect: "Passivo: o personagem tem +1d8 de dano em todos os ataques físicos. Quando chegar a 0 HP pela primeira vez por sessão: recupera automaticamente 3d10 HP (o sangue de herói recusa a morte fácil). Ao matar um inimigo de dificuldade 3+: recupera 1d8 HP. NPCs sentem algo especial no personagem — +1d4 em interações com guerreiros e soldados.",
+    duration: "Permanente — parte do destino do personagem",
+    mechanical: { bonus: "+1d8 dano, revive 1x/sessão (3d10 HP), +1d8 HP ao matar Dif.3+" }
+  },
+  {
+    id: "bless-escolhido", name: "Escolhido da Divindade", tier: "poderosa",
+    icon: "👑", origin: "Missão divina cumprida, salvação de algo sagrado, sacrifício pessoal de grande valor",
+    effect: "O personagem é marcado por uma divindade específica (escolher qual). Ganha: +1 em todos os atributos (+1 FOR, DEX, AGI, INT, SAB), imunidade a maldições de tier menor e média, e uma habilidade única da divindade (Mestre e jogador criam juntos). Além disso: uma vez por sessão, pode pedir orientação à divindade — o Mestre dá uma pista ou ajuda narrativa.",
+    duration: "Permanente — mas pode ser revogada por atos contrários à divindade",
+    mechanical: { bonus: "+1 em todos os atributos, imune a maldições menores e médias, habilidade divina única" }
+  },
+  {
+    id: "bless-imortal-vontade", name: "Vontade Imortal", tier: "poderosa",
+    icon: "⚡", origin: "Sobreviver ao impossível, ser ressuscitado por ritual de nível máximo, contrato com entidade primordial",
+    effect: "O personagem é incapaz de morrer de causas mundanas enquanto a bênção estiver ativa. Se chegar a 0 HP: fica Inconsciente mas estabiliza automaticamente (não morre). Recupera 1d6 HP por rodada enquanto Inconsciente. Para morrer de verdade: precisaria de uma causa de natureza divina ou mágica de nível 5. +2 em todos os testes de resistência. A presença do personagem impõe respeito involuntário (+1d6 em Intimidação).",
+    duration: "Duração: 1 missão completa; renovável com grande ato",
+    mechanical: { bonus: "Imune a morte mundana, regen 1d6/r Inconsciente, +2 resistências, +1d6 Intimidação" }
+  }
+];
+
 function getAllSpellsInGame() {
   const list = [];
   Object.keys(CLASSES).forEach(key => {
