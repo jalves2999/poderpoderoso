@@ -3073,7 +3073,7 @@ function buildPrintableSheet(character, cls, maxHP, resourceMax) {
   const equippedArmor = getEquippedItem(character, "armor");
   const equippedAccessories = getEquippedItem(character, "accessory");
 
-  return `
+  let html = `
   <div class="print-page">
     <div class="print-header">
       <div class="print-header-main">
@@ -3279,6 +3279,63 @@ function buildPrintableSheet(character, cls, maxHP, resourceMax) {
     <div class="print-footer">Grimório de Personagens — Ficha gerada em ${new Date().toLocaleDateString("pt-BR")}</div>
   </div>
   `;
+
+  // Bloco de maldições e bênçãos ativas
+  const activeCBIds = character.activeCurses || [];
+  if (activeCBIds.length) {
+    const ALL_CB = [
+      ...CURSES.map(c    => ({ ...c, type:"curse"    })),
+      ...BLESSINGS.map(b => ({ ...b, type:"blessing" })),
+    ];
+    const TIER_LABELS = { menor:"Menor", media:"Média", poderosa:"Poderosa" };
+    const activeCurses   = activeCBIds.map(id => ALL_CB.find(x => x.id === id)).filter(x => x && x.type === "curse");
+    const activeBlessing = activeCBIds.map(id => ALL_CB.find(x => x.id === id)).filter(x => x && x.type === "blessing");
+
+    const renderCBPrintCard = (item) => {
+      const isCurse = item.type === "curse";
+      const borderColor = isCurse ? "#c05050" : "#40a060";
+      const mechHTML = item.mechanical ? Object.entries(item.mechanical).map(([k,v]) =>
+        `<span style="font-size:7.5pt;padding:1px 5px;border-radius:4px;background:${k==="bonus"?"rgba(40,140,60,0.12)":"rgba(160,40,40,0.1)"};color:${k==="bonus"?"#3a7040":"#904040"}">${k==="bonus"?"✦ ":"▼ "}${v}</span>`
+      ).join("&nbsp;") : "";
+      return `
+        <div style="border:1px solid ${borderColor};border-left:3px solid ${borderColor};border-radius:6px;padding:6px 8px;margin-bottom:5px;background:${isCurse?"rgba(140,30,30,0.04)":"rgba(30,100,50,0.04)"}">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px">
+            <span style="font-size:15px">${item.icon}</span>
+            <strong style="font-size:9.5pt">${item.name}</strong>
+            <span style="font-size:7.5pt;color:#888;margin-left:auto">${isCurse?"Maldição":"Bênção"} · ${TIER_LABELS[item.tier]||item.tier}</span>
+          </div>
+          <p style="font-size:8.5pt;color:#333;margin:0 0 3px;line-height:1.5">${item.effect}</p>
+          ${mechHTML ? `<div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:3px">${mechHTML}</div>` : ""}
+          ${item.duration ? `<div style="font-size:7.5pt;color:#888;margin-top:2px">⏳ ${item.duration}</div>` : ""}
+          ${item.removal && isCurse ? `<div style="font-size:7.5pt;color:#508050;margin-top:1px">🔑 ${item.removal}</div>` : ""}
+        </div>`;
+    };
+
+    const cursesBlock = activeCurses.length ? `
+      <div class="print-box" style="border-left:3px solid #c05050">
+        <div class="print-box-title" style="color:#c05050">💀 Maldições Ativas (${activeCurses.length})</div>
+        ${activeCurses.map(renderCBPrintCard).join("")}
+      </div>` : "";
+
+    const blessBlock = activeBlessing.length ? `
+      <div class="print-box" style="border-left:3px solid #40a060">
+        <div class="print-box-title" style="color:#3a8050">✨ Bênçãos Ativas (${activeBlessing.length})</div>
+        ${activeBlessing.map(renderCBPrintCard).join("")}
+      </div>` : "";
+
+    const cbSection = cursesBlock || blessBlock ? `
+      <div class="print-two-col" style="margin-top:8px">
+        ${cursesBlock}
+        ${blessBlock}
+      </div>` : "";
+
+    html = html.replace(
+      `<div class="print-footer">`,
+      cbSection + `<div class="print-footer">`
+    );
+  }
+
+  return html;
 }
 
 
