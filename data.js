@@ -1224,7 +1224,7 @@ const WEAPONS_TWO_HAND = [
     story: "Criado para guerreiros que aprenderam magia com Arcath mas não queriam abrir mão do combate corpo a corpo. O báculo pode ser usado como arma ou como foco mágico — e o portador pode fazer os dois no mesmo turno.",
     note: "+1 Ação de Magia e +1 Ação de Combate por rodada. Permite conjurar e atacar corpo a corpo no mesmo turno sem penalidade." },
   { tier: "lendario", name: "Lança do Herói Arqueiro — Réplica Enchanted", dmg: "1d12 + 1d8", req: "DEX/FOR", weight: 5, defenseDegrade: null, slot: ["primary"], heavyTwoHanded: true,
-    magicBonus: { actions: 2, reactions: 1 },
+    magicBonus: { actions: 2 },
     story: "Réplica encantada da lança do Herói Arqueiro Ferrath. O original foi destruído na Batalha Colossal, mas forjadores de Arcath conseguiram recriar parte do encantamento estudando fragmentos encontrados nas planícies.",
     note: "+2 Ações de Combate e +1 Reação por rodada. Ataques com esta lança alcançam 3 hexágonos em corpo a corpo e 12 hexágonos como arma arremessada (retorna ao portador)." },
 
@@ -1520,7 +1520,7 @@ const ARMORS = [
     story: "Forjada no coração de uma montanha durante uma tempestade invocada pelo próprio Deus Marcado, esta couraça carrega a impressão de uma pata de lobo gravada no peito — que brilha vermelho quando o portador está em perigo real. Apenas três foram criadas; o paradeiro de duas é desconhecido.",
     note: "Passivo: ao cair abaixo de 25% HP, ganha +1d8 de Defesa Física e o dano natural do portador aumenta em +1d6 por 3 rodadas (ativa automaticamente). Uma vez por dia: ao morrer, o portador estabiliza em vez de morrer e recupera 1d10 HP." },
   { tier: "lendario", name: "Armadura da Muralha Viva de Sanctum", physDefense: 6, magDefense: 6, weight: 8, movePenalty: 0, req: "SAB/FOR",
-    magicBonus: { hp: 30, reactions: 1, carry: 15 },
+    magicBonus: { hp: 30, carry: 15 },
     story: "A armadura que o Clérigo Sanctum usou na Batalha Colossal. Projetada para proteger sem impedir os movimentos de cura. As runas na superfície são orações gravadas pelo próprio Sanctum — que ainda funcionam após 500 anos.",
     note: "Passivo: magias de cura do portador adicionam +1d6 automaticamente. +30 HP máximo, +1 Reação e +15 Carga refletem ao equipar. A Reação extra permite usar Graça Divina e ainda agir normalmente no turno." },
   { tier: "lendario", name: "Vestes do Arquimago Supremo", physDefense: 2, magDefense: 10, weight: 2, movePenalty: 0, req: "INT",
@@ -1704,7 +1704,7 @@ const ACCESSORIES = [
 
   /* --- RAROS: Bônus de ações/reações/magia --- */
   { tier: "raro", name: "Bracelete de Combate Acelerado", weight: 0.3,
-    magicBonus: { reactions: 1 },
+    magicBonus: { },
     effect: "+1 Reação por rodada. Reflete diretamente no campo Reações das Estatísticas de Combate.",
     story: "Bracelete com engrenagens mínimas de prata e ouro que respondem ao pulso do portador. Desenvolvido por engenheiros anões da Cidadela do Casco que precisavam reagir mais rapidamente durante os mergulhos de Magnalaga." },
   { tier: "raro", name: "Anel da Ação Dupla", weight: 0.1,
@@ -1716,17 +1716,17 @@ const ACCESSORIES = [
     effect: "+1 Ação de Magia por rodada. Passivo permanente.",
     story: "Cristal de mana em forma de serpente em espiral — reminiscente dos cultos de Jurgmund, mas de origem pré-batalha. Amplifica os canais de energia mágica naturais do portador." },
   { tier: "raro", name: "Elmo do Reflexo Rápido", weight: 2.0,
-    magicBonus: { reactionActions: 1 },
+    magicBonus: { },
     effect: "+1 Ação de Reação por rodada.",
     story: "Elmo com viseira dupla que amplia o campo de visão periférico. Guardas de fronteira de Valdris os usam para detectar ataques laterais. O encantamento adicional foi desenvolvido após a primeira aparição dos Cultistas do Aralto." },
 
   /* --- MÁGICOS: Múltiplos bônus de ações + atributos + vida --- */
   { tier: "magico", name: "Colar da Reação Arcana", weight: 0.3,
-    magicBonus: { reactions: 1, reactionActions: 1, spellActions: 1 },
+    magicBonus: { spellActions: 1 },
     effect: "+1 Reação, +1 Ação de Reação e +1 Ação de Magia por rodada. Permite conjurar magias como Reação sem custo extra de Ação.",
     story: "Criado pela Grande Maga Sela de Arcath para os poucos estudantes que conseguiam dividir atenção entre combate e conjuração. Apenas três foram feitos — e um está desaparecido junto com um estudante." },
   { tier: "magico", name: "Elmo do Herói Inabalável", weight: 2.5,
-    magicBonus: { reactions: 1, hp: 15 },
+    magicBonus: { hp: 15 },
     effect: "+1 Reação por rodada e +15 HP máximo. Os +15 HP aparecem imediatamente na aba Vital ao equipar.",
     story: "Elmo forjado em honra ao Guerreiro Valdris, com seu brasão gravado na fronte. Versões menores são distribuídas para os campeões do Reino de Valdris. Esta versão foi encantada por um mago de Arcath para reforçar tanto a resistência quanto os reflexos." },
   { tier: "magico", name: "Botas da Investida Rápida", weight: 1.2,
@@ -1750,7 +1750,7 @@ const ACCESSORIES = [
     effect: "+20 HP máximo e +1 SAB. O bônus de SAB afeta cura, Fé e percepção normalmente. O +20 HP aparece na aba Vital imediatamente.",
     story: "Pingente com uma cobra enroscada em âmbar — fossilizado há milênios, antes da Batalha Colossal. Serpentarianos consideram este item uma relíquia sagrada de Jurgmund. Curadores de todas as classes o cobiçam." },
   { tier: "magico", name: "Pulseira da Destreza Arcana", weight: 0.2,
-    magicBonus: { attr: "DEX", attrValue: 1, reactionActions: 1 },
+    magicBonus: { attr: "DEX", attrValue: 1 },
     effect: "+1 DEX e +1 Ação de Reação por rodada. Bônus de DEX afeta testes que usam o atributo.",
     story: "Pulseira de prata com runas de precisão gravadas na face interna. Originária da escola de Arcath — criada para conjuradores que precisavam de destreza para gestos mágicos complexos." },
   { tier: "magico", name: "Anel da Agilidade do Caçador", weight: 0.1,
@@ -1760,7 +1760,7 @@ const ACCESSORIES = [
 
   /* --- LENDÁRIOS: Bônus poderosos múltiplos --- */
   { tier: "lendario", name: "Coroa dos Cinco Heróis", weight: 0.8,
-    magicBonus: { actions: 1, reactions: 1, reactionActions: 1, spellActions: 1, hp: 25 },
+    magicBonus: { actions: 1, spellActions: 1, hp: 25 },
     effect: "+1 Ação, +1 Reação, +1 Ação de Reação, +1 Ação de Magia por rodada e +25 HP máximo. Todas as estatísticas refletem imediatamente ao equipar.",
     story: "Criada pelos cinco heróis fundadores no dia da vitória sobre o Deus Marcado como símbolo de sua aliança eterna. Cada gema representa um herói: rubi (Guerreiro Valdris), safira (Maga Arcath), esmeralda (Arqueiro Ferrath), ônix (Ladina Sombrath), opala (Clérigo Sanctum). Reaparece periodicamente nas mãos de quem 'precisa ser todos ao mesmo tempo'.",
     uniqueAbility: "Unidade dos Heróis (1x/dia): por 3 rodadas, o portador age com as capacidades combinadas dos cinco heróis — pode usar qualquer habilidade de qualquer classe como se fosse da sua. Ao fim das 3 rodadas, fica Exausto por 1 rodada." },
@@ -1773,7 +1773,7 @@ const ACCESSORIES = [
     effect: "+2 INT, +2 Ações de Magia por rodada e +2 Slots de Magia. O +2 INT reflete em Slots de Magia (cumulativo) e em todos os cálculos que usam INT.",
     story: "O grimório pessoal da Maga Arcath, que ela deixou selado na Torre antes de morrer. Apenas abre para quem demonstra conhecimento arcano genuíno (INT ≥ 4 ou Arcanismo Crítico). Contém anotações da própria Arcath — incluindo o sistema de magia original que ela desenvolveu ao aprender com os elfos." },
   { tier: "lendario", name: "Botas da Velocidade do Vazio", weight: 0.9,
-    magicBonus: { actions: 2, reactionActions: 2, move: 2 },
+    magicBonus: { actions: 2, move: 2 },
     effect: "+2 Ações de Combate, +2 Ações de Reação e +2 Movimento por rodada.",
     story: "Criadas por um Aralto que foi capturado e convertido — um raro caso de redenção. O ex-Aralto usou o conhecimento de movimento do Vazio para criar botas que permitem ao portador mover-se com a velocidade que os servos do Deus Marcado usavam para fugir. Foram deixadas como legado para 'aqueles que precisam alcançar o que o mal alcança'.",
     note: "Passivo: o portador nunca provoca Ataques de Oportunidade ao se mover." },
@@ -1864,7 +1864,7 @@ const ACCESSORIES = [
   /* Amuleto da Muralha Imóvel */
   { tier: "magico", cursed: true,
     name: "Amuleto da Muralha Imóvel", weight: 0.4,
-    magicBonus: { reactions: 0 },
+    magicBonus: { },
     effect: "+5 Defesa Física e +5 Defesa Mágica enquanto equipado.",
     story: "Amuleto com o símbolo de uma muralha inquebrável. Proteção absoluta — mas o preço é que a muralha não se move.",
     note: "⚠ AMALDIÇOADA: +5 Def. Física e +5 Def. Mágica (passivo). MAS o portador só pode ter 1 Ação de Combate e 1 Ação de Magia por turno, independente de outros bônus ou habilidades. Qualquer bônus de ação é ignorado. A muralha defende mas não ataca.",
@@ -1924,7 +1924,7 @@ const ACCESSORIES = [
   /* Coração de Cristal */
   { tier: "unico", cursed: true,
     name: "Coração de Cristal", weight: 0.3,
-    magicBonus: { hp: 50, reactions: 2 },
+    magicBonus: { hp: 50 },
     effect: "+50 HP máximo e +2 Reações. Visualmente: cristal que pulsa como coração.",
     story: "O coração literalmente removido de um Golem de Cristal de Atrelon que havia desenvolvido consciência. O Golem pediu para ser desativado — mas seu coração continuou pulsando. Quem o carrega ouve, em momentos de silêncio, um segundo coração batendo.",
     note: "⚠ AMALDIÇOADA — Segundo Coração: +50 HP e +2 Reações. MAS o cristal sente dor. Cada vez que o portador recebe dano, o cristal emite um som suave. Ao chegar abaixo de 50% HP, o cristal chora — e o portador é compelido a se proteger (Força de Vontade difícil ou usa Reações apenas para se defender, nunca para atacar). Se o portador morrer, o cristal explode causando 3d10 em raio 3 hex.",
@@ -1962,7 +1962,7 @@ const ACCESSORIES = [
   /* ── RAS'KURU (Orcs) ── */
   { tier: "lendario", divine: "Ras'kuru", race: "orc",
     name: "Dente de Ras'kuru", weight: 0.3,
-    magicBonus: { hp: 15, reactions: 1 },
+    magicBonus: { hp: 15 },
     effect: "+15 HP máximo e +1 Reação. Passivo: ao chegar abaixo de 30% HP, entra em 'Fúria de Guerra' automaticamente — +2d6 em todos os ataques por 2 rodadas (Ras'kuru admira quem luta até o fim). Uma vez por combate: 'Rugido de Ras'kuru' — emite um rugido que aplica Amedrontado a todos os inimigos em raio 5 hex por 2 rodadas (Força de Vontade difícil para resistir).",
     story: "Um dente de Ras'kuru que caiu durante a batalha que os orcs travaram pela primeira vez ao lado de Arcath. O deus não precisava de dentes para lutar, mas achou que dar um dente era mais honesto que dar uma espada. Orcs que empunham o dente não ficam com medo — o dente lembra que a morte já lutou ao lado deles antes.",
     curseDetails: "Localização: Pedra Sangrenta (monumento orc na Grande Planície). O Dente está dentro da pedra — só aparece para orcs ou aliados de orcs que derrotaram algo mais forte que eles." },
@@ -2045,7 +2045,7 @@ const ACCESSORIES = [
   /* ── SET: Fúria Encadeada (peça 3) — Berserker ── */
   { tier: "lendario", subclass: "berserker", setName: "Fúria Encadeada",
     name: "Correntes de Sangue (Fúria Encadeada)", weight: 0.4,
-    magicBonus: { reactions: 1 },
+    magicBonus: { },
     effect: "+1 Reação. Passivo: ao ativar Fúria de Batalha, as correntes se enrijecem em torno dos pulsos — o portador fica imune a Desarmado e Agarrado pela duração da Fúria. Sede de Sangue: a cura ao matar aumenta em +1d6 com estas correntes.",
     story: "Correntes de aço que se apertam levemente quando o portador sente raiva. Foram forjadas para conter — mas a raiva sempre ganha. O portador anterior as usou por 10 anos. Depois parou de conseguir tirá-las. Não reclamou.",
     setBonus: { pieces: 3, ability: "Corrente Sem Fim",
@@ -2825,7 +2825,7 @@ const BESTIARY = [
     id: "rato-das-ruinas", name: "Rato das Ruínas", difficulty: 1, size: "pequeno",
     category: "Besta", location: ["Cidade", "Ruínas", "Esgoto"],
     hp: 8, physDefense: 1, magDefense: 0, dodge: 12,
-    actions: 2, reactions: 1,
+    actions: 2,
     damage: "1d4 (mordida)",
     abilities: [
       { name: "Enxame", desc: "Se houver 3 ou mais Ratos das Ruínas no mesmo hexágono, cada um causa +1 de dano extra." }
@@ -2842,7 +2842,7 @@ const BESTIARY = [
     id: "goblin-batedeira", name: "Goblin Batedeira", difficulty: 1, size: "pequeno",
     category: "Humanoide", location: ["Floresta", "Caverna", "Ruínas"],
     hp: 14, physDefense: 2, magDefense: 0, dodge: 13,
-    actions: 2, reactions: 1,
+    actions: 2,
     damage: "1d6 (faca enferrujada)",
     abilities: [
       { name: "Fuga Covarde", desc: "Se ficar abaixo de 5 HP, usa sua Ação de Movimento para correr, ignorando Ataques de Oportunidade." },
@@ -2861,7 +2861,7 @@ const BESTIARY = [
     id: "lobo-comum", name: "Lobo Comum", difficulty: 1, size: "normal",
     category: "Besta", location: ["Floresta", "Planície", "Montanha"],
     hp: 18, physDefense: 2, magDefense: 0, dodge: 13,
-    actions: 2, reactions: 1,
+    actions: 2,
     damage: "1d6+1d4 (mordida)",
     abilities: [
       { name: "Derrubada por Mordida", desc: "Ao acertar, o alvo testa Resistência (normal) ou cai Prostrado por 1 rodada." },
@@ -2880,7 +2880,7 @@ const BESTIARY = [
     id: "serpente-comum", name: "Serpente Venenosa", difficulty: 1, size: "pequeno",
     category: "Besta", location: ["Floresta", "Pântano", "Ruínas", "Serpentara"],
     hp: 10, physDefense: 1, magDefense: 1, dodge: 14,
-    actions: 2, reactions: 1,
+    actions: 2,
     damage: "1d4 (mordida) + Veneno: 1d4 por rodada, 2 rodadas",
     abilities: [
       { name: "Veneno Paralisante", desc: "O veneno pode causar -1 Movimento por rodada (cumulativo, máx. -2). Testa Resistência (normal) para resistir a cada aplicação." },
@@ -2899,7 +2899,7 @@ const BESTIARY = [
     id: "bandido-de-estrada", name: "Bandido de Estrada", difficulty: 1, size: "normal",
     category: "Humanoide", location: ["Estrada", "Floresta", "Planície"],
     hp: 20, physDefense: 3, magDefense: 0, dodge: 11,
-    actions: 2, reactions: 1,
+    actions: 2,
     damage: "1d8 (espada curta) ou 1d6 (arco curto, 8 hex)",
     abilities: [
       { name: "Rendição Tática", desc: "Se o grupo bandido perder 2/3 dos membros, os restantes podem se render e oferecer informações por misericórdia." }
@@ -2921,7 +2921,7 @@ const BESTIARY = [
     id: "guerreiro-cultista", name: "Guerreiro Cultista da Marca", difficulty: 2, size: "normal",
     category: "Humanoide", location: ["Ruínas", "Caverna", "Floresta Profunda"],
     hp: 35, physDefense: 4, magDefense: 2, dodge: 12,
-    actions: 2, reactions: 1,
+    actions: 2,
     damage: "1d8+1d4 (espada marcada)",
     abilities: [
       { name: "Frenesi da Marca", desc: "Ao ficar abaixo de 50% HP, entra em Frenesi: +1d4 de dano mas -1 na Chance de Defesa por 3 rodadas." },
@@ -2941,7 +2941,7 @@ const BESTIARY = [
     id: "lobo-das-trevas", name: "Lobo das Trevas", difficulty: 2, size: "normal",
     category: "Besta Sombria", location: ["Floresta Profunda", "Caverna", "Planície à Noite"],
     hp: 32, physDefense: 3, magDefense: 2, dodge: 14,
-    actions: 2, reactions: 2,
+    actions: 2,
     damage: "1d8+1d4 (mordida sombria)",
     abilities: [
       { name: "Mordida Sombria", desc: "Acertos aplicam Maldição Leve: -1d4 em todos os testes de Resistência por 2 rodadas." },
@@ -2961,7 +2961,7 @@ const BESTIARY = [
     id: "sacerdote-cobra", name: "Sacerdote de Jurgmund", difficulty: 2, size: "normal",
     category: "Humanoide", location: ["Serpentara", "Templo", "Cidade"],
     hp: 28, physDefense: 2, magDefense: 5, dodge: 12,
-    actions: 2, reactions: 1,
+    actions: 2,
     damage: "1d6 (cajado sagrado)",
     abilities: [
       { name: "Bênção da Cobra", desc: "1 Ação: um aliado recupera 1d8 HP e fica imune a veneno por 2 rodadas." },
@@ -2983,7 +2983,7 @@ const BESTIARY = [
     id: "golem-pedra", name: "Golem de Pedra Antiga", difficulty: 2, size: "grande",
     category: "Construto", location: ["Ruínas", "Dungeon", "Templo Antigo"],
     hp: 55, physDefense: 7, magDefense: 1, dodge: 8,
-    actions: 2, reactions: 0,
+    actions: 2,
     damage: "1d10+1d4 (soco de pedra)",
     abilities: [
       { name: "Casca Rochosa", desc: "Passivo: imune a veneno e doenças. Reduz dano cortante e perfurante em 2." },
@@ -3006,7 +3006,7 @@ const BESTIARY = [
     id: "alfa-matilha", name: "Lobo Alfa da Matilha", difficulty: 3, size: "grande",
     category: "Besta", location: ["Floresta", "Montanha", "Planície"],
     hp: 75, physDefense: 5, magDefense: 2, dodge: 14,
-    actions: 3, reactions: 2,
+    actions: 3,
     damage: "1d10+1d6 (mordida alfa)",
     abilities: [
       { name: "Comando da Matilha", desc: "Lobos aliados em raio de 6 hex ganham +1d4 de dano enquanto o Alfa estiver vivo." },
@@ -3028,7 +3028,7 @@ const BESTIARY = [
     id: "troll-das-cavernas", name: "Troll das Cavernas", difficulty: 3, size: "grande",
     category: "Gigante", location: ["Caverna", "Dungeon", "Montanha"],
     hp: 90, physDefense: 6, magDefense: 1, dodge: 9,
-    actions: 2, reactions: 1,
+    actions: 2,
     damage: "1d12+1d6 (garras) ou 1d10+1d4 (mordida)",
     abilities: [
       { name: "Regeneração Troll", desc: "Recupera 1d6 HP por rodada. Não regenera dano de fogo ou ácido. Se reduzido a 0 HP por dano normal, fica Inconsciente mas regenera até voltar." },
@@ -3048,7 +3048,7 @@ const BESTIARY = [
     id: "mago-renegado", name: "Mago Renegado de Atrelon", difficulty: 3, size: "normal",
     category: "Humanoide", location: ["Ruínas de Atrelon", "Torre Abandonada", "Dungeon"],
     hp: 50, physDefense: 2, magDefense: 7, dodge: 13,
-    actions: 2, reactions: 2,
+    actions: 2,
     damage: "1d8 (cajado) ou magias",
     abilities: [
       { name: "Barreira Arcana", desc: "Passivo: primeiro acerto de cada combate causa metade do dano (escudo mágico absorve)." },
@@ -3075,7 +3075,7 @@ const BESTIARY = [
     id: "cobra-rainha-jovem", name: "Cobra-Rainha Jovem", difficulty: 3, size: "grande",
     category: "Besta Sagrada", location: ["Serpentara", "Pântano", "Templo de Jurgmund"],
     hp: 80, physDefense: 4, magDefense: 6, dodge: 13,
-    actions: 3, reactions: 2,
+    actions: 3,
     damage: "1d10+1d4 (mordida venenosa) ou 1d8 (constrição)",
     abilities: [
       { name: "Veneno da Rainha", desc: "Mordida aplica Veneno da Rainha: 1d8 por rodada por 3 rodadas. Teste Resistência (difícil) para resistir a cada dose." },
@@ -3100,7 +3100,7 @@ const BESTIARY = [
     id: "lobo-do-vazio", name: "Lobo do Vazio", difficulty: 4, size: "grande",
     category: "Entidade do Vazio", location: ["Plano Liminar", "Floresta Maldita", "Onde o Véu é Fino"],
     hp: 130, physDefense: 7, magDefense: 8, dodge: 16,
-    actions: 3, reactions: 2,
+    actions: 3,
     damage: "1d12+1d8 (mordida do vazio) + 1d6 dano de vazio",
     abilities: [
       { name: "Imunidade ao Plano Físico", desc: "Passivo: reduz dano de armas não-mágicas à metade. Somente armas mágicas, sagradas ou de prata causam dano total." },
@@ -3123,7 +3123,7 @@ const BESTIARY = [
     id: "grande-sacerdote-cobra", name: "Grande Sacerdote de Jurgmund", difficulty: 4, size: "normal",
     category: "Humanoide Elite", location: ["Serpentara", "Grande Templo de Jurgmund"],
     hp: 110, physDefense: 4, magDefense: 10, dodge: 14,
-    actions: 3, reactions: 3,
+    actions: 3,
     damage: "1d8+1d4 (cetro sagrado) ou magias",
     abilities: [
       { name: "Proteção Divina", desc: "Passivo: imune a venenos e charmes. Primeiro dano de magia de cada combate é absorvido completamente." },
@@ -3150,7 +3150,7 @@ const BESTIARY = [
     id: "general-fantasma", name: "General Elyon — O Traidor Fantasma", difficulty: 4, size: "normal",
     category: "Morto-Vivo Elite", location: ["Ruínas de Durrak", "Campo de Batalha Maldito"],
     hp: 120, physDefense: 6, magDefense: 9, dodge: 15,
-    actions: 3, reactions: 3,
+    actions: 3,
     damage: "1d12+1d6 (Lâmina Partida — espectral) + 1d6 dano sagrado/profano",
     abilities: [
       { name: "Forma Espectral", desc: "Passivo: 50% de chance de ignorar qualquer ataque físico (o golpe o atravessa). Ataques mágicos e sagrados sempre acertam." },
@@ -3178,7 +3178,7 @@ const BESTIARY = [
     id: "lich-atrelon", name: "O Lich das Montanhas de Atrelon", difficulty: 5, size: "normal",
     category: "Morto-Vivo Lendário", location: ["Pico de Atrelon", "Torre do Gelo Eterno"],
     hp: 220, physDefense: 8, magDefense: 14, dodge: 17,
-    actions: 4, reactions: 3,
+    actions: 4,
     damage: "1d10+1d6 (toque gélido) ou magias",
     abilities: [
       { name: "Filactério do Gelo", desc: "Passivo: quando reduzido a 0 HP, o corpo se dissolve em névoa gélida. Regenera completamente em 1d4 dias no Filactério (item escondido). Deve-se destruir o Filactério primeiro para matar permanentemente." },
@@ -3208,7 +3208,7 @@ const BESTIARY = [
     id: "cobra-imortal-jurgmund", name: "A Serpente Imortal de Jurgmund", difficulty: 5, size: "colossal",
     category: "Divindade Menor", location: ["Núcleo de Serpentara", "Câmara Sagrada de Jurgmund"],
     hp: 300, physDefense: 10, magDefense: 12, dodge: 13,
-    actions: 4, reactions: 2,
+    actions: 4,
     damage: "2d12+1d8 (mordida colossal) ou 1d12+1d6 (cauda) ou 2d10 (constrição)",
     abilities: [
       { name: "Escamas Divinas", desc: "Passivo: imune a veneno, charme e medo. Dano de armas não-lendárias é reduzido em 3." },
@@ -3237,7 +3237,7 @@ const BESTIARY = [
     id: "deus-marcado-avatar", name: "Avatar do Deus Marcado", difficulty: 5, size: "colossal",
     category: "Divindade — Avatar", location: ["Qualquer lugar com Maldição Aberta", "Altar da Marca"],
     hp: 350, physDefense: 12, magDefense: 15, dodge: 18,
-    actions: 5, reactions: 4,
+    actions: 5,
     damage: "2d12+1d12 (garra divina) ou 3d10 (uivo sônico colossal)",
     abilities: [
       { name: "Presença Esmagadora", desc: "Passivo: qualquer criatura que entre no raio de 6 hex deve testar SAB (crítico) ou fica Aterrorizada pelo resto do combate (−1d8 em tudo)." },
@@ -3269,7 +3269,7 @@ const BESTIARY = [
     id: "karlac-filhote", name: "Karlac Filhote", difficulty: 1, size: "pequeno",
     category: "Besta de Fogo", location: ["Deserto Carmesim"],
     hp: 14, physDefense: 3, magDefense: 0, dodge: 12,
-    actions: 2, reactions: 1,
+    actions: 2,
     damage: "1d6 (mordida ígnea)",
     abilities: [
       { name: "Pele Quente", desc: "Qualquer criatura que atacar corpo a corpo recebe 1d4 de dano de fogo ao acertar (o calor da pele queima quem toca)." },
@@ -3287,7 +3287,7 @@ const BESTIARY = [
     id: "serpentariano-patrulheiro", name: "Serpentariano Patrulheiro", difficulty: 1, size: "normal",
     category: "Humanoide Serpentariano", location: ["Montanhas de Atrelon", "Castelo da Cobra"],
     hp: 18, physDefense: 3, magDefense: 1, dodge: 13,
-    actions: 2, reactions: 1,
+    actions: 2,
     damage: "1d6 (lança de osso) ou 1d4 (mordida venenosa)",
     abilities: [
       { name: "Mordida Venenosa", desc: "Ataque de mordida aplica veneno fraco: 1d4 por rodada por 2 rodadas. Resistência (normal) cancela." },
@@ -3307,7 +3307,7 @@ const BESTIARY = [
     id: "anao-do-casco", name: "Anão Guardião do Casco", difficulty: 2, size: "normal",
     category: "Humanoide Anão", location: ["Grande Lago Central", "Cidadela do Casco"],
     hp: 40, physDefense: 6, magDefense: 2, dodge: 10,
-    actions: 2, reactions: 2,
+    actions: 2,
     damage: "1d10+1d4 (machado do casco)",
     abilities: [
       { name: "Âncora de Combate", desc: "Passivo: imune a qualquer efeito de empurrão, derrubada ou movimento forçado. Somos construídos para ficar de pé quando tudo se move." },
@@ -3326,7 +3326,7 @@ const BESTIARY = [
     id: "criatura-profundezas", name: "Criatura das Profundezas do Lago", difficulty: 2, size: "normal",
     category: "Aberração Aquática", location: ["Grande Lago Central"],
     hp: 35, physDefense: 2, magDefense: 4, dodge: 14,
-    actions: 3, reactions: 1,
+    actions: 3,
     damage: "1d8 (tentáculo) ou 1d6 (mordida ácida)",
     abilities: [
       { name: "Bioluminescência Hipnótica", desc: "1 Ação: emite padrão de luz. Alvos visíveis que falhem em SAB (normal) ficam Fascinados por 1 rodada (não podem atacar a criatura, apenas observar)." },
@@ -3346,7 +3346,7 @@ const BESTIARY = [
     id: "cultista-aralto", name: "Cultista do Aralto", difficulty: 2, size: "normal",
     category: "Humanoide Corrompido", location: ["Montanhas de Atrelon", "Reinos de Akaen", "Deserto Carmesim"],
     hp: 32, physDefense: 3, magDefense: 3, dodge: 12,
-    actions: 2, reactions: 1,
+    actions: 2,
     damage: "1d8+1d4 (espada marcada pelo Deus Marcado)",
     abilities: [
       { name: "Marca do Deus", desc: "A tatuagem da Marca no peito: ao atingir 0 HP, pode gastar a Marca para recuperar 1d8 HP uma única vez no combate (os olhos ficam pretos por 1 rodada)." },
@@ -3366,7 +3366,7 @@ const BESTIARY = [
     id: "serpentariano-sacerdote", name: "Sacerdote Serpentariano da Cobra", difficulty: 3, size: "normal",
     category: "Humanoide Serpentariano", location: ["Montanhas de Atrelon", "Castelo da Cobra"],
     hp: 65, physDefense: 3, magDefense: 8, dodge: 13,
-    actions: 3, reactions: 2,
+    actions: 3,
     damage: "1d8 (cajado de cobra) ou magias",
     abilities: [
       { name: "Bênção de Jurgmund Corrupta", desc: "Passivo: aliados Serpentarianos em raio 4 hex ganham +1d4 de dano e são imunes a medo enquanto o sacerdote estiver vivo." },
@@ -3388,7 +3388,7 @@ const BESTIARY = [
     id: "guardiao-fissura", name: "Guardião da Fissura", difficulty: 3, size: "grande",
     category: "Aberração Aquática Ancestral", location: ["Grande Lago Central"],
     hp: 85, physDefense: 5, magDefense: 6, dodge: 11,
-    actions: 3, reactions: 2,
+    actions: 3,
     damage: "1d12+1d6 (garra ancestral) ou 1d10 (jato de água pressurizada)",
     abilities: [
       { name: "Corpo de Água", desc: "Passivo: ataques cortantes e perfurantes causam metade do dano. Dano contundente normal. Magia de fogo causa dano dobrado." },
@@ -3408,7 +3408,7 @@ const BESTIARY = [
     id: "aralto-menor", name: "Aralto da Marca — Forma Menor", difficulty: 3, size: "normal",
     category: "Campeão do Deus Marcado", location: ["Reinos de Akaen", "Montanhas de Atrelon", "Deserto Carmesim"],
     hp: 80, physDefense: 5, magDefense: 7, dodge: 14,
-    actions: 3, reactions: 2,
+    actions: 3,
     damage: "1d10+1d6 (lâmina da Marca) + 1d4 dano de vazio",
     abilities: [
       { name: "Presença Corrupta", desc: "Passivo: qualquer criatura que iniciar seu turno a 2 hex do Aralto deve testar SAB (normal) ou perde 1 Ação de Reação nessa rodada (a presença corrói a vontade)." },
@@ -3432,7 +3432,7 @@ const BESTIARY = [
     id: "serpentariano-rei-vassk", name: "Rei Vassk — O Corrompido", difficulty: 4, size: "normal",
     category: "Humanoide Serpentariano Elite", location: ["Castelo da Cobra — Trono"],
     hp: 115, physDefense: 6, magDefense: 9, dodge: 15,
-    actions: 3, reactions: 3,
+    actions: 3,
     damage: "1d12+1d8 (Espada da Cobra Real) + 1d6 veneno sagrado corrompido",
     abilities: [
       { name: "Aura do Rei Corrompido", desc: "Passivo: todos os Serpentarianos em raio 8 hex agem com +1 Ação extra por turno enquanto Vassk estiver consciente. Se cair, todos os aliados ficam Abalados por 1 rodada." },
@@ -3456,7 +3456,7 @@ const BESTIARY = [
     id: "aralto-sussurrante", name: "O Aralto Sussurrante", difficulty: 4, size: "normal",
     category: "Campeão do Deus Marcado — Elite", location: ["Câmaras Profundas do Crânio", "Castelo da Cobra"],
     hp: 130, physDefense: 7, magDefense: 10, dodge: 17,
-    actions: 3, reactions: 3,
+    actions: 3,
     damage: "1d12+1d6 (Garra de Vazio) + 1d8 dano de vazio",
     abilities: [
       { name: "Máscara Perfeita", desc: "Pode copiar qualquer pessoa vista. Testes de INT para identificar a cópia têm dificuldade Crítica (≤ 1+bônus). A máscara cai somente ao meio-dia (sem sombra) ou com magia de Revelar Ilusão." },
@@ -3484,7 +3484,7 @@ const BESTIARY = [
     id: "grande-salamandra-karlac", name: "Grande Salamandra Karlac", difficulty: 5, size: "colossal",
     category: "Criatura Colossal — Guardiã do Deserto", location: ["Deserto Carmesim"],
     hp: 400, physDefense: 14, magDefense: 8, dodge: 8,
-    actions: 4, reactions: 2,
+    actions: 4,
     damage: "3d12+1d10 (pisada) ou 2d12+1d8 (cauda) ou 2d10 (bafo de fogo)",
     abilities: [
       { name: "Corpo Colossal", desc: "Passivo: imune a condições de movimento forçado, derrubada e atordoamento. Ataques com armas não-lendárias causam no máximo 5 de dano por golpe." },
@@ -3507,7 +3507,7 @@ const BESTIARY = [
     id: "dragao-dourado-karloth", name: "Dragão Dourado de Karloth", difficulty: 5, size: "colossal",
     category: "Entidade Colossal — Guardião do Mundo", location: ["Grande Planície Sudeste", "Vulcão de Karloth"],
     hp: 500, physDefense: 16, magDefense: 16, dodge: 20,
-    actions: 5, reactions: 5,
+    actions: 5,
     damage: "3d12+2d10 (garra/mordida) ou 4d10 (bafo de luz dourada, 8 hex de alcance)",
     abilities: [
       { name: "Presença Divina", desc: "Passivo: qualquer criatura dentro de 10 hex que não tenha intenção pura sofre Amedrontamento automático (−1d8 em tudo). Intenção pura: julgamento do Mestre. Aliados com objetivo nobre são imunes." },
@@ -3530,7 +3530,7 @@ const BESTIARY = [
     id: "magnalaga-acordada", name: "Tartaruga Magnalaga — Forma Acordada", difficulty: 5, size: "colossal",
     category: "Ser Ancestral Transformado", location: ["Grande Lago Central"],
     hp: 380, physDefense: 15, magDefense: 12, dodge: 6,
-    actions: 3, reactions: 1,
+    actions: 3,
     damage: "2d12+1d10 (mordida) ou 2d10 (jato d'água purgativa, 10 hex)",
     abilities: [
       { name: "Absorção Completa", desc: "Passivo: imune a veneno, ácido e qualquer efeito de contaminação. Se atingida por magia de água, cura HP em vez de sofrer dano." },
@@ -3557,7 +3557,7 @@ const BESTIARY = [
   /* ── MORTOS-VIVOS ── */
   { id:"zumbi-comum", name:"Zumbi Comum", difficulty:1, size:"normal", category:"Morto-Vivo",
     location:["Cemitério","Ruínas","Dungeon"], hp:28, physDefense:1, magDefense:0, dodge:8,
-    actions:1, reactions:0, damage:"1d6 (mordida podre)",
+    actions:1, damage:"1d6 (mordida podre)",
     abilities:[
       { name:"Infatigável", desc:"Imune a Atordoado, Exaustão e Medo. Nunca foge." },
       { name:"Mordida Infecciosa", desc:"Acerto: alvo testa FOR (normal) ou fica Envenenado (1d4 por rodada, 4 rodadas). Cura mágica ou antídoto remove." },
@@ -3569,7 +3569,7 @@ const BESTIARY = [
 
   { id:"zumbi-abissal", name:"Zumbi Abissal", difficulty:3, size:"normal", category:"Morto-Vivo",
     location:["Fissura do Lago","Dungeon Profunda","Território do Deus Marcado"], hp:80, physDefense:4, magDefense:3, dodge:10,
-    actions:2, reactions:1, damage:"1d10+1d6 (garras abissais)",
+    actions:2, damage:"1d10+1d6 (garras abissais)",
     abilities:[
       { name:"Aura de Corrupção", desc:"Passivo: aliados em raio 2 hex têm −1 em todos os testes enquanto a aura estiver ativa. Clérigos imunes." },
       { name:"Morte Explosiva", desc:"Ao chegar a 0 HP, explode em energia abissal: 2d8 dano sombrio a todos em raio 2 hex (SAB normal para metade)." },
@@ -3582,7 +3582,7 @@ const BESTIARY = [
 
   { id:"esqueleto-guerreiro", name:"Esqueleto Guerreiro", difficulty:1, size:"normal", category:"Morto-Vivo",
     location:["Tumba","Dungeon","Ruínas Élficas"], hp:18, physDefense:3, magDefense:0, dodge:11,
-    actions:2, reactions:1, damage:"1d8 (espada enferrujada)",
+    actions:2, damage:"1d8 (espada enferrujada)",
     abilities:[
       { name:"Osso Vazio", desc:"Imune a veneno, dano psíquico e condições mentais. Vulnerável a dano contundente (+1d4 extra)." },
       { name:"Sem Dor", desc:"Nunca sofre penalidade por HP baixo. Luta com 100% de eficiência até 0 HP." }
@@ -3593,7 +3593,7 @@ const BESTIARY = [
 
   { id:"esqueleto-gigante", name:"Esqueleto Colossal", difficulty:4, size:"colossal", category:"Morto-Vivo",
     location:["Tumba Ancestral","Dungeon Profunda","Ruínas Élficas"], hp:140, physDefense:8, magDefense:2, dodge:9,
-    actions:3, reactions:1, damage:"2d10+1d8 (golpe de osso colossal)",
+    actions:3, damage:"2d10+1d8 (golpe de osso colossal)",
     abilities:[
       { name:"Pisar Esmagador", desc:"1 Ação: pisa em área 2x2 hex. Todos nessa área sofrem 2d8 dano contundente e testam AGI (difícil) ou ficam Derrubados." },
       { name:"Tamanho Colossal", desc:"Ocupa 3 hexágonos. Não pode ser Derrubado ou Empurrado por meios mundanos (apenas magia de nível 3+)." },
@@ -3606,7 +3606,7 @@ const BESTIARY = [
 
   { id:"vampiro-nobre", name:"Vampiro Nobre", difficulty:4, size:"normal", category:"Morto-Vivo",
     location:["Castelo Abandonado","Cidade","Ruínas Nobres"], hp:120, physDefense:6, magDefense:7, dodge:16,
-    actions:3, reactions:3, damage:"1d10+1d8 (mordida drenante)",
+    actions:3, damage:"1d10+1d8 (mordida drenante)",
     abilities:[
       { name:"Mordida Drenante", desc:"Cada mordida rouba 1d8 HP do alvo e cura o vampiro pelo mesmo valor. Alvos drenados 3x seguidas ficam sob Domínio Parcial." },
       { name:"Névoa Carmesim", desc:"1x/combate: transforma-se em névoa por 2 rodadas — imune a dano físico, pode se mover por frestas. Ao retornar, regenera 2d8 HP." },
@@ -3620,7 +3620,7 @@ const BESTIARY = [
 
   { id:"lobisomem", name:"Lobisomem", difficulty:3, size:"grande", category:"Metamorfo",
     location:["Floresta","Aldeia","Montanha"], hp:95, physDefense:5, magDefense:3, dodge:14,
-    actions:3, reactions:2, damage:"1d10+1d8 (garras e mordida)",
+    actions:3, damage:"1d10+1d8 (garras e mordida)",
     abilities:[
       { name:"Regeneração Selvagem", desc:"Regenera 8 HP por rodada. Prata, fogo e magia sagrada cancelam a regeneração por 2 rodadas. Dano de prata causa 1d4 extra permanente (não regenera)." },
       { name:"Mordida Lycântropa", desc:"Humanoides mordidos testam FOR (crítico). Falha: ficam Envenenados com Lycantrofia — precisam de cura sagrada dentro de 1 hora ou transformam-se na próxima lua cheia." },
@@ -3634,7 +3634,7 @@ const BESTIARY = [
   /* ── HUMANOIDES COM HABILIDADES ── */
   { id:"kobold-armadilheiro", name:"Kobold Armadilheiro", difficulty:1, size:"pequeno", category:"Humanoide",
     location:["Caverna","Dungeon","Floresta Profunda"], hp:14, physDefense:2, magDefense:1, dodge:13,
-    actions:2, reactions:1, damage:"1d4+1d4 (faca e armadilha)",
+    actions:2, damage:"1d4+1d4 (faca e armadilha)",
     abilities:[
       { name:"Armadilheiro Expert", desc:"Prepara armadilhas durante o combate (1 Ação). A armadilha ativa no próximo alvo que cruzar o hex: 1d6 dano + Preso (FOR normal para escapar). Pode ter até 3 armadilhas ativas." },
       { name:"Fuga Tática", desc:"Se ficar abaixo de 50% HP, usa 1 Reação para mover 3 hex sem provocar ataque de oportunidade e desaparecer em pequenos túneis." },
@@ -3646,7 +3646,7 @@ const BESTIARY = [
 
   { id:"orc-berserker", name:"Orc Berserker", difficulty:2, size:"grande", category:"Humanoide",
     location:["Planície","Acampamento","Floresta"], hp:55, physDefense:3, magDefense:1, dodge:11,
-    actions:3, reactions:1, damage:"1d12+1d6 (machado de guerra)",
+    actions:3, damage:"1d12+1d6 (machado de guerra)",
     abilities:[
       { name:"Fúria do Sangue", desc:"Ao receber qualquer dano: entra em Fúria automaticamente por 3 rodadas. Em Fúria: +1d8 de dano mas não pode recuar nem usar itens." },
       { name:"Sede de Sangue", desc:"Se matar um inimigo: recupera 1d10 HP imediatamente e ganha +1 Ação extra neste turno." },
@@ -3658,7 +3658,7 @@ const BESTIARY = [
 
   { id:"elfo-sombrio", name:"Elfo das Sombras", difficulty:3, size:"normal", category:"Humanoide",
     location:["Floresta Profunda","Ruínas Élficas","Território Élfico"], hp:68, physDefense:3, magDefense:6, dodge:17,
-    actions:3, reactions:3, damage:"1d8+1d6 (lâmina da meia-luz)",
+    actions:3, damage:"1d8+1d6 (lâmina da meia-luz)",
     abilities:[
       { name:"Passo das Sombras", desc:"Se estiver em área de sombra ou escuridão: teleporta para qualquer outra sombra em raio 8 hex como Ação gratuita (1x/turno)." },
       { name:"Flechas Envenenadas", desc:"Ataques à distância (alcance 10): adiciona veneno élfico (1d6/rodada, 3 rodadas). Resistência AGI (difícil) para anular." },
@@ -3671,7 +3671,7 @@ const BESTIARY = [
 
   { id:"necromante-errante", name:"Necromante Errante", difficulty:3, size:"normal", category:"Humanoide",
     location:["Cemitério","Dungeon","Floresta Sombria"], hp:55, physDefense:1, magDefense:7, dodge:12,
-    actions:2, reactions:1, damage:"1d6 (cajado ossado)",
+    actions:2, damage:"1d6 (cajado ossado)",
     abilities:[
       { name:"Comandar Mortos", desc:"1 Ação: levanta até 2 esqueletos ou zumbis de cadáveres presentes no campo. Cada morto-vivo tem HP=20, dano=1d6. Máximo de 4 ativos." },
       { name:"Escudo de Ossos", desc:"Passivo: enquanto tiver mortos-vivos aliados ativos, recebe −2 dano de todos os ataques físicos (os ossos absorvem)." },
@@ -3685,7 +3685,7 @@ const BESTIARY = [
   /* ── CRIATURAS DE FLORESTA ── */
   { id:"ent-guardiao", name:"Ent Guardião da Floresta", difficulty:4, size:"colossal", category:"Planta Viva",
     location:["Floresta Ancestral","Floresta Profunda"], hp:160, physDefense:9, magDefense:2, dodge:8,
-    actions:3, reactions:1, damage:"2d8+1d10 (galhos colossais)",
+    actions:3, damage:"2d8+1d10 (galhos colossais)",
     abilities:[
       { name:"Raízes Aprisionadoras", desc:"1 Ação: raízes emergem em área 3x3 hex. Todos no terreno testam AGI (difícil) ou ficam Presos (Imóveis) por 2 rodadas. Liberar: FOR (normal) por Ação." },
       { name:"Casca Invulnerável", desc:"Imune a dano cortante e perfurante. Dano por fogo é dobrado. Dano mágico de terra cura em vez de machucar (+1d8 por acerto terrestre)." },
@@ -3698,7 +3698,7 @@ const BESTIARY = [
 
   { id:"treant-jovem", name:"Treant Jovem", difficulty:2, size:"grande", category:"Planta Viva",
     location:["Floresta","Bosque","Planície com Árvores"], hp:60, physDefense:6, magDefense:1, dodge:9,
-    actions:2, reactions:1, damage:"1d10+1d6 (galho poderoso)",
+    actions:2, damage:"1d10+1d6 (galho poderoso)",
     abilities:[
       { name:"Enraizar", desc:"1 Ação: cria raízes em 1 hex adjacente — terreno difícil que custa 2 Ações para cruzar. Persiste até o treant morrer." },
       { name:"Regeneração Vegetal", desc:"Recupera 4 HP por rodada em terreno natural (floresta, grama). Fogo cancela a regeneração por 2 rodadas." }
@@ -3709,7 +3709,7 @@ const BESTIARY = [
 
   { id:"sombra-florestal", name:"Sombra Florestal", difficulty:2, size:"normal", category:"Espírito",
     location:["Floresta Profunda","Área Corrompida","Noite"], hp:40, physDefense:0, magDefense:6, dodge:18,
-    actions:2, reactions:2, damage:"1d8 (toque das sombras — dano sombrio)",
+    actions:2, damage:"1d8 (toque das sombras — dano sombrio)",
     abilities:[
       { name:"Intangível", desc:"Imune a dano físico de armas não-mágicas. Armas mágicas e magias causam dano normal. Fogo e luz sagrada causam 1d4 extra." },
       { name:"Drenar Força", desc:"Cada toque bem-sucedido reduz o atributo FOR do alvo em 1 temporariamente (retorna após descanso longo). Se FOR chegar a 0: alvo fica Incapacitado." },
@@ -3722,7 +3722,7 @@ const BESTIARY = [
   /* ── CRIATURAS GRANDES ── */
   { id:"mamute-das-planícies", name:"Mamute das Planícies", difficulty:3, size:"colossal", category:"Besta",
     location:["Grande Planície","Estepe","Neve"], hp:130, physDefense:7, magDefense:1, dodge:8,
-    actions:2, reactions:1, damage:"2d8+1d10 (chifres e pisoteio)",
+    actions:2, damage:"2d8+1d10 (chifres e pisoteio)",
     abilities:[
       { name:"Carga Imparável", desc:"Se mover 3+ hex em linha reta e atacar: dano dobrado e o alvo é Empurrado 3 hex e Derrubado (sem teste). Muro ou obstáculo: 1d10 para ambos." },
       { name:"Pisoteio em Área", desc:"1 Ação: pisa em 2 hexágonos adjacentes simultaneamente — 2d6 dano a cada criatura nesses hexágonos." },
@@ -3735,7 +3735,7 @@ const BESTIARY = [
 
   { id:"gigante-das-pedras", name:"Gigante das Pedras", difficulty:4, size:"colossal", category:"Gigante",
     location:["Montanha","Caverna Grande","Ruínas"], hp:180, physDefense:10, magDefense:3, dodge:9,
-    actions:3, reactions:1, damage:"2d10+1d8 (punho de pedra)",
+    actions:3, damage:"2d10+1d8 (punho de pedra)",
     abilities:[
       { name:"Arremesso de Pedra", desc:"1 Ação: arremessa pedra a até 12 hex. Dano: 2d8 + alvo e todos em raio 1 hex testam AGI (difícil) ou Derrubados." },
       { name:"Corpo de Pedra", desc:"Imune a dano perfurante. Resistência −3 a dano cortante. Vulnerável a dano de terra (magia de Thurgomur causa +1d10)." },
@@ -3749,7 +3749,7 @@ const BESTIARY = [
   /* ── CRIATURAS VOADORAS ── */
   { id:"harpia", name:"Harpia Caçadora", difficulty:2, size:"normal", category:"Voadora",
     location:["Penhasco","Floresta","Montanha"], hp:45, physDefense:2, magDefense:3, dodge:16,
-    actions:3, reactions:2, damage:"1d8+1d6 (garras cortantes)",
+    actions:3, damage:"1d8+1d6 (garras cortantes)",
     abilities:[
       { name:"Voadora", desc:"Ocupa hex aéreo (altitude 3). Ataques corpo a corpo de aliados no chão têm −1d4 de acerto. Ataques à distância são normais. Pode mergulhar: +1d6 de dano num ataque por rodada." },
       { name:"Canto Encantador", desc:"1 Ação (1x/combate): todos em raio 5 hex testam SAB (difícil) ou ficam Enfeitiçados por 2 rodadas (não atacam a harpia, caminham em sua direção)." },
@@ -3762,7 +3762,7 @@ const BESTIARY = [
 
   { id:"grifo", name:"Grifo das Montanhas", difficulty:3, size:"grande", category:"Voadora",
     location:["Montanha","Penhasco Alto","Região de Atrelon"], hp:90, physDefense:5, magDefense:3, dodge:15,
-    actions:3, reactions:2, damage:"1d10+1d8 (bico de águia + garras de leão)",
+    actions:3, damage:"1d10+1d8 (bico de águia + garras de leão)",
     abilities:[
       { name:"Voador de Altitude", desc:"Ocupa hex aéreo altitude 5 (muito alto). Fora do alcance de ataques corpo a corpo. Projéteis têm −1d4. Magias de área alcançam normalmente." },
       { name:"Mergulho Devastador", desc:"1x/rodada: pode mergulhar de altitude máxima para atacar — dano triplo mas fica em altitude 0 após o ataque (no chão, vulnerável)." },
@@ -3775,7 +3775,7 @@ const BESTIARY = [
 
   { id:"basilisco-asa", name:"Basilisco Voador", difficulty:4, size:"grande", category:"Voadora",
     location:["Dungeon Alta","Penhasco","Ruína de Atrelon"], hp:110, physDefense:7, magDefense:4, dodge:13,
-    actions:3, reactions:1, damage:"1d10+1d8 (mordida petrificante)",
+    actions:3, damage:"1d10+1d8 (mordida petrificante)",
     abilities:[
       { name:"Olhar Petrificante", desc:"1 Ação: todos em cone 4 hex à frente testam FOR (difícil) ou ficam Paralisados por 1 rodada. 1 falha acumulada = Paralisado 2 rodadas. 2 falhas = Petrificado permanente (reversível por magia de nível 4+)." },
       { name:"Couro Calcificado", desc:"Reduz dano de qualquer fonte em 2. Magia de terra ou dano sagrado ignora essa redução." },
@@ -3789,7 +3789,7 @@ const BESTIARY = [
   /* ── CORROMPIDOS PELO DEUS MARCADO ── */
   { id:"urso-corrompido-marca", name:"Urso Corrompido pela Marca", difficulty:3, size:"grande", category:"Besta Corrompida",
     location:["Floresta Corrompida","Território dos Araltos"], hp:100, physDefense:6, magDefense:3, dodge:11,
-    actions:3, reactions:1, damage:"1d12+1d8 (garras corrompidas)",
+    actions:3, damage:"1d12+1d8 (garras corrompidas)",
     abilities:[
       { name:"Aura Corruptora", desc:"Passivo: aliados em raio 3 hex têm −1d4 em todos os testes. Clérigos de Jurgmund ou Sanctum imunes." },
       { name:"Garras do Deus Marcado", desc:"Cada acerto aplica 1 nível de Corrupção da Marca ao alvo (acumulável). 3 níveis = alvo começa a agir erráticamente (Mestre determina)." },
@@ -3802,7 +3802,7 @@ const BESTIARY = [
 
   { id:"golem-marcado", name:"Golem da Marca", difficulty:4, size:"grande", category:"Construto Corrompido",
     location:["Fortaleza dos Araltos","Dungeon Corrompida"], hp:150, physDefense:9, magDefense:5, dodge:9,
-    actions:3, reactions:2, damage:"2d8+1d8 (punho marcado)",
+    actions:3, damage:"2d8+1d8 (punho marcado)",
     abilities:[
       { name:"Núcleo da Marca", desc:"No centro do peito há um cristal carmesim. Atacar o cristal (−2 para acerto, requer mira declarada): causa dano duplo e pode desestabilizar o golem (SAB difícil ou Atordoado 1 rodada)." },
       { name:"Pulso de Corrupção", desc:"1 Ação: emite pulso de energia corrompida em raio 3 hex — 2d6 dano sombrio a todos (SAB normal para metade)." },
@@ -3823,7 +3823,7 @@ const BESTIARY = [
       { name:"Escamas Douradas", desc:"Suas escamas brilham levemente dourado. Clérigos de Jurgmund que a vejam ganham +1 Slot de Magia enquanto ela estiver visível." }
     ],
     spells:[],
-    actions:2, reactions:2, damage:"1d8 + veneno sagrado (defensivo)",
+    actions:2, damage:"1d8 + veneno sagrado (defensivo)",
     behavior:"Anda pelo mundo como mensageira de Jurgmund. Observa, guia, eventualmente some. Nunca é morta sem consequência — Serpentarianos ficam hostis se virem um grupo matar uma.",
     loot:[{item:"Escama Dourada de Jurgmund (material divino)",chance:70,qty:"1d3"},{item:"Veneno Sagrado Residual (frasco)",chance:30,qty:"1"}] },
 
@@ -3835,14 +3835,14 @@ const BESTIARY = [
       { name:"Pele de Cristal", desc:"Passivo: dano físico causa 1d4 de dano reflexivo ao atacante (o cristal é muito afiado). Não intencional — é sua defesa natural." }
     ],
     spells:[],
-    actions:1, reactions:1, damage:"— (não ataca)",
+    actions:1, damage:"— (não ataca)",
     behavior:"Curioso e dócil. Se os jogadores ficarem quietos por 1 rodada completa, ele se aproxima. Pode ser capturado sem combate com DEX (normal).",
     loot:[{item:"Escama de Cristal Cobra (material decorativo e mágico)",chance:90,qty:"1d4"}] },
 
   /* ── CRIATURAS COM MAGIAS ÚNICAS ── */
   { id:"maga-da-floresta", name:"Maga da Floresta Antiga", difficulty:3, size:"normal", category:"Humanoide",
     location:["Floresta Ancestral","Círculo de Pedras","Bosque Sagrado"], hp:65, physDefense:2, magDefense:8, dodge:13,
-    actions:2, reactions:2, damage:"1d6 (cajado de madeira viva) + magia",
+    actions:2, damage:"1d6 (cajado de madeira viva) + magia",
     abilities:[
       { name:"Controle da Flora", desc:"1 Ação: controla toda a vegetação em raio 6 hex por 3 rodadas. Pode: criar terreno difícil, fazer raízes aprisionarem (AGI difícil) ou criar paredes de galhos (Def.5, 20 HP)." },
       { name:"Forma Animal", desc:"1x/combate: transforma-se em animal selvagem (urso dif.2) por 4 rodadas. Mantém INT mas ganha todas as estatísticas da forma." },
@@ -3855,7 +3855,7 @@ const BESTIARY = [
 
   { id:"draconico-menor", name:"Dracônico Menor", difficulty:3, size:"normal", category:"Dracônico",
     location:["Montanhas","Cavernas","Ruínas de Atrelon"], hp:80, physDefense:6, magDefense:5, dodge:14,
-    actions:3, reactions:2, damage:"1d10+1d6 (garras e chama)",
+    actions:3, damage:"1d10+1d6 (garras e chama)",
     abilities:[
       { name:"Sopro de Chama", desc:"1 Ação (1x a cada 2 rodadas): sopro de fogo em cone 4 hex — 3d8 dano de fogo, metade com AGI (normal). Imune a fogo próprio." },
       { name:"Escalas Dragonínicas", desc:"Resistência a fogo (-4 por dado). Vulnerável a frio (+1d4 por dado de dano de gelo)." },
@@ -3868,7 +3868,7 @@ const BESTIARY = [
 
   { id:"espirito-fogo", name:"Espírito do Fogo Primordial", difficulty:4, size:"normal", category:"Elemental",
     location:["Vulcão Karloth","Deserto Carmesim","Área de Erupção"], hp:95, physDefense:0, magDefense:8, dodge:17,
-    actions:3, reactions:2, damage:"2d8 (toque de chama pura)",
+    actions:3, damage:"2d8 (toque de chama pura)",
     abilities:[
       { name:"Corpo de Fogo", desc:"Imune a fogo e dano físico mundano. Dano de gelo causa 1d6 extra e reduz 1 Ação por rodada por 2 rodadas. Água apaga temporariamente (1 rodada)." },
       { name:"Aura Flamejante", desc:"Passivo: qualquer criatura a 1 hex sofre 1d6 de calor por rodada. Objetos inflamáveis nos hexágonos adjacentes pegam fogo." },
@@ -3888,7 +3888,7 @@ const BESTIARY = [
   { id:"aranha-gigante", name:"Aranha Gigante da Caverna", difficulty:2, size:"grande", category:"Besta",
     location:["Caverna","Dungeon","Floresta Sombria"],
     hp:42, physDefense:3, magDefense:1, dodge:14,
-    actions:2, reactions:2, damage:"1d8+1d4 (presas venenosas)",
+    actions:2, damage:"1d8+1d4 (presas venenosas)",
     abilities:[
       { name:"Teia Aprisionadora", desc:"1 Ação: dispara teia a até 6 hex. Alvo testa AGI (normal) ou fica Preso (imóvel, pode gastar 1 Ação por turno para testar FOR normal e escapar). Pode ter até 3 teias ativas." },
       { name:"Veneno de Paralisia", desc:"Cada mordida aplica veneno: 1d4 de dano por rodada + reduz AGI em 1 por rodada (acumula). Se AGI chegar a 0: Paralisado por 2 rodadas. Antídoto ou cura mágica remove." },
@@ -3901,7 +3901,7 @@ const BESTIARY = [
   { id:"gnoll-guerreiro", name:"Gnoll Guerreiro", difficulty:2, size:"normal", category:"Humanoide",
     location:["Planície","Deserto","Acampamento Nômade"],
     hp:48, physDefense:3, magDefense:1, dodge:12,
-    actions:2, reactions:1, damage:"1d10+1d4 (lança serrilhada)",
+    actions:2, damage:"1d10+1d4 (lança serrilhada)",
     abilities:[
       { name:"Riso de Hiena", desc:"Ao reduzir um inimigo a 0 HP: emite um grito/riso aterrorizante. Todos os inimigos em raio 4 hex testam SAB (normal) ou ficam com -1d4 em todos os testes por 1 rodada." },
       { name:"Faro de Sangue", desc:"Detecta criaturas com menos de 50% HP em raio 10 hex. Prioriza atacar alvos enfraquecidos — reorienta ataque automaticamente se alvo mais ferido aparecer." },
@@ -3913,7 +3913,7 @@ const BESTIARY = [
   { id:"serpente-constritora", name:"Serpente Constritora das Ruínas", difficulty:2, size:"grande", category:"Besta",
     location:["Ruínas","Floresta","Caverna"],
     hp:50, physDefense:3, magDefense:2, dodge:13,
-    actions:2, reactions:1, damage:"1d8+1d6 (mordida e constrição)",
+    actions:2, damage:"1d8+1d6 (mordida e constrição)",
     abilities:[
       { name:"Constrição Letal", desc:"Após qualquer mordida com acerto: a serpente envolve o alvo. Por rodada que permanecer envolvida: 1d8 de dano automático + alvo tem -1 Ação. Escapar: FOR (difícil) como Ação." },
       { name:"Resistência a Veneno", desc:"Imune a todos os venenos. Ataques com veneno aplicado não têm efeito sobre ela." },
@@ -3925,7 +3925,7 @@ const BESTIARY = [
   { id:"feiticeiro-goblin", name:"Feiticeiro Goblin", difficulty:2, size:"pequeno", category:"Humanoide",
     location:["Caverna","Acampamento Goblin","Dungeon"],
     hp:30, physDefense:1, magDefense:5, dodge:14,
-    actions:2, reactions:1, damage:"1d4 (cajadinho) + magias",
+    actions:2, damage:"1d4 (cajadinho) + magias",
     abilities:[
       { name:"Maldição do Azar", desc:"1 Ação Mágica: um alvo a até 8 hex fica Azarado por 3 rodadas — todo 20 natural nos dados desse alvo vira 1 (o azar inverte os críticos)." },
       { name:"Explosão Caótica", desc:"1 Ação Mágica: bola de energia instável lançada a 6 hex. Dano 2d6 em raio 2 hex. 1 em 6 chances do goblin também sofrer 1d6 (mira péssima)." },
@@ -3938,7 +3938,7 @@ const BESTIARY = [
   { id:"mumia-menor", name:"Múmia Menor", difficulty:2, size:"normal", category:"Morto-Vivo",
     location:["Tumba","Pirâmide","Deserto Carmesim"],
     hp:45, physDefense:4, magDefense:3, dodge:10,
-    actions:2, reactions:1, damage:"1d8+1d4 (golpe ressecante)",
+    actions:2, damage:"1d8+1d4 (golpe ressecante)",
     abilities:[
       { name:"Maldição da Múmia", desc:"Toque com acerto: alvo fica Amaldiçoado (Maldição da Ressecação) — recupera metade do HP de curas por 24 horas. Cura mágica de nível 2+ ou Clérigo remove." },
       { name:"Imune ao Fogo", desc:"Completamente imune a dano de fogo. Magia de água ou frio causa 1d6 extra (a umidade corrói as bandagens)." },
@@ -3950,7 +3950,7 @@ const BESTIARY = [
   { id:"doppelganger-menor", name:"Imitador (Doppelganger Menor)", difficulty:2, size:"normal", category:"Aberração",
     location:["Cidade","Taverna","Dungeon Profunda"],
     hp:38, physDefense:2, magDefense:4, dodge:15,
-    actions:2, reactions:2, damage:"1d8 (golpe surpresa)",
+    actions:2, damage:"1d8 (golpe surpresa)",
     abilities:[
       { name:"Copiar Aparência", desc:"Pode copiar a aparência de qualquer humanoide que tenha observado por 1 rodada. A cópia é perfeita visualmente mas SAB (difícil) detecta algo errado no comportamento." },
       { name:"Golpe de Traição", desc:"Se estiver disfarçado de aliado: primeiro ataque é Crítico automático e causa Atordoado por 1 rodada (o choque da traição é devastador)." },
@@ -3963,7 +3963,7 @@ const BESTIARY = [
   { id:"golem-gelo", name:"Golem de Gelo", difficulty:2, size:"grande", category:"Construto",
     location:["Neve","Montanha","Dungeon Gelada"],
     hp:55, physDefense:5, magDefense:2, dodge:8,
-    actions:2, reactions:1, damage:"1d10+1d6 (soco de gelo)",
+    actions:2, damage:"1d10+1d6 (soco de gelo)",
     abilities:[
       { name:"Aura de Frio", desc:"Passivo: criaturas a 1 hex sofrem 1d4 de frio por rodada. Líquidos nessa área congelam. Movimento de criaturas em raio 2 hex é reduzido em 1." },
       { name:"Fragmentação de Gelo", desc:"Ao receber dano contundente: explode em estilhaços — todos em raio 2 hex sofrem 1d6 de dano de gelo perfurante (AGI normal para metade)." },
@@ -3976,7 +3976,7 @@ const BESTIARY = [
   { id:"naiad-corrompida", name:"Náiade Corrompida", difficulty:2, size:"normal", category:"Espírito",
     location:["Rio","Grande Lago","Pântano"],
     hp:40, physDefense:1, magDefense:6, dodge:16,
-    actions:2, reactions:2, damage:"1d6+1d4 (toque aquoso)",
+    actions:2, damage:"1d6+1d4 (toque aquoso)",
     abilities:[
       { name:"Forma Aquosa", desc:"Em contato com água: regenera 3 HP por rodada e Esquiva +2. Fora da água: perde esses bônus e fica Enfraquecida (-1d4 nos ataques)." },
       { name:"Canção das Profundezas", desc:"1 Ação: canto que drena voluntade — alvo a 8 hex testa SAB (normal) ou caminha em direção à água mais próxima por 2 rodadas (como Enfeitiçado)." },
@@ -3991,7 +3991,7 @@ const BESTIARY = [
   { id:"minotauro-perdido", name:"Minotauro Perdido", difficulty:3, size:"grande", category:"Humanoide",
     location:["Labirinto","Dungeon","Ruínas"],
     hp:95, physDefense:6, magDefense:2, dodge:11,
-    actions:3, reactions:1, damage:"1d12+1d10 (machado colossal)",
+    actions:3, damage:"1d12+1d10 (machado colossal)",
     abilities:[
       { name:"Carga do Labirinto", desc:"Se mover 3+ hex em linha reta antes de atacar: dano dobrado + alvo testado AGI (difícil) ou Derrubado e Empurrado 2 hex. O minotauro não para — segue em frente 1 hex extra." },
       { name:"Sentido de Labirinto", desc:"Nunca se perde. Em dungeon ou labirinto: sempre sabe o caminho para qualquer ponto visitado. Imune a magias de desorientação ou névoa mental." },
@@ -4004,7 +4004,7 @@ const BESTIARY = [
   { id:"quimera-jovem", name:"Quimera Jovem", difficulty:3, size:"grande", category:"Besta",
     location:["Montanha","Planície","Dungeon de Elite"],
     hp:88, physDefense:5, magDefense:4, dodge:13,
-    actions:3, reactions:2, damage:"1d10+1d6 (cabeças alternadas)",
+    actions:3, damage:"1d10+1d6 (cabeças alternadas)",
     abilities:[
       { name:"Três Cabeças", desc:"Cada turno, a Quimera ataca com a cabeça dominante (Mestre escolhe ou rola 1d3): 1=Leão (mordida 1d10, Derruba), 2=Bode (chifrada 1d8, Empurra 2 hex), 3=Dragão (sopro 2d6 fogo cone 3 hex)." },
       { name:"Sopro de Dragão", desc:"Cabeça de Dragão: 1x a cada 2 rodadas — cone 4 hex, 2d8 de fogo, AGI normal para metade." },
@@ -4017,7 +4017,7 @@ const BESTIARY = [
   { id:"bruxa-das-ervas", name:"Bruxa das Ervas Venenosas", difficulty:3, size:"normal", category:"Humanoide",
     location:["Pântano","Floresta Profunda","Ruínas"],
     hp:60, physDefense:1, magDefense:8, dodge:14,
-    actions:2, reactions:2, damage:"1d6 (cajado venenoso) + veneno",
+    actions:2, damage:"1d6 (cajado venenoso) + veneno",
     abilities:[
       { name:"Nuvem de Esporos", desc:"1 Ação Mágica: nuvem em raio 3 hex por 3 rodadas. Todos dentro testam SAB (normal) a cada rodada: falha = Envenenado (1d6/rodada) E Confuso (age aleatoriamente) por 2 rodadas." },
       { name:"Maldição do Espelho", desc:"1 Ação Mágica (1x/combate): reflete a próxima magia que atingir a bruxa de volta ao conjurador com dano dobrado. Dura até ser usada ou 3 rodadas." },
@@ -4031,7 +4031,7 @@ const BESTIARY = [
   { id:"cavaleiro-sem-cabeca", name:"Cavaleiro Sem Cabeça", difficulty:3, size:"normal", category:"Morto-Vivo",
     location:["Estrada","Floresta","Cemitério Nobre"],
     hp:85, physDefense:7, magDefense:3, dodge:13,
-    actions:3, reactions:2, damage:"1d10+1d8 (espada do julgamento)",
+    actions:3, damage:"1d10+1d8 (espada do julgamento)",
     abilities:[
       { name:"Sem Cabeça", desc:"Imune a Cegueira, Atordoado por som e qualquer efeito que exija visão ou audição para funcionar. Veneno via mordida também não funciona (sem boca)." },
       { name:"Julgamento dos Mortos", desc:"Ao aproximar de um alvo a 1 hex: o alvo sente o peso do julgamento — testa SAB (normal) ou fica com -1d4 em todos os ataques enquanto o Cavaleiro estiver adjacente." },
@@ -4044,7 +4044,7 @@ const BESTIARY = [
   { id:"escorpiao-gigante", name:"Escorpião Gigante do Deserto", difficulty:3, size:"grande", category:"Besta",
     location:["Deserto Carmesim","Planície Árida","Caverna"],
     hp:80, physDefense:7, magDefense:1, dodge:11,
-    actions:3, reactions:1, damage:"1d10+1d6 (pinças) + 1d8 (ferrão)",
+    actions:3, damage:"1d10+1d6 (pinças) + 1d8 (ferrão)",
     abilities:[
       { name:"Dupla Pinça", desc:"Pode atacar com ambas as pinças em 1 Ação. Cada pinça que acerta: alvo testado FOR (normal) ou fica Agarrado. Se ambas agarrarem: alvo fica Imóvel." },
       { name:"Ferrão de Neurotoxina", desc:"O ferrão aplica neurotoxina — 1d8 por rodada, reduz 1 AGI por rodada (não regenera até antídoto). 3 rodadas de ferrão sem cura: alvo fica Paralisado. Resistência FOR (difícil) para metade." },
@@ -4057,7 +4057,7 @@ const BESTIARY = [
   { id:"esfinx-menor", name:"Esfinge Menor", difficulty:3, size:"grande", category:"Besta Mística",
     location:["Deserto","Ruínas Élficas","Templo"],
     hp:90, physDefense:6, magDefense:7, dodge:13,
-    actions:3, reactions:2, damage:"1d10+1d8 (garras e bico)",
+    actions:3, damage:"1d10+1d8 (garras e bico)",
     abilities:[
       { name:"O Enigma", desc:"No início do combate: apresenta um enigma ao grupo. Se resolverem corretamente (1 minuto de discussão): a Esfinge para de atacar e responde 1 pergunta verdadeira. Se errarem: entra em Fúria por 3 rodadas (+1d8 de dano, +1 Ação)." },
       { name:"Olho do Destino", desc:"1 Ação Mágica: vê 1 rodada no futuro — o próximo ataque contra ela erra automaticamente (previsão perfeita). Usa 1x a cada 3 rodadas." },
@@ -4071,7 +4071,7 @@ const BESTIARY = [
   { id:"elemental-terra", name:"Elemental de Terra", difficulty:3, size:"grande", category:"Elemental",
     location:["Montanha","Caverna","Planície Pedregosa"],
     hp:100, physDefense:9, magDefense:2, dodge:8,
-    actions:2, reactions:1, damage:"2d8+1d6 (soco de pedra)",
+    actions:2, damage:"2d8+1d6 (soco de pedra)",
     abilities:[
       { name:"Corpo de Rocha", desc:"Imune a dano cortante e perfurante. Resistência a dano contundente (-2 por dado). Fogo causa dano normal. Magia de terra cura (+1d8 por acerto de magia terrestre)." },
       { name:"Fundir no Chão", desc:"Em terreno natural (pedra, terra): pode submergir no chão como Ação livre. Emerge em qualquer ponto a até 8 hex no próximo turno. Enquanto submerso: imune a dano físico." },
@@ -4084,7 +4084,7 @@ const BESTIARY = [
   { id:"gargoyle", name:"Gárgula Guardiã", difficulty:3, size:"normal", category:"Construto",
     location:["Castelo","Ruínas","Templo","Topo de Torre"],
     hp:75, physDefense:8, magDefense:4, dodge:13,
-    actions:3, reactions:2, damage:"1d8+1d6 (garras de pedra e chifres)",
+    actions:3, damage:"1d8+1d6 (garras de pedra e chifres)",
     abilities:[
       { name:"Pedra Viva", desc:"Quando imóvel por 1 rodada completa: parece escultura de pedra (Percepção crítico para notar que está viva). Primeiro ataque após mimetismo: Crítico automático." },
       { name:"Voadora de Pedra", desc:"Altitude 2. Apesar do peso: voa de forma silenciosa. Ataques à distância têm -1d4 (corpo de pedra desvia projéteis). Pode carregar um alvo no voo (AGI difícil para escapar)." },
@@ -4097,7 +4097,7 @@ const BESTIARY = [
   { id:"mercenario-elite", name:"Mercenário de Elite", difficulty:3, size:"normal", category:"Humanoide",
     location:["Cidade","Dungeon Contratada","Estrada"],
     hp:72, physDefense:6, magDefense:3, dodge:15,
-    actions:3, reactions:3, damage:"1d10+1d6 (espada longa ou arco)",
+    actions:3, damage:"1d10+1d6 (espada longa ou arco)",
     abilities:[
       { name:"Veterano de Batalha", desc:"Nunca entra em pânico ou fica Amedrontado. Imune à primeira Condição negativa de cada combate. +1d4 em todos os testes de combate." },
       { name:"Estrategista", desc:"1 Ação (1x/combate): analisa o campo de batalha — escolhe 1 alvo. Todos os ataques contra esse alvo pelo grupo ganham +1d4 de acerto por 2 rodadas." },
@@ -4110,7 +4110,7 @@ const BESTIARY = [
   { id:"serpente-vento", name:"Serpente do Vento", difficulty:3, size:"normal", category:"Besta Elemental",
     location:["Montanhas de Atrelon","Penhasco","Planície Aberta"],
     hp:65, physDefense:3, magDefense:6, dodge:19,
-    actions:3, reactions:3, damage:"1d8+1d6 (mordida + vento cortante)",
+    actions:3, damage:"1d8+1d6 (mordida + vento cortante)",
     abilities:[
       { name:"Corpo de Vento", desc:"Pode se mover através de qualquer espaço não-sólido. Esquiva base 19 (o corpo é parcialmente intangível ao vento). Ataques físicos têm 25% de chance de passar sem dano (rola 1d4 — em 1, o golpe atravessa)." },
       { name:"Rajada Cegante", desc:"1 Ação: libera rajada em cone 3 hex — todos testam AGI (normal) ou ficam Cegos por 1 rodada e Empurrados 2 hex." },
@@ -4123,7 +4123,7 @@ const BESTIARY = [
   { id:"golem-carne", name:"Golem de Carne", difficulty:3, size:"grande", category:"Construto",
     location:["Laboratório do Necromante","Dungeon Profunda"],
     hp:105, physDefense:5, magDefense:2, dodge:9,
-    actions:2, reactions:1, damage:"1d12+1d8 (soco brutal)",
+    actions:2, damage:"1d12+1d8 (soco brutal)",
     abilities:[
       { name:"Tecido Morto", desc:"Imune a veneno e condições mentais. Vulnerável a fogo (+1d6 por dado). Dano cortante causa sangramento no golem — perde 1d4 HP por rodada por 3 rodadas (o sangue escorre)." },
       { name:"Partes Extras", desc:"Tem 6 braços adicionais costurados. Para cada 30 HP perdidos: perde 1 Ação mas ganha Reação de Agarrar automática quando atacado corpo a corpo." },

@@ -4189,3 +4189,138 @@ main {
   .print-table td { word-break: break-word; }
   .print-table-label { width: 28%; min-width: 70px; }
 }
+
+/* ================================================================
+   PAINEL DE ITENS EQUIPADOS — Aba Vital
+   ================================================================ */
+
+.eip-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+@media (max-width: 480px) { .eip-grid { grid-template-columns: 1fr; } }
+
+.eip-card {
+  border: 1.5px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: rgba(248,243,232,0.03);
+}
+.eip-card-rare {
+  border-color: rgba(156,122,60,0.45);
+  background: linear-gradient(135deg, rgba(156,122,60,0.07), rgba(248,243,232,0.02));
+}
+
+.eip-slot-label {
+  font-family: var(--font-heading);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--ink-soft);
+}
+
+.eip-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.eip-name {
+  font-family: var(--font-heading);
+  font-size: 14px;
+  color: var(--ink);
+  flex: 1;
+  line-height: 1.3;
+}
+
+.eip-badges { display: flex; gap: 4px; flex-wrap: wrap; }
+.eip-tier {
+  font-size: 9.5px;
+  padding: 2px 7px;
+  border-radius: 8px;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+.tier-raro     { background: rgba(74,144,217,0.2);  color: #4a90d9; }
+.tier-magico   { background: rgba(106,58,122,0.25); color: #c080e0; }
+.tier-lendario { background: rgba(125,42,46,0.25);  color: #e08060; }
+.tier-unico    { background: rgba(156,122,60,0.25); color: var(--gold); }
+.tier-ancestral{ background: rgba(200,170,80,0.2);  color: #d4a830; }
+
+.eip-badge {
+  font-size: 9px;
+  padding: 2px 6px;
+  border-radius: 8px;
+  font-family: var(--font-heading);
+}
+.eip-badge-cursed { background: rgba(125,42,46,0.3); color: #e08060; }
+.eip-badge-divine { background: rgba(156,122,60,0.2); color: var(--gold); }
+
+/* Chips de stats */
+.eip-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.eip-chip {
+  font-size: 11px;
+  padding: 3px 7px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-heading);
+}
+.eip-chip-k {
+  font-size: 10px;
+  opacity: 0.7;
+}
+.chip-atk     { background: rgba(125,42,46,0.18);  color: #e09070; }
+.chip-def     { background: rgba(40,80,120,0.2);   color: #80b0e0; }
+.chip-mag     { background: rgba(80,40,120,0.2);   color: #c090e0; }
+.chip-magic   { background: rgba(156,122,60,0.18); color: var(--gold); }
+.chip-warn    { background: rgba(180,80,20,0.15);  color: #e0a060; }
+.chip-neutral { background: rgba(0,0,0,0.08);      color: var(--ink-soft); }
+
+/* Linhas de texto para itens raros */
+.eip-effect {
+  font-size: 12.5px;
+  color: var(--ink);
+  line-height: 1.55;
+  margin: 0;
+}
+.eip-note {
+  font-size: 12px;
+  color: var(--ink-soft);
+  line-height: 1.5;
+  margin: 0;
+  padding-left: 8px;
+  border-left: 2px solid rgba(156,122,60,0.35);
+}
+.eip-story {
+  font-size: 11.5px;
+  color: rgba(90,70,50,0.7);
+  font-style: italic;
+  margin: 0;
+  line-height: 1.5;
+}
+.eip-set {
+  font-size: 10.5px;
+  color: var(--gold);
+  font-family: var(--font-heading);
+  opacity: 0.8;
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .eip-name  { font-size: 13px; }
+  .eip-effect{ font-size: 13px !important; }
+  .eip-note  { font-size: 12.5px !important; }
+  .eip-chip  { font-size: 12px !important; }
+}

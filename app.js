@@ -280,20 +280,6 @@ function calcActions(character) {
 }
 
 /* Reações por rodada = 1 + 1 a cada 4 pontos de AGI (regra original, mantida) */
-function calcReactions(character) {
-  let reactions = 1 + Math.floor(getEffectiveAttr(character, "AGI") / 4);
-  reactions += sumAccessoryEffectValue(character, "reaction");   // itens fixos por nome
-  reactions += sumAccessoryEffectValue(character, "reactions");  // magicBonus em acessórios
-  reactions += sumMagicItemBonus(character, "reactions");        // magicBonus em armas/armaduras/escudos
-  return reactions;
-}
-
-/* Ações de Reação = 1 a cada 3 pontos de AGI, mínimo 1. Recurso separado das Reações de combate. */
-function calcReactionActions(character) {
-  const base = Math.max(1, Math.floor(getEffectiveAttr(character, "AGI") / 3));
-  const bonus = sumAccessoryEffectValue(character, "reactionActions") + sumMagicItemBonus(character, "reactionActions");
-  return base + bonus;
-}
 
 /* Ações de Magia por turno:
    - Progressão garantida por nível para TODAS as classes: +1 a cada 3 níveis
@@ -1603,9 +1589,7 @@ function renderRulesTab() {
               <ul class="rules-list">
                 <li>+1 Ação de Combate a cada 4 AGI</li>
                 <li>Movimento: <code>4 + AGI − penalidade armadura</code></li>
-                <li>Reações: <code>1 + floor(AGI/4)</code></li>
-                <li>Ações de Reação: <code>1 + floor(AGI/3)</code></li>
-                <li>Esquiva: <code>10 + AGI − penalidades</code></li>
+                <li>Reações: <code>1 + floor(AGI/4)</code></li>                <li>Esquiva: <code>10 + AGI − penalidades</code></li>
               </ul>
             </div>
             <div class="rules-attr-card">
@@ -1636,7 +1620,7 @@ function renderRulesTab() {
       title: "Sistema de Ações",
       content: `
         <div class="rules-block">
-          <p class="rules-intro">Em combate, cada personagem tem três tipos de recursos de ação por rodada: <strong>Ações</strong>, <strong>Reações</strong> e <strong>Ações de Reação</strong>. Cada tipo é independente.</p>
+          <p class="rules-intro">Em combate, cada personagem tem dois tipos de recursos de ação por rodada: <strong>Ações de Combate</strong> e <strong>Ações de Magia</strong>. Cada tipo é independente.</p>
           <div class="rules-callout rules-callout-red">
             <strong>⚔ Ações de Combate</strong> — o que você faz no seu turno
             <p>Fórmula: <code>1 + floor(Nível÷3) + floor(AGI÷4) + floor(DEX÷5) + bônus de itens</code></p>
@@ -2038,6 +2022,7 @@ function renderSheet() {
       ${renderVitalsSection(character, cls, maxHP, resourceMax)}
       ${renderAttributesSection(character, cls)}
       ${renderDerivedSection(character, cls)}
+      ${renderEquippedItemsPanel(character)}
     `,
     habilidades: `
       ${cls ? renderClassAbilitiesSection(character, cls) : ""}
@@ -2106,6 +2091,119 @@ function renderSheet() {
   attachSheetHandlers(character);
 }
 
+
+/* --- Painel de Itens Equipados (resumo na aba Vital) --- */
+
+function renderEquippedItemsPanel(character) {
+  const TIER_RARE = ["raro","magico","lendario","unico","ancestral"];
+  const TIER_LABELS = { comum:"Comum", raro:"Raro", magico:"Mágico", lendario:"Lendário", unico:"Único", ancestral:"Ancestral" };
+  const TIER_CLASS  = { raro:"tier-raro", magico:"tier-magico", lendario:"tier-lendario", unico:"tier-unico", ancestral:"tier-ancestral" };
+
+  // Coletar todos os itens equipados
+  const slots = [
+    { key:"primary",   label:"⚔ Arma Primária"   },
+    { key:"secondary", label:"⚔ Arma Secundária"  },
+    { key:"shield",    label:"🛡 Escudo"           },
+    { key:"armor",     label:"🧥 Armadura"         },
+  ];
+
+  const equipped = [];
+  slots.forEach(s => {
+    const item = character.inventory?.find(i => i.equippedSlot === s.key);
+    if (item) equipped.push({ slotLabel: s.label, item });
+  });
+
+  // Acessórios
+  const accessories = character.inventory?.filter(i => i.equippedSlot === "accessory") || [];
+
+  if (!equipped.length && !accessories.length) return "";
+
+  const renderStatChips = (item) => {
+    const bd = item.baseData || {};
+    const chips = [];
+    if (bd.dmg)           chips.push({ k:"⚔ Dano",        v: bd.dmg,              cls:"chip-atk" });
+    if (bd.physDefense)   chips.push({ k:"🛡 Def.Física",  v:`+${bd.physDefense}`, cls:"chip-def" });
+    if (bd.magDefense)    chips.push({ k:"✨ Def.Mágica",  v:`+${bd.magDefense}`,  cls:"chip-mag" });
+    if (bd.movePenalty)   chips.push({ k:"🏃 Movimento",   v: bd.movePenalty > 0 ? `−${bd.movePenalty}` : `+${-bd.movePenalty}`, cls: bd.movePenalty > 0 ? "chip-warn" : "chip-def" });
+    if (bd.weight != null) chips.push({ k:"⚖ Peso",        v:`${bd.weight}kg`,     cls:"chip-neutral" });
+    if (bd.range)          chips.push({ k:"🎯 Alcance",    v:`${bd.range}hex`,     cls:"chip-neutral" });
+    if (bd.req)            chips.push({ k:"📋 Req.",        v: bd.req,              cls:"chip-neutral" });
+    // magicBonus
+    if (bd.magicBonus) {
+      const MB_LABELS = { hp:"❤ HP", move:"🏃 Mov", actions:"⚡ Ações", spellActions:"✨ Ações Magia", slots:"🔮 Slots", carry:"📦 Carga" };
+      Object.entries(bd.magicBonus).forEach(([k,v]) => {
+        if (k === "attr" || k === "attrValue" || !v) return;
+        chips.push({ k: MB_LABELS[k] || k, v:`+${v}`, cls:"chip-magic" });
+      });
+      if (bd.magicBonus.attr && bd.magicBonus.attrValue) {
+        chips.push({ k: bd.magicBonus.attr, v:`+${bd.magicBonus.attrValue}`, cls:"chip-magic" });
+      }
+    }
+    if (!chips.length) return "";
+    return `<div class="eip-chips">${chips.map(c =>`<span class="eip-chip ${c.cls}"><span class="eip-chip-k">${c.k}</span>${c.v}</span>`).join("")}</div>`;
+  };
+
+  const renderItemCard = (item, slotLabel) => {
+    const bd   = item.baseData || {};
+    const tier = bd.tier || "comum";
+    const rare = TIER_RARE.includes(tier);
+    const tierBadge = rare ? `<span class="eip-tier ${TIER_CLASS[tier]||""}">${TIER_LABELS[tier]||tier}</span>` : "";
+    const statChips  = renderStatChips(item);
+    const effectLine = rare && bd.effect ? `<p class="eip-effect">📜 ${bd.effect}</p>` : "";
+    const noteLine   = rare && bd.note   ? `<p class="eip-note">✦ ${bd.note}</p>`     : "";
+    const storyLine  = rare && bd.story  ? `<p class="eip-story">"${bd.story.substring(0,160)}${bd.story.length>160?"…":""}"</p>` : "";
+    const setLine    = bd.setName ? `<div class="eip-set">Conjunto: ${bd.setName}</div>` : "";
+    const cursedBadge = bd.cursed  ? `<span class="eip-badge eip-badge-cursed">⚠ Amaldiçoado</span>` : "";
+    const divineBadge = bd.divine  ? `<span class="eip-badge eip-badge-divine">🌟 ${bd.divine}</span>` : "";
+
+    return `
+      <div class="eip-card ${rare ? "eip-card-rare" : ""}">
+        <div class="eip-slot-label">${slotLabel}</div>
+        <div class="eip-head">
+          <span class="eip-name">${escapeHTML(item.name)}</span>
+          <div class="eip-badges">${tierBadge}${cursedBadge}${divineBadge}</div>
+        </div>
+        ${statChips}
+        ${effectLine}${noteLine}${storyLine}${setLine}
+      </div>`;
+  };
+
+  const weaponCards = equipped.map(({ slotLabel, item }) => renderItemCard(item, slotLabel)).join("");
+
+  const accCards = accessories.map(item => {
+    const bd   = item.baseData || {};
+    const tier = bd.tier || "comum";
+    const rare = TIER_RARE.includes(tier);
+    const tierBadge   = rare ? `<span class="eip-tier ${TIER_CLASS[tier]||""}">${TIER_LABELS[tier]||tier}</span>` : "";
+    const statChips   = renderStatChips(item);
+    const effectLine  = rare && bd.effect ? `<p class="eip-effect">📜 ${bd.effect}</p>` : "";
+    const noteLine    = rare && bd.note   ? `<p class="eip-note">✦ ${bd.note}</p>`     : "";
+    const storyLine   = rare && bd.story  ? `<p class="eip-story">"${bd.story.substring(0,140)}${bd.story.length>140?"…":""}"</p>` : "";
+    const cursedBadge = bd.cursed ? `<span class="eip-badge eip-badge-cursed">⚠ Amaldiçoado</span>` : "";
+    const divineBadge = bd.divine ? `<span class="eip-badge eip-badge-divine">🌟 ${bd.divine}</span>` : "";
+
+    return `
+      <div class="eip-card ${rare ? "eip-card-rare" : ""}">
+        <div class="eip-slot-label">💍 Acessório</div>
+        <div class="eip-head">
+          <span class="eip-name">${escapeHTML(item.name)}</span>
+          <div class="eip-badges">${tierBadge}${cursedBadge}${divineBadge}</div>
+        </div>
+        ${statChips}
+        ${effectLine}${noteLine}${storyLine}
+      </div>`;
+  }).join("");
+
+  return `
+  <div class="sheet-section">
+    <h3 class="sheet-section-title">Itens Equipados</h3>
+    <p class="section-hint">Resumo do equipamento ativo. Itens raros e acima mostram seus efeitos e atributos completos aqui. Para trocar itens acesse a aba 🛡 Equip.</p>
+    <div class="eip-grid">
+      ${weaponCards}${accCards}
+    </div>
+    ${!equipped.length && !accessories.length ? `<p class="empty-inline-note">Nenhum item equipado ainda.</p>` : ""}
+  </div>`;
+}
 
 /* --- Vitals: HP, XP/Nível, Recurso de classe --- */
 
@@ -2194,8 +2292,6 @@ function renderAttributesSection(character, cls) {
 function renderDerivedSection(character, cls) {
   const move = calcMovement(character);
   const actions = calcActions(character);
-  const reactions = calcReactions(character);
-  const reactionActions = calcReactionActions(character);
   const spellActions = calcSpellActions(character);
   const slots = calcSpellSlots(character);
   const carry = calcCarryCapacity(character);
@@ -2209,10 +2305,7 @@ function renderDerivedSection(character, cls) {
 
   const stats = [
     { label: "Movimento", value: `${move} hex`, tooltip: "Quantos hexágonos você pode andar por turno. Ganha-se 1 por ponto de AGI (base 4), descontando penalidade de armadura/escudo pesado." },
-    { label: "Ações/turno", value: actions, tooltip: "Ações de combate por turno. Base: 1 + floor(Nível÷3). Bônus: +1 a cada 4 AGI, +1 a cada 5 DEX. Exemplo: nível 3 = 2 ações; nível 6 = 3 ações. Atributos adicionam bônus extras." },
-    { label: "Reações/rodada", value: reactions, tooltip: "Quantas vezes você pode reagir fora do seu turno (defender-se, ataque de oportunidade). Ganha-se 1 reação extra a cada 4 pontos de AGI, começando com 1." },
-    { label: "Ações de Reação", value: reactionActions, tooltip: "Recurso separado das Reações comuns, usado especificamente para ações reativas especiais. Ganha-se 1 a cada 3 pontos de AGI. Mínimo de 1." },
-    { label: "Ações de Magia", value: spellActions, tooltip: "Ações para conjurar magias. Todas as classes ganham 1 + floor(Nível÷3). Bônus de INT: +1 a cada 2 pontos.", highlight: spellActions > 0 },
+    { label: "Ações/turno", value: actions, tooltip: "Ações de combate por turno. Base: 1 + floor(Nível÷3). Bônus: +1 a cada 4 AGI, +1 a cada 5 DEX. Exemplo: nível 3 = 2 ações; nível 6 = 3 ações. Atributos adicionam bônus extras." },    { label: "Ações de Magia", value: spellActions, tooltip: "Ações para conjurar magias. Todas as classes ganham 1 + floor(Nível÷3). Bônus de INT: +1 a cada 2 pontos.", highlight: spellActions > 0 },
     { label: "Defesa Física", value: physDef, tooltip: "Reduz o dano de ataques físicos recebidos. Vem da armadura equipada e do escudo (se houver)." },
     { label: "Defesa Mágica", value: magDef, tooltip: "Reduz o dano de magias e ataques mágicos recebidos. Vem principalmente de armaduras arcanas/sagradas e itens mágicos." },
     { label: "Chance de Esquiva", value: `${dodge} ou menos (d20)`, tooltip: "Role 1d20: se o resultado for igual ou menor que este valor, você esquiva totalmente do ataque. Base 10 + AGI. Armas de duas mãos pesadas (sem a perícia 'Defesa com Armas Pesadas') aplicam −2." },
@@ -2957,8 +3050,6 @@ function renderNotesSection(character) {
 function buildPrintableSheet(character, cls, maxHP, resourceMax) {
   const move = calcMovement(character);
   const actions = calcActions(character);
-  const reactions = calcReactions(character);
-  const reactionActions = calcReactionActions(character);
   const spellActions = calcSpellActions(character);
   const slots = calcSpellSlots(character);
   const carry = calcCarryCapacity(character);
@@ -3009,10 +3100,7 @@ function buildPrintableSheet(character, cls, maxHP, resourceMax) {
       <div class="print-box-title">Estatísticas de Combate</div>
       <div class="print-combat-grid">
         <div class="print-combat-cell"><span class="print-combat-label">Movimento</span><span class="print-combat-value">${move} hex</span></div>
-        <div class="print-combat-cell"><span class="print-combat-label">Ações</span><span class="print-combat-value">${actions}</span></div>
-        <div class="print-combat-cell"><span class="print-combat-label">Reações</span><span class="print-combat-value">${reactions}</span></div>
-        <div class="print-combat-cell"><span class="print-combat-label">Ações de Reação</span><span class="print-combat-value">${reactionActions}</span></div>
-        <div class="print-combat-cell"><span class="print-combat-label">Ações de Magia</span><span class="print-combat-value">${spellActions}</span></div>
+        <div class="print-combat-cell"><span class="print-combat-label">Ações</span><span class="print-combat-value">${actions}</span></div>        <div class="print-combat-cell"><span class="print-combat-label">Ações de Magia</span><span class="print-combat-value">${spellActions}</span></div>
         <div class="print-combat-cell"><span class="print-combat-label">Def. Física</span><span class="print-combat-value">${physDef}</span></div>
         <div class="print-combat-cell"><span class="print-combat-label">Def. Mágica</span><span class="print-combat-value">${magDef}</span></div>
         <div class="print-combat-cell"><span class="print-combat-label">Slots de Magia</span><span class="print-combat-value">${slots}</span></div>
@@ -3902,7 +3990,6 @@ function openAddItemModal(character) {
   document.getElementById("custom-bonus-hp").value = "0";
   document.getElementById("custom-bonus-move").value = "0";
   document.getElementById("custom-bonus-actions").value = "0";
-  document.getElementById("custom-bonus-reactions").value = "0";
   document.getElementById("custom-bonus-reaction-actions").value = "0";
   document.getElementById("custom-bonus-spell-actions").value = "0";
   document.getElementById("custom-bonus-dodge").value = "0";
@@ -4137,7 +4224,7 @@ function updateCatalogItemPreview() {
   const magicBonusLines = item.magicBonus ? Object.entries(item.magicBonus)
     .filter(([k]) => k !== "attr" && k !== "attrValue")
     .map(([k,v]) => {
-      const labels = { actions:"Ações",reactions:"Reações",reactionActions:"Ações de Reação",spellActions:"Ações de Magia",hp:"HP",carry:"Carga",slots:"Slots",move:"Movimento" };
+      const labels = { actions:"Ações", spellActions:"Ações de Magia", hp:"HP", carry:"Carga", slots:"Slots", move:"Movimento" };
       return v > 0 ? `<span class="catalog-preview-bonus">+${v} ${labels[k]||k}</span>` : null;
     }).filter(Boolean).join("") : "";
   const attrBonus = item.magicBonus?.attr ? `<span class="catalog-preview-bonus">+${item.magicBonus.attrValue} ${item.magicBonus.attr}</span>` : "";
@@ -4323,8 +4410,6 @@ document.getElementById("add-item-modal-confirm").addEventListener("click", () =
         hp: parseInt(document.getElementById("custom-bonus-hp").value) || 0,
         move: parseInt(document.getElementById("custom-bonus-move").value) || 0,
         actions: parseInt(document.getElementById("custom-bonus-actions").value) || 0,
-        reactions: parseInt(document.getElementById("custom-bonus-reactions").value) || 0,
-        reactionActions: parseInt(document.getElementById("custom-bonus-reaction-actions").value) || 0,
         spellActions: parseInt(document.getElementById("custom-bonus-spell-actions").value) || 0,
         dodge: parseInt(document.getElementById("custom-bonus-dodge").value) || 0,
         slots: parseInt(document.getElementById("custom-bonus-slots").value) || 0
