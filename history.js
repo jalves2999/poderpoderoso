@@ -572,7 +572,17 @@ function renderMissions(filter) {
   missions.forEach(m => counts[m.difficulty] = (counts[m.difficulty]||0)+1);
 
   const DIFF_LABELS = { facil:"Fácil", normal:"Normal", dificil:"Difícil" };
-  const REWARD_ICONS = { ouro:"🪙", item:"⚔", magia:"✨", pericia:"📚", benção:"🌟", maldição:"💀", bonus:"⭐", info:"📖" };
+  const REWARD_ICONS = {
+    moedas:"🪙", bronze:"🟫", prata:"⚪", ouro:"🟡", platina:"⬜",
+    item:"⚔", magia:"✨", pericia:"📚", benção:"🌟", maldição:"💀", bonus:"⭐", info:"📖"
+  };
+  const REWARD_COLORS = {
+    moedas:"rgba(156,122,60,0.15)", bronze:"rgba(140,80,30,0.15)",
+    prata:"rgba(160,160,180,0.15)", ouro:"rgba(200,160,30,0.15)", platina:"rgba(200,230,255,0.18)",
+    item:"rgba(74,144,217,0.12)", magia:"rgba(106,58,122,0.12)", pericia:"rgba(40,120,80,0.12)",
+    benção:"rgba(40,160,80,0.12)", maldição:"rgba(160,40,40,0.12)",
+    bonus:"rgba(200,160,30,0.12)", info:"rgba(80,120,180,0.12)"
+  };
 
   const renderArea = (area) => {
     const trapHTML = area.trap ? `
@@ -624,7 +634,7 @@ function renderMissions(filter) {
     ).join("") || "";
 
     const rewardsHTML = m.rewards?.map(r=>`
-      <div class="mission-reward-item reward-${r.type}">
+      <div class="mission-reward-item reward-${r.type}" style="background:${REWARD_COLORS[r.type]||'rgba(0,0,0,0.05)'}">
         <span>${REWARD_ICONS[r.type]||"▸"}</span>
         <span>${r.desc}</span>
       </div>`).join("") || "";
