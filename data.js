@@ -3268,7 +3268,8 @@ const BESTIARY = [
      DIFICULDADE 1 — combates rápidos, baixa defesa
   ────────────────────────────────────────────────────────────────── */
   {
-    id: "rato-das-ruinas", name: "Rato das Ruínas", difficulty: 1, size: "pequeno",
+    id: "rato-das-ruinas", name: "Rato das Ruínas", difficulty: 1,
+    attrs: {FOR:0,DEX:1,AGI:1,INT:0,SAB:0}, size: "pequeno",
     category: "Besta", location: ["Cidade", "Ruínas", "Esgoto"],
     hp: 8, physDefense: 1, magDefense: 0, dodge: 12,
     actions: 2,
@@ -3285,7 +3286,8 @@ const BESTIARY = [
   },
 
   {
-    id: "goblin-batedeira", name: "Goblin Batedeira", difficulty: 1, size: "pequeno",
+    id: "goblin-batedeira", name: "Goblin Batedeira", difficulty: 1,
+    attrs: {FOR:0,DEX:1,AGI:1,INT:0,SAB:0}, size: "pequeno",
     category: "Humanoide", location: ["Floresta", "Caverna", "Ruínas"],
     hp: 14, physDefense: 2, magDefense: 0, dodge: 13,
     actions: 2,
@@ -3304,7 +3306,8 @@ const BESTIARY = [
   },
 
   {
-    id: "lobo-comum", name: "Lobo Comum", difficulty: 1, size: "normal",
+    id: "lobo-comum", name: "Lobo Comum", difficulty: 1,
+    attrs: {FOR:1,DEX:0,AGI:1,INT:0,SAB:1}, size: "normal",
     category: "Besta", location: ["Floresta", "Planície", "Montanha"],
     hp: 18, physDefense: 2, magDefense: 0, dodge: 13,
     actions: 2,
@@ -3323,7 +3326,8 @@ const BESTIARY = [
   },
 
   {
-    id: "serpente-comum", name: "Serpente Venenosa", difficulty: 1, size: "pequeno",
+    id: "serpente-comum", name: "Serpente Venenosa", difficulty: 1,
+    attrs: {FOR:0,DEX:1,AGI:1,INT:0,SAB:0}, size: "pequeno",
     category: "Besta", location: ["Floresta", "Pântano", "Ruínas", "Serpentara"],
     hp: 10, physDefense: 1, magDefense: 1, dodge: 14,
     actions: 2,
@@ -3342,7 +3346,8 @@ const BESTIARY = [
   },
 
   {
-    id: "bandido-de-estrada", name: "Bandido de Estrada", difficulty: 1, size: "normal",
+    id: "bandido-de-estrada", name: "Bandido de Estrada", difficulty: 1,
+    attrs: {FOR:1,DEX:1,AGI:0,INT:0,SAB:0}, size: "normal",
     category: "Humanoide", location: ["Estrada", "Floresta", "Planície"],
     hp: 20, physDefense: 3, magDefense: 0, dodge: 11,
     actions: 2,
@@ -3364,7 +3369,8 @@ const BESTIARY = [
      DIFICULDADE 2 — combates equilibrados, alguma estratégia
   ────────────────────────────────────────────────────────────────── */
   {
-    id: "guerreiro-cultista", name: "Guerreiro Cultista da Marca", difficulty: 2, size: "normal",
+    id: "guerreiro-cultista", name: "Guerreiro Cultista da Marca", difficulty: 2,
+    attrs: {FOR:2,DEX:1,AGI:1,INT:0,SAB:1}, size: "normal",
     category: "Humanoide", location: ["Ruínas", "Caverna", "Floresta Profunda"],
     hp: 35, physDefense: 4, magDefense: 2, dodge: 12,
     actions: 2,
@@ -3384,7 +3390,8 @@ const BESTIARY = [
   },
 
   {
-    id: "lobo-das-trevas", name: "Lobo das Trevas", difficulty: 2, size: "normal",
+    id: "lobo-das-trevas", name: "Lobo das Trevas", difficulty: 2,
+    attrs: {FOR:2,DEX:1,AGI:2,INT:0,SAB:1}, size: "normal",
     category: "Besta Sombria", location: ["Floresta Profunda", "Caverna", "Planície à Noite"],
     hp: 32, physDefense: 3, magDefense: 2, dodge: 14,
     actions: 2,
@@ -3404,7 +3411,8 @@ const BESTIARY = [
   },
 
   {
-    id: "sacerdote-cobra", name: "Sacerdote de Jurgmund", difficulty: 2, size: "normal",
+    id: "sacerdote-cobra", name: "Sacerdote de Jurgmund", difficulty: 2,
+    attrs: {FOR:1,DEX:1,AGI:1,INT:2,SAB:2}, size: "normal",
     category: "Humanoide", location: ["Serpentara", "Templo", "Cidade"],
     hp: 28, physDefense: 2, magDefense: 5, dodge: 12,
     actions: 2,
@@ -3426,7 +3434,8 @@ const BESTIARY = [
   },
 
   {
-    id: "golem-pedra", name: "Golem de Pedra Antiga", difficulty: 2, size: "grande",
+    id: "golem-pedra", name: "Golem de Pedra Antiga", difficulty: 2,
+    attrs: {FOR:3,DEX:0,AGI:0,INT:0,SAB:0}, size: "grande",
     category: "Construto", location: ["Ruínas", "Dungeon", "Templo Antigo"],
     hp: 55, physDefense: 7, magDefense: 1, dodge: 8,
     actions: 2,
@@ -3449,7 +3458,8 @@ const BESTIARY = [
      DIFICULDADE 3 — inimigos fortes, possíveis chefes simples
   ────────────────────────────────────────────────────────────────── */
   {
-    id: "alfa-matilha", name: "Lobo Alfa da Matilha", difficulty: 3, size: "grande",
+    id: "alfa-matilha", name: "Lobo Alfa da Matilha", difficulty: 3,
+    attrs: {FOR:3,DEX:2,AGI:3,INT:1,SAB:2}, size: "grande",
     category: "Besta", location: ["Floresta", "Montanha", "Planície"],
     hp: 75, physDefense: 5, magDefense: 2, dodge: 14,
     actions: 3,
@@ -3471,7 +3481,8 @@ const BESTIARY = [
   },
 
   {
-    id: "troll-das-cavernas", name: "Troll das Cavernas", difficulty: 3, size: "grande",
+    id: "troll-das-cavernas", name: "Troll das Cavernas", difficulty: 3,
+    attrs: {FOR:5,DEX:0,AGI:1,INT:0,SAB:1}, size: "grande",
     category: "Gigante", location: ["Caverna", "Dungeon", "Montanha"],
     hp: 90, physDefense: 6, magDefense: 1, dodge: 9,
     actions: 2,
@@ -3491,7 +3502,8 @@ const BESTIARY = [
   },
 
   {
-    id: "mago-renegado", name: "Mago Renegado de Atrelon", difficulty: 3, size: "normal",
+    id: "mago-renegado", name: "Mago Renegado de Atrelon", difficulty: 3,
+    attrs: {FOR:0,DEX:1,AGI:1,INT:5,SAB:3}, size: "normal",
     category: "Humanoide", location: ["Ruínas de Atrelon", "Torre Abandonada", "Dungeon"],
     hp: 50, physDefense: 2, magDefense: 7, dodge: 13,
     actions: 2,
@@ -3518,7 +3530,8 @@ const BESTIARY = [
   },
 
   {
-    id: "cobra-rainha-jovem", name: "Cobra-Rainha Jovem", difficulty: 3, size: "grande",
+    id: "cobra-rainha-jovem", name: "Cobra-Rainha Jovem", difficulty: 3,
+    attrs: {FOR:3,DEX:2,AGI:2,INT:2,SAB:2}, size: "grande",
     category: "Besta Sagrada", location: ["Serpentara", "Pântano", "Templo de Jurgmund"],
     hp: 80, physDefense: 4, magDefense: 6, dodge: 13,
     actions: 3,
@@ -3543,7 +3556,8 @@ const BESTIARY = [
      DIFICULDADE 4 — muito fortes, exigem estratégia
   ────────────────────────────────────────────────────────────────── */
   {
-    id: "lobo-do-vazio", name: "Lobo do Vazio", difficulty: 4, size: "grande",
+    id: "lobo-do-vazio", name: "Lobo do Vazio", difficulty: 4,
+    attrs: {FOR:4,DEX:3,AGI:4,INT:2,SAB:3}, size: "grande",
     category: "Entidade do Vazio", location: ["Plano Liminar", "Floresta Maldita", "Onde o Véu é Fino"],
     hp: 130, physDefense: 7, magDefense: 8, dodge: 16,
     actions: 3,
@@ -3566,7 +3580,8 @@ const BESTIARY = [
   },
 
   {
-    id: "grande-sacerdote-cobra", name: "Grande Sacerdote de Jurgmund", difficulty: 4, size: "normal",
+    id: "grande-sacerdote-cobra", name: "Grande Sacerdote de Jurgmund", difficulty: 4,
+    attrs: {FOR:2,DEX:2,AGI:2,INT:6,SAB:5}, size: "normal",
     category: "Humanoide Elite", location: ["Serpentara", "Grande Templo de Jurgmund"],
     hp: 110, physDefense: 4, magDefense: 10, dodge: 14,
     actions: 3,
@@ -3593,7 +3608,8 @@ const BESTIARY = [
   },
 
   {
-    id: "general-fantasma", name: "General Elyon — O Traidor Fantasma", difficulty: 4, size: "normal",
+    id: "general-fantasma", name: "General Elyon — O Traidor Fantasma", difficulty: 4,
+    attrs: {FOR:4,DEX:3,AGI:3,INT:4,SAB:4}, size: "normal",
     category: "Morto-Vivo Elite", location: ["Ruínas de Durrak", "Campo de Batalha Maldito"],
     hp: 120, physDefense: 6, magDefense: 9, dodge: 15,
     actions: 3,
@@ -3621,7 +3637,8 @@ const BESTIARY = [
      DIFICULDADE 5 — chefes, monstros especiais com lore profundo
   ────────────────────────────────────────────────────────────────── */
   {
-    id: "lich-atrelon", name: "O Lich das Montanhas de Atrelon", difficulty: 5, size: "normal",
+    id: "lich-atrelon", name: "O Lich das Montanhas de Atrelon", difficulty: 5,
+    attrs: {FOR:2,DEX:3,AGI:3,INT:10,SAB:7}, size: "normal",
     category: "Morto-Vivo Lendário", location: ["Pico de Atrelon", "Torre do Gelo Eterno"],
     hp: 220, physDefense: 8, magDefense: 14, dodge: 17,
     actions: 4,
@@ -3651,7 +3668,8 @@ const BESTIARY = [
   },
 
   {
-    id: "cobra-imortal-jurgmund", name: "A Serpente Imortal de Jurgmund", difficulty: 5, size: "colossal",
+    id: "cobra-imortal-jurgmund", name: "A Serpente Imortal de Jurgmund", difficulty: 5,
+    attrs: {FOR:5,DEX:4,AGI:5,INT:7,SAB:8}, size: "colossal",
     category: "Divindade Menor", location: ["Núcleo de Serpentara", "Câmara Sagrada de Jurgmund"],
     hp: 300, physDefense: 10, magDefense: 12, dodge: 13,
     actions: 4,
@@ -3680,7 +3698,8 @@ const BESTIARY = [
   },
 
   {
-    id: "deus-marcado-avatar", name: "Avatar do Deus Marcado", difficulty: 5, size: "colossal",
+    id: "deus-marcado-avatar", name: "Avatar do Deus Marcado", difficulty: 5,
+    attrs: {FOR:8,DEX:5,AGI:5,INT:8,SAB:7}, size: "colossal",
     category: "Divindade — Avatar", location: ["Qualquer lugar com Maldição Aberta", "Altar da Marca"],
     hp: 350, physDefense: 12, magDefense: 15, dodge: 18,
     actions: 5,
@@ -3712,7 +3731,8 @@ const BESTIARY = [
 
   /* --- Dif 1: Encontros comuns do mundo --- */
   {
-    id: "karlac-filhote", name: "Karlac Filhote", difficulty: 1, size: "pequeno",
+    id: "karlac-filhote", name: "Karlac Filhote", difficulty: 1,
+    attrs: {FOR:1,DEX:0,AGI:1,INT:0,SAB:0}, size: "pequeno",
     category: "Besta de Fogo", location: ["Deserto Carmesim"],
     hp: 14, physDefense: 3, magDefense: 0, dodge: 12,
     actions: 2,
@@ -3730,7 +3750,8 @@ const BESTIARY = [
     ]
   },
   {
-    id: "serpentariano-patrulheiro", name: "Serpentariano Patrulheiro", difficulty: 1, size: "normal",
+    id: "serpentariano-patrulheiro", name: "Serpentariano Patrulheiro", difficulty: 1,
+    attrs: {FOR:1,DEX:1,AGI:1,INT:0,SAB:0}, size: "normal",
     category: "Humanoide Serpentariano", location: ["Montanhas de Atrelon", "Castelo da Cobra"],
     hp: 18, physDefense: 3, magDefense: 1, dodge: 13,
     actions: 2,
@@ -3750,7 +3771,8 @@ const BESTIARY = [
 
   /* --- Dif 2: Encontros intermediários --- */
   {
-    id: "anao-do-casco", name: "Anão Guardião do Casco", difficulty: 2, size: "normal",
+    id: "anao-do-casco", name: "Anão Guardião do Casco", difficulty: 2,
+    attrs: {FOR:3,DEX:1,AGI:0,INT:1,SAB:1}, size: "normal",
     category: "Humanoide Anão", location: ["Grande Lago Central", "Cidadela do Casco"],
     hp: 40, physDefense: 6, magDefense: 2, dodge: 10,
     actions: 2,
@@ -3769,7 +3791,8 @@ const BESTIARY = [
     ]
   },
   {
-    id: "criatura-profundezas", name: "Criatura das Profundezas do Lago", difficulty: 2, size: "normal",
+    id: "criatura-profundezas", name: "Criatura das Profundezas do Lago", difficulty: 2,
+    attrs: {FOR:2,DEX:1,AGI:1,INT:0,SAB:2}, size: "normal",
     category: "Aberração Aquática", location: ["Grande Lago Central"],
     hp: 35, physDefense: 2, magDefense: 4, dodge: 14,
     actions: 3,
@@ -3789,7 +3812,8 @@ const BESTIARY = [
     ]
   },
   {
-    id: "cultista-aralto", name: "Cultista do Aralto", difficulty: 2, size: "normal",
+    id: "cultista-aralto", name: "Cultista do Aralto", difficulty: 2,
+    attrs: {FOR:1,DEX:1,AGI:1,INT:1,SAB:2}, size: "normal",
     category: "Humanoide Corrompido", location: ["Montanhas de Atrelon", "Reinos de Akaen", "Deserto Carmesim"],
     hp: 32, physDefense: 3, magDefense: 3, dodge: 12,
     actions: 2,
@@ -3809,7 +3833,8 @@ const BESTIARY = [
 
   /* --- Dif 3: Desafiadores --- */
   {
-    id: "serpentariano-sacerdote", name: "Sacerdote Serpentariano da Cobra", difficulty: 3, size: "normal",
+    id: "serpentariano-sacerdote", name: "Sacerdote Serpentariano da Cobra", difficulty: 3,
+    attrs: {FOR:1,DEX:1,AGI:2,INT:4,SAB:4}, size: "normal",
     category: "Humanoide Serpentariano", location: ["Montanhas de Atrelon", "Castelo da Cobra"],
     hp: 65, physDefense: 3, magDefense: 8, dodge: 13,
     actions: 3,
@@ -3831,7 +3856,8 @@ const BESTIARY = [
     ]
   },
   {
-    id: "guardiao-fissura", name: "Guardião da Fissura", difficulty: 3, size: "grande",
+    id: "guardiao-fissura", name: "Guardião da Fissura", difficulty: 3,
+    attrs: {FOR:4,DEX:1,AGI:1,INT:1,SAB:3}, size: "grande",
     category: "Aberração Aquática Ancestral", location: ["Grande Lago Central"],
     hp: 85, physDefense: 5, magDefense: 6, dodge: 11,
     actions: 3,
@@ -3851,7 +3877,8 @@ const BESTIARY = [
     ]
   },
   {
-    id: "aralto-menor", name: "Aralto da Marca — Forma Menor", difficulty: 3, size: "normal",
+    id: "aralto-menor", name: "Aralto da Marca — Forma Menor", difficulty: 3,
+    attrs: {FOR:3,DEX:2,AGI:2,INT:3,SAB:3}, size: "normal",
     category: "Campeão do Deus Marcado", location: ["Reinos de Akaen", "Montanhas de Atrelon", "Deserto Carmesim"],
     hp: 80, physDefense: 5, magDefense: 7, dodge: 14,
     actions: 3,
@@ -3875,7 +3902,8 @@ const BESTIARY = [
 
   /* --- Dif 4: Muito fortes, estratégia necessária --- */
   {
-    id: "serpentariano-rei-vassk", name: "Rei Vassk — O Corrompido", difficulty: 4, size: "normal",
+    id: "serpentariano-rei-vassk", name: "Rei Vassk — O Corrompido", difficulty: 4,
+    attrs: {FOR:4,DEX:3,AGI:3,INT:5,SAB:5}, size: "normal",
     category: "Humanoide Serpentariano Elite", location: ["Castelo da Cobra — Trono"],
     hp: 115, physDefense: 6, magDefense: 9, dodge: 15,
     actions: 3,
@@ -3899,7 +3927,8 @@ const BESTIARY = [
     isElite: true
   },
   {
-    id: "aralto-sussurrante", name: "O Aralto Sussurrante", difficulty: 4, size: "normal",
+    id: "aralto-sussurrante", name: "O Aralto Sussurrante", difficulty: 4,
+    attrs: {FOR:3,DEX:3,AGI:4,INT:6,SAB:5}, size: "normal",
     category: "Campeão do Deus Marcado — Elite", location: ["Câmaras Profundas do Crânio", "Castelo da Cobra"],
     hp: 130, physDefense: 7, magDefense: 10, dodge: 17,
     actions: 3,
@@ -3927,7 +3956,8 @@ const BESTIARY = [
 
   /* --- Dif 5: Chefes únicos do mundo de Aether --- */
   {
-    id: "grande-salamandra-karlac", name: "Grande Salamandra Karlac", difficulty: 5, size: "colossal",
+    id: "grande-salamandra-karlac", name: "Grande Salamandra Karlac", difficulty: 5,
+    attrs: {FOR:8,DEX:2,AGI:1,INT:2,SAB:2}, size: "colossal",
     category: "Criatura Colossal — Guardiã do Deserto", location: ["Deserto Carmesim"],
     hp: 400, physDefense: 14, magDefense: 8, dodge: 8,
     actions: 4,
@@ -3950,7 +3980,8 @@ const BESTIARY = [
     isElite: true
   },
   {
-    id: "dragao-dourado-karloth", name: "Dragão Dourado de Karloth", difficulty: 5, size: "colossal",
+    id: "dragao-dourado-karloth", name: "Dragão Dourado de Karloth", difficulty: 5,
+    attrs: {FOR:7,DEX:4,AGI:4,INT:8,SAB:8}, size: "colossal",
     category: "Entidade Colossal — Guardião do Mundo", location: ["Grande Planície Sudeste", "Vulcão de Karloth"],
     hp: 500, physDefense: 16, magDefense: 16, dodge: 20,
     actions: 5,
@@ -3973,7 +4004,8 @@ const BESTIARY = [
     isElite: true
   },
   {
-    id: "magnalaga-acordada", name: "Tartaruga Magnalaga — Forma Acordada", difficulty: 5, size: "colossal",
+    id: "magnalaga-acordada", name: "Tartaruga Magnalaga — Forma Acordada", difficulty: 5,
+    attrs: {FOR:6,DEX:4,AGI:4,INT:9,SAB:8}, size: "colossal",
     category: "Ser Ancestral Transformado", location: ["Grande Lago Central"],
     hp: 380, physDefense: 15, magDefense: 12, dodge: 6,
     actions: 3,
@@ -4001,7 +4033,8 @@ const BESTIARY = [
      ══════════════════════════════════════════════════════════ */
 
   /* ── MORTOS-VIVOS ── */
-  { id:"zumbi-comum", name:"Zumbi Comum", difficulty:1, size:"normal", category:"Morto-Vivo",
+  { id:"zumbi-comum", name:"Zumbi Comum", difficulty:1,
+    attrs: {FOR:2,DEX:0,AGI:0,INT:0,SAB:0}, size:"normal", category:"Morto-Vivo",
     location:["Cemitério","Ruínas","Dungeon"], hp:28, physDefense:1, magDefense:0, dodge:8,
     actions:1, damage:"1d6 (mordida podre)",
     abilities:[
@@ -4013,7 +4046,8 @@ const BESTIARY = [
     behavior:"Age em grupos de 3-8. Lento (Movimento 2) mas incansável. Avança em linha reta para o alvo mais próximo. Não tem táticas.",
     loot:[{item:"Nada de valor",chance:100,qty:"—"},{item:"Fragmento de roupa com pista",chance:15,qty:"1"}] },
 
-  { id:"zumbi-abissal", name:"Zumbi Abissal", difficulty:3, size:"normal", category:"Morto-Vivo",
+  { id:"zumbi-abissal", name:"Zumbi Abissal", difficulty:3,
+    attrs: {FOR:4,DEX:0,AGI:1,INT:0,SAB:1}, size:"normal", category:"Morto-Vivo",
     location:["Fissura do Lago","Dungeon Profunda","Território do Deus Marcado"], hp:80, physDefense:4, magDefense:3, dodge:10,
     actions:2, damage:"1d10+1d6 (garras abissais)",
     abilities:[
@@ -4026,7 +4060,8 @@ const BESTIARY = [
     behavior:"Guardião territorial. Protege áreas corrompidas. Ataca o alvo com mais luz ou energia divina (odeia clérigos). Não foge — morre no posto.",
     loot:[{item:"Cristal Abissal (reagente)",chance:40,qty:"1"},{item:"Pedaço de Armadura Corrompida",chance:25,qty:"1"}] },
 
-  { id:"esqueleto-guerreiro", name:"Esqueleto Guerreiro", difficulty:1, size:"normal", category:"Morto-Vivo",
+  { id:"esqueleto-guerreiro", name:"Esqueleto Guerreiro", difficulty:1,
+    attrs: {FOR:1,DEX:1,AGI:0,INT:0,SAB:0}, size:"normal", category:"Morto-Vivo",
     location:["Tumba","Dungeon","Ruínas Élficas"], hp:18, physDefense:3, magDefense:0, dodge:11,
     actions:2, damage:"1d8 (espada enferrujada)",
     abilities:[
@@ -4037,7 +4072,8 @@ const BESTIARY = [
     behavior:"Guarda tumbas e tesouros sem pensar. Ataca qualquer vivo que entrar na área. Pode ser comandado por um necromante — obedece ordens simples.",
     loot:[{item:"Osso de Qualidade (material)",chance:60,qty:"1d4"},{item:"Moedas Antigas",chance:30,qty:"1d8"},{item:"Arma Enferrujada Recuperável",chance:20,qty:"1"}] },
 
-  { id:"esqueleto-gigante", name:"Esqueleto Colossal", difficulty:4, size:"colossal", category:"Morto-Vivo",
+  { id:"esqueleto-gigante", name:"Esqueleto Colossal", difficulty:4,
+    attrs: {FOR:7,DEX:0,AGI:0,INT:0,SAB:0}, size:"colossal", category:"Morto-Vivo",
     location:["Tumba Ancestral","Dungeon Profunda","Ruínas Élficas"], hp:140, physDefense:8, magDefense:2, dodge:9,
     actions:3, damage:"2d10+1d8 (golpe de osso colossal)",
     abilities:[
@@ -4050,7 +4086,8 @@ const BESTIARY = [
     behavior:"Guardião de tumbas antigas. Ignora criaturas pequenas (goblins, ratos) mas ataca humanoides. Movimento lento (3 hexágonos) mas alcance de 2 hexágonos nos ataques.",
     loot:[{item:"Osso Ancestral Encantado",chance:70,qty:"1d3"},{item:"Cristal de Alma Aprisionada",chance:30,qty:"1"},{item:"Artefato da Tumba",chance:20,qty:"1"}] },
 
-  { id:"vampiro-nobre", name:"Vampiro Nobre", difficulty:4, size:"normal", category:"Morto-Vivo",
+  { id:"vampiro-nobre", name:"Vampiro Nobre", difficulty:4,
+    attrs: {FOR:4,DEX:4,AGI:4,INT:6,SAB:5}, size:"normal", category:"Morto-Vivo",
     location:["Castelo Abandonado","Cidade","Ruínas Nobres"], hp:120, physDefense:6, magDefense:7, dodge:16,
     actions:3, damage:"1d10+1d8 (mordida drenante)",
     abilities:[
@@ -4064,7 +4101,8 @@ const BESTIARY = [
     behavior:"Inteligente e calculista. Tenta dominar um aliado primeiro, depois negocia com os demais. Foge se chegar a 30% HP para regenerar. Nunca subestima — se os jogadores sobrevivem ao primeiro encontro, prepara emboscada melhor no próximo.",
     loot:[{item:"Coração de Vampiro (ingrediente)",chance:80,qty:"1"},{item:"Manto Nobre (item raro)",chance:50,qty:"1"},{item:"Anel de Sigilo (acessório mágico)",chance:30,qty:"1"},{item:"Moedas de Ouro Antigas",chance:90,qty:"2d20"}] },
 
-  { id:"lobisomem", name:"Lobisomem", difficulty:3, size:"grande", category:"Metamorfo",
+  { id:"lobisomem", name:"Lobisomem", difficulty:3,
+    attrs: {FOR:4,DEX:2,AGI:3,INT:1,SAB:2}, size:"grande", category:"Metamorfo",
     location:["Floresta","Aldeia","Montanha"], hp:95, physDefense:5, magDefense:3, dodge:14,
     actions:3, damage:"1d10+1d8 (garras e mordida)",
     abilities:[
@@ -4078,7 +4116,8 @@ const BESTIARY = [
     loot:[{item:"Pele de Lobisomem (material raro)",chance:50,qty:"1"},{item:"Amuleto de Prata (do humano que era)",chance:30,qty:"1"}] },
 
   /* ── HUMANOIDES COM HABILIDADES ── */
-  { id:"kobold-armadilheiro", name:"Kobold Armadilheiro", difficulty:1, size:"pequeno", category:"Humanoide",
+  { id:"kobold-armadilheiro", name:"Kobold Armadilheiro", difficulty:1,
+    attrs: {FOR:0,DEX:2,AGI:1,INT:1,SAB:0}, size:"pequeno", category:"Humanoide",
     location:["Caverna","Dungeon","Floresta Profunda"], hp:14, physDefense:2, magDefense:1, dodge:13,
     actions:2, damage:"1d4+1d4 (faca e armadilha)",
     abilities:[
@@ -4090,7 +4129,8 @@ const BESTIARY = [
     behavior:"Covardes em combate direto mas perigosos em grupos e com preparação. Fogem ao primeiro sinal de desvantagem para buscar reforços. Adoram emboscadas e terrenos armadilhados.",
     loot:[{item:"Kit de Ferramentas de Armadilha",chance:50,qty:"1"},{item:"Moedas de Cobre",chance:80,qty:"1d6"},{item:"Pedra de Sílex Especial",chance:20,qty:"1d3"}] },
 
-  { id:"orc-berserker", name:"Orc Berserker", difficulty:2, size:"grande", category:"Humanoide",
+  { id:"orc-berserker", name:"Orc Berserker", difficulty:2,
+    attrs: {FOR:3,DEX:1,AGI:0,INT:0,SAB:0}, size:"grande", category:"Humanoide",
     location:["Planície","Acampamento","Floresta"], hp:55, physDefense:3, magDefense:1, dodge:11,
     actions:3, damage:"1d12+1d6 (machado de guerra)",
     abilities:[
@@ -4102,7 +4142,8 @@ const BESTIARY = [
     behavior:"Combate frontal agressivo. Ignora aliados em desvantagem — foca no inimigo mais forte. Nunca recua voluntariamente. Pode ser convencido por um guerreiro orc de respeito.",
     loot:[{item:"Machado de Guerra Orc (arma rara)",chance:40,qty:"1"},{item:"Dente de Criatura Colossal (troféu)",chance:60,qty:"1d3"},{item:"Provisões de Acampamento",chance:70,qty:"1"}] },
 
-  { id:"elfo-sombrio", name:"Elfo das Sombras", difficulty:3, size:"normal", category:"Humanoide",
+  { id:"elfo-sombrio", name:"Elfo das Sombras", difficulty:3,
+    attrs: {FOR:1,DEX:4,AGI:4,INT:2,SAB:2}, size:"normal", category:"Humanoide",
     location:["Floresta Profunda","Ruínas Élficas","Território Élfico"], hp:68, physDefense:3, magDefense:6, dodge:17,
     actions:3, damage:"1d8+1d6 (lâmina da meia-luz)",
     abilities:[
@@ -4115,7 +4156,8 @@ const BESTIARY = [
     behavior:"Tático e paciente. Nunca entra em combate aberto — favorece emboscadas, veneno e retiradas estratégicas. Alvo prioritário: conjuradores e portadores de luz. Foge se a furtividade for quebrada.",
     loot:[{item:"Lâmina Élfica da Meia-Luz (raro)",chance:25,qty:"1"},{item:"Extrato de Veneno Élfico (×3)",chance:60,qty:"1"},{item:"Cristal de Memória Élfica",chance:15,qty:"1"}] },
 
-  { id:"necromante-errante", name:"Necromante Errante", difficulty:3, size:"normal", category:"Humanoide",
+  { id:"necromante-errante", name:"Necromante Errante", difficulty:3,
+    attrs: {FOR:0,DEX:1,AGI:1,INT:5,SAB:3}, size:"normal", category:"Humanoide",
     location:["Cemitério","Dungeon","Floresta Sombria"], hp:55, physDefense:1, magDefense:7, dodge:12,
     actions:2, damage:"1d6 (cajado ossado)",
     abilities:[
@@ -4129,7 +4171,8 @@ const BESTIARY = [
     loot:[{item:"Grimório de Necromancia (magia proibida)",chance:40,qty:"1"},{item:"Pó de Osso (reagente ×5)",chance:80,qty:"1"},{item:"Amuleto de Osso (acessório mágico)",chance:30,qty:"1"}] },
 
   /* ── CRIATURAS DE FLORESTA ── */
-  { id:"ent-guardiao", name:"Ent Guardião da Floresta", difficulty:4, size:"colossal", category:"Planta Viva",
+  { id:"ent-guardiao", name:"Ent Guardião da Floresta", difficulty:4,
+    attrs: {FOR:7,DEX:0,AGI:0,INT:2,SAB:3}, size:"colossal", category:"Planta Viva",
     location:["Floresta Ancestral","Floresta Profunda"], hp:160, physDefense:9, magDefense:2, dodge:8,
     actions:3, damage:"2d8+1d10 (galhos colossais)",
     abilities:[
@@ -4142,7 +4185,8 @@ const BESTIARY = [
     behavior:"Protetor territorial, não predador. Avisa antes de atacar — dá 1 rodada de aviso visual (chacoalha galhos) antes de agir. Se o grupo recuar e não desmatar, para. Inimigo irreconciliável apenas de Karlacs e Salamandras.",
     loot:[{item:"Coração de Ent (material lendário)",chance:30,qty:"1"},{item:"Lenha Sagrada (material)",chance:90,qty:"1d6"},{item:"Resina Curativa (3 usos, cura 2d8)",chance:50,qty:"1"}] },
 
-  { id:"treant-jovem", name:"Treant Jovem", difficulty:2, size:"grande", category:"Planta Viva",
+  { id:"treant-jovem", name:"Treant Jovem", difficulty:2,
+    attrs: {FOR:3,DEX:0,AGI:0,INT:1,SAB:1}, size:"grande", category:"Planta Viva",
     location:["Floresta","Bosque","Planície com Árvores"], hp:60, physDefense:6, magDefense:1, dodge:9,
     actions:2, damage:"1d10+1d6 (galho poderoso)",
     abilities:[
@@ -4153,7 +4197,8 @@ const BESTIARY = [
     behavior:"Solitário ou sob comando de um Ent maior. Defende a área onde nasceu. Recua se receber dano de fogo (instinto de sobrevivência).",
     loot:[{item:"Casca de Treant (armadura material)",chance:50,qty:"1"},{item:"Resina Curativa (1 uso)",chance:40,qty:"1"}] },
 
-  { id:"sombra-florestal", name:"Sombra Florestal", difficulty:2, size:"normal", category:"Espírito",
+  { id:"sombra-florestal", name:"Sombra Florestal", difficulty:2,
+    attrs: {FOR:0,DEX:2,AGI:3,INT:1,SAB:1}, size:"normal", category:"Espírito",
     location:["Floresta Profunda","Área Corrompida","Noite"], hp:40, physDefense:0, magDefense:6, dodge:18,
     actions:2, damage:"1d8 (toque das sombras — dano sombrio)",
     abilities:[
@@ -4166,7 +4211,8 @@ const BESTIARY = [
     loot:[{item:"Essência de Sombra (componente mágico)",chance:50,qty:"1"}] },
 
   /* ── CRIATURAS GRANDES ── */
-  { id:"mamute-das-planícies", name:"Mamute das Planícies", difficulty:3, size:"colossal", category:"Besta",
+  { id:"mamute-das-planícies", name:"Mamute das Planícies", difficulty:3,
+    attrs: {FOR:6,DEX:0,AGI:0,INT:0,SAB:1}, size:"colossal", category:"Besta",
     location:["Grande Planície","Estepe","Neve"], hp:130, physDefense:7, magDefense:1, dodge:8,
     actions:2, damage:"2d8+1d10 (chifres e pisoteio)",
     abilities:[
@@ -4179,7 +4225,8 @@ const BESTIARY = [
     behavior:"Passivo se não ameaçado. Se um aliado ou filhote for atacado, entra em modo de proteção total — prioriza ameaças maiores. Pode ser acalmado com um teste de SAB (difícil) se um xamã estiver presente.",
     loot:[{item:"Marfim de Mamute (material valioso)",chance:60,qty:"1d2"},{item:"Pele de Mamute (armadura material)",chance:50,qty:"1"},{item:"Músculo de Mamute (reagente de força)",chance:30,qty:"1"}] },
 
-  { id:"gigante-das-pedras", name:"Gigante das Pedras", difficulty:4, size:"colossal", category:"Gigante",
+  { id:"gigante-das-pedras", name:"Gigante das Pedras", difficulty:4,
+    attrs: {FOR:7,DEX:1,AGI:0,INT:1,SAB:1}, size:"colossal", category:"Gigante",
     location:["Montanha","Caverna Grande","Ruínas"], hp:180, physDefense:10, magDefense:3, dodge:9,
     actions:3, damage:"2d10+1d8 (punho de pedra)",
     abilities:[
@@ -4193,7 +4240,8 @@ const BESTIARY = [
     loot:[{item:"Coração de Pedra Viva (material divino de Thurgomur)",chance:20,qty:"1"},{item:"Ouro nas Veias da Pele",chance:40,qty:"1d10 moedas de ouro"},{item:"Pedra de Força (reagente)",chance:50,qty:"1d3"}] },
 
   /* ── CRIATURAS VOADORAS ── */
-  { id:"harpia", name:"Harpia Caçadora", difficulty:2, size:"normal", category:"Voadora",
+  { id:"harpia", name:"Harpia Caçadora", difficulty:2,
+    attrs: {FOR:1,DEX:2,AGI:2,INT:1,SAB:0}, size:"normal", category:"Voadora",
     location:["Penhasco","Floresta","Montanha"], hp:45, physDefense:2, magDefense:3, dodge:16,
     actions:3, damage:"1d8+1d6 (garras cortantes)",
     abilities:[
@@ -4206,7 +4254,8 @@ const BESTIARY = [
     behavior:"Caçadora inteligente. Usa o Canto para separar o grupo, depois ataca isolados com rasantes. Trabalha em pares. Foge se uma parceira morrer.",
     loot:[{item:"Pena de Harpia (material mágico)",chance:80,qty:"1d6"},{item:"Ovo de Harpia (valioso para alquimistas)",chance:15,qty:"1"},{item:"Moedas (roubadas de vítimas)",chance:50,qty:"1d20"}] },
 
-  { id:"grifo", name:"Grifo das Montanhas", difficulty:3, size:"grande", category:"Voadora",
+  { id:"grifo", name:"Grifo das Montanhas", difficulty:3,
+    attrs: {FOR:4,DEX:3,AGI:3,INT:1,SAB:2}, size:"grande", category:"Voadora",
     location:["Montanha","Penhasco Alto","Região de Atrelon"], hp:90, physDefense:5, magDefense:3, dodge:15,
     actions:3, damage:"1d10+1d8 (bico de águia + garras de leão)",
     abilities:[
@@ -4219,7 +4268,8 @@ const BESTIARY = [
     behavior:"Nobre e orgulhoso. Pode ser domado com tempo e respeito (missão secundária). Em estado selvagem: caça para alimentar filhotes. Não persegue presas que entram em cavernas.",
     loot:[{item:"Pena de Grifo (item lendário — sela de voar)",chance:30,qty:"1"},{item:"Garras de Grifo (arma material)",chance:50,qty:"1d4"},{item:"Ovo de Grifo (montaria potencial)",chance:10,qty:"1"}] },
 
-  { id:"basilisco-asa", name:"Basilisco Voador", difficulty:4, size:"grande", category:"Voadora",
+  { id:"basilisco-asa", name:"Basilisco Voador", difficulty:4,
+    attrs: {FOR:4,DEX:2,AGI:3,INT:1,SAB:2}, size:"grande", category:"Voadora",
     location:["Dungeon Alta","Penhasco","Ruína de Atrelon"], hp:110, physDefense:7, magDefense:4, dodge:13,
     actions:3, damage:"1d10+1d8 (mordida petrificante)",
     abilities:[
@@ -4233,7 +4283,8 @@ const BESTIARY = [
     loot:[{item:"Olho de Basilisco (ingrediente petrificante)",chance:40,qty:"1"},{item:"Escama de Basilisco (armadura material)",chance:50,qty:"1d6"},{item:"Cristal de Carne Calcificada",chance:25,qty:"1"}] },
 
   /* ── CORROMPIDOS PELO DEUS MARCADO ── */
-  { id:"urso-corrompido-marca", name:"Urso Corrompido pela Marca", difficulty:3, size:"grande", category:"Besta Corrompida",
+  { id:"urso-corrompido-marca", name:"Urso Corrompido pela Marca", difficulty:3,
+    attrs: {FOR:4,DEX:1,AGI:1,INT:0,SAB:1}, size:"grande", category:"Besta Corrompida",
     location:["Floresta Corrompida","Território dos Araltos"], hp:100, physDefense:6, magDefense:3, dodge:11,
     actions:3, damage:"1d12+1d8 (garras corrompidas)",
     abilities:[
@@ -4246,7 +4297,8 @@ const BESTIARY = [
     behavior:"Erratico e agressivo. Ataca aliados corrompidos se em Fúria Sombria. Araltos podem controlá-lo parcialmente com símbolo da Marca (teste de INT).",
     loot:[{item:"Pele Corrompida (material amaldiçoado)",chance:60,qty:"1"},{item:"Fragmento da Marca (cristal corrompido)",chance:40,qty:"1"}] },
 
-  { id:"golem-marcado", name:"Golem da Marca", difficulty:4, size:"grande", category:"Construto Corrompido",
+  { id:"golem-marcado", name:"Golem da Marca", difficulty:4,
+    attrs: {FOR:6,DEX:0,AGI:0,INT:0,SAB:1}, size:"grande", category:"Construto Corrompido",
     location:["Fortaleza dos Araltos","Dungeon Corrompida"], hp:150, physDefense:9, magDefense:5, dodge:9,
     actions:3, damage:"2d8+1d8 (punho marcado)",
     abilities:[
@@ -4260,7 +4312,8 @@ const BESTIARY = [
     loot:[{item:"Cristal da Marca (valioso e perigoso)",chance:80,qty:"1"},{item:"Peças de Metal Corrompido",chance:60,qty:"1d4"},{item:"Núcleo de Golem (pode ser reprogramado)",chance:20,qty:"1"}] },
 
   /* ── CORROMPIDOS PELO SANGUE DA SERPENTE (não agressivos) ── */
-  { id:"cobra-sangue-Jurgmund", name:"Cobra do Sangue de Jurgmund", difficulty:2, size:"normal", category:"Besta Sagrada",
+  { id:"cobra-sangue-Jurgmund", name:"Cobra do Sangue de Jurgmund", difficulty:2,
+    attrs: {FOR:1,DEX:1,AGI:2,INT:1,SAB:2}, size:"normal", category:"Besta Sagrada",
     location:["Montanhas de Atrelon","Castelo da Cobra","Florestas Próximas ao Lago"], hp:45, physDefense:3, magDefense:5, dodge:16,
     abilities:[
       { name:"Não Agressiva por Natureza", desc:"Não ataca primeiro. Se atacada: defende-se e tenta se afastar. Apenas ataca 3x seguidas se encurralada." },
@@ -4273,7 +4326,8 @@ const BESTIARY = [
     behavior:"Anda pelo mundo como mensageira de Jurgmund. Observa, guia, eventualmente some. Nunca é morta sem consequência — Serpentarianos ficam hostis se virem um grupo matar uma.",
     loot:[{item:"Escama Dourada de Jurgmund (material divino)",chance:70,qty:"1d3"},{item:"Veneno Sagrado Residual (frasco)",chance:30,qty:"1"}] },
 
-  { id:"lagarto-cristal-cobra", name:"Lagarto de Cristal Cobriforme", difficulty:1, size:"pequeno", category:"Besta Sagrada",
+  { id:"lagarto-cristal-cobra", name:"Lagarto de Cristal Cobriforme", difficulty:1,
+    attrs: {FOR:0,DEX:1,AGI:1,INT:0,SAB:1}, size:"pequeno", category:"Besta Sagrada",
     location:["Cavernas de Atrelon","Beira do Lago","Perto do Castelo"], hp:20, physDefense:4, magDefense:2, dodge:15,
     abilities:[
       { name:"Completamente Inofensivo", desc:"Nunca ataca voluntariamente. Foge de qualquer confronto. Se capturado e tratado bem: torna-se familiar (bônus de +1 em testes de Percepção e +1 Slot de Magia)." },
@@ -4286,7 +4340,8 @@ const BESTIARY = [
     loot:[{item:"Escama de Cristal Cobra (material decorativo e mágico)",chance:90,qty:"1d4"}] },
 
   /* ── CRIATURAS COM MAGIAS ÚNICAS ── */
-  { id:"maga-da-floresta", name:"Maga da Floresta Antiga", difficulty:3, size:"normal", category:"Humanoide",
+  { id:"maga-da-floresta", name:"Maga da Floresta Antiga", difficulty:3,
+    attrs: {FOR:0,DEX:1,AGI:1,INT:4,SAB:5}, size:"normal", category:"Humanoide",
     location:["Floresta Ancestral","Círculo de Pedras","Bosque Sagrado"], hp:65, physDefense:2, magDefense:8, dodge:13,
     actions:2, damage:"1d6 (cajado de madeira viva) + magia",
     abilities:[
@@ -4299,7 +4354,8 @@ const BESTIARY = [
     behavior:"Protetora, não agressora. Ataca quem desmata ou polui a floresta. Pode ser aliada se o grupo mostrar respeito pela natureza. Oferece cura e informações em troca de promessas mantidas.",
     loot:[{item:"Cajado de Madeira Viva (arma mágica)",chance:30,qty:"1"},{item:"Sementes de Cura (3 usos — cura 2d8)",chance:60,qty:"1"},{item:"Mapa de Locais Sagrados",chance:40,qty:"1"}] },
 
-  { id:"draconico-menor", name:"Dracônico Menor", difficulty:3, size:"normal", category:"Dracônico",
+  { id:"draconico-menor", name:"Dracônico Menor", difficulty:3,
+    attrs: {FOR:3,DEX:2,AGI:2,INT:2,SAB:1}, size:"normal", category:"Dracônico",
     location:["Montanhas","Cavernas","Ruínas de Atrelon"], hp:80, physDefense:6, magDefense:5, dodge:14,
     actions:3, damage:"1d10+1d6 (garras e chama)",
     abilities:[
@@ -4312,7 +4368,8 @@ const BESTIARY = [
     behavior:"Quer tesouro e respeito, nesta ordem. Pode ser negociado com ofertas de ouro ou itens valiosos. É inimigo de quem invade sua caverna. Nunca se une a outros dracônicos menores (competição de território).",
     loot:[{item:"Escama de Dracônico (armadura material)",chance:60,qty:"1d6"},{item:"Garra de Dracônico (arma material)",chance:40,qty:"1d2"},{item:"Fragmento de Tesouro do Dracônico",chance:70,qty:"1d20 ouro"}] },
 
-  { id:"espirito-fogo", name:"Espírito do Fogo Primordial", difficulty:4, size:"normal", category:"Elemental",
+  { id:"espirito-fogo", name:"Espírito do Fogo Primordial", difficulty:4,
+    attrs: {FOR:0,DEX:4,AGI:5,INT:2,SAB:2}, size:"normal", category:"Elemental",
     location:["Vulcão Karloth","Deserto Carmesim","Área de Erupção"], hp:95, physDefense:0, magDefense:8, dodge:17,
     actions:3, damage:"2d8 (toque de chama pura)",
     abilities:[
@@ -4331,7 +4388,8 @@ const BESTIARY = [
 
   /* ─── DIFICULDADE 2 ─────────────────────────────────────── */
 
-  { id:"aranha-gigante", name:"Aranha Gigante da Caverna", difficulty:2, size:"grande", category:"Besta",
+  { id:"aranha-gigante", name:"Aranha Gigante da Caverna", difficulty:2,
+    attrs: {FOR:2,DEX:2,AGI:1,INT:0,SAB:1}, size:"grande", category:"Besta",
     location:["Caverna","Dungeon","Floresta Sombria"],
     hp:42, physDefense:3, magDefense:1, dodge:14,
     actions:2, damage:"1d8+1d4 (presas venenosas)",
@@ -4344,7 +4402,8 @@ const BESTIARY = [
     spells:[], behavior:"Tece teias antes do combate para cobrir saídas. Usa Paralisia para prender presas e guarda para comer depois. Foge se perder mais da metade dos pontos de vida em 2 rodadas.",
     loot:[{item:"Seda de Aranha Gigante (material — corda ou roupa)",chance:70,qty:"1d4"},{item:"Veneno de Aranha (3 doses)",chance:40,qty:"1"},{item:"Casulo com item preso (variado)",chance:30,qty:"1"}] },
 
-  { id:"gnoll-guerreiro", name:"Gnoll Guerreiro", difficulty:2, size:"normal", category:"Humanoide",
+  { id:"gnoll-guerreiro", name:"Gnoll Guerreiro", difficulty:2,
+    attrs: {FOR:2,DEX:1,AGI:1,INT:0,SAB:1}, size:"normal", category:"Humanoide",
     location:["Planície","Deserto","Acampamento Nômade"],
     hp:48, physDefense:3, magDefense:1, dodge:12,
     actions:2, damage:"1d10+1d4 (lança serrilhada)",
@@ -4356,7 +4415,8 @@ const BESTIARY = [
     spells:[], behavior:"Caça em grupos de 3-6. O gnoll mais forte lidera. Foca em alvos caídos para garantir a morte. Foge se o líder morrer, mas volta com reforços.",
     loot:[{item:"Lança Serrilhada (arma comum)",chance:60,qty:"1"},{item:"Provisões (comida questionável)",chance:50,qty:"1d3"},{item:"Moedas Diversas",chance:40,qty:"1d10"},{item:"Trofeu de Osso (intimidação)",chance:30,qty:"1"}] },
 
-  { id:"serpente-constritora", name:"Serpente Constritora das Ruínas", difficulty:2, size:"grande", category:"Besta",
+  { id:"serpente-constritora", name:"Serpente Constritora das Ruínas", difficulty:2,
+    attrs: {FOR:3,DEX:0,AGI:1,INT:0,SAB:1}, size:"grande", category:"Besta",
     location:["Ruínas","Floresta","Caverna"],
     hp:50, physDefense:3, magDefense:2, dodge:13,
     actions:2, damage:"1d8+1d6 (mordida e constrição)",
@@ -4368,7 +4428,8 @@ const BESTIARY = [
     spells:[], behavior:"Predadora oportunista. Espera imóvel até que algo passe a 2 hex. Foca em um alvo por vez até matar ou o alvo escapar.",
     loot:[{item:"Pele de Serpente Constritora",chance:60,qty:"1"},{item:"Veneno Constritora (2 doses, causa Lentidão)",chance:25,qty:"1"},{item:"Ovo de Serpente (incubado)",chance:15,qty:"1d3"}] },
 
-  { id:"feiticeiro-goblin", name:"Feiticeiro Goblin", difficulty:2, size:"pequeno", category:"Humanoide",
+  { id:"feiticeiro-goblin", name:"Feiticeiro Goblin", difficulty:2,
+    attrs: {FOR:0,DEX:1,AGI:2,INT:2,SAB:1}, size:"pequeno", category:"Humanoide",
     location:["Caverna","Acampamento Goblin","Dungeon"],
     hp:30, physDefense:1, magDefense:5, dodge:14,
     actions:2, damage:"1d4 (cajadinho) + magias",
@@ -4381,7 +4442,8 @@ const BESTIARY = [
     spells:[], behavior:"Caótico e imprevisível. Fica na retaguarda lançando magias aleatórias. Invoca reforços ao sentir perigo. Foge se ficar sozinho.",
     loot:[{item:"Cajadinho Mágico Goblin (arma peculiar)",chance:30,qty:"1"},{item:"Poção Instável (efeito aleatório 1d6)",chance:50,qty:"1d2"},{item:"Moedas",chance:60,qty:"1d8"},{item:"Componente Mágico Roubado",chance:25,qty:"1"}] },
 
-  { id:"mumia-menor", name:"Múmia Menor", difficulty:2, size:"normal", category:"Morto-Vivo",
+  { id:"mumia-menor", name:"Múmia Menor", difficulty:2,
+    attrs: {FOR:2,DEX:0,AGI:0,INT:1,SAB:2}, size:"normal", category:"Morto-Vivo",
     location:["Tumba","Pirâmide","Deserto Carmesim"],
     hp:45, physDefense:4, magDefense:3, dodge:10,
     actions:2, damage:"1d8+1d4 (golpe ressecante)",
@@ -4393,7 +4455,8 @@ const BESTIARY = [
     spells:[], behavior:"Guardião silencioso de tumbas. Não persegue além dos limites da tumba. Protege o sarcófago central acima de tudo.",
     loot:[{item:"Bandagem Impregnada (material alquímico)",chance:60,qty:"1d4"},{item:"Amuleto de Proteção Antigo",chance:30,qty:"1"},{item:"Ouro Funerário",chance:50,qty:"2d8"}] },
 
-  { id:"doppelganger-menor", name:"Imitador (Doppelganger Menor)", difficulty:2, size:"normal", category:"Aberração",
+  { id:"doppelganger-menor", name:"Imitador (Doppelganger Menor)", difficulty:2,
+    attrs: {FOR:1,DEX:2,AGI:2,INT:3,SAB:1}, size:"normal", category:"Aberração",
     location:["Cidade","Taverna","Dungeon Profunda"],
     hp:38, physDefense:2, magDefense:4, dodge:15,
     actions:2, damage:"1d8 (golpe surpresa)",
@@ -4406,7 +4469,8 @@ const BESTIARY = [
     spells:[], behavior:"Prefere infiltração a combate. Assume identidade de alguém do grupo e ataca quando menos esperam. Foge se a cobertura for exposta. Nunca luta se pode enganar.",
     loot:[{item:"Essência de Imitador (componente)",chance:50,qty:"1"},{item:"Itens da última vítima (variado)",chance:70,qty:"1d3"}] },
 
-  { id:"golem-gelo", name:"Golem de Gelo", difficulty:2, size:"grande", category:"Construto",
+  { id:"golem-gelo", name:"Golem de Gelo", difficulty:2,
+    attrs: {FOR:3,DEX:0,AGI:0,INT:0,SAB:0}, size:"grande", category:"Construto",
     location:["Neve","Montanha","Dungeon Gelada"],
     hp:55, physDefense:5, magDefense:2, dodge:8,
     actions:2, damage:"1d10+1d6 (soco de gelo)",
@@ -4419,7 +4483,8 @@ const BESTIARY = [
     spells:[], behavior:"Guardião sem inteligência. Patrulha área designada. Não persegue além do território. Pode ser confundido com escultura até se mover.",
     loot:[{item:"Núcleo de Gelo Eterno (material mágico)",chance:40,qty:"1"},{item:"Água de Fonte de Gelo Puro",chance:60,qty:"1d4 frascos"}] },
 
-  { id:"naiad-corrompida", name:"Náiade Corrompida", difficulty:2, size:"normal", category:"Espírito",
+  { id:"naiad-corrompida", name:"Náiade Corrompida", difficulty:2,
+    attrs: {FOR:0,DEX:2,AGI:2,INT:1,SAB:3}, size:"normal", category:"Espírito",
     location:["Rio","Grande Lago","Pântano"],
     hp:40, physDefense:1, magDefense:6, dodge:16,
     actions:2, damage:"1d6+1d4 (toque aquoso)",
@@ -4434,7 +4499,8 @@ const BESTIARY = [
 
   /* ─── DIFICULDADE 3 ─────────────────────────────────────── */
 
-  { id:"minotauro-perdido", name:"Minotauro Perdido", difficulty:3, size:"grande", category:"Humanoide",
+  { id:"minotauro-perdido", name:"Minotauro Perdido", difficulty:3,
+    attrs: {FOR:5,DEX:1,AGI:1,INT:1,SAB:0}, size:"grande", category:"Humanoide",
     location:["Labirinto","Dungeon","Ruínas"],
     hp:95, physDefense:6, magDefense:2, dodge:11,
     actions:3, damage:"1d12+1d10 (machado colossal)",
@@ -4447,7 +4513,8 @@ const BESTIARY = [
     spells:[], behavior:"Territorial e traumatizado. Patrulha seu labirinto com fúria silenciosa. Pode ser apaziguado por alguém que mostre respeito genuíno (SAB crítico + falar em Orc antigo).",
     loot:[{item:"Chifre de Minotauro (instrumento/arma)",chance:50,qty:"1"},{item:"Machado de Minotauro (arma grande)",chance:40,qty:"1"},{item:"Fio de Minotauro (sempre leva ao centro)",chance:20,qty:"1"}] },
 
-  { id:"quimera-jovem", name:"Quimera Jovem", difficulty:3, size:"grande", category:"Besta",
+  { id:"quimera-jovem", name:"Quimera Jovem", difficulty:3,
+    attrs: {FOR:4,DEX:2,AGI:2,INT:1,SAB:1}, size:"grande", category:"Besta",
     location:["Montanha","Planície","Dungeon de Elite"],
     hp:88, physDefense:5, magDefense:4, dodge:13,
     actions:3, damage:"1d10+1d6 (cabeças alternadas)",
@@ -4460,7 +4527,8 @@ const BESTIARY = [
     spells:[], behavior:"Caçadora territorial. Planeja atacar de cima com sopro, pousar para corpo a corpo. Não tem estratégia sofisticada — confia no poder bruto das três cabeças.",
     loot:[{item:"Escama de Quimera (material raro)",chance:60,qty:"1d6"},{item:"Garra de Quimera",chance:50,qty:"1d4"},{item:"Coração Triplo de Quimera (reagente lendário)",chance:20,qty:"1"}] },
 
-  { id:"bruxa-das-ervas", name:"Bruxa das Ervas Venenosas", difficulty:3, size:"normal", category:"Humanoide",
+  { id:"bruxa-das-ervas", name:"Bruxa das Ervas Venenosas", difficulty:3,
+    attrs: {FOR:0,DEX:1,AGI:1,INT:4,SAB:5}, size:"normal", category:"Humanoide",
     location:["Pântano","Floresta Profunda","Ruínas"],
     hp:60, physDefense:1, magDefense:8, dodge:14,
     actions:2, damage:"1d6 (cajado venenoso) + veneno",
@@ -4474,7 +4542,8 @@ const BESTIARY = [
     behavior:"Hábil manipuladora. Tenta negociar primeiro (tem informações valiosas). Em combate: abre com Esporos para confundir, usa poções nos mais fortes, guarda Maldição do Espelho para o conjurador.",
     loot:[{item:"Grimório de Venenos (receitas raras)",chance:40,qty:"1"},{item:"Ervas Venenosas Raras (×5)",chance:70,qty:"1"},{item:"Poção Especial da Bruxa (efeito variado)",chance:50,qty:"1d2"},{item:"Olho de Bruxa (componente)",chance:25,qty:"1"}] },
 
-  { id:"cavaleiro-sem-cabeca", name:"Cavaleiro Sem Cabeça", difficulty:3, size:"normal", category:"Morto-Vivo",
+  { id:"cavaleiro-sem-cabeca", name:"Cavaleiro Sem Cabeça", difficulty:3,
+    attrs: {FOR:4,DEX:2,AGI:2,INT:2,SAB:0}, size:"normal", category:"Morto-Vivo",
     location:["Estrada","Floresta","Cemitério Nobre"],
     hp:85, physDefense:7, magDefense:3, dodge:13,
     actions:3, damage:"1d10+1d8 (espada do julgamento)",
@@ -4487,7 +4556,8 @@ const BESTIARY = [
     spells:[], behavior:"Busca quem fez algum juramento não cumprido — ataca priorizando personagens com dívidas de honra. Pode ser apaziguado se um juramento antigo for cumprido na sua presença.",
     loot:[{item:"Armadura do Cavaleiro (set incompleto, mágico)",chance:50,qty:"1"},{item:"Espada do Julgamento (arma lendária)",chance:20,qty:"1"},{item:"Medalhão da Ordem (identifica a nobreza que serviu)",chance:70,qty:"1"}] },
 
-  { id:"escorpiao-gigante", name:"Escorpião Gigante do Deserto", difficulty:3, size:"grande", category:"Besta",
+  { id:"escorpiao-gigante", name:"Escorpião Gigante do Deserto", difficulty:3,
+    attrs: {FOR:4,DEX:2,AGI:1,INT:0,SAB:1}, size:"grande", category:"Besta",
     location:["Deserto Carmesim","Planície Árida","Caverna"],
     hp:80, physDefense:7, magDefense:1, dodge:11,
     actions:3, damage:"1d10+1d6 (pinças) + 1d8 (ferrão)",
@@ -4500,7 +4570,8 @@ const BESTIARY = [
     spells:[], behavior:"Caçador paciente. Espera enterrado até que uma presa se aproxime. Sempre tenta prender com as pinças antes de usar o ferrão. Foge se perder ambas as pinças.",
     loot:[{item:"Veneno de Escorpião Gigante (componente raro, ×3)",chance:60,qty:"1"},{item:"Exoesqueleto (material de armadura)",chance:40,qty:"1"},{item:"Ferrão (arma improvisada)",chance:30,qty:"1"}] },
 
-  { id:"esfinx-menor", name:"Esfinge Menor", difficulty:3, size:"grande", category:"Besta Mística",
+  { id:"esfinx-menor", name:"Esfinge Menor", difficulty:3,
+    attrs: {FOR:3,DEX:2,AGI:2,INT:5,SAB:4}, size:"grande", category:"Besta Mística",
     location:["Deserto","Ruínas Élficas","Templo"],
     hp:90, physDefense:6, magDefense:7, dodge:13,
     actions:3, damage:"1d10+1d8 (garras e bico)",
@@ -4514,7 +4585,8 @@ const BESTIARY = [
     behavior:"Prefere muito mais o enigma ao combate. Não luta se pode falar. Em combate: usa Olho do Destino defensivamente, mantém altitude e usa garras em mergulhos. Nunca persegue quem foge.",
     loot:[{item:"Pena de Esfinge (componente de magia de previsão)",chance:50,qty:"1d3"},{item:"Cristal de Conhecimento (responde 1 pergunta sim/não)",chance:25,qty:"1"},{item:"Ouro do Tesouro Guardado",chance:60,qty:"3d20"}] },
 
-  { id:"elemental-terra", name:"Elemental de Terra", difficulty:3, size:"grande", category:"Elemental",
+  { id:"elemental-terra", name:"Elemental de Terra", difficulty:3,
+    attrs: {FOR:6,DEX:0,AGI:0,INT:0,SAB:1}, size:"grande", category:"Elemental",
     location:["Montanha","Caverna","Planície Pedregosa"],
     hp:100, physDefense:9, magDefense:2, dodge:8,
     actions:2, damage:"2d8+1d6 (soco de pedra)",
@@ -4527,7 +4599,8 @@ const BESTIARY = [
     spells:[], behavior:"Invocado ou guardião natural. Segue o caminho de menor resistência (vai pelo chão). Imperturbável e lento. Podem ser negociados por Clérigos de Thurgomur.",
     loot:[{item:"Coração de Pedra Viva (material divino)",chance:30,qty:"1"},{item:"Pedra Elemental (componente de magia de terra)",chance:70,qty:"1d4"},{item:"Cristal Geodo (decorativo e valioso)",chance:50,qty:"1d3"}] },
 
-  { id:"gargoyle", name:"Gárgula Guardiã", difficulty:3, size:"normal", category:"Construto",
+  { id:"gargoyle", name:"Gárgula Guardiã", difficulty:3,
+    attrs: {FOR:3,DEX:1,AGI:2,INT:1,SAB:2}, size:"normal", category:"Construto",
     location:["Castelo","Ruínas","Templo","Topo de Torre"],
     hp:75, physDefense:8, magDefense:4, dodge:13,
     actions:3, damage:"1d8+1d6 (garras de pedra e chifres)",
@@ -4540,7 +4613,8 @@ const BESTIARY = [
     spells:[], behavior:"Guarda um ponto específico eternamente. Não ataca quem passa sem ameaçar o local. Pode ser confundida com decoração. Responde a palavra de comando de quem a criou.",
     loot:[{item:"Fragmento de Gárgula (material de pedra encantada)",chance:70,qty:"1d4"},{item:"Cristal de Encantamento (nucleo que a anima)",chance:30,qty:"1"}] },
 
-  { id:"mercenario-elite", name:"Mercenário de Elite", difficulty:3, size:"normal", category:"Humanoide",
+  { id:"mercenario-elite", name:"Mercenário de Elite", difficulty:3,
+    attrs: {FOR:3,DEX:3,AGI:3,INT:2,SAB:2}, size:"normal", category:"Humanoide",
     location:["Cidade","Dungeon Contratada","Estrada"],
     hp:72, physDefense:6, magDefense:3, dodge:15,
     actions:3, damage:"1d10+1d6 (espada longa ou arco)",
@@ -4553,7 +4627,8 @@ const BESTIARY = [
     spells:[], behavior:"Profissional calculista. Avalia ameaças e prioriza as maiores. Pode ser corrompido por oferta maior que quem o contratou (INT alta). Em desvantagem clara: oferece trégua e informações.",
     loot:[{item:"Armadura de Mercenário (item raro)",chance:40,qty:"1"},{item:"Espada de Elite (arma rara)",chance:30,qty:"1"},{item:"Contrato de Contratante (pista)",chance:60,qty:"1"},{item:"Moedas de Ouro",chance:80,qty:"2d10"}] },
 
-  { id:"serpente-vento", name:"Serpente do Vento", difficulty:3, size:"normal", category:"Besta Elemental",
+  { id:"serpente-vento", name:"Serpente do Vento", difficulty:3,
+    attrs: {FOR:1,DEX:4,AGI:5,INT:1,SAB:2}, size:"normal", category:"Besta Elemental",
     location:["Montanhas de Atrelon","Penhasco","Planície Aberta"],
     hp:65, physDefense:3, magDefense:6, dodge:19,
     actions:3, damage:"1d8+1d6 (mordida + vento cortante)",
@@ -4566,7 +4641,8 @@ const BESTIARY = [
     spells:[], behavior:"Curiosa e fugaz. Ataca por breve períodos e recua. Nunca luta até a morte — foge quando abaixo de 40% HP. Serpentarianos que entendem Jurgmund podem comunicar-se com ela.",
     loot:[{item:"Escama de Vento (material leve, resistente)",chance:50,qty:"1d4"},{item:"Essência de Vento (componente mágico)",chance:40,qty:"1"}] },
 
-  { id:"golem-carne", name:"Golem de Carne", difficulty:3, size:"grande", category:"Construto",
+  { id:"golem-carne", name:"Golem de Carne", difficulty:3,
+    attrs: {FOR:5,DEX:0,AGI:0,INT:0,SAB:0}, size:"grande", category:"Construto",
     location:["Laboratório do Necromante","Dungeon Profunda"],
     hp:105, physDefense:5, magDefense:2, dodge:9,
     actions:2, damage:"1d12+1d8 (soco brutal)",
@@ -4579,5 +4655,126 @@ const BESTIARY = [
     spells:[], behavior:"Robô de carne sem inteligência. Segue ordens simples do criador. Sem ordens: defende o espaço onde está. Foco em um alvo por vez até destruído.",
     loot:[{item:"Partes de Golem (material grotesco mas útil)",chance:60,qty:"1d4"},{item:"Núcleo de Animação (componente do necromante)",chance:30,qty:"1"},{item:"Diário do Criador (pista)",chance:20,qty:"1"}] }
 
+,
 
+  /* ══════════════════════════════════════════════════════════
+     MONSTROS ADICIONAIS — Missões e Complementos
+     ══════════════════════════════════════════════════════════ */
+
+  /* ── Inimigos de missões faltantes ── */
+
+  { id: "teldris-mago-traficante", name: "Teldris, o Mago Traficante", difficulty: 2, size: "normal", category: "Humanoide",
+    location: ["Cidade", "Mansão", "Laboratório Secreto"],
+    hp: 48, physDefense: 1, magDefense: 6, dodge: 13,
+    attrs: {FOR:0,DEX:1,AGI:1,INT:4,SAB:3},
+    actions: 2, damage: "1d6 (cajado) + magias",
+    abilities: [
+      { name: "Ilusionista", desc: "Cria duplicata ilusória de si mesmo (1 Ação de Magia). 50% de chance de ataques atingirem a ilusão. A ilusão desaparece ao receber qualquer dano." },
+      { name: "Mente Fraturada", desc: "1 Ação de Magia: alvo testa SAB (normal) ou fica Confuso por 2 rodadas (age aleatoriamente)." }
+    ],
+    spells: ["Névoa Cinzenta (nível 2)", "Disfarce Menor (nível 3)"],
+    behavior: "Usa capangas como escudo. Foge se capangas caírem. Negocia em posição de fraqueza — tem informações valiosas sobre redes de tráfico de criaturas. Nunca luta corpo a corpo.",
+    loot: [{item:"Chave do Cofre",chance:100,qty:"1"},{item:"Documentos de Clientes",chance:100,qty:"1"},{item:"Poção de Invisibilidade",chance:60,qty:"1"},{item:"Ouro (2d20)",chance:100,qty:"1"}] },
+
+  { id: "formiga-gigante-guerreira", name: "Formiga Gigante Guerreira", difficulty: 1, size: "normal", category: "Besta",
+    location: ["Formigueiro", "Subterrâneo", "Floresta"],
+    hp: 22, physDefense: 3, magDefense: 0, dodge: 11,
+    attrs: {FOR:2,DEX:1,AGI:1,INT:0,SAB:1},
+    actions: 2, damage: "1d6+1d4 (mandíbulas cortantes)",
+    abilities: [
+      { name: "Exoesqueleto", desc: "Reduz dano cortante em 2 por ataque. Dano contundente é normal." },
+      { name: "Ferômio de Alarme", desc: "Ao ser ferida abaixo de 50% HP: emite ferômio — todas as formigas aliadas em raio 8 hex ficam Alertas (+1d4 em Percepção e +1 Ação neste turno)." },
+      { name: "Carga de Mandíbula", desc: "Se mover 2+ hexes e atacar: dano +1d4 e alvo testa AGI (normal) ou cai Derrubado." }
+    ],
+    spells: [],
+    behavior: "Defensiva por natureza — não ataca quem não ameaçar o ninho ou a rainha. Em grupos de 3+: usam táticas de pinça (2 flanqueiam enquanto 1 ataca frontalmente, +1d4 de dano conjunto).",
+    loot: [{item:"Mandíbula de Formiga Gigante (material resistente)",chance:50,qty:"1d2"},{item:"Mel Alquímico (ingrediente)",chance:30,qty:"1"}] },
+
+  { id: "rainha-das-formigas", name: "Rainha das Formigas Gigantes", difficulty: 2, size: "grande", category: "Besta",
+    location: ["Câmara da Rainha", "Formigueiro Profundo"],
+    hp: 65, physDefense: 5, magDefense: 1, dodge: 8,
+    attrs: {FOR:4,DEX:0,AGI:0,INT:2,SAB:3},
+    actions: 2, damage: "1d10+1d6 (mandíbulas pesadas)",
+    abilities: [
+      { name: "Controle do Ninho", desc: "Enquanto viva: gera 1 Formiga Guerreira por rodada de qualquer cadáver de formiga adjacente (reconstitui as guardas)." },
+      { name: "Ferômio Real", desc: "Todas as formigas em raio 10 hex têm +2 em todos os testes enquanto a rainha estiver viva e sem ameaça direta." },
+      { name: "Presença Imponente", desc: "Qualquer criatura que se aproxime a 1 hex pela primeira vez testa SAB (normal) ou fica Intimidada por 1 rodada (−1d4 em ataques)." }
+    ],
+    spells: [],
+    behavior: "Não ataca quem oferecer comida (qualquer item alimentar). Comunicável: pode ser negociada com Druida ou magia de comunicação animal. Se o ninho for ameaçado, combate sem recuo.",
+    loot: [{item:"Mel Real de Formiga (componente mágico raro)",chance:80,qty:"1d3"},{item:"Cera da Rainha (selante mágico)",chance:40,qty:"1"}] },
+
+  { id: "soldado-da-guarda", name: "Soldado da Guarda", difficulty: 2, size: "normal", category: "Humanoide",
+    location: ["Cidade", "Fortaleza", "Palácio", "Fronteira"],
+    hp: 42, physDefense: 5, magDefense: 1, dodge: 12,
+    attrs: {FOR:2,DEX:1,AGI:1,INT:1,SAB:1},
+    actions: 2, damage: "1d8+1d4 (espada e escudo)",
+    abilities: [
+      { name: "Formação de Escudo", desc: "Se estiver adjacente a outro Soldado: ambos ganham +2 Defesa Física e +1 Ação de Reação compartilhada." },
+      { name: "Brado de Alerta", desc: "1 Ação: grita chamando reforços — em 1d3 rodadas chegam 1d4 soldados adicionais se houver reservas disponíveis." },
+      { name: "Disciplina Militar", desc: "Imune a Medo e Provocação. Segue ordens mesmo em desvantagem. Nunca foge sem ordem direta do superior." }
+    ],
+    spells: [],
+    behavior: "Profissional e disciplinado. Não ataca inocentes mas não cede sem autoridade superior. Pode ser persuadido com credencial legítima (SAB difícil sem credencial, normal com).",
+    loot: [{item:"Equipamento de Guarda (armadura e arma padrão)",chance:70,qty:"1"},{item:"Chave de Seção",chance:30,qty:"1"},{item:"Moedas (1d10 prata)",chance:60,qty:"1"}] },
+
+  { id: "banshee-aliada", name: "Banshee", difficulty: 4, size: "normal", category: "Morto-Vivo",
+    location: ["Navio Assombrado", "Cemitério", "Ruínas Costeiras", "Dungeon com Água"],
+    hp: 55, physDefense: 0, magDefense: 7, dodge: 19,
+    attrs: {FOR:0,DEX:3,AGI:5,INT:5,SAB:6},
+    actions: 3, damage: "1d10 (toque psíquico — ignora Def Física)",
+    abilities: [
+      { name: "Intangível", desc: "Imune a todo dano físico de armas não-mágicas. Armas mágicas e magias causam dano normal. Fogo sagrado causa 1d8 extra." },
+      { name: "Lamento da Banshee", desc: "1 Ação de Magia (1x a cada 2 rodadas): todos em raio 4 hex testam SAB (difícil) ou ficam Aterrorizados por 2 rodadas — só tentam fugir, nenhuma outra ação." },
+      { name: "Toque de Dreno de Vida", desc: "Ataque bem-sucedido: além do dano, alvo perde 1d4 de SAB temporariamente (retorna após descanso longo). Se SAB chegar a 0: alvo cai Inconsciente." },
+      { name: "Corpo de Névoa", desc: "Pode atravessar paredes e portas. Em área com muitos espíritos: regenera 5 HP por rodada." }
+    ],
+    spells: [],
+    behavior: "Se aliada (invocada): foca no inimigo mais ameaçador ao conjurador. Se hostil: usa Lamento para paralisar e depois drena individualmente. Não persegue além de sua área territorial.",
+    loot: [{item:"Essência de Banshee (componente para magias de medo)",chance:60,qty:"1"},{item:"Colar da Vítima (item da vida anterior)",chance:40,qty:"1"}] },
+
+  { id: "tharak-draconico-adulto", name: "Tharak, Dracônico Vermelho Adulto", difficulty: 5, size: "colossal", category: "Dracônico",
+    location: ["Forte do Norte", "Montanha", "Caverna Dracônica"],
+    hp: 280, physDefense: 10, magDefense: 6, dodge: 12,
+    isElite: true,
+    attrs: {FOR:8,DEX:4,AGI:3,INT:6,SAB:5},
+    actions: 4, damage: "2d12+2d8 (garras + mordida) ou Sopro",
+    abilities: [
+      { name: "Sopro de Chamas (Doente)", desc: "Cone 6 hex: 4d10 de fogo. AGI (normal) para metade. Doente: 1 em 4 chances de o sopro falhar (rola 1d4, em 1 falha). Recarrega a cada 3 rodadas." },
+      { name: "Escamas Dracônicas", desc: "Imune a fogo e calor. Resistência a dano cortante (−3 por dado). Vulnerável a frio (+1d8 por dado de frio)." },
+      { name: "Ameaça Colossal", desc: "Ocupa 4 hexes. Qualquer criatura pequena ou normal em hexes adjacentes testa FOR (normal) por rodada ou é Empurrada 2 hexes (o corpo de Tharak pressiona)." },
+      { name: "Doença Dracônica", desc: "Tharak está doente: HP máximo reduzido a 70% do normal, escamas caindo (Def Física 10 em vez de 12 normal). A condição é visível — Percepção (normal) detecta o sofrimento." },
+      { name: "Pai Protetor", desc: "Se algum filhote estiver em perigo: +2d10 de dano em todos os ataques por 3 rodadas. Imune a Medo e qualquer efeito mental durante esse período." }
+    ],
+    spells: [],
+    behavior: "Não é malévolo — está com medo e em dor. Comunica-se em dracônico antigo (SAB difícil para entender sem idioma). Se o grupo mostrar ausência de ameaça (embainhando armas, sentando): Tharak para de atacar e observa. Negociável se alguém oferecer cura ou proteção para os filhotes.",
+    loot: [{item:"Escama de Dracônico Adulto (lendário)",chance:80,qty:"1d3"},{item:"Ouro do Tesouro de Tharak (4d20 moedas de ouro)",chance:100,qty:"1"},{item:"Gema Dracônica (decorativa e valiosa — 50 ouro cada)",chance:60,qty:"1d4"}] },
+
+  { id: "cavaleiro-esqueletico-montado", name: "Cavaleiro Esquelético Montado", difficulty: 3, size: "grande", category: "Morto-Vivo",
+    location: ["Tumba", "Dungeon", "Campo de Batalha Antigo"],
+    hp: 70, physDefense: 6, magDefense: 2, dodge: 12,
+    attrs: {FOR:4,DEX:2,AGI:2,INT:1,SAB:0},
+    actions: 3, damage: "1d10+1d8 (lança de osso + impacto do cavalo)",
+    abilities: [
+      { name: "Carga Mortal", desc: "Se mover 4+ hexes em linha reta e atacar: dano dobrado + alvo fica Derrubado automaticamente (sem teste). O cavalo continua até bater em obstáculo." },
+      { name: "Cavaleiro e Montaria", desc: "O cavaleiro e o cavalo funcionam como uma unidade. Destruir o cavalo (HP 30, Def 3 separado): cavaleiro perde Carga Mortal e Movimento cai de 8 para 3, mas continua lutando." },
+      { name: "Ossos da Guarda", desc: "Imune a veneno, medo e dano psíquico. Não sente dor — luta com 100% de eficiência até 0 HP." }
+    ],
+    spells: [],
+    behavior: "Guardião de locais específicos. Usa Carga Mortal no primeiro turno se possível. Depois mantém pressão corpo a corpo com o cavaleiro. Focado em quem estiver mais perto do ponto que guarda.",
+    loot: [{item:"Lança de Osso Encantado (arma rara)",chance:40,qty:"1"},{item:"Armadura do Cavaleiro (desgastada mas funcional)",chance:50,qty:"1"},{item:"Ferraduras do Cavalo Fantasma (material mágico)",chance:25,qty:"1"}] },
+
+  { id: "espectro-faminto-invocado", name: "Espectro Faminto", difficulty: 2, size: "normal", category: "Morto-Vivo",
+    location: ["Dungeon", "Cemitério", "Navio Assombrado", "Área com Mortes Violentas"],
+    hp: 30, physDefense: 0, magDefense: 5, dodge: 17,
+    attrs: {FOR:0,DEX:3,AGI:4,INT:2,SAB:3},
+    actions: 2, damage: "1d8 (toque psíquico — ignora Def Física completamente)",
+    abilities: [
+      { name: "Intangível", desc: "Imune a dano físico de armas não-mágicas. Armas mágicas e magias causam dano normal." },
+      { name: "Drenar SAB", desc: "Cada toque bem-sucedido drena 1d4 de SAB do alvo temporariamente (retorna após descanso longo). Se SAB chegar a 0: alvo fica Inconsciente por 2 rodadas." },
+      { name: "Forma Sombria", desc: "Em escuridão total: invisível. Em penumbra: Esquiva +3. Luz sagrada cancela ambos os efeitos." }
+    ],
+    spells: [],
+    behavior: "Predador de memórias e força vital. Foca em alvos com SAB mais alta (sente o potencial). Foge quando abaixo de 40% HP para área escura.",
+    loot: [{item:"Essência de Espectro (componente mágico)",chance:50,qty:"1"}] }
 ];
