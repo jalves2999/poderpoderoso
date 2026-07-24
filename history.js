@@ -567,7 +567,9 @@ function renderMissions(filter) {
   const container = document.getElementById("missions-container");
   const missions = typeof MISSIONS !== "undefined" ? MISSIONS : [];
 
-  const filtered = filter === "all" ? missions : missions.filter(m => m.difficulty === filter);
+  const filtered = filter === "all"          ? missions
+    : filter === "continuidade"              ? missions.filter(m => m.requires)
+    : missions.filter(m => m.difficulty === filter);
   const counts = { facil:0, normal:0, dificil:0 };
   missions.forEach(m => counts[m.difficulty] = (counts[m.difficulty]||0)+1);
 
@@ -712,7 +714,7 @@ function renderMissions(filter) {
       <button class="mission-filter-btn facil ${filter==="facil"?"active":""}" onclick="renderMissions('facil')">🟢 Fácil (${counts.facil||0})</button>
       <button class="mission-filter-btn normal ${filter==="normal"?"active":""}" onclick="renderMissions('normal')">🟡 Normal (${counts.normal||0})</button>
       <button class="mission-filter-btn dificil ${filter==="dificil"?"active":""}" onclick="renderMissions('dificil')">🔴 Difícil (${counts.dificil||0})</button>
-      <button class="mission-filter-btn ${filter==='continuidade'?'active':''}" onclick="renderMissions('continuidade')" style="border-color:rgba(156,122,60,0.4);color:var(--gold)">🔗 Continuidade (${missions.filter(m=>m.requires).length})</button>
+      <button class="mission-filter-btn ${filter==="continuidade"?"active":""}" onclick="renderMissions('continuidade')" style="border-color:rgba(156,122,60,0.4);color:var(--gold)">🔗 Continuidade (${missions.filter(m=>m.requires).length})</button>
       <button class="mission-roll-btn" onclick="rollRandomMission()">🎲 Missão Aleatória</button>
     </div>
     <div class="missions-grid">
@@ -722,7 +724,9 @@ function renderMissions(filter) {
 
 function rollRandomMission() {
   const missions = typeof MISSIONS !== "undefined" ? MISSIONS : [];
-  const filtered = currentMissionFilter === "all" ? missions : missions.filter(m => m.difficulty === currentMissionFilter);
+  const filtered = currentMissionFilter === "all"         ? missions
+    : currentMissionFilter === "continuidade"             ? missions.filter(m => m.requires)
+    : missions.filter(m => m.difficulty === currentMissionFilter);
   if (!filtered.length) return;
   const picked = filtered[Math.floor(Math.random() * filtered.length)];
   // Expandir o card sorteado e scroll até ele
