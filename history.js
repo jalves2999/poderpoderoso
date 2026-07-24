@@ -574,12 +574,15 @@ function renderMissions(filter) {
   const DIFF_LABELS = { facil:"Fácil", normal:"Normal", dificil:"Difícil" };
   const REWARD_ICONS = {
     moedas:"🪙", bronze:"🟫", prata:"⚪", ouro:"🟡", platina:"⬜",
-    item:"⚔", magia:"✨", pericia:"📚", benção:"🌟", maldição:"💀", bonus:"⭐", info:"📖"
+    item:"⚔", item_set:"✦", arma:"⚔", armadura:"🛡", acessorio:"💍",
+    magia:"✨", pericia:"📚", benção:"🌟", maldição:"💀", bonus:"⭐", info:"📖"
   };
   const REWARD_COLORS = {
     moedas:"rgba(156,122,60,0.15)", bronze:"rgba(140,80,30,0.15)",
     prata:"rgba(160,160,180,0.15)", ouro:"rgba(200,160,30,0.15)", platina:"rgba(200,230,255,0.18)",
-    item:"rgba(74,144,217,0.12)", magia:"rgba(106,58,122,0.12)", pericia:"rgba(40,120,80,0.12)",
+    item:"rgba(74,144,217,0.12)", item_set:"rgba(200,160,30,0.2)",
+    arma:"rgba(180,60,60,0.12)", armadura:"rgba(60,100,160,0.12)", acessorio:"rgba(120,60,160,0.12)",
+    magia:"rgba(106,58,122,0.12)", pericia:"rgba(40,120,80,0.12)",
     benção:"rgba(40,160,80,0.12)", maldição:"rgba(160,40,40,0.12)",
     bonus:"rgba(200,160,30,0.12)", info:"rgba(80,120,180,0.12)"
   };
@@ -639,6 +642,13 @@ function renderMissions(filter) {
         <span>${r.desc}</span>
       </div>`).join("") || "";
 
+    const requiresHTML = m.requires ? `
+      <div style="margin-bottom:8px;padding:7px 10px;border-radius:6px;background:rgba(156,122,60,0.1);border-left:3px solid var(--gold);font-size:12px;color:var(--ink-soft)">
+        🔗 <strong>Missão de Continuidade</strong> — Requer conclusão de: <em>${
+          missions.find(x=>x.id===m.requires)?.title || m.requires
+        }</em>
+      </div>` : "";
+
     const npcsHTML = m.npcs?.map(n=>`
       <div class="mission-npc-box" style="margin-bottom:5px">
         <div class="mission-npc-name ${n.role.includes("Benéfic")?"mission-npc-role-ben":n.role.includes("Traiçoeiro")?"mission-npc-role-tra":"mission-npc-role-neu"}">
@@ -654,13 +664,14 @@ function renderMissions(filter) {
         <button class="mission-card-trigger">
           <span class="mission-icon">${m.icon}</span>
           <div class="mission-head">
-            <div class="mission-title">${m.title}</div>
+            <div class="mission-title">${m.title}${m.requires ? ' <span style="font-size:10px;color:var(--gold);font-family:var(--font-heading)">🔗 CONT.</span>' : ""}</div>
             <div class="mission-sub">${m.summary}</div>
           </div>
           <span class="mission-diff-badge diff-${m.difficulty}">${diffLabel}</span>
           <span class="mission-arrow">▾</span>
         </button>
         <div class="mission-body">
+          ${requiresHTML}
           <div class="mission-tags">${tagsHTML}</div>
           <p class="mission-hook">"${m.hook}"</p>
 
@@ -701,6 +712,7 @@ function renderMissions(filter) {
       <button class="mission-filter-btn facil ${filter==="facil"?"active":""}" onclick="renderMissions('facil')">🟢 Fácil (${counts.facil||0})</button>
       <button class="mission-filter-btn normal ${filter==="normal"?"active":""}" onclick="renderMissions('normal')">🟡 Normal (${counts.normal||0})</button>
       <button class="mission-filter-btn dificil ${filter==="dificil"?"active":""}" onclick="renderMissions('dificil')">🔴 Difícil (${counts.dificil||0})</button>
+      <button class="mission-filter-btn ${filter==='continuidade'?'active':''}" onclick="renderMissions('continuidade')" style="border-color:rgba(156,122,60,0.4);color:var(--gold)">🔗 Continuidade (${missions.filter(m=>m.requires).length})</button>
       <button class="mission-roll-btn" onclick="rollRandomMission()">🎲 Missão Aleatória</button>
     </div>
     <div class="missions-grid">

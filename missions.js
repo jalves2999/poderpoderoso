@@ -1784,5 +1784,591 @@ const MISSIONS = [
     master_notes: "A pressão de tempo (3 dias, 36h de trilha, 2h de diplomacia) deve ser real e comunicada claramente. Grupos que passam tempo demais em qualquer passo perdem a janela. A platina como bônus de zero sangue é o incentivo para diplomacia sobre violência.",
     duration: "3 sessões"
   }
+,
 
+  /* ══════════════════════════════════════════════════════════════
+     MISSÕES DE ITENS — Armas, Armaduras, Acessórios do Database
+     ══════════════════════════════════════════════════════════════ */
+
+  {
+    id: "m-lobo-alfa-garra",
+    title: "O Último Alfa",
+    difficulty: "normal",
+    icon: "🐺",
+    tags: ["floresta", "caça", "besta", "item"],
+    hook: "A Guilda dos Caçadores perdeu três rastreadores na Floresta Negra. O culpado: um Lobo Alfa de matilha que cresceu absurdamente — maior que um cavalo. Sua garra foi vista com brilho estranho. 'Tragam a garra e terão o Fang do Alfa. É justo.'",
+    summary: "Caçada ao Lobo Alfa de uma matilha lendária que defende território com táticas coordenadas. A garra brilhante é a recompensa.",
+    start: "Floresta Negra. Território da matilha: pegadas do tamanho de pratos espalhadas pelo barro. Uivos coordenados ao entardecer.",
+    areas: [
+      {
+        name: "Território da Matilha",
+        description: "A matilha usa táticas — lobos menores deslocam o grupo para posição desvantajosa antes do Alfa aparecer.",
+        hex: {
+          layout: "12x8",
+          terrain: ["árvores densas (cobertura pesada, 40% do mapa)", "ravina central (3 hexes de desnível — queda 1d6)", "clareiras abertas (sem cobertura)", "trilha de armadilha natural (marcas no chão)"],
+          hint: "A matilha usa a ravina como divisor — tenta separar o grupo. Manter formação compacta anula a tática de flanqueio."
+        },
+        enemies: [
+          { name: "Lobo Comum", qty: 5, diff: 1, note: "Flanqueadores. Não atacam frontalmente — rodeiam." },
+          { name: "Lobo das Trevas", qty: 2, diff: 2, note: "Subchefes da matilha. Atacam quem estiver isolado." }
+        ]
+      },
+      {
+        name: "Clareira do Alfa",
+        description: "O Alfa emerge quando a matilha perdeu mais da metade. Enorme, olhos dourados — e uma garra da pata dianteira direita realmente brilha.",
+        enemies: [
+          { name: "Lobo Alfa da Matilha", qty: 1, diff: 3, note: "Elite. Usa Comando da Matilha e Derrubada Poderosa. A garra direita é a recompensa." }
+        ],
+        npc: {
+          name: "Fantasma do Caçador Morto",
+          role: "Benéfico",
+          personality: "Aparece brevemente ao derrotar o Alfa. 'Obrigado. Avise minha filha que eu a amo.' Desaparece.",
+          resolution: "SAB (normal) para perceber o espírito. Cumprir o pedido: +recompensa emocional e potencial quest futura."
+        }
+      }
+    ],
+    npcs: [
+      { name: "Mestre da Guilda dos Caçadores", role: "Benéfico", personality: "Pragmático, honra acordos. A Guilda é recurso valioso de longo prazo." }
+    ],
+    enemies_summary: [
+      { name: "Lobo Comum", qty: 5, diff: 1 },
+      { name: "Lobo das Trevas", qty: 2, diff: 2 },
+      { name: "Lobo Alfa da Matilha", qty: 1, diff: 3 }
+    ],
+    rewards: [
+      { type: "arma",  desc: "Fang do Alfa [Lendário] — Espada de 1M que causa +1d8 extra contra Bestas; portador lidera qualquer matilha de lobos instintivamente" },
+      { type: "prata", desc: "25 moedas de prata (Guilda dos Caçadores, pagamento de contrato)" },
+      { type: "item",  desc: "Garras da Alcateia [Único] — acessório que permite invocar 2 lobos aliados 1x/combate" },
+      { type: "bonus", desc: "Filiação honorária na Guilda dos Caçadores: informações de monstros e acesso a equipamentos de rastreamento" }
+    ],
+    master_notes: "A tática da matilha de separar o grupo é o desafio real, não o Alfa. O espírito do caçador cria gancho para missão futura (a filha que precisa ser avisada pode ser NPC recorrente).",
+    duration: "2 sessões"
+  },
+
+  {
+    id: "m-tumba-guerreiro-espada",
+    title: "A Tumba do Guerreiro Sem Nome",
+    difficulty: "normal",
+    icon: "⚔",
+    tags: ["dungeon", "armadilha", "puzzle", "honra", "item"],
+    hook: "Numa taverna, um velho erudito mostra um mapa. 'A Grande Espada do Crepúsculo está aqui. Enterrada com o guerreiro que jurou que nenhum indigno a usaria. A tumba a protege.' Ele oferece o mapa por 20 moedas de prata e um favor futuro.",
+    summary: "Tumba de 3 câmaras que testa a dignidade do portador antes de entregar a espada. As armadilhas respondem à intenção, não à habilidade.",
+    start: "Tumba nas montanhas. Porta de pedra com inscrição: 'Quem entra com cobiça, sai com nada. Quem entra com propósito, recebe o que merece.'",
+    areas: [
+      {
+        name: "Câmara do Julgamento (1)",
+        description: "Quatro pedestais com armas comuns. Uma voz ressoa: 'Deixem aqui algo de valor. Não como pagamento. Como prova de que sabem o que significa abrir mão.'",
+        puzzle: {
+          type: "Sacrifício Voluntário",
+          description: "Cada membro do grupo deve colocar algo de valor pessoal (não necessariamente monetário) num pedestal. A câmara avalia intenção — INT (SAB difícil): a câmara aceita objetos de valor emocional mais facilmente que moedas.",
+          solution: "Quem colocar algo de valor genuíno: o pedestal brilha dourado. Quem colocar moeda sem significado: pedestal fica cinza (passa, mas recebe −1d4 nas próximas rolagens dentro da tumba). Quem tentar enganar: 2d8 de raio sagrado.",
+          hint: "O erudito que vendeu o mapa colocou uma aliança de casamento aqui há 20 anos — está no pedestal mais próximo da entrada."
+        }
+      },
+      {
+        name: "Câmara da Prova (2)",
+        description: "Um construto de pedra com a forma do guerreiro original bloqueia o caminho.",
+        enemies: [{ name: "Golem de Pedra Antiga", qty: 1, diff: 2, note: "Não pode ser derrotado por força — cada vez que cai a 0 HP, levanta com 50% HP. Só para se alguém declarar seu propósito honesto para a espada." }],
+        puzzle: {
+          type: "Declaração de Propósito",
+          description: "O construto para permanentemente se um personagem declarar em voz alta por que merece a espada. A declaração deve ser verdadeira (SAB difícil do Mestre para avaliar autenticidade) e específica — não 'para ser forte', mas um propósito real.",
+          solution: "Com propósito genuíno: o construto se inclina e abre passagem. Com propósito vago: continua lutando. Com mentira: adiciona 2d6 de dano ao próximo ataque."
+        }
+      },
+      {
+        name: "Câmara da Espada (3)",
+        description: "A Grande Espada do Crepúsculo na pedra. O guerreiro original aparece como espírito — sorrindo.",
+        npc: {
+          name: "Espírito do Guerreiro Sem Nome",
+          role: "Benéfico",
+          personality: "Sem palavras. Apenas gestos. Aponta para o personagem que declarou propósito mais genuíno, depois para a espada, depois para fora. Significa: 'Você. A espada. O mundo.'",
+          resolution: "Quem declarou o propósito mais genuíno: o guerreiro empurra a espada suavemente em direção a esse personagem. A espada só pode ser retirada por essa pessoa (outras tentativas: nada acontece)."
+        }
+      }
+    ],
+    npcs: [
+      { name: "Erudito Velho (o que vendeu o mapa)", role: "Benéfico secreto", personality: "Foi o guerreiro sem nome em outra vida — não lembra, mas a aliança prova. Se descoberto: doa algo mais valioso como gratidão." }
+    ],
+    enemies_summary: [{ name: "Golem de Pedra Antiga", qty: 1, diff: 2 }],
+    rewards: [
+      { type: "arma",    desc: "Grande Espada do Crepúsculo [Lendário] — 2M, 1d12+1d10, ao anoitecer ganha +1d8 extra; portador não pode mentir conscientemente enquanto a empunha" },
+      { type: "prata",   desc: "12 moedas de prata (objetos nos pedestais — a câmara devolveu tudo ao final)" },
+      { type: "benção",  desc: "Bênção de Mão Firme (Thurgomur reconhece quem honra guerreiros ancestrais)" }
+    ],
+    master_notes: "O coração da missão é a Declaração de Propósito. Dê tempo para o jogador pensar e falar — isso cria um momento de roleplay memorável que define o personagem. A espada sendo específica para um personagem é poderoso.",
+    duration: "2 sessões"
+  },
+
+  {
+    id: "m-armeiro-anao-encomenda",
+    title: "A Encomenda do Armeiro Anão",
+    difficulty: "facil",
+    icon: "🔩",
+    tags: ["social", "coleta", "anão", "armadura", "item"],
+    hook: "O Armeiro Brarg Dunforge quer criar uma Armadura de Ferro Negro de Durrak mas precisa de 3 ingredientes raros que só existem em lugares específicos. 'Tragam os ingredientes. A armadura é de vocês. Ou podem ficar com 40 moedas de ouro. Mas a armadura vale mais.'",
+    summary: "Missão de coleta em 3 locais diferentes. Cada ingrediente tem um desafio específico pequeno. O armeiro cria a armadura como recompensa.",
+    start: "Forja de Dunforge na cidade. Cheiro de metal e cerveja. O armeiro explica os 3 ingredientes com diagramas detalhados nas paredes.",
+    areas: [
+      {
+        name: "Mina do Ferro Negro (Ingrediente 1)",
+        description: "Veia de Ferro Negro numa mina abandonada. Problema: os anões que a abandonaram deixaram Golems de Pedra Antiga como guardiões.",
+        enemies: [{ name: "Golem de Pedra Antiga", qty: 2, diff: 2, note: "Guardiões automáticos. Se alguém mostrar símbolo de Thurgomur (SAB normal): recuam por 1 hora — tempo suficiente para minerar." }],
+        puzzle: {
+          type: "Mineração de Precisão",
+          description: "O Ferro Negro precisa ser extraído sem vibração excessiva (ou racha). DEX (normal) com ferramentas certas, ou FOR (difícil) na força bruta. Kit de Ferramentas de Armadilha pode ser adaptado: DEX (normal).",
+          solution: "Sucesso: 2kg de Ferro Negro puro. Falha parcial: 1kg (armadura menos resistente, Dunforge desconta 5 moedas de ouro)."
+        }
+      },
+      {
+        name: "Lago das Brumas (Ingrediente 2)",
+        description: "Óleo de Peixe Profundo — criaturas do lago. Pesca ou coleta de peixe morto na margem (mais simples mas qualidade menor).",
+        npc: {
+          name: "Pescador Local",
+          role: "Benéfico",
+          personality: "Velho, sabe tudo sobre o lago. Por 3 moedas de prata, pesca o peixe certo em 30 minutos. Por 1 moeda, aponta onde os peixes estão."
+        }
+      },
+      {
+        name: "Santuário de Thurgomur (Ingrediente 3)",
+        description: "Sal Bênto de Thurgomur — precisa ser coletado do altar. Mas um Clérigo local acha que o grupo quer roubar.",
+        puzzle: {
+          type: "Negociação Religiosa",
+          description: "O Clérigo Uldun defende o santuário. SAB (normal) para explicar o propósito (armadura para Dunforge é conhecido na região). INT (normal) para mencionar que Thurgomur aprecia bom artesanato — dar o sal É honrar Thurgomur.",
+          solution: "Convencer Uldun: ele dá o sal de graça E oferece bênção. Falhar: sal disponível por 5 moedas de prata no mercado (qualidade inferior, Dunforge desconta 5 moedas)."
+        }
+      }
+    ],
+    npcs: [
+      { name: "Brarg Dunforge", role: "Benéfico", personality: "Exigente mas honesto. Testa a qualidade dos ingredientes e comenta em detalhes — gênio do ofício." }
+    ],
+    enemies_summary: [{ name: "Golem de Pedra Antiga", qty: 2, diff: 2 }],
+    rewards: [
+      { type: "armadura", desc: "Armadura de Ferro Negro de Durrak [Lendário — Set Muralha de Durrak] — Def.Física +9, Def.Mágica +3; primeira peça do set Muralha de Durrak" },
+      { type: "ouro",     desc: "40 moedas de ouro (alternativa em vez da armadura — Dunforge oferece)" },
+      { type: "bonus",    desc: "Dunforge como armeiro aliado: desconto de 30% em manutenção e melhorias de armaduras" }
+    ],
+    master_notes: "Missão de coleta com desafios menores. A armadura sendo parte 1 do set Muralha de Durrak cria gancho natural para as missões de continuidade do set. Dunforge pode ser mentor para personagens com interesse em artesanato.",
+    duration: "1-2 sessões"
+  },
+
+  {
+    id: "m-bardo-lendario-alaude",
+    title: "O Alaúde que Tocava Sozinho",
+    difficulty: "normal",
+    icon: "🎵",
+    tags: ["bardo", "mistério", "social", "item", "morto-vivo"],
+    hook: "Numa loja de penhores da cidade: um alaúde que toca sozinho às 3h da manhã. O penhorador está desesperado. 'Ninguém consegue dormir. Comprem ele ou me ajudem a descobrir por que toca.' Preço: ridiculamente baixo ou investigação.",
+    summary: "O Alaúde de Ossos de Dragão pertencia a um Bardo famoso morto há 20 anos. O espírito do Bardo está preso no instrumento e quer ser libertado — mas a libertação requer a última música que ele nunca terminou.",
+    start: "Loja de penhores. 2h da manhã. O alaúde toca três notas repetidas numa prateleira do fundo.",
+    areas: [
+      {
+        name: "A Loja de Penhores",
+        description: "O alaúde está na prateleira. Ao ser tocado por alguém com talento musical: o espírito do Bardo emerge brevemente.",
+        npc: {
+          name: "Espírito de Vann, o Bardo",
+          role: "Benéfico",
+          personality: "Animado, teatral. 'Finalmente alguém que TOCA! 20 anos nessa prateleira.' Explica: ele morreu antes de terminar sua maior composição. O espírito está preso até que a música seja completada.",
+          resolution: "Aceitar completar a música: 3 noites de trabalho com Vann. Recusar: ele fica tocando sozinho."
+        }
+      },
+      {
+        name: "Pesquisa da Composição Perdida",
+        description: "Vann fornece as primeiras 2/3 da partitura. O terço final precisa ser encontrado ou composto.",
+        puzzle: {
+          type: "A Composição Incompleta",
+          description: "Vann tem metade da partitura. A outra metade estava com seu aprendiz — que se tornou um Necromante Errante por desespero após a morte de Vann.",
+          solution: "Encontrar o Necromante (SAB normal para rastrear): ele está numa ruína a 1 dia da cidade. O aprendiz pode entregar a partitura (Persuasão difícil — ele a considera sagrada) ou o grupo pode copiar (DEX normal enquanto ele dorme)."
+        }
+      },
+      {
+        name: "A Performance Final",
+        description: "Com a partitura completa, Bardo do grupo (ou quem tiver mais SAB) executa a composição.",
+        enemies: [{ name: "Espíritos Hostis (ciúme dos outros instrumentos)", qty: 3, diff: 1, note: "Outros instrumentos na loja ganham vida brevemente — tentam interromper. Derrubados por música continuada (SAB normal por rodada)." }],
+        puzzle: {
+          type: "A Performance",
+          description: "SAB (normal): completa a música sem erros. SAB (difícil): com improviso que melhora a composição. Crítico natural: Vann chora (metaforicamente) e abençoa o executante.",
+          solution: "Ao completar: o alaúde brilha, Vann se materializa por um momento completo, agradece e desaparece. O alaúde agora é apenas um instrumento — mas extraordinário."
+        }
+      }
+    ],
+    npcs: [
+      { name: "Vann, o Bardo (espírito)", role: "Benéfico", personality: "Vivo no passado. Ama teatro e drama. Vai ensinar tudo sobre música se o grupo der atenção." },
+      { name: "Aprendiz Necromante", role: "Ambíguo", personality: "Perdeu seu mestre e não sabe como processar o luto além da necromancia. A partitura é tudo que tem dele." }
+    ],
+    enemies_summary: [
+      { name: "Necromante Errante (se conflito)", qty: 1, diff: 3 },
+      { name: "Espíritos Hostis (instrumentos)", qty: 3, diff: 1 }
+    ],
+    rewards: [
+      { type: "arma",    desc: "Alaúde de Ossos de Dragão [Raro — Set Voz e Melodia] — arma mágica; buffs do Bardo duram +1 rodada; 1ª peça do set Voz e Melodia" },
+      { type: "prata",   desc: "15 moedas de prata (penhorador, aliviado)" },
+      { type: "magia",   desc: "Vann ensina Balada do Caos ou Conto do Herói (magias de subclasse Bardo)" },
+      { type: "bonus",   desc: "Aprendiz grato (se partitura devolvida com respeito): aliado eventual, não mais necromante" }
+    ],
+    master_notes: "Missão para Bardos ou conjuradores com SAB alta. O aprendiz necromante em luto é o personagem mais interessante — tratá-lo com compaixão pode ser mais recompensador do que a partitura.",
+    duration: "2 sessões"
+  },
+
+  /* ══════════════════════════════════════════════════════════════
+     MISSÕES DE CONTINUIDADE — Requerem outra missão concluída
+     Cada cadeia distribui peças de um set completo
+     ══════════════════════════════════════════════════════════════ */
+
+  /* ────── CADEIA: Muralha de Durrak (3 missões) ────────────── */
+
+  {
+    id: "m-durrak-2-escudo",
+    title: "A Forja de Durrak — O Escudo Perdido",
+    difficulty: "dificil",
+    requires: "m-armeiro-anao-encomenda",
+    icon: "🛡",
+    tags: ["continuidade", "dungeon", "anão", "set", "item"],
+    hook: "Brarg Dunforge recebeu uma carta da Forja Ancestral de Durrak: 'O Escudo da Vanguarda foi roubado por um desertor anão há 50 anos. Está numa masmorra habitada por Gigantes das Pedras. Recuperem-no e completem o set.' Brarg oferece a segunda peça do set.",
+    summary: "Dungeon de 3 andares habitada por Gigantes das Pedras e um Golem da Marca corrompido. O escudo está no centro, sendo usado pelo Gigante-líder.",
+    start: "Dungeon nas Montanhas de Durrak. Entrada: portão de pedra com brasão anão arranhado. Temperatura elevada — os Gigantes usam o calor das pedras.",
+    requires_desc: "Requer: A Encomenda do Armeiro Anão (primeira peça do set Muralha de Durrak)",
+    areas: [
+      {
+        name: "Andar 1 — Salão dos Guardiões",
+        hex: {
+          layout: "14x10",
+          terrain: ["pilares de pedra (cobertura pesada)", "plataforma elevada (nordeste — vantagem)", "fosso de lava (hex 7 — 3d8 se cair)", "escada para Andar 2 (sul, bloqueada por pedra)"],
+          hint: "O Gigante das Pedras patrulha em ciclo de 4 rodadas. O Elemental de Terra bloqueia a escada passivamente — Move 1 hex ao sentir vibração forte."
+        },
+        enemies: [
+          { name: "Gigante das Pedras", qty: 1, diff: 4 },
+          { name: "Elemental de Terra", qty: 1, diff: 3, note: "Guardião da escada. Pode ser anulado com Magia de Terra ou oferenda de pedra preciosa (Brarg deu uma ao grupo)." }
+        ]
+      },
+      {
+        name: "Andar 2 — Câmara Corrompida",
+        description: "Um Golem da Marca instalado pelos Araltos para 'proteger' o escudo de ser recuperado — eles também o querem.",
+        enemies: [{ name: "Golem da Marca", qty: 1, diff: 4, note: "Núcleo vulnerável no peito. Se destruído: revela fragmento de informação sobre planos dos Araltos na região." }],
+        trap: { name: "Pulso de Corrupção em Área", trigger: "Permanecer mais de 3 rodadas na câmara", effect: "O golem emite pulso expandido — todos na câmara testam SAB (difícil) ou ganham Maldição Olho Mau temporária (1 sessão).", detect: "Clérigo percebe automaticamente. Outros: SAB (normal) ao entrar sente o campo." }
+      },
+      {
+        name: "Andar 3 — Câmara do Líder",
+        description: "Gigante-Líder Krog sentado num trono de pedra, o Escudo da Vanguarda como decoração na parede atrás dele.",
+        npc: {
+          name: "Gigante-Líder Krog",
+          role: "Neutro (com honra)",
+          personality: "Enorme, mas fala língua comum quebrada. 'Escudo meu. Achei. É meu.' Pode ser negociado: ofertas de comida (muito — 10 porções de rações), pedras preciosas (2+ rubis) ou derrota honrosa em combate singular.",
+          resolution: "Negociar: Krog dá o escudo orgulhosamente. Combate singular (1 vs 1): Krog Dif.4 completo. Combate em grupo: Krog chama mais um Gigante das Pedras."
+        },
+        enemies: [{ name: "Gigante das Pedras (Krog — se combate)", qty: 1, diff: 4 }]
+      }
+    ],
+    npcs: [
+      { name: "Krog, Gigante-Líder", role: "Neutro", personality: "Simples mas com código de honra. Respeita força e honestidade. Detesta traição." }
+    ],
+    enemies_summary: [
+      { name: "Gigante das Pedras", qty: 2, diff: 4 },
+      { name: "Elemental de Terra", qty: 1, diff: 3 },
+      { name: "Golem da Marca", qty: 1, diff: 4 }
+    ],
+    rewards: [
+      { type: "item_set", desc: "Escudo da Vanguarda de Durrak [Lendário — Set Muralha de Durrak] — Def.Física +7, Def.Mágica +4; 2ª peça do set (bônus ativa com 3 peças)" },
+      { type: "ouro",     desc: "8 moedas de ouro (Brarg, pagamento de recuperação)" },
+      { type: "info",     desc: "Fragmento do Golem: revelação de plano dos Araltos na região (plot hook de campanha)" }
+    ],
+    master_notes: "Krog é o NPC mais interessante. Negocie com comida — gigantes são simples mas não burros. O Golem da Marca aqui conecta com a trama maior dos Araltos.",
+    duration: "2-3 sessões"
+  },
+
+  {
+    id: "m-durrak-3-bracelete",
+    title: "A Forja de Durrak — O Bracelete do Guardião",
+    difficulty: "dificil",
+    requires: "m-durrak-2-escudo",
+    icon: "⌛",
+    tags: ["continuidade", "anão", "puzzle", "set", "item", "divindade"],
+    hook: "Com duas peças do set Muralha de Durrak, Brarg Dunforge recebe visão de Thurgomur: 'A terceira peça está na Tumba Ancestral de Durrak. A tumba só abre para quem já provou dignidade duas vezes.' A tumba está selada há 200 anos.",
+    summary: "A tumba de Durrak é um santuário de Thurgomur. Testa as peças coletadas anteriormente — as armaduras já obtidas reagem à presença sagrada. O bracelete está guardado pelo próprio espírito de Durrak.",
+    requires_desc: "Requer: A Forja de Durrak — O Escudo Perdido (segunda peça do set)",
+    start: "Tumba de Durrak. A porta está fechada — mas ao se aproximar com as 2 peças do set, ela aquece levemente. Brarg, à distância, murmura uma oração a Thurgomur.",
+    areas: [
+      {
+        name: "Câmara de Reconhecimento",
+        description: "A tumba 'vê' as peças do set no grupo. As armaduras brilham brevemente. Uma voz grave ressoa em anão antigo.",
+        puzzle: {
+          type: "A Tradução de Thurgomur",
+          description: "A voz faz três perguntas em anão antigo (Brarg traduziu por escrito antes). As respostas devem ser ações, não palavras: (1) 'O que é mais pesado — ouro ou dever?' → Colocar algo de dever no pedestal (uma arma, um escudo). (2) 'O que é mais forte — pedra ou vontade?' → Quebrar uma pedra do ambiente (FOR normal). (3) 'O que vale mais — a sua vida ou a de um estranho?' → O grupo discute e demonstra sua resposta de alguma forma.",
+          solution: "Thurgomur não julga as respostas — julga se o grupo foi honesto. SAB (difícil) percebe isso. A câmara abre independente das respostas, mas respostas honestas = bênção adicional."
+        }
+      },
+      {
+        name: "Câmara dos Antepassados",
+        description: "12 estátuas de guerreiros anões. Uma delas começa a se mover — Golem Guardião.",
+        enemies: [{ name: "Golem de Pedra Antiga", qty: 1, diff: 2, note: "Só para se alguém mostrar o set completo (2 peças equipadas). Para imediatamente e abre passagem." }]
+      },
+      {
+        name: "Câmara de Durrak",
+        description: "Durrak — espírito do fundador da forja — sentado num trono de ferro negro. O bracelete na mão.",
+        npc: {
+          name: "Espírito de Durrak",
+          role: "Benéfico",
+          personality: "Silencioso e imponente. Examina o grupo por 1 rodada completa. Então estende a mão com o bracelete. Se o grupo equipar a armadura e o escudo antes de entrar: Durrak sorri — primeiro sorriso em 200 anos de vigilância.",
+          resolution: "Nenhum combate. Só cerimônia. Durrak gesticula: 'Use bem.' O espírito some com uma última faísca de forja."
+        }
+      }
+    ],
+    npcs: [
+      { name: "Espírito de Durrak", role: "Benéfico", personality: "O criador do set. Quer que seja usado por alguém digno. Simples assim." }
+    ],
+    enemies_summary: [{ name: "Golem de Pedra Antiga", qty: 1, diff: 2 }],
+    rewards: [
+      { type: "item_set", desc: "Bracelete de Ferro do Guardião [Raro — Set Muralha de Durrak] — +2 FOR, +1 Ação; 3ª peça — BÔNUS DE SET ATIVO: Muralha Viva (bloqueio total de 1 ataque por combate + aliados adj. +2 Def.Física)" },
+      { type: "benção",   desc: "Bênção Escolhido da Divindade — Thurgomur marca o portador do set completo como seu campeão" },
+      { type: "bonus",    desc: "Set completo Muralha de Durrak — todos os 3 itens com bônus de set ativo" }
+    ],
+    master_notes: "Missão de recompensa emocional. Não há combate real — é o encerramento digno de uma jornada de 3 missões. O sorriso de Durrak deve ser descrito com cuidado: é o momento mais importante da cadeia.",
+    duration: "1-2 sessões"
+  },
+
+  /* ────── CADEIA: Fúria Encadeada (3 missões) ──────────────── */
+
+  {
+    id: "m-furia-1-machado",
+    title: "As Correntes do Berserker — O Machado",
+    difficulty: "normal",
+    requires: null,
+    icon: "🔥",
+    tags: ["berserker", "arena", "gladiador", "set", "item"],
+    hook: "Um gladiador lendário aposentado aparece no acampamento do grupo. 'Vocês têm o espírito. Há um Machado Correntes enterrado na Arena Subterrânea de Harkon — o último gladiador que o usou foi invencível. Ele foi sepultado com ele. Quem o merecer, vai conseguir.' O gladiador aparece no dia seguinte morto — envenenado. Alguém não quer que o grupo encontre o machado.",
+    summary: "Arena abandonada com o tumulo do último portador do Machado Correntes. 3 desafios que testam a fúria, a resistência e o autocontrole — virtudes do verdadeiro Berserker.",
+    start: "Arena subterrânea de Harkon. Abandonada há 30 anos. Cheiro de areia velha e metal. Seis saídas, cinco seladas. Uma aberta.",
+    areas: [
+      {
+        name: "Primeiro Desafio — A Fúria",
+        description: "Arena central. Um Orc Berserker encadeado é liberado. Ele não para até cair ou o grupo parar de lutar.",
+        enemies: [{ name: "Orc Berserker", qty: 2, diff: 2 }],
+        hex: {
+          layout: "12x8",
+          terrain: ["areia (terreno normal)", "grades nas bordas (parede)", "pedestal ao norte (Machado Correntes está aqui — não pode ser tocado ainda)", "entradas de 4 lados (inimigos entram por elas)"],
+          hint: "A voz da arena diz: 'Não a arma. A raiva. Mostre que sabe usá-la sem se perder.' Grupo que entra em Fúria de Batalha: +1d6 de dano. Grupo que perde controle (Mestre avalia): desafio falha."
+        }
+      },
+      {
+        name: "Segundo Desafio — A Resistência",
+        description: "Câmara de veneno. As paredes soltam gás que drena FOR (−1 por rodada). Devem passar para o outro lado em 5 rodadas.",
+        trap: { name: "Gás da Fraqueza", trigger: "Permanecer na câmara", effect: "−1 FOR por rodada (retorna após descanso). Se FOR chegar a 0: Incapacitado. 5 rodadas para cruzar a câmara de 10 hexes.", detect: "Cheiro metálico ao entrar. Percepção (normal) identifica as grades de ventilação." }
+      },
+      {
+        name: "Terceiro Desafio — O Autocontrole",
+        description: "O sarcófago do gladiador. O machado visível dentro de vidro. Mas ao lado: uma criança (ilusão perfeita) chorando, pedindo ajuda.",
+        puzzle: {
+          type: "O Teste da Compaixão vs. Objetivo",
+          description: "SAB (difícil): reconhece como ilusão. Sem o teste: parece real. Se o grupo ignora a criança e pega o machado: a ilusão desaparece e o machado é liberado. Se tenta ajudar a criança primeiro: ela some ao toque — e o machado é liberado com um bônus adicional.",
+          solution: "A ilusão testa se o grupo mantém humanidade mesmo na conquista. Resposta compassiva = bônus real. Ignorar = ainda funciona. O sarcófago sempre abre."
+        }
+      }
+    ],
+    npcs: [],
+    enemies_summary: [
+      { name: "Orc Berserker", qty: 2, diff: 2 }
+    ],
+    rewards: [
+      { type: "arma",    desc: "Machado Correntes [Lendário — Set Fúria Encadeada] — 2M, 1d12+1d10; ataca 2 alvos adjacentes por Ação; 1ª peça do set" },
+      { type: "ouro",    desc: "4 moedas de ouro (tesouro no sarcófago do gladiador)" },
+      { type: "info",    desc: "Diário do gladiador: menciona quem o envenenou (plot hook — alguém rico e poderoso da cidade não queria que o machado fosse recuperado)" }
+    ],
+    master_notes: "O assassinato do gladiador logo no início cria urgência e mistério. O diário aponta para um vilão urbano — bom para campanhas com foco em intriga de cidade.",
+    duration: "2 sessões"
+  },
+
+  {
+    id: "m-furia-2-armadura",
+    title: "As Correntes do Berserker — A Armadura",
+    difficulty: "dificil",
+    requires: "m-furia-1-machado",
+    icon: "🔴",
+    tags: ["continuidade", "berserker", "corrompido", "set", "item"],
+    hook: "O diário do gladiador revela: a Armadura da Cólera foi tomada por um Orc Berserker corrompido que serves os Araltos. Ele usa a armadura mas nunca ativou o bônus de set — 'não tem o machado'. O portador vive numa fortaleza de orcs nas montanhas.",
+    requires_desc: "Requer: As Correntes do Berserker — O Machado (1ª peça do set)",
+    start: "Fortaleza de orcs nas Montanhas Vermelhas. Patrulhas visíveis. 30 orcs ao todo — enfrentar todos é suicídio.",
+    areas: [
+      {
+        name: "Infiltração ou Confronto",
+        description: "Três abordagens possíveis: (1) Furtividade pelo lado leste (Furtividade difícil ×3), (2) Desafio de combate singular (código de honra orc), (3) Negociar com facção de orcs que quer derrubar o líder corrompido.",
+        npc: {
+          name: "Orc Granda (quer derrubar o líder)",
+          role: "Benéfico (oportunístico)",
+          personality: "Deseja o poder do líder mas sozinho não consegue. 'Matem Krag. Eu garanto que ninguém interfere. A armadura é de vocês.' Honra o trato."
+        }
+      },
+      {
+        name: "Câmara do Líder Corrompido",
+        hex: {
+          layout: "12x10",
+          terrain: ["trono de ossos (líder começa aqui)", "pilares (cobertura)", "prisioneiros em gaiolas (nordeste — distração moral)", "saída traseira (Krag tenta usar se abaixo de 30% HP)"],
+          hint: "Krag usa Armadura da Cólera — já tem cargas de Ira passivas acumuladas. Primeiro ataque recebido: +5d4 de dano (cargas liberadas). Aviso: descreva a armadura vibrando ao se aproximar."
+        },
+        enemies: [
+          { name: "Orc Berserker (Krag — líder corrompido)", qty: 1, diff: 3, note: "Com Armadura da Cólera: +5d4 no primeiro contra-ataque de cargas acumuladas. Aralto aparece para resgatar Krag se ele cair." }
+        ],
+        trap: { name: "Cargas de Ira Acumuladas", trigger: "Primeiro acerto físico no Krag", effect: "Armadura libera 5 cargas acumuladas — Krag contra-ataca com +5d4 de dano no próximo ataque (ação de reação). Aviso visível: armadura vibra visivelmente.", detect: "Percepção (normal) ou SAB (normal) ao ver a armadura." }
+      }
+    ],
+    npcs: [
+      { name: "Orc Granda", role: "Benéfico (oportunístico)", personality: "Político pragmático. Honra acordos quando servem seus interesses." },
+      { name: "Aralto da Marca (resgaste)", role: "Traiçoeiro", personality: "Aparece para resgatar Krag se cair abaixo de 50% HP. Foge com Krag se o grupo for muito forte — retorno numa missão futura." }
+    ],
+    enemies_summary: [
+      { name: "Orc Berserker (Krag)", qty: 1, diff: 3 },
+      { name: "Aralto da Marca — Forma Menor", qty: 1, diff: 3 }
+    ],
+    rewards: [
+      { type: "item_set", desc: "Armadura da Cólera [Lendário — Set Fúria Encadeada] — Def.Física +6; acumula cargas de Ira ao receber dano (+1d4/carga, max 5); 2ª peça" },
+      { type: "ouro",     desc: "6 moedas de ouro (tesouro da fortaleza)" },
+      { type: "bonus",    desc: "Granda no poder: orcs da região não mais hostis; podem ser aliados menores em batalhas futuras" }
+    ],
+    master_notes: "O Aralto fugindo com Krag cria continuidade narrativa. A opção de aliança com Granda é politicamente interessante — 30 orcs como aliados improváveis tem valor.",
+    duration: "2-3 sessões"
+  },
+
+  {
+    id: "m-furia-3-correntes",
+    title: "As Correntes do Berserker — As Correntes de Sangue",
+    difficulty: "dificil",
+    requires: "m-furia-2-armadura",
+    icon: "⛓",
+    tags: ["continuidade", "berserker", "Deus Marcado", "set", "item", "final"],
+    hook: "Com o machado e a armadura, o grupo sente um chamado estranho — sonhos de correntes douradas. O Krag capturado pelo Aralto tem informação: 'As Correntes de Sangue estão no Templo da Ira no desfiladeiro. Mas os Araltos sabem que vocês vêm.' Uma armadilha. E também a única forma de completar o set.",
+    requires_desc: "Requer: As Correntes do Berserker — A Armadura (2ª peça do set)",
+    start: "Templo da Ira no Desfiladeiro. Antigo templo de guerreiros de Ras'kuru, tomado pelos Araltos como base. As Correntes estão no altar central. 20 Araltos esperam.",
+    areas: [
+      {
+        name: "Entrada do Templo",
+        description: "Os Araltos sabem que o grupo vem. Emboscada preparada — 8 cultistas e 2 Araltos Menores nos telhados.",
+        hex: {
+          layout: "14x10",
+          terrain: ["colunas do templo (cobertura pesada)", "altares menores (cobertura média)", "telhado (altitude 3 — 4 Cultistas atirando)", "entrada norte (onde grupo entra)", "altar central (sul — onde estão as Correntes)"],
+          hint: "Com Armadura da Cólera equipada: portador sente os Araltos ao redor — +1d4 em Percepção e Iniciativa neste encontro."
+        },
+        enemies: [
+          { name: "Guerreiro Cultista da Marca", qty: 6, diff: 2 },
+          { name: "Aralto da Marca — Forma Menor", qty: 2, diff: 3 }
+        ]
+      },
+      {
+        name: "Altar das Correntes",
+        description: "As Correntes de Sangue estão no altar — mas um Aralto Sussurrante as usa como arma, segurando-as.",
+        enemies: [
+          { name: "Aralto Sussurrante", qty: 1, diff: 4, note: "Elite. Usa as Correntes como arma (alcance 3 hex, 2d8+1d6). Se derrotado: as Correntes caem livres." }
+        ],
+        puzzle: {
+          type: "As Correntes Escolhem",
+          description: "Ao derrotar o Aralto Sussurrante, as Correntes caem no chão — mas se apertam sozinhas ao redor do pulso de qualquer um que tente pegá-las sem ter o set completo. Com o Machado e a Armadura equipados: as Correntes 'caminham' até o portador e se prendem voluntariamente.",
+          solution: "Equipar o Machado e a Armadura antes de pegar as Correntes. Elas se auto-equipam. O set ativa."
+        }
+      }
+    ],
+    npcs: [],
+    enemies_summary: [
+      { name: "Guerreiro Cultista da Marca", qty: 6, diff: 2 },
+      { name: "Aralto da Marca — Forma Menor", qty: 2, diff: 3 },
+      { name: "Aralto Sussurrante", qty: 1, diff: 4 }
+    ],
+    rewards: [
+      { type: "item_set", desc: "Correntes de Sangue [Lendário — Set Fúria Encadeada] — +1 Reação; imune a Desarmado na Fúria; Sede de Sangue cura +1d6; 3ª peça — SET COMPLETO" },
+      { type: "item_set", desc: "SET COMPLETO Fúria Encadeada ATIVO: Corrente Sem Fim — Fúria dura +2 rodadas; ao sair pode entrar em Limiar da Morte; machado ataca 2 alvos em toda a Fúria" },
+      { type: "platina",  desc: "1 moeda de platina (tesouro do templo — ofrenda dos Araltos aos seus mestres)" },
+      { type: "benção",   desc: "Bênção Avatar da Guerra (Ras'kuru reconhece o portador do set completo em seu templo)" }
+    ],
+    master_notes: "As Correntes se auto-equipando com o set completo é o momento cinematográfico do encerramento da cadeia. Descreva com cuidado: as correntes deslizando pelo chão até o portador como se tivessem vida. O set completo muda fundamentalmente o estilo de combate do Berserker.",
+    duration: "2-3 sessões"
+  },
+
+  /* ────── CADEIA: Voz e Melodia — continuação ──────────────── */
+
+  {
+    id: "m-voz-2-brincos",
+    title: "O Naufrágio da Sereia",
+    difficulty: "normal",
+    requires: "m-bardo-lendario-alaude",
+    icon: "🌊",
+    tags: ["continuidade", "bardo", "naval", "sereia", "set", "item"],
+    hook: "O espírito de Vann deu uma última dica antes de partir: 'Os Brincos de Pena de Sereia estão num naufrágio ao norte. Uma sereia real morreu ali há 100 anos — voluntariamente. Suas penas ficaram. Só alguém que as mereça conseguirá pegá-las.'",
+    requires_desc: "Requer: O Alaúde que Tocava Sozinho (1ª peça do set Voz e Melodia)",
+    start: "Costa norte. Naufrágio visível nas pedras — à flor d'água em maré baixa. Gaivotas não pousam ali.",
+    areas: [
+      {
+        name: "O Naufrágio",
+        description: "Navio partido em dois. No interior, sob 2 metros de água, a câmara da sereia. Os Brincos estão num baú de corais.",
+        puzzle: {
+          type: "Canção da Sereia",
+          description: "Ao entrar na câmara submersa (AGI normal para nadar), o grupo ouve uma melodia incompleta — a última canção da sereia. SAB (difícil) ou Bardo automaticamente: reconhece que a melodia pede para ser completada.",
+          solution: "Completar a melodia (SAB normal, Bardo automático, com o Alaúde equipado: automático sem falha): o baú abre. Forçar o baú (DEX difícil): funciona mas o item está fora do alinhamento — −1d4 em efeitos de buff por 1 semana.",
+          hint: "A melodia é a mesma composição de Vann — ele e a sereia se conheciam. Percepção (SAB normal) identifica isso."
+        },
+        trap: { name: "Câmara Pressurizada", trigger: "Permanecer submerso mais de 5 rodadas", effect: "Sufocação: 1d4 de dano por rodada. Magia Respirar Água ou bolha mágica resolve.", detect: "INT (normal): a entrada é mais funda do que parece — calcule o ar disponível." }
+      },
+      {
+        name: "Espírito da Sereia",
+        description: "Ao completar a melodia, o espírito da sereia aparece brevemente.",
+        npc: {
+          name: "Espírito da Sereia Lyra",
+          role: "Benéfico",
+          personality: "Grata. 'Vann enviou vocês. Eu sabia que ele encontraria alguém digno.' Entrega os brincos com as próprias mãos translúcidas.",
+          resolution: "Nenhum combate. Lyra sorri e desaparece. 'Cantem bem. É a única coisa que importa.'"
+        }
+      }
+    ],
+    npcs: [{ name: "Espírito de Lyra", role: "Benéfica", personality: "Paz absoluta. Morreu por escolha. Não há tristeza nela." }],
+    enemies_summary: [],
+    rewards: [
+      { type: "item_set", desc: "Brincos de Pena de Sereia [Raro — Set Voz e Melodia] — +1 Ação de Magia; +1d6 em testes sociais; Palavras de Mel sobe 1 grau de dificuldade; 2ª peça" },
+      { type: "magia",    desc: "Lyra ensina Eco Ilusório (magia de subclasse Bardo) como gratidão de Vann" },
+      { type: "bonus",    desc: "O naufrágio: baú principal contém 20 moedas de prata e 3 moedas de ouro (tesouro do navio original)" }
+    ],
+    master_notes: "Missão quase sem combate — pura atmosfera. A conexão Vann-Lyra recompensa jogadores que prestaram atenção na missão anterior. A melodia completada deve soar familiar ao grupo.",
+    duration: "1 sessão"
+  },
+
+  {
+    id: "m-voz-3-capa",
+    title: "A Última Performance",
+    difficulty: "dificil",
+    requires: "m-voz-2-brincos",
+    icon: "🎪",
+    tags: ["continuidade", "bardo", "set", "item", "boss", "climax"],
+    hook: "Com o Alaúde e os Brincos, o Bardo do grupo começa a ter sonhos: uma capa dourada num palco que existe entre o mundo real e o mundo dos espíritos. Vann aparece no sonho: 'A Capa de Palco está no Teatro dos Mortos — onde espíritos de artistas vão para uma última apresentação. Entre. Apresente-se. Ganhe a capa.'",
+    requires_desc: "Requer: O Naufrágio da Sereia (2ª peça do set Voz e Melodia)",
+    start: "Teatro abandonado na cidade. À meia-noite, com as 2 peças do set equipadas: a porta do teatro abre sozinha. Dentro — o Teatro dos Mortos.",
+    areas: [
+      {
+        name: "O Teatro dos Mortos",
+        description: "300 espíritos de artistas na plateia. O palco está vazio. Um mestre de cerimônias espiritual anuncia: 'Uma performance. Toda a arte de vocês. Sem falsidade.'",
+        puzzle: {
+          type: "A Grande Performance",
+          description: "O Bardo (ou quem tiver mais SAB no grupo) deve fazer uma performance usando tudo — o Alaúde, os Brincos, e qualquer talento do grupo. SAB (difícil) para a performance base. Com o Alaúde equipado: SAB (normal). Com todo o grupo contribuindo (cada membro usa 1 Ação por rodada da performance por 5 rodadas): automático.",
+          solution: "Performance bem-sucedida: a plateia de espíritos aplaude, espíritos de heróis antigos aparecem brevemente. Performance falha: espíritos hostis se agitam — 3d6 Espíritos Hostis. Performance extraordinária (crítico): Vann e Lyra aparecem juntos na plateia, aplaudindo."
+        },
+        enemies: [{ name: "Espíritos Hostis (se performance falha)", qty: 6, diff: 1, note: "Emergem da plateia em caso de falha crítica na performance" }]
+      },
+      {
+        name: "Bastidores — O Guardião da Capa",
+        description: "O Mestre de Cerimônias Espiritual aparece nos bastidores com a Capa de Palco.",
+        npc: {
+          name: "Mestre de Cerimônias dos Mortos",
+          role: "Neutro (árbitro)",
+          personality: "Dramático, justo. 'Vocês se apresentaram. A plateia julgou. Eu só entrego o resultado.' Entrega a capa sem burocracia.",
+          resolution: "Nenhum combate se a performance foi boa. Se o grupo tentou enganar ou foi falso: ele testa SAB (difícil) para perceber e retém a capa por mais uma semana."
+        }
+      }
+    ],
+    npcs: [
+      { name: "Mestre de Cerimônias dos Mortos", role: "Neutro", personality: "O mais justo dos árbitros — ele apenas mede e entrega." }
+    ],
+    enemies_summary: [
+      { name: "Espíritos Hostis (se performance falha)", qty: 6, diff: 1 }
+    ],
+    rewards: [
+      { type: "item_set", desc: "Capa de Palco [Raro — Set Voz e Melodia] — +1 Movimento; imune a Derrubado por terreno; 3ª peça — SET COMPLETO" },
+      { type: "item_set", desc: "SET COMPLETO Voz e Melodia ATIVO: A Música que Move o Mundo — Performance de Batalha como Ação Livre; ao encerrar, aliados no raio curam 2d8 HP" },
+      { type: "benção",   desc: "Bênção Voz Abençoada permanente — potencializada (Vann e Lyra garantem que a voz nunca perca o dom)" }
+    ],
+    master_notes: "A performance deve ser descrita em cena — pergunte ao jogador o que seu personagem faz durante cada uma das 5 rodadas. Os espíritos reagindo, Vann e Lyra aparecendo juntos — este é o fechamento emocional de uma cadeia de 3 missões. Faça valer.",
+    duration: "2 sessões"
+  }
 ];
