@@ -469,7 +469,22 @@ function calcEquippedAttrBonus(character, attrKey) {
 /* Peso total do inventário inteiro (equipado ou não — tudo é inventário agora) */
 function calcTotalWeight(character) {
   let total = 0;
-  character.inventory.forEach(item => total += (item.weight || 0) * (item.qty || 1));
+  const mountIds = new Set((character.mount?.storedItems || []).map(id => id));
+  character.inventory.forEach(item => {
+    if (!mountIds.has(item.instanceId)) {
+      total += (item.weight || 0) * (item.qty || 1);
+    }
+  });
+  return Math.max(0, round1(total));
+}
+
+function calcMountWeight(character) {
+  if (!character.mount) return 0;
+  const mountIds = new Set((character.mount.storedItems || []));
+  let total = 0;
+  character.inventory.forEach(item => {
+    if (mountIds.has(item.instanceId)) total += (item.weight || 0) * (item.qty || 1);
+  });
   return Math.max(0, round1(total));
 }
 
@@ -2038,8 +2053,8 @@ function renderSheet() {
       ${renderCurrencySection(character)}
     `,
     inventario: `
-      ${renderMountSection(character)}
       ${renderInventorySection(character)}
+      ${renderMountSection(character)}
       ${renderNotesSection(character)}
       <div class="sheet-danger-zone">
         <button class="btn-danger" id="btn-delete-from-sheet">Remover este personagem</button>
@@ -2918,20 +2933,108 @@ function renderModifierFields(item) {
 /* --- Montaria --- */
 
 function renderMountSection(character) {
-  const mount = character.mount || null;
+  const mount     = character.mount || null;
+  const mountData = mount ? (typeof MOUNTS !== "undefined" ? MOUNTS : []).find(m => m.id === mount.id) : null;
 
-  const TIER_LABELS = { fraco: "Fraco", normal: "Normal", forte: "Forte" };
-  const TIER_COLORS = { fraco: "rgba(140,100,40,0.2)", normal: "rgba(60,100,160,0.2)", forte: "rgba(120,40,40,0.2)" };
+  const TIER_LABELS   = { fraco:"Fraco", normal:"Normal", forte:"Forte" };
   const TRAVEL_LABELS = {
-    terrestre: "🏔 Terrestre",
-    voador: "🌤 Voador",
-    terrestre_voador: "🏔/🌤 Terrestre + Voo",
-    terrestre_aquatico: "🏔/🌊 Terrestre + Aquático"
+    terrestre:"🏔 Terrestre", voador:"🌤 Voador",
+    terrestre_voador:"🏔/🌤 Terrestre + Voo", terrestre_aquatico:"🏔/🌊 Terrestre + Aquático"
   };
-  const ENC_LABEL = (mod) =>
-    mod > 0  ? `<span style="color:#e07050">+${mod} encontros</span>` :
-    mod < 0  ? `<span style="color:#50a050">${mod} encontros</span>` :
-               `<span style="color:var(--ink-soft)">neutro</span>`;
+  const encLabel = mod =>
+    mod > 0 ? `<span style="color:#e07050">+${mod} encontros ▲</span>` :
+    mod < 0 ? `<span style="color:#50a050">${mod} encontros ▼</span>` :
+              `<span style="color:var(--ink-soft)">neutro</span>`;
+
+  const mountCardHTML = mountData ? (() => {
+    const storedItems = (mount.storedItems || []);
+    const storedList  = character.inventory.filter(i => storedItems.includes(i.instanceId));
+    const mountWeight = calcMountWeight(character);
+    const mountCarry  = mountData.carryKg;
+    const mountPct    = clamp((mountWeight / mountCarry) * 100, 0, 100);
+    const mountOver   = mountWeight > mountCarry;
+
+    return `
+      <div class="mount-card">
+        <div class="mount-card-head">
+          <span class="mount-icon">${mountData.icon}</span>
+          <div class="mount-head-info">
+            <div class="mount-name">${mountData.name}</div>
+            <div class="mount-species">${mountData.species} · ${TIER_LABELS[mountData.tier]||mountData.tier}</div>
+          </div>
+          <button class="mount-remove-btn" id="btn-remove-mount">✕ Dispensar</button>
+        </div>
+
+        <div class="mount-chip-row">
+          <span class="mount-chip"><span class="mchip-k">⚡ Veloc.</span>${mountData.speed} hex</span>
+          <span class="mount-chip"><span class="mchip-k">📦 Carga</span>${mountData.carryKg} kg</span>
+          <span class="mount-chip"><span class="mchip-k">🗺 Viagem</span>${TRAVEL_LABELS[mountData.travel]||mountData.travel}</span>
+          <span class="mount-chip"><span class="mchip-k">🎲 Encontros</span>${encLabel(mountData.encounterMod)}</span>
+          ${mountData.magic ? `<span class="mount-chip mount-chip-magic">✨ Mágica — Invocável</span>` : ""}
+        </div>
+
+        <p class="mount-desc">${mountData.description}</p>
+
+        <div class="mount-traits">
+          ${mountData.traits.map(t=>`<div class="mount-trait">✦ ${t}</div>`).join("")}
+          ${mountData.weakness ? `<div class="mount-trait mount-weakness">⚠ ${mountData.weakness}</div>` : ""}
+        </div>
+
+        <div class="mount-cargo-section">
+          <div class="mount-cargo-title">📦 Carga Guardada (${storedList.length} iten${storedList.length!==1?"s":""})</div>
+          ${storedList.length ? `
+          <div class="mount-cargo-list">
+            ${storedList.map(item=>`
+              <div class="mount-cargo-item">
+                <span class="mci-name">${escapeHTML(item.name)}</span>
+                <span class="mci-weight">${round1((item.weight||0)*(item.qty||1))} kg</span>
+                <button class="inv-mount-btn mounted" data-mount-item="${item.instanceId}" title="Trazer de volta">↩ Trazer</button>
+              </div>`).join("")}
+          </div>` : `<p class="empty-inline-note" style="font-size:11.5px;margin-top:4px">Nenhum item guardado. Use o botão 🐴 nos itens do inventário.</p>`}
+
+          <div class="carry-meter" style="margin-top:8px">
+            <div class="carry-meter-label">
+              <span>${mountData.icon} Peso na montaria</span>
+              <span>${mountWeight} / ${mountCarry} kg</span>
+            </div>
+            <div class="carry-meter-track">
+              <div class="carry-meter-fill ${mountOver?"over":""}" style="width:${mountPct}%;${mountOver?"":"background:rgba(60,130,80,0.7)"}"></div>
+            </div>
+            ${mountOver ? `<div class="carry-meter-note">Montaria sobrecarregada! Velocidade reduzida à metade.</div>` : ""}
+          </div>
+        </div>
+      </div>`;
+  })() : "";
+
+  const availableMounts = typeof MOUNTS !== "undefined" ? MOUNTS : [];
+
+  return `
+  <div class="sheet-section">
+    <h3 class="sheet-section-title">🐴 Montaria</h3>
+    <p class="section-hint">Itens guardados na montaria são removidos do peso da mochila. Montarias mágicas são invocáveis. O modificador de encontros afeta viagens longas.</p>
+
+    ${mount ? mountCardHTML : `<p class="empty-inline-note">Nenhuma montaria registrada. Adicione uma abaixo.</p>`}
+
+    ${!mount ? `
+    <div class="mount-add-form">
+      <div class="mount-select-row">
+        <select id="mount-select" class="field-input" style="flex:1">
+          <option value="">Escolher espécie de montaria...</option>
+          ${[
+            { label:"── Tier Fraco · 25 kg de carga ──", opts: availableMounts.filter(m=>m.tier==="fraco") },
+            { label:"── Tier Normal · 50 kg de carga ──", opts: availableMounts.filter(m=>m.tier==="normal") },
+            { label:"── Tier Forte · 75 kg de carga ──",  opts: availableMounts.filter(m=>m.tier==="forte") },
+          ].map(g => g.opts.length ? `
+            <optgroup label="${g.label}">
+              ${g.opts.map(m=>`<option value="${m.id}">${m.icon} ${m.name} — Vel.${m.speed} | ${m.carryKg}kg | ${TRAVEL_LABELS[m.travel]||m.travel}${m.magic?" ✨":""}</option>`).join("")}
+            </optgroup>` : "").join("")}
+        </select>
+        <button class="btn-primary" id="btn-add-mount">🐴 Registrar</button>
+      </div>
+      <div id="mount-preview"></div>
+    </div>` : ""}
+  </div>`;
+}
 
   const mountCardHTML = mount ? (() => {
     const m = MOUNTS.find(x => x.id === mount.id);
@@ -2988,41 +3091,6 @@ function renderMountSection(character) {
         </div>
       </div>`;
   })() : "";
-
-  const availableMounts = typeof MOUNTS !== "undefined" ? MOUNTS : [];
-
-  return `
-  <div class="sheet-section">
-    <h3 class="sheet-section-title">🐴 Montaria</h3>
-    <p class="section-hint">
-      A montaria carrega carga separada do personagem e define a velocidade e tipo de viagem. 
-      Montarias mágicas podem ser invocadas à distância.
-      Modificador de encontro afeta a chance de topar com inimigos durante viagens.
-    </p>
-
-    ${mount ? mountCardHTML : `<p class="empty-inline-note">Nenhuma montaria registrada.</p>`}
-
-    ${!mount ? `
-    <div class="mount-add-form">
-      <div class="mount-add-title">Adicionar Montaria</div>
-      <div class="mount-select-row">
-        <select id="mount-select" class="field-input" style="flex:1">
-          <option value="">Escolher espécie...</option>
-          ${[
-            { label: "── Tier Fraco (25kg carga) ──", options: availableMounts.filter(m=>m.tier==="fraco") },
-            { label: "── Tier Normal (50kg carga) ──", options: availableMounts.filter(m=>m.tier==="normal") },
-            { label: "── Tier Forte (75kg carga) ──", options: availableMounts.filter(m=>m.tier==="forte") },
-          ].map(group => group.options.length ? `
-            <optgroup label="${group.label}">
-              ${group.options.map(m => `<option value="${m.id}">${m.icon} ${m.name} — Vel.${m.speed} | ${m.carryKg}kg | ${TRAVEL_LABELS[m.travel]||m.travel}${m.magic?" ✨":""}</option>`).join("")}
-            </optgroup>` : "").join("")}
-        </select>
-        <button class="btn-primary" id="btn-add-mount">🐴 Registrar Montaria</button>
-      </div>
-      <div id="mount-preview" style="margin-top:8px"></div>
-    </div>` : ""}
-  </div>`;
-}
 
 /* --- Inventário (itens livres + peso total) --- */
 
@@ -3095,45 +3163,78 @@ function renderCurrencySection(character) {
 }
 
 function renderInventorySection(character) {
-  const carry = calcCarryCapacity(character);
+  const carry  = calcCarryCapacity(character);
   const weight = calcTotalWeight(character);
-  const pct = clamp((weight / carry) * 100, 0, 100);
-  const over = weight > carry;
+  const pct    = clamp((weight / carry) * 100, 0, 100);
+  const over   = weight > carry;
 
-  const slotLabels = { primary: "Arma Primária", secondary: "Arma Secundária", shield: "Escudo", armor: "Armadura", accessory: "Acessório" };
+  // Itens na montaria
+  const storedIds  = new Set((character.mount?.storedItems || []));
+  const mountData  = character.mount ? (typeof MOUNTS !== "undefined" ? MOUNTS : []).find(m => m.id === character.mount.id) : null;
+  const mountCarry = mountData?.carryKg || 0;
+  const mountWeight = calcMountWeight(character);
+  const mountPct   = mountCarry > 0 ? clamp((mountWeight / mountCarry) * 100, 0, 100) : 0;
+  const mountOver  = mountWeight > mountCarry;
+
+  const slotLabels = { primary:"Arma Primária", secondary:"Arma Secundária", shield:"Escudo", armor:"Armadura", accessory:"Acessório" };
+
+  const itemRows = character.inventory.map(item => {
+    const onMount  = storedIds.has(item.instanceId);
+    const equipped = !!item.equippedSlot;
+    const canMount = !equipped && !!character.mount;
+    return `
+      <div class="inv-row ${onMount ? "inv-row-mounted" : ""}">
+        <div class="inv-row-name">
+          <span class="inv-item-name">${escapeHTML(item.name)}</span>
+          ${equipped
+            ? `<span class="equipped-tag" style="font-size:10px">⚔ ${slotLabels[item.equippedSlot]||item.equippedSlot}</span>`
+            : onMount
+              ? `<span class="mount-stored-tag">🐴 Na Montaria</span>`
+              : ""}
+        </div>
+        <div class="inv-row-actions">
+          ${canMount ? `
+            <button class="inv-mount-btn ${onMount?"mounted":""}" data-mount-item="${item.instanceId}" title="${onMount?"Trazer de volta da montaria":"Guardar na montaria"}">
+              ${onMount ? "↩ Trazer" : "🐴 Guardar"}
+            </button>` : ""}
+          <button class="inv-remove-btn" data-remove-inv="${item.instanceId}" title="Remover item" ${equipped ? "disabled" : ""}>✕</button>
+        </div>
+      </div>`;
+  }).join("");
 
   return `
   <div class="sheet-section">
     <div class="inventory-header-row">
       <h3 class="sheet-section-title" style="margin-bottom:0;flex:1;">Inventário (Mochila)</h3>
-      <button class="btn-primary" id="btn-open-add-item-modal">+ Adicionar Item do Mundo</button>
+      <button class="btn-primary" id="btn-open-add-item-modal">+ Adicionar Item</button>
     </div>
 
-    ${character.inventory.length > 0 ? `
-    <div class="inventory-table-wrap">
-    <table class="inventory-table">
-      <thead><tr><th>Item</th><th>Categoria</th><th>Qtd.</th><th>Peso unit.</th><th>Total</th><th>Status</th><th></th></tr></thead>
-      <tbody>
-        ${character.inventory.map(item => `
-          <tr>
-            <td>${escapeHTML(item.name)}</td>
-            <td>${categoryLabel(item.category)}</td>
-            <td>${item.qty}</td>
-            <td>${item.weight} kg</td>
-            <td>${round1(item.weight * item.qty)} kg</td>
-            <td>${item.equippedSlot ? `<span class="equipped-tag">Equipado: ${slotLabels[item.equippedSlot]}</span>` : `<span class="unequipped-tag">Na mochila</span>`}</td>
-            <td><button class="inv-remove-btn" data-remove-inv="${item.instanceId}" title="Remover item" ${item.equippedSlot ? "disabled" : ""}>✕</button></td>
-          </tr>
-        `).join("")}
-      </tbody>
-    </table>
-    </div>` : `<p class="empty-inline-note">A mochila está vazia. Use "Adicionar Item do Mundo" para registrar itens encontrados na aventura.</p>`}
+    ${character.inventory.length > 0
+      ? `<div class="inv-list">${itemRows}</div>`
+      : `<p class="empty-inline-note">A mochila está vazia. Use "+ Adicionar Item" para registrar itens encontrados.</p>`}
 
-    <div class="carry-meter">
-      <div class="carry-meter-label"><span>Capacidade de Carga</span><span>${weight} / ${carry} kg</span></div>
-      <div class="carry-meter-track"><div class="carry-meter-fill ${over ? "over" : ""}" style="width:${pct}%"></div></div>
-      ${over ? `<div class="carry-meter-note">Sobrecarregado! O mestre pode aplicar penalidades de Movimento ou Ações até o peso ser reduzido.</div>` : ""}
+    <div class="carry-meter" style="margin-top:10px">
+      <div class="carry-meter-label">
+        <span>🎒 Mochila</span>
+        <span>${weight} / ${carry} kg</span>
+      </div>
+      <div class="carry-meter-track">
+        <div class="carry-meter-fill ${over ? "over" : ""}" style="width:${pct}%"></div>
+      </div>
+      ${over ? `<div class="carry-meter-note">Sobrecarregado! Penalidades de Movimento até o peso ser reduzido.</div>` : ""}
     </div>
+
+    ${character.mount && mountData ? `
+    <div class="carry-meter" style="margin-top:6px">
+      <div class="carry-meter-label">
+        <span>${mountData.icon} ${mountData.name}</span>
+        <span>${mountWeight} / ${mountCarry} kg</span>
+      </div>
+      <div class="carry-meter-track">
+        <div class="carry-meter-fill ${mountOver ? "over" : ""}" style="width:${mountPct}%;background:${mountOver?"":"rgba(60,130,80,0.7)"}"></div>
+      </div>
+      ${mountOver ? `<div class="carry-meter-note">Montaria sobrecarregada! Velocidade reduzida à metade.</div>` : ""}
+    </div>` : ""}
   </div>`;
 }
 
@@ -4076,13 +4177,13 @@ function attachSheetHandlers(character) {
 
   // Remove inventory item (only if not equipped)
   // ── Handlers de Montaria ──────────────────────────────────────
-  const mountSelect = document.getElementById("mount-select");
+  const mountSelect  = document.getElementById("mount-select");
   const mountPreview = document.getElementById("mount-preview");
 
   if (mountSelect && mountPreview) {
     const TRAVEL_LABELS = {
-      terrestre: "🏔 Terrestre", voador: "🌤 Voador",
-      terrestre_voador: "🏔/🌤 Terrestre + Voo", terrestre_aquatico: "🏔/🌊 Terrestre + Aquático"
+      terrestre:"🏔 Terrestre", voador:"🌤 Voador",
+      terrestre_voador:"🏔/🌤 Terrestre + Voo", terrestre_aquatico:"🏔/🌊 Terrestre + Aquático"
     };
     mountSelect.addEventListener("change", () => {
       const m = (typeof MOUNTS !== "undefined" ? MOUNTS : []).find(x => x.id === mountSelect.value);
@@ -4092,16 +4193,16 @@ function attachSheetHandlers(character) {
         <div class="mount-preview-card">
           <div style="font-size:26px;margin-bottom:4px">${m.icon}</div>
           <strong style="font-size:13px">${m.name}</strong>
-          <div style="font-size:12px;color:var(--ink-soft);margin:4px 0">${m.description}</div>
+          <div style="font-size:12px;color:var(--ink-soft);margin:4px 0;font-style:italic">${m.description}</div>
           <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:6px">
-            <span class="mount-chip"><span class="mchip-k">⚡ Velocidade</span>${m.speed} hex</span>
+            <span class="mount-chip"><span class="mchip-k">⚡ Veloc.</span>${m.speed} hex</span>
             <span class="mount-chip"><span class="mchip-k">📦 Carga</span>${m.carryKg}kg</span>
             <span class="mount-chip"><span class="mchip-k">🗺 Viagem</span>${TRAVEL_LABELS[m.travel]||m.travel}</span>
             <span class="mount-chip"><span class="mchip-k">🎲 Encontros</span>${encTxt}</span>
             ${m.magic ? `<span class="mount-chip mount-chip-magic">✨ Mágica — Invocável</span>` : ""}
           </div>
           <div style="margin-top:7px;display:flex;flex-direction:column;gap:3px">
-            ${m.traits.map(t=>`<div style="font-size:11.5px;color:var(--ink)">✦ ${t}</div>`).join("")}
+            ${m.traits.map(t=>`<div style="font-size:11.5px">✦ ${t}</div>`).join("")}
             ${m.weakness ? `<div style="font-size:11.5px;color:#c05050">⚠ ${m.weakness}</div>` : ""}
           </div>
         </div>`;
@@ -4111,10 +4212,9 @@ function attachSheetHandlers(character) {
   const addMountBtn = document.getElementById("btn-add-mount");
   if (addMountBtn) addMountBtn.addEventListener("click", () => {
     const sel = document.getElementById("mount-select");
-    const id = sel?.value;
+    const id  = sel?.value;
     if (!id) { showToast("Escolha uma montaria antes de registrar."); return; }
-    if (character.mount) { showToast("Remova a montaria atual antes de adicionar outra."); return; }
-    character.mount = { id, cargo: [] };
+    character.mount = { id, storedItems: [] };
     persistCurrentCharacter();
     renderSheet();
     showToast("Montaria registrada!");
@@ -4122,32 +4222,36 @@ function attachSheetHandlers(character) {
 
   const removeMountBtn = document.getElementById("btn-remove-mount");
   if (removeMountBtn) removeMountBtn.addEventListener("click", () => {
-    if (!confirm("Dispensar a montaria atual? A carga dela será perdida.")) return;
+    if (!confirm("Dispensar a montaria? Itens guardados voltarão para a mochila.")) return;
     character.mount = null;
     persistCurrentCharacter();
     renderSheet();
     showToast("Montaria dispensada.");
   });
 
-  const addMountCargoBtn = document.getElementById("btn-add-mount-cargo");
-  if (addMountCargoBtn) addMountCargoBtn.addEventListener("click", () => {
-    const name   = document.getElementById("mount-cargo-name")?.value.trim();
-    const weight = parseFloat(document.getElementById("mount-cargo-weight")?.value) || 0;
-    const qty    = parseInt(document.getElementById("mount-cargo-qty")?.value) || 1;
-    if (!name) { showToast("Informe o nome do item."); return; }
-    if (weight <= 0) { showToast("Informe o peso do item (maior que 0)."); return; }
-    if (!character.mount) return;
-    if (!character.mount.cargo) character.mount.cargo = [];
-    character.mount.cargo.push({ name, weight, qty });
-    persistCurrentCharacter();
-    renderSheet();
-  });
-
-  document.querySelectorAll("[data-remove-mount-cargo]").forEach(btn => {
+  // Guardar / trazer item da montaria (toggle)
+  document.querySelectorAll("[data-mount-item]").forEach(btn => {
     btn.addEventListener("click", () => {
-      const idx = parseInt(btn.dataset.removeMountCargo);
-      if (!character.mount?.cargo) return;
-      character.mount.cargo.splice(idx, 1);
+      const instanceId = btn.dataset.mountItem;
+      if (!character.mount) return;
+      if (!character.mount.storedItems) character.mount.storedItems = [];
+      const idx = character.mount.storedItems.indexOf(instanceId);
+      if (idx === -1) {
+        // Verificar capacidade antes de guardar
+        const mountData = (typeof MOUNTS !== "undefined" ? MOUNTS : []).find(m => m.id === character.mount.id);
+        const currentMountWeight = calcMountWeight(character);
+        const item = character.inventory.find(i => i.instanceId === instanceId);
+        const itemWeight = (item?.weight || 0) * (item?.qty || 1);
+        if (mountData && currentMountWeight + itemWeight > mountData.carryKg) {
+          showToast(`Montaria sem espaço! (${currentMountWeight}/${mountData.carryKg} kg)`);
+          return;
+        }
+        character.mount.storedItems.push(instanceId);
+        showToast("Item guardado na montaria.");
+      } else {
+        character.mount.storedItems.splice(idx, 1);
+        showToast("Item trazido de volta para a mochila.");
+      }
       persistCurrentCharacter();
       renderSheet();
     });

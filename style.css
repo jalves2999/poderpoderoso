@@ -4598,3 +4598,86 @@ main {
   .mount-add-form { display: none !important; }
   .mount-card { break-inside: avoid; }
 }
+
+/* ================================================================
+   INVENTÁRIO SIMPLIFICADO — lista de nome + botões
+   ================================================================ */
+
+.inv-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 2px;
+}
+
+.inv-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: rgba(248,243,232,0.02);
+  transition: background 0.15s;
+}
+.inv-row:hover { background: rgba(156,122,60,0.05); }
+
+.inv-row-mounted {
+  background: rgba(60,120,70,0.06);
+  border-color: rgba(60,140,80,0.3);
+}
+
+.inv-row-name {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+.inv-item-name {
+  font-size: 13.5px;
+  color: var(--ink);
+  line-height: 1.3;
+}
+.mount-stored-tag {
+  font-size: 10px;
+  padding: 2px 7px;
+  border-radius: 8px;
+  background: rgba(60,140,80,0.18);
+  color: #50a060;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.inv-row-actions {
+  display: flex;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+/* Botão "🐴 Guardar" / "↩ Trazer" */
+.inv-mount-btn {
+  padding: 4px 9px;
+  border-radius: 6px;
+  border: 1px solid rgba(60,120,70,0.4);
+  background: rgba(60,120,70,0.1);
+  color: #50a060;
+  font-family: var(--font-heading);
+  font-size: 11px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: filter 0.15s, background 0.15s;
+}
+.inv-mount-btn:hover { filter: brightness(1.2); }
+.inv-mount-btn.mounted {
+  background: rgba(60,140,80,0.2);
+  border-color: rgba(60,160,80,0.5);
+  color: #40c060;
+}
+
+/* ── Barra de carga da montaria (verde) ── */
+.carry-meter + .carry-meter {
+  margin-top: 5px;
+}
