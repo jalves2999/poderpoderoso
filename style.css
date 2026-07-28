@@ -4681,3 +4681,174 @@ main {
 .carry-meter + .carry-meter {
   margin-top: 5px;
 }
+
+/* ================================================================
+   MODAL DE DETALHES DO ITEM
+   ================================================================ */
+
+/* Link clicável no inventário */
+.inv-item-link {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 13.5px;
+  color: var(--ink);
+  text-align: left;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(156,122,60,0.5);
+  transition: color 0.15s, text-decoration-color 0.15s;
+  line-height: 1.3;
+}
+.inv-item-link:hover {
+  color: var(--gold);
+  text-decoration-color: var(--gold);
+}
+
+/* Modal box tamanho específico para detalhes */
+.item-detail-box {
+  max-width: 100%;
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+@media (min-width: 560px) {
+  .item-detail-box { max-width: 480px; }
+}
+
+/* ── Header ── */
+.idd-header {
+  padding: 18px 18px 12px;
+  border-bottom: 1px solid var(--line);
+  background: rgba(0,0,0,0.02);
+}
+.idd-title-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.idd-name {
+  font-family: var(--font-heading);
+  font-size: 18px;
+  color: var(--ink);
+  margin: 0;
+  flex: 1;
+  line-height: 1.25;
+}
+.idd-close-btn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: var(--ink-soft);
+  cursor: pointer;
+  padding: 0 2px;
+  line-height: 1;
+  flex-shrink: 0;
+  transition: color 0.15s;
+}
+.idd-close-btn:hover { color: var(--ink); }
+
+.idd-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.idd-tier {
+  font-family: var(--font-heading);
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 8px;
+  border: 1px solid;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+.idd-cat {
+  font-size: 11px;
+  color: var(--ink-soft);
+  padding: 2px 7px;
+  border-radius: 8px;
+  background: rgba(0,0,0,0.06);
+}
+
+/* Badges de estado */
+.idd-badge {
+  font-size: 10px;
+  padding: 2px 7px;
+  border-radius: 8px;
+  font-family: var(--font-heading);
+  font-weight: 700;
+}
+.idd-badge-equipped  { background: rgba(60,100,40,0.18);  color: #5a9040; }
+.idd-badge-mount     { background: rgba(60,120,70,0.18);  color: #50a060; }
+.idd-badge-set       { background: rgba(156,122,60,0.2);  color: var(--gold); }
+.idd-badge-cursed    { background: rgba(160,40,40,0.15);  color: #c05050; }
+.idd-badge-divine    { background: rgba(200,160,30,0.15); color: #b08020; }
+.idd-badge-magic     { background: rgba(100,50,160,0.15); color: #9060c0; }
+.idd-badge-consumable{ background: rgba(200,100,20,0.15); color: #c07020; }
+
+/* ── Chips de stats ── */
+.idd-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--line);
+}
+.idd-chip {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: 7px;
+  background: rgba(0,0,0,0.05);
+  border: 1px solid var(--line);
+}
+.idd-chip-icon  { font-size: 13px; }
+.idd-chip-label { font-size: 10.5px; color: var(--ink-soft); }
+.idd-chip-val   { font-size: 13px; font-family: var(--font-heading); color: var(--ink); font-weight: 700; }
+
+/* ── Seções de texto ── */
+.idd-section {
+  padding: 12px 18px 0;
+}
+.idd-section-label {
+  font-family: var(--font-heading);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--ink-soft);
+  margin-bottom: 5px;
+}
+.idd-text {
+  font-size: 13.5px;
+  color: var(--ink);
+  line-height: 1.65;
+  margin: 0;
+}
+.idd-note {
+  padding: 8px 10px;
+  border-left: 3px solid rgba(156,122,60,0.4);
+  background: rgba(156,122,60,0.05);
+  border-radius: 0 6px 6px 0;
+  font-size: 13px;
+}
+.idd-story {
+  font-style: italic;
+  color: rgba(90,70,50,0.8);
+  font-size: 13px;
+}
+
+/* ── Footer ── */
+.idd-footer {
+  padding: 14px 18px 18px;
+  margin-top: 10px;
+  border-top: 1px solid var(--line);
+}
+.idd-footer .btn-secondary { width: 100%; }

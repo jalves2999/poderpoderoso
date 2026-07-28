@@ -3185,7 +3185,7 @@ function renderInventorySection(character) {
     return `
       <div class="inv-row ${onMount ? "inv-row-mounted" : ""}">
         <div class="inv-row-name">
-          <span class="inv-item-name">${escapeHTML(item.name)}</span>
+          <button class="inv-item-link" data-item-detail="${item.instanceId}" title="Ver detalhes do item">${escapeHTML(item.name)}</button>
           ${equipped
             ? `<span class="equipped-tag" style="font-size:10px">⚔ ${slotLabels[item.equippedSlot]||item.equippedSlot}</span>`
             : onMount
@@ -4176,6 +4176,15 @@ function attachSheetHandlers(character) {
   });
 
   // Remove inventory item (only if not equipped)
+  // ── Clique no nome do item → modal de detalhes ────────────────
+  document.querySelectorAll("[data-item-detail]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const instanceId = btn.dataset.itemDetail;
+      const item = character.inventory.find(i => i.instanceId === instanceId);
+      if (item) openItemDetailModal(item, character);
+    });
+  });
+
   // ── Handlers de Montaria ──────────────────────────────────────
   const mountSelect  = document.getElementById("mount-select");
   const mountPreview = document.getElementById("mount-preview");
@@ -4339,6 +4348,130 @@ function attachSheetHandlers(character) {
 
 let addItemModalCharacter = null;
 let addItemModalTab = "catalog";
+
+/* ── Modal de Detalhes do Item ───────────────────────────────── */
+
+function openItemDetailModal(item, character) {
+  const overlay = document.getElementById("item-detail-overlay");
+  const box     = document.getElementById("item-detail-box");
+  if (!overlay || !box) return;
+
+  const bd   = item.baseData || {};
+  const tier = bd.tier || "comum";
+
+  const TIER_LABEL = { comum:"Comum", raro:"Raro", magico:"Mágico", lendario:"Lendário", unico:"Único", ancestral:"Ancestral" };
+  const TIER_COLOR = {
+    comum:    "#888",
+    raro:     "#4a90d9",
+    magico:   "#b070d0",
+    lendario: "#d06040",
+    unico:    "#c0900a",
+    ancestral:"#d4a830"
+  };
+  const CAT_LABEL = { weapon:"Arma", shield:"Escudo", armor:"Armadura", accessory:"Acessório", misc:"Item", gear:"Item Geral", potion:"Poção" };
+
+  // Chips de stats
+  const chips = [];
+  if (bd.dmg)            chips.push({ icon:"⚔", label:"Dano",          val: bd.dmg });
+  if (bd.physDefense)    chips.push({ icon:"🛡", label:"Def. Física",   val:`+${bd.physDefense}` });
+  if (bd.magDefense)     chips.push({ icon:"✨", label:"Def. Mágica",   val:`+${bd.magDefense}` });
+  if (bd.range)          chips.push({ icon:"🎯", label:"Alcance",       val:`${bd.range} hex` });
+  if (bd.movePenalty)    chips.push({ icon:"🏃", label:"Pen. Movimento",val: bd.movePenalty > 0 ? `−${bd.movePenalty}` : `+${-bd.movePenalty}` });
+  if (bd.penalty && bd.penalty !== "Nenhuma") chips.push({ icon:"⚠", label:"Penalidade", val: bd.penalty });
+  if (bd.weight != null) chips.push({ icon:"⚖", label:"Peso",          val:`${bd.weight}kg` });
+  if (bd.req)            chips.push({ icon:"📋", label:"Requisito",     val: bd.req });
+  if (item.qty > 1)      chips.push({ icon:"🔢", label:"Quantidade",    val: item.qty });
+
+  // magicBonus
+  const MB = { hp:"❤ HP", move:"🏃 Mov", actions:"⚡ Ações", spellActions:"✨ Ações Magia", slots:"🔮 Slots", carry:"📦 Carga" };
+  if (bd.magicBonus) {
+    Object.entries(bd.magicBonus).forEach(([k,v]) => {
+      if (!v) return;
+      if (k === "attr" || k === "attrValue") return;
+      chips.push({ icon:"💎", label: MB[k]||k, val:`+${v}` });
+    });
+    if (bd.magicBonus.attr && bd.magicBonus.attrValue)
+      chips.push({ icon:"💎", label: bd.magicBonus.attr, val:`+${bd.magicBonus.attrValue}` });
+  }
+
+  const chipsHTML = chips.length ? `
+    <div class="idd-chips">
+      ${chips.map(c=>`
+        <span class="idd-chip">
+          <span class="idd-chip-icon">${c.icon}</span>
+          <span class="idd-chip-label">${c.label}</span>
+          <span class="idd-chip-val">${c.val}</span>
+        </span>`).join("")}
+    </div>` : "";
+
+  // Slot de equipamento atual
+  const SLOT_LABEL = { primary:"⚔ Arma Primária", secondary:"⚔ Arma Secundária", shield:"🛡 Escudo", armor:"🧥 Armadura", accessory:"💍 Acessório" };
+  const slotBadge = item.equippedSlot
+    ? `<span class="idd-badge idd-badge-equipped">${SLOT_LABEL[item.equippedSlot]||item.equippedSlot} — Equipado</span>`
+    : "";
+
+  // Na montaria?
+  const onMount = (character.mount?.storedItems||[]).includes(item.instanceId);
+  const mountBadge = onMount ? `<span class="idd-badge idd-badge-mount">🐴 Na Montaria</span>` : "";
+
+  // Set
+  const setBadge = bd.setName ? `<span class="idd-badge idd-badge-set">✦ Set: ${bd.setName}</span>` : "";
+  const cursedBadge = bd.cursed ? `<span class="idd-badge idd-badge-cursed">⚠ Amaldiçoado</span>` : "";
+  const divineBadge = bd.divine ? `<span class="idd-badge idd-badge-divine">🌟 ${bd.divine}</span>` : "";
+  const magicBadge  = bd.magicBonus && Object.values(bd.magicBonus).some(v=>v) && tier === "comum"
+    ? `<span class="idd-badge idd-badge-magic">✨ Mágico</span>` : "";
+  const consumBadge = bd.consumable ? `<span class="idd-badge idd-badge-consumable">🔥 Consumível</span>` : "";
+
+  box.innerHTML = `
+    <div class="idd-header">
+      <div class="idd-title-row">
+        <h2 class="idd-name">${escapeHTML(item.name)}</h2>
+        <button class="idd-close-btn" id="item-detail-close" aria-label="Fechar">✕</button>
+      </div>
+      <div class="idd-meta-row">
+        <span class="idd-tier" style="color:${TIER_COLOR[tier]};border-color:${TIER_COLOR[tier]}">${TIER_LABEL[tier]||tier}</span>
+        <span class="idd-cat">${CAT_LABEL[item.category]||item.category}</span>
+        ${slotBadge}${mountBadge}${setBadge}${cursedBadge}${divineBadge}${magicBadge}${consumBadge}
+      </div>
+    </div>
+
+    ${chipsHTML}
+
+    ${bd.effect ? `
+    <div class="idd-section">
+      <div class="idd-section-label">📜 Efeito</div>
+      <p class="idd-text">${escapeHTML(bd.effect)}</p>
+    </div>` : ""}
+
+    ${bd.note ? `
+    <div class="idd-section">
+      <div class="idd-section-label">✦ Nota</div>
+      <p class="idd-text idd-note">${escapeHTML(bd.note)}</p>
+    </div>` : ""}
+
+    ${bd.story ? `
+    <div class="idd-section">
+      <div class="idd-section-label">📖 História</div>
+      <p class="idd-text idd-story">"${escapeHTML(bd.story)}"</p>
+    </div>` : ""}
+
+    ${(!bd.effect && !bd.note && !bd.story) ? `
+    <div class="idd-section">
+      <p class="idd-text" style="color:var(--ink-soft);font-style:italic">Item sem descrição adicional.</p>
+    </div>` : ""}
+
+    <div class="idd-footer">
+      <button class="btn-secondary" id="item-detail-close-footer">Fechar</button>
+    </div>`;
+
+  overlay.classList.remove("hidden");
+
+  // Fechar
+  const close = () => overlay.classList.add("hidden");
+  document.getElementById("item-detail-close")?.addEventListener("click", close);
+  document.getElementById("item-detail-close-footer")?.addEventListener("click", close);
+  overlay.addEventListener("click", e => { if (e.target === overlay) close(); }, { once: true });
+}
 
 function openAddItemModal(character) {
   addItemModalCharacter = character;
