@@ -3036,62 +3036,6 @@ function renderMountSection(character) {
   </div>`;
 }
 
-  const mountCardHTML = mount ? (() => {
-    const m = MOUNTS.find(x => x.id === mount.id);
-    if (!m) return `<p class="empty-inline-note">Montaria não encontrada no catálogo.</p>`;
-    const tierColor = TIER_COLORS[m.tier] || TIER_COLORS.normal;
-    const totalCarry = m.carryKg;
-    const carriedByMount = (mount.cargo || []).reduce((s,i)=>s+(i.weight||0)*(i.qty||1),0);
-    const carryPct = Math.min(100, (carriedByMount/totalCarry)*100);
-    const overloaded = carriedByMount > totalCarry;
-    return `
-      <div class="mount-card" style="border-color:${TIER_COLORS[m.tier].replace('0.2','0.5')}">
-        <div class="mount-card-head">
-          <span class="mount-icon">${m.icon}</span>
-          <div class="mount-head-info">
-            <div class="mount-name">${m.name}</div>
-            <div class="mount-species">${m.species} — ${TIER_LABELS[m.tier]}</div>
-          </div>
-          <button class="mount-remove-btn" id="btn-remove-mount" title="Dispensar montaria">✕ Dispensar</button>
-        </div>
-        <div class="mount-chip-row">
-          <span class="mount-chip"><span class="mchip-k">⚡ Veloc.</span>${m.speed} hex</span>
-          <span class="mount-chip"><span class="mchip-k">📦 Carga</span>${totalCarry}kg</span>
-          <span class="mount-chip"><span class="mchip-k">🗺 Tipo</span>${TRAVEL_LABELS[m.travel]||m.travel}</span>
-          <span class="mount-chip"><span class="mchip-k">🎲 Encontros</span>${ENC_LABEL(m.encounterMod)}</span>
-          ${m.magic ? `<span class="mount-chip mount-chip-magic"><span class="mchip-k">✨</span>Mágica — Invocável</span>` : ""}
-        </div>
-        <p class="mount-desc">${m.description}</p>
-        <div class="mount-traits">
-          ${m.traits.map(t=>`<div class="mount-trait">✦ ${t}</div>`).join("")}
-          ${m.weakness ? `<div class="mount-trait mount-weakness">⚠ ${m.weakness}</div>` : ""}
-        </div>
-        <div class="mount-cargo-section">
-          <div class="mount-cargo-title">Carga da Montaria</div>
-          <div class="carry-meter" style="margin:0">
-            <div class="carry-meter-label"><span>Peso carregado</span><span>${round1(carriedByMount)} / ${totalCarry} kg</span></div>
-            <div class="carry-meter-track"><div class="carry-meter-fill ${overloaded?"over":""}" style="width:${carryPct}%"></div></div>
-            ${overloaded ? `<div class="carry-meter-note">Montaria sobrecarregada! Velocidade reduzida à metade.</div>` : ""}
-          </div>
-          ${(mount.cargo||[]).length ? `
-          <div class="mount-cargo-list">
-            ${(mount.cargo||[]).map((item,idx)=>`
-              <div class="mount-cargo-item">
-                <span class="mci-name">${escapeHTML(item.name)}</span>
-                <span class="mci-weight">${item.weight}kg × ${item.qty||1} = ${round1((item.weight||0)*(item.qty||1))}kg</span>
-                <button class="inv-remove-btn" data-remove-mount-cargo="${idx}" title="Remover da montaria">✕</button>
-              </div>`).join("")}
-          </div>` : `<p class="empty-inline-note" style="font-size:11.5px;margin-top:6px">Nenhum item na montaria. Use o formulário abaixo para adicionar carga.</p>`}
-          <div class="mount-cargo-add">
-            <input type="text" id="mount-cargo-name" class="field-input" placeholder="Nome do item" style="flex:2">
-            <input type="number" id="mount-cargo-weight" class="field-input" placeholder="kg" style="width:60px" min="0.1" step="0.1">
-            <input type="number" id="mount-cargo-qty" class="field-input" placeholder="Qtd" style="width:55px" min="1" value="1">
-            <button class="btn-secondary" id="btn-add-mount-cargo" style="white-space:nowrap">+ Adicionar</button>
-          </div>
-        </div>
-      </div>`;
-  })() : "";
-
 /* --- Inventário (itens livres + peso total) --- */
 
 /* --- Dinheiro: bronze, prata, ouro, platina (1 prata=10 bronze, 1 ouro=100 prata, 1 platina=1000 ouro) --- */
