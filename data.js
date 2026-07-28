@@ -4778,3 +4778,124 @@ const BESTIARY = [
     behavior: "Predador de memórias e força vital. Foca em alvos com SAB mais alta (sente o potencial). Foge quando abaixo de 40% HP para área escura.",
     loot: [{item:"Essência de Espectro (componente mágico)",chance:50,qty:"1"}] }
 ];
+
+/* ================================================================
+   MONTARIAS — Sistema de Montaria do Mundo de Aether
+   tier: fraco | normal | forte
+   Carga: fraco=25kg, normal=50kg, forte=75kg
+   ================================================================ */
+
+const MOUNTS = [
+  {
+    id: "mula",
+    name: "Mula",
+    icon: "🫏",
+    species: "Mula",
+    tier: "fraco",
+    carryKg: 25,
+    speed: 4,
+    travel: "terrestre",
+    magic: false,
+    encounterMod: 0,
+    cost: { prata: 15 },
+    description: "Animal de carga resistente e teimoso. Não cansa em terrenos difíceis mas é lenta em planícies abertas.",
+    traits: ["Terreno Difícil: sem penalidade de velocidade em lama, pedras ou montanha", "Não entra em pânico com cheiros fortes"],
+    weakness: "Velocidade máxima 4 — nunca aumenta por bônus."
+  },
+  {
+    id: "cavalo",
+    name: "Cavalo de Guerra",
+    icon: "🐴",
+    species: "Cavalo",
+    tier: "normal",
+    carryKg: 50,
+    speed: 7,
+    travel: "terrestre",
+    magic: false,
+    encounterMod: 0,
+    cost: { ouro: 3 },
+    description: "Montaria padrão dos guerreiros e viajantes de Aether. Versátil e confiável em planícies e estradas.",
+    traits: ["Carga de Cavalaria: se o portador atacar no mesmo turno em que o cavalo mover 3+ hexes, +1d6 de dano", "Pode ser equipado com armadura de cavalo (+2 Def.Física para o cavalo)"],
+    weakness: "−2 de velocidade em terreno montanhoso ou floresta densa."
+  },
+  {
+    id: "ave-atrelon",
+    name: "Ave de Atrelon",
+    icon: "🦅",
+    species: "Ave de Atrelon",
+    tier: "normal",
+    carryKg: 50,
+    speed: 6,
+    travel: "terrestre_voador",
+    magic: false,
+    encounterMod: +1,
+    cost: { ouro: 8 },
+    description: "Grande ave das Montanhas de Atrelon, treinada por serpentarianos. Pode voar por distâncias curtas e escalar terrenos verticais.",
+    traits: ["Voo Curto: pode voar até 5 hexes em linha reta por Ação (não carregando jinete pesado — até 60kg total)", "Escalar: sobe paredes e penhascos a velocidade normal", "Altitude: pode sobrevoar a 6m de altura, ignorando terreno"],
+    weakness: "Atrai predadores voadores (Grifo, Harpia) — +1 de encontro em montanhas. Não voa sob chuva forte."
+  },
+  {
+    id: "lagarto-sabaht",
+    name: "Lagarto de Sabaht",
+    icon: "🦎",
+    species: "Lagarto de Sabaht",
+    tier: "normal",
+    carryKg: 50,
+    speed: 5,
+    travel: "terrestre_aquatico",
+    magic: false,
+    encounterMod: -1,
+    cost: { ouro: 5 },
+    description: "Lagarto robusto criado no Deserto Carmesim. Camuflagem natural, pode nadar e não atrai a atenção de criaturas selvagens.",
+    traits: ["Camuflagem Passiva: grupo tem −1 em encontros com bestas selvagens enquanto estiver montado", "Natação: velocidade 4 em rios e lagos, pode mergulhar brevemente (3 rodadas)", "Resistência ao Calor: sem penalidade no Deserto Carmesim"],
+    weakness: "Velocidade reduzida para 3 em ambientes frios (abaixo de 10°C). Não funciona em neve."
+  },
+  {
+    id: "rinodonte",
+    name: "Rinodonte",
+    icon: "🦏",
+    species: "Rinodonte",
+    tier: "forte",
+    carryKg: 75,
+    speed: 5,
+    travel: "terrestre",
+    magic: false,
+    encounterMod: +2,
+    cost: { ouro: 12 },
+    description: "Enorme besta blindada das Grandes Planícies. Aterrorizante, pode ser usada como arma de assalto em batalha. Atrai atenção de qualquer criatura no caminho.",
+    traits: ["Carga de Ruptura: se mover 4+ hexes em linha reta, derruba automaticamente qualquer criatura de tamanho normal ou menor no caminho (FOR difícil para resistir)", "Couro Blindado: o Rinodonte tem 8 de Def.Física natural — pode ser montado em combate com segurança relativa", "Intimidação de Grupo: inimigos em raio 4 hex devem testar SAB (normal) ou ficam com −1d4 em ataques no primeiro turno"],
+    weakness: "Muito barulhento — +2 de chance de encontro em viagem. Não entra em cavernas ou florestas densas."
+  },
+  {
+    id: "grande-falcao",
+    name: "Grande Falcão",
+    icon: "🦆",
+    species: "Grande Falcão",
+    tier: "fraco",
+    carryKg: 25,
+    speed: 9,
+    travel: "voador",
+    magic: false,
+    encounterMod: 0,
+    cost: { ouro: 6 },
+    description: "Falcão gigante capaz de carregar um jinete leve. Extremamente rápido em linha reta, ideal para reconhecimento e rotas aéreas. Carga limitada.",
+    traits: ["Voo Completo: velocidade 9 no ar, ignora todo terreno terrestre", "Mergulho de Caça: se descer de altitude e atacar, +2d6 de dano no primeiro ataque do turno", "Altitude Máxima: pode voar a até 50m — fora do alcance da maioria dos arqueiros"],
+    weakness: "Carga máxima 25kg — impossível carregar jinete com armadura pesada (+20kg). Não pode decolar em espaços fechados."
+  },
+  {
+    id: "slipner",
+    name: "Slipner",
+    icon: "⚡",
+    species: "Slipner",
+    tier: "normal",
+    carryKg: 50,
+    speed: 12,
+    travel: "terrestre",
+    magic: true,
+    encounterMod: -1,
+    cost: { ouro: 20 },
+    description: "Criatura mágica de origem desconhecida — parece um cavalo feito de névoa prateada com patas que mal tocam o chão. Rarissimo. Viaja a velocidade sobre-humana e aparece quando chamado.",
+    traits: ["Velocidade Absurda: velocidade 12 — o dobro de qualquer montaria comum. Em estrada aberta: pode percorrer o dobro da distância diária", "Invocação: responde a um assobio específico em até 1km de distância. Aparece em 1d4 minutos", "Passagem Suave: não levanta poeira, não faz barulho — −1 de encontro em viagem", "Imune a Medo: não entra em pânico com magia ou monstros"],
+    weakness: "Não pode ser comprado — deve ser encontrado, conquistado ou recebido como recompensa. Desaparece se maltratar."
+  }
+];

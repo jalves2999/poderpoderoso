@@ -4445,3 +4445,156 @@ main {
 .cb-add-btn:active { filter: brightness(0.85); }
 .cb-btn-curse   { background: rgba(160,40,40,0.3); color: #ff9080; }
 .cb-btn-blessing{ background: rgba(40,140,60,0.3); color: #70d080; }
+
+/* ================================================================
+   MONTARIA — Seção de Montaria na Aba Inventário
+   ================================================================ */
+
+/* ── Card da montaria ativa ── */
+.mount-card {
+  border: 1.5px solid rgba(156,122,60,0.35);
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: rgba(156,122,60,0.04);
+}
+
+.mount-card-head {
+  display: flex; align-items: center; gap: 10px;
+}
+.mount-icon { font-size: 28px; flex-shrink: 0; line-height: 1; }
+.mount-head-info { flex: 1; min-width: 0; }
+.mount-name { font-family: var(--font-heading); font-size: 15px; color: var(--ink); }
+.mount-species { font-size: 11.5px; color: var(--ink-soft); margin-top: 2px; }
+
+.mount-remove-btn {
+  padding: 5px 10px; border-radius: 6px;
+  border: 1px solid rgba(200,60,60,0.4);
+  background: rgba(160,40,40,0.1); color: #e07060;
+  font-family: var(--font-heading); font-size: 11.5px;
+  cursor: pointer; white-space: nowrap; flex-shrink: 0;
+  transition: filter 0.15s;
+}
+.mount-remove-btn:hover { filter: brightness(1.2); }
+
+/* ── Chips de stats ── */
+.mount-chip-row {
+  display: flex; flex-wrap: wrap; gap: 5px;
+}
+.mount-chip {
+  font-family: var(--font-heading); font-size: 11px;
+  padding: 3px 9px; border-radius: 6px;
+  background: rgba(0,0,0,0.06);
+  display: flex; align-items: center; gap: 5px;
+  color: var(--ink);
+}
+.mount-chip-magic {
+  background: rgba(100,50,160,0.15);
+  color: #b070e0;
+}
+.mchip-k {
+  font-size: 10px; opacity: 0.65;
+  border-right: 1px solid var(--line);
+  padding-right: 5px; margin-right: 1px;
+}
+
+/* ── Descrição e traits ── */
+.mount-desc {
+  font-size: 12.5px; color: var(--ink-soft);
+  line-height: 1.6; margin: 0;
+  font-style: italic;
+}
+.mount-traits {
+  display: flex; flex-direction: column; gap: 4px;
+}
+.mount-trait {
+  font-size: 12px; color: var(--ink); line-height: 1.5;
+  padding-left: 4px;
+  border-left: 2px solid rgba(156,122,60,0.3);
+  padding: 2px 6px;
+  border-radius: 0 4px 4px 0;
+  background: rgba(156,122,60,0.04);
+}
+.mount-weakness {
+  color: #c05050;
+  border-left-color: rgba(180,60,60,0.4);
+  background: rgba(160,40,40,0.05);
+}
+
+/* ── Carga da montaria ── */
+.mount-cargo-section {
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+  display: flex; flex-direction: column; gap: 7px;
+}
+.mount-cargo-title {
+  font-family: var(--font-heading); font-size: 12px;
+  text-transform: uppercase; letter-spacing: 0.4px;
+  color: var(--ink-soft);
+}
+.mount-cargo-list {
+  display: flex; flex-direction: column; gap: 4px;
+}
+.mount-cargo-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 5px 8px; border-radius: 5px;
+  background: rgba(0,0,0,0.04); border: 1px solid var(--line);
+}
+.mci-name { flex: 1; font-size: 13px; color: var(--ink); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mci-weight { font-size: 11.5px; color: var(--ink-soft); flex-shrink: 0; }
+
+.mount-cargo-add {
+  display: flex; gap: 6px; flex-wrap: wrap;
+  align-items: center;
+  padding: 8px; background: rgba(0,0,0,0.03);
+  border: 1px dashed var(--line); border-radius: 7px;
+}
+.mount-cargo-add .field-input {
+  min-width: 0;
+}
+@media (max-width: 480px) {
+  .mount-cargo-add { flex-direction: column; }
+  .mount-cargo-add .field-input,
+  .mount-cargo-add .btn-secondary { width: 100%; }
+}
+
+/* ── Formulário de adicionar montaria ── */
+.mount-add-form {
+  display: flex; flex-direction: column; gap: 8px;
+  margin-top: 8px;
+}
+.mount-add-title {
+  font-family: var(--font-heading); font-size: 12px;
+  text-transform: uppercase; letter-spacing: 0.4px;
+  color: var(--ink-soft);
+}
+.mount-select-row {
+  display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+}
+.mount-select-row .field-input { flex: 1; min-width: 200px; }
+
+/* ── Preview da montaria selecionada ── */
+.mount-preview-card {
+  padding: 12px 14px; border-radius: 8px;
+  border: 1.5px solid rgba(156,122,60,0.3);
+  background: rgba(156,122,60,0.05);
+  animation: fadeIn 0.2s ease;
+}
+
+/* ── Responsivo ── */
+@media (max-width: 480px) {
+  .mount-chip { font-size: 10.5px; }
+  .mount-name { font-size: 14px; }
+  .mount-select-row { flex-direction: column; }
+  .mount-select-row .btn-primary { width: 100%; }
+}
+
+/* ── Print ── */
+@media print {
+  .mount-remove-btn,
+  .mount-cargo-add,
+  .mount-add-form { display: none !important; }
+  .mount-card { break-inside: avoid; }
+}
