@@ -1331,7 +1331,9 @@ function renderCharacterList() {
     card.innerHTML = `
       <button class="char-card-delete" title="Remover personagem" aria-label="Remover personagem">✕</button>
       <div class="char-card-seal">${cls ? cls.icon : "?"}</div>
-      <h3 class="char-card-name">${escapeHTML(character.name)}</h3>
+      <h3 class="char-card-name">
+        <button class="char-name-link" data-char-preview="${character.id}" title="Ver resumo de ${escapeHTML(character.name)}">${escapeHTML(character.name)}</button>
+      </h3>
       <p class="char-card-class">${cls ? cls.name : "Sem classe"}${character.origin ? " · " + escapeHTML(character.origin) : ""}</p>
       <div class="char-card-bars">
         <div class="mini-bar-row">
@@ -1353,7 +1355,13 @@ function renderCharacterList() {
 
     card.addEventListener("click", (e) => {
       if (e.target.closest(".char-card-delete")) return;
-      openCharacterSheet(character.id);
+      if (e.target.closest(".char-name-link")) return; // nome tem handler próprio
+      openCharPreviewModal(character.id);
+    });
+
+    card.querySelector(".char-name-link").addEventListener("click", (e) => {
+      e.stopPropagation();
+      openCharPreviewModal(character.id);
     });
 
     card.querySelector(".char-card-delete").addEventListener("click", (e) => {
@@ -1396,6 +1404,185 @@ function findCharacter(id) { return characters.find(c => c.id === id); }
 
 function persistCurrentCharacter() {
   saveCharacters(characters);
+}
+
+/* ── Modal de Resumo de Personagem ──────────────────────────── */
+
+function openCharPreviewModal(id) {
+  const character = findCharacter(id);
+  if (!character) return;
+  const overlay = document.getElementById("char-preview-overlay");
+  const box     = document.getElementById("char-preview-box");
+  if (!overlay || !box) return;
+
+  const cls      = getClassDef(character.classKey);
+  const sc       = character.subclassKey ? (typeof SUBCLASSES !== "undefined" ? SUBCLASSES[character.subclassKey] : null) : null;
+  const maxHP    = calcMaxHP(character);
+  const resMax   = calcResourceMax(character);
+  const carry    = calcCarryCapacity(character);
+  const weight   = calcTotalWeight(character);
+  const move     = calcMovement(character);
+  const actions  = calcActions(character);
+  const spells   = calcSpellActions(character);
+  const slots    = calcSpellSlots(character);
+  const physDef  = calcPhysicalDefense(character);
+  const magDef   = calcMagicDefense(character);
+  const dmg      = calcDamageBreakdown(character);
+
+  const hpPct  = clamp((character.currentHP / maxHP) * 100, 0, 100);
+  const resPct = clamp((character.currentResource / resMax) * 100, 0, 100);
+  const xpPct  = clamp((character.xp / xpToNextLevel(character)) * 100, 0, 100);
+
+  // Atributos
+  const ATTR_ICONS = { FOR:"💪", DEX:"🎯", AGI:"⚡", INT:"🧠", SAB:"🔮" };
+  const attrsHTML = ["FOR","DEX","AGI","INT","SAB"].map(a => `
+    <div class="cpv-attr">
+      <span class="cpv-attr-icon">${ATTR_ICONS[a]}</span>
+      <span class="cpv-attr-label">${a}</span>
+      <span class="cpv-attr-val">${character.attrs?.[a] ?? 0}</span>
+    </div>`).join("");
+
+  // Equipados
+  const equip = [
+    { slot:"primary",   label:"⚔" },
+    { slot:"secondary", label:"⚔" },
+    { slot:"shield",    label:"🛡" },
+    { slot:"armor",     label:"🧥" },
+  ].map(s => {
+    const item = character.inventory?.find(i => i.equippedSlot === s.slot);
+    return item ? `<span class="cpv-equip-item">${s.label} ${escapeHTML(item.name)}</span>` : null;
+  }).filter(Boolean);
+  const accessories = character.inventory?.filter(i => i.equippedSlot === "accessory") || [];
+  accessories.forEach(a => equip.push(`<span class="cpv-equip-item">💍 ${escapeHTML(a.name)}</span>`));
+
+  // Magias equipadas
+  const knownSpells = (character.spells || []).slice(0, 5);
+
+  // Maldições/Bênçãos
+  const ALL_CB = [
+    ...(typeof CURSES   !== "undefined" ? CURSES   : []).map(c=>({...c,type:"curse"})),
+    ...(typeof BLESSINGS!== "undefined" ? BLESSINGS: []).map(b=>({...b,type:"blessing"})),
+  ];
+  const activeCB = (character.activeCurses || []).map(id => ALL_CB.find(x=>x.id===id)).filter(Boolean);
+
+  // Montaria
+  const mountData = character.mount
+    ? (typeof MOUNTS !== "undefined" ? MOUNTS : []).find(m => m.id === character.mount.id)
+    : null;
+
+  box.innerHTML = `
+    <div class="cpv-header">
+      <div class="cpv-icon">${cls ? cls.icon : "?"}</div>
+      <div class="cpv-header-info">
+        <h2 class="cpv-name">${escapeHTML(character.name)}</h2>
+        <div class="cpv-sub">
+          ${cls ? cls.name : "Sem classe"}${sc ? ` · ${sc.icon} ${sc.name}` : ""}${character.origin ? ` · ${escapeHTML(character.origin)}` : ""}
+        </div>
+        <div class="cpv-level">Nível ${character.level} · ${character.rosterType === "pc" ? "Personagem Jogador" : "NPC"}</div>
+      </div>
+      <button class="idd-close-btn" id="char-preview-close">✕</button>
+    </div>
+
+    <div class="cpv-body">
+
+      <!-- Barras vitais -->
+      <div class="cpv-bars">
+        <div class="cpv-bar-row">
+          <span class="cpv-bar-label">❤ PV</span>
+          <div class="carry-meter-track"><div class="carry-meter-fill hp" style="width:${hpPct}%"></div></div>
+          <span class="cpv-bar-val">${character.currentHP}/${maxHP}</span>
+        </div>
+        ${cls ? `
+        <div class="cpv-bar-row">
+          <span class="cpv-bar-label">${cls.resourceIcon||"🔵"} ${cls.resource||"Recurso"}</span>
+          <div class="carry-meter-track"><div class="carry-meter-fill" style="width:${resPct}%;background:rgba(60,100,180,0.65)"></div></div>
+          <span class="cpv-bar-val">${character.currentResource}/${resMax}</span>
+        </div>` : ""}
+        <div class="cpv-bar-row">
+          <span class="cpv-bar-label">✨ XP</span>
+          <div class="carry-meter-track"><div class="carry-meter-fill xp" style="width:${xpPct}%"></div></div>
+          <span class="cpv-bar-val">${character.xp}/${xpToNextLevel(character)}</span>
+        </div>
+      </div>
+
+      <!-- Atributos -->
+      <div class="cpv-attrs">${attrsHTML}</div>
+
+      <!-- Stats de combate -->
+      <div class="cpv-stats-grid">
+        <div class="cpv-stat"><span class="cpv-stat-icon">🛡</span><span class="cpv-stat-label">Def.Física</span><strong>${physDef}</strong></div>
+        <div class="cpv-stat"><span class="cpv-stat-icon">✨</span><span class="cpv-stat-label">Def.Mágica</span><strong>${magDef}</strong></div>
+        <div class="cpv-stat"><span class="cpv-stat-icon">⚡</span><span class="cpv-stat-label">Ações</span><strong>${actions}</strong></div>
+        <div class="cpv-stat"><span class="cpv-stat-icon">🔮</span><span class="cpv-stat-label">Ações Magia</span><strong>${spells}</strong></div>
+        <div class="cpv-stat"><span class="cpv-stat-icon">🏃</span><span class="cpv-stat-label">Movimento</span><strong>${move}</strong></div>
+        <div class="cpv-stat"><span class="cpv-stat-icon">🎒</span><span class="cpv-stat-label">Carga</span><strong>${weight}/${carry}kg</strong></div>
+        ${slots > 0 ? `<div class="cpv-stat"><span class="cpv-stat-icon">📖</span><span class="cpv-stat-label">Slots</span><strong>${character.usedSlots||0}/${slots}</strong></div>` : ""}
+        ${dmg.total ? `<div class="cpv-stat"><span class="cpv-stat-icon">⚔</span><span class="cpv-stat-label">Dano</span><strong>${dmg.total}</strong></div>` : ""}
+      </div>
+
+      <!-- Equipamento -->
+      ${equip.length ? `
+      <div class="cpv-section">
+        <div class="cpv-section-label">Equipamento</div>
+        <div class="cpv-equip-list">${equip.join("")}</div>
+      </div>` : ""}
+
+      <!-- Perícias -->
+      ${(character.skills?.class||[]).length || (character.skills?.general||[]).length ? `
+      <div class="cpv-section">
+        <div class="cpv-section-label">Perícias</div>
+        <div class="cpv-tags">
+          ${[...(character.skills.class||[]),...(character.skills.general||[])].map(s=>`<span class="cpv-tag">${s}</span>`).join("")}
+        </div>
+      </div>` : ""}
+
+      <!-- Magias conhecidas (primeiras 5) -->
+      ${knownSpells.length ? `
+      <div class="cpv-section">
+        <div class="cpv-section-label">Magias${(character.spells||[]).length > 5 ? ` (${(character.spells||[]).length} total — mostrando 5)` : ""}</div>
+        <div class="cpv-tags">
+          ${knownSpells.map(s=>`<span class="cpv-tag">${s}</span>`).join("")}
+        </div>
+      </div>` : ""}
+
+      <!-- Maldições e Bênçãos -->
+      ${activeCB.length ? `
+      <div class="cpv-section">
+        <div class="cpv-section-label">Condições Ativas</div>
+        <div class="cpv-tags">
+          ${activeCB.map(cb=>`<span class="cpv-tag ${cb.type==="curse"?"cpv-tag-curse":"cpv-tag-bless"}">${cb.icon} ${cb.name}</span>`).join("")}
+        </div>
+      </div>` : ""}
+
+      <!-- Montaria -->
+      ${mountData ? `
+      <div class="cpv-section">
+        <div class="cpv-section-label">Montaria</div>
+        <div class="cpv-mount-row">
+          <span class="cpv-mount-icon">${mountData.icon}</span>
+          <span class="cpv-mount-name">${mountData.name}</span>
+          <span class="cpv-mount-speed">⚡ ${mountData.speed} hex</span>
+          <span class="cpv-mount-carry">📦 ${calcMountWeight(character)}/${mountData.carryKg}kg</span>
+        </div>
+      </div>` : ""}
+
+    </div>
+
+    <div class="cpv-footer">
+      <button class="btn-secondary" id="char-preview-close-footer">Fechar</button>
+      <button class="btn-primary" id="char-preview-open-sheet">Abrir Ficha Completa →</button>
+    </div>`;
+
+  overlay.classList.remove("hidden");
+
+  const close = () => overlay.classList.add("hidden");
+  document.getElementById("char-preview-close")?.addEventListener("click", close);
+  document.getElementById("char-preview-close-footer")?.addEventListener("click", close);
+  document.getElementById("char-preview-open-sheet")?.addEventListener("click", () => {
+    close();
+    openCharacterSheet(id);
+  });
+  overlay.addEventListener("click", e => { if (e.target === overlay) close(); }, { once: true });
 }
 
 function openCharacterSheet(id) {
