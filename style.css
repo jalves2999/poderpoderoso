@@ -5086,3 +5086,98 @@ main {
 .cpv-skill-n { background: rgba(60,120,60,0.12); color: #4a9050; }
 .cpv-skill-d { background: rgba(180,120,20,0.12); color: #9a7010; }
 .cpv-skill-c { background: rgba(160,40,40,0.12);  color: #a03030; }
+
+/* ================================================================
+   CARD PRINCIPAL — Botões dedicados de Resumo e Ficha
+   ================================================================ */
+
+.char-card-btns {
+  display: flex;
+  gap: 6px;
+  margin-top: 10px;
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+}
+
+.char-btn-preview,
+.char-btn-sheet {
+  flex: 1;
+  padding: 7px 4px;
+  border-radius: 6px;
+  font-family: var(--font-heading);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  border: 1px solid;
+  transition: filter 0.15s, transform 0.1s;
+  text-align: center;
+  white-space: nowrap;
+}
+.char-btn-preview:active,
+.char-btn-sheet:active { filter: brightness(0.85); transform: scale(0.97); }
+
+.char-btn-preview {
+  background: rgba(156,122,60,0.1);
+  border-color: rgba(156,122,60,0.4);
+  color: var(--gold);
+}
+.char-btn-preview:hover { background: rgba(156,122,60,0.2); }
+
+.char-btn-sheet {
+  background: rgba(58,42,29,0.08);
+  border-color: rgba(58,42,29,0.25);
+  color: var(--ink);
+}
+.char-btn-sheet:hover { background: rgba(58,42,29,0.15); }
+
+/* ================================================================
+   MODAL DE RESUMO — Seção de Dano
+   ================================================================ */
+
+.cpv-damage-combined {
+  font-family: var(--font-heading);
+  font-size: 17px;
+  color: var(--ink);
+  font-weight: 700;
+  padding: 6px 10px;
+  background: rgba(180,60,40,0.08);
+  border-radius: 7px;
+  border-left: 3px solid rgba(180,60,40,0.4);
+  display: inline-block;
+  margin-bottom: 6px;
+}
+
+.cpv-damage-sources {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.cpv-damage-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 3px 8px;
+  border-radius: 5px;
+  background: rgba(0,0,0,0.03);
+  border: 1px solid var(--line);
+  gap: 8px;
+}
+
+.cpv-damage-label {
+  font-size: 11.5px;
+  color: var(--ink-soft);
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cpv-damage-dice {
+  font-family: var(--font-heading);
+  font-size: 12.5px;
+  color: var(--ink);
+  font-weight: 700;
+  flex-shrink: 0;
+}

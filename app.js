@@ -1332,7 +1332,7 @@ function renderCharacterList() {
       <button class="char-card-delete" title="Remover personagem" aria-label="Remover personagem">✕</button>
       <div class="char-card-seal">${cls ? cls.icon : "?"}</div>
       <h3 class="char-card-name">
-        <button class="char-name-link" data-char-preview="${character.id}" title="Ver resumo de ${escapeHTML(character.name)}">${escapeHTML(character.name)}</button>
+        <button class="char-name-link" data-char-preview="${character.id}">${escapeHTML(character.name)}</button>
       </h3>
       <p class="char-card-class">${cls ? cls.name : "Sem classe"}${character.origin ? " · " + escapeHTML(character.origin) : ""}</p>
       <div class="char-card-bars">
@@ -1351,17 +1351,37 @@ function renderCharacterList() {
         <span class="char-card-level">Nível ${character.level}</span>
         <span>${character.rosterType === "pc" ? "Jogador" : "NPC"}</span>
       </div>
+      <div class="char-card-btns">
+        <button class="char-btn-preview" data-char-preview="${character.id}" title="Ver resumo rápido">📋 Resumo</button>
+        <button class="char-btn-sheet"   data-char-sheet="${character.id}"   title="Abrir ficha completa">📄 Ficha</button>
+      </div>
     `;
 
+    // Clique no card (fora dos botões) → resumo
     card.addEventListener("click", (e) => {
       if (e.target.closest(".char-card-delete")) return;
-      if (e.target.closest(".char-name-link")) return; // nome tem handler próprio
+      if (e.target.closest(".char-btn-preview")) return;
+      if (e.target.closest(".char-btn-sheet"))   return;
+      if (e.target.closest(".char-name-link"))   return;
       openCharPreviewModal(character.id);
     });
 
+    // Nome → resumo
     card.querySelector(".char-name-link").addEventListener("click", (e) => {
       e.stopPropagation();
       openCharPreviewModal(character.id);
+    });
+
+    // Botão 📋 Resumo
+    card.querySelector(".char-btn-preview").addEventListener("click", (e) => {
+      e.stopPropagation();
+      openCharPreviewModal(character.id);
+    });
+
+    // Botão 📄 Ficha
+    card.querySelector(".char-btn-sheet").addEventListener("click", (e) => {
+      e.stopPropagation();
+      openCharacterSheet(character.id);
     });
 
     card.querySelector(".char-card-delete").addEventListener("click", (e) => {
@@ -1517,8 +1537,30 @@ function openCharPreviewModal(id) {
         <div class="cpv-stat"><span class="cpv-stat-icon">🏃</span><span class="cpv-stat-label">Movimento</span><strong>${move}</strong></div>
         <div class="cpv-stat"><span class="cpv-stat-icon">🎒</span><span class="cpv-stat-label">Carga</span><strong>${weight}/${carry}kg</strong></div>
         ${slots > 0 ? `<div class="cpv-stat"><span class="cpv-stat-icon">📖</span><span class="cpv-stat-label">Slots</span><strong>${character.usedSlots||0}/${slots}</strong></div>` : ""}
-        ${dmg.total ? `<div class="cpv-stat"><span class="cpv-stat-icon">⚔</span><span class="cpv-stat-label">Dano</span><strong>${dmg.total}</strong></div>` : ""}
       </div>
+
+      <!-- Dano -->
+      ${(() => {
+        const combined = buildCombinedDamageString(dmg);
+        if (!combined || combined === "—") return "";
+        return `
+        <div class="cpv-section">
+          <div class="cpv-section-label">⚔ Dano Total de Ataque</div>
+          <div class="cpv-damage-combined">${combined}</div>
+          <div class="cpv-damage-sources">
+            ${dmg.sources.filter(s => s.dice && s.dice !== "—").map(s => `
+              <div class="cpv-damage-row">
+                <span class="cpv-damage-label">${s.label}</span>
+                <span class="cpv-damage-dice">${s.dice}${s.bonus ? ` +${s.bonus}` : ""}</span>
+              </div>`).join("")}
+            ${dmg.totalFixedBonus > 0 ? `
+              <div class="cpv-damage-row">
+                <span class="cpv-damage-label">Bônus fixo total</span>
+                <span class="cpv-damage-dice">+${dmg.totalFixedBonus}</span>
+              </div>` : ""}
+          </div>
+        </div>`;
+      })()}
 
       <!-- Equipamento -->
       ${equip.length ? `
