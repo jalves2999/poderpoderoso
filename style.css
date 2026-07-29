@@ -5017,3 +5017,72 @@ main {
   .cpv-footer .btn-primary,
   .cpv-footer .btn-secondary { width: 100%; }
 }
+
+/* ── Testes de Perícia no Modal de Resumo ── */
+.cpv-skills-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.cpv-skill-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 5px;
+  background: rgba(0,0,0,0.03);
+  border: 1px solid transparent;
+}
+.cpv-skill-row:hover { background: rgba(156,122,60,0.05); }
+
+.cpv-skill-trained {
+  background: rgba(156,122,60,0.07);
+  border-color: rgba(156,122,60,0.2);
+}
+
+.cpv-skill-icon { font-size: 13px; flex-shrink: 0; width: 18px; text-align: center; }
+
+.cpv-skill-name {
+  flex: 1;
+  font-size: 12.5px;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+}
+
+.cpv-skill-plus {
+  font-size: 10px;
+  padding: 1px 5px;
+  border-radius: 5px;
+  background: rgba(156,122,60,0.2);
+  color: var(--gold);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.cpv-skill-n,
+.cpv-skill-d,
+.cpv-skill-c {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  font-family: var(--font-heading);
+}
+.cpv-skill-n strong,
+.cpv-skill-d strong,
+.cpv-skill-c strong {
+  font-size: 12.5px;
+  font-weight: 700;
+}
+
+.cpv-skill-n { background: rgba(60,120,60,0.12); color: #4a9050; }
+.cpv-skill-d { background: rgba(180,120,20,0.12); color: #9a7010; }
+.cpv-skill-c { background: rgba(160,40,40,0.12);  color: #a03030; }

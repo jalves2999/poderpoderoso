@@ -1554,7 +1554,28 @@ function openCharPreviewModal(id) {
         </div>
       </div>` : ""}
 
-      <!-- Montaria -->
+      <!-- Testes de Perícia -->
+      ${(() => {
+        const nonCombat = (typeof SKILL_TESTS !== "undefined" ? SKILL_TESTS : []).filter(t => !t.combat);
+        if (!nonCombat.length) return "";
+        const rows = nonCombat.map(test => {
+          const { normal, hard, critical, hasSkill } = calcSkillTest(character, test);
+          return `
+            <div class="cpv-skill-row ${hasSkill ? "cpv-skill-trained" : ""}">
+              <span class="cpv-skill-icon">${test.icon}</span>
+              <span class="cpv-skill-name">${test.name}${hasSkill ? `<span class="cpv-skill-plus">+2</span>` : ""}</span>
+              <span class="cpv-skill-n" title="Normal">N<strong>${normal}</strong></span>
+              <span class="cpv-skill-d" title="Difícil">D<strong>${hard}</strong></span>
+              <span class="cpv-skill-c" title="Crítico">C<strong>${critical}</strong></span>
+            </div>`;
+        }).join("");
+        return `
+        <div class="cpv-section">
+          <div class="cpv-section-label">Testes de Perícia <span style="font-weight:400;text-transform:none;letter-spacing:0">— role 1d20 abaixo do valor</span></div>
+          <div class="cpv-skills-grid">${rows}</div>
+        </div>`;
+      })()}
+
       ${mountData ? `
       <div class="cpv-section">
         <div class="cpv-section-label">Montaria</div>
