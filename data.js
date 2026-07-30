@@ -73,15 +73,14 @@ const CLASSES = {
       { name: "Última Resistência", cost: "5 Fúria (todos), 1 Ação", effect: "Com HP ≤ 25%, gasta toda a Fúria para curar 1d10 + FOR. Uso único por combate." }
     ],
     skillsClass: [
-      { name: "Combate com Armas Pesadas", attr: "FOR", desc: "Reduz as penalidades de manejo de armas grandes e pesadas, como machados de duas mãos e martelos de guerra, tornando os golpes mais precisos e firmes.", example: "Manejar um machado grande sem perder equilíbrio ao golpear, mesmo em espaço apertado." },
-      { name: "Combate com Armas Leves", attr: "DEX", desc: "Melhora o manejo de espadas curtas e adagas, permitindo golpes mais rápidos e ajustes finos de ângulo durante o combate.", example: "Encaixar um golpe certeiro entre as placas de uma armadura inimiga usando uma adaga." },
-      { name: "Resistência Física", attr: "FOR", desc: "Aumenta a capacidade de resistir a venenos, fadiga extrema e efeitos físicos debilitantes que afetam o corpo.", example: "Continuar lutando mesmo após ser envenenado por uma flecha, resistindo aos efeitos por mais tempo." },
-      { name: "Intimidação", attr: "FOR/SAB", desc: "Permite ameaçar e impor presença física ou psicológica sobre outros, seja em combate ou em negociações tensas.", example: "Fazer um bandido desistir de um assalto só de erguer o machado e encarar o grupo." },
-      { name: "Tática de Campo", attr: "INT", desc: "Avalia terreno, formações inimigas e pontos fracos estratégicos antes ou durante uma batalha.", example: "Notar que os arqueiros inimigos estão posicionados num morro e sugerir um flanco pela direita." },
-      { name: "Atletismo", attr: "FOR/AGI", desc: "Permite escalar superfícies, saltar distâncias maiores e arrombar portas ou obstáculos com força física.", example: "Saltar de um telhado a outro durante uma perseguição, ou derrubar uma porta trancada com um chute." },
-      { name: "Defesa com Armas Pesadas", attr: "FOR", desc: "Treino especializado em usar o próprio peso e comprimento de armas de duas mãos para interceptar golpes, algo que a maioria dos guerreiros não consegue fazer. Quem possui essa perícia pode tentar defender-se normalmente mesmo empunhando uma arma de duas mãos pesada, mas a Chance de Defesa sofre −2 (além de qualquer outra degradação por tentativa).", example: "Erguer um machado grande na diagonal bem a tempo de desviar o golpe de uma espada inimiga, algo que pareceria impossível para quem não treinou a manobra.", mechanicalEffect: "enable_two_hand_defense" }
-    ],
-    spellsFull: null
+      { name: "Atletismo",             attr: "FOR/AGI", desc: "Escalar, nadar, correr com armadura pesada e realizar feitos físicos em combate e exploração.", example: "Escalar muralha de 6m com armadura; derrubar porta trancada com chute; nadar com cota de malha." },
+      { name: "Intimidação",           attr: "FOR/SAB", desc: "Usar presença física e reputação para desestabilizar inimigos antes ou durante o combate.", example: "Fazer mercenários reconsiderarem o ataque só pelo porte; ameaçar informante para que fale." },
+      { name: "Defesa com Armas Pesadas", attr: "FOR/AGI", desc: "Permite usar armas de 2 mãos para defender. Sem esta perícia, armas 2M não podem defender. Com ela: −2 na Chance de Defesa por ataque defendido.", example: "Usar a haste do Maul para aparar golpe de espada.", combat: true, mechanicalEffect: "enable_two_hand_defense", combatDesc: "Permite usar armas de 2 mãos para defender, com −2 na Chance de Defesa por ataque defendido (em vez de ser impossível)." },
+      { name: "Golpe de Derrubada",    attr: "FOR/AGI", desc: "Ao acertar corpo a corpo: alvo testa FOR (normal) ou cai Derrubado por 1 rodada.", example: "Troll derrubado: aliados adjacentes ganham +1 na Chance de Acerto contra ele.", combat: true, combatDesc: "Ao acertar ataque corpo a corpo, declare 'Derrubada'. Alvo testa FOR (normal): falha → Derrubado 1 rodada." },
+      { name: "Varredura",             attr: "FOR/AGI", desc: "1x/turno: ao acertar com arma 2M, gaste 1 Ação extra para golpear 2º inimigo adjacente por metade do dano.", example: "Claymore derruba Goblin; Varredura atinge o segundo por metade do dano.", combat: true, combatDesc: "1x/turno ao acertar com arma 2M: Ação extra para golpear 2º inimigo adjacente diferente por metade do dano." },
+      { name: "Pressão Tática",        attr: "INT/SAB", desc: "1x/rodada, Ação Livre: analisa inimigo — ataques tratam a DEX dele como 1 ponto menor por 2 rodadas.", example: "Estuda o Orc Berserker DEX 0: tratado como DEX −1, +1 na Chance de Acerto.", combat: true, combatDesc: "1x/rodada, Ação Livre: analisa 1 inimigo visível. Seus ataques contra ele têm DEX inimiga −1 por 2 rodadas." },
+      { name: "Liderança",             attr: "SAB", desc: "Coordenar aliados em situações caóticas, elevar moral e manter coesão sob pressão.", example: "Reorganiza o grupo após emboscada; soldados continuam lutando mesmo com baixas." }
+    ],    spellsFull: null
   },
 
   mago: {
@@ -126,13 +125,13 @@ const CLASSES = {
       { name: "Reserva Arcana Ampliada", cost: "6 MP, fora de combate", effect: "Escolhe 1 magia conhecida e concede a ela +1 uso na contagem de cooldown atual (por batalha, por dia, ou por semana, conforme a magia). Pode ser usada 1 vez por descanso longo." }
     ],
     skillsClass: [
-      { name: "Arcanismo", attr: "INT", desc: "Permite identificar magias sendo conjuradas, reconhecer itens mágicos e decifrar runas e inscrições arcanas.", example: "Reconhecer que o brilho azulado na espada inimiga é um encantamento de gelo antes que ela seja usada." },
-      { name: "Conhecimento Arcano Histórico", attr: "INT", desc: "Conhecimento sobre criaturas mágicas, ruínas antigas e eventos históricos relacionados à magia.", example: "Lembrar que a torre em ruínas era o antigo laboratório de um arquimago desaparecido séculos atrás." },
-      { name: "Concentração", attr: "SAB", desc: "Resiste a ser interrompido enquanto conjura uma magia, mesmo sob dano ou pressão de combate.", example: "Terminar de conjurar uma Bola de Fogo mesmo levando um golpe de espada no ombro." },
-      { name: "Investigação Mágica", attr: "INT", desc: "Detecta armadilhas mágicas, ilusões e efeitos arcanos ocultos que passariam despercebidos a olho nu.", example: "Notar que o corredor 'vazio' na verdade esconde uma ilusão sobre um precipício." },
-      { name: "Alquimia Básica", attr: "INT", desc: "Permite criar componentes para magias e identificar poções e substâncias mágicas desconhecidas.", example: "Identificar que o líquido roxo no frasco é uma poção de invisibilidade antes de bebê-lo." }
-    ],
-    spellsFull: [
+      { name: "Arcanismo",           attr: "INT",     desc: "Teoria mágica, identificação de feitiços, runas e criaturas mágicas.", example: "Identificar que o artefato é um Foco de Invocação; reconhecer feitiço como Ilusão de 3º nível." },
+      { name: "Investigação",        attr: "INT",     desc: "Examinar ativamente pistas, decifrar textos arcanos e conectar informações dispersas.", example: "Decifrar mapa cifrado do culto; descobrir que dois eventos têm o mesmo culpado." },
+      { name: "História",            attr: "INT",     desc: "Eventos históricos, reinos extintos, guerras e civilizações antigas de Aether.", example: "Saber que a torre era laboratório de arquimago desaparecido há 200 anos." },
+      { name: "Percepção Mágica",    attr: "SAB/INT", desc: "Detectar auras mágicas, identificar encantamentos e sentir anomalias arcanas.", example: "Sentir que o espelho é um portal; identificar que o cofre tem feitiço de alarme.", combat: true, combatDesc: "Em combate: 1 Ação para identificar buffs/debuffs mágicos ativos no alvo e sua escola arcana." },
+      { name: "Conjuração Rápida",   attr: "INT/DEX", desc: "1x/combate: conjura magia Nível 1-2 como Reação após ataque declarado, antes de resolver.", example: "Escudo Arcano como Reação antes de receber o golpe do Troll.", combat: true, combatDesc: "1x/combate: conjure magia Nível 1-2 como Reação (após ataque declarado, antes de resolver). Consome Slot normalmente." },
+      { name: "Foco Ampliado",       attr: "INT",     desc: "Passivo: magias alcance ≤4 hex ganham +2 hex; áreas ganham +1 hex de raio.", example: "Bola de Fogo (raio 3) passa a raio 4. Raio (alcance 4) passa a 6.", combat: true, combatDesc: "Passivo permanente: magias com alcance ≤4 hex ganham +2 hex. Magias de área ganham +1 hex de raio. Não afeta magias de toque." }
+    ],    spellsFull: [
       { name: "Mísseis Arcanos", level: 1, effect: "1d6 + 1d4 de dano mágico em alvo único (alcance 6).", castTime: "1 Ação (instantânea)", cooldown: "4 usos por batalha" },
       { name: "Toque Gélido", level: 1, effect: "1d8 de dano mágico (toque); reduz Movimento do alvo em 2 na próxima rodada.", castTime: "1 Ação (instantânea)", cooldown: "4 usos por batalha" },
       { name: "Mãos Faiscantes", level: 1, effect: "1d4 + 1d4 de dano elétrico em até 2 alvos adjacentes entre si (alcance 4).", castTime: "1 Ação (instantânea)", cooldown: "4 usos por batalha" },
@@ -192,14 +191,13 @@ const CLASSES = {
       { name: "Olho de Águia", cost: "3 Foco", effect: "Por 3 rodadas, alcance de ataques à distância +4 hexágonos; ignora cobertura parcial." }
     ],
     skillsClass: [
-      { name: "Pontaria", attr: "DEX", desc: "Mantém a precisão de tiro mesmo em condições adversas, como vento forte, pouca luz ou alvos em movimento.", example: "Acertar um alvo a 30 metros mesmo com chuva forte e vento lateral atrapalhando a trajetória da flecha." },
-      { name: "Sobrevivência", attr: "SAB", desc: "Rastreia pegadas, encontra comida e água em ambientes selvagens, e lê sinais sutis do terreno.", example: "Seguir o rastro de um lobo ferido através de uma floresta densa até sua toca." },
-      { name: "Conhecimento de Fauna/Flora", attr: "INT", desc: "Identifica criaturas selvagens, venenos naturais e propriedades de plantas e ervas.", example: "Reconhecer que as bagas vermelhas no caminho são venenosas antes que alguém as coma." },
-      { name: "Percepção", attr: "SAB", desc: "Detecta emboscadas, inimigos escondidos e detalhes sutis no ambiente que passariam despercebidos.", example: "Notar o brilho de uma lâmina escondida nos arbustos antes que a emboscada seja disparada." },
-      { name: "Manutenção de Equipamento", attr: "DEX", desc: "Repara e produz flechas, cordas de arco e outros equipamentos de tiro com materiais disponíveis.", example: "Fabricar flechas novas a partir de madeira local durante uma pausa na viagem." },
-      { name: "Furtividade Leve", attr: "AGI", desc: "Permite movimentação silenciosa pelo ambiente, sem o bônus de ataque furtivo que o Ladino possui.", example: "Se aproximar de um acampamento inimigo sem ser ouvido, para observar de perto antes de agir." }
-    ],
-    spellsFull: null
+      { name: "Percepção",       attr: "SAB",     desc: "Detectar alvos ocultos, emboscadas e detalhes sutis, especialmente à distância.", example: "Avistar Goblin espiando de rocha a 100m; perceber armadilha na trilha antes de pisar." },
+      { name: "Sobrevivência",   attr: "SAB",     desc: "Rastrear criaturas, orientar-se na natureza, encontrar abrigo e recursos selvagens.", example: "Rastrear grupo de Orcs pela floresta; prever tempestade pelo comportamento dos pássaros." },
+      { name: "Furtividade",     attr: "AGI/DEX", desc: "Mover-se silenciosamente para ganhar posição de tiro sem ser detectado.", example: "Aproximar-se do acampamento inimigo pelo barlavento para tiro sem alerta." },
+      { name: "Natureza",        attr: "SAB",     desc: "Identificar criaturas, plantas, terrenos e fenômenos naturais. Essencial para caça.", example: "Saber que o pântano não suporta criatura Grande — forçar o Troll para lá." },
+      { name: "Tiro em Movimento", attr: "DEX/AGI", desc: "Pode usar Ação de Movimento + Ação de Ataque à distância no mesmo turno sem −1 na Chance de Acerto.", example: "Reposiciona 3 hexes e atira com chance normal, sem a penalidade de movimento.", combat: true, combatDesc: "Pode usar Ação de Movimento + Ação de Ataque à distância no mesmo turno sem a penalidade de −1 na Chance de Acerto." },
+      { name: "Tiro Preciso",    attr: "DEX/SAB", desc: "1x/combate: mira completa — ignora cobertura parcial e causa +1d6 de dano.", example: "O Goblin atrás da barricada: cobertura ignorada, +1d6 no acerto.", combat: true, combatDesc: "1x/combate: gaste a Ação de Combate inteira mirando (sem mover). Próximo tiro: ignora cobertura parcial e +1d6 de dano." }
+    ],    spellsFull: null
   },
 
   ladino: {
@@ -243,13 +241,13 @@ const CLASSES = {
         ] }
     ],
     skillsClass: [
-      { name: "Ladinagem", attr: "DEX", desc: "Arromba fechaduras, desarma armadilhas mecânicas e realiza furtos discretos.", example: "Abrir o cadeado de um baú do tesouro sem chave, em poucos segundos." },
-      { name: "Investigação", attr: "INT", desc: "Encontra pistas, compartimentos secretos e detalhes escondidos em cenas e objetos.", example: "Descobrir uma passagem secreta atrás de uma estante ao notar marcas de atrito no chão." },
-      { name: "Percepção de Mentiras", attr: "SAB", desc: "Detecta blefes, meias-verdades e sinais de traição na fala e no comportamento de outros.", example: "Perceber que o mercador está escondendo informações sobre a procedência de um item raro." },
-      { name: "Acrobacia", attr: "AGI", desc: "Permite escapar de agarrões, manter o equilíbrio em superfícies instáveis e realizar saltos precisos.", example: "Se soltar do aperto de um troll e cair de pé após um salto de um telhado." },
-      { name: "Conhecimento de Venenos", attr: "INT", desc: "Identifica e prepara venenos e seus antídotos a partir de ingredientes naturais ou alquímicos.", example: "Preparar um antídoto rápido após reconhecer o veneno usado contra um aliado." }
-    ],
-    spellsFull: null
+      { name: "Prestidigitação",      attr: "DEX",     desc: "Furtar objetos, esconder itens no corpo, abrir fechaduras e truques manuais de delicadeza extrema.", example: "Furtar a chave do carcereiro; esconder faca no cano da bota; abrir cela com grampo." },
+      { name: "Furtividade",          attr: "AGI/DEX", desc: "Mover-se silenciosamente e permanecer oculto — a ferramenta mais importante do Ladino.", example: "Passar pela guarda dormindo; seguir o alvo pela cidade sem ser percebido." },
+      { name: "Enganação",            attr: "SAB/DEX", desc: "Mentir, manipular e criar ilusões sociais com controle da linguagem corporal.", example: "Fingir ser mercador; convencer interrogador que o grupo estava apenas passando por ali." },
+      { name: "Acrobacia",            attr: "AGI/DEX", desc: "Escapar de agarrões, rolar, equilibrar-se e mover-se em terrenos difíceis.", example: "Rolar entre as pernas do inimigo e reposicionar-se atrás dele em 1 Ação." },
+      { name: "Investigação",         attr: "INT",     desc: "Encontrar pistas, passagens secretas e padrões ocultos — a versão ativa da Percepção.", example: "Descobrir passagem atrás de estante pelas marcas de atrito; conectar dois eventos." },
+      { name: "Ferramentas de Ladrão", attr: "DEX",   desc: "Usar kit especializado para abrir fechaduras e desativar armadilhas mecânicas.", example: "Abrir sala do tesouro; desativar armadilha de setas do corredor antes de cruzar.", combat: true, combatDesc: "Em combate: 1 Ação para desativar armadilha mecânica ativa ou forçar mecanismo de porta trancada." }
+    ],    spellsFull: null
   },
 
   clerigo: {
@@ -293,13 +291,13 @@ const CLASSES = {
       { name: "Ressurreição Menor", cost: "Toda a Fé (mín. 6), 1 Ação", effect: "1x/dia, restaura aliado caído há até 3 rodadas para 50% do HP máximo." }
     ],
     skillsClass: [
-      { name: "Medicina", attr: "SAB", desc: "Presta primeiros socorros sem usar magia e diagnostica doenças e condições físicas.", example: "Identificar que a febre de um aldeão é causada por uma infecção, não por uma maldição." },
-      { name: "Religião", attr: "INT", desc: "Conhecimento sobre doutrinas religiosas, rituais sagrados e hierarquias de templos e ordens.", example: "Reconhecer o símbolo de uma ordem religiosa rival gravado na porta de um templo abandonado." },
-      { name: "Intuição", attr: "SAB", desc: "Percebe intenções ocultas, mentiras sutis e sinais de perigo iminente antes que se manifestem.", example: "Sentir que o sorriso do anfitrião escondia más intenções, momentos antes da traição." },
-      { name: "Persuasão", attr: "SAB/FOR", desc: "Usa diplomacia, conforto emocional e liderança moral para guiar e unir o grupo ou convencer outros.", example: "Convencer um aldeão assustado a confiar no grupo e revelar onde os sequestradores se escondem." },
-      { name: "Combate com Armas de Impacto", attr: "FOR", desc: "Reduz as penalidades de manejo de maças e martelos de guerra, armas tradicionalmente usadas por Clérigos.", example: "Golpear com firmeza usando uma maça pesada sem perder o equilíbrio entre os golpes." }
-    ],
-    spellsFull: [
+      { name: "Medicina",          attr: "SAB",     desc: "Tratar ferimentos, curar doenças, estabilizar aliados a 0 HP e aplicar primeiros socorros sem magia.", example: "Remover flecha envenenada; cauterizar ferimento para parar Sangramento; estabilizar aliado desmaiado." },
+      { name: "Religião",          attr: "SAB/INT", desc: "Conhecimento dos deuses de Aether, rituais, símbolos sagrados, mortos-vivos e planos divinos.", example: "Reconhecer símbolo de Jurgmund; saber como afastar Espectro com oração." },
+      { name: "Persuasão",         attr: "SAB",     desc: "Convencer de boa fé — negociar, ganhar confiança e influenciar com argumentos honestos.", example: "Convencer aldeões a confiar no grupo; mediar disputa entre fações rivais da cidade." },
+      { name: "Força de Vontade",  attr: "INT/SAB", desc: "Resistir a efeitos mentais, dominação e pressão psicológica extrema.", example: "Resistir ao Sussurro da Dúvida; não ceder ao medo do Lamento da Banshee." },
+      { name: "Liderança",         attr: "SAB",     desc: "Coordenar aliados, elevar o moral e manter o grupo coeso sob pressão.", example: "Reorganiza o grupo após emboscada; mantém moral em batalha com baixas pesadas." },
+      { name: "Canalizar pelo Cajado", attr: "INT/SAB", desc: "Ao acertar com cajado/arma mágica: conjura magia Nível 1 no mesmo alvo gastando 1 Ação de Magia (sem Slot extra).", example: "Cajado acerta o Esqueleto; Canalizar: lança Raio Sagrado sem Slot adicional.", combat: true, combatDesc: "Ao acertar ataque com cajado ou arma mágica: gaste 1 Ação de Magia para conjurar magia Nível 1 conhecida no mesmo alvo. Não consome Slot — apenas a Ação de Magia." }
+    ],    spellsFull: [
       { name: "Luz Sagrada", level: 1, effect: "1d6 de dano sagrado; cega criaturas das trevas por 1 rodada.", castTime: "1 Ação (instantânea)", cooldown: "4 usos por batalha" },
       { name: "Curar Feridas", level: 1, effect: "2d6 + SAB de cura em alvo único tocado.", castTime: "1 Ação (instantânea)", cooldown: "4 usos por batalha" },
       { name: "Proteção contra o Mal", level: 1, effect: "+1d4 na Chance de Defesa contra criaturas malignas por 3 rodadas.", castTime: "1 Ação (instantânea)", cooldown: "3 usos por sessão" },
@@ -1181,7 +1179,39 @@ const WEAPONS_ONE_HAND = [
     setBonus: { pieces: 3, ability: "Laboratório de Campo",
       effect: "Com 3 peças: pode criar qualquer poção do Nível 1 ou 2 como Ação de Combate (sem descanso longo, mas precisa de ingredientes coletados neste combate). 1x/combate." } },
 
-];
+,
+
+  /* ─── SET: Lâmina das Runas — Runa-Lâmina (guerreiro+mago) 3p ─ */
+
+  { tier: "raro", name: "Espada Rúnica de Valdris", dmg: "1d8+1d4", req: "FOR", weight: 3.5,
+    slot: ["primary"], defenseDegrade: 1,
+    setName: "Lâmina das Runas", subclass: "runa-lamina",
+    effect: "Ao gravar uma Runa nesta espada: a Runa fica carregada (não consome Carga do turno). A primeira Runa carregada por combate é gratuita (não consome MP nem Fúria).",
+    note: "1ª Runa por combate é gratuita. Runas nesta lâmina causam +1d4 extra ao detonar.",
+    story: "Forjada em Valdris com inscrições de fragmentos de grimório. O ferreiro não entendia o que gravava — mas a espada entendeu." },
+
+  { tier: "raro", name: "Adaga de Ancoragem Arcana", dmg: "1d4+1d4", req: "DEX", weight: 1,
+    slot: ["primary","secondary"], defenseDegrade: 2,
+    setName: "Lâmina das Runas", subclass: "runa-lamina",
+    effect: "Ao usar esta adaga como secundária: se o portador tiver uma Runa ativa no corpo ou na arma primária, a adaga causa +1d6 arcano passivo em cada ataque. Se uma Runa detonar enquanto estiver empunhando a adaga: ganha +1 Esquiva na rodada.",
+    note: "Com Runa ativa: +1d6 arcano passivo em ataques. Bônus de Esquiva ao detonar Runa.",
+    story: "Pequena o suficiente para segurar na mão esquerda enquanto as runas brilham na direita." },
+
+  /* ─── SET: Sombra Dupla — Caçador Sombrio (ladino+arqueiro) 3p ─ */
+
+  { tier: "raro", name: "Faca do Silêncio", dmg: "1d6+1d4", req: "DEX", weight: 0.8,
+    slot: ["primary","secondary"], defenseDegrade: 2,
+    setName: "Sombra Dupla", subclass: "cacador-sombrio",
+    effect: "Ataques com esta faca não produzem som. Se o portador estiver Furtivo: o acerto é automático contra alvos que não perceberam o portador (sem rolar d10). Ataques furtivos com esta faca: +1d8 adicional.",
+    note: "Silenciosa. Em Furtividade contra alvos desavisados: acerto automático + +1d8 extra.",
+    story: "O vendedor disse que ninguém jamais ouviu o dono desta faca atacar. O comprador perguntou se algum deles ainda estava vivo para confirmar." },
+
+  { tier: "raro", name: "Adaga da Armadilha", dmg: "1d4+1d4", req: "DEX", weight: 0.7,
+    slot: ["primary","secondary"], defenseDegrade: 2,
+    setName: "Sombra Dupla", subclass: "cacador-sombrio",
+    effect: "Ao cravar esta adaga num hex como Ação Livre: cria armadilha simples (1d6, Preso). Não gasta Carga de Veneno nem Foco. Pode ser combinada com Armadilha de Caçador — cravando a adaga no hex da armadilha existente: +1d4 ao dano e Sangramento adicional.",
+    note: "Armadilha gratuita como Ação Livre 1x/combate. Aprimora Armadilha de Caçador existente.",
+    story: "A lâmina tem entalhes que funcionam como anzol. Uma vez que entra num material mole — não sai sem custo." }];
 
 const WEAPONS_TWO_HAND = [
   /* --- COMUNS --- */
@@ -1329,7 +1359,36 @@ const WEAPONS_TWO_HAND = [
     setBonus: { pieces: 3, ability: "Corrente Sem Fim",
       effect: "Com 3 peças: ao entrar em Fúria de Batalha, o efeito dura +2 rodadas extras. Ao sair da Fúria: pode escolher imediatamente entrar em Limiar da Morte (se a habilidade for conhecida) sem custo de ação." } },
 
-];
+,
+
+  /* ─── SET: Lâmina das Runas — 3ª peça (Runa-Lâmina) ────────── */
+
+  { tier: "lendario", name: "Greatsword das Runas Despertas", dmg: "1d12+1d8", req: "FOR", weight: 6,
+    slot: ["primary"], defenseDegrade: 2, heavyTwoHanded: true,
+    setName: "Lâmina das Runas", subclass: "runa-lamina",
+    magicBonus: { attr: "FOR", attrValue: 1 },
+    effect: "Runas gravadas nesta espada detonam em ÁREA (raio 2 hex) em vez de só no alvo atingido. +1 FOR enquanto equipada. Com set completo (Lâmina das Runas 3p): Fúria Arcana em raio 4 hex e Runas gratuitas por combate aumentam de 1 para 2.",
+    note: "+1 FOR passivo. Runas explodem em área 2 hex. SET COMPLETO: +2 Runas gratuitas e Fúria Arcana raio 4.",
+    story: "Encontrada num arsenal de Atrelon. As runas na lâmina mudavam ao ser tocadas — como se decidindo o que mostrar.",
+    setBonus: "Lâmina das Runas (3p) — Detonação Total: Fúria Arcana atinge raio 4 hex; Runas gratuitas por combate = 2; ao entrar em Transcendência Rúnica: Runas ativas detonam gratuitamente." },
+
+  /* ─── SET: Marca do Caçador — Caçador de Gigantes (guer+arq) 3p */
+
+  { tier: "raro", name: "Lança do Abatimento", dmg: "1d10+1d6", req: "FOR", weight: 4.5,
+    slot: ["primary"], defenseDegrade: 2,
+    setName: "Marca do Caçador", subclass: "cacador-gigantes",
+    effect: "Contra inimigos de tamanho Grande ou maior: causa +1d8 de dano extra e o alvo testa FOR (normal) ou perde 1 de Movimento por rodada (tendão cortado). Pode ser arremessada como alcance 5 hex (1 Ação, retorna na próxima rodada se no chão).",
+    note: "Contra alvos Grandes+: +1d8 extra e reduz Movimento. Arremesso alcance 5 hex.",
+    story: "Criada na tradição dos caçadores da Planície Sudeste. Ponta larga para maximizar o dano em estruturas grandes." },
+
+  { tier: "lendario", name: "Maul do Gigante Caído", dmg: "2d8+1d6", req: "FOR", weight: 9,
+    slot: ["primary"], defenseDegrade: 1, heavyTwoHanded: true,
+    setName: "Marca do Caçador", subclass: "cacador-gigantes",
+    magicBonus: { attr: "FOR", attrValue: 2 },
+    effect: "Contra inimigos de tamanho Grande ou maior: dano TRIPLICADO no lugar de dobrado. +2 FOR passivo. Todo acerto contra inimigo Grande+ impõe −2 Def.Física por 2 rodadas (escamas, armadura ou ossos trincados). SET COMPLETO: Executar a Presa funciona com dano ×5 contra alvos Grandes+ abaixo de 50% HP.",
+    note: "+2 FOR passivo. Contra Grandes+: dano ×3 e −2 Def.Física. SET COMPLETO: Executar dano ×5.",
+    story: "Forjada com ossos de um Gigante das Pedras que morreu na Batalha Colossal. Pesa o suficiente para lembrar ao usuário que ele pode cair do mesmo jeito.",
+    setBonus: "Marca do Caçador (3p) — Expertise de Abate: Anatomia de Besta revela ponto fraco automaticamente; Golpe de Abatimento custa 1 Fúria/Foco a menos; Executar a Presa causa dano ×5 contra alvos Grandes+ abaixo de 50% HP." }];
 
 const WEAPONS_MAGIC = [
   /* --- COMUNS --- */
@@ -1378,7 +1437,199 @@ const WEAPONS_MAGIC = [
     note: "Magias de buff do Bardo conjuradas enquanto empunha o Alaúde têm duração +1 rodada. Inspiração Bárdica: o bônus sobe de +1d6 para +1d8. Pode ser usada como arma ranged (projeta notas musicais).",
     setBonus: { pieces: 3, ability: "A Música que Move o Mundo",
       effect: "Com 3 peças: Performance de Batalha pode ser ativada como Ação Livre (sem custo de Ação de Magia). Ao encerrar a Performance: todos os aliados que estavam no raio recuperam 2d8 HP (a melodia final os restaura)." } },
+,
 
+  /* ═══════════════════════════════════════════════════════════════
+     ARMAS MÁGICAS — Varinhas, Orbes, Cajados, Cetros, Livros, Focas
+     Para classes mágicas (Mago, Clérigo, Bardo, Druida, etc.)
+     slot: primary ou secondary; req: INT ou SAB
+     charges: usos limitados de efeito especial por combate
+     ═══════════════════════════════════════════════════════════════ */
+
+  /* ─── MÁGICO ─────────────────────────────────────────────────── */
+
+  { tier: "magico", name: "Varinha de Fogo", dmg: "1d4", req: "INT", weight: 0.3,
+    slot: ["primary","secondary"], defenseDegrade: null,
+    charges: { max: 5, label: "Disparos de Fogo", resetOn: "combate" },
+    range: 4,
+    effect: "Ação de Combate: gasta 1 Carga para disparar projétil de fogo a até 4 hex (alcance 4). Dano: 1d8+INT de fogo + Queimando (1d4/rodada, 2 rodadas). Sem Cargas: apenas o dano base 1d4 sem efeito de fogo.",
+    note: "5 disparos de fogo por combate. Sem Cargas: perde o efeito especial mas ainda pode ser usada como varinha comum.",
+    story: "Comprada num mercado de Valdris por moedas. Usada por aprendizes que ainda não controlam Bola de Fogo — mas já têm pressa em queimar coisas." },
+
+  { tier: "magico", name: "Varinha de Gelo", dmg: "1d4", req: "INT", weight: 0.3,
+    slot: ["primary","secondary"], defenseDegrade: null,
+    charges: { max: 5, label: "Disparos de Gelo", resetOn: "combate" },
+    range: 4,
+    effect: "Ação de Combate: gasta 1 Carga para disparar projétil de gelo a até 4 hex. Dano: 1d6+INT de frio + Lento (−2 Movimento por 2 rodadas). Sem Cargas: apenas dano base 1d4.",
+    note: "5 disparos de gelo por combate. Acertos acumulam — 2 acertos no mesmo alvo: Paralisado 1 rodada (FOR normal para resistir).",
+    story: "Feita com água do Lago Central congelada no inverno de Durrak e canalizada em madeira de pinheiro cinzento. Fria ao toque. Sempre." },
+
+  { tier: "magico", name: "Cajado do Raio", dmg: "1d8", req: "INT", weight: 3,
+    slot: ["primary"], defenseDegrade: 2, heavyTwoHanded: false,
+    charges: { max: 3, label: "Descargas de Raio", resetOn: "combate" },
+    range: 4,
+    effect: "Ação de Combate: gasta 1 Carga para disparar raio a até 4 hex. Dano: 2d8+INT de relâmpago. Se o alvo usar armadura metálica: dano máximo (sem rolagem). Sem Cargas: apenas dano físico 1d8.",
+    note: "3 descargas de raio por combate. O raio salta para 1 alvo adjacente ao atingido: 1d6 de dano elétrico (sem custo de Carga).",
+    story: "Forjada num pico de Atrelon durante tempestade. O madeireiro que cortou a árvore disse que o trovão pareceu concordar." },
+
+  { tier: "magico", name: "Orbe das Sombras", dmg: "1d6", req: "INT", weight: 0.8,
+    slot: ["primary","secondary"], defenseDegrade: null,
+    charges: { max: 4, label: "Pulsos de Sombra", resetOn: "combate" },
+    range: 4,
+    effect: "Ação de Combate: gasta 1 Carga para disparar pulso de energia sombria a até 4 hex. Dano: 1d8+INT de dano psíquico (ignora Def.Física). Alvo testa SAB (normal) ou fica com −1d4 nos ataques por 1 rodada. Sem Cargas: dano base 1d6 físico.",
+    note: "4 disparos por combate. Em área escura ou à noite: +1d6 extra de dano sombrio em cada disparo.",
+    story: "Uma esfera negra que parece absorver a luz ao redor. Clérigos de Aethea ficam desconfortáveis perto dela. Isso diz algo." },
+
+  { tier: "magico", name: "Grimório de Batalha", dmg: "—", req: "INT", weight: 1.5,
+    slot: ["primary"], defenseDegrade: null,
+    charges: { max: 3, label: "Leituras de Combate", resetOn: "combate" },
+    range: 0,
+    magicBonus: { spellActions: 1 },
+    effect: "Passivo: +1 Ação de Magia por turno. Ativo (Ação de Magia, gasta 1 Carga): lê passagem do grimório — cria campo arcano 3x3 hex por 2 rodadas. Inimigos no campo: −1 em todos os testes. Aliados: +1d4 em magias lançadas de dentro do campo.",
+    note: "+1 Ação de Magia permanente enquanto equipado. 3 ativações do campo por combate. Sem Cargas: o passivo continua ativo.",
+    story: "Encadernado em couro de criatura que nunca foi identificada. Páginas se viram sozinhas no vento. Sempre apontando para o trecho certo." },
+
+  { tier: "magico", name: "Cetro da Mente", dmg: "1d6", req: "SAB", weight: 1.2,
+    slot: ["primary","secondary"], defenseDegrade: null,
+    charges: { max: 4, label: "Pulsos Mentais", resetOn: "combate" },
+    range: 4,
+    magicBonus: { slots: 1 },
+    effect: "Passivo: +1 Slot de Magia. Ação de Combate: gasta 1 Carga para disparar impulso mental a até 4 hex. Dano: 1d8+SAB psíquico. Alvo testa SAB (difícil) ou fica Confuso por 1 rodada (age aleatoriamente). Sem Cargas: apenas dano base 1d6.",
+    note: "4 disparos mentais por combate. +1 Slot permanente enquanto equipado.",
+    story: "Pertenceu a um inquisidor de Sanctum que interrogava hereges sem fazer uma única pergunta." },
+
+  { tier: "magico", name: "Cristal de Cura", dmg: "—", req: "SAB", weight: 0.5,
+    slot: ["primary","secondary"], defenseDegrade: null,
+    charges: { max: 4, label: "Pulsos de Cura", resetOn: "combate" },
+    range: 4,
+    effect: "Ação de Combate: gasta 1 Carga para enviar pulso de cura a aliado visível a até 4 hex. Cura 1d8+SAB HP. Sem Cargas: apenas serve como foco para magias de cura (+1d4 em magias de cura do portador).",
+    note: "4 curas à distância por combate. Não causa dano — é puramente ofensivo para aliados. Clérigos com este cristal: Palavra de Cura alcança +2 hex.",
+    story: "Formado naturalmente numa nascente de Aethea. Clérigos da cidade o consideram relíquia. Este aqui foi comprado numa loja de penhores." },
+
+  /* ─── RARO ───────────────────────────────────────────────────── */
+
+  { tier: "raro", name: "Varinha do Relâmpago Furtivo", dmg: "1d4", req: "DEX", weight: 0.2,
+    slot: ["primary","secondary"], defenseDegrade: null,
+    charges: { max: 6, label: "Raios Furtivos", resetOn: "combate" },
+    range: 4,
+    effect: "Ação de Combate: gasta 1 Carga para disparar raio silencioso a até 4 hex. Dano: 1d6+DEX de relâmpago. O disparo não produz som nem luz visível — Furtividade não é comprometida ao disparar. Sem Cargas: dano base 1d4 silencioso.",
+    note: "6 disparos silenciosos por combate. Bardo e Ladino: disparar não revela posição oculta.",
+    story: "Favorita de assassinos que precisam matar à distância sem o barulho inconveniente de uma flecha." },
+
+  { tier: "raro", name: "Orbe do Eco Arcano", dmg: "1d6", req: "INT", weight: 0.8,
+    slot: ["primary","secondary"], defenseDegrade: null,
+    charges: { max: 3, label: "Ecos", resetOn: "combate" },
+    range: 4,
+    magicBonus: { spellActions: 1 },
+    effect: "Passivo: +1 Ação de Magia. Ativo (Ação de Combate, gasta 1 Carga): dispara projétil arcano a até 4 hex que causa 1d10+INT e depois retorna ao portador como Ação Livre — atacando um segundo alvo diferente em raio 2 hex do primeiro por 1d8+INT. Sem Cargas: dano base 1d6, sem ricochete.",
+    note: "3 disparos com ricochete por combate. +1 Ação de Magia permanente. O segundo alvo não pode ser o mesmo que o primeiro.",
+    story: "A esfera completa um círculo perfeito antes de retornar. Físicos de Valdris tentam explicar. Magos riem deles." },
+
+  { tier: "raro", name: "Cajado das Raízes Vivas", dmg: "1d8", req: "SAB", weight: 3.5,
+    slot: ["primary"], defenseDegrade: 2, heavyTwoHanded: false,
+    charges: { max: 3, label: "Raízes", resetOn: "combate" },
+    range: 4,
+    effect: "Ação de Combate: gasta 1 Carga para invocar raízes em hex a até 4 hex. Todas as criaturas no hex e adjacentes: Presas (FOR normal para escapar, Ação). Dano inicial: 1d6+SAB. Raízes persistem por 2 rodadas — criaturas que entram também ficam Presas. Sem Cargas: dano físico 1d8.",
+    note: "3 invocações de raízes por combate. Druidas com este cajado: Moldar Terreno custa 1 Foco/Fé a menos.",
+    story: "Cortado da Floresta de Wren por Lyss antes de tudo dar errado. A madeira ainda cresce — milímetros por ano." },
+
+  { tier: "raro", name: "Cetro do Juramento Partido", dmg: "1d6", req: "SAB", weight: 1.5,
+    slot: ["primary","secondary"], defenseDegrade: null,
+    charges: { max: 4, label: "Maldições do Juramento", resetOn: "combate" },
+    range: 4,
+    effect: "Ação de Combate: gasta 1 Carga para lançar maldição a alvo a até 4 hex. Por 3 rodadas: alvo tem −1d4 em todos os testes. 2 Cargas: −1d6 e Def.Física −2. 3 Cargas num mesmo alvo: Execrado (−1d8 em testes, Def −3, dura até fim do combate). Sem Cargas: dano base 1d6.",
+    note: "4 Cargas de maldição por combate. Podem ser acumuladas no mesmo alvo para efeito crescente.",
+    story: "Feito do cajado de um Paladino que rompeu seu juramento. A energia do juramento não foi a lugar nenhum — ficou no cetro." },
+
+  { tier: "raro", name: "Grimório do Sangue Arcano", dmg: "—", req: "INT", weight: 1.5,
+    slot: ["primary"], defenseDegrade: null,
+    charges: { max: 3, label: "Sacrifícios Arcanos", resetOn: "combate" },
+    range: 0,
+    magicBonus: { slots: 2 },
+    effect: "Passivo: +2 Slots de Magia. Ativo (Ação de Magia, gasta 1 Carga + 1d6 HP próprio): amplifica a próxima magia. Efeito: magia seguinte causa dano dobrado OU cura dobrada OU afeta o dobro de alvos. O HP pago não pode ser curado até o próximo descanso. Sem Cargas: passivo continua ativo.",
+    note: "+2 Slots permanentes. 3 amplificações por combate — cada uma custa HP do portador.",
+    story: "Páginas manchadas de sangue de proprietários anteriores. Não fica limpo por lavagem. Funciona melhor assim." },
+
+  { tier: "raro", name: "Tomo da Inversão", dmg: "—", req: "INT", weight: 1.8,
+    slot: ["primary"], defenseDegrade: null,
+    charges: { max: 2, label: "Inversões", resetOn: "sessao" },
+    range: 4,
+    magicBonus: { slots: 1 },
+    effect: "Passivo: +1 Slot de Magia. Ativo (Ação de Magia, gasta 1 Carga): inverte efeito de uma magia já lançada na rodada. Magia de dano vira cura do mesmo valor. Magia de debuff vira buff equivalente. Magia de controle do inimigo vira aliada. Apenas 2 usos por sessão — não por combate.",
+    note: "+1 Slot permanente. 2 inversões por sessão inteira. Requer que uma magia já tenha sido lançada na rodada.",
+    story: "A última página tem uma frase: 'Tudo pode ser lido ao contrário.' A primeira página repete a mesma frase de trás para frente." },
+
+  /* ─── LENDÁRIO ───────────────────────────────────────────────── */
+
+  { tier: "lendario", name: "Cajado da Tempestade Eterna", dmg: "1d10", req: "INT", weight: 4,
+    slot: ["primary"], defenseDegrade: 2, heavyTwoHanded: false,
+    charges: { max: 5, label: "Raios da Tempestade", resetOn: "combate" },
+    range: 5,
+    magicBonus: { spellActions: 1, slots: 2 },
+    effect: "Passivo: +1 Ação de Magia e +2 Slots. Ativo (Ação de Combate, gasta 1 Carga): dispara raio em linha reta de até 5 hex — atinge TODOS os alvos na linha. Dano: 2d10+INT de relâmpago. Armadura metálica: dano automático máximo. 2 Cargas: relâmpago em área 3 hex de raio no ponto de impacto (2d10+INT, AGI normal para metade).",
+    note: "5 raios por combate. Alcance 5 hex. Afeta linha inteira de inimigos. +1 Ação de Magia e +2 Slots permanentes.",
+    story: "Caiu de Atrelon durante a Grande Tempestade de 300 anos atrás. A tempestade nunca parou de verdade — só ficou menor.",
+    setName: "Cólera Arcana" },
+
+  { tier: "lendario", name: "Orbe Primordial de Magnalaga", dmg: "1d10", req: "INT", weight: 1.2,
+    slot: ["primary","secondary"], defenseDegrade: null,
+    charges: { max: 4, label: "Pulsos Primordiais", resetOn: "combate" },
+    range: 4,
+    magicBonus: { slots: 3 },
+    effect: "Passivo: +3 Slots de Magia. Ativo (Ação de Combate, gasta 1 Carga): dispara projétil de energia primordial a até 4 hex. Dano: 2d10+INT de dano arcano puro (ignora Def.Mágica). 3 Cargas no mesmo turno: implosão que puxa todos em raio 4 hex 2 hexes para o centro (FOR difícil para resistir) + 2d10+INT. 1 uso da implosão por combate.",
+    note: "+3 Slots permanentes. 4 disparos. A implosão consome 3 Cargas mas pode ser devastadora em grupos.",
+    story: "Encontrado na câmara mais profunda da Cidadela do Casco, dentro do casco de Magnalaga. Ela não ligou para a perda. Ou não percebeu." },
+
+  { tier: "lendario", name: "Tomo do Fim dos Tempos", dmg: "—", req: "INT", weight: 2.5,
+    slot: ["primary"], defenseDegrade: null,
+    charges: { max: 1, label: "Proclamação Final", resetOn: "sessao" },
+    range: 6,
+    magicBonus: { spellActions: 2, slots: 3 },
+    effect: "Passivo: +2 Ações de Magia e +3 Slots. Ativo (2 Ações de Magia, gasta a única Carga da sessão): Proclamação Final — lança a maldição máxima em todos os inimigos visíveis. Por 5 rodadas: −1d10 em todos os testes, Def.Física e Mágica −5, velocidade −3. Imunes: criaturas com SAB 8+. 1 uso por sessão.",
+    note: "+2 Ações de Magia e +3 Slots permanentes. 1 Proclamação Final por sessão. Extremamente poderoso — use com sabedoria.",
+    story: "Escrito em linguagem que não existia antes de o livro existir. Os estudiosos que tentaram traduzir ficaram 3 dias murmurando e depois nunca mais falaram das páginas finais." },
+
+  /* ─── SETS DE ARMAS MÁGICAS ──────────────────────────────────── */
+
+  /* Set: Chama e Gelo (2 peças — varinha + orbe complementares) */
+  { tier: "raro", name: "Varinha da Chama Viva", dmg: "1d6", req: "INT", weight: 0.3,
+    slot: ["primary","secondary"], defenseDegrade: null,
+    charges: { max: 5, label: "Chamas Vivas", resetOn: "combate" },
+    range: 4,
+    setName: "Chama e Gelo",
+    effect: "Ação de Combate: gasta 1 Carga para disparar chama persistente a até 4 hex. Dano: 1d8+INT de fogo. O hex atingido pega fogo — qualquer criatura que entrar ou ficar nele sofre 1d4 de fogo por rodada por 2 rodadas. Sem Cargas: dano base 1d6.",
+    note: "5 disparos. Cria fogo persistente no hex. Com Orbe do Frio Eterno equipado como secundária: BÔNUS DE SET — cada disparo de fogo cancela Lento e cura 1d4 HP em aliados que tiverem a condição Queimando (a chama de cura).",
+    story: "Gêmea do Orbe do Frio Eterno. Separadas há décadas. Funcionam melhor juntas — como todo par de opostos." },
+
+  { tier: "raro", name: "Orbe do Frio Eterno", dmg: "1d6", req: "INT", weight: 0.7,
+    slot: ["primary","secondary"], defenseDegrade: null,
+    charges: { max: 5, label: "Pulsos de Gelo", resetOn: "combate" },
+    range: 4,
+    setName: "Chama e Gelo",
+    effect: "Ação de Combate: gasta 1 Carga para disparar pulso de gelo a até 4 hex. Dano: 1d6+INT de frio. Alvos ficam Lentos (−2 Movimento, 2 rodadas). 2 acertos no mesmo alvo: Congelado (imóvel 1 rodada, FOR normal para resistir). Sem Cargas: dano base 1d6.",
+    note: "5 disparos. Com Varinha da Chama Viva equipada como primária: BÔNUS DE SET — disparos de gelo em alvos Queimando causam +1d8 extra (choque térmico) e extinguem a chama.",
+    story: "Gêmea da Varinha da Chama Viva. Sempre mais fria que o ambiente ao redor. Sempre procurando o par." },
+
+  /* Set: Grimório do Archmago (3 peças — tomo + cajado + anel) */
+  { tier: "lendario", name: "Tomo Arcano de Valdris", dmg: "—", req: "INT", weight: 2,
+    slot: ["primary"], defenseDegrade: null,
+    charges: { max: 3, label: "Capítulos de Batalha", resetOn: "combate" },
+    range: 4,
+    magicBonus: { spellActions: 1, slots: 2 },
+    setName: "Grimório do Archmago",
+    effect: "Passivo: +1 Ação de Magia e +2 Slots. Ativo (Ação de Magia, gasta 1 Carga): lê Capítulo de Batalha — aliados em raio 4 hex ganham +1d8 em magias por 3 rodadas. Sem Cargas: o passivo continua ativo.",
+    note: "+1 Ação de Magia e +2 Slots permanentes. Com Cajado de Cristal Puro: BÔNUS 2 PEÇAS — +1 Slot adicional e Capítulos duram 4 rodadas.",
+    story: "Volume II de uma coleção de 7. Os outros 6 estão em lugares que a Torre of Arcath preferia não divulgar." },
+
+  { tier: "lendario", name: "Cajado de Cristal Puro", dmg: "1d8+1d6", req: "INT", weight: 3.5,
+    slot: ["primary"], defenseDegrade: 1, heavyTwoHanded: false,
+    charges: { max: 4, label: "Feixes de Cristal", resetOn: "combate" },
+    range: 5,
+    magicBonus: { slots: 2 },
+    setName: "Grimório do Archmago",
+    effect: "Passivo: +2 Slots. Ativo (Ação de Combate, gasta 1 Carga): dispara feixe de luz cristalina a até 5 hex. Dano: 1d10+1d6+INT de dano arcano. O feixe perfura — atinge todos na linha (cada um faz AGI normal para metade). Sem Cargas: dano base 1d8+1d6.",
+    note: "+2 Slots permanentes. Com Tomo Arcano de Valdris: BÔNUS 2 PEÇAS — feixes perfurantes causam +1d6 por alvo adicional atingido. Com o Anel do Archmago: BÔNUS SET COMPLETO — 1x/sessão, lançar qualquer magia conhecida sem custo de Slot.",
+    story: "Forjado da pedra cristalina do Pico de Atrelon. Reflete arco-íris em qualquer iluminação. Ainda assim, corta como faca." }
 ];
 
 const WEAPONS_RANGED = [
@@ -1651,7 +1902,43 @@ const ARMORS = [
     setBonus: { pieces: 3, ability: "Golpe do Juramento Cumprido",
       effect: "Com as 3 peças: ao cumprir um Juramento Sagrado neste combate — próximo acerto é dano máximo + 3d8 sagrado, aliados em raio 5 hex curam 1d10 HP." } },
 
-];
+,
+
+  /* ─── SET: Lâmina das Runas — Armadura ─────────────────────── */
+
+  { tier: "raro", name: "Couraça das Runas Inscritas", physDefense: 5, magDefense: 4,
+    movePenalty: 0, weight: 7, req: "FOR",
+    setName: "Lâmina das Runas", subclass: "runa-lamina",
+    effect: "Quando o portador recebe dano físico: 20% de chance de a armadura absorver o dano e converter em 1 Runa carregada gratuitamente (não gasta recurso). As runas na armadura brilham ao ativar Escudo Arcano Rúnico: o escudo absorve +4 de dano extra.",
+    note: "20% chance de converter dano recebido em Runa gratuita. Escudo Arcano Rúnico +4 de absorção.",
+    story: "Um ferreiro de Valdris passou 3 anos gravando runas nas placas uma a uma. A armadura aprendeu sozinha a completar as que ficaram incompletas." },
+
+  /* ─── SET: Marca do Caçador — Armadura ─────────────────────── */
+
+  { tier: "raro", name: "Couro do Caçador de Presas", physDefense: 4, magDefense: 2,
+    movePenalty: 0, weight: 5, req: "FOR",
+    setName: "Marca do Caçador", subclass: "cacador-gigantes",
+    effect: "Em combate contra inimigos de tamanho Grande ou maior: +1 Def.Física adicional por cada hit recebido deles (até +3). O portador é imune a condição Derrubado causada por criaturas de tamanho Colossal. Ao usar Anatomia de Besta: percebe automaticamente se o alvo está abaixo de 50% HP.",
+    note: "Acumula +Def.Física contra ataques de Grandes (até +3). Imune a Derrubado de criaturas Colossais.",
+    story: "Cada remendo e costura desta armadura foi feito com material de uma criatura diferente. O Caçador que a usou antes matou 22 gigantes." },
+
+  /* ─── SET: Véu das Sombras Sagradas — Sussurro Sombrio ─────── */
+
+  { tier: "raro", name: "Manto do Deus Sombrio", physDefense: 3, magDefense: 5,
+    movePenalty: 0, weight: 4, req: "SAB",
+    setName: "Véu das Sombras Sagradas", subclass: "sussurro-sombrio",
+    effect: "Passivo: +1 Carga de Veneno máxima adicional. Quando o portador aplica Veneno Sagrado: +1 rodada de duração (somando ao passivo da subclasse, total +2 rodadas extras). À noite ou em área escura: +1 Def.Física adicional.",
+    note: "+1 Carga de Veneno máxima. Veneno Sagrado dura +1 rodada extra. Noite: +1 Def.Física.",
+    story: "Tecido de seda negra abençoado em ritual de meia-noite por um sacerdote que não recorda o que disse. O deus lembra." },
+
+  /* ─── SET: Sombra Dupla — Armadura ─────────────────────────── */
+
+  { tier: "raro", name: "Armadura da Penumbra", physDefense: 3, magDefense: 3,
+    movePenalty: 0, weight: 3.5, req: "DEX",
+    setName: "Sombra Dupla", subclass: "cacador-sombrio",
+    effect: "Em Furtividade: +2 Def.Física e +2 Def.Mágica adicionais. Ao sair de Furtividade para atacar (Emboscada Perfeita): o 1º ataque tem Def.Física do alvo reduzida em 2 (o portador sabe exatamente onde golpear). Movimento de Fantasma dura +1 rodada quando usada.",
+    note: "Em Furtividade: +2 Def.Física e +2 Def.Mágica. Emboscada: alvo com −2 Def.Física. Fantasma +1 rodada.",
+    story: "Confeccionada em tecido de Sombra Florestal — a criatura que os ladinos de Akaen chamam de 'quem andou aqui antes de você'." }];
 
 const ACCESSORIES = [
   /* --- COMUNS --- */
@@ -2051,7 +2338,95 @@ const ACCESSORIES = [
     setBonus: { pieces: 3, ability: "Corrente Sem Fim",
       effect: "Com as 3 peças: Fúria de Batalha dura +2 rodadas, ao sair pode entrar em Limiar da Morte sem custo. E o machado pode atacar 2 alvos por Ação durante toda a Fúria (não só 1x)." } },
 
-];
+,
+
+  /* ═══ ACESSÓRIOS DAS 4 NOVAS SUBCLASSES ══════════════════════ */
+
+  /* ─── SET: Lâmina das Runas — Anel (3ª peça) ───────────────── */
+
+  { tier: "lendario", name: "Anel das Runas Vivas",
+    slot: ["accessory"], weight: 0.1, req: "INT",
+    setName: "Lâmina das Runas", subclass: "runa-lamina",
+    magicBonus: { attr: "INT", attrValue: 1 },
+    effect: "Passivo: +1 INT. Runas gravadas não se apagam ao detonar — ficam 'dormentes' e se recarregam ao fim de cada rodada (1 Runa recarrega por rodada). Com set completo (3p): Fúria Arcana em raio 4 hex; ao entrar em Transcendência Rúnica, todas as Runas dormentes detonam gratuitamente.",
+    note: "+1 INT. Runas dormentes recarregam 1/rodada. SET COMPLETO: Fúria Arcana raio 4 e detonação automática ao entrar em Transcendência.",
+    story: "O anel tem 8 faces, cada uma com uma runa diferente. Quando o usuário dorme, os rostos das runas mudam.",
+    setBonus: "Lâmina das Runas (3p) — Detonação Total: Fúria Arcana raio 4 hex; Runas dormentes do Anel detonam ao entrar em Transcendência Rúnica; cada detivação do Escudo Arcano Rúnico cria automaticamente 1 Runa." },
+
+  /* ─── SET: Marca do Caçador — Cinto (3ª peça) ──────────────── */
+
+  { tier: "raro", name: "Cinto de Presas do Caçador",
+    slot: ["accessory"], weight: 0.5, req: "FOR",
+    setName: "Marca do Caçador", subclass: "cacador-gigantes",
+    magicBonus: { carry: 10 },
+    effect: "Passivo: +10kg de carga. Ao derrotar um inimigo Grande ou maior: guarda automaticamente 1 item de loot deste inimigo (não ocupa espaço de inventário — fica no cinto). Capacidade: até 3 itens de loot. Anatomia de Besta custa 0 Ações enquanto equipado.",
+    note: "+10kg carga. Guarda até 3 itens de loot de criaturas grandes. Anatomia de Besta gratuita.",
+    story: "Cheio de garras, dentes e pedaços de criaturas que não existem mais. Cada peça é troféu e ferramenta." },
+
+  /* ─── SET: Véu das Sombras Sagradas — Amuleto (2ª peça) ────── */
+
+  { tier: "raro", name: "Amuleto do Deus Proibido",
+    slot: ["accessory"], weight: 0.2, req: "SAB",
+    setName: "Véu das Sombras Sagradas", subclass: "sussurro-sombrio",
+    magicBonus: { attr: "SAB", attrValue: 1 },
+    effect: "Passivo: +1 SAB. Sussurro da Dúvida pode ser usado como Ação Livre 1x por combate sem gastar recurso. Execração Divina aplicada por portador com este amuleto: o efeito de chance de atacar aliados aumenta de 20% para 35%.",
+    note: "+1 SAB. Sussurro da Dúvida 1x gratuito/combate. Execração Divina mais potente (35% vs 20%).",
+    story: "O deus cujo nome está gravado no verso não tem templo. Tem seguidores que preferem assim." },
+
+  { tier: "lendario", name: "Relíquia do Pacto Sombrio",
+    slot: ["accessory"], weight: 0.3, req: "SAB",
+    setName: "Véu das Sombras Sagradas", subclass: "sussurro-sombrio",
+    magicBonus: { attr: "SAB", attrValue: 2, slots: 1 },
+    effect: "Passivo: +2 SAB, +1 Slot de Magia. Ao aplicar Veneno Sagrado: 30% de chance de o efeito se propagar para o inimigo mais próximo do alvo original (mesmo dano e duração, sem custo). Bênção Negra: o aliado afetado não perde HP — em vez disso, você perde metade do HP que seria dele.",
+    note: "+2 SAB, +1 Slot. 30% propagação de Veneno Sagrado. Bênção Negra: você absorve o custo de HP.",
+    story: "O pacto está inscrito na relíquia. Qualquer um pode ler. Ninguém entende as implicações até ser tarde demais.",
+    setBonus: "Véu das Sombras Sagradas (3p) — Corrupção Divina: Veneno Sagrado dura +3 rodadas no total; Execração Divina se torna passiva ao início de cada combate (gasta 1 Fé, aplica versão fraca automaticamente em todos os inimigos)." },
+
+  /* ─── SET: Sombra Dupla — Capa (3ª peça) ───────────────────── */
+
+  { tier: "lendario", name: "Manto da Névoa Caçadora",
+    slot: ["accessory"], weight: 0.8, req: "AGI",
+    setName: "Sombra Dupla", subclass: "cacador-sombrio",
+    magicBonus: { move: 2, attr: "AGI", attrValue: 1 },
+    effect: "Passivo: +2 Movimento, +1 AGI. Ao usar Movimento de Fantasma: pode atravessar paredes de até 1 hex de espessura. Após cada kill em Furtividade: o portador volta automaticamente à Furtividade (sem gastar Ação) se houver cobertura a 2 hex.",
+    note: "+2 Mov, +1 AGI. Fantasma atravessa paredes. Após kill furtivo: re-entra em Furtividade automaticamente.",
+    story: "A névoa que emite não é mágica — é real. A névoa só existe porque o manto quer existir. É uma distinção importante.",
+    setBonus: "Sombra Dupla (3p) — Arte do Assassino: Tiro Mortal pode ser executado com 1 Ação (em vez de 2) se alvo estiver Preso ou Furtividade ativa; Emboscada Perfeita estende-se a todos os aliados adjacentes; Armadilha de Caçador pode ser instalada em movimento (Ação Livre durante Movimento de Fantasma)." },
+
+  /* ═══ ITENS INDIVIDUAIS — Potencializam mecânicas específicas ═ */
+
+  /* Runa-Lâmina */
+  { tier: "magico", name: "Tinta Rúnica de Combate",
+    slot: ["accessory"], weight: 0.2, req: "INT",
+    subclass: "runa-lamina",
+    effect: "Passivo: reduz o custo de Gravar Runa em 1 (mínimo 0 — primeira Runa é gratuita em vez de custar 1 recurso). Ao detonar 3 Runas no mesmo combate: a próxima Runa gravada causa +1d8 extra ao detonar.",
+    note: "Reduz custo de Gravar Runa. Bônus após 3 detonações por combate.",
+    story: "A tinta é de uma cor que não tem nome. Magos de Valdris discutem há décadas se é roxo ou azul ou algo entre os dois." },
+
+  /* Caçador de Gigantes */
+  { tier: "magico", name: "Lupa Tática de Rastreamento",
+    slot: ["accessory"], weight: 0.3, req: "INT",
+    subclass: "cacador-gigantes",
+    effect: "Passivo: Anatomia de Besta concede +1d4 extra de dano no próximo ataque contra o alvo analisado. Ao Marcar Presa: o portador sente a direção da Presa mesmo através de paredes (Percepção mágica até 20 hex).",
+    note: "Anatomia de Besta dá bônus de dano. Rastreamento mágico de Presa Marcada até 20 hex.",
+    story: "Construída por um Alquimista que sobreviveu ao Mamute das Planícies mais de uma vez. Não na mesma batalha. São histórias diferentes." },
+
+  /* Sussurro Sombrio */
+  { tier: "magico", name: "Frasco do Veneno do Esquecimento",
+    slot: ["accessory"], weight: 0.2, req: "SAB",
+    subclass: "sussurro-sombrio",
+    charges: { max: 3, label: "Doses", resetOn: "sessao" },
+    effect: "3 doses por sessão. Ao aplicar: Veneno Sagrado normal, mas adiciona Amnésia — alvo testa SAB (difícil) ou esquece 1 habilidade especial por 3 rodadas (escolha aleatória ou do portador com SAB difícil+). Antídotos comuns ainda não funcionam (é Veneno Sagrado).",
+    note: "3 usos/sessão. Adiciona Amnésia ao Veneno Sagrado: alvo perde 1 habilidade por 3 rodadas.",
+    story: "O veneno que não mata. Só faz esquecer. Às vezes isso é pior." },
+
+  /* Caçador Sombrio */
+  { tier: "magico", name: "Gancho da Ascensão Sombria",
+    slot: ["accessory"], weight: 0.4, req: "AGI",
+    subclass: "cacador-sombrio",
+    effect: "Passivo: pode se mover verticalmente (escalar, subir em estruturas) ao mesmo custo de Movimento horizontal. Ativo (1 Ação Livre, 1 uso/combate): dispara gancho a até 6 hex — puxa o portador ao hex escolhido instantaneamente. Se usado durante Movimento de Fantasma: o gancho não revela posição.",
+    note: "Escalada gratuita. Gancho 6 hex como Ação Livre 1x/combate. Compatível com Fantasma (sem revelar).",
+    story: "O gancho nunca falha. Alguns usuários levaram tempo demais para descobrir que às vezes deveriam." }];
 
 const ALL_WEAPONS = [...WEAPONS_ONE_HAND, ...WEAPONS_TWO_HAND, ...WEAPONS_MAGIC, ...WEAPONS_RANGED];
 
@@ -3332,72 +3707,308 @@ const NAV_PAGES = [
 /* ---------------------------------------------------------------------- */
 
 const SKILL_TESTS = [
-  /* ---- Percepção e Sentidos ---- */
-  { name: "Percepção",          icon: "👁",  attrKeys: ["SAB","AGI"],  desc: "Detectar detalhes sutis no ambiente, emboscadas ocultas e criaturas furtivas.", learned: true },
-  { name: "Pressentimento",     icon: "🌀",  attrKeys: ["SAB"],        desc: "Sentir quando algo está errado mesmo sem evidências concretas.", learned: false },
 
-  /* ---- Investigação e Conhecimento ---- */
-  { name: "Investigação",       icon: "🔍",  attrKeys: ["INT","AGI"],  desc: "Analisar pistas, cenas de crime, textos antigos e conexões ocultas.", learned: true },
-  { name: "Conhecimento",       icon: "📚",  attrKeys: ["INT"],        desc: "Recordar fatos históricos, lendas, propriedades de criaturas e itens.", learned: true },
-  { name: "Arcanismo",          icon: "✨",  attrKeys: ["INT","SAB"],  desc: "Identificar magias, itens mágicos, runas e fenômenos arcanos.", learned: true },
+  /* ════════════════════════════════════════════════════════════
+     PERÍCIAS GERAIS — usadas em exploração, social e investigação
+     Fórmula: 10 + soma(attrKeys) + 2 (se aprendida) = Normal
+     Hard = 5 + bônus | Crítico = 1 + bônus
+     ════════════════════════════════════════════════════════════ */
 
-  /* ---- Social e Influência ---- */
-  { name: "Lábia",              icon: "🗣",  attrKeys: ["SAB","DEX"],  desc: "Convencer, enganar ou manipular pessoas através de palavras.", learned: true },
-  { name: "Persuasão",          icon: "🤝",  attrKeys: ["SAB"],        desc: "Negociar de boa fé, fazer pedidos razoáveis e ganhar confiança.", learned: true },
-  { name: "Intimidação",        icon: "😤",  attrKeys: ["FOR","SAB"],  desc: "Impor presença física ou psicológica para forçar cooperação.", learned: false },
+  /* ── Sentidos e Percepção ─────────────────────────────────── */
 
-  /* ---- Furtividade e Destreza ---- */
-  { name: "Furtividade",        icon: "🌑",  attrKeys: ["AGI","DEX"],  desc: "Mover-se silenciosamente e permanecer oculto de observadores.", learned: true },
-  { name: "Acrobacia",          icon: "🤸",  attrKeys: ["AGI","DEX"],  desc: "Escapar de agarrões, manter equilíbrio em superfícies instáveis e saltar.", learned: false },
+  { name: "Percepção",
+    icon: "👁", attrKeys: ["SAB"],
+    desc: "Notar detalhes ocultos, detectar emboscadas, ouvir sussurros, farejar perigo. Usado sempre que o mundo tenta esconder algo do personagem.",
+    example: "Perceber o bandido se escondendo atrás das caixas; ouvir passos no corredor; notar que a parede tem timbre oco.",
+    learned: true },
 
-  /* ---- Físico e Força ---- */
-  { name: "Atletismo",          icon: "💪",  attrKeys: ["FOR","AGI"],  desc: "Escalar, nadar, correr longas distâncias e arrombar portas.", learned: false },
-  { name: "Resistência",        icon: "🦾",  attrKeys: ["FOR"],        desc: "Resistir a venenos, fadiga extrema e efeitos físicos debilitantes.", learned: false },
-  { name: "Força de Vontade",   icon: "🧠",  attrKeys: ["INT","FOR"],  desc: "Resistir a efeitos mentais, manter-se firme sob pressão extrema e superar a exaustão pela determinação. Combina disciplina mental (INT) com teimosia física (FOR).", example: "Resistir ao domínio de um Aralto que tenta controlar sua mente, ou continuar lutando com 1 HP por pura obstinação.", learned: false },
-  { name: "Briga",              icon: "👊",  attrKeys: ["FOR","AGI"],  desc: "Lutar sem armas: socas, agarrões, chaves e quedas.", learned: false },
+  { name: "Pressentimento",
+    icon: "🌀", attrKeys: ["SAB"],
+    desc: "Intuição pura — sentir que algo está errado mesmo sem evidências visíveis. Resiste a ilusões e disfarces que enganam os outros sentidos.",
+    example: "Sentir que o negociante está mentindo apesar do sorriso perfeito; pressentir que a sala está vigiada.",
+    learned: false },
 
-  /* ---- Combate: Geral ---- */
-  { name: "Retaliar",           icon: "↩",  attrKeys: ["AGI","DEX"],  desc: "Perícia de combate.", learned: true, combat: true, mechanicalEffect: "retaliate",
-    combatDesc: "Ao inimigo deixar o hexágono adjacente ao seu voluntariamente, você pode gastar 1 Ação de Reação para fazer imediatamente 1 ataque corpo a corpo contra ele antes que ele complete o movimento." },
-  { name: "Esquivar Rolar",     icon: "🌀",  attrKeys: ["AGI"],        desc: "Perícia de combate.", learned: true, combat: true, mechanicalEffect: "dodge_roll",
-    combatDesc: "Enquanto não empunha arma de duas mãos pesada, sua Chance de Esquiva aumenta em +2 permanentemente. Reflete no campo 'Chance de Esquiva' das Estatísticas de Combate." },
-  { name: "Foco de Combate",    icon: "🎯",  attrKeys: ["SAB","INT"],  desc: "Perícia de combate.", learned: true, combat: true, mechanicalEffect: "combat_focus",
-    combatDesc: "Uma vez por combate, ao errar um ataque, você pode re-rolar o dado de ataque e ficar com o resultado mais alto. Sem custo de ação — ativa automaticamente ao anunciar que errou." },
-  { name: "Guardião de Flanco", icon: "🛡",  attrKeys: ["FOR","SAB"],  desc: "Perícia de combate.", learned: true, combat: true, mechanicalEffect: "flank_guard",
-    combatDesc: "Enquanto você está de pé e consciente, todos os aliados em hexágonos adjacentes ao seu ganham +1 na Chance de Defesa (passivo, sem custo de ação)." },
-  { name: "Golpe de Derrubada", icon: "🔨",  attrKeys: ["FOR","AGI"],  desc: "Perícia de combate.", learned: true, combat: true, mechanicalEffect: "knockdown",
-    combatDesc: "Ao acertar um ataque corpo a corpo, você pode declarar 'Derrubada' antes de rolar o dano. O alvo deve fazer um teste de Resistência (normal); se falhar, cai Prostrado por 1 rodada." },
+  { name: "Percepção Mágica",
+    icon: "✨🔍", attrKeys: ["SAB", "INT"],
+    desc: "Detectar auras mágicas, identificar encantamentos em itens ou locais, sentir portais e anomalias arcanas. Necessário para Magos e Clérigos identificarem itens.",
+    example: "Detectar que o espelho é um portal; identificar o encantamento numa espada comum; sentir que o calabouço inteiro está amaldiçoado.",
+    learned: true },
 
-  /* ---- Combate: Armas de Uma Mão ---- */
-  { name: "Desarmamento",       icon: "🤚",  attrKeys: ["DEX","AGI"],  desc: "Perícia de combate.", learned: true, combat: true, mechanicalEffect: "disarm",
-    combatDesc: "Ao acertar um ataque com arma de uma mão, você pode declarar 'Desarmamento' em vez de causar dano. O alvo deve passar num teste de Resistência (difícil) ou derruba a arma que estava segurando no hexágono adjacente." },
-  { name: "Duelista",           icon: "⚔",  attrKeys: ["DEX","SAB"],  desc: "Perícia de combate.", learned: true, combat: true, mechanicalEffect: "duelist",
-    combatDesc: "Se você não está usando a mão secundária para nada (sem escudo, sem arma secundária), ganha +1 na Chance de Defesa com arma de uma mão. Passivo, sem custo de ação." },
+  /* ── Conhecimento e Intelecto ─────────────────────────────── */
 
-  /* ---- Combate: Armas de Duas Mãos ---- */
-  { name: "Varredura",          icon: "🌪",  attrKeys: ["FOR","AGI"],  desc: "Perícia de combate.", learned: true, combat: true, mechanicalEffect: "sweep",
-    combatDesc: "Uma vez por turno, ao acertar um ataque com arma de duas mãos, você pode gastar 1 Ação de Reação para fazer um segundo golpe contra um inimigo diferente adjacente ao seu. Esse segundo golpe causa apenas metade do dano." },
-  { name: "Ímpeto Brutal",      icon: "💥",  attrKeys: ["FOR"],        desc: "Perícia de combate.", learned: true, combat: true, mechanicalEffect: "brutal_charge",
-    combatDesc: "Se você se moveu pelo menos 2 hexágonos em linha reta antes do ataque neste turno, o próximo ataque com arma de duas mãos causa +1d6 de dano extra de impacto." },
+  { name: "Investigação",
+    icon: "🔍", attrKeys: ["INT"],
+    desc: "Examinar ativamente uma área em busca de pistas, analisar evidências, decifrar textos e conectar informações dispersas. Diferente de Percepção (ativa vs passiva).",
+    example: "Examinar a cena de um crime; decifrar o mapa cifrado; descobrir que dois eventos aparentemente não relacionados têm o mesmo culpado.",
+    learned: true },
 
-  /* ---- Combate: Escudo ---- */
-  { name: "Escudo Bash",        icon: "🛡💥", attrKeys: ["FOR","DEX"],  desc: "Perícia de combate.", learned: true, combat: true, mechanicalEffect: "shield_bash",
-    combatDesc: "Ao usar um escudo como arma, você pode gastar 1 Ação para dar uma martelada com ele. Causa 1d4 de dano e força um teste de Resistência (difícil) no alvo; se falhar, ele perde 1 Ação no próximo turno." },
-  { name: "Muralha Viva",       icon: "🧱",  attrKeys: ["FOR","SAB"],  desc: "Perícia de combate.", learned: true, combat: true, mechanicalEffect: "living_wall",
-    combatDesc: "Enquanto tiver um escudo equipado, você pode usar uma Reação para interposar o escudo entre um aliado adjacente e um ataque a ele destinado, adicionando o bônus de Defesa Física do escudo à defesa do aliado contra esse ataque." },
+  { name: "História",
+    icon: "📜", attrKeys: ["INT"],
+    desc: "Conhecimento de eventos históricos, guerras, linhagens nobres, reinos extintos e civilizações antigas do mundo de Aether.",
+    example: "Reconhecer o brasão da família real de Atrelon; saber que a Batalha Colossal ocorreu há 500 anos; identificar a ruína como sendo de origem Serpentariana.",
+    learned: true },
 
-  /* ---- Combate: Arco / Distância ---- */
-  { name: "Tiro em Movimento",  icon: "🏃🏹", attrKeys: ["DEX","AGI"],  desc: "Perícia de combate.", learned: true, combat: true, mechanicalEffect: "moving_shot",
-    combatDesc: "Você pode usar uma Ação de Movimento e uma Ação de Ataque à distância no mesmo turno sem penalidade. Normalmente, atacar à distância após se mover aplica −1 na Chance de Acerto." },
-  { name: "Pressão de Distância", icon: "🎯🛡", attrKeys: ["DEX","INT"],  desc: "Perícia de combate.", learned: true, combat: true, mechanicalEffect: "ranged_pressure",
-    combatDesc: "Inimigos que tentam se aproximar de você enquanto estão a mais de 3 hexágonos e você tem arma à distância equipada sofrem um Ataque de Oportunidade à distância seu." },
+  { name: "Arcanismo",
+    icon: "📖✨", attrKeys: ["INT"],
+    desc: "Teoria mágica, identificação de magias, runas, criaturas mágicas e planos de existência. A ciência por trás do sobrenatural.",
+    example: "Identificar que o monstro é um Golem da Marca; reconhecer que o feitiço é de escola de Transmutação; entender como funciona um ritual de invocação.",
+    learned: true },
 
-  /* ---- Combate: Armas Mágicas / Cajado ---- */
-  { name: "Conjuração Rápida",  icon: "⚡✨", attrKeys: ["INT","DEX"],  desc: "Perícia de combate.", learned: true, combat: true, mechanicalEffect: "quick_cast",
-    combatDesc: "Uma vez por combate, você pode conjurar uma magia de Nível 1 ou 2 como Ação de Reação em vez de como Ação normal. A magia ainda consome Slot e respeita seu cooldown." },
-  { name: "Canalizar pelo Cajado", icon: "🪄", attrKeys: ["INT","SAB"],  desc: "Perícia de combate.", learned: true, combat: true, mechanicalEffect: "staff_channel",
-    combatDesc: "Ao acertar um ataque com cajado ou arma mágica, você pode gastar 1 Ação de Reação para conjurar imediatamente uma magia de Nível 1 conhecida no mesmo alvo, sem gastar Ação de Magia para isso." }
+  { name: "Natureza",
+    icon: "🌿", attrKeys: ["SAB"],
+    desc: "Conhecimento de plantas, animais, terrenos, clima e fenômenos naturais. Essencial para sobreviver e orientar-se em ambientes selvagens.",
+    example: "Identificar planta venenosa; prever tempestade pela posição das nuvens; saber que a trilha foi pisada por um urso há poucas horas.",
+    learned: true },
+
+  { name: "Religião",
+    icon: "⛩", attrKeys: ["SAB", "INT"],
+    desc: "Conhecimento dos deuses de Aether (Aethea, Thurgomur, Jurgmund, Ras'kuru), rituais, símbolos sagrados, mortos-vivos e planos divinos.",
+    example: "Reconhecer que o altar é dedicado a Jurgmund; saber como afastar um Espectro com oração; identificar que a criatura tem bênção divina.",
+    learned: true },
+
+  { name: "Medicina",
+    icon: "🩹", attrKeys: ["SAB"],
+    desc: "Tratar ferimentos, estabilizar aliados incapacitados, identificar doenças e venenos, e aplicar primeiros socorros sem magia.",
+    example: "Estabilizar aliado a 0 HP sem magia (SAB normal); identificar que o veneno é de Cobra de Sangue de Jurgmund; cauterizar ferimento para parar Sangramento.",
+    learned: true },
+
+  { name: "Prestidigitação",
+    icon: "🃏", attrKeys: ["DEX"],
+    desc: "Habilidade manual fina: furtar objetos, esconder itens no corpo, abrir fechaduras, desativar armadilhas, jogar cartas e truques de mãos.",
+    example: "Furtar a chave do carcereiro; esconder a faca no cano da bota; abrir a fechadura da cela com um grampo.",
+    learned: true },
+
+  /* ── Social e Influência ──────────────────────────────────── */
+
+  { name: "Persuasão",
+    icon: "🤝", attrKeys: ["SAB"],
+    desc: "Convencer de boa fé — negociar, fazer pedidos razoáveis, ganhar confiança e influenciar com argumentos honestos e diplomacia.",
+    example: "Negociar o preço de um item; convencer o guarda a deixar o grupo entrar; inspirar uma vila assustada a resistir.",
+    learned: true },
+
+  { name: "Enganação",
+    icon: "🎭", attrKeys: ["SAB", "DEX"],
+    desc: "Mentir, manipular, disfarçar intenções e criar ilusões sociais. DEX reflete controle da linguagem corporal.",
+    example: "Fingir ser um mercador; mentir para o interrogador sem suar frio; convencer o vilão de que o grupo está do seu lado.",
+    learned: true },
+
+  { name: "Intimidação",
+    icon: "😤", attrKeys: ["FOR", "SAB"],
+    desc: "Impor presença física ou psicológica para forçar cooperação por medo. FOR para ameaça física, SAB para pressão psicológica.",
+    example: "Ameaçar o informante; fazer um inimigo hesitar antes de atacar; intimidar um grupo para que recue.",
+    learned: false },
+
+  { name: "Liderança",
+    icon: "📣", attrKeys: ["SAB"],
+    desc: "Coordenar aliados em situações caóticas, elevar o moral do grupo, delegar tarefas e manter a coesão sob pressão. Diferente de Persuasão: é comando, não convencimento.",
+    example: "Reorganizar o grupo após uma emboscada; manter soldados lutando mesmo com perdas; delegar tarefas numa missão de infiltração.",
+    learned: true },
+
+  { name: "Atuação",
+    icon: "🎪", attrKeys: ["SAB", "DEX"],
+    desc: "Cantar, tocar instrumento, dançar, atuar e se apresentar para audiências. DEX reflete precisão técnica do instrumento.",
+    example: "Tocar alaúde em taverna para obter informações; atuar como nobre para infiltrar baile; dançar para distrair a guarda.",
+    learned: true },
+
+  /* ── Furtividade e Destreza ───────────────────────────────── */
+
+  { name: "Furtividade",
+    icon: "🌑", attrKeys: ["AGI", "DEX"],
+    desc: "Mover-se silenciosamente, permanecer oculto e agir sem ser percebido. AGI para movimento suave, DEX para ações manuais silenciosas.",
+    example: "Passar por uma guarda dormindo; esconder-se atrás de uma coluna; abrir uma porta sem fazer barulho.",
+    learned: true },
+
+  { name: "Acrobacia",
+    icon: "🤸", attrKeys: ["AGI", "DEX"],
+    desc: "Equilíbrio em superfícies instáveis, escapar de agarrões, rolar para esquivar, saltar com precisão e mover-se em terrenos difíceis.",
+    example: "Caminhar sobre viga estreita; escapar de um agarrão; rolar sob o golpe de um gigante; atravessar telhados correndo.",
+    learned: true },
+
+  /* ── Força Física e Resistência ───────────────────────────── */
+
+  { name: "Atletismo",
+    icon: "💪", attrKeys: ["FOR", "AGI"],
+    desc: "Escalar, nadar, correr longas distâncias, arrombar portas, pular distâncias longas e sustentar esforço físico prolongado.",
+    example: "Escalar a muralha do castelo; nadar contra a correnteza; arrebentar as correntes com força bruta; carregar o aliado inconsciente enquanto corre.",
+    learned: true },
+
+  { name: "Resistência",
+    icon: "🦾", attrKeys: ["FOR"],
+    desc: "Suportar venenos, doenças, fadiga extrema, tortura, fome prolongada e efeitos físicos debilitantes pela dureza do corpo.",
+    example: "Resistir ao veneno da Cobra Constritora; continuar lutando com febre; sobreviver sem comida por 3 dias na floresta.",
+    learned: false },
+
+  { name: "Força de Vontade",
+    icon: "🧠", attrKeys: ["INT", "SAB"],
+    desc: "Resistir a efeitos mentais, dominação, ilusões e pressão psicológica. SAB para intuição e INT para análise racional.",
+    example: "Resistir ao Sussurro da Dúvida de um Aralto; não ceder ao medo causado pelo Lamento da Banshee; ignorar a ilusão de chamas.",
+    learned: false },
+
+  { name: "Sobrevivência",
+    icon: "🏕", attrKeys: ["SAB"],
+    desc: "Rastrear criaturas ou pessoas, encontrar alimento e abrigo, prever clima, orientar-se sem mapa e montar acampamento seguro.",
+    example: "Rastrear o Lobisomem pela floresta; encontrar água potável no deserto; acampar sem atrair predadores; navegar pelas estrelas.",
+    learned: true },
+
+  { name: "Manejo de Animais",
+    icon: "🐾", attrKeys: ["SAB"],
+    desc: "Acalmar, treinar e controlar animais. Comunicar intenções básicas, montar criaturas não-domesticadas e evitar ataques de bestas.",
+    example: "Acalmar o cavalo em pânico; treinar o corvo para entregar mensagens; convencer o urso a não atacar; montar um Rinodonte não-domesticado.",
+    learned: true },
+
+  /* ── Ofícios e Ferramentas ────────────────────────────────── */
+
+  { name: "Ferramentas de Ladrão",
+    icon: "🔧", attrKeys: ["DEX"],
+    desc: "Usar ferramentas especializadas para abrir fechaduras, desativar armadilhas mecânicas e arrombar cofres. Requer ter o kit de ferramentas.",
+    example: "Abrir a fechadura da sala do tesouro; desativar a armadilha de setas do corredor; arrombar o cofre do mercador.",
+    learned: true },
+
+  { name: "Artesanato",
+    icon: "⚒", attrKeys: ["DEX", "INT"],
+    desc: "Fabricar, reparar e avaliar objetos artesanais: armas, armaduras, ferramentas e itens mundanos. DEX para execução, INT para projeto.",
+    example: "Reparar armadura danificada; avaliar se a espada é uma falsificação; criar armadilha mecânica simples; forjar chave a partir de impressão.",
+    learned: true },
+
+  { name: "Idiomas e Linguística",
+    icon: "🗺", attrKeys: ["INT"],
+    desc: "Ler, escrever e falar idiomas estrangeiros (Serpentariano, Anão Antigo, Élficos, Dracônico), além de decifrar códigos e sistemas de escrita desconhecidos.",
+    example: "Traduzir inscrições Serpentarianas na parede; decifrar o diário cifrado do vilão; comunicar-se com o Dracônico Menor.",
+    learned: true },
+
+  { name: "Negociação",
+    icon: "💰", attrKeys: ["SAB", "INT"],
+    desc: "Avaliar valor de itens, barganhar preços, detectar fraudes comerciais e entender economia local. SAB para leitura do vendedor, INT para cálculo de valor.",
+    example: "Negociar 30% de desconto na espada; perceber que a 'pedra preciosa' é vidro colorido; vender o tesouro pelo preço justo.",
+    learned: true },
+
+  /* ════════════════════════════════════════════════════════════
+     PERÍCIAS DE COMBATE — conferem bônus mecânicos específicos
+     Aprendidas durante criação de personagem ou por progressão
+     ════════════════════════════════════════════════════════════ */
+
+  /* ── Combate Geral ────────────────────────────────────────── */
+
+  { name: "Retaliar",
+    icon: "↩", attrKeys: ["AGI", "DEX"], learned: true, combat: true,
+    desc: "Perícia de combate.",
+    combatDesc: "Quando um inimigo se afasta voluntariamente de um hex adjacente ao seu, você pode gastar 1 Ação para fazer 1 ataque corpo a corpo contra ele antes que conclua o movimento. O ataque usa a Chance de Acerto normal.",
+    example: "O Goblin tenta fugir — Retaliar permite um golpe nas costas antes que ele escape." },
+
+  { name: "Foco de Combate",
+    icon: "🎯", attrKeys: ["SAB", "INT"], learned: true, combat: true,
+    desc: "Perícia de combate.",
+    combatDesc: "1x por combate, ao errar um ataque, você pode rerolar o dado de ataque e ficar com o melhor resultado. Ativa automaticamente ao anunciar o erro — sem custo de Ação.",
+    example: "O d10 mostrou 8 (falhou no 6 necessário). Foco de Combate: rerola e tira 4 — acertou." },
+
+  { name: "Guardião de Flanco",
+    icon: "🛡", attrKeys: ["FOR", "SAB"], learned: true, combat: true,
+    desc: "Perícia de combate.",
+    combatDesc: "Passivo permanente: aliados em hexes adjacentes ao seu ganham +1 na Chance de Defesa enquanto você estiver consciente e de pé. Não requer Ação.",
+    example: "O Clérigo ao seu lado defende com 6 ou menos em vez de 5 ou menos." },
+
+  { name: "Golpe de Derrubada",
+    icon: "🔨", attrKeys: ["FOR", "AGI"], learned: true, combat: true,
+    desc: "Perícia de combate.",
+    combatDesc: "Ao acertar ataque corpo a corpo, declare 'Derrubada' antes de rolar dano. O alvo testa FOR (normal): falha → Derrubado por 1 rodada. Alvos derrubados são mais fáceis de acertar (+1 na Chance de Acerto contra eles).",
+    example: "Derrubado, o Troll leva ataques de todos os aliados adjacentes com +1 de vantagem." },
+
+  { name: "Pressão Tática",
+    icon: "⚡", attrKeys: ["INT", "SAB"], learned: true, combat: true,
+    desc: "Perícia de combate.",
+    combatDesc: "1x por rodada, como Ação Livre: analisa o padrão de ataque de 1 inimigo visível. Por 2 rodadas: seus ataques contra esse inimigo têm a Chance de Acerto baseada na DEX tratada como 1 ponto maior (vantagem de análise).",
+    example: "Pressão Tática no Orc Berserker DEX 0: você o trata como se tivesse DEX −1, ganhando +1 na Chance de Acerto." },
+
+  /* ── Combate: Armas de Uma Mão ────────────────────────────── */
+
+  { name: "Desarmamento",
+    icon: "🤚", attrKeys: ["DEX", "AGI"], learned: true, combat: true,
+    desc: "Perícia de combate.",
+    combatDesc: "Ao acertar com arma de 1 mão, declare 'Desarmamento' em vez de dano. O alvo testa Resistência (difícil): falha → derruba a arma no hex adjacente. A arma pode ser apanhada com 1 Ação.",
+    example: "O Mago inimigo perde o cajado. Sem o foco, suas magias de alto nível ficam mais difíceis." },
+
+  { name: "Duelista",
+    icon: "⚔", attrKeys: ["DEX", "SAB"], learned: true, combat: true,
+    desc: "Perícia de combate.",
+    combatDesc: "Passivo: se a mão secundária estiver completamente livre (sem escudo, sem arma, sem item), sua Chance de Defesa com arma de 1 mão aumenta em +1. Você troca o escudo por mobilidade e precisão.",
+    example: "Espada na direita, mão esquerda vazia: Chance de Defesa 6 em vez de 5." },
+
+  { name: "Defesa com Armas Pesadas",
+    icon: "🗡🛡", attrKeys: ["FOR", "AGI"], learned: true, combat: true,
+    desc: "Perícia de combate.",
+    combatDesc: "Permite usar armas de 2 mãos para defender. Sem esta perícia: armas de 2 mãos não podem defender. Com ela: podem defender, perdendo −2 na Chance de Defesa por ataque defendido (em vez de inaptas).",
+    example: "O Guerreiro com Claymore pode agora aparar golpes, mas cada defesa custa −2 da próxima." },
+
+  /* ── Combate: Armas de Duas Mãos ──────────────────────────── */
+
+  { name: "Varredura",
+    icon: "🌪", attrKeys: ["FOR", "AGI"], learned: true, combat: true,
+    desc: "Perícia de combate.",
+    combatDesc: "1x por turno: ao acertar com arma de 2 mãos, gaste 1 Ação extra para golpear um segundo inimigo adjacente diferente. O segundo golpe causa metade do dano (arredonda para baixo). Ambos os ataques usam o mesmo resultado de dado.",
+    example: "Derruba 1 Goblin e a Varredura atinge o segundo ao lado por metade do dano." },
+
+  { name: "Ímpeto Brutal",
+    icon: "💥", attrKeys: ["FOR"], learned: true, combat: true,
+    desc: "Perícia de combate.",
+    combatDesc: "Se moveu pelo menos 2 hexes em linha reta antes do ataque neste turno: o próximo ataque com arma de 2 mãos causa +1d6 extra de dano de impacto. O movimento e o ataque devem ser na mesma Ação de Combate.",
+    example: "Corre 3 hexes em linha reta e golpeia: +1d6 de dano cinético de momentum." },
+
+  /* ── Combate: Escudo ──────────────────────────────────────── */
+
+  { name: "Escudo Bash",
+    icon: "🛡💥", attrKeys: ["FOR", "DEX"], learned: true, combat: true,
+    desc: "Perícia de combate.",
+    combatDesc: "Gaste 1 Ação de Combate para golpear com o escudo: 1d4 de dano + alvo testa Resistência (difícil): falha → perde 1 Ação no próximo turno (atordoado brevemente). Pode ser feito no mesmo turno que um ataque normal com a arma principal.",
+    example: "Espada pela direita, martelada do escudo pela esquerda: 2 ataques no mesmo turno." },
+
+  { name: "Muralha Viva",
+    icon: "🧱", attrKeys: ["FOR", "SAB"], learned: true, combat: true,
+    desc: "Perícia de combate.",
+    combatDesc: "Reação ao aliado adjacente ser atacado: interpõe o escudo entre o aliado e o ataque. O aliado usa sua Chance de Defesa + o bônus de Defesa Física do seu escudo para aquele ataque específico. Você ainda pode defender normalmente no seu turno.",
+    example: "O Clérigo ia ser acertado. Muralha Viva: defende por ele usando o bônus do Escudo Pesado." },
+
+  /* ── Combate: Arco e Distância ────────────────────────────── */
+
+  { name: "Tiro em Movimento",
+    icon: "🏃🏹", attrKeys: ["DEX", "AGI"], learned: true, combat: true,
+    desc: "Perícia de combate.",
+    combatDesc: "Pode usar Ação de Movimento + Ação de Ataque à distância no mesmo turno sem penalidade. Normalmente, atacar à distância após se mover impõe −1 na Chance de Acerto.",
+    example: "Reposiciona 3 hexes e atira com Chance de Acerto normal, sem o −1 padrão." },
+
+  { name: "Pressão de Distância",
+    icon: "🎯🛡", attrKeys: ["DEX", "INT"], learned: true, combat: true,
+    desc: "Perícia de combate.",
+    combatDesc: "Inimigos que tentam se aproximar de você estando a 4+ hexes de distância sofrem Ataque de Oportunidade à distância (1 Ação, Chance de Acerto normal). Ativa automaticamente ao declarar Pressão no início do turno.",
+    example: "O Ogro avança 4 hexes em direção ao Arqueiro — recebe um tiro antes de chegar." },
+
+  { name: "Tiro Preciso",
+    icon: "🎯⭐", attrKeys: ["DEX", "SAB"], learned: true, combat: true,
+    desc: "Perícia de combate.",
+    combatDesc: "1x por combate: ao usar uma Ação de Combate inteira para mirar (sem se mover), o próximo ataque à distância ignora cobertura parcial e ganha +1d6 de dano extra. O tiro não pode ser desviado por cobertura leve (pilares, caixas).",
+    example: "O Goblin está atrás de uma barricada. Tiro Preciso: cobertura ignorada, +1d6 de dano." },
+
+  /* ── Combate: Armas Mágicas e Conjuração ──────────────────── */
+
+  { name: "Conjuração Rápida",
+    icon: "⚡✨", attrKeys: ["INT", "DEX"], learned: true, combat: true,
+    desc: "Perícia de combate.",
+    combatDesc: "1x por combate: conjure uma magia de Nível 1 ou 2 como Reação em vez de Ação (depois de um ataque inimigo ser declarado mas antes de resolver). A magia ainda consome Slot normalmente.",
+    example: "O Troll ataca — como Reação: Escudo Arcano (Nível 1) antes de receber o golpe." },
+
+  { name: "Canalizar pelo Cajado",
+    icon: "🪄", attrKeys: ["INT", "SAB"], learned: true, combat: true,
+    desc: "Perícia de combate.",
+    combatDesc: "Ao acertar ataque físico com cajado, varinha ou arma mágica: gaste 1 Ação de Magia para conjurar magia de Nível 1 conhecida no mesmo alvo imediatamente. A magia não consome Slot adicional — apenas a Ação de Magia.",
+    example: "Cajado acerta o Esqueleto; Canalizar: lança Raio Sagrado no mesmo alvo sem Slot extra." },
+
+  { name: "Foco Ampliado",
+    icon: "🔮", attrKeys: ["INT"], learned: true, combat: true,
+    desc: "Perícia de combate.",
+    combatDesc: "Passivo: magias com alcance de 4 hex ou menos têm o alcance aumentado em +2 hex. Magias de área têm o raio aumentado em +1 hex. Não afeta magias de toque.",
+    example: "Bola de Fogo (área 3 hex) passa a ser área 4 hex. Raio (alcance 4 hex) passa a 6 hex." }
+
 ];
+
 
 /* ======================================================================
    BESTIÁRIO — compêndio de criaturas e inimigos
