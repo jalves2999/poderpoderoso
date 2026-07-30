@@ -2075,39 +2075,169 @@ function renderRulesTab() {
       title: "Sequência de Combate",
       content: `
         <div class="rules-block">
+          <p class="rules-intro">Todo o combate usa <strong>d10</strong> (ataque, defesa, iniciativa) e <strong>d20</strong> (esquiva). A base de acerto é sempre <strong>5 ou menos</strong> no d10. DEX define vantagem/desvantagem nos ataques.</p>
+
+          <!-- 1. INICIATIVA -->
           <div class="rules-callout rules-callout-red">
-            <strong>1. Iniciativa</strong>
+            <strong>1. Iniciativa — 1d10</strong>
             <ul class="rules-list">
-              <li>Cada participante rola 1d20 + AGI</li>
-              <li>Ordem decrescente (maior vai primeiro)</li>
-              <li>Empates: AGI maior vai primeiro; se ainda empatado, joga dado</li>
+              <li>O jogador rola <strong>1d10</strong> pelo grupo inteiro. O Mestre rola <strong>1d10</strong> pelos inimigos.</li>
+              <li>Quem tirar o <strong>maior número age primeiro</strong> com todo o seu grupo.</li>
+              <li>Empate: jogar novamente até desempatar.</li>
+              <li>O grupo que vencer a iniciativa realiza todas as suas Ações antes dos inimigos agirem.</li>
             </ul>
           </div>
+
+          <!-- 2. ATAQUE -->
           <div class="rules-callout rules-callout-gold">
-            <strong>2. Turno do Personagem</strong>
+            <strong>2. Ataque — 1d10</strong>
             <ul class="rules-list">
-              <li>Use as Ações de Combate disponíveis para: atacar, usar habilidade, mover-se, interagir com objeto</li>
-              <li>Use as Ações de Magia disponíveis para conjurar magias</li>
-              <li>Ações não usadas no turno são perdidas (não acumulam)</li>
+              <li>Base de acerto: <strong>5 ou menos</strong> no d10 (ou seja, 50% de chance).</li>
+              <li><strong>Vantagem de DEX:</strong> compare a DEX do atacante com a DEX do defensor.</li>
+            </ul>
+            <div class="rules-table-wrap">
+              <table class="rules-table">
+                <thead><tr><th>Situação</th><th>Chance de Acerto</th><th>Exemplo</th></tr></thead>
+                <tbody>
+                  <tr><td>DEX igual</td><td>5 ou menos (base)</td><td>Ambos com DEX 2 → acerta no 5</td></tr>
+                  <tr><td>Atacante tem DEX maior</td><td>5 + diferença ou menos</td><td>Atacante DEX 2, Defensor DEX 1 → acerta no <strong>6</strong></td></tr>
+                  <tr><td>Atacante tem DEX menor</td><td>5 − diferença ou menos</td><td>Atacante DEX 1, Defensor DEX 3 → acerta no <strong>3</strong></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <ul class="rules-list" style="margin-top:8px">
+              <li>Cada Ação de Combate permite <strong>1 rolagem de ataque</strong>.</li>
+              <li>O ataque pode acertar o mesmo alvo múltiplas vezes (uma por Ação usada).</li>
             </ul>
           </div>
+
+          <!-- 3. DEFESA -->
           <div class="rules-callout rules-callout-blue">
-            <strong>3. Reações (fora do seu turno)</strong>
+            <strong>3. Defesa — 1d10</strong>
             <ul class="rules-list">
-              <li>Quando um inimigo ataca você, gasta uma Reação para executar Ações de Reação</li>
-              <li>Possíveis Ações de Reação: Bloquear (usar escudo/arma), Esquivar (rolar Esquiva), Contra-Atacar</li>
-              <li>Sem Reações sobrando: você não pode reagir — o ataque acerta automaticamente se tiver acerto</li>
+              <li>Ao ser atacado, o defensor pode <strong>declarar Defesa</strong> antes de ver o dado do atacante.</li>
+              <li>Base de defesa: <strong>5 ou menos</strong> no d10 (bloqueia o ataque).</li>
+              <li>Cada tipo de equipamento tem regra diferente:</li>
+            </ul>
+            <div class="rules-table-wrap">
+              <table class="rules-table">
+                <thead><tr><th>Equipamento</th><th>Chance de Defesa</th><th>Desgaste</th></tr></thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Escudo Pesado</strong></td>
+                    <td><strong>6 ou menos</strong> (vantagem +1)</td>
+                    <td>Não perde chance de defesa</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Escudo Normal</strong></td>
+                    <td><strong>5 ou menos</strong> (base)</td>
+                    <td>Não perde chance de defesa</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Arma de 1 Mão</strong></td>
+                    <td><strong>5 ou menos</strong> (base)</td>
+                    <td>−1 na chance por ataque defendido</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Arma de 2 Mãos</strong></td>
+                    <td><strong>5 ou menos</strong> (requer perícia)</td>
+                    <td>−2 na chance por ataque defendido</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Adaga / Instrumento</strong></td>
+                    <td>❌ Sem defesa</td>
+                    <td>+1 de bônus de Esquiva em vez disso</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <ul class="rules-list" style="margin-top:8px">
+              <li>A chance de defesa de armas <strong>reseta ao início de cada rodada</strong>.</li>
+              <li>Se a chance de defesa chegar a 0 ou menos no meio de uma rodada: sem mais defesas naquela rodada.</li>
             </ul>
           </div>
+
+          <!-- 4. ESQUIVA -->
           <div class="rules-callout rules-callout-green">
-            <strong>4. Ataque</strong>
+            <strong>4. Esquiva — 1d20</strong>
             <ul class="rules-list">
-              <li>Role o dado de acerto da arma (varia por arma e habilidade)</li>
-              <li>Compare com a Esquiva do alvo — se igual ou maior, acerta</li>
-              <li>Se acertar: role o dano da arma + dano natural (FOR) + modificadores</li>
-              <li>O alvo reduz o dano recebido pela Defesa correspondente (física ou mágica)</li>
+              <li>A Esquiva usa <strong>1d20</strong> com base <strong>10 ou menos</strong>.</li>
+              <li>Qualquer personagem pode tentar esquivar <em>em vez de</em> ou <em>além de</em> defender.</li>
+              <li><strong>Cada Esquiva realizada</strong> na mesma rodada custa <strong>−2 na chance de esquiva</strong>.</li>
+              <li>Adagas e instrumentos concedem <strong>+1 de bônus de Esquiva</strong> (em vez de defesa).</li>
+            </ul>
+            <div class="rules-table-wrap">
+              <table class="rules-table">
+                <thead><tr><th>Situação</th><th>Chance de Esquiva</th></tr></thead>
+                <tbody>
+                  <tr><td>1ª esquiva da rodada</td><td>10 ou menos no d20</td></tr>
+                  <tr><td>2ª esquiva</td><td>8 ou menos</td></tr>
+                  <tr><td>3ª esquiva</td><td>6 ou menos</td></tr>
+                  <tr><td>4ª esquiva</td><td>4 ou menos</td></tr>
+                  <tr><td>Com adaga/instrumento</td><td>+1 na chance base (11, 9, 7…)</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- 5. DANO -->
+          <div class="rules-callout rules-callout-red">
+            <strong>5. Cálculo de Dano</strong>
+            <ul class="rules-list">
+              <li>O dano é calculado <strong>pelo número de acertos</strong> em um ataque completo.</li>
+            </ul>
+            <div class="rules-callout" style="background:rgba(0,0,0,0.04);border-left:3px solid var(--gold);padding:10px 14px;margin:8px 0;border-radius:0 6px 6px 0">
+              <code style="font-size:13px">(Dano da Arma + Dano Natural + Bônus) × Nº de Acertos − Defesa Física = Dano Final</code>
+            </div>
+            <ul class="rules-list">
+              <li><strong>Dano da Arma:</strong> indicado no item equipado.</li>
+              <li><strong>Dano Natural:</strong> baseado em FOR (FOR 0 = nenhum, FOR 1 = 1d4, FOR 2 = 1d6…).</li>
+              <li><strong>Bônus fixo:</strong> modificadores de itens, habilidades e magias.</li>
+              <li><strong>Defesa do alvo</strong> é subtraída do total após multiplicação pelos acertos.</li>
+              <li>O <strong>dano mínimo</strong> de qualquer ataque que acertar é sempre 1.</li>
             </ul>
           </div>
+
+          <!-- 6. CRÍTICO -->
+          <div class="rules-callout rules-callout-gold">
+            <strong>6. Crítico</strong>
+            <ul class="rules-list">
+              <li>Um <strong>Acerto Crítico</strong> ocorre quando o atacante tira <strong>1 no d10 de ataque</strong>.</li>
+              <li>Uma <strong>Defesa Crítica Falha</strong> ocorre quando o defensor tira o <strong>valor máximo do d10</strong> na tentativa de defesa.</li>
+              <li>Para o crítico ocorrer: o atacante precisa ter Acerto Crítico <strong>E</strong> o defensor precisa ter Defesa Crítica Falha na mesma troca.</li>
+              <li>Efeito do crítico: <strong>Dano dobrado</strong> — (Dano + Bônus) × 2, antes de subtrair a defesa.</li>
+            </ul>
+            <div class="rules-table-wrap">
+              <table class="rules-table">
+                <thead><tr><th>Dado</th><th>Resultado</th><th>Efeito</th></tr></thead>
+                <tbody>
+                  <tr>
+                    <td>Atacante: 1 no d10</td>
+                    <td>✦ Acerto Crítico</td>
+                    <td rowspan="2" style="vertical-align:middle;font-weight:700;color:#c04040">Dano dobrado! <br>(Dano + Bônus) × 2</td>
+                  </tr>
+                  <tr>
+                    <td>Defensor: 10 no d10 (valor máx.)</td>
+                    <td>✦ Defesa Crítica Falha</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- EXEMPLO COMPLETO -->
+          <div class="rules-callout" style="background:rgba(156,122,60,0.08);border:1px solid rgba(156,122,60,0.3);border-radius:8px;padding:14px 16px">
+            <strong>📖 Exemplo Completo de Rodada</strong>
+            <ol class="rules-list" style="list-style:decimal;padding-left:20px;gap:6px">
+              <li><strong>Iniciativa:</strong> Jogador tira 7, Mestre tira 4. Grupo do jogador age primeiro.</li>
+              <li><strong>Ataque:</strong> Kalek (DEX 2) ataca Goblin (DEX 1). Vantagem +1 → acerta com 6 ou menos. Kalek tira <strong>4</strong> — acertou!</li>
+              <li><strong>Defesa do Goblin:</strong> Goblin tem escudo normal (base 5). Tira <strong>3</strong> — defendeu! Ataque bloqueado.</li>
+              <li><strong>Segundo Ataque:</strong> Kalek usa segunda Ação. Tira <strong>6</strong> — acertou de novo!</li>
+              <li><strong>Defesa do Goblin (2ª):</strong> Goblin tira <strong>7</strong> — falhou! O ataque passa.</li>
+              <li><strong>Dano:</strong> Kalek usa Espada (1d8) + Dano Natural FOR 2 (1d6) + 0 bônus. Acertou 1 vez sem crítico. Rola: 1d8 = 5, 1d6 = 3 → total 8. Goblin tem Def.Física 2. Dano Final: 8 − 2 = <strong>6 de dano</strong>.</li>
+            </ol>
+          </div>
+
         </div>
       `
     },
@@ -2577,7 +2707,7 @@ function renderDerivedSection(character, cls) {
     { label: "Ações/turno", value: actions, tooltip: "Ações de combate por turno. Base: 1 + floor(Nível÷3). Bônus: +1 a cada 4 AGI, +1 a cada 5 DEX. Exemplo: nível 3 = 2 ações; nível 6 = 3 ações. Atributos adicionam bônus extras." },    { label: "Ações de Magia", value: spellActions, tooltip: "Ações para conjurar magias. Todas as classes ganham 1 + floor(Nível÷3). Bônus de INT: +1 a cada 2 pontos.", highlight: spellActions > 0 },
     { label: "Defesa Física", value: physDef, tooltip: "Reduz o dano de ataques físicos recebidos. Vem da armadura equipada e do escudo (se houver)." },
     { label: "Defesa Mágica", value: magDef, tooltip: "Reduz o dano de magias e ataques mágicos recebidos. Vem principalmente de armaduras arcanas/sagradas e itens mágicos." },
-    { label: "Chance de Esquiva", value: `${dodge} ou menos (d20)`, tooltip: "Role 1d20: se o resultado for igual ou menor que este valor, você esquiva totalmente do ataque. Base 10 + AGI. Armas de duas mãos pesadas (sem a perícia 'Defesa com Armas Pesadas') aplicam −2." },
+    { label: "Chance de Esquiva", value: `${dodge} ou menos (d20)`, tooltip: "Role 1d20: resultado igual ou menor que este valor esquiva totalmente o ataque. Base 10 — cada esquiva adicional na mesma rodada custa −2 (10, 8, 6…). Adagas e instrumentos concedem +1 de bônus." },
     { label: "Slots de Magia", value: `${(character.activeSpells||[]).length}/${slots}`, tooltip: "Slots em uso / total disponível (INT + SAB). Cada magia equipada consome 1 slot. Desequipe magias para liberar slots. Classes conjuradoras têm garantia de pelo menos 1." },
     { label: "Carga", value: `${weight} / ${carry}`, tooltip: "Peso atual carregado / capacidade máxima. Base 20 + (FOR × 5), mais um bônus fixo por nível que varia por classe." }
   ];
