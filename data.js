@@ -3709,305 +3709,246 @@ const NAV_PAGES = [
 const SKILL_TESTS = [
 
   /* ════════════════════════════════════════════════════════════
-     PERÍCIAS GERAIS — usadas em exploração, social e investigação
-     Fórmula: 10 + soma(attrKeys) + 2 (se aprendida) = Normal
-     Hard = 5 + bônus | Crítico = 1 + bônus
+     TESTES DE PERÍCIA GERAL
+     Role 1d20: resultado ≤ valor = sucesso
+     Normal = 10 + soma(attrKeys) + 2 se aprendida
+     Difícil = 5 + bônus  |  Crítico = 1 + bônus
      ════════════════════════════════════════════════════════════ */
 
-  /* ── Sentidos e Percepção ─────────────────────────────────── */
+  /* ── Sentidos ──────────────────────────────────────────────── */
 
   { name: "Percepção",
     icon: "👁", attrKeys: ["SAB"],
-    desc: "Notar detalhes ocultos, detectar emboscadas, ouvir sussurros, farejar perigo. Usado sempre que o mundo tenta esconder algo do personagem.",
-    example: "Perceber o bandido se escondendo atrás das caixas; ouvir passos no corredor; notar que a parede tem timbre oco.",
+    desc: "Notar detalhes ocultos, detectar emboscadas e criaturas furtivas. Passivo — o Mestre pode pedir sem aviso.",
+    example: "Perceber o bandido atrás das caixas; ouvir passos no corredor; notar que a parede tem timbre oco.",
     learned: true },
 
   { name: "Pressentimento",
     icon: "🌀", attrKeys: ["SAB"],
-    desc: "Intuição pura — sentir que algo está errado mesmo sem evidências visíveis. Resiste a ilusões e disfarces que enganam os outros sentidos.",
-    example: "Sentir que o negociante está mentindo apesar do sorriso perfeito; pressentir que a sala está vigiada.",
+    desc: "Intuição pura — sentir que algo está errado mesmo sem evidências concretas. Resiste a ilusões que enganam os outros sentidos.",
+    example: "Sentir que o negociante está mentindo; pressentir que a sala está vigiada mesmo sem ver ninguém.",
     learned: false },
 
-  { name: "Percepção Mágica",
-    icon: "✨🔍", attrKeys: ["SAB", "INT"],
-    desc: "Detectar auras mágicas, identificar encantamentos em itens ou locais, sentir portais e anomalias arcanas. Necessário para Magos e Clérigos identificarem itens.",
-    example: "Detectar que o espelho é um portal; identificar o encantamento numa espada comum; sentir que o calabouço inteiro está amaldiçoado.",
-    learned: true },
-
-  /* ── Conhecimento e Intelecto ─────────────────────────────── */
-
   { name: "Investigação",
-    icon: "🔍", attrKeys: ["INT"],
-    desc: "Examinar ativamente uma área em busca de pistas, analisar evidências, decifrar textos e conectar informações dispersas. Diferente de Percepção (ativa vs passiva).",
-    example: "Examinar a cena de um crime; decifrar o mapa cifrado; descobrir que dois eventos aparentemente não relacionados têm o mesmo culpado.",
+    icon: "🔍", attrKeys: ["INT", "AGI"],
+    desc: "Examinar ativamente uma área em busca de pistas, decifrar textos, analisar evidências. Diferente de Percepção: é ativa e deliberada.",
+    example: "Examinar cena de crime; decifrar mapa cifrado; notar que a poeira na mesa foi perturbada recentemente.",
     learned: true },
 
-  { name: "História",
-    icon: "📜", attrKeys: ["INT"],
-    desc: "Conhecimento de eventos históricos, guerras, linhagens nobres, reinos extintos e civilizações antigas do mundo de Aether.",
-    example: "Reconhecer o brasão da família real de Atrelon; saber que a Batalha Colossal ocorreu há 500 anos; identificar a ruína como sendo de origem Serpentariana.",
+  { name: "Conhecimento",
+    icon: "📚", attrKeys: ["INT"],
+    desc: "Recordar fatos históricos, lendas, propriedades de criaturas, itens e reinos de Aether. Quanto maior o INT, mais se sabe.",
+    example: "Saber que Magnalaga é sensível a vibrações; identificar o brasão da família Braun; reconhecer runas de Durrak.",
     learned: true },
 
   { name: "Arcanismo",
-    icon: "📖✨", attrKeys: ["INT"],
-    desc: "Teoria mágica, identificação de magias, runas, criaturas mágicas e planos de existência. A ciência por trás do sobrenatural.",
-    example: "Identificar que o monstro é um Golem da Marca; reconhecer que o feitiço é de escola de Transmutação; entender como funciona um ritual de invocação.",
+    icon: "✨", attrKeys: ["INT", "SAB"],
+    desc: "Identificar magias, itens mágicos, runas, criaturas arcanas e fenômenos sobrenaturais. Essencial para Magos e Clérigos.",
+    example: "Identificar encantamento numa espada; reconhecer que a criatura é um Golem da Marca; sentir aura de portal.",
     learned: true },
 
-  { name: "Natureza",
-    icon: "🌿", attrKeys: ["SAB"],
-    desc: "Conhecimento de plantas, animais, terrenos, clima e fenômenos naturais. Essencial para sobreviver e orientar-se em ambientes selvagens.",
-    example: "Identificar planta venenosa; prever tempestade pela posição das nuvens; saber que a trilha foi pisada por um urso há poucas horas.",
-    learned: true },
+  /* ── Social ────────────────────────────────────────────────── */
 
-  { name: "Religião",
-    icon: "⛩", attrKeys: ["SAB", "INT"],
-    desc: "Conhecimento dos deuses de Aether (Aethea, Thurgomur, Jurgmund, Ras'kuru), rituais, símbolos sagrados, mortos-vivos e planos divinos.",
-    example: "Reconhecer que o altar é dedicado a Jurgmund; saber como afastar um Espectro com oração; identificar que a criatura tem bênção divina.",
+  { name: "Lábia",
+    icon: "🗣", attrKeys: ["SAB", "DEX"],
+    desc: "Convencer, enganar ou manipular por palavras — tanto honestidade estratégica quanto mentira direta. DEX reflete controle da linguagem corporal.",
+    example: "Fingir ser mercador; convencer o guarda de que o grupo tem autorização; mentir sem suar frio.",
     learned: true },
-
-  { name: "Medicina",
-    icon: "🩹", attrKeys: ["SAB"],
-    desc: "Tratar ferimentos, estabilizar aliados incapacitados, identificar doenças e venenos, e aplicar primeiros socorros sem magia.",
-    example: "Estabilizar aliado a 0 HP sem magia (SAB normal); identificar que o veneno é de Cobra de Sangue de Jurgmund; cauterizar ferimento para parar Sangramento.",
-    learned: true },
-
-  { name: "Prestidigitação",
-    icon: "🃏", attrKeys: ["DEX"],
-    desc: "Habilidade manual fina: furtar objetos, esconder itens no corpo, abrir fechaduras, desativar armadilhas, jogar cartas e truques de mãos.",
-    example: "Furtar a chave do carcereiro; esconder a faca no cano da bota; abrir a fechadura da cela com um grampo.",
-    learned: true },
-
-  /* ── Social e Influência ──────────────────────────────────── */
 
   { name: "Persuasão",
     icon: "🤝", attrKeys: ["SAB"],
-    desc: "Convencer de boa fé — negociar, fazer pedidos razoáveis, ganhar confiança e influenciar com argumentos honestos e diplomacia.",
-    example: "Negociar o preço de um item; convencer o guarda a deixar o grupo entrar; inspirar uma vila assustada a resistir.",
-    learned: true },
-
-  { name: "Enganação",
-    icon: "🎭", attrKeys: ["SAB", "DEX"],
-    desc: "Mentir, manipular, disfarçar intenções e criar ilusões sociais. DEX reflete controle da linguagem corporal.",
-    example: "Fingir ser um mercador; mentir para o interrogador sem suar frio; convencer o vilão de que o grupo está do seu lado.",
+    desc: "Negociar de boa fé, fazer pedidos razoáveis e ganhar confiança com argumentos honestos e diplomacia.",
+    example: "Negociar preço justo; convencer o guarda a deixar o grupo entrar; inspirar aldeões assustados.",
     learned: true },
 
   { name: "Intimidação",
     icon: "😤", attrKeys: ["FOR", "SAB"],
-    desc: "Impor presença física ou psicológica para forçar cooperação por medo. FOR para ameaça física, SAB para pressão psicológica.",
-    example: "Ameaçar o informante; fazer um inimigo hesitar antes de atacar; intimidar um grupo para que recue.",
+    desc: "Impor presença física ou psicológica para forçar cooperação pelo medo. FOR para ameaça física, SAB para pressão mental.",
+    example: "Fazer mercenários recuarem; ameaçar informante; fazer inimigo hesitar antes de atacar.",
     learned: false },
 
-  { name: "Liderança",
-    icon: "📣", attrKeys: ["SAB"],
-    desc: "Coordenar aliados em situações caóticas, elevar o moral do grupo, delegar tarefas e manter a coesão sob pressão. Diferente de Persuasão: é comando, não convencimento.",
-    example: "Reorganizar o grupo após uma emboscada; manter soldados lutando mesmo com perdas; delegar tarefas numa missão de infiltração.",
-    learned: true },
-
-  { name: "Atuação",
-    icon: "🎪", attrKeys: ["SAB", "DEX"],
-    desc: "Cantar, tocar instrumento, dançar, atuar e se apresentar para audiências. DEX reflete precisão técnica do instrumento.",
-    example: "Tocar alaúde em taverna para obter informações; atuar como nobre para infiltrar baile; dançar para distrair a guarda.",
-    learned: true },
-
-  /* ── Furtividade e Destreza ───────────────────────────────── */
+  /* ── Furtividade e Destreza ────────────────────────────────── */
 
   { name: "Furtividade",
     icon: "🌑", attrKeys: ["AGI", "DEX"],
-    desc: "Mover-se silenciosamente, permanecer oculto e agir sem ser percebido. AGI para movimento suave, DEX para ações manuais silenciosas.",
-    example: "Passar por uma guarda dormindo; esconder-se atrás de uma coluna; abrir uma porta sem fazer barulho.",
+    desc: "Mover-se silenciosamente e permanecer oculto de observadores. AGI para movimento suave, DEX para ações manuais silenciosas.",
+    example: "Passar pela guarda dormindo; abrir porta sem barulho; seguir alvo pela cidade sem ser visto.",
     learned: true },
 
   { name: "Acrobacia",
     icon: "🤸", attrKeys: ["AGI", "DEX"],
-    desc: "Equilíbrio em superfícies instáveis, escapar de agarrões, rolar para esquivar, saltar com precisão e mover-se em terrenos difíceis.",
-    example: "Caminhar sobre viga estreita; escapar de um agarrão; rolar sob o golpe de um gigante; atravessar telhados correndo.",
-    learned: true },
+    desc: "Equilíbrio em superfícies instáveis, escapar de agarrões, rolar para esquivar, saltar com precisão.",
+    example: "Caminhar sobre viga estreita; escapar de agarrão; rolar sob golpe de gigante; cruzar telhados.",
+    learned: false },
 
-  /* ── Força Física e Resistência ───────────────────────────── */
+  /* ── Físico ────────────────────────────────────────────────── */
 
   { name: "Atletismo",
     icon: "💪", attrKeys: ["FOR", "AGI"],
-    desc: "Escalar, nadar, correr longas distâncias, arrombar portas, pular distâncias longas e sustentar esforço físico prolongado.",
-    example: "Escalar a muralha do castelo; nadar contra a correnteza; arrebentar as correntes com força bruta; carregar o aliado inconsciente enquanto corre.",
-    learned: true },
+    desc: "Escalar, nadar, correr longas distâncias, arrombar portas, saltar distâncias e sustentar esforço físico.",
+    example: "Escalar muralha com armadura; nadar contra correnteza; arrebentar correntes; carregar aliado incapacitado.",
+    learned: false },
 
   { name: "Resistência",
     icon: "🦾", attrKeys: ["FOR"],
-    desc: "Suportar venenos, doenças, fadiga extrema, tortura, fome prolongada e efeitos físicos debilitantes pela dureza do corpo.",
-    example: "Resistir ao veneno da Cobra Constritora; continuar lutando com febre; sobreviver sem comida por 3 dias na floresta.",
+    desc: "Resistir a venenos, doenças, fadiga, tortura e efeitos físicos debilitantes pela dureza do corpo.",
+    example: "Resistir ao veneno da Cobra Constritora; continuar lutando com febre; sobreviver 3 dias sem comida.",
     learned: false },
 
   { name: "Força de Vontade",
     icon: "🧠", attrKeys: ["INT", "SAB"],
-    desc: "Resistir a efeitos mentais, dominação, ilusões e pressão psicológica. SAB para intuição e INT para análise racional.",
-    example: "Resistir ao Sussurro da Dúvida de um Aralto; não ceder ao medo causado pelo Lamento da Banshee; ignorar a ilusão de chamas.",
+    desc: "Resistir a efeitos mentais, dominação, ilusões e pressão psicológica. SAB para intuição, INT para análise racional.",
+    example: "Resistir ao Sussurro da Dúvida; não ceder ao Lamento da Banshee; ignorar ilusão de chamas.",
+    example: "Resistir ao domínio de um Aralto; continuar lutando com 1 HP por pura obstinação.",
     learned: false },
 
-  { name: "Sobrevivência",
-    icon: "🏕", attrKeys: ["SAB"],
-    desc: "Rastrear criaturas ou pessoas, encontrar alimento e abrigo, prever clima, orientar-se sem mapa e montar acampamento seguro.",
-    example: "Rastrear o Lobisomem pela floresta; encontrar água potável no deserto; acampar sem atrair predadores; navegar pelas estrelas.",
-    learned: true },
-
-  { name: "Manejo de Animais",
-    icon: "🐾", attrKeys: ["SAB"],
-    desc: "Acalmar, treinar e controlar animais. Comunicar intenções básicas, montar criaturas não-domesticadas e evitar ataques de bestas.",
-    example: "Acalmar o cavalo em pânico; treinar o corvo para entregar mensagens; convencer o urso a não atacar; montar um Rinodonte não-domesticado.",
-    learned: true },
-
-  /* ── Ofícios e Ferramentas ────────────────────────────────── */
-
-  { name: "Ferramentas de Ladrão",
-    icon: "🔧", attrKeys: ["DEX"],
-    desc: "Usar ferramentas especializadas para abrir fechaduras, desativar armadilhas mecânicas e arrombar cofres. Requer ter o kit de ferramentas.",
-    example: "Abrir a fechadura da sala do tesouro; desativar a armadilha de setas do corredor; arrombar o cofre do mercador.",
-    learned: true },
-
-  { name: "Artesanato",
-    icon: "⚒", attrKeys: ["DEX", "INT"],
-    desc: "Fabricar, reparar e avaliar objetos artesanais: armas, armaduras, ferramentas e itens mundanos. DEX para execução, INT para projeto.",
-    example: "Reparar armadura danificada; avaliar se a espada é uma falsificação; criar armadilha mecânica simples; forjar chave a partir de impressão.",
-    learned: true },
-
-  { name: "Idiomas e Linguística",
-    icon: "🗺", attrKeys: ["INT"],
-    desc: "Ler, escrever e falar idiomas estrangeiros (Serpentariano, Anão Antigo, Élficos, Dracônico), além de decifrar códigos e sistemas de escrita desconhecidos.",
-    example: "Traduzir inscrições Serpentarianas na parede; decifrar o diário cifrado do vilão; comunicar-se com o Dracônico Menor.",
-    learned: true },
-
-  { name: "Negociação",
-    icon: "💰", attrKeys: ["SAB", "INT"],
-    desc: "Avaliar valor de itens, barganhar preços, detectar fraudes comerciais e entender economia local. SAB para leitura do vendedor, INT para cálculo de valor.",
-    example: "Negociar 30% de desconto na espada; perceber que a 'pedra preciosa' é vidro colorido; vender o tesouro pelo preço justo.",
-    learned: true },
+  { name: "Briga",
+    icon: "👊", attrKeys: ["FOR", "AGI"],
+    desc: "Lutar sem armas: socas, agarrões, chaves e quedas. Diferente de Atletismo — é combate corporal sem equipamento.",
+    example: "Agarrar e imobilizar um ladrão; dar soco certeiro num guarda; escapar de presa enquanto desarmado.",
+    learned: false },
 
   /* ════════════════════════════════════════════════════════════
-     PERÍCIAS DE COMBATE — conferem bônus mecânicos específicos
-     Aprendidas durante criação de personagem ou por progressão
+     PERÍCIAS DE COMBATE
+     Cada uma concede uma vantagem passiva situacional em combate.
+     Aprendida durante criação ou por progressão de nível.
+     Não são habilidades ativas — ativam em momentos específicos.
      ════════════════════════════════════════════════════════════ */
 
-  /* ── Combate Geral ────────────────────────────────────────── */
+  /* ── Geral ─────────────────────────────────────────────────── */
 
   { name: "Retaliar",
-    icon: "↩", attrKeys: ["AGI", "DEX"], learned: true, combat: true,
-    desc: "Perícia de combate.",
-    combatDesc: "Quando um inimigo se afasta voluntariamente de um hex adjacente ao seu, você pode gastar 1 Ação para fazer 1 ataque corpo a corpo contra ele antes que conclua o movimento. O ataque usa a Chance de Acerto normal.",
-    example: "O Goblin tenta fugir — Retaliar permite um golpe nas costas antes que ele escape." },
+    icon: "↩", attrKeys: ["AGI", "DEX"],
+    learned: true, combat: true,
+    desc: "Ao esquivar com sucesso por 5 ou mais abaixo do valor (d20), pode gastar 1 Reação para atacar o agressor imediatamente. O ataque não pode ser defendido — apenas esquivado.",
+    combatDesc: "Ao esquivar com d20 ≤ (Esquiva − 5): gasta 1 Reação para contra-atacar o agressor. O contra-ataque não pode ser defendido, apenas esquivado.",
+    example: "Esquiva com valor 10, tira 3 no d20 (margem de 7 — acima de 5): Retaliar ativa. O Goblin não pode defender o contra-ataque." },
+
+  { name: "Esquivar Rolar",
+    icon: "🌀", attrKeys: ["AGI"],
+    learned: true, combat: true,
+    desc: "Passivo permanente: +2 na Chance de Esquiva enquanto não empunha arma de duas mãos pesada sem a perícia de Defesa com Armas Pesadas.",
+    combatDesc: "Passivo: +2 na Chance de Esquiva (ex: base 10 → 12). Não ativa se estiver empunhando arma 2M pesada sem perícia.",
+    example: "Esquiva base 10 → vira 12. Tiros de d20 ≤ 12 esquivam em vez de ≤ 10." },
 
   { name: "Foco de Combate",
-    icon: "🎯", attrKeys: ["SAB", "INT"], learned: true, combat: true,
-    desc: "Perícia de combate.",
-    combatDesc: "1x por combate, ao errar um ataque, você pode rerolar o dado de ataque e ficar com o melhor resultado. Ativa automaticamente ao anunciar o erro — sem custo de Ação.",
-    example: "O d10 mostrou 8 (falhou no 6 necessário). Foco de Combate: rerola e tira 4 — acertou." },
+    icon: "🎯", attrKeys: ["SAB", "INT"],
+    learned: true, combat: true,
+    desc: "1x por combate: ao errar um ataque (tirar acima da Chance de Acerto), pode imediatamente rerolar o dado e ficar com o melhor resultado.",
+    combatDesc: "1x por combate, ao errar: rerola o d10 de ataque e usa o melhor resultado. Não gasta Ação — reativo ao erro.",
+    example: "Chance de acerto 6, tira 7 (errou). Foco de Combate: rerola e tira 4 — acertou." },
 
   { name: "Guardião de Flanco",
-    icon: "🛡", attrKeys: ["FOR", "SAB"], learned: true, combat: true,
-    desc: "Perícia de combate.",
-    combatDesc: "Passivo permanente: aliados em hexes adjacentes ao seu ganham +1 na Chance de Defesa enquanto você estiver consciente e de pé. Não requer Ação.",
+    icon: "🛡", attrKeys: ["FOR", "SAB"],
+    learned: true, combat: true,
+    desc: "Passivo permanente: aliados em hexes adjacentes ao seu ganham +1 na Chance de Defesa enquanto você estiver consciente e de pé.",
+    combatDesc: "Passivo: aliados adjacentes ganham +1 na Chance de Defesa (ex: 5 → 6 ou 6 → 7). Não requer Ação.",
     example: "O Clérigo ao seu lado defende com 6 ou menos em vez de 5 ou menos." },
 
-  { name: "Golpe de Derrubada",
-    icon: "🔨", attrKeys: ["FOR", "AGI"], learned: true, combat: true,
-    desc: "Perícia de combate.",
-    combatDesc: "Ao acertar ataque corpo a corpo, declare 'Derrubada' antes de rolar dano. O alvo testa FOR (normal): falha → Derrubado por 1 rodada. Alvos derrubados são mais fáceis de acertar (+1 na Chance de Acerto contra eles).",
-    example: "Derrubado, o Troll leva ataques de todos os aliados adjacentes com +1 de vantagem." },
-
-  { name: "Pressão Tática",
-    icon: "⚡", attrKeys: ["INT", "SAB"], learned: true, combat: true,
-    desc: "Perícia de combate.",
-    combatDesc: "1x por rodada, como Ação Livre: analisa o padrão de ataque de 1 inimigo visível. Por 2 rodadas: seus ataques contra esse inimigo têm a Chance de Acerto baseada na DEX tratada como 1 ponto maior (vantagem de análise).",
-    example: "Pressão Tática no Orc Berserker DEX 0: você o trata como se tivesse DEX −1, ganhando +1 na Chance de Acerto." },
-
-  /* ── Combate: Armas de Uma Mão ────────────────────────────── */
+  /* ── Armas de 1 Mão ────────────────────────────────────────── */
 
   { name: "Desarmamento",
-    icon: "🤚", attrKeys: ["DEX", "AGI"], learned: true, combat: true,
-    desc: "Perícia de combate.",
-    combatDesc: "Ao acertar com arma de 1 mão, declare 'Desarmamento' em vez de dano. O alvo testa Resistência (difícil): falha → derruba a arma no hex adjacente. A arma pode ser apanhada com 1 Ação.",
-    example: "O Mago inimigo perde o cajado. Sem o foco, suas magias de alto nível ficam mais difíceis." },
+    icon: "🤚", attrKeys: ["DEX", "AGI"],
+    learned: true, combat: true,
+    desc: "Ao acertar um ataque com arma de 1 mão e tirar 1 ou 2 no d10 (ataque crítico ou quase): em vez do dano normal, pode optar por desarmar — o alvo derruba a arma no hex.",
+    combatDesc: "Ao tirar 1 ou 2 no d10 de ataque com arma de 1 mão: pode escolher Desarmar em vez de causar dano. Alvo derruba a arma no hex adjacente. Sem resistência — é uma consequência do golpe preciso.",
+    example: "Tira 2 no d10 (acertou). Escolhe Desarmar: o Mago inimigo derruba o cajado. Sem ele, perde Canalizar." },
 
   { name: "Duelista",
-    icon: "⚔", attrKeys: ["DEX", "SAB"], learned: true, combat: true,
-    desc: "Perícia de combate.",
-    combatDesc: "Passivo: se a mão secundária estiver completamente livre (sem escudo, sem arma, sem item), sua Chance de Defesa com arma de 1 mão aumenta em +1. Você troca o escudo por mobilidade e precisão.",
-    example: "Espada na direita, mão esquerda vazia: Chance de Defesa 6 em vez de 5." },
+    icon: "⚔", attrKeys: ["DEX", "SAB"],
+    learned: true, combat: true,
+    desc: "Passivo: ao empunhar arma de 1 mão com a mão secundária completamente livre (sem escudo, sem arma, sem item), ganha +1 na Chance de Defesa com a arma.",
+    combatDesc: "Passivo: mão secundária totalmente vazia → +1 na Chance de Defesa com arma de 1 mão. Perde o bônus se colocar qualquer coisa na mão secundária.",
+    example: "Espada na direita, nada na esquerda: Chance de Defesa 6 em vez de 5. Pega um escudo: volta para 5." },
+
+  /* ── Armas de 2 Mãos ───────────────────────────────────────── */
 
   { name: "Defesa com Armas Pesadas",
-    icon: "🗡🛡", attrKeys: ["FOR", "AGI"], learned: true, combat: true,
-    desc: "Perícia de combate.",
-    combatDesc: "Permite usar armas de 2 mãos para defender. Sem esta perícia: armas de 2 mãos não podem defender. Com ela: podem defender, perdendo −2 na Chance de Defesa por ataque defendido (em vez de inaptas).",
-    example: "O Guerreiro com Claymore pode agora aparar golpes, mas cada defesa custa −2 da próxima." },
-
-  /* ── Combate: Armas de Duas Mãos ──────────────────────────── */
+    icon: "🗡🛡", attrKeys: ["FOR", "AGI"],
+    learned: true, combat: true,
+    mechanicalEffect: "enable_two_hand_defense",
+    desc: "Sem esta perícia, armas de 2 mãos não podem ser usadas para defender. Com ela: o portador pode defender com arma 2M, perdendo −2 na Chance de Defesa por ataque defendido (em vez de ser impossível).",
+    combatDesc: "Habilita defesa com armas de 2 mãos. Cada ataque defendido reduz a Chance de Defesa em −2 (armas 1M perdem −1, 2M perdem −2). Sem a perícia: tentativas de defesa com arma 2M são automaticamente ignoradas.",
+    example: "Com Claymore: sem perícia → não pode defender. Com perícia → defende com 5, próxima defesa com 3, depois 1." },
 
   { name: "Varredura",
-    icon: "🌪", attrKeys: ["FOR", "AGI"], learned: true, combat: true,
-    desc: "Perícia de combate.",
-    combatDesc: "1x por turno: ao acertar com arma de 2 mãos, gaste 1 Ação extra para golpear um segundo inimigo adjacente diferente. O segundo golpe causa metade do dano (arredonda para baixo). Ambos os ataques usam o mesmo resultado de dado.",
-    example: "Derruba 1 Goblin e a Varredura atinge o segundo ao lado por metade do dano." },
+    icon: "🌪", attrKeys: ["FOR", "AGI"],
+    learned: true, combat: true,
+    desc: "Ao acertar com arma de 2 mãos e tirar 1 no d10 (acerto crítico), o golpe alcança automaticamente 1 inimigo adjacente ao alvo principal com metade do dano.",
+    combatDesc: "Ao tirar 1 no d10 de ataque com arma 2M (crítico de acerto): 1 inimigo adjacente ao alvo também sofre metade do dano rolado. Sem custo de Ação extra — acontece automaticamente.",
+    example: "Crítico com Claymore no Orc. A Varredura atinge o Goblin ao lado por metade do dano automaticamente." },
 
   { name: "Ímpeto Brutal",
-    icon: "💥", attrKeys: ["FOR"], learned: true, combat: true,
-    desc: "Perícia de combate.",
-    combatDesc: "Se moveu pelo menos 2 hexes em linha reta antes do ataque neste turno: o próximo ataque com arma de 2 mãos causa +1d6 extra de dano de impacto. O movimento e o ataque devem ser na mesma Ação de Combate.",
-    example: "Corre 3 hexes em linha reta e golpeia: +1d6 de dano cinético de momentum." },
+    icon: "💥", attrKeys: ["FOR"],
+    learned: true, combat: true,
+    desc: "Ao se mover 3 ou mais hexes em linha reta e atacar no mesmo turno com arma de 2 mãos: o ataque causa +1d6 de dano de impacto. Automático — não requer declaração.",
+    combatDesc: "Ao mover 3+ hexes em linha reta E atacar com arma 2M no mesmo turno: +1d6 de dano de impacto. O movimento e o ataque devem ser na mesma ação de turno.",
+    example: "Avança 3 hexes em linha reta e ataca com Maul: automaticamente +1d6 de dano cinético de momentum." },
 
-  /* ── Combate: Escudo ──────────────────────────────────────── */
+  /* ── Escudo ─────────────────────────────────────────────────── */
 
   { name: "Escudo Bash",
-    icon: "🛡💥", attrKeys: ["FOR", "DEX"], learned: true, combat: true,
-    desc: "Perícia de combate.",
-    combatDesc: "Gaste 1 Ação de Combate para golpear com o escudo: 1d4 de dano + alvo testa Resistência (difícil): falha → perde 1 Ação no próximo turno (atordoado brevemente). Pode ser feito no mesmo turno que um ataque normal com a arma principal.",
-    example: "Espada pela direita, martelada do escudo pela esquerda: 2 ataques no mesmo turno." },
+    icon: "🛡💥", attrKeys: ["FOR", "DEX"],
+    learned: true, combat: true,
+    desc: "Ao usar a Ação de defesa com escudo e tirar 1 no d10 (defesa crítica): em vez de apenas bloquear, pode usar o próprio escudo para atacar o agressor. Causa 1d4 de dano e o agressor perde 1 de Chance de Defesa naquela rodada.",
+    combatDesc: "Ao tirar 1 no d10 de defesa com escudo (defesa crítica): além de bloquear, contra-ataca o agressor com 1d4 de dano e −1 na Chance de Defesa dele nesta rodada.",
+    example: "Defende com escudo, tira 1 no d10 (crítico de defesa). Bash: bloqueia o golpe E dá martelada que fragiliza a próxima defesa do Orc." },
 
   { name: "Muralha Viva",
-    icon: "🧱", attrKeys: ["FOR", "SAB"], learned: true, combat: true,
-    desc: "Perícia de combate.",
-    combatDesc: "Reação ao aliado adjacente ser atacado: interpõe o escudo entre o aliado e o ataque. O aliado usa sua Chance de Defesa + o bônus de Defesa Física do seu escudo para aquele ataque específico. Você ainda pode defender normalmente no seu turno.",
-    example: "O Clérigo ia ser acertado. Muralha Viva: defende por ele usando o bônus do Escudo Pesado." },
+    icon: "🧱", attrKeys: ["FOR", "SAB"],
+    learned: true, combat: true,
+    desc: "Passivo: enquanto tiver escudo equipado e estiver de pé, aliados no mesmo hex ou adjacentes podem usar sua Chance de Defesa de escudo no lugar da própria Chance de Defesa (se a sua for maior).",
+    combatDesc: "Passivo: aliados adjacentes com Chance de Defesa menor que a sua (com escudo) passam a usar a sua Chance de Defesa quando forem atacados enquanto você estiver no hex adjacente.",
+    example: "Você tem escudo pesado (Chance de Defesa 6). O Bardo ao lado tem 5. Com Muralha Viva, o Bardo usa 6." },
 
-  /* ── Combate: Arco e Distância ────────────────────────────── */
+  /* ── Arco e Distância ───────────────────────────────────────── */
 
   { name: "Tiro em Movimento",
-    icon: "🏃🏹", attrKeys: ["DEX", "AGI"], learned: true, combat: true,
-    desc: "Perícia de combate.",
-    combatDesc: "Pode usar Ação de Movimento + Ação de Ataque à distância no mesmo turno sem penalidade. Normalmente, atacar à distância após se mover impõe −1 na Chance de Acerto.",
-    example: "Reposiciona 3 hexes e atira com Chance de Acerto normal, sem o −1 padrão." },
+    icon: "🏃🏹", attrKeys: ["DEX", "AGI"],
+    learned: true, combat: true,
+    desc: "Passivo: remove a penalidade de −1 na Chance de Acerto ao atirar à distância no mesmo turno em que se moveu. Normalmente mover e atirar aplica −1.",
+    combatDesc: "Passivo: atirar à distância após se mover no mesmo turno não aplica a penalidade de −1 na Chance de Acerto.",
+    example: "Move 3 hexes e atira: Chance de Acerto 5 normal em vez de 4 com a penalidade padrão." },
 
   { name: "Pressão de Distância",
-    icon: "🎯🛡", attrKeys: ["DEX", "INT"], learned: true, combat: true,
-    desc: "Perícia de combate.",
-    combatDesc: "Inimigos que tentam se aproximar de você estando a 4+ hexes de distância sofrem Ataque de Oportunidade à distância (1 Ação, Chance de Acerto normal). Ativa automaticamente ao declarar Pressão no início do turno.",
-    example: "O Ogro avança 4 hexes em direção ao Arqueiro — recebe um tiro antes de chegar." },
+    icon: "🎯🛡", attrKeys: ["DEX", "INT"],
+    learned: true, combat: true,
+    desc: "Passivo situacional: ao inimigo avançar em linha reta em direção ao portador estando a 4+ hexes, o portador pode imediatamente atirar nele 1 vez. O inimigo não pode defender esse tiro — apenas esquivar.",
+    combatDesc: "Ao inimigo se mover em linha reta em direção a você estando a 4+ hexes: 1 tiro imediato, sem custo de Ação extra. O inimigo não pode defender — só esquivar.",
+    example: "O Gigante avança em linha reta de 5 hexes. Pressão de Distância: tiro automático que ele não pode defender." },
 
   { name: "Tiro Preciso",
-    icon: "🎯⭐", attrKeys: ["DEX", "SAB"], learned: true, combat: true,
-    desc: "Perícia de combate.",
-    combatDesc: "1x por combate: ao usar uma Ação de Combate inteira para mirar (sem se mover), o próximo ataque à distância ignora cobertura parcial e ganha +1d6 de dano extra. O tiro não pode ser desviado por cobertura leve (pilares, caixas).",
-    example: "O Goblin está atrás de uma barricada. Tiro Preciso: cobertura ignorada, +1d6 de dano." },
+    icon: "🎯⭐", attrKeys: ["DEX", "SAB"],
+    learned: true, combat: true,
+    desc: "Ao não se mover no turno inteiro e usar todas as Ações de Combate para atirar no mesmo alvo: cada tiro adicional no mesmo alvo ganha +1d4 de dano acumulado (2º tiro +1d4, 3º tiro +2d4).",
+    combatDesc: "Sem se mover no turno: cada tiro extra no mesmo alvo ganha +1d4 acumulado. 2º tiro: +1d4. 3º tiro: +2d4. Mover-se cancela o bônus.",
+    example: "2 Ações de Combate, imóvel, mesmo alvo: 1º tiro dano normal. 2º tiro +1d4. Total de concentração." },
 
-  /* ── Combate: Armas Mágicas e Conjuração ──────────────────── */
+  /* ── Armas Mágicas ──────────────────────────────────────────── */
 
   { name: "Conjuração Rápida",
-    icon: "⚡✨", attrKeys: ["INT", "DEX"], learned: true, combat: true,
-    desc: "Perícia de combate.",
-    combatDesc: "1x por combate: conjure uma magia de Nível 1 ou 2 como Reação em vez de Ação (depois de um ataque inimigo ser declarado mas antes de resolver). A magia ainda consome Slot normalmente.",
-    example: "O Troll ataca — como Reação: Escudo Arcano (Nível 1) antes de receber o golpe." },
+    icon: "⚡✨", attrKeys: ["INT", "DEX"],
+    learned: true, combat: true,
+    desc: "Passivo situacional: ao ser atacado por um inimigo que você já acertou neste combate com magia, pode usar o conhecimento da luta para defender com a magia ainda em execução — a Def.Mágica conta como +1 contra esse inimigo específico.",
+    combatDesc: "Passivo: contra inimigos que você já acertou com magia neste combate, sua Def.Mágica conta como +1. Representa antecipação da resposta do adversário.",
+    example: "Acertou Bola de Fogo no Orc. Nas rodadas seguintes, Def.Mágica contra esse Orc é +1." },
 
   { name: "Canalizar pelo Cajado",
-    icon: "🪄", attrKeys: ["INT", "SAB"], learned: true, combat: true,
-    desc: "Perícia de combate.",
-    combatDesc: "Ao acertar ataque físico com cajado, varinha ou arma mágica: gaste 1 Ação de Magia para conjurar magia de Nível 1 conhecida no mesmo alvo imediatamente. A magia não consome Slot adicional — apenas a Ação de Magia.",
-    example: "Cajado acerta o Esqueleto; Canalizar: lança Raio Sagrado no mesmo alvo sem Slot extra." },
+    icon: "🪄", attrKeys: ["INT", "SAB"],
+    learned: true, combat: true,
+    desc: "Ao acertar um ataque físico com cajado, varinha ou arma mágica e tirar 1 ou 2 no d10: o portador pode escolher converter o dano físico em dano mágico do tipo da arma (fogo, gelo, raio), ignorando Def.Física e usando Def.Mágica no lugar.",
+    combatDesc: "Ao tirar 1 ou 2 no d10 de ataque com arma mágica: pode converter o dano físico em dano mágico do tipo da arma. O dano ignora Def.Física e usa Def.Mágica no lugar.",
+    example: "Cajado de Raio acerta (d10 = 2). Canalizar: dano vira elétrico, ignora a Def.Física 5 do Golem e usa Def.Mágica 2." },
 
   { name: "Foco Ampliado",
-    icon: "🔮", attrKeys: ["INT"], learned: true, combat: true,
-    desc: "Perícia de combate.",
-    combatDesc: "Passivo: magias com alcance de 4 hex ou menos têm o alcance aumentado em +2 hex. Magias de área têm o raio aumentado em +1 hex. Não afeta magias de toque.",
-    example: "Bola de Fogo (área 3 hex) passa a ser área 4 hex. Raio (alcance 4 hex) passa a 6 hex." }
+    icon: "🔮", attrKeys: ["INT"],
+    learned: true, combat: true,
+    desc: "Passivo permanente: magias de ataque com alcance até 4 hex têm o alcance aumentado em +2 hex. Magias de área têm o raio aumentado em +1 hex.",
+    combatDesc: "Passivo: magias de alcance ≤4 hex ganham +2 hex de alcance. Magias de área ganham +1 hex de raio. Não afeta magias de toque.",
+    example: "Bola de Fogo (raio 3 hex) passa a 4 hex. Raio de Gelo (alcance 4 hex) passa a 6 hex." }
 
 ];
+
 
 
 /* ======================================================================
