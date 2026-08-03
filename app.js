@@ -1712,6 +1712,8 @@ function renderGlossaryContent() {
     container.innerHTML = renderSpellsGlossary(query);
   } else if (currentGlossaryTab === "items") {
     container.innerHTML = renderItemsGlossary(query);
+  } else if (currentGlossaryTab === "skills") {
+    container.innerHTML = renderSkillsGlossary(query);
   } else if (currentGlossaryTab === "curses") {
     container.innerHTML = renderCursesGlossary(query);
   } else if (currentGlossaryTab === "rules") {
@@ -1729,6 +1731,179 @@ function renderGlossaryContent() {
       });
     });
   }
+}
+
+/* --- Aba de Perícias --- */
+
+function renderSkillsGlossary(query = "") {
+  const allSkills = typeof SKILL_TESTS !== "undefined" ? SKILL_TESTS : [];
+  const gerais  = allSkills.filter(s => !s.combat);
+  const combate = allSkills.filter(s =>  s.combat);
+
+  const q = query.toLowerCase();
+  const match = s => !q ||
+    s.name.toLowerCase().includes(q) ||
+    (s.desc||"").toLowerCase().includes(q) ||
+    (s.combatDesc||"").toLowerCase().includes(q) ||
+    (s.example||"").toLowerCase().includes(q);
+
+  /* — Grupos temáticos das perícias gerais — */
+  const GROUPS = [
+    { label: "👁 Sentidos e Percepção",  names: ["Percepção","Pressentimento","Investigação"] },
+    { label: "📚 Conhecimento",           names: ["Conhecimento","Arcanismo"] },
+    { label: "🗣 Social e Influência",    names: ["Lábia","Persuasão","Intimidação"] },
+    { label: "🌑 Furtividade e Destreza", names: ["Furtividade","Acrobacia","Prestidigitação"] },
+    { label: "💪 Físico e Resistência",   names: ["Atletismo","Resistência","Força de Vontade","Briga"] },
+  ];
+
+  /* — Grupos temáticos das perícias de combate — */
+  const COMBAT_GROUPS = [
+    { label: "⚡ Geral",              names: ["Retaliar","Esquivar Rolar","Foco de Combate","Guardião de Flanco"] },
+    { label: "🗡 Armas de 1 Mão",    names: ["Desarmamento","Duelista"] },
+    { label: "⚔ Armas de 2 Mãos",   names: ["Defesa com Armas Pesadas","Varredura","Ímpeto Brutal"] },
+    { label: "🛡 Escudo",             names: ["Escudo Bash","Muralha Viva"] },
+    { label: "🏹 Distância",          names: ["Tiro em Movimento","Pressão de Distância","Tiro Preciso"] },
+    { label: "✨ Magia e Conjuração", names: ["Conjuração Rápida","Canalizar pelo Cajado","Foco Ampliado"] },
+  ];
+
+  const buildCard = (s) => {
+    const attrBadges = (s.attrKeys||[]).map(a =>
+      `<span class="skill-attr-badge">${a}</span>`).join("");
+    const learnedBadge = s.learned !== false
+      ? `<span class="skill-badge skill-badge-learned">Aprendível</span>`
+      : `<span class="skill-badge skill-badge-passive">Passiva</span>`;
+    const combatBadge = s.combat
+      ? `<span class="skill-badge skill-badge-combat">Combate</span>`
+      : "";
+    return `
+      <div class="skill-gloss-card ${s.combat?"skill-gloss-card-combat":""}">
+        <div class="skill-gloss-head">
+          <span class="skill-gloss-icon">${s.icon||"🎯"}</span>
+          <div class="skill-gloss-title-col">
+            <span class="skill-gloss-name">${s.name}</span>
+            <div class="skill-gloss-badges">${attrBadges}${learnedBadge}${combatBadge}</div>
+          </div>
+        </div>
+        <p class="skill-gloss-desc">${s.desc||""}</p>
+        ${s.combat && s.combatDesc ? `
+          <div class="skill-gloss-mechanic">
+            <span class="skill-gloss-mech-label">⚙ Mecânica</span>
+            <span>${s.combatDesc}</span>
+          </div>` : ""}
+        ${s.example ? `
+          <div class="skill-gloss-example">
+            <span class="skill-gloss-ex-label">📖 Exemplo</span>
+            <span>${s.example}</span>
+          </div>` : ""}
+      </div>`;
+  };
+
+  const buildGroup = (group, sourceList) => {
+    const skills = group.names
+      .map(n => sourceList.find(s => s.name === n))
+      .filter(Boolean)
+      .filter(match);
+    if (!skills.length) return "";
+    return `
+      <div class="skill-gloss-group">
+        <h4 class="skill-gloss-group-title">${group.label}</h4>
+        <div class="skill-gloss-cards">${skills.map(buildCard).join("")}</div>
+      </div>`;
+  };
+
+  /* — Calcula fórmula para exibição — */
+  const formulaHTML = `
+    <div class="skill-gloss-formula-box">
+      <div class="skill-gloss-formula-title">📐 Como calcular um Teste de Perícia Geral</div>
+      <div class="skill-gloss-formula-grid">
+        <div class="skill-gloss-formula-item">
+          <span class="sfg-label">Base</span>
+          <span class="sfg-val">10</span>
+          <span class="sfg-note">sempre</span>
+        </div>
+        <span class="sfg-op">+</span>
+        <div class="skill-gloss-formula-item">
+          <span class="sfg-label">Atributos</span>
+          <span class="sfg-val">+X</span>
+          <span class="sfg-note">soma dos atributos indicados</span>
+        </div>
+        <span class="sfg-op">+</span>
+        <div class="skill-gloss-formula-item">
+          <span class="sfg-label">Aprendida</span>
+          <span class="sfg-val">+2</span>
+          <span class="sfg-note">se tiver a perícia aprendida</span>
+        </div>
+        <span class="sfg-op">=</span>
+        <div class="skill-gloss-formula-item sfg-result">
+          <span class="sfg-label">Normal</span>
+          <span class="sfg-val">10+X+2</span>
+          <span class="sfg-note">rolar d20 abaixo = sucesso</span>
+        </div>
+      </div>
+      <div class="skill-gloss-difficulty-row">
+        <div class="skill-gloss-diff diff-n">
+          <span>Normal</span>
+          <strong>10 + bônus</strong>
+          <span>d20 ≤ valor</span>
+        </div>
+        <div class="skill-gloss-diff diff-d">
+          <span>Difícil</span>
+          <strong>5 + bônus</strong>
+          <span>d20 ≤ valor</span>
+        </div>
+        <div class="skill-gloss-diff diff-c">
+          <span>Crítico</span>
+          <strong>1 + bônus</strong>
+          <span>d20 ≤ valor</span>
+        </div>
+      </div>
+      <p class="skill-gloss-formula-note">
+        Testes de Combate <strong>não usam esta fórmula</strong> — cada um define sua própria mecânica situacional.
+        Testes de Perícia Geral têm valor máximo de <strong>19</strong> (independente dos bônus).
+      </p>
+    </div>`;
+
+  const geralFiltered = GROUPS.map(g => buildGroup(g, gerais)).join("");
+  const combateFiltered = COMBAT_GROUPS.map(g => buildGroup(g, combate)).join("");
+
+  // Skills fora dos grupos (caso existam)
+  const knownNames = new Set([...GROUPS, ...COMBAT_GROUPS].flatMap(g => g.names));
+  const orphans = allSkills.filter(s => !knownNames.has(s.name) && match(s));
+  const orphansHTML = orphans.length
+    ? `<div class="skill-gloss-group"><h4 class="skill-gloss-group-title">📋 Outras</h4>
+        <div class="skill-gloss-cards">${orphans.map(buildCard).join("")}</div></div>` : "";
+
+  if (q && !geralFiltered.replace(/<[^>]*>/g,"").trim() && !combateFiltered.replace(/<[^>]*>/g,"").trim()) {
+    return `<p class="empty-inline-note" style="margin-top:20px">Nenhuma perícia encontrada para "${query}".</p>`;
+  }
+
+  return `
+    <div class="skill-gloss-root">
+
+      ${!q ? formulaHTML : ""}
+
+      <!-- Perícias Gerais -->
+      <div class="skill-gloss-section-header">
+        <span class="skill-gloss-section-icon">🎯</span>
+        <div>
+          <h3 class="skill-gloss-section-title">Testes de Perícia Geral</h3>
+          <p class="skill-gloss-section-sub">Usados em exploração, social e investigação. Role 1d20 abaixo do valor calculado.</p>
+        </div>
+      </div>
+      ${geralFiltered || `<p class="empty-inline-note">Nenhum resultado.</p>`}
+
+      <!-- Perícias de Combate -->
+      <div class="skill-gloss-section-header" style="margin-top:28px">
+        <span class="skill-gloss-section-icon">⚔</span>
+        <div>
+          <h3 class="skill-gloss-section-title">Perícias de Combate</h3>
+          <p class="skill-gloss-section-sub">Vantagens passivas situacionais. Ativam automaticamente quando a condição específica ocorre — não são habilidades ativas.</p>
+        </div>
+      </div>
+      ${combateFiltered || `<p class="empty-inline-note">Nenhum resultado.</p>`}
+
+      ${orphansHTML}
+    </div>`;
 }
 
 /* --- Tutorial de Classes --- */
