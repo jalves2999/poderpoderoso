@@ -1211,7 +1211,49 @@ const WEAPONS_ONE_HAND = [
     setName: "Sombra Dupla", subclass: "cacador-sombrio",
     effect: "Ao cravar esta adaga num hex como Ação Livre: cria armadilha simples (1d6, Preso). Não gasta Carga de Veneno nem Foco. Pode ser combinada com Armadilha de Caçador — cravando a adaga no hex da armadilha existente: +1d4 ao dano e Sangramento adicional.",
     note: "Armadilha gratuita como Ação Livre 1x/combate. Aprimora Armadilha de Caçador existente.",
-    story: "A lâmina tem entalhes que funcionam como anzol. Uma vez que entra num material mole — não sai sem custo." }];
+    story: "A lâmina tem entalhes que funcionam como anzol. Uma vez que entra num material mole — não sai sem custo." },
+
+  /* ─── INSPIRADOS EM ELDEN RING — Armas de 1 Mão ─────────────── */
+
+  { tier: "lendario", name: "Lâmina do Rio de Sangue",
+    dmg: "1d8+1d6", req: "DEX", weight: 2.5,
+    slot: ["primary"], defenseDegrade: 1,
+    magicBonus: { attr: "DEX", attrValue: 1 },
+    effect: "Cada acerto acumula 1 carga de Hemorragia no alvo (máx 5). Ao atingir 5 cargas: Hemorragia explode — alvo perde 15% do HP máximo atual instantaneamente (ignora Def.Física e Mágica). As cargas resetam após a explosão. Ataques com DEX 3+: acumula 2 cargas por acerto.",
+    note: "+1 DEX passivo. 5 cargas → explosão de 15% HP máximo atual. DEX 3+: 2 cargas/acerto.",
+    story: "Forjada por um ferreiro maldito do Deserto Carmesim que misturou o aço com o próprio sangue durante sete luas. Dizem que a lâmina sempre está levemente úmida, independente do clima. O ferreiro nunca foi visto novamente.",
+    cursed: true },
+
+  { tier: "lendario", name: "Adaga da Noite Estelar",
+    dmg: "1d6+1d4", req: "DEX", weight: 0.8,
+    slot: ["primary","secondary"], defenseDegrade: 2,
+    effect: "Ao atacar alvo em Furtividade: o acerto é automático (sem rolar d10) e causa +2d8 de dano arcano adicional que ignora Def.Física. Em combate aberto: ao tirar 1 no d10, o dano arcano explode em nova Ação de Magia gratuita — lança magia de Nível 1 conhecida no mesmo alvo sem custo de recurso.",
+    note: "Em Furtividade: acerto automático + 2d8 arcano. Crítico em combate aberto: magia Nível 1 gratuita no alvo.",
+    story: "Encontrada na câmara mais alta das Ruínas de Atrelon, incrustada no teto como uma estrela artificial. Quem a pega sente que a escuridão ao redor ficou levemente mais útil." },
+
+  { tier: "lendario", name: "Espada dos Cavaleiros Perfurados",
+    dmg: "1d10+1d6", req: "FOR", weight: 4,
+    slot: ["primary"], defenseDegrade: 1,
+    magicBonus: { attr: "FOR", attrValue: 1 },
+    effect: "Passivo: +1 FOR. Cada acerto que o portador recebe (não esquiva, não defende completamente) carrega a espada com 1 Espinho (+1d6 de dano, acumula até 3 Espinhos). Ao atacar com Espinhos ativos: todos os Espinhos disparam de uma vez no próximo acerto. A espada 'aprende' com a dor.",
+    note: "+1 FOR. Acumula Espinhos ao receber dano (até 3×+1d6). Próximo ataque: todos os Espinhos disparam.",
+    story: "Pertenceu a um cavaleiro que fez voto de sentir cada golpe que recebia para nunca subestimar o inimigo. O voto está na lâmina. Quem a empunha faz o voto também — quer saber disso ou não." },
+
+  { tier: "lendario", name: "Cutelo da Blasfêmia Ardente",
+    dmg: "1d8+1d6", req: "FOR", weight: 3.5,
+    slot: ["primary"], defenseDegrade: 1,
+    magicBonus: { attr: "FOR", attrValue: 1 },
+    effect: "Passivo: ao matar um inimigo com esta arma, cura 2d6 HP e recupera 1 Fúria (Guerreiro/Berserker) ou 1 Fé (Clérigo/Paladino). Ativo (gasta 3 Fúria ou 3 Fé): lança Chama Blasfêmica — cone 4 hex de fogo sagrado corrompido, 2d8+FOR de dano, inimigos afetados testam Resistência (normal) ou ficam Queimando (1d6/rodada, 2 rodadas). 2 usos/combate.",
+    note: "+1 FOR. Matar inimigo: +2d6 HP e +1 recurso. Chama Blasfêmica: cone 4 hex, 2d8+FOR, Queimando.",
+    story: "O Clérigo que a forjou não sabia que a lâmina absorveria suas orações. Quando percebeu, as orações já não eram mais dele — eram da espada. Ele morreu sorrindo. A espada continuou." },
+
+  { tier: "ancestral", name: "Lua Cheia Invertida",
+    dmg: "1d8+1d6+1d4", req: "INT", weight: 2,
+    slot: ["primary"], defenseDegrade: 1,
+    magicBonus: { spellActions: 1, attr: "INT", attrValue: 2 },
+    effect: "Passivo: +2 INT e +1 Ação de Magia. Ativo (custa 2 Ações de Magia): dispara Feixe de Lua — raio de energia pura a 8 hex de alcance, 3d8+INT de dano arcano. O alvo testea Força de Vontade (difícil) ou fica com Def.Mágica −4 por 3 rodadas (a luz da lua corrói a resistência mágica). Ao acertar ataque físico: +1d6 de dano arcano grátis se tiver MP disponível.",
+    note: "+2 INT, +1 Ação de Magia. Feixe de Lua: 8 hex, 3d8+INT + Def.Mágica −4. Ataque físico: +1d6 arcano grátis.",
+    story: "Forjada durante um eclipse completo nas Montanhas de Atrelon por um Mago que quis capturar o momento em que a lua e o sol se tocam. Funcionou. Ambos ficaram na lâmina." }];
 
 const WEAPONS_TWO_HAND = [
   /* --- COMUNS --- */
@@ -1388,7 +1430,48 @@ const WEAPONS_TWO_HAND = [
     effect: "Contra inimigos de tamanho Grande ou maior: dano TRIPLICADO no lugar de dobrado. +2 FOR passivo. Todo acerto contra inimigo Grande+ impõe −2 Def.Física por 2 rodadas (escamas, armadura ou ossos trincados). SET COMPLETO: Executar a Presa funciona com dano ×5 contra alvos Grandes+ abaixo de 50% HP.",
     note: "+2 FOR passivo. Contra Grandes+: dano ×3 e −2 Def.Física. SET COMPLETO: Executar dano ×5.",
     story: "Forjada com ossos de um Gigante das Pedras que morreu na Batalha Colossal. Pesa o suficiente para lembrar ao usuário que ele pode cair do mesmo jeito.",
-    setBonus: "Marca do Caçador (3p) — Expertise de Abate: Anatomia de Besta revela ponto fraco automaticamente; Golpe de Abatimento custa 1 Fúria/Foco a menos; Executar a Presa causa dano ×5 contra alvos Grandes+ abaixo de 50% HP." }];
+    setBonus: "Marca do Caçador (3p) — Expertise de Abate: Anatomia de Besta revela ponto fraco automaticamente; Golpe de Abatimento custa 1 Fúria/Foco a menos; Executar a Presa causa dano ×5 contra alvos Grandes+ abaixo de 50% HP." },
+
+  /* ─── INSPIRADOS EM ELDEN RING — Armas de 2 Mãos ────────────── */
+
+  { tier: "lendario", name: "Martelo do Esmaga-Gigantes",
+    dmg: "2d10+1d8", req: "FOR", weight: 14,
+    slot: ["primary"], defenseDegrade: 1, heavyTwoHanded: true,
+    magicBonus: { attr: "FOR", attrValue: 2 },
+    effect: "Passivo: +2 FOR. Contra inimigos de tamanho Grande ou maior: dano TRIPLICADO e o alvo testea FOR (difícil) ou fica Derrubado e Atordoado por 1 rodada (perde todas as Ações). Contra inimigos de tamanho normal: dano normal mas o impacto força recuo de 2 hexes (FOR normal para resistir). Sem arma mais pesada no mundo — penalidade de −1 Ação de Combate permanente enquanto equipado.",
+    note: "+2 FOR. Grandes+: dano ×3 + Derrubado e Atordoado. Normal: recua 2 hex. Penalidade: −1 Ação.",
+    story: "Encontrado numa fortaleza de Gigantes das Pedras destruída na Grande Planície. Nenhum humano normal consegue levantá-lo. Quem consegue não precisa de mais nada." },
+
+  { tier: "lendario", name: "Greatsword da Noite Negra",
+    dmg: "1d12+1d10", req: "FOR", weight: 7,
+    slot: ["primary"], defenseDegrade: 2, heavyTwoHanded: true,
+    magicBonus: { attr: "FOR", attrValue: 1 },
+    effect: "Passivo: +1 FOR. Ativo (custa 2 Fúria ou 2 MP): Onda de Trevas — aceno horizontal que lança projétil de energia sombria em linha reta de 6 hexes, atingindo TODOS no caminho. Dano: 2d8+FOR de dano sombrio (ignora Def.Física). Cada alvo testea Força de Vontade (normal) ou perde 1 Ação no próximo turno. 3 usos/combate.",
+    note: "+1 FOR. Onda de Trevas: linha 6 hex, todos os alvos, 2d8+FOR sombrio, possível perda de Ação.",
+    story: "Esculpida da pedra negra de uma cratera que caiu do céu há 300 anos. A pedra nunca esquentou mesmo após séculos. A espada também não. Quem a carrega sente um frio específico — não no corpo. Nos pensamentos." },
+
+  { tier: "ancestral", name: "Lança do Pai dos Dragões",
+    dmg: "1d12+1d10+1d6", req: "FOR", weight: 8,
+    slot: ["primary"], defenseDegrade: 2, heavyTwoHanded: false,
+    magicBonus: { attr: "FOR", attrValue: 2, attr2: "SAB", attrValue2: 1 },
+    effect: "Passivo: +2 FOR. Ativo (custa 4 Fúria ou 4 Fé, 1 uso/combate): Chama do Ancestral — o portador ergue a lança e dela emerge chama dracônica. Todos os inimigos em raio 5 hex sofrem 4d10+FOR de dano de fogo. AGI (difícil) para metade. Após a chama: o portador ganha 2 Ações de Combate adicionais neste turno (adrenalina dracônica). Após o combate: portador fica Exausto (−1 Ação) por 1 hora.",
+    note: "+2 FOR. Chama do Ancestral: raio 5 hex, 4d10+FOR, AGI difícil p/ metade. +2 Ações pós-chama. Exausto após.",
+    story: "A lança que Tharak, o Dracônico Vermelho Adulto, guardava mesmo doente e sofrendo. Não é sua — ele a guarda para o verdadeiro dono. Quando questionado sobre quem seria, Tharak fecha os olhos e não responde." },
+
+  { tier: "lendario", name: "Claíde dos Irmãos Gêmeos",
+    dmg: "1d12+1d8", req: "FOR", weight: 6.5,
+    slot: ["primary"], defenseDegrade: 2, heavyTwoHanded: true,
+    effect: "Passivo situacional: ao matar um inimigo com esta arma, o próximo ataque (no mesmo turno ou no seguinte) tem Chance de Acerto +2 e causa +1d8 de dano (o segundo irmão acorda). Se o segundo ataque também matar: ambos os irmãos estão desperados — todos os ataques até o fim da rodada ganham +2d6. Ao errar um ataque: perde o bônus acumulado (o irmão morto recolhe o outro).",
+    note: "Matar inimigo: +2 Acerto e +1d8. Segunda morte no turno: +2d6 em todos até fim da rodada. Erro: perde tudo.",
+    story: "Dois irmãos forjaram uma espada só porque não conseguiam decidir qual seria o verdadeiro dono. A solução foi simples: nenhum dos dois. A espada escolhe quem a usa — e espera que seja alguém que entenda que duas mãos são mais eficientes que uma." },
+
+  { tier: "lendario", name: "Machado da Ruína Eterna",
+    dmg: "2d8+1d10", req: "FOR", weight: 9,
+    slot: ["primary"], defenseDegrade: 1, heavyTwoHanded: true,
+    magicBonus: { attr: "FOR", attrValue: 2 },
+    effect: "Passivo: +2 FOR. Passivo de escalada: cada acerto consecutivo no mesmo alvo (sem errar, sem trocar de alvo) aumenta o dano em +1d6 acumulado (máx +3d6 = 4º acerto em diante). Ao errar ou trocar de alvo: o acúmulo reseta. Ativo (custa 3 Fúria): Ruína — golpe no chão que cria fissura em linha reta de 4 hexes, 2d10 de dano, todos testam AGI (normal) ou caem Derrubados.",
+    note: "+2 FOR. Acertos consecutivos: +1d6 por acerto (máx +3d6). Ruína: fissura 4 hex, 2d10, Derrubado.",
+    story: "Usada pelo último General do Exército da Ruína — uma força que ninguém nomeia mais. O General foi derrotado mas o machado não. Tem a habilidade disconcertante de estar levemente mais pesado cada dia que passa." }];
 
 const WEAPONS_MAGIC = [
   /* --- COMUNS --- */
@@ -1630,7 +1713,49 @@ const WEAPONS_MAGIC = [
     effect: "Passivo: +2 Slots. Ativo (Ação de Combate, gasta 1 Carga): dispara feixe de luz cristalina a até 5 hex. Dano: 1d10+1d6+INT de dano arcano. O feixe perfura — atinge todos na linha (cada um faz AGI normal para metade). Sem Cargas: dano base 1d8+1d6.",
     note: "+2 Slots permanentes. Com Tomo Arcano de Valdris: BÔNUS 2 PEÇAS — feixes perfurantes causam +1d6 por alvo adicional atingido. Com o Anel do Archmago: BÔNUS SET COMPLETO — 1x/sessão, lançar qualquer magia conhecida sem custo de Slot.",
     story: "Forjado da pedra cristalina do Pico de Atrelon. Reflete arco-íris em qualquer iluminação. Ainda assim, corta como faca." }
-];
+,
+
+  /* ─── INSPIRADOS EM ELDEN RING — Armas Mágicas ──────────────── */
+
+  { tier: "lendario", name: "Cetro do Senhor dos Espinhos",
+    dmg: "1d8+1d6", req: "INT", weight: 2,
+    slot: ["primary","secondary"], defenseDegrade: null,
+    charges: { max: 4, label: "Espinhos Arcanos", resetOn: "combate" },
+    range: 5,
+    magicBonus: { spellActions: 1, slots: 2, attr: "INT", attrValue: 1 },
+    effect: "Passivo: +1 INT, +1 Ação de Magia, +2 Slots. Ativo (1 Carga, alcance 5 hex): Chuva de Espinhos — projeta campo de espinhos de energia num raio de 2 hex em torno do alvo. Qualquer criatura que entrar ou sair da área sofre 1d8+INT de dano. O campo persiste 3 rodadas sem custo adicional. 2 Cargas: espinhos explodem ao fim das 3 rodadas (2d10 extra, área 3 hex).",
+    note: "+1 INT, +1 Ação Magia, +2 Slots. Campo de espinhos 2 hex, 3 rodadas. 2 Cargas: explosão final 2d10.",
+    story: "O Senhor dos Espinhos foi um Necromante que tentou aprisionar a morte num cetro. Conseguiu. A morte ficou com ele — pessoalmente, permanentemente, no cetro. Ele ainda está lá dentro de alguma forma. Às vezes o cetro faz perguntas." },
+
+  { tier: "lendario", name: "Orbe da Lua Cheia de Rennala",
+    dmg: "1d10+1d6", req: "INT", weight: 1,
+    slot: ["primary","secondary"], defenseDegrade: null,
+    charges: { max: 3, label: "Plenas da Lua", resetOn: "combate" },
+    range: 6,
+    magicBonus: { spellActions: 1, slots: 3, attr: "INT", attrValue: 2 },
+    effect: "Passivo: +2 INT, +1 Ação de Magia, +3 Slots. Ativo (2 Cargas, alcance 6 hex): Plena da Lua — projétil de luz lunar pura. Dano: 3d8+INT de dano arcano. Alvo testea Força de Vontade (difícil) ou tem Def.Mágica reduzida à metade por 4 rodadas (a lua dissolve resistências mágicas). 1 Carga: Crescente Lunar, dano 2d6+INT sem o efeito de dissolução.",
+    note: "+2 INT, +1 Ação Magia, +3 Slots. Plena da Lua (2 Cargas): 3d8+INT + Def.Mágica ÷2 por 4 rodadas.",
+    story: "Rennala foi a maior arquimaga de Atrelon antes da Batalha Colossal. Este orbe era seu olho — ela o usava para ver magias em formação antes que existissem. Quando ela morreu, o orbe guardou o que ela via no último momento. Às vezes mostra." },
+
+  { tier: "lendario", name: "Báculo do Profeta Sangrento",
+    dmg: "1d8", req: "SAB", weight: 3,
+    slot: ["primary"], defenseDegrade: 2, heavyTwoHanded: false,
+    charges: { max: 3, label: "Profecias", resetOn: "sessao" },
+    range: 5,
+    magicBonus: { slots: 2, attr: "SAB", attrValue: 2 },
+    effect: "Passivo: +2 SAB, +2 Slots. Ativo (1 Carga, 1 uso de Fé, alcance 5 hex): Profecia de Sangue — o portador sangra voluntariamente (perde 1d6 HP) para ver o próximo ataque do alvo. Por 2 rodadas: o portador sabe exatamente o que o alvo vai fazer — primeiro ataque do alvo é automaticamente bloqueado (sem rolar defesa). 3 Cargas/sessão — as profecias não renovam por combate, mas por sessão inteira.",
+    note: "+2 SAB, +2 Slots. Profecia: perde 1d6 HP → bloqueia automaticamente 1 ataque do alvo por 2 rodadas. 3/sessão.",
+    story: "O Profeta via o futuro em sangue — literalmente. Quanto mais sangrava, mais via. O báculo foi feito para conter o excesso das visões. Não funcionou completamente. Mas funcionou suficientemente para que ele vivesse até escolher parar." },
+
+  { tier: "ancestral", name: "Grimório do Fim dos Dedos",
+    dmg: "—", req: "INT", weight: 2.2,
+    slot: ["primary"], defenseDegrade: null,
+    charges: { max: 2, label: "Fragmentos do Fim", resetOn: "sessao" },
+    range: 0,
+    magicBonus: { spellActions: 2, slots: 4, attr: "INT", attrValue: 3 },
+    effect: "Passivo: +3 INT, +2 Ações de Magia, +4 Slots. Ativo (2 Cargas, 2 Ações de Magia — 1 uso/sessão): O Fim Chegou — o portador abre o grimório na última página e lê em voz alta. Todos os inimigos visíveis sem exceção testam Força de Vontade (crítico — quase impossível): falha → perdem metade do HP atual instantaneamente (dano de entropia pura, ignora tudo). Sucesso → ficam com −1d10 em todos os testes por 3 rodadas. Após usar: o portador fica Exausto por 2 horas e 2 páginas do grimório apagam-se permanentemente. Quando não houver mais páginas, o grimório fecha sozinho.",
+    note: "+3 INT, +2 Ações Magia, +4 Slots. O Fim Chegou: todos os inimigos visíveis perdem 50% HP (Força de Vontade crítico para resistir). 1/sessão. Apaga 2 páginas. Uso limitado.",
+    story: "O grimório tem 40 páginas. Ninguém sabe quantas restam — a contagem muda. Quem o encontrou não quis continuar contando depois da terceira vez que o número diminuiu sem ter sido usado." }];
 
 const WEAPONS_RANGED = [
   /* --- COMUNS --- */
@@ -1738,7 +1863,24 @@ const SHIELDS = [
     setBonus: { pieces: 3, ability: "Golpe do Juramento Cumprido",
       effect: "Ver Martelo do Juramento (2 peças adicionais ativam o bônus completo)." } },
 
-];
+,
+
+  /* ─── INSPIRADOS EM ELDEN RING — Escudos ────────────────────── */
+
+  { tier: "lendario", name: "Escudo do Cavaleiro Sem Falha",
+    physDefense: 8, magDefense: 4, weight: 4.5, req: "FOR",
+    slot: ["shield"],
+    magicBonus: { attr: "FOR", attrValue: 1 },
+    effect: "Passivo: +1 FOR. Chance de Defesa: 7 ou menos (escudo mais confiável de Aether). Ao tirar 1 no d10 de defesa (defesa crítica): o atacante recebe o dano que causaria de volta (dano refletido, ignora Defesa do atacante). O nome é uma promessa — não foi quebrado em combate ainda.",
+    note: "+1 FOR. Defesa 7 ou menos. Crítico de defesa (tirar 1): dano do ataque refletido de volta no atacante.",
+    story: "Pertenceu ao único cavaleiro que nunca foi ferido em batalha. Não porque era invulnerável — porque cada golpe que chegava encontrava o escudo primeiro. Ele morreu em paz, de velhice. O escudo ficou sem propósito. Ainda procura um novo." },
+
+  { tier: "lendario", name: "Escudo do Sangue de Dragão",
+    physDefense: 7, magDefense: 6, weight: 5, req: "FOR",
+    slot: ["shield"],
+    effect: "Passivo: imune a dano de fogo (qualquer fonte). Ao receber dano de fogo (que seria ignorado): o escudo absorve e carrega a energia — próxima defesa libera essa energia no atacante (1d8 de fogo, automático). Ao usar Escudo Bash (perícia): o bash causa +1d6 de fogo extra e tem chance de Queimar o alvo (1d4/rodada, 2 rodadas).",
+    note: "Imune a fogo. Absorve fogo → libera no próximo Bash. Bash: +1d6 fogo e Queimando.",
+    story: "Feito do couro do ventre de um dragão vermelho morto na Batalha Colossal. O dragão não queria morrer mas o guerreiro não tinha escolha. O escudo guarda algo do arrependimento de ambos." }];
 
 const ARMORS = [
   /* --- COMUNS --- */
@@ -1938,7 +2080,30 @@ const ARMORS = [
     setName: "Sombra Dupla", subclass: "cacador-sombrio",
     effect: "Em Furtividade: +2 Def.Física e +2 Def.Mágica adicionais. Ao sair de Furtividade para atacar (Emboscada Perfeita): o 1º ataque tem Def.Física do alvo reduzida em 2 (o portador sabe exatamente onde golpear). Movimento de Fantasma dura +1 rodada quando usada.",
     note: "Em Furtividade: +2 Def.Física e +2 Def.Mágica. Emboscada: alvo com −2 Def.Física. Fantasma +1 rodada.",
-    story: "Confeccionada em tecido de Sombra Florestal — a criatura que os ladinos de Akaen chamam de 'quem andou aqui antes de você'." }];
+    story: "Confeccionada em tecido de Sombra Florestal — a criatura que os ladinos de Akaen chamam de 'quem andou aqui antes de você'." },
+
+  /* ─── INSPIRADOS EM ELDEN RING — Armaduras ──────────────────── */
+
+  { tier: "lendario", name: "Armadura do Cavaleiro da Lua Cheia",
+    physDefense: 6, magDefense: 8, movePenalty: 0, weight: 8, req: "INT",
+    magicBonus: { attr: "INT", attrValue: 1, slots: 1 },
+    effect: "Passivo: +1 INT, +1 Slot. Magias de Nível 3+ lançadas pelo portador têm o custo de Ações de Magia reduzido em 1 (mínimo 1). À luz da lua ou em ambientes escuros: +1 Def.Física adicional e +1d4 em todos os testes de Arcanismo. Imune à condição Confuso.",
+    note: "+1 INT, +1 Slot. Magias Nível 3+: −1 Ação de Magia. Noite/escuridão: +1 Def.Física e +1d4 Arcanismo.",
+    story: "Usada pelos Cavaleiros de Rennala — magos que aprenderam a lutar, ou guerreiros que aprenderam a conjurar. A distinção importava para eles. O resultado importa para quem os enfrenta." },
+
+  { tier: "lendario", name: "Couraça do Guerreiro Manchado",
+    physDefense: 8, magDefense: 3, movePenalty: 0, weight: 9, req: "FOR",
+    magicBonus: { attr: "FOR", attrValue: 1 },
+    effect: "Passivo: +1 FOR. Cada vez que o portador cai abaixo de 50% HP pela primeira vez no combate: a armadura absorve o excesso de dano por 1 rodada completa (imunidade a dano nesta rodada). Isso ocorre uma vez por combate automaticamente. Cicatrizes visíveis na armadura aumentam em número — cada batalha sobrevivida deixa marca permanente no couro.",
+    note: "+1 FOR. 1x/combate ao cair abaixo de 50% HP: 1 rodada de imunidade a dano automática.",
+    story: "O Guerreiro Manchado sobreviveu a tudo. Batalhas, maldições, doenças, o próprio Deus Marcado. Eventualmente cansou de sobreviver e abandonou a armadura num campo vazio. Ela ainda está em pé. Esperando o próximo usuário." },
+
+  { tier: "ancestral", name: "Vestes do Rei Elden",
+    physDefense: 5, magDefense: 10, movePenalty: 0, weight: 4, req: "SAB",
+    magicBonus: { attr: "INT", attrValue: 2, attr2: "SAB", attrValue2: 2, slots: 2 },
+    effect: "Passivo: +2 INT, +2 SAB, +2 Slots. O portador nunca pode ser reduzido a 0 HP por um único ataque — qualquer golpe que causaria dano fatal deixa o portador com exatamente 1 HP em vez disso. Este efeito funciona 1x por combate. Após usar: as vestes ficam parcialmente translúcidas por 1d4 rodadas (o poder se recarrega). Imune a maldições de nível menor e médio.",
+    note: "+2 INT, +2 SAB, +2 Slots. 1x/combate: qualquer golpe fatal → 1 HP em vez de morte. Imune a maldições menores/médias.",
+    story: "As vestes do último Rei de Aether — antes de Aether ter reinos, quando havia apenas um. O rei desapareceu e as vestes ficaram dobradas sobre um trono que ninguém mais reconhece. Quem as usa sente o peso de decisões que nunca foram suas." }];
 
 const ACCESSORIES = [
   /* --- COMUNS --- */
@@ -2426,7 +2591,51 @@ const ACCESSORIES = [
     subclass: "cacador-sombrio",
     effect: "Passivo: pode se mover verticalmente (escalar, subir em estruturas) ao mesmo custo de Movimento horizontal. Ativo (1 Ação Livre, 1 uso/combate): dispara gancho a até 6 hex — puxa o portador ao hex escolhido instantaneamente. Se usado durante Movimento de Fantasma: o gancho não revela posição.",
     note: "Escalada gratuita. Gancho 6 hex como Ação Livre 1x/combate. Compatível com Fantasma (sem revelar).",
-    story: "O gancho nunca falha. Alguns usuários levaram tempo demais para descobrir que às vezes deveriam." }];
+    story: "O gancho nunca falha. Alguns usuários levaram tempo demais para descobrir que às vezes deveriam." },
+
+  /* ─── INSPIRADOS EM ELDEN RING — Talismãs/Acessórios ─────────── */
+
+  { tier: "lendario", name: "Talismã do Punho Férreo",
+    slot: ["accessory"], weight: 0.2, req: "FOR",
+    magicBonus: { attr: "FOR", attrValue: 2 },
+    effect: "Passivo: +2 FOR. Ataques físicos do portador nunca podem ser desviados por esquiva — o alvo pode apenas defender ou absorver o golpe. Se o alvo não tiver Ação de Defesa disponível, o ataque é sempre considerado acerto (sem rolar d10). O portador também fica imune a ser Desarmado.",
+    note: "+2 FOR. Ataques não podem ser esquivados. Sem defesa disponível = acerto automático. Imune a Desarmamento.",
+    story: "O punho que não erra. Não porque é preciso — porque é inevitável. Existe uma diferença entre as duas coisas que importa moralmente mas não mecanicamente." },
+
+  { tier: "lendario", name: "Talismã dos Dois Dedos",
+    slot: ["accessory"], weight: 0.1, req: "SAB",
+    magicBonus: { attr: "SAB", attrValue: 1, slots: 1 },
+    effect: "Passivo: +1 SAB, +1 Slot. O portador pode usar 2 Slots em qualquer magia para duplicar seu efeito: mesma magia atinge 2 alvos separados (se dano), ou área dobrada (se área), ou duração dobrada (se buff/debuff). A decisão de duplicar é tomada no momento do lançamento. 2 usos de duplicação por sessão.",
+    note: "+1 SAB, +1 Slot. 2x/sessão: gastar 2 Slots → duplicar efeito de magia (2 alvos / área dupla / duração dupla).",
+    story: "Os Dois Dedos eram entidades que guiavam reinos inteiros com gestos simples. Este talismã tem a forma de dois dedos entrelaçados. Quem o usa às vezes acorda com a sensação de ter feito uma escolha que não lembra de ter feito." },
+
+  { tier: "lendario", name: "Talismã da Grande Espada de Pedra",
+    slot: ["accessory"], weight: 0.5, req: "FOR",
+    magicBonus: { attr: "FOR", attrValue: 1 },
+    effect: "Passivo: +1 FOR. Ao acertar com arma de 2 mãos: chance de 25% de o golpe criar Onda de Impacto (d10 rola 1–2 automaticamente após o acerto): todos os inimigos em raio 2 hex sofrem 1d8 de dano de impacto e testam AGI (normal) ou ficam Derrubados. A Onda não gasta Ação e não pode ser bloqueada.",
+    note: "+1 FOR. Arma 2M: 25% chance (tirar 1-2 no d10 após acerto) → Onda de Impacto: 1d8 + Derrubado em raio 2 hex.",
+    story: "Esculpido da pedra do mesmo lugar onde a maior greatsword de Aether foi forjada. A pedra lembra o peso da espada e tenta replicar o impacto. Não consegue completamente. Mas 25% é suficiente." },
+
+  { tier: "lendario", name: "Talismã do Dragão Verde",
+    slot: ["accessory"], weight: 0.2, req: "SAB",
+    magicBonus: { attr: "SAB", attrValue: 1 },
+    effect: "Passivo: +1 SAB. O portador regenera 3 HP no início de cada turno enquanto estiver acima de 0 HP. Se o portador tiver uma Bênção ativa: a regeneração aumenta para 5 HP/turno. Fora de combate: regenera 5 HP/minuto (descanso ativo, não precisa estar parado).",
+    note: "+1 SAB. Regenera 3 HP/turno. Com Bênção ativa: 5 HP/turno. Fora de combate: 5 HP/minuto.",
+    story: "Os dragões verdes eram curandeiros. Não guerreiros — curandeiros. Quando o último morreu, seu coração virou este talismã. Ele ainda bate. Levemente. Em compasso com o portador." },
+
+  { tier: "lendario", name: "Talismã do Escorpião Arcano",
+    slot: ["accessory"], weight: 0.3, req: "INT",
+    magicBonus: { attr: "INT", attrValue: 1 },
+    effect: "Passivo: +1 INT. Todas as magias de dano do portador causam +25% de dano (arredonda para cima). Custo: o portador também recebe +25% de dano de todas as fontes (a arrogância tem preço). O talismã não pode ser removido durante combate — só fora dele.",
+    note: "+1 INT. Dano de magias +25%. Dano recebido +25%. Não pode ser removido durante combate.",
+    story: "O escorpião pica mesmo a si mesmo quando não há outra opção. O talismã funciona com a mesma lógica. A questão não é se o custo vale — é se o portador consegue sobreviver ao custo." },
+
+  { tier: "ancestral", name: "Medalhão de Erd",
+    slot: ["accessory"], weight: 0.4, req: "SAB",
+    magicBonus: { attr: "SAB", attrValue: 2, attr2: "INT", attrValue2: 1 },
+    effect: "Passivo: +2 SAB, +1 INT. 1x por sessão, ao cair a 0 HP: o medalhão ativa automaticamente — o portador revive com 50% HP e fica Imune a dano por 1 rodada completa. Após reviver: todos os aliados em raio 5 hex curam 2d8 HP (a ressurreição irradia). O medalhão então fica inativo até o próximo descanso longo.",
+    note: "+2 SAB, +1 INT. 1x/sessão: morte → revive com 50% HP + imunidade 1 rodada + aliados curam 2d8. Recarrega em descanso longo.",
+    story: "Erd não era um rei nem um deus — era um pai. Fez este medalhão para que o filho voltasse de qualquer guerra. O filho nunca voltou mesmo assim. O medalhão ficou tentando." }];
 
 const ALL_WEAPONS = [...WEAPONS_ONE_HAND, ...WEAPONS_TWO_HAND, ...WEAPONS_MAGIC, ...WEAPONS_RANGED];
 
