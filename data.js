@@ -5681,7 +5681,515 @@ const BESTIARY = [
     spells: [],
     behavior: "Predador de memórias e força vital. Foca em alvos com SAB mais alta (sente o potencial). Foge quando abaixo de 40% HP para área escura.",
     loot: [{item:"Essência de Espectro (componente mágico)",chance:50,qty:"1"}] }
-];
+,
+
+  /* ═══════════════════════════════════════════════════════════════
+     MONSTROS INSPIRADOS EM PATH OF EXILE
+     Foco em mecânicas hexagonais: projéteis encadeados, auras de
+     campo, totens, explosões de posição, portais, modifiers únicos
+     ═══════════════════════════════════════════════════════════════ */
+
+  /* ─── DIF 2 ──────────────────────────────────────────────────── */
+
+  {
+    id: "zumbi-explosivo",
+    name: "Zumbi Explosivo",
+    difficulty: 2,
+    attrs: { FOR:3, DEX:0, AGI:0, INT:0, SAB:0 },
+    size: "normal",
+    category: "Morto-Vivo",
+    location: ["Dungeon", "Cemitério", "Ruínas", "Área Corrompida"],
+    hp: 42, physDefense: 3, magDefense: 0, dodge: 8,
+    actions: 2,
+    damage: "1d8+1d4 (soco podre) ou Explosão",
+    isElite: false,
+    abilities: [
+      {
+        name: "Explosão Cadavérica",
+        desc: "Ao cair a 0 HP, o Zumbi explode imediatamente (sem Ação). Todos em raio 2 hex sofrem 2d6 de dano de putrefação (ignora Def.Física, usa Def.Mágica). AGI (normal) para metade. A explosão pode encadear — se outro Zumbi Explosivo morrer dentro do raio da explosão, ele também explode."
+      },
+      {
+        name: "Avanço Imparável",
+        desc: "Passivo: o Zumbi não para de avançar mesmo recebendo dano. Ao ser atingido, não é Derrubado nem Atordoado por qualquer efeito — apenas continua andando. Velocidade 4 em linha reta, nunca desvia."
+      }
+    ],
+    hex: {
+      layout: "Tático",
+      hint: "Posicione Zumbis Explosivos próximos uns aos outros para criar reação em cadeia. Jogadores inteligentes tentarão empurrar um Zumbi para perto de outros antes de matar — o Mestre deve antecipar isso e posicioná-los espalhados. A ameaça real é o encadeamento, não o dano individual."
+    },
+    spells: [],
+    behavior: "Avança em linha reta em direção ao inimigo mais próximo. Não tem inteligência tática — mas o agrupamento natural cria o perigo da cadeia explosiva. Necromantes usam eles como bombas humanas. Não comunicáveis.",
+    loot: [{ item: "Fragmento de Osso Podre (ingrediente alquímico)", chance: 40, qty: "1d3" }]
+  },
+
+  {
+    id: "arqueiro-glacial",
+    name: "Arqueiro Glacial",
+    difficulty: 2,
+    attrs: { FOR:0, DEX:3, AGI:2, INT:1, SAB:1 },
+    size: "normal",
+    category: "Humanoide",
+    location: ["Montanha", "Dungeon", "Floresta Nevada", "Torres Antigas"],
+    hp: 38, physDefense: 2, magDefense: 3, dodge: 14,
+    actions: 2,
+    damage: "1d8+1d4 (flecha de gelo) — alcance 6 hex",
+    abilities: [
+      {
+        name: "Rajada de Flechas de Gelo",
+        desc: "1 Ação (1x/combate): dispara 3 flechas simultaneamente em 3 alvos diferentes a até 6 hex (ou no mesmo alvo 3 vezes). Cada flecha causa 1d6+DEX de frio. Todo alvo atingido acumula 1 carga de Gelo. Com 2 cargas: −2 Movimento. Com 3 cargas: Congelado (imóvel, FOR normal para escapar com 1 Ação)."
+      },
+      {
+        name: "Flecha de Fuga",
+        desc: "Reação ao ser atacado em corpo a corpo: pode imediatamente se mover 3 hex para trás (sem custo de Ação) antes de resolver o ataque. O ataque erra automaticamente se o movimento tirar o atacante do alcance."
+      },
+      {
+        name: "Posição Elevada",
+        desc: "Passivo: se estiver em hex de altitude maior que o alvo (plataforma, escada, colina), ganha +1 na Chance de Acerto e +1d4 de dano em todos os ataques à distância."
+      }
+    ],
+    hex: {
+      layout: "Preferência por altitude e distância",
+      hint: "O Arqueiro Glacial deve sempre estar no hex mais alto disponível. Constrói cargas de Gelo sistematicamente — 3 cargas num alvo o congela. O grupo que não avançar rápido vai ser progressivamente imobilizado."
+    },
+    spells: [],
+    behavior: "Mantém distância máxima e posição elevada. Alterna entre o alvo mais móvel (congelar o guerreiro veloz) e o mais vulnerável (destruir o mago). Se corpo a corpo é inevitável, usa Flecha de Fuga para reposicionar.",
+    loot: [
+      { item: "Flechas de Gelo (1d6 unidades)", chance: 60, qty: "1d6" },
+      { item: "Arco Curto com Runa de Gelo (mágico fraco)", chance: 20, qty: "1" }
+    ]
+  },
+
+  {
+    id: "sacerdote-do-totem",
+    name: "Sacerdote do Totem de Sangue",
+    difficulty: 2,
+    attrs: { FOR:0, DEX:1, AGI:1, INT:2, SAB:3 },
+    size: "normal",
+    category: "Humanoide",
+    location: ["Floresta Profunda", "Aldeia Maldita", "Ruínas Tribais", "Pântano"],
+    hp: 32, physDefense: 1, magDefense: 5, dodge: 12,
+    actions: 2,
+    damage: "1d6+SAB (bastão ritual) ou Maldição",
+    abilities: [
+      {
+        name: "Invocar Totem de Sangue",
+        desc: "1 Ação: crava um Totem em qualquer hex vazio a até 4 hex. O Totem (HP 15, Def 0, imóvel) pulsa a cada rodada — todos os inimigos do Sacerdote em raio 3 hex do Totem sofrem 1d4 de dano de sangramento (cumulativo com outros sangramentos). O Sacerdote pode ter 2 Totens ativos simultaneamente. Destruir um Totem: 1 Ação de Combate adjacente."
+      },
+      {
+        name: "Maldição do Sangramento",
+        desc: "1 Ação de Magia: alvo a até 5 hex testea SAB (normal). Falha: Sangrando por 3 rodadas (1d6/rodada, não acumula com outras maldições de sangramento do mesmo sacerdote). O sacerdote cura 50% do dano de sangramento que o alvo sofrer enquanto estiver maldito."
+      },
+      {
+        name: "Escudo de Totem",
+        desc: "Passivo: enquanto houver pelo menos 1 Totem ativo em raio 6 hex, o Sacerdote recebe −2 de todos os danos (a energia dos Totens o protege). Se todos os Totens forem destruídos: o Sacerdote fica Vulnerável (+2 em todos os danos recebidos) por 2 rodadas."
+      }
+    ],
+    hex: {
+      layout: "Controle de zona com Totens",
+      hint: "O Sacerdote deve colocar Totens nos hexes mais estratégicos — corredores que o grupo precisa cruzar, perto de aliados que precisam de suporte. A prioridade do grupo deve ser destruir os Totens antes de focar o Sacerdote."
+    },
+    spells: [],
+    behavior: "Abre o combate com 2 Totens imediatamente. Depois aplica Maldição do Sangramento no alvo com mais HP. Se ameaçado em melee, recua para trás dos Totens usando-os como escudo zonal.",
+    loot: [
+      { item: "Totem Ritual (item de missão)", chance: 70, qty: "1" },
+      { item: "Pó de Sangue Seco (componente alquímico)", chance: 50, qty: "1d4" }
+    ]
+  },
+
+  /* ─── DIF 3 ──────────────────────────────────────────────────── */
+
+  {
+    id: "aranha-abissal-tecelã",
+    name: "Aranha Abissal Tecelã",
+    difficulty: 3,
+    attrs: { FOR:2, DEX:4, AGI:4, INT:2, SAB:2 },
+    size: "grande",
+    category: "Besta Abissal",
+    location: ["Dungeon", "Caverna Profunda", "Floresta Maldita", "Teia do Abismo"],
+    hp: 80, physDefense: 5, magDefense: 4, dodge: 16,
+    actions: 3,
+    damage: "1d10+1d6 (garras aracnídeas) + veneno",
+    abilities: [
+      {
+        name: "Teia do Abismo",
+        desc: "1 Ação: lança teia que cobre área 3x3 hex a até 5 hex. Criaturas na área: Presas (FOR normal para escapar com 1 Ação). A teia persiste 4 rodadas. Criaturas Presas recebem +1d4 de dano acido por rodada (a teia corrói). Fogo destrói a teia instantaneamente em toda a área."
+      },
+      {
+        name: "Passos Silenciosos",
+        desc: "Passivo: move-se pelo teto e paredes sem custo extra de Movimento. Pode atacar de cima (altitude 4 hex) — ataques de cima causam +1d6 extra e os alvos não podem defender (apenas esquivar). Não pode ser Derrubada por efeitos de terreno."
+      },
+      {
+        name: "Veneno Paralisante",
+        desc: "A cada acerto com garras: alvo acumula 1 carga de Veneno Paralisante (máx 3). Com 1 carga: −1 Ação. Com 2 cargas: −2 Ações. Com 3 cargas: Paralizado completamente por 1 rodada, depois reseta para 0 cargas."
+      },
+      {
+        name: "Invocar Filhotes",
+        desc: "Ao cair abaixo de 40% HP (1x/combate): 1d4 Aranhas Filhotes (HP 10, Def 1, dano 1d4+veneno 1, Dif 1) emergem do abdômen. Cada filhote age independentemente mas herda o Veneno da mãe."
+      }
+    ],
+    hex: {
+      layout: "Combate tridimensional",
+      hint: "A Aranha usa o teto como quinto eixo de movimento — marque altitude 4 nos hexes de teto disponíveis. O grupo precisa forçá-la para o chão (fogo na teia, magias de queda) ou alcançá-la com ataques à distância. Filhotes são prioridade de limpeza — cada um que acerta aplica veneno."
+    },
+    spells: [],
+    behavior: "Abre com Teia do Abismo num corredor para bloquear o grupo. Ataca do teto quem ficar Preso. Quando abaixo de 40% HP, invoca filhotes e tenta reposicionar no teto atrás do grupo.",
+    loot: [
+      { item: "Glândula de Veneno Paralisante (componente raro)", chance: 60, qty: "1" },
+      { item: "Fio de Teia Abissal (material mágico)", chance: 40, qty: "1d4" }
+    ]
+  },
+
+  {
+    id: "elemental-relampago-errante",
+    name: "Elemental de Relâmpago Errante",
+    difficulty: 3,
+    attrs: { FOR:1, DEX:5, AGI:5, INT:2, SAB:1 },
+    size: "normal",
+    category: "Elemental",
+    location: ["Planície Aberta", "Torre de Mago", "Ruínas com Tempestade", "Cume de Montanha"],
+    hp: 65, physDefense: 2, magDefense: 8, dodge: 18,
+    actions: 3,
+    damage: "1d8+1d6 (descarga) — alcance 3 hex",
+    abilities: [
+      {
+        name: "Salto do Relâmpago",
+        desc: "Passivo de movimento: ao se mover, o Elemental não ocupa hexes intermediários — teleporta diretamente para o destino (até 6 hex) como relâmpago. Criaturas em qualquer hex pelo qual passaria (linha reta entre origem e destino) sofrem 1d4 de eletricidade. O salto não provoca Ataques de Oportunidade."
+      },
+      {
+        name: "Cadeia de Relâmpagos",
+        desc: "1 Ação (o ataque principal): dispara relâmpago em alvo a até 3 hex. O relâmpago encadeia — salta para o inimigo mais próximo do alvo inicial (até 2 hex de distância), depois encadeia de novo (até 2 hex do segundo). Máximo 4 alvos na cadeia. Dano: 1d8 no primeiro, −1d4 em cada salto subsequente. Criatura com armadura metálica não pode esquivar da cadeia."
+      },
+      {
+        name: "Sobrecarga",
+        desc: "Ao receber dano de fogo: dobra o próximo Salto do Relâmpago (12 hex em vez de 6) e a Cadeia de Relâmpagos afeta 6 alvos na próxima rodada. Ao receber dano de terra/pedra: Paralisado por 1 rodada (grounded)."
+      },
+      {
+        name: "Forma de Tempestade",
+        desc: "Passivo: imune a dano elétrico. Criaturas em hex adjacente ao Elemental recebem 1d4 de estática por rodada automaticamente (campo elétrico passivo). Armaduras metálicas: 1d6 em vez de 1d4."
+      }
+    ],
+    hex: {
+      layout: "Alta mobilidade e cadeia",
+      hint: "O Elemental é mais perigoso quando o grupo está agrupado — a Cadeia de Relâmpagos pode atingir 4 personagens num único ataque. Grupos dispersos em 3+ hexes de separação cancelam a cadeia. Jogadores com armaduras metálicas (Cota de Malha, Armadura de Placas) são alvos prioritários — não podem esquivar."
+    },
+    spells: [],
+    behavior: "Abre pulando para o centro do grupo para maximizar a cadeia. Foge para longe se atingido por pedra/terra (grounded). Se atingido por fogo aliado acidentalmente: dobra poder — o Mestre pode usar isso estrategicamente.",
+    loot: [
+      { item: "Núcleo de Relâmpago (material para armas elétricas)", chance: 50, qty: "1" },
+      { item: "Essência Elétrica (componente mágico raro)", chance: 30, qty: "1" }
+    ]
+  },
+
+  {
+    id: "berseker-de-sangue-corrupto",
+    name: "Berserker de Sangue Corrompido",
+    difficulty: 3,
+    attrs: { FOR:5, DEX:2, AGI:2, INT:0, SAB:0 },
+    size: "normal",
+    category: "Humanoide Corrompido",
+    location: ["Acampamento Corrompido", "Floresta do Deus Marcado", "Dungeon de Sangue", "Planície Devastada"],
+    hp: 90, physDefense: 5, magDefense: 1, dodge: 11,
+    actions: 3,
+    damage: "1d12+1d8 (machado de sangue)",
+    abilities: [
+      {
+        name: "Frenesi Sanguíneo",
+        desc: "Passivo escalável: cada acerto que o Berserker sofre (sem matar) aumenta seu dano em +1d4 (máx +4d4). Ao ser curado por qualquer fonte: perde todas as cargas de Frenesi. 'Quanto mais sangra, mais mata.'"
+      },
+      {
+        name: "Tornado de Machado",
+        desc: "1 Ação (1x a cada 2 rodadas): gira com o machado, atingindo TODOS em raio 2 hex. Dano: 1d10+FOR+Frenesi atual. Cada criatura atingida testa FOR (normal) ou é empurrada 2 hex para fora do raio. Pode ser interrompido se o Berserker for Derrubado antes de completar (no início do turno)."
+      },
+      {
+        name: "Carga Furiosa",
+        desc: "1 Ação: move até 5 hex em linha reta e ataca o primeiro inimigo no caminho. Dano: 2d8+FOR. O alvo testa AGI (difícil) ou fica Derrubado. Criaturas no caminho (não o alvo final) sofrem 1d4 de atropelamento."
+      },
+      {
+        name: "Desejo de Morte",
+        desc: "Passivo: ao cair abaixo de 25% HP, entra em Êxtase de Morte — ataca 2 vezes por Ação (em vez de 1), mas qualquer dano recebido no Êxtase é dobrado. Dura até morrer ou combate terminar. Não pode ser curado durante o Êxtase."
+      }
+    ],
+    hex: {
+      layout: "Melee agressivo de alta pressão",
+      hint: "O Tornado de Machado é a habilidade mais perigosa — empurra o grupo para fora de posição e causa dano em área. Personagens na borda de precipícios ou obstáculos devem tomar cuidado com o empurrão de 2 hex. Curar o Berserker reseta o Frenesi — isso pode ser usado estrategicamente se o grupo tiver acesso a magias de cura inimiga."
+    },
+    spells: [],
+    behavior: "Abre com Carga Furiosa no alvo mais blindado. Usa Tornado de Machado quando 2+ inimigos estão em raio 2. No Êxtase de Morte: foca no alvo com menos HP para matar rápido antes de morrer.",
+    loot: [
+      { item: "Machado de Sangue (arma rara danificada)", chance: 30, qty: "1" },
+      { item: "Cristal da Corrupção (material do Deus Marcado)", chance: 50, qty: "1d2" }
+    ]
+  },
+
+  /* ─── DIF 4 ──────────────────────────────────────────────────── */
+
+  {
+    id: "lich-portais-fracturados",
+    name: "Lich dos Portais Fraturados",
+    difficulty: 4,
+    attrs: { FOR:1, DEX:4, AGI:4, INT:7, SAB:6 },
+    size: "normal",
+    category: "Morto-Vivo Elite",
+    location: ["Torre Arcana", "Ruínas de Atrelon", "Nexo Dimensional", "Dungeon Profunda"],
+    hp: 140, physDefense: 4, magDefense: 10, dodge: 17,
+    actions: 4,
+    damage: "1d8+INT (raio arcano) — alcance 5 hex",
+    isElite: true,
+    abilities: [
+      {
+        name: "Portal de Reposicionamento",
+        desc: "1 Ação (ilimitado): cria par de portais em 2 hexes vazios a até 8 hex. Qualquer criatura que entrar num portal sai pelo outro imediatamente. O Lich usa isso para: se teletransportar para longe, reposicionar aliados, ou FORÇAR inimigos através do portal (alvo no hex do portal testa AGI difícil ou é sugado para o outro lado — para dentro de armadilha, precipício, ou grupo inimigo). Portais duram 2 rodadas."
+      },
+      {
+        name: "Projéteis Orbitais",
+        desc: "Passivo + Ativo. Passivo: 3 Orbes de energia orbitam o Lich — qualquer ataque físico que o acertar tem 30% de chance (d10 ≤ 3) de ser interceptado por um Orbe (anulado). Quando Orbe intercepta: é destruído. Ativo (1 Ação): dispara 1 Orbe em alvo a 6 hex (2d8+INT de dano arcano). Orbes se regeneram (1 por rodada, máx 3)."
+      },
+      {
+        name: "Campo de Fragmentação",
+        desc: "1 Ação de Magia (1x/combate): cria campo em área 5x5 hex que fragmenta o espaço por 3 rodadas. No campo: Movimento custa 2 por hex (em vez de 1), ataques à distância têm −2 na Chance de Acerto (o espaço distorce a trajetória), e portais do Lich custam 0 Ações (movimento livre). O campo é visível — névoa distorcida."
+      },
+      {
+        name: "Absorção Arcana",
+        desc: "Reação ao receber dano mágico: absorve 50% do dano e converte em 1 Orbe adicional (além dos 3 orbitais, máx 5 durante absorção). Se absorver 20+ pontos de dano mágico num turno: no turno seguinte lança Raio de Descarga usando todos os Orbes extras — 1d10 por Orbe, 1 alvo à escolha."
+      }
+    ],
+    hex: {
+      layout: "Controle dimensional de campo",
+      hint: "Os Portais são a mecânica central — o Lich pode mover inimigos para dentro do Campo de Fragmentação ou separar o grupo. Identificar onde os portais vão aparecer e reposicionar antes é crucial. Orbes Orbitais: ataques rápidos (múltiplos por turno) esgotam os Orbes rapidamente — depois o Lich fica vulnerável a físico por 1-2 rodadas."
+    },
+    spells: [],
+    behavior: "Abre com Campo de Fragmentação sobre o grupo inteiro. Usa portais para se manter a 5+ hex do grupo. Dispara Orbes nos conjuradores. Se o grupo se aproxima em melee: portal imediato para trocar de posição. Absorve magias de área deliberadamente para carregar a Descarga.",
+    loot: [
+      { item: "Olho de Portal (artefato dimensional raro)", chance: 40, qty: "1" },
+      { item: "Cristal de Orbe Orbital (material mágico)", chance: 60, qty: "1d3" },
+      { item: "Grimório Fraturado (magia de portal nível 4)", chance: 25, qty: "1" }
+    ]
+  },
+
+  {
+    id: "hidra-de-veneno-abissal",
+    name: "Hidra de Veneno Abissal",
+    difficulty: 4,
+    attrs: { FOR:6, DEX:3, AGI:2, INT:2, SAB:3 },
+    size: "colossal",
+    category: "Besta Lendária",
+    location: ["Pântano Profundo", "Lago Subterrâneo", "Caverna Úmida", "Costa do Lago Central"],
+    hp: 160, physDefense: 8, magDefense: 4, dodge: 10,
+    actions: 4,
+    damage: "1d12+1d8+FOR (mordida por cabeça ativa)",
+    isElite: true,
+    abilities: [
+      {
+        name: "Três Cabeças Ativas",
+        desc: "A Hidra começa com 3 cabeças ativas. Cada cabeça tem HP independente de 30 e pode ser alvo separado (requer declarar 'ataco a Cabeça X' antes de rolar). Cabeça destruída: 1 Ação por rodada é perdida. Ao cortar uma cabeça sem fogo ou ácido: 2 novas cabeças crescem na próxima rodada (máx 5 cabeças). Fogo ou ácido na cabeça cortada: cauteriza (não regenera)."
+      },
+      {
+        name: "Cuspe de Veneno em Área",
+        desc: "1 Ação por cabeça ativa (1x/2 rodadas por cabeça): projeta veneno em cone 3 hex. Todos no cone: 1d8 de veneno imediato + Envenenado (1d6/rodada, 3 rodadas). SAB (difícil) para metade do imediato e resistir ao Envenenado."
+      },
+      {
+        name: "Corpo Colossal",
+        desc: "Passivo: ocupa 6 hexes. Criaturas adjacentes ao corpo (não às cabeças) sofrem 1d6 de esmagamento no início de cada turno delas (o peso do corpo pressiona o terreno). Não pode ser Derrubada ou Empurrada por qualquer fonte."
+      },
+      {
+        name: "Regeneração Hidra",
+        desc: "Passivo: regenera 8 HP no início de cada turno. Fogo cancela a regeneração por 1 rodada. Ácido cancela por 2 rodadas. Cabeças destruídas por fogo/ácido não regeneram mas o corpo continua regenerando HP."
+      }
+    ],
+    hex: {
+      layout: "Boss de múltiplos alvos",
+      hint: "A decisão de cortar cabeças vs destruir o corpo é o dilema central. Cortar sem cauterizar cria mais cabeças e mais Ações. A estratégia correta: focar o corpo (mais HP, mais difícil) ou ter fogo/ácido preparado para cada cabeça cortada. Dividir o dano entre cabeças desperdiça — foque uma de cada vez."
+    },
+    spells: [],
+    behavior: "Cabeças atacam alvos separados (maximiza pressão). Se o grupo se agrupa: Cuspe de Veneno em Área em área central. Mantém posição — não persegue inimigos além de 4 hex (o corpo é muito grande). Foca caçadores de cabeça (quem estiver atacando as cabeças mais frequentemente).",
+    loot: [
+      { item: "Veneno de Hidra Abissal (ingrediente lendário)", chance: 80, qty: "1d3" },
+      { item: "Escama de Hidra (material de armadura rara)", chance: 60, qty: "1d6" },
+      { item: "Dente de Cabeça Cauterizada (talismã de resistência)", chance: 30, qty: "1" }
+    ]
+  },
+
+  /* ─── DIF 5 ──────────────────────────────────────────────────── */
+
+  {
+    id: "guardiao-do-nexo",
+    name: "Guardião do Nexo",
+    difficulty: 5,
+    attrs: { FOR:6, DEX:5, AGI:5, INT:8, SAB:7 },
+    size: "colossal",
+    category: "Construto Lendário",
+    location: ["Nexo Dimensional", "Centro do Mapa", "Santuário Perdido", "Coração da Fissura"],
+    hp: 300, physDefense: 12, magDefense: 12, dodge: 14,
+    isElite: true,
+    actions: 5,
+    damage: "2d10+1d8 (garras do nexo) ou Magias",
+    abilities: [
+      {
+        name: "Fases do Nexo",
+        desc: "O Guardião tem 3 Fases baseadas em HP: Fase 1 (300-200 HP): padrão. Fase 2 (199-100 HP): ganha +1 Ação por turno, Def.Física e Mágica aumentam +2, projéteis em todas as direções a cada 2 rodadas (1d8 arcano em raio 4 hex). Fase 3 (99-1 HP): mais 5 Ações por turno, imune a condições de controle, projéteis constantes (1d8 todo turno). Em cada transição de fase: todos os efeitos ativos no Guardião são removidos (buffs e debuffs)."
+      },
+      {
+        name: "Raio do Nexo",
+        desc: "1 Ação: dispara raio em linha reta de 10 hex de comprimento. Dano: 3d10+INT em qualquer criatura na linha. AGI (difícil) para metade. O raio não para em obstáculos — atravessa paredes, pilares e cobertura. Pode ser usado em qualquer direção."
+      },
+      {
+        name: "Campo de Anulação",
+        desc: "Passivo (Fase 2+): campo em raio 3 hex ao redor do Guardião. No campo: magias custam +1 Ação de Magia para lançar, Slots de Magia utilizados no campo causam 1d6 de dano ao conjurador (o Nexo drena energia arcana), e itens com Cargas perdem 1 Carga por rodada que o portador ficar no campo."
+      },
+      {
+        name: "Reconfiguração do Terreno",
+        desc: "1 Ação (Fase 1: 1x/combate, Fase 2: 1x/2 rodadas, Fase 3: 1x/rodada): reorganiza o campo de batalha. O Guardião escolhe: (A) eleva 3 hexes ao nível 2 de altitude (cria cobertura), (B) abre 3 hexes de abismo (queda 2d8, criaturas neles caem), ou (C) troca 2 criaturas de posição (ambas testam AGI difícil para resistir). Afeta tanto aliados quanto inimigos do Guardião."
+      },
+      {
+        name: "Absorver e Refletir",
+        desc: "Reação (Fase 3 apenas): ao receber magia de dano de área: absorve e relança a mesma magia centrada em outro ponto escolhido pelo Mestre (dentro do alcance original). O Guardião não sofre dano da magia absorvida."
+      }
+    ],
+    hex: {
+      layout: "Boss de campo completo — reorganiza o terreno",
+      hint: "A Reconfiguração do Terreno é a mecânica mais caótica — o mapa muda durante o combate. Mantenha registro de altitude e abismos. Na Fase 3: o Guardião reage a magias de área relançando-as — magias de dano em área se tornam perigosas para o próprio grupo. A transição de fase remove todos os debuffs — não acumule efeitos de controle perto de 200 e 100 HP."
+    },
+    spells: ["Raio do Nexo (linha 10 hex, 3d10+INT)", "Projéteis do Nexo (raio 4 hex, 1d8 arcano)", "Absorver e Refletir (Fase 3)"],
+    behavior: "Fase 1: testa o grupo com Raios e Reconfigurações defensivas. Fase 2: pressão constante — usa Campo de Anulação para neutralizar magos. Fase 3: modo caos — tudo na velocidade máxima. O Guardião nunca recua — é o Nexo. O Nexo não vai a lugar algum.",
+    loot: [
+      { item: "Núcleo do Nexo (artefato único — poder dimensional)", chance: 100, qty: "1" },
+      { item: "Fragmento do Construto (material para armadura lendária)", chance: 100, qty: "1d4" },
+      { item: "Essência do Campo de Anulação (magia de anel negação)", chance: 60, qty: "1" }
+    ]
+  },
+
+  {
+    id: "arauto-da-tormenta-negra",
+    name: "Arauto da Tormenta Negra",
+    difficulty: 5,
+    attrs: { FOR:4, DEX:7, AGI:7, INT:8, SAB:8 },
+    size: "grande",
+    category: "Entidade do Caos",
+    location: ["Tempestade Perpétua", "Cume de Atrelon", "Onde a Tormenta Começou"],
+    hp: 260, physDefense: 8, magDefense: 14, dodge: 20,
+    isElite: true,
+    actions: 5,
+    damage: "2d8+1d10 (garras de tormenta) ou Magias de Tempestade",
+    abilities: [
+      {
+        name: "Olho da Tormenta",
+        desc: "Passivo permanente: o Arauto está sempre no centro de uma tempestade pessoal. Todos em raio 4 hex: −2 em testes de ataque à distância (vento), 1d4 de dano elétrico por rodada (estática), e Movimento custa +1 por hex (rajadas). O Arauto é imune a esses efeitos. Entrar no hex do Arauto (raio 0): 2d6 de raio automático."
+      },
+      {
+        name: "Chamado da Tormenta",
+        desc: "1 Ação (1x/2 rodadas): invoca Tormenta em hex escolhido a até 8 hex. No próximo turno do Arauto: 3 raios caem em hexes aleatórios dentro de raio 3 do ponto escolhido (2d8 cada, sem esquiva — apenas Def.Mágica). O ponto é marcado visivelmente — o grupo tem 1 turno inteiro para sair da área."
+      },
+      {
+        name: "Velocidade Relâmpago",
+        desc: "Passivo: o Arauto pode se mover como Ação Livre (sem custo de Ação) até 4 hex uma vez por rodada. Esta movimentação não provoca Ataques de Oportunidade e acontece DURANTE a rodada (pode ser feita entre Ações)."
+      },
+      {
+        name: "Descarga Total",
+        desc: "1 Ação (1 uso/combate): o Arauto sobe a altitude máxima disponível e libera toda a energia acumulada. Cone de 6 hex em todas as 6 direções simultaneamente (360°): 4d10+INT de dano elétrico. AGI (crítico) para metade. Imune a elétrico neste turno. Após a Descarga: Olho da Tormenta expande para raio 6 por 3 rodadas."
+      },
+      {
+        name: "Relâmpago Encadeado Implacável",
+        desc: "Substitui Ação de Ataque normal: dispara relâmpago que encadeia entre TODOS os inimigos visíveis (sem máximo de alvos). Dano inicial: 2d8+INT. Cada salto: −1d4 de dano (mínimo 1d4). O encadeamento para apenas quando não há mais alvos em raio 3 do último atingido."
+      }
+    ],
+    hex: {
+      layout: "Mobilidade extrema + dano de área em toda a grade",
+      hint: "A dispersão máxima do grupo (5+ hex de separação) neutraliza o Relâmpago Encadeado mas expõe cada personagem à Tormenta individualmente. O Olho da Tormenta cria zona de exclusão constante — ninguém deve ficar em raio 4 por mais de 1 rodada. Chamado da Tormenta: identificar o marcador e TODOS saírem da área é prioridade absoluta."
+    },
+    spells: ["Chamado da Tormenta (raios aleatórios, área 3 hex)", "Descarga Total (360°, 4d10+INT)", "Relâmpago Encadeado Implacável (todos os alvos)"],
+    behavior: "Nunca fica parado — usa Velocidade Relâmpago entre cada Ação para manter distância de melee. Usa Chamado da Tormenta em clusters do grupo. Reserva Descarga Total para quando 3+ personagens estão no cone. Prioriza conjuradores (anula vantagem mágica com o Olho da Tormenta).",
+    loot: [
+      { item: "Essência da Tormenta Negra (material lendário para armas)", chance: 80, qty: "1" },
+      { item: "Olho do Arauto (talismã que concede Velocidade Relâmpago 1x/dia)", chance: 40, qty: "1" },
+      { item: "Fragmento de Descarga Total (componente para magia de relâmpago 5)", chance: 30, qty: "1" }
+    ]
+  },
+
+  /* ─── MINI-BOSS ESPECIAL — Dif 3 com mecânica única ─────────── */
+
+  {
+    id: "colosso-de-magma-fundido",
+    name: "Colosso de Magma Fundido",
+    difficulty: 3,
+    attrs: { FOR:7, DEX:0, AGI:0, INT:1, SAB:1 },
+    size: "colossal",
+    category: "Elemental Lendário",
+    location: ["Monte Karloth", "Vulcão", "Câmara de Lava", "Forja Abandonada"],
+    hp: 120, physDefense: 10, magDefense: 2, dodge: 6,
+    actions: 2,
+    damage: "2d8+1d10+FOR (soco de magma) — área 2 hex de respingo",
+    isElite: true,
+    abilities: [
+      {
+        name: "Rastro de Lava",
+        desc: "Passivo: cada hex que o Colosso percorre vira Lava Ativa por 3 rodadas. Criaturas que entrarem ou terminarem turno em hex de lava: 2d6 de dano de fogo. O Colosso pode atravessar sua própria lava sem dano. O rastro de lava cria barreiras naturais no mapa conforme o Colosso se move."
+      },
+      {
+        name: "Explosão Vulcânica",
+        desc: "1 Ação (1x/combate): salta para hex a até 5 hex, causando ao pousar 3d8 de dano de impacto em raio 3 hex. O salto cria Lava Ativa em todos os hexes do raio 3. AGI (difícil) para metade do dano. O salto pode ser usado sobre obstáculos."
+      },
+      {
+        name: "Armadura de Rocha Vulcânica",
+        desc: "Passivo: imune a fogo e calor. Resistência a dano físico (−3 por dado de dano físico). Vulnerável a água e gelo (+1d8 por dado de dano de frio). Ao receber dano de gelo: perde 2 de Def.Física permanentemente (a rocha racha) até o fim do combate, cumulativo."
+      },
+      {
+        name: "Respingo de Magma",
+        desc: "Passivo em todos os ataques físicos do Colosso: ao acertar, magma respinga — todos em hexes adjacentes ao alvo (não o alvo principal) sofrem 1d6 de fogo. Inimigos com armadura metálica: 1d8 de fogo."
+      }
+    ],
+    hex: {
+      layout: "Controle de zona com lava",
+      hint: "O Rastro de Lava é a mecânica mais impactante — o Colosso literalmente reduz o espaço navegável do mapa a cada turno. Após 4 rodadas, metade do mapa pode ser lava. Forçar o Colosso a se mover em círculos (usando obstáculos e paredes) cria mais lava em zonas menos importantes. Gelo é a fraqueza — cada hit de gelo enfraquece a armadura."
+    },
+    spells: [],
+    behavior: "Avança em linha reta para o grupo mais denso. Usa Explosão Vulcânica para pular sobre obstáculos quando cercado. Não persegue inimigos que fogem — mas o rastro de lava fecha o mapa progressivamente, tornando a fuga impossível.",
+    loot: [
+      { item: "Núcleo de Magma Fundido (material para armas de fogo)", chance: 70, qty: "1" },
+      { item: "Escama de Rocha Vulcânica (material de armadura)", chance: 60, qty: "1d4" },
+      { item: "Cristal de Magma (gema decorativa valiosa — 30 ouro)", chance: 40, qty: "1d3" }
+    ]
+  },
+
+  {
+    id: "espectro-do-eco",
+    name: "Espectro do Eco",
+    difficulty: 3,
+    attrs: { FOR:0, DEX:4, AGI:6, INT:5, SAB:5 },
+    size: "normal",
+    category: "Morto-Vivo Etéreo",
+    location: ["Dungeon", "Templo Antigo", "Câmara do Eco", "Onde Muitos Morreram Juntos"],
+    hp: 60, physDefense: 0, magDefense: 9, dodge: 19,
+    actions: 3,
+    damage: "1d8+SAB (toque etéreo — ignora Def.Física)",
+    abilities: [
+      {
+        name: "Cópia do Eco",
+        desc: "1 Ação (1x/combate): o Espectro cria 2 cópias de si mesmo em hexes adjacentes. As cópias têm HP 1 e as mesmas estatísticas de ataque mas não têm habilidades especiais. O Espectro original se torna INDISTINGUÍVEL das cópias — mesmo com Percepção ou Arcanismo não é possível identificá-lo até que uma cópia seja destruída (Percepção difícil ao destruir: identifica se era a cópia ou o original pelo calor residual). As cópias atacam normalmente."
+      },
+      {
+        name: "Eco do Último Feitiço",
+        desc: "Passivo: toda vez que um conjurador usar uma magia de dano em raio 3 hex do Espectro, o Espectro 'memoriza' a magia. Na próxima rodada, pode reproduzir a magia como Ação (gratuitamente, sem Slot, mesmo que não conheça) centrada em qualquer hex a até 5 hex. O Eco causa 75% do dano original."
+      },
+      {
+        name: "Atravessar",
+        desc: "Passivo: pode se mover através de paredes, pilares e criaturas sem custo extra. Criaturas que o Espectro atravessa (hex passante) testam Força de Vontade (normal) ou ficam com −1d4 nos ataques por 1 rodada (o frio do espectro paralisa momentaneamente)."
+      },
+      {
+        name: "Intangível",
+        desc: "Passivo: imune a dano de armas não-mágicas. Vulnerável a dano sagrado (+1d8 por dado). Em luz direta (tocha, magia de luz): perde Atravessar e Cópia do Eco por 2 rodadas (luz o ancora ao plano físico)."
+      }
+    ],
+    hex: {
+      layout: "Ilusão e controle de identidade",
+      hint: "As 3 cópias são o desafio principal — o grupo tem 1/3 de chance de acertar o original a cada ataque. Tocha ou magia de luz remove as habilidades especiais, tornando-o muito mais vulnerável. Eco do Último Feitiço: cuidado com magias de área próximas ao Espectro — ele pode devolvê-las. Magos devem usar ataques focados, não área."
+    },
+    spells: [],
+    behavior: "Cria cópias imediatamente. Atravessa paredes para atacar o mago (alvo prioritário — para copiar magias). Se iluminado: retrocede para a escuridão usando Atravessar em paredes. Eco de magias de área poderosas é a maior ameaça que oferece.",
+    loot: [
+      { item: "Essência do Eco (componente para magia de cópia)", chance: 50, qty: "1" },
+      { item: "Fragmento Etéreo (material mágico)", chance: 40, qty: "1d2" }
+    ]
+  }];
 
 /* ================================================================
    MONTARIAS — Sistema de Montaria do Mundo de Aether
