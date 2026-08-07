@@ -6189,7 +6189,877 @@ const BESTIARY = [
       { item: "Essência do Eco (componente para magia de cópia)", chance: 50, qty: "1" },
       { item: "Fragmento Etéreo (material mágico)", chance: 40, qty: "1d2" }
     ]
-  }];
+  },
+
+  /* ═══════════════════════════════════════════════════════════════
+     MONSTROS INSPIRADOS EM BALDUR'S GATE 3
+     Mecânicas de arena: o campo é parte da solução.
+     Cada monstro tem lore próprio de Aether e condição de encontro.
+     ═══════════════════════════════════════════════════════════════ */
+
+  /* ─── DIF 2 — Encontros com twist de arena ───────────────────── */
+
+  {
+    id: "bruxa-do-jardim-venenoso",
+    name: "Velnara, a Herborista",
+    difficulty: 3,
+    attrs: { FOR:0, DEX:2, AGI:1, INT:5, SAB:6 },
+    size: "normal",
+    category: "Humanoide Corrompido",
+    location: ["Floresta Profunda", "Casa Isolada", "Jardim Maldito", "Vila Abandonada"],
+    hp: 70, physDefense: 1, magDefense: 8, dodge: 13,
+    actions: 3,
+    damage: "1d6+SAB (cajado envenenado) ou Magias de Veneno",
+    isElite: true,
+    lore: "Velnara era uma respeitada herborista em Margem das Pedras — mulher gentil, conhecida por suas poções de cura. Há dois anos desapareceu sem explicação. O que voltou usa seu rosto mas não tem sua voz. A herborista real, Mirna Voss, está presa numa gaiola de raízes no centro do jardim — viva, semiconsciente, sendo drenada lentamente. Se o grupo encontrar Mirna primeiro: ela sussurra 'a sombra no espelho... ela me usou... pegue a chave de marfim no vaso de rosas negras'. A chave de marfim desativa as Raízes do Jardim.",
+    encounterSetup: "O grupo encontra a casa de Velnara através de: (A) Missão de Mirna — alguém quer saber onde ela está. (B) Viajantes que passaram pelo caminho que nunca chegaram ao destino. (C) O jardim em si — plantas de cores impossíveis visíveis da estrada. A 'Herborista' recebe o grupo normalmente com chá. O veneno do chá é lento — ativa apenas no segundo turno de combate se algum personagem bebeu.",
+    abilities: [
+      {
+        name: "Jardim Venenoso — Aura de Campo",
+        desc: "MECÂNICA DE ARENA: enquanto Velnara estiver viva, o jardim inteiro exala névoa tóxica. No início de cada rodada: todos (exceto Velnara) em qualquer hex do campo sofrem 1d4 de veneno de névoa. Não pode ser evitado — apenas resistido (Resistência difícil para imune nesta rodada, 1x por personagem). Destruir os 4 Vasos de Ervas Negras (HP 20 cada, Def 0 — nos quatro cantos do mapa) remove a névoa do campo inteiro. Com todos os 4 vasos destruídos: Velnara perde também o Escudo de Raízes."
+      },
+      {
+        name: "Raízes do Jardim",
+        desc: "1 Ação: invoca raízes de qualquer hex de terra a até 5 hex. Alvo no hex: Preso (FOR normal para escapar, 1 Ação). As raízes duram 3 rodadas. Vasos Negros destruídos reduzem o alcance (-1 hex por vaso). Com todos vasos destruídos: esta habilidade desativa. A chave de marfim (com Mirna) desativa imediatamente."
+      },
+      {
+        name: "Escudo de Raízes",
+        desc: "Passivo: enquanto os 4 Vasos estiverem intactos, Velnara é Intocável — ataques físicos a ricocheteiam em raízes (automaticamente deflectidos). Magias causam metade do dano. Com todos os vasos destruídos: perde completamente. Com 1-3 vasos destruídos: apenas metade dos ataques físicos passam."
+      },
+      {
+        name: "Veneno da Transformação",
+        desc: "1 Ação de Magia: projeta veneno especial em alvo a 4 hex. SAB (difícil) para resistir. Falha: alvo começa a se transformar — por 3 rodadas perde 1 SAB e 1 INT temporariamente (a transformação que ela fez em si mesma). Se SAB ou INT chegar a 0: fica confuso permanentemente até cura mágica."
+      }
+    ],
+    hex: {
+      layout: "Jardim 12x10 com 4 vasos nos cantos e gaiola central",
+      terrain: [
+        "Canteiros de flores (cobertura leve — +1 Furtividade)",
+        "4 Vasos de Ervas Negras (nos 4 cantos — HP 20 cada, Def 0)",
+        "Gaiola de Raízes (centro — Mirna dentro, Intocável enquanto Velnara viver)",
+        "Fonte Envenenada (centro-norte — quem beber: Envenenado 3 rodadas)",
+        "Estufa de Vidro (nordeste — cobertura pesada, Velnara começa aqui)"
+      ],
+      hint: "Dividir o grupo: metade destrói Vasos, metade pressiona Velnara. Com todos os vasos destruídos, ela perde o Escudo e as Raízes — fica vulnerável em 1 turno. Prioridade: VAsos primeiro, Velnara depois. Personagem com Resistência alta pode ignorar a névoa e focar em Velnara diretamente enquanto os outros destroem os vasos."
+    },
+    spells: ["Névoa Tóxica (campo inteiro, passivo)", "Raízes do Jardim (5 hex)", "Veneno da Transformação"],
+    behavior: "Finge hospitalidade até o primeiro ataque. Imediatamente recua para a estufa (cobertura pesada). Usa Raízes para Prender quem se aproximar dos Vasos. Foca Veneno da Transformação no personagem com mais INT ou SAB. Se todos os Vasos caírem: entra em pânico e tenta negociar — mas está mentindo.",
+    loot: [
+      { item: "Chave de Marfim (liberta Mirna)", chance: 100, qty: "1" },
+      { item: "Diário de Velnara (processo da transformação — informação de arco)", chance: 100, qty: "1" },
+      { item: "Extrato do Jardim Negro (veneno raro — Veneno da Transformação 3 doses)", chance: 60, qty: "1" },
+      { item: "Grimório de Herbalismo Corrompido (magia de Veneno Nível 3)", chance: 40, qty: "1" }
+    ]
+  },
+
+  {
+    id: "constructo-da-forja-antiga",
+    name: "Constructo da Forja de Durrak",
+    difficulty: 4,
+    attrs: { FOR:8, DEX:0, AGI:0, INT:1, SAB:1 },
+    size: "colossal",
+    category: "Construto",
+    location: ["Forja Abandonada", "Câmara Mecanizada", "Mina Profunda de Durrak"],
+    hp: 220, physDefense: 14, magDefense: 2, dodge: 5,
+    actions: 3,
+    damage: "2d10+1d8+FOR (braço de prensa) ou Jato de Fogo",
+    isElite: true,
+    lore: "Os anões de Durrak construíram este Constructo há 400 anos para guardar a câmara de fundição mais profunda — onde o Ferro Negro puro era processado. O Constructo nunca recebeu ordem de descansar. Seus criadores morreram, a forja foi abandonada, mas ele continua sua ronda há quatro séculos, aquecendo os fornos que não precisam mais funcionar, prensando metal que não existe mais. Encontrá-lo requer descer até o Nível 3 da Mina de Durrak (missão da cadeia Muralha de Durrak) — ele guarda a câmara que contém o Ferro Negro puro necessário para a armadura de Dunforge.",
+    encounterSetup: "O grupo desce pela mina. Temperatura aumenta a cada nível. No Nível 3: o calor é sufocante (Resistência normal a cada 10 min ou −1 FOR temporária). A câmara tem teto alto (6 hex de altura) com uma Prensa Colossal no teto — cilindro de pedra e ferro de 8 toneladas suspenso por correntes envelhecidas. O Constructo patrulha. Há uma alavanca no lado norte da câmara. Os anões sabiam que precisariam de uma forma de destruí-lo se necessário.",
+    abilities: [
+      {
+        name: "Prensa Colossal — Mecânica de Arena",
+        desc: "MECÂNICA DE ARENA: No teto da câmara, há uma Prensa de 8 toneladas presa por 3 Correntes (HP 25 cada, Def 3). Destruir todas as 3 correntes faz a Prensa cair sobre o hex central da câmara. Se o Constructo estiver no hex central ou em qualquer hex adjacente (raio 2): sofre 8d10 de dano esmagamento — suficiente para destruí-lo se estiver abaixo de 180 HP. Com HP cheio: o golpe causa dano mas não o destrói (precisa ser enfraquecido primeiro). Há também uma ALAVANCA no norte (Percepção difícil para notar) — usá-la (1 Ação adjacente) faz a Prensa cair imediatamente, mas a Alavanca está do outro lado da câmara do Constructo."
+      },
+      {
+        name: "Armadura Indestrutível",
+        desc: "Passivo: Def.Física 14 — dificilmente penetrável. Imune a veneno, fogo, e condições mentais. Vulnerável a dano elétrico (+1d6 por dado) — o sistema elétrico interno é antiquado. Resistente a físico: qualquer arma não-mágica causa metade do dano."
+      },
+      {
+        name: "Jato de Forno",
+        desc: "1 Ação (1x/2 rodadas): abre o painel do peito e lança jato de fogo fundido em cone 4 hex. Dano: 3d8 de fogo. AGI (normal) para metade. Hexes atingidos ficam com Chão em Brasa por 2 rodadas (1d4 de fogo por rodada a quem estiver neles)."
+      },
+      {
+        name: "Braço de Prensa",
+        desc: "Ao acertar ataque físico: o alvo testea FOR (difícil) ou fica Preso sob o braço do Constructo (imóvel, 1 Ação para escapar). Enquanto Preso: o Constructo causa automaticamente 1d8 de esmagamento por rodada sem custo de Ação."
+      },
+      {
+        name: "Protocolo de Emergência",
+        desc: "Ao cair abaixo de 100 HP: ativa os Queimadores de Emergência — todos os hexes da borda do mapa ficam com Fogo por 3 rodadas (o Constructo tenta cozer tudo na câmara). O espaço navegável reduz drasticamente para o centro."
+      }
+    ],
+    hex: {
+      layout: "Câmara de forja 14x12 com teto alto (6 hex altitude)",
+      terrain: [
+        "Prensa Colossal (teto — 3 Correntes, HP 25 cada, Def 3)",
+        "Alavanca (parede norte — Percepção difícil para notar, ativa Prensa)",
+        "Fornos Laterais (leste e oeste — cobertura pesada mas Chão em Brasa adjacente)",
+        "Hex Central (marcado com X no chão anão — ponto de queda da Prensa)",
+        "Correntes (visíveis no teto — podem ser cortadas com armas ou atacadas à distância)"
+      ],
+      hint: "Estratégia A (direta): destruir 3 Correntes enquanto mantém o Constructo no centro. Ele sempre volta ao centro para patrulhar — empurrá-lo para longe dá tempo de cortar correntes. Estratégia B (alavanca): alguém precisa distrair o Constructo enquanto outro chega até a Alavanca no norte. O jato de fogo é o maior obstáculo para quem tenta acessar as correntes no teto (escalar: AGI normal, mas o calor aplica −1 Resistência)."
+    },
+    spells: [],
+    behavior: "Patrulha em volta do hex central em ciclos de 4 hexes. Ao detectar intrusos: centra-se e usa Jato de Forno. Se inimigo adjacente: Braço de Prensa. Nunca sai de raio 5 do centro da câmara (a programação original o mantém na ronda). Esta previsibilidade pode ser explorada para posicioná-lo sob a Prensa.",
+    loot: [
+      { item: "Núcleo Mecânico Anão (componente de artesanato raro)", chance: 80, qty: "1" },
+      { item: "Ferro Negro Puro (2kg — objetivo da missão Dunforge)", chance: 100, qty: "1" },
+      { item: "Manual de Construção Anão (INT normal: aprende Artesanato)", chance: 50, qty: "1" },
+      { item: "Engrenagem de Orichalco (material valioso — 20 ouro)", chance: 60, qty: "1d3" }
+    ]
+  },
+
+  {
+    id: "rei-dos-ratos-devorador",
+    name: "Skrix, o Rei dos Ratos",
+    difficulty: 2,
+    attrs: { FOR:2, DEX:4, AGI:4, INT:3, SAB:2 },
+    size: "normal",
+    category: "Humanoide Corrompido",
+    location: ["Esgoto da Cidade", "Porão de Taverna", "Armazém Abandonado", "Submundo Urbano"],
+    hp: 55, physDefense: 3, magDefense: 4, dodge: 16,
+    actions: 3,
+    damage: "1d6+1d4+DEX (adaga envenenada)",
+    isElite: true,
+    lore: "Skrix era um ladrão comum de Margem das Pedras — até encontrar o Ninho. Em algum lugar nos esgotos existe um Ninho Primordial de ratos que pulsa com energia corrompida do Deus Marcado. Quem passa tempo suficiente lá começa a entender a linguagem dos ratos. Depois começa a gostar. Depois... muda. Skrix ainda parece humano mas suas pupas são verticais e ele cheira a esgoto mesmo após banho. Controla todos os ratos num raio de 100m. O grupo encontra ele quando investigam desaparecimentos na cidade — pessoas que foram ao porão e não voltaram, comida que some dos armazéns, um comerciante que quer saber onde foi seu estoque.",
+    encounterSetup: "Skrix está no centro do Ninho — câmara circular nos esgotos com saída única. O chão da câmara central tem buracos de rato (raio 1 hex do centro) — por onde os ratos emergem. Paredes encharcadas. Teto baixo (2 hex de altura — sem voo eficaz). No fundo: gaiolas com os desaparecidos (3 PNJs — vivos, inconscientes). Skrix não ataca imediatamente — tenta negociar ('eles se juntaram ao Ninho voluntariamente') enquanto posiciona os ratos.",
+    abilities: [
+      {
+        name: "Enxame do Ninho — Mecânica de Arena",
+        desc: "MECÂNICA DE ARENA: o Ninho Primordial (hex central, HP 40, Def 0) pulsa e invoca 1d4 Ratos Comuns (HP 8, Def 0, dano 1d4, Dif 1) por rodada enquanto estiver intacto. Destruir o Ninho (40 HP de qualquer dano) para a invocação permanentemente e Skrix perde 'Linguagem dos Ratos' e 'Escudo do Enxame'. Com o Ninho destruído: Skrix fica desorientado por 1 rodada (perde todas as Ações) — a ligação quebrada o atordoa."
+      },
+      {
+        name: "Escudo do Enxame",
+        desc: "Passivo (requer Ninho intacto): enquanto houver 3+ Ratos ativos no campo, Skrix tem +2 Def.Física e +2 Def.Mágica (os ratos formam barreira viva). Com menos de 3 Ratos: perde o bônus. Os ratos podem ser mortos com ataques de área ou Dano de Área — mas o Ninho invoca mais."
+      },
+      {
+        name: "Linguagem dos Ratos",
+        desc: "Passivo (requer Ninho intacto): 1x por rodada como Ação Livre, Skrix direciona todos os ratos ativos a atacar 1 alvo específico — todos os ratos convergem para o mesmo hex neste turno, cada um atacando. Pode criar uma avalanche de 1d4+2 ataques simultâneos num único alvo."
+      },
+      {
+        name: "Instinto do Predador",
+        desc: "Passivo permanente: Skrix nunca pode ser surpreendido. Sempre age primeiro na Iniciativa se a rolagem empatar. Ao ser atacado em melee e tirar 4 ou menos na esquiva (d20): recua automaticamente 2 hexes antes de resolver o dano."
+      }
+    ],
+    hex: {
+      layout: "Câmara circular 8x8 com Ninho central e buracos de rato",
+      terrain: [
+        "Ninho Primordial (hex central — HP 40, Def 0, invoca ratos)",
+        "Buracos de Rato (raio 1 hex do centro — ratos emergem por aqui)",
+        "Gaiolas dos Reféns (parede norte — 3 PNJs inconscientes)",
+        "Água do Esgoto (faixa sul — Movimento custa +1, Acrobacia normal para não cair)",
+        "Teto Baixo (altura 2 — sem espaço para voo ou salto alto)"
+      ],
+      hint: "Prioridade absoluta: destruir o Ninho. Enquanto ele existe, Skrix regenera escudo e mais ratos surgem infinitamente. Um personagem vai direto ao Ninho enquanto os outros contêm Skrix e os ratos. Magia de área (Bola de Fogo, Campo de Relâmpagos) limpa os ratos mas pode acertar os reféns nas gaiolas — verificar posicionamento antes. Com o Ninho destruído: Skrix fica atordoado — 1 turno completo sem Ações é a janela para dano máximo."
+    },
+    spells: [],
+    behavior: "Começa tentando negociar. Quando combate inicia: posiciona-se no hex oposto ao Ninho (para protegê-lo indiretamente). Usa Linguagem dos Ratos para focar o personagem mais próximo do Ninho. Se o Ninho cair: entra em pânico genuíno e tenta fugir pelo esgoto (saída secreta — Percepção difícil para notar antes dele escapar).",
+    loot: [
+      { item: "Chave das Gaiolas (liberta os reféns)", chance: 100, qty: "1" },
+      { item: "Diário de Skrix (localização do Ninho original — info de arco)", chance: 80, qty: "1" },
+      { item: "Adaga do Rato Rei (adaga rara, +1d4 veneno)", chance: 50, qty: "1" },
+      { item: "Moedas roubadas (2d20 prata)", chance: 100, qty: "1" }
+    ]
+  },
+
+  {
+    id: "cavaleiro-renegado-invocador",
+    name: "Ser-Aldric, o Cavaleiro Renegado",
+    difficulty: 3,
+    attrs: { FOR:5, DEX:3, AGI:2, INT:3, SAB:2 },
+    size: "normal",
+    category: "Humanoide Elite",
+    location: ["Ruínas de Castelo", "Antiga Sala do Trono", "Estrada Abandonada", "Torre Caída"],
+    hp: 100, physDefense: 8, magDefense: 5, dodge: 12,
+    actions: 3,
+    damage: "1d10+1d8+FOR (espada bastarda) ou Magia Proibida",
+    isElite: true,
+    lore: "Ser-Aldric foi o melhor cavaleiro dos Reinos de Akaen até descobrir que seu rei ordenou o massacre da aldeia onde nasceu — 'para eliminar uma praga de ratos'. Ele desertou na noite do massacre, pegou a espada sagrada do templo que protegia, e jurou que a usaria para acabar com os que abusam do poder. Vinte anos depois, 'os que abusam do poder' expandiu-se para incluir mercadores, cobradores de impostos, qualquer nobre, e eventualmente qualquer um que viaja com ouro suficiente. Ele acredita genuinamente que é justo. A sala do trono das ruínas onde vive foi decorada com os brasões de todos que 'julgou'. O grupo encontra ele após investigar desaparecimentos de caravanas na Estrada do Leste.",
+    encounterSetup: "Ser-Aldric não ataca imediatamente — ele julga. Faz 3 perguntas ao grupo: 'De onde vieram? Para onde vão? O que carregam?' As respostas definem sua postura inicial. Se o grupo tem ex-escravos (como na Sessão 1): ele os considera inocentes e pode deixar passar — se não tiverem ouro suficiente para 'parecerem ricos'. A sala do trono tem uma grade mecanizada no teto (Investigação normal para notar) — Ser-Aldric pode ativá-la para dividir o campo ao meio como Ação.",
+    abilities: [
+      {
+        name: "Grade do Julgamento — Mecânica de Arena",
+        desc: "MECÂNICA DE ARENA: A sala tem uma Grade de Ferro no teto que pode ser soltada por uma alavanca atrás do trono (somente Ser-Aldric sabe, mas Investigação difícil revela). Quando ativada: a Grade cai e divide o mapa ao meio (norte-sul) — 6 hexes de barreira intransponível exceto por magia. Criaturas no hex de queda testam AGI (difícil) ou sofrem 2d8 de esmagamento. A Grade pode ser levantada novamente (Força normal, 2 Ações) ou destruída (HP 50, Def 4). Depois da queda, o combate acontece em dois lados separados."
+      },
+      {
+        name: "Golpe do Traidor",
+        desc: "1 Ação: ataque que ignora completamente a Def.Física se o alvo estiver de costas para Ser-Aldric ou flanqueado. Dano: 1d10+1d8+FOR+1d6 (o golpe pelas costas que ele recebeu uma vez). Ele só usa contra quem considera culpado — nunca contra quem declarou ser servo ou escravo."
+      },
+      {
+        name: "Magia Proibida — Correntes do Julgamento",
+        desc: "1 Ação de Magia (custa 1 Slot, roubado do templo): invoca Correntes de Luz em alvo a 5 hex. Alvo testea Força de Vontade (difícil). Falha: Preso por 3 rodadas e não pode atacar Ser-Aldric (as correntes julgam — quem é culpado fica imóvel). Sucesso: apenas −1 Movimento. Ele considera 'culpado' qualquer um que carregue mais de 20 moedas de ouro."
+      },
+      {
+        name: "Último Julgamento",
+        desc: "Passivo ao cair abaixo de 30% HP: Ser-Aldric para completamente por 1 rodada e olha para os brasões nas paredes. Qualquer personagem que falar com ele neste momento (SAB normal para abordagem correta) pode iniciar diálogo — ele pode ser convencido a parar se alguém conseguir fazê-lo questionar seus métodos (Persuasão difícil + mencionar a aldeia natal). Se convencido: larga a espada e se ajoelha. Se não convencido: volta a lutar com +1d8 de dano bônus (raiva)."
+      }
+    ],
+    hex: {
+      layout: "Sala do trono 14x8 com trono ao norte e Grade no teto",
+      terrain: [
+        "Trono (parede norte — cobertura pesada, alavanca da Grade atrás)",
+        "Grade do Julgamento (teto — cai ao meio do mapa quando ativada)",
+        "Brasões nas Paredes (decorativos — mencioná-los abre diálogo com Ser-Aldric)",
+        "Tapete Central (indica área de queda da Grade — Percepção normal para notar desgaste no teto)",
+        "Saída Sul (única saída — Ser-Aldric a bloqueia instintivamente)"
+      ],
+      hint: "A Grade divide o grupo — prepare-se antes que caia. Se cair com metade do grupo em cada lado: o lado com Ser-Aldric está em desvantagem numérica. Opção: deixar alguém próximo da alavanca do trono para desviar antes da queda. O Último Julgamento é a janela mais importante — Ser-Aldric é tecnicamente um aliado em potencial, não apenas um inimigo."
+    },
+    spells: ["Correntes do Julgamento (Slot, 5 hex)", "Ativação da Grade (Ação Livre, 1x/combate)"],
+    behavior: "Começa distante, no trono. Ativa a Grade no 2º turno se o combate começar. Alterna entre Golpe do Traidor (quem estiver flanqueado) e Correntes (quem tiver mais ouro). Na janela do Último Julgamento: genuinamente para — não é fraqueza, é o único momento em que ainda é humano.",
+    loot: [
+      { item: "Espada do Templo de Thurgomur (lendária — sagrada, +1d8 sagrado vs corruptos)", chance: 80, qty: "1" },
+      { item: "Diário do Julgamento (lista de todos que matou — info para NPCs)", chance: 100, qty: "1" },
+      { item: "Brasão da Aldeia Natal (item emocional — missão futura)", chance: 60, qty: "1" }
+    ]
+  },
+
+  {
+    id: "curador-parasita",
+    name: "Irmão Tolvan, o Curador",
+    difficulty: 3,
+    attrs: { FOR:1, DEX:2, AGI:1, INT:4, SAB:6 },
+    size: "normal",
+    category: "Humanoide Parasitado",
+    location: ["Templo Corrompido", "Hospital de Campanha", "Acampamento de Refugiados"],
+    hp: 65, physDefense: 2, magDefense: 7, dodge: 13,
+    actions: 3,
+    damage: "1d6+SAB (toque de cura invertida) ou Magias",
+    isElite: true,
+    lore: "Irmão Tolvan era um Clérigo de Thurgomur — genuinamente bom, cuidando de refugiados da última incursão do Deus Marcado. Seis meses atrás curou um 'ferido' que encontrou na estrada. O ferido era um Aralto em disfarce que implantou um Parasita do Eco nele — uma criatura invisível que habita o sistema nervoso e redireciona a Fé para energia corrupta. Tolvan não sabe que está doente. Ele acha que está curando. Quando 'cura' alguém, o Parasita drena a vitalidade do paciente para alimentar a si mesmo. Os refugiados que 'melhoraram' ficaram mais fracos a cada dia. O grupo encontra Tolvan num acampamento de refugiados onde pessoas 'curadas' por ele estão morrendo lentamente.",
+    encounterSetup: "O grupo não encontra um vilão — encontra um homem confuso e assustado que genuinamente acredita estar ajudando. Tolvan pode ser salvo: o Parasita do Eco pode ser expulso com Luz Sagrada de alta intensidade (magia de Nível 3 ou superior direcionada ao hospedeiro, causando 2d8 de dano sagrado ao Tolvan — o Parasita sai e materializa como criatura separada). Se o grupo matar Tolvan sem tentar salvar: o Parasita escapa e encontra um novo hospedeiro (potencialmente um dos personagens — SAB difícil para resistir).",
+    abilities: [
+      {
+        name: "Parasita do Eco — A Verdadeira Ameaça",
+        desc: "MECÂNICA DE ARENA: o Parasita do Eco (HP 30, Def 0, Esquiva 20, invisível) habita o corpo de Tolvan. Enquanto dentro: Tolvan recebe os efeitos das habilidades do Parasita involuntariamente. Se Tolvan cair a 0 HP OU receber 20+ de dano sagrado num turno: o Parasita materializa-se (força Tolvan a vomitá-lo literalmente) e age como criatura separada. O Parasita materializado tem: Toque de Drenagem (1d8+SAB, rouba HP e cura a si mesmo), Invisibilidade (se mover sem atacar), e busca imediatamente o hospedeiro com menor SAB."
+      },
+      {
+        name: "Cura Invertida",
+        desc: "1 Ação (Tolvan acredita que está curando): toca aliado ou inimigo a 2 hex. Em aliados: 'cura' 1d8 HP mas o alvo perde 1d6 de SAB temporária (o Parasita drena enquanto Tolvan alimenta — Tolvan não percebe). Em inimigos: causa 1d8 de dano de drenagem (acredita estar 'removendo corrupção'). Não pode ser revertida sem destruir o Parasita."
+      },
+      {
+        name: "Campo de Purificação Corrompida",
+        desc: "1 Ação de Magia: cria campo de 'purificação' em raio 3 hex. No campo: magias de cura causam metade do efeito (o Parasita interfere) e criaturas feridas dentro do campo sofrem 1d4 de drenagem por rodada (o campo puxa vitalidade). Tolvan está genuinamente tentando ajudar — o Parasita subverte tudo."
+      },
+      {
+        name: "Súplica do Clérigo",
+        desc: "Ao cair abaixo de 40% HP: Tolvan para de atacar e reza. SAB (normal) para perceber que a reza é genuína e ele não está fingindo. Neste momento: pode ser abordado com Persuasão (normal) ou Medicina (normal para identificar o Parasita com diagnóstico). Se identificado o Parasita: Tolvan para de resistir ao grupo e fica imóvel pedindo para ser salvo."
+      }
+    ],
+    hex: {
+      layout: "Acampamento de tendas 10x8 com reféns e pacientes",
+      terrain: [
+        "Tendas dos Refugiados (6 ao longo das bordas — pacientes dentro, podem ser acertados por área)",
+        "Altar de Thurgomur (centro-norte — se Tolvan chegar a 1 hex: Purificação 1x gratuita — remove Parasita sem dano)",
+        "Fogueira Central (centro — cobertura nula, iluminação, Luz Sagrada mais eficaz adjacente)",
+        "Suprimentos Médicos (nordeste — Medicina normal revela Parasita antes do combate)"
+      ],
+      hint: "O Altar é a solução mais elegante: manobrar Tolvan (não matar, não derrubar) para o hex adjacente ao Altar ativa Purificação automática. Alternativamente: 20+ dano sagrado num turno força o Parasita para fora. Magia de área pode machucar refugiados nas tendas — cuidado com posicionamento. Se o Parasita escapar e tentar possuir um personagem: SAB difícil. Falha = aquele personagem 'ajuda' o Parasita até o grupo forçá-lo para fora."
+    },
+    spells: ["Cura Invertida (toque, 2 hex)", "Campo de Purificação Corrompida (raio 3)"],
+    behavior: "Tolvan não quer lutar — defende-se enquanto tenta 'curar' o grupo. O Parasita usa ele como escudo (se ele morrer, o Parasita é exposto). Se o grupo for claramente superior: Tolvan faz Súplica e para. Se salvos: Tolvan fica devastado com o que fez involuntariamente e oferece seus serviços como aliado.",
+    loot: [
+      { item: "Parasita do Eco (amostra — informação sobre o Deus Marcado)", chance: 100, qty: "1" },
+      { item: "Cajado de Thurgomur de Tolvan (lendário se purificado)", chance: 80, qty: "1" },
+      { item: "Gratidão dos Refugiados (aliados ocasionais — safe house futura)", chance: 100, qty: "1" }
+    ]
+  },
+
+  {
+    id: "golem-de-gelo-puzzle",
+    name: "Colosso de Gelo de Atrelon",
+    difficulty: 3,
+    attrs: { FOR:7, DEX:0, AGI:0, INT:1, SAB:2 },
+    size: "colossal",
+    category: "Elemental Construído",
+    location: ["Torres Antigas de Atrelon", "Câmara Glacial", "Cume Nevado", "Cripta de Gelo"],
+    hp: 130, physDefense: 9, magDefense: 3, dodge: 6,
+    actions: 2,
+    damage: "2d8+FOR (pancada de gelo) + Congelamento em área",
+    isElite: true,
+    lore: "Os Magos de Atrelon que se aliaram aos Serpentarianos antes da Batalha Colossal criaram três Colossos de Gelo para guardar suas torres. Dois foram destruídos na guerra. O terceiro ainda guarda a Torre Leste de Atrelon — uma câmara onde está selada informação sobre o paradeiro de Sss'era antes da Batalha. O grupo pode precisar desta informação durante a campanha principal. O Colosso não é maligno — é um guardião cumprindo ordens de Magos mortos há 500 anos.",
+    encounterSetup: "A câmara tem quatro Cristais de Aquecimento nas paredes (criados pelos mesmos magos como sistema de segurança — se os Cristais fossem ativados, o Colosso congelaria). Os Cristais estão apagados mas funcionais. Ativar cada Cristal (Arcanismo normal + 1 Ação adjacente) aquece a câmara em 25%. Com 4 Cristais ativos: o Colosso congela completamente (imóvel, Def.Física reduzida a 0 por 3 rodadas — pode ser destruído facilmente ou simplesmente passar por ele).",
+    abilities: [
+      {
+        name: "Cristais de Aquecimento — Solução da Arena",
+        desc: "MECÂNICA DE ARENA: 4 Cristais nas paredes (Arcanismo normal + 1 Ação adjacente para ativar cada um). 1 Cristal: −2 Def.Física do Colosso. 2 Cristais: −4 Def.Física e −2 Ações. 3 Cristais: −6 Def.Física, −3 Ações, velocidade 1. 4 Cristais: Colosso congela completamente — Def.Física 0, imóvel 3 rodadas. O Colosso tenta destruir os Cristais (HP 20, Def 2 cada) — alcança apenas os da parede norte e sul (leste e oeste estão fora de alcance)."
+      },
+      {
+        name: "Ventania de Gelo",
+        desc: "1 Ação (1x/2 rodadas): expira ventania que empurra todas as criaturas em cone 5 hex. Empurrão: 3 hexes na direção da ventania. AGI (difícil) para resistir. Criaturas que baterem em parede: 1d6 extra de impacto. A ventania também apaga tochas e magias de luz menores — a câmara escurece se não houver fonte de luz mágica."
+      },
+      {
+        name: "Braço Congelante",
+        desc: "Ao acertar fisicamente: além do dano, o alvo acumula 1 carga de Congelamento. Com 3 cargas: Congelado (imóvel 1 rodada, FOR difícil para escapar por Ação). Cargas diminuem 1 por rodada naturalmente, mas a temperatura da câmara (muito baixa) impede que dimunuam mais de 1 por rodada."
+      },
+      {
+        name: "Armadura de Gelo Regenerativa",
+        desc: "Passivo: no início de cada turno, regenera 2 de Def.Física perdida (a câmara fria a mantém). Fogo cancela a regeneração e causa −3 de Def.Física adicional por turno de exposição. Com 4 Cristais ativos: a regeneração vira 0 e o processo inverte (+3 de vulnerabilidade por turno)."
+      }
+    ],
+    hex: {
+      layout: "Câmara circular 12x10 com 4 Cristais nas paredes cardeais",
+      terrain: [
+        "Cristal Norte (parede norte — ativável, destruível pelo Colosso)",
+        "Cristal Sul (parede sul — ativável, destruível pelo Colosso)",
+        "Cristal Leste (parede leste — ativável, FORA do alcance do Colosso)",
+        "Cristal Oeste (parede oeste — ativável, FORA do alcance do Colosso)",
+        "Chão Glacial (todo o mapa — Acrobacia normal para não cair ao correr)",
+        "Câmara Selada (parede norte — atrás do Cristal Norte, contém as informações)"
+      ],
+      hint: "Estratégia A: ativar Cristais Leste e Oeste primeiro (fora do alcance do Colosso), depois Norte e Sul rapidamente. Isso requer dividir o grupo: 2 em cada lado. O Colosso vai focar em quem estiver perto dos Cristais norte/sul. Ventania de Gelo pode jogar personagens para longe dos Cristais — posição nos hexes centrais é mais segura. Estratégia B: focar nos Cristais e aceitar o dano até todos os 4 estarem ativos — brutal mas funciona."
+    },
+    spells: [],
+    behavior: "Vai diretamente ao Cristal mais próximo que já estiver ativo e tenta destruí-lo. Nunca persegue quem se afasta — volta à posição central. Ventania de Gelo é usada quando 2+ inimigos estão no cone. Não pode processar múltiplas ameaças — foca uma de cada vez por ordem de proximidade.",
+    loot: [
+      { item: "Núcleo de Gelo Primordial (material lendário para armas de gelo)", chance: 70, qty: "1" },
+      { item: "Informação Selada de Atrelon (localização de Sss'era antes da guerra)", chance: 100, qty: "1" },
+      { item: "Cristal de Aquecimento (funcional — 3 usos de Fogo de Nível 2 armazenados)", chance: 40, qty: "1" }
+    ]
+  },
+
+  /* ═══════════════════════════════════════════════════════════════
+     DERIVADOS DE COLOSSAIS — Criaturas nascidas da influência,
+     sangue ou corrupção dos grandes seres do mundo de Aether.
+     Encontrados antes de chegar ao colossal pai.
+     ═══════════════════════════════════════════════════════════════ */
+
+  /* ─── DERIVADOS DE KARLAC — Grande Salamandra ───────────────── */
+
+  { id: "karlac-juvenil",
+    name: "Karlac Juvenil",
+    difficulty: 2,
+    attrs: { FOR:3, DEX:1, AGI:1, INT:0, SAB:1 },
+    size: "grande",
+    category: "Besta — Cria de Karlac",
+    location: ["Deserto Carmesim", "Oásis do Deserto", "Ruínas do Deserto", "Cratera de Calor"],
+    hp: 55, physDefense: 5, magDefense: 1, dodge: 10,
+    actions: 2,
+    damage: "1d8+1d6+FOR (mordida ardente) + 1d4 fogo passivo",
+    behavior: "Territorial e impulsivo — não é maligno, apenas imprevisível. Ataca qualquer coisa que entre em raio 5 hex sem aviso. Criança de 50-80 anos da Karlac adulta. Às vezes visto seguindo caravanas à distância, curioso. Um Druida com Manejo de Animais (difícil) pode acalmá-lo e até usá-lo como montaria temporária.",
+    lore: "Karlac Juvenis são crias que a Grande Salamandra deixa vagar pelo Deserto depois de anos de criação. Cada um tem o calor corporal de uma fornalha — a terra ao redor deles racha de seca. Encontrar um é sinal de que a Grande Salamandra esteve ali recentemente.",
+    abilities: [
+      { name: "Calor Irradiante", desc: "Passivo: qualquer criatura que começar o turno em hex adjacente ao Karlac Juvenil sofre 1d4 de fogo automático (calor irradiado do corpo). Criaturas com armadura metálica: 1d6 em vez de 1d4." },
+      { name: "Baforada de Brasas", desc: "1 Ação (1x/2 rodadas): expele cone de brasas 3 hex. Dano: 1d8+FOR de fogo. AGI (normal) para metade. Hexes atingidos ficam com Chão Quente por 2 rodadas (1d4 por rodada a quem estiver neles)." },
+      { name: "Couro Endurecido", desc: "Resistência a fogo (imune). Dano cortante reduzido em 2 por dado (o couro grosso absorve lâminas). Vulnerável a água e gelo: +1d6 por dado de frio." }
+    ],
+    hex: { layout: "Terreno aberto do deserto", hint: "O Calor Irradiante força o grupo a manter distância — melee é arriscado. Água e gelo são a fraqueza óbvia. Um Druida pode tentar comunicação antes do combate — SAB (difícil) para interpretar a linguagem corporal do juvenil e identificar se está com fome, com medo, ou territorial." },
+    spells: [],
+    loot: [{ item: "Escama de Karlac Juvenil (material raro para armaduras resistentes a fogo)", chance: 70, qty: "1d3" }, { item: "Dente de Karlac (talismã de calor — resistência a frio)", chance: 40, qty: "1" }] },
+
+  { id: "servo-da-salamandra",
+    name: "Cultista do Calor — Servo de Karlac",
+    difficulty: 2,
+    attrs: { FOR:2, DEX:1, AGI:1, INT:2, SAB:3 },
+    size: "normal",
+    category: "Humanoide Corrompido — Servo de Karlac",
+    location: ["Deserto Carmesim", "Acampamento do Culto", "Cratera Central"],
+    hp: 42, physDefense: 3, magDefense: 4, dodge: 12,
+    actions: 2,
+    damage: "1d6+SAB (tocha ritual) ou Magia de Calor",
+    behavior: "Fanático e calmo — não tem medo da morte, considera uma honra ser consumido por Karlac. Tentará sempre posicionar o grupo entre ele e o sol (ou qualquer fonte de calor). Nunca foge.",
+    lore: "Humanos e serpentarianos que passaram tempo suficiente perto da Grande Salamandra desenvolveram devoção instintiva. A pele deles ficou ressecada e quente ao toque. Alguns conseguem canalizar o calor de Karlac como magia rudimentar. O grupo pode encontrá-los guardando os territórios externos antes de chegar à cratera central.",
+    abilities: [
+      { name: "Bênção de Karlac", desc: "Passivo: imune a fogo. Ao cair a 0 HP, explode em chamas — todos em raio 1 hex sofrem 1d6 de fogo (o calor absorvido ao longo dos anos é liberado)." },
+      { name: "Invocar Calor", desc: "1 Ação de Magia: projeta onda de calor em alvo a 4 hex. Dano: 1d8+SAB de fogo. Se acertar: o alvo fica com sede intensa por 2 rodadas (−1 em todos os testes — o calor drena a concentração em ambiente de deserto)." },
+      { name: "Ritual do Fogo Vivo", desc: "Se 3+ Cultistas do Calor estiverem vivos e adjacentes entre si: formam Círculo Ritual (1 Ação por todos). Por 3 rodadas: qualquer Karlac Juvenil aliado na área ganha +1d6 de dano e regenera 3 HP/rodada. O Círculo é quebrado se qualquer um dos 3 for morto ou movido." }
+    ],
+    hex: { layout: "Deserto aberto", hint: "Os Cultistas em grupo são mais perigosos que individualmente — o Círculo Ritual amplifica qualquer Karlac Juvenil presente. Isolar e separar o trio antes que formem o Círculo é prioritário. A explosão de morte em raio 1 é uma armadilha para quem usa melee sem planejamento." },
+    spells: ["Invocar Calor (4 hex)"],
+    loot: [{ item: "Tocha Ritual de Karlac (3 usos de Invocar Calor armazenados)", chance: 40, qty: "1" }, { item: "Diário do Culto (localização da cratera central)", chance: 60, qty: "1" }] },
+
+  /* ─── DERIVADOS DE THARAK — Dracônico Vermelho Adulto ───────── */
+
+  { id: "draconica-filhote-tharak",
+    name: "Filhote Dracônico de Tharak",
+    difficulty: 2,
+    attrs: { FOR:2, DEX:2, AGI:2, INT:1, SAB:1 },
+    size: "normal",
+    category: "Dracônico — Filhote de Tharak",
+    location: ["Forte do Norte", "Caverna Dracônica", "Montanha Nevada"],
+    hp: 40, physDefense: 4, magDefense: 2, dodge: 14,
+    actions: 2,
+    damage: "1d6+1d4+FOR (garras e mordida pequena)",
+    behavior: "Protetor e assustado — os filhotes atacam o que ameaça o ninho, mas fogem se feridos acima de 50% HP (voltam para Tharak). Se o grupo não ameaçar o ninho, os filhotes observam à distância sem atacar. Matar um filhote na presença de Tharak ativa imediatamente sua habilidade Pai Protetor.",
+    lore: "Os filhotes de Tharak nasceram há menos de 10 anos — ainda pequenos para um Dracônico, mas já capazes de resistência considerável. Tharak os protege com ferocidade, mesmo doente. O grupo encontrará os filhotes primeiro, guardando a entrada da caverna enquanto Tharak descansa mais fundo.",
+    abilities: [
+      { name: "Sopro Nascente", desc: "1 Ação (1x/combate): sopro de chamas em cone 2 hex. Dano: 1d6+FOR de fogo. AGI (normal) para metade. Menos poderoso que o pai mas surpreendente para criaturas pequenas." },
+      { name: "Escamas Jovens", desc: "Resistência a fogo. Dano físico de armas sem bônus mágico: −1 por dado (as escamas jovens já endurecem). Vulnerável a frio: +1d4 por dado." },
+      { name: "Vínculo com o Pai", desc: "Passivo: se Tharak estiver no mesmo campo de batalha, o Filhote tem +1 em tudo e não foge mesmo ferido. Se Tharak for ferido abaixo de 50%: todos os Filhotes atacam imediatamente o responsável independente de qualquer outra ordem ou situação." }
+    ],
+    hex: { layout: "Entrada de caverna com terreno irregular", hint: "Os Filhotes estão protegendo o acesso a Tharak — não são o objetivo, são o aviso. Causar dano a um Filhote na presença de Tharak (mesmo involuntariamente por área) desencadeia o Pai Protetor. A abordagem não-violenta é possível: Manejo de Animais (normal), ou simplesmente não avançar em direção ao ninho." },
+    spells: [],
+    loot: [{ item: "Escama de Filhote Dracônico (material raro — resiste a fogo)", chance: 50, qty: "1d2" }, { item: "Garra de Filhote (componente para encantamento de fogo)", chance: 30, qty: "1" }] },
+
+  { id: "cavaleiro-draconico-tharak",
+    name: "Cavaleiro Dracônico — Servo de Tharak",
+    difficulty: 3,
+    attrs: { FOR:4, DEX:3, AGI:2, INT:2, SAB:2 },
+    size: "normal",
+    category: "Humanoide Dracônico",
+    location: ["Forte do Norte", "Passagem da Montanha", "Acampamento Dracônico"],
+    hp: 75, physDefense: 6, magDefense: 3, dodge: 12,
+    actions: 3,
+    damage: "1d10+1d6+FOR (lança com ponta dracônica) ou Sopro de Fogo (limitado)",
+    behavior: "Leal e honrado — foi escolhido por Tharak como guardião por demonstrar coragem e lealdade genuínas, não fanatismo. Não é vilão. Protege Tharak porque acredita que o Dracônico Vermelho não deve morrer em sofrimento. Pode negociar se o grupo provar intenção pacífica (Persuasão difícil — ele é cético mas não irracional).",
+    lore: "Havia um acampamento de guerreiros nômades nas montanhas do norte. Quando Tharak adoeceu, alguns deles não fugiram — ficaram, tentando entender o dragão. Tharak, surpreendido, não os matou. Eventualmente, alguns aprenderam a entender seus sinais. Os Cavaleiros Dracônicos são esses guerreiros — humanos que vivem na fronteira entre o mundo humano e o dracônico.",
+    abilities: [
+      { name: "Sopro Emprestado", desc: "1 Ação (2x/combate — concedido por Tharak): o Cavaleiro usa um fragmento do poder de Tharak para exhalar chamas. Cone 3 hex, 1d8+FOR de fogo. AGI (normal) para metade. Se Tharak não estiver vivo: esta habilidade não funciona." },
+      { name: "Escudo Dracônico", desc: "Reação: ao aliado Filhote ou ao próprio Tharak receber ataque dentro de 3 hex: o Cavaleiro interpõe-se e absorve até 10 HP do dano no lugar. Este sacrifício não causa dano ao Cavaleiro além dos 10 HP absolvidos." },
+      { name: "Resistência ao Fogo", desc: "Passivo: imune a dano de fogo (vivendo com Tharak, o corpo se adaptou). Ataques enquanto montado em Filhote (se conseguir montar): +1d6 de dano e +2 na Chance de Acerto (combate montado dracônico)." }
+    ],
+    hex: { layout: "Passagem de montanha com plataformas", hint: "O Cavaleiro Dracônico é um possível aliado — se o grupo demonstrar que não quer matar Tharak mas apenas ajudar. Persuasão (difícil) ou demonstrar conhecimento médico (Medicina normal para identificar a doença de Tharak) abre negociação. Em combate: foca defesa dos Filhotes, não ataque ao grupo." },
+    spells: [],
+    loot: [{ item: "Lança com Ponta Dracônica (arma rara — causa fogo)", chance: 50, qty: "1" }, { item: "Armadura de Escamas de Filhote (armadura rara — resistência a fogo)", chance: 30, qty: "1" }] },
+
+  /* ─── DERIVADOS DO LICH DE ATRELON ──────────────────────────── */
+
+  { id: "espectro-de-atrelon",
+    name: "Espectro Congelado de Atrelon",
+    difficulty: 2,
+    attrs: { FOR:0, DEX:3, AGI:3, INT:4, SAB:3 },
+    size: "normal",
+    category: "Morto-Vivo — Servo do Lich",
+    location: ["Montanhas de Atrelon", "Pico Nevado", "Túnel de Gelo", "Ruínas Congeladas"],
+    hp: 35, physDefense: 0, magDefense: 6, dodge: 16,
+    actions: 2,
+    damage: "1d6+INT (toque glacial — ignora Def.Física)",
+    behavior: "Silencioso e metódico — patrulha rotas ao Pico em padrão fixo. Não devia — simplesmente seguia a última ordem do Lich ('ninguém sobe'). Ao detectar intrusos: não grita nem alerta, apenas ataca em silêncio. O Lich não sabe de tudo que acontece nas encostas — cada Espectro age independentemente.",
+    lore: "Os Espectros Congelados são os restos de Magos que tentaram chegar ao Lich ao longo dos séculos — alguns para estudar, alguns para combater, alguns por curiosidade. O Lich os matou e os manteve como sentinelas. Estão congelados em diferentes estágios de decomposição — alguns ainda usam roupas de eras passadas.",
+    abilities: [
+      { name: "Toque Glacial", desc: "Cada acerto: alvo acumula 1 carga de Gelo (máx 3). Com 3 cargas: Congelado por 1 rodada, depois reseta. As cargas diminuem 1 por rodada em temperatura normal mas NO ambiente de Atrelon (frio extremo): as cargas não diminuem naturalmente." },
+      { name: "Forma Etérea", desc: "Passivo: imune a armas não-mágicas. Vulnerável a fogo (dobro de dano). A temperatura das Montanhas de Atrelon cancela parcialmente o fogo — dano de fogo é normal em vez de dobrado nos primeiros 2 hexes abaixo do Pico." },
+      { name: "Memória Congelada", desc: "1x/combate: o Espectro mostra uma imagem do que viu em vida — Percepção (normal) para o grupo vê fragmento de memória (pista sobre o Lich ou o caminho para o topo). É involuntário e o Espectro não sabe que faz isso." }
+    ],
+    hex: { layout: "Trilha de montanha nevada", hint: "As Memórias Congeladas são pistas de navegação — cada Espectro derrotado pode revelar fragmento do caminho ou fraqueza do Lich. O acúmulo de Gelo sem diminuição natural (ambiente frio) torna cada acerto mais perigoso que parece. Fogo é eficaz mas o ambiente reduz o bônus." },
+    spells: [],
+    loot: [{ item: "Cristal de Memória (contém 1 visão do passado de Atrelon)", chance: 50, qty: "1" }, { item: "Fragmento de Gelo Eterno (material para armas de frio)", chance: 40, qty: "1d2" }] },
+
+  { id: "golem-osso-gelo",
+    name: "Golem de Osso e Gelo",
+    difficulty: 3,
+    attrs: { FOR:5, DEX:0, AGI:0, INT:1, SAB:1 },
+    size: "grande",
+    category: "Construto — Criação do Lich",
+    location: ["Pico de Atrelon", "Torre do Gelo Eterno", "Câmara do Filactério"],
+    hp: 95, physDefense: 8, magDefense: 2, dodge: 7,
+    actions: 2,
+    damage: "1d10+1d8+FOR (punho de osso congelado) + respingo de gelo",
+    behavior: "Guardião mecânico — patrulha as câmaras internas da Torre do Lich em rotas fixas. Ataca tudo que não emitir o 'sinal de servo' (um cristal que o Lich dá a seus servos — o grupo não tem). Pode ser enganado se alguém carregar um Cristal de Memória de um Espectro derrotado (o Golem o reconhece como servo morto — fica confuso por 1 rodada).",
+    lore: "O Lich criou os Golens de Osso e Gelo com os esqueletos de guerreiros que tentaram destruir seu Filactério. Cada Golem contém 3-4 esqueletos fundidos com gelo e mantidos por magia de necromancia. Se destruído: os ossos ainda se movem por 1d4 rodadas tentando se remontar (podem ser mantidos separados ou queimados para prevenir isso).",
+    abilities: [
+      { name: "Respingo Glacial", desc: "Passivo em todos os ataques físicos: ao acertar, respingo de gelo atinge todos em hexes adjacentes ao alvo — 1d4 de frio (sem resistência). Criaturas com armadura metálica: 1d6." },
+      { name: "Invulnerabilidade ao Frio", desc: "Imune a frio e gelo. Fogo causa +1d6 por dado. Em câmaras aquecidas (artificialmente acima de 0°C): perde 2 de Def.Física por rodada que permanecer no calor." },
+      { name: "Remontagem", desc: "Ao cair a 0 HP: os ossos separados continuam se movendo por 1d4 rodadas (HP 1 cada fragmento, Def 0, dano 1d4). Se todos os fragmentos forem destruídos ou impedidos de se unir durante esse tempo: morte permanente. Fogo aplicado ao Golem caído impede a Remontagem automaticamente." },
+      { name: "Peso Colossal", desc: "Passivo: ao se mover para hex adjacente a inimigo pequeno ou normal, o alvo testea FOR (normal) ou é empurrado 1 hex (o volume do Golem empurra). Terreno de neve ou gelo: o Golem não tem penalidade de Movimento." }
+    ],
+    hex: { layout: "Corredor glacial da Torre", hint: "A Remontagem é o elemento mais importante — equipas com fogo devem reservar uma aplicação para o Golem caído. O Cristal de Memória de Espectro derrotado pode comprar 1 rodada de confusão — suficiente para reposicionar. Fogo aquece a câmara gradualmente (-2 Def.Física por rodada de uso intenso de fogo na sala)." },
+    spells: [],
+    loot: [{ item: "Fragmento de Filactério Falso (isca — o Lich criou iscas)", chance: 40, qty: "1" }, { item: "Osso Glacial (material para armas de gelo)", chance: 60, qty: "1d4" }] },
+
+  /* ─── DERIVADOS DA SERPENTE DE JURGMUND ─────────────────────── */
+
+  { id: "sacerdote-escama-jurgmund",
+    name: "Sacerdote da Escama — Servo de Jurgmund",
+    difficulty: 2,
+    attrs: { FOR:1, DEX:2, AGI:2, INT:3, SAB:4 },
+    size: "normal",
+    category: "Serpentariano Elite — Servo Divino",
+    location: ["Serpentara", "Castelo da Cobra", "Templo de Jurgmund", "Câmara do Culto"],
+    hp: 45, physDefense: 3, magDefense: 6, dodge: 13,
+    actions: 3,
+    damage: "1d6+SAB (cajado de osso de serpente) ou Magia",
+    behavior: "Calculado e sereno — não sente medo porque acredita genuinamente que morrer em serviço de Jurgmund é ascensão. Prioriza manter aliados vivos (buffando e curando) sobre atacar diretamente. Se capturado: não fala nada relevante — mas sua roupa tem marcas que indicam a hierarquia do Culto (Investigação normal para decifrar).",
+    lore: "Quem serve a Serpente Imortal de Jurgmund por tempo suficiente começa a mudar fisicamente: a pele endurece levemente, os olhos ficam com pupila horizontal, e a língua se bifurca. Os Sacerdotes da Escama são o terceiro nível da hierarquia serpentariana — acima dos Patrulheiros mas abaixo do Grande Sacerdote. São encontrados no interior do Castelo da Cobra e nos templos regionais.",
+    abilities: [
+      { name: "Escama Abençoada", desc: "Passivo: pele parcialmente escamada concede Resistência a veneno (imune a venenos Dif.1-2). Venenos Dif.3+ causam metade do efeito." },
+      { name: "Veneno Sagrado de Jurgmund", desc: "1 Ação de Magia: aplica bênção de veneno sagrado em aliado ou em si mesmo. Por 3 rodadas: próximos ataques causam +1d6 de veneno sagrado (só antídoto divino remove). Se aplicado em si mesmo e morrer enquanto ativo: o veneno se propaga em raio 2 hex (1d6 de veneno, SAB normal para resistir)." },
+      { name: "Palavra da Serpente", desc: "1 Ação de Magia (1x/combate): pronuncia palavras sagradas em dracônico serpentariano. Aliados serpentarianos em raio 6 hex recuperam 1d8 HP e ganham +1 Ação neste turno. Inimigos testam Força de Vontade (normal) ou ficam com −1d4 nos ataques por 1 rodada (a língua da serpente corrói a confiança)." }
+    ],
+    hex: { layout: "Templo com pilares e altares", hint: "A Palavra da Serpente aplicada no momento certo pode dar Ações extras a um grupo inteiro de serpentarianos — matar o Sacerdote primeiro elimina esse multiplicador. A propagação do veneno na morte cria zona de risco — personagens de melee devem sair do raio 2 antes do Sacerdote cair." },
+    spells: ["Veneno Sagrado de Jurgmund", "Palavra da Serpente"],
+    loot: [{ item: "Escama de Sacerdote (material que resiste a veneno)", chance: 50, qty: "1d2" }, { item: "Cajado de Osso de Serpente (arma mágica — Veneno Sagrado 3 usos)", chance: 30, qty: "1" }, { item: "Símbolo da Hierarquia (revela estrutura do Culto)", chance: 80, qty: "1" }] },
+
+  { id: "cobra-guardiao-julgmund",
+    name: "Cobra Guardiã de Jurgmund",
+    difficulty: 3,
+    attrs: { FOR:4, DEX:4, AGI:4, INT:3, SAB:4 },
+    size: "grande",
+    category: "Serpentariano Sagrado — Criatura de Jurgmund",
+    location: ["Câmara Sagrada de Jurgmund", "Corredor do Templo", "Ante-câmara da Serpente"],
+    hp: 85, physDefense: 5, magDefense: 7, dodge: 16,
+    actions: 3,
+    damage: "1d8+1d6+DEX (mordida sagrada) + veneno divino",
+    behavior: "Guardião puro — não tem personalidade, apenas propósito. Não negocia, não foge, não hesita. Exatamente como a Serpente Imortal, mas menor e mais rápida. Se o grupo estiver em missão com bênção de Jurgmund (impossível normalmente — apenas se aliados com o Culto): a Cobra os deixa passar sem atacar.",
+    lore: "Cobras que viveram na presença da Serpente Imortal por décadas absorvem fragmentos de sua divindade. Crescem além do natural, ficam semi-translúcidas, e desenvolvem resistência mágica que não pertence a criaturas mortais. São a última defesa antes da câmara da Serpente Imortal — qualquer um que chegue até elas mereceu chegar até elas.",
+    abilities: [
+      { name: "Veneno Divino Menor", desc: "Cada mordida injeta veneno divino. SAB (difícil) para resistir. Falha: 1d8 de veneno por rodada por 4 rodadas. Antídotos comuns não funcionam — apenas magia sagrada ou a Bênção de Jurgmund. Acumula: segunda mordida não-resistida aumenta para 1d10/rodada." },
+      { name: "Constrição Sagrada", desc: "Ao acertar 2 ataques no mesmo alvo no mesmo turno: o alvo fica Preso (enrolado). Enquanto Preso: a Cobra causa automaticamente 1d6+FOR de esmagamento por rodada sem custo. O alvo pode escapar com FOR (difícil) gastando 2 Ações. Aliados adjacentes podem ajudar: FOR (normal) em vez de difícil." },
+      { name: "Escamas Translúcidas", desc: "Passivo: 30% de chance (d10 ≤ 3) de ataques passarem através das escamas sem causar dano (a semi-translucidez confunde a trajetória do golpe). Magias: 50% de chance (d10 ≤ 5). Não funciona contra dano sagrado ou armas de Thurgomur." }
+    ],
+    hex: { layout: "Corredor estreito antes da câmara sagrada", hint: "A Constrição é devastadora em corredores estreitos — o alvo Preso bloqueia o hex e impede que aliados passem facilmente. Liberar o alvo preso é prioridade antes de focar a Cobra. A resistência de 30-50% torna ataques imprecisos especialmente frustrantes — múltiplas Ações de Combate por turno reduzem o impacto da sorte." },
+    spells: [],
+    loot: [{ item: "Presa da Cobra Guardiã (reagente para Veneno Divino)", chance: 60, qty: "1d2" }, { item: "Escama Translúcida (material para item mágico de resistência)", chance: 40, qty: "1d3" }, { item: "Bênção Menor de Jurgmund (passiva: +1 SAB por 1 sessão)", chance: 30, qty: "1" }] },
+
+  /* ─── DERIVADOS DE MAGNALAGA — Tartaruga Ancestral ──────────── */
+
+  { id: "anao-casco-guardiao",
+    name: "Guardião do Casco — Anão da Cidadela",
+    difficulty: 2,
+    attrs: { FOR:3, DEX:1, AGI:1, INT:2, SAB:2 },
+    size: "normal",
+    category: "Anão — Guardião de Magnalaga",
+    location: ["Cidadela do Casco", "Casco de Magnalaga", "Porto de Embarque do Lago"],
+    hp: 50, physDefense: 6, magDefense: 2, dodge: 10,
+    actions: 2,
+    damage: "1d8+1d4+FOR (martelo de casco)",
+    behavior: "Suspeito mas justo — a Cidadela tem regras, não hostilidade. O Guardião pede senha ou identificação. Grupos sem apresentação válida são escoltados (não atacados) até um oficial. Se o grupo tentar forçar entrada: combate. Se tiver carta de Dunforge ou bênção de Thurgomur: acesso imediato.",
+    lore: "Os anões que vivem no casco de Magnalaga há gerações desenvolveram relação simbiótica com a tartaruga — ela os protege com o casco, eles removem parasitas e detritos que se acumulam nela. Os Guardiões do Casco são a milícia desta cidade viva. Não são hostis — são cautelosos. A Cidadela recebe viajantes, mas com protocolo rigoroso.",
+    abilities: [
+      { name: "Formação do Casco", desc: "Se 2+ Guardiões do Casco estiverem adjacentes: ambos ganham +2 Def.Física e +1 na Chance de Defesa com escudo (a formação anã é defensiva por natureza). A formação não pode ser quebrada por Derrubada se ambos testarem FOR (normal) simultaneamente." },
+      { name: "Martelar a Escama", desc: "Ao atacar inimigo com armadura metálica ou Def.Física 5+: +1d6 de dano extra (treinamento específico para criaturas do lago, que têm carapaças)." },
+      { name: "Chamado de Reforço", desc: "1 Ação (1x/combate): grita chamada de alerta. Em 1d3 rodadas chegam 1d4 Guardiões adicionais se a luta for dentro da Cidadela. Fora da Cidadela: não há reforços — mas o grito pode alertar criatura do lago próxima (Mestre decide)." }
+    ],
+    hex: { layout: "Cidadela no casco de Magnalaga", hint: "Guardiões em formação são difíceis de quebrar — ataques de área são mais eficientes que físicos individuais. A janela de reforços de 1d3 rodadas é a urgência: terminar o combate antes de chegarem. A situação ideal é evitar o combate inteiramente com a carta de Dunforge." },
+    spells: [],
+    loot: [{ item: "Martelo do Casco (arma com bônus contra criaturas de carapaça)", chance: 40, qty: "1" }, { item: "Escudo de Casco de Magnalaga (escudo mágico — resiste a água)", chance: 25, qty: "1" }] },
+
+  { id: "caranguejo-das-profundezas",
+    name: "Caranguejo Colossal das Profundezas do Lago",
+    difficulty: 3,
+    attrs: { FOR:6, DEX:1, AGI:0, INT:0, SAB:2 },
+    size: "colossal",
+    category: "Besta Aquática — Parasita de Magnalaga",
+    location: ["Profundezas do Lago Central", "Fundo do Casco de Magnalaga", "Caverna Subaquática"],
+    hp: 100, physDefense: 9, magDefense: 1, dodge: 7,
+    actions: 2,
+    damage: "1d12+1d8+FOR (pinça colossal) + Esmagar",
+    behavior: "Puramente instintivo — ataca qualquer movimento próximo. Parasita legítimo de Magnalaga (a própria tartaruga o tolera pois ele come outros parasitas menores). Os Guardiões do Casco às vezes contratam aventureiros para removê-lo quando fica grande demais e começa a arrancar placas do casco.",
+    lore: "Caranguejos comuns do Lago Central que vivem na parte inferior do casco de Magnalaga há séculos crescem absurdamente — alimentados pelos nutrientes que a tartaruga absorve e pelos parasitas menores que caçam. Um Caranguejo das Profundezas adulto pode ser maior que uma carroça. Magnalaga os tolera até certo tamanho; depois de um certo ponto, é trabalho dos anões lidar com eles.",
+    abilities: [
+      { name: "Pinça de Abertura", desc: "Ao acertar ataque: além do dano, o alvo testea FOR (difícil) ou fica Preso na pinça. Enquanto Preso: 1d8+FOR de esmagamento automático por rodada. A pinça segura 1 criatura de cada vez. Libertar: FOR (difícil), 2 Ações. Aliados podem ajudar: FOR (normal)." },
+      { name: "Carapaça Abissal", desc: "Resistência a dano físico de armas não-mágicas (−3 por dado). Imune a frio. Vulnerável a fogo (terreno subaquático torna improvável — mas magia de fogo funciona normalmente). Qualquer ataque que cause Perfurante em vez de Cortante ou Contundente ignora −1 da resistência da carapaça (perfura as juntas)." },
+      { name: "Varredura de Pernas", desc: "1 Ação (1x/2 rodadas): varre o chão com as 8 pernas. Todos em raio 2 hex testam AGI (normal) ou caem Derrubados e são empurrados 2 hex. O Caranguejo então pode avançar para o hex desocupado." }
+    ],
+    hex: { layout: "Fundo do casco — terreno rochoso úmido", hint: "A Pinça é o maior perigo — um personagem Preso em combate subaquático (se aplicável) também pode estar se afogando. Ataques Perfurantes (adagas, lanças, flechas) são mais eficientes contra a carapaça. Forçar o Caranguejo para área estreita neutraliza a Varredura de Pernas." },
+    spells: [],
+    loot: [{ item: "Carapaça de Caranguejo das Profundezas (material raro para armadura aquática)", chance: 70, qty: "1d3" }, { item: "Pinça do Caranguejo (ferramenta de escalada — suporta 200kg)", chance: 40, qty: "1" }] },
+
+  /* ─── DERIVADOS DO DEUS MARCADO — Avatar ─────────────────────── */
+
+  { id: "arauto-menor-deus-marcado",
+    name: "Arauto da Marca",
+    difficulty: 3,
+    attrs: { FOR:3, DEX:3, AGI:3, INT:4, SAB:4 },
+    size: "normal",
+    category: "Campeão do Deus Marcado",
+    location: ["Qualquer lugar com Corrupção", "Altar da Marca", "Área Maldita", "Onde o Avatar Passou"],
+    hp: 80, physDefense: 5, magDefense: 6, dodge: 14,
+    actions: 3,
+    damage: "1d8+1d6 (lâmina da marca) ou Magias da Corrupção",
+    behavior: "Metodicamente cruel — não tem emoções mas simula raiva, medo e alegria para manipular. Sempre está cumprindo um objetivo específico (rastrear Aela, destruir um santuário, corromper um NPC). O combate é apenas um obstáculo para ele — se o grupo for mais fraco, luta. Se for mais forte, foge para cumprir a missão de outra forma.",
+    lore: "O Arauto da Marca que perseguiu Theodor é o mesmo que o grupo vê de longe no início da campanha. Não é único — há vários Arautos, cada um cumprindo missão separada do Deus Marcado. São humanos que cederam voluntariamente ao Deus Marcado em troca de poder. A Marca no pescoço é o símbolo do contrato. Matar um Arauto não quebra o contrato — outro toma o lugar na mesma missão.",
+    abilities: [
+      { name: "Marca Propagada", desc: "Ao acertar 3x o mesmo alvo no combate: tenta propagar a Marca. O alvo testea Força de Vontade (difícil). Falha: ganha Maldição da Marca (−1 em todos os testes por sessão, removível apenas em Santuário de Thurgomur ou Sss'era). O Arauto é avisado da localização do alvo marcado por 1 semana." },
+      { name: "Escudo da Corrupção", desc: "Passivo: magias de cura causam metade do efeito no Arauto (a corrupção rejeita energia positiva). Maldições aplicadas nele não funcionam (já está comprometido). Ao receber dano sagrado: −2 Def.Física por turno afetado (ponto fraco genuíno)." },
+      { name: "Fragmento do Avatar", desc: "1 Ação (1x/combate): canaliza brevemente o Avatar. Por 2 rodadas: +1d8 em todos os ataques, imune a Derrubado e Preso, e qualquer aliado corrompido em raio 6 hex recebe +2 em tudo. Após o Fragmento: o Arauto fica Exausto (−1 Ação) por 2 rodadas (o corpo mortal não suporta bem a canalização)." },
+      { name: "Missão Prioritária", desc: "Passivo: o Arauto sempre tem um objetivo além de matar o grupo. Se o objetivo for cumprido durante o combate (ex: ele chegar ao Altar da Marca, ou tocar a menina Aela, ou destruir o item que protegem): ele recua imediatamente sem continuar lutando, mesmo se o grupo estiver vencendo." }
+    ],
+    hex: { layout: "Variável — segue o grupo para qualquer arena", hint: "A Missão Prioritária é a mecânica mais importante: identificar o que o Arauto está tentando fazer neste combate específico e impedi-lo é mais importante que matá-lo. Dano sagrado é a fraqueza principal. A Marca Propagada em 3 acertos sequenciais é prioridade de prevenção — não deixar o mesmo personagem ser alvo 3 vezes." },
+    spells: ["Fragmento do Avatar (1x/combate, 2 rodadas)", "Marca Propagada (3 acertos)"],
+    loot: [{ item: "Símbolo da Marca (item de missão — informação sobre o Deus Marcado)", chance: 100, qty: "1" }, { item: "Lâmina da Marca (arma mágica — +1d4 de corrupção por acerto)", chance: 40, qty: "1" }, { item: "Fragmento de Conhecimento do Arauto (pista sobre próximo objetivo)", chance: 70, qty: "1" }] },
+
+  /* ═══════════════════════════════════════════════════════════════
+     MONSTROS DE GRUPO — O nome do grupo aparece entre parênteses.
+     Cada grupo tem lore compartilhado explicando por que são
+     encontrados juntos. Grupos têm sinergia tática entre si.
+     ═══════════════════════════════════════════════════════════════ */
+
+  /* ══════════════════════════════════════════════════════════════
+     GRUPO: Legião do Lich do Pântano
+     Lore: O Pantano do Véu Cinzento, a leste do Rio Mara, esconde
+     a cripita de Varek — um Necromante que morreu antes de terminar
+     seu filactério. Seu espírito ficou preso num estado semi-lich,
+     incapaz de descansar ou de viver. Por 200 anos ele criou uma
+     Legião de mortos-vivos com os viajantes que se perderam no
+     pântano. O grupo os encontra ao investigar desaparecimentos
+     no caminho norte ou ao tentar atravessar o pântano.
+     ══════════════════════════════════════════════════════════════ */
+
+  { id: "esqueleto-arqueiro-lich-pantano",
+    name: "Esqueleto Arqueiro (Legião do Lich do Pântano)",
+    difficulty: 2,
+    attrs: { FOR:1, DEX:3, AGI:1, INT:0, SAB:0 },
+    size: "normal", category: "Morto-Vivo",
+    location: ["Pântano do Véu Cinzento", "Margem do Rio Mara", "Floresta Pantanosa"],
+    hp: 28, physDefense: 2, magDefense: 1, dodge: 13,
+    actions: 2, damage: "1d8+DEX (flecha podre) — alcance 6 hex",
+    group: "Legião do Lich do Pântano",
+    groupRole: "Ataque à distância — fica em posição elevada (árvores, troncos) e cobre os guerreiros com flechas.",
+    groupSynergy: "Enquanto um Esqueleto Guerreiro da Legião estiver em combate melee com um alvo, o Arqueiro tem +1 na Chance de Acerto contra esse alvo (o guerreiro o mantém ocupado).",
+    abilities: [
+      { name: "Flecha de Osso Podre", desc: "A flecha tem veneno de pântano residual: acerto causa Infecção (−1 FOR temporária por rodada por 2 rodadas). Cumulativo: 3 acertos = −3 FOR. Antídoto ou Medicina (normal) interrompe." },
+      { name: "Posição Elevada", desc: "Passivo: se estiver em hex acima do terreno (tronco, galho, plataforma): +1 Chance de Acerto e +1d4 de dano." },
+      { name: "Imune a Condições Mortais", desc: "Imune a veneno, sangramento, medo e doenças. Armas não-mágicas causam −1 de dano por dado (ossos dispersam o impacto). Vulnerável a dano contundente: +1 por dado." }
+    ],
+    hex: { layout: "Pântano com névoa (visibilidade reduzida a 5 hex)", hint: "O Arqueiro usa névoa e posição elevada — Percepção (difícil) para localizá-lo na névoa do pântano. Com um Esqueleto Guerreiro na frente, o Arqueiro ganha vantagem. Magia de luz dissipa a névoa local por 3 rodadas, revelando posição." },
+    spells: [], behavior: "Fica parado em posição elevada e atira. Nunca se move se tiver linha de visão. Se o guerreiro aliado cair: recua 3 hexes e continua atirando.", loot: [{ item: "Flechas Podres (1d6)", chance: 60, qty: "1d6" }, { item: "Fragmento de Osso do Pântano (ingrediente de poção)", chance: 30, qty: "1" }] },
+
+  { id: "esqueleto-guerreiro-lich-pantano",
+    name: "Esqueleto Guerreiro (Legião do Lich do Pântano)",
+    difficulty: 2,
+    attrs: { FOR:2, DEX:1, AGI:1, INT:0, SAB:0 },
+    size: "normal", category: "Morto-Vivo",
+    location: ["Pântano do Véu Cinzento", "Margem do Rio Mara", "Floresta Pantanosa"],
+    hp: 35, physDefense: 4, magDefense: 0, dodge: 11,
+    actions: 2, damage: "1d8+1d4+FOR (espada enferrujada)",
+    group: "Legião do Lich do Pântano",
+    groupRole: "Combate corpo a corpo — avança em linha reta para o inimigo mais próximo. Tanque do grupo.",
+    groupSynergy: "Se adjacente a um Zumbi Explosivo da Legião: empurra o Zumbi em direção ao inimigo como Ação Livre (o Guerreiro usa o Zumbi como arma viva). O Zumbi ainda explode normalmente ao morrer.",
+    abilities: [
+      { name: "Ossatura do Pântano", desc: "Os ossos encharcados do pântano são resilientes: armas cortantes causam −2 por dado. Contundente: dano normal. Fogo: +1d6 (os ossos ressecam e pegam fogo facilmente)." },
+      { name: "Marcha Imparável", desc: "Passivo: não pode ser Derrubado ou Atordoado (o Lich o sustenta magicamente). Movimento sempre 4, mesmo em terreno de pântano (lama, água rasa)." },
+      { name: "Reanimar", desc: "Se destruído com dano não-sagrado: 20% de chance (d10 ≤ 2) de se reanimar com 5 HP no próximo turno do Lich. Dano sagrado ou fogo: sem Reanimar." }
+    ],
+    hex: { layout: "Pântano com obstáculos de barro e raízes", hint: "A Marcha Imparável o torna inútil de empurrar ou derrubar — focar em dano e matar rápido é o caminho. Fogo é a fraqueza mais acessível. O Guerreiro empurrar o Zumbi Explosivo é a sinergia mais perigosa — reposicionar o Zumbi antes que o Guerreiro chegue perto é prioritário." },
+    spells: [], behavior: "Avança direto sem desvio. Se houver Zumbi Explosivo aliado próximo: empurra-o na direção do grupo. Prioriza personagem que atacou o Arqueiro.", loot: [{ item: "Espada Enferrujada do Pântano (sucata — vale 1 bronze)", chance: 80, qty: "1" }, { item: "Osso do Pântano (material alquímico)", chance: 25, qty: "1" }] },
+
+  { id: "zumbi-do-pantano-lich",
+    name: "Zumbi Explosivo do Pântano (Legião do Lich do Pântano)",
+    difficulty: 2,
+    attrs: { FOR:3, DEX:0, AGI:0, INT:0, SAB:0 },
+    size: "normal", category: "Morto-Vivo",
+    location: ["Pântano do Véu Cinzento", "Margem do Rio Mara"],
+    hp: 38, physDefense: 2, magDefense: 0, dodge: 7,
+    actions: 1, damage: "1d6+FOR (soco podre) ou Explosão",
+    group: "Legião do Lich do Pântano",
+    groupRole: "Arma viva — usado pelo Guerreiro como bomba. Funciona sozinho mas é devastador em combinação.",
+    groupSynergy: "O Guerreiro da Legião pode empurá-lo como Ação Livre. Quando explode, os gases do pântano amplificam a explosão para raio 3 hex (em vez de 2) e causa veneno adicional (1d4/rodada, 2 rodadas).",
+    abilities: [
+      { name: "Explosão de Gás do Pântano", desc: "Ao morrer: explode. Raio 3 hex (amplificado pelo gás do pântano vs. raio 2 normal). Dano: 2d6 de putrefação + Envenenado (1d4/rodada, 2 rodadas). AGI (normal) para metade. Encadeia com outros Zumbis no raio." },
+      { name: "Avanço Lento", desc: "Velocidade 3 em terra firme, 2 em lama. Nunca desvia. Sempre vai em direção ao inimigo mais próximo." }
+    ],
+    hex: { layout: "Pântano", hint: "O encadeamento de explosões é mais perigoso que qualquer ataque individual. Matar um Zumbi longe dos outros e do grupo é sempre a prioridade." },
+    spells: [], behavior: "Avança lentamente. Se um Guerreiro Esqueleto empurrá-lo: vai até o destino. Se não: apenas avança.", loot: [{ item: "Gás do Pântano Engarrafado (2 doses — pode ser usado como bomba)", chance: 30, qty: "1" }] },
+
+  { id: "varek-lich-semi",
+    name: "Varek, o Lich Incompleto (Legião do Lich do Pântano)",
+    difficulty: 4,
+    attrs: { FOR:2, DEX:3, AGI:3, INT:7, SAB:5 },
+    size: "normal", category: "Morto-Vivo Elite",
+    location: ["Cripta Central do Pântano"],
+    hp: 130, physDefense: 3, magDefense: 10, dodge: 15,
+    isElite: true,
+    group: "Legião do Lich do Pântano",
+    groupRole: "Líder e invocador — controla toda a Legião à distância.",
+    groupSynergy: "Enquanto Varek viver: todos os mortos-vivos da Legião no campo têm Reanimar 40% (em vez de 20%) e agem com +1 Ação por turno. Ao morrer: todos os mortos-vivos da Legião presentes caem simultaneamente (o elo mágico se desfaz).",
+    abilities: [
+      { name: "Filactério Incompleto", desc: "Varek tentou criar um filactério mas falhou — o objeto existe (uma gema negra no altar central) mas está danificado. Ao cair a 0 HP: se o Filactério ainda existir no altar, Varek reconstitui com 40 HP em 2 rodadas. Destruir o Filactério (HP 20, Def 0) primeiro previne a reconstituição. O Filactério fica a 8 hex de Varek propositalmente." },
+      { name: "Invocar do Pântano", desc: "1 Ação de Magia (1x/2 rodadas): invoca 1d4 Zumbis do Pântano de qualquer hex de água ou lama no campo. Dura enquanto o Filactério existir. Sem Filactério: não pode invocar." },
+      { name: "Toque da Morte Incompleta", desc: "Ao acertar: alvo testea Resistência (difícil). Falha: inicia processo de necrose — perde 1d6 de FOR e 1d6 de SAB temporários por rodada por 3 rodadas. Se FOR ou SAB chegarem a 0: o alvo cai inconsciente e começa a se transformar em zumbi (Medicina difícil ou cura sagrada para reverter antes de 10 minutos)." },
+      { name: "Presença do Lich Incompleto", desc: "Passivo: todos que entram no raio 4 hex de Varek testam Força de Vontade (normal). Falha: −1d4 nos ataques por 2 rodadas (a presença inacabada causa confusão, não medo genuíno — o Lich não consegue aterrorizar completamente)." }
+    ],
+    hex: { layout: "Cripta 12x10 com altar central, 4 colunas e Filactério ao norte", terrain: ["Altar Central (Filactério no topo — HP 20, Def 0)", "Colunas (cobertura pesada — 4 posições)", "Lama Profunda (sul — invocação de Zumbis possível)", "Varek começa ao norte, protegendo o Filactério"], hint: "Dois objetivos simultâneos: destruir o Filactério (para prevenir reconstituição) e matar Varek. Dividir o grupo: um foca o Filactério enquanto o outro contém Varek. Cuidado com o Invocar do Pântano — lama ao sul sempre gera novos Zumbis." },
+    spells: ["Invocar do Pântano", "Toque da Morte Incompleta"],
+    behavior: "Fica próximo ao Filactério (protegendo). Usa Invocar do Pântano para encher o campo. Toque da Morte em quem tiver mais FOR. Se o Filactério for destruído: entra em pânico e ataca com tudo — sem reconstituição possível, fica agressivo.", loot: [{ item: "Filactério Quebrado de Varek (fragmento — material de necromancia)", chance: 100, qty: "1" }, { item: "Grimório do Lich Incompleto (magias de invocação nível 2-3)", chance: 60, qty: "1" }, { item: "Gema do Fracasso (item de história — conta o que Varek tentou)", chance: 100, qty: "1" }] },
+
+  /* ══════════════════════════════════════════════════════════════
+     GRUPO: Alcateia das Sombras Cinzentas
+     Lore: No coração da Floresta Negra, um Lobo do Vazio corrompeu
+     uma alcateia inteira — não de propósito, mas por contato. Os
+     lobos que viveram próximos ao Lobo do Vazio por anos absorveram
+     fragmentos de sua energia. Agora têm pelagem escura e olhos
+     brancos mas são menores e menos poderosos que ele. Encontrados
+     em qualquer floresta densa perto de onde o Vazio está presente.
+     ══════════════════════════════════════════════════════════════ */
+
+  { id: "lobo-cinzento-alcateia",
+    name: "Lobo Cinzento (Alcateia das Sombras Cinzentas)",
+    difficulty: 2,
+    attrs: { FOR:2, DEX:2, AGI:3, INT:1, SAB:1 },
+    size: "normal", category: "Besta Corrompida",
+    location: ["Floresta Negra", "Floresta Maldita", "Planície com Bruma do Vazio"],
+    hp: 32, physDefense: 3, magDefense: 2, dodge: 15,
+    actions: 2, damage: "1d6+1d4+DEX (mordida sombria)",
+    group: "Alcateia das Sombras Cinzentas",
+    groupRole: "Flanqueador — circula o grupo enquanto o Alfa pressiona de frente.",
+    groupSynergy: "Se 2+ Lobos Cinzentos estão adjacentes ao mesmo alvo: ambos ganham +1 Chance de Acerto e o alvo não pode Retaliar (a quantidade de lobos ao redor torna o contra-ataque inviável).",
+    abilities: [
+      { name: "Eco do Vazio", desc: "Cada mordida tem 20% de chance (d10 ≤ 2) de aplicar fragmento de corrupção: alvo perde 1 de SAB temporária. Cumulativo. Se SAB chegar a 0 por este efeito: o alvo vê alucinações do Vazio por 1 rodada (Confuso)." },
+      { name: "Movimento de Sombra", desc: "Em hex com pouca luz (tocha a 4+ hex ou escuridão): o Lobo some visualmente até atacar. A posição dele é desconhecida — o atacante precisa declarar hex antes de rolar (Percepção difícil para localizar corretamente)." }
+    ],
+    hex: { layout: "Floresta densa com pouca luz", hint: "Manter tochas ou magia de luz é essencial — sem luz, os Lobos ficam invisíveis entre ataques. O flanqueio de 2+ Lobos no mesmo alvo é o padrão padrão da alcateia — dispersar o grupo para evitar ser rodeado." },
+    spells: [], behavior: "Circula pelo exterior do campo em hex de sombra. Entra para atacar quando o Alfa tiver o alvo ocupado. Foge se mais da metade da alcateia cair.", loot: [{ item: "Pele do Lobo Cinzento (material — resistência a corrupção)", chance: 50, qty: "1" }] },
+
+  { id: "loba-alfa-alcateia",
+    name: "Loba Alfa das Sombras (Alcateia das Sombras Cinzentas)",
+    difficulty: 3,
+    attrs: { FOR:4, DEX:3, AGI:3, INT:2, SAB:3 },
+    size: "normal", category: "Besta Corrompida",
+    location: ["Floresta Negra", "Coração da Floresta Maldita"],
+    hp: 75, physDefense: 5, magDefense: 3, dodge: 14,
+    actions: 3, damage: "1d10+1d6+FOR (mordida do Vazio)",
+    group: "Alcateia das Sombras Cinzentas",
+    groupRole: "Líder e pressão central — mantém o alvo ocupado enquanto os Cinzentos flanqueiam.",
+    groupSynergy: "Enquanto a Alfa viver: os Lobos Cinzentos da alcateia têm +2 em todas as rolagens e não fogem. Ao a Alfa morrer: os sobreviventes imediatamente tentam fugir (AGI (normal) para escapar nos próximos 2 rodadas).",
+    abilities: [
+      { name: "Chamado da Alcateia", desc: "1 Ação Livre (1x/combate): ulula. Todos os Lobos Cinzentos da Alcateia no campo ganham +1 Ação neste turno e se reposicionam 2 hex em direção ao alvo mais isolado do grupo." },
+      { name: "Mordida do Vazio", desc: "Ao acertar: além do dano, o alvo testea Força de Vontade (normal). Falha: vê um fragmento do que o Lobo do Vazio viu — fica com −1d6 nos ataques por 2 rodadas (a visão do Vazio paralisa a mente momentaneamente)." },
+      { name: "Resistência da Matriarca", desc: "Passivo: imune a Medo e Intimidação. Ao cair abaixo de 30% HP: entra em Fúria de Alcateia — velocidade +2 e ataques causam +1d6 de dano sombrio por 3 rodadas. Não pode ser negociada ou acalmada neste estado." }
+    ],
+    hex: { layout: "Floresta com área central aberta e bordas sombreadas", hint: "Matar a Alfa primeiro encerra o combate mais rapidamente que qualquer outra coisa — os Cinzentos fogem imediatamente. Porém a Alfa é mais difícil de acertar. Ordem de prioridade: eliminar 2 Cinzentos para reduzir a pressão de flanqueio, depois focar na Alfa." },
+    spells: [], behavior: "Pressiona o alvo com mais HP de frente. Usa Chamado no turno 2 para reposicionar todos os Cinzentos. Quando abaixo de 30%: abandona a estratégia e ataca o alvo mais próximo com tudo.", loot: [{ item: "Pele da Loba Alfa (material raro — +1 AGI como acessório)", chance: 60, qty: "1" }, { item: "Garra do Vazio (componente — resistência a corrupção)", chance: 40, qty: "1" }] },
+
+  /* ══════════════════════════════════════════════════════════════
+     GRUPO: Clã dos Espinhos de Ferro
+     Lore: Os Goblins dos Espinhos de Ferro não são tribais comuns.
+     São goblins que foram capturados e treinados por um Mercenário
+     Elite chamado Borkan há 40 anos — ensinados a usar táticas de
+     soldado em vez de emboscada caótica. Borkan morreu, mas o
+     sistema de treinamento sobreviveu: os filhos ensinaram os netos.
+     Encontrados nas rotas comerciais da Grande Planície como
+     mercenários de aluguel ou salteadores organizados.
+     ══════════════════════════════════════════════════════════════ */
+
+  { id: "goblin-atirador-espihos-ferro",
+    name: "Goblin Atirador (Clã dos Espinhos de Ferro)",
+    difficulty: 1,
+    attrs: { FOR:0, DEX:2, AGI:2, INT:1, SAB:0 },
+    size: "normal", category: "Humanoide",
+    location: ["Grande Planície", "Estrada Comercial", "Atalho da Floresta", "Acampamento do Clã"],
+    hp: 18, physDefense: 1, magDefense: 0, dodge: 14,
+    actions: 2, damage: "1d6+DEX (besta curta) — alcance 5 hex",
+    group: "Clã dos Espinhos de Ferro",
+    groupRole: "Suporte à distância — nunca entra em melee voluntariamente.",
+    groupSynergy: "Se o alvo estiver Preso pela armadilha do Engenheiro do Clã: dano do Atirador é +1d6 (alvo imóvel é alvo fácil) e não pode esquivar.",
+    abilities: [
+      { name: "Tiro Coordenado", desc: "Se 2+ Atiradores atirarem no mesmo alvo no mesmo turno: o segundo tiro tem +1 Chance de Acerto (o primeiro tiro distraiu o alvo)." },
+      { name: "Recuar e Atirar", desc: "Passivo: pode se mover 2 hex e atirar na mesma Ação sem penalidade. Usado para manter distância de melee." }
+    ],
+    hex: { layout: "Estrada com cobertura lateral", hint: "Atiradores em dupla são coordenados — o segundo sempre aproveita a distração do primeiro. Fechar o melee com um deles interrompe completamente sua eficácia (sem Tiro Coordenado, sem Recuar e Atirar eficiente)." },
+    spells: [], behavior: "Fica em cobertura a 5+ hex. Se melee se aproxima: Recuar até hex seguro. Se sem saída: rende-se (Borkan ensinou que prisioneiros têm valor).", loot: [{ item: "Besta Curta Goblin (funcional)", chance: 50, qty: "1" }, { item: "Moedas (1d6 bronze)", chance: 70, qty: "1" }] },
+
+  { id: "goblin-escudeiro-espinhos-ferro",
+    name: "Goblin Escudeiro (Clã dos Espinhos de Ferro)",
+    difficulty: 1,
+    attrs: { FOR:1, DEX:1, AGI:1, INT:1, SAB:0 },
+    size: "normal", category: "Humanoide",
+    location: ["Grande Planície", "Estrada Comercial", "Acampamento do Clã"],
+    hp: 22, physDefense: 4, magDefense: 0, dodge: 11,
+    actions: 2, damage: "1d6+FOR (lança curta)",
+    group: "Clã dos Espinhos de Ferro",
+    groupRole: "Linha de frente — forma parede de escudos entre o grupo e os Atiradores.",
+    groupSynergy: "Se 3+ Escudeiros estiverem em hexes adjacentes formando linha: ganham Formação de Espinhos — qualquer inimigo que entrar no hex adjacente à linha sofre 1d4 de dano de lança (reflexo defensivo coletivo).",
+    abilities: [
+      { name: "Formação Ensaiada", desc: "Passivo: se adjacente a outro Escudeiro, ambos têm +1 na Chance de Defesa com escudo (treinamento militar de Borkan). A formação de 3+ cria Formação de Espinhos." },
+      { name: "Cobrir Retirada", desc: "Reação: ao aliado Atirador ser atingido em melee, o Escudeiro interpõe o escudo — absorve até 6 HP do dano no lugar do Atirador." }
+    ],
+    hex: { layout: "Estrada aberta", hint: "A linha de Escudeiros protege os Atiradores atrás deles. Quebrar a linha (matar 1 Escudeiro ou empurrar 1 para fora) elimina a Formação de Espinhos. Magia de área atinge linha e Atiradores ao mesmo tempo — eficiente contra a formação compacta." },
+    spells: [], behavior: "Forma linha e avança lentamente. Cobre o Atirador se ameaçado. Se a linha quebrar: combate individual normal.", loot: [{ item: "Escudo de Madeira Reforçado (funcional)", chance: 40, qty: "1" }] },
+
+  { id: "goblin-engenheiro-espinhos-ferro",
+    name: "Goblin Engenheiro (Clã dos Espinhos de Ferro)",
+    difficulty: 2,
+    attrs: { FOR:0, DEX:3, AGI:1, INT:3, SAB:1 },
+    size: "normal", category: "Humanoide",
+    location: ["Grande Planície", "Estrada Comercial", "Acampamento do Clã"],
+    hp: 25, physDefense: 1, magDefense: 2, dodge: 13,
+    actions: 2, damage: "1d4+DEX (faca) ou Armadilha",
+    group: "Clã dos Espinhos de Ferro",
+    groupRole: "Suporte técnico — instala armadilhas antes e durante o combate.",
+    groupSynergy: "Seus Espinhos de Ferro (a armadilha do grupo) beneficiam todos: ao Prender um alvo, todos os aliados do Clã no campo têm +1 Chance de Acerto contra ele. O nome do Clã vem dessas armadilhas.",
+    abilities: [
+      { name: "Espinhos de Ferro (Armadilha)", desc: "Antes do combate (colocada fora da visão) ou 1 Ação: instala armadilha de espinhos em hex. Primeiro inimigo que entrar: Preso (FOR normal para escapar, 1 Ação) + 1d6 de perfuração. A armadilha é visível com Percepção (normal) mas o Engenheiro instala em hexes de alta passagem naturalmente." },
+      { name: "Bomba de Fumaça", desc: "1 Ação (2/combate): atira bomba a 4 hex. Área 2x2 hex fica coberta por fumaça por 3 rodadas — visibilidade 0 no interior. Ataques à distância na fumaça têm −3 na Chance de Acerto. O Clã usa a fumaça para reposicionar sem ser visto." }
+    ],
+    hex: { layout: "Estrada com pontos de passagem obrigatória", hint: "O Engenheiro instala os Espinhos de Ferro nos hexes que o grupo PRECISA cruzar — choke points naturais. Percepção (normal) antes de avançar detecta a armadilha. A Bomba de Fumaça cobre a retirada dos Atiradores." },
+    spells: [], behavior: "Fica atrás de todos. Instala Espinhos de Ferro no primeiro turno em hex de choke point. Usa Bomba de Fumaça quando Atirador está ameaçado. Em combate direto: foge.", loot: [{ item: "Kit de Armadilhas de Espinhos (3 usos)", chance: 60, qty: "1" }, { item: "Bomba de Fumaça (2 usos)", chance: 40, qty: "1d2" }] },
+
+  { id: "borkan-filho-capitan-espinhos",
+    name: "Borkan Filho, Capitão dos Espinhos (Clã dos Espinhos de Ferro)",
+    difficulty: 3,
+    attrs: { FOR:3, DEX:3, AGI:2, INT:3, SAB:2 },
+    size: "normal", category: "Humanoide Elite",
+    location: ["Acampamento Principal do Clã", "Caravana Contratada", "Fortaleza do Clã"],
+    hp: 78, physDefense: 5, magDefense: 3, dodge: 13,
+    isElite: true,
+    group: "Clã dos Espinhos de Ferro",
+    groupRole: "Líder estratégico — coordena todos do Clã e adapta táticas ao que o grupo faz.",
+    groupSynergy: "Enquanto Borkan Filho viver: o Clã inteiro ganha +1 em todas as rolagens. Ao morrer: Escudeiros recuam e Atiradores disparam uma última salva simultânea antes de fugir.",
+    abilities: [
+      { name: "Táticas de Borkan", desc: "1 Ação Livre (1x/rodada): ordena um movimento de repositcionamento. 1 aliado do Clã se move até 4 hex sem custo de Ação. Usado para: tirar Atirador de perigo, quebrar cerco, ou posicionar para Formação de Espinhos." },
+      { name: "Golpe do Mercenário", desc: "Ao acertar: +1d6 de dano adicional se o alvo tiver Chance de Defesa abaixo de 4 nesta rodada (detecta fraqueza defensiva instintivamente — herança do treinamento de Borkan pai)." },
+      { name: "Rendição Honrada", desc: "Se abaixo de 20% HP: oferece rendição formal. 'Borkan não ensinou a morrer por nada.' Pode ser negociado — o Clã presta serviços como guias ou informantes em troca de vida. SAB (normal) para perceber que a oferta é genuína." }
+    ],
+    hex: { layout: "Acampamento com posição elevada para Borkan (observação)", hint: "Borkan Filho dirige de posição elevada — pode ver todo o campo. Retirada dos Atiradores quando ameaçados é automática via Táticas de Borkan. Se o grupo negociar na Rendição Honrada: o Clã pode ser contratado (20 prata por dia — informação de rotas e proteção)." },
+    spells: [], behavior: "Nunca entra em melee até metade do clã cair. Usa Táticas de Borkan todo turno para otimizar posições. Quando entra em melee: golpeia quem tiver menos Chance de Defesa.", loot: [{ item: "Manual de Táticas de Borkan (treinamento — aprende Pressão Tática como perícia)", chance: 50, qty: "1" }, { item: "Armadura do Capitão (armadura rara, funcional)", chance: 40, qty: "1" }, { item: "Contrato do Clã (oferta de aliança)", chance: 100, qty: "1" }] },
+
+  /* ══════════════════════════════════════════════════════════════
+     GRUPO: Colônia Subterrânea de Vorn
+     Lore: Nas profundezas sob o Rio Mara existe uma colônia de
+     Kobolds diferente das tribais comuns — fundada por um Kobold
+     chamado Vorn que aprendeu alquimia básica com um Mago itinerante.
+     A Colônia de Vorn sobrevive fabricando armadilhas e vendendo
+     para bandidos. São tecnicamente neutros mas protegem o túnel
+     com violência. O grupo os encontra ao tentar usar o atalho
+     subterrâneo sob o Rio Mara.
+     ══════════════════════════════════════════════════════════════ */
+
+  { id: "kobold-armadilheiro-vorn",
+    name: "Kobold Armadilheiro (Colônia Subterrânea de Vorn)",
+    difficulty: 1,
+    attrs: { FOR:0, DEX:3, AGI:2, INT:2, SAB:0 },
+    size: "normal", category: "Humanoide",
+    location: ["Túnel Subterrâneo", "Caverna do Rio Mara", "Atalho Subterrâneo"],
+    hp: 14, physDefense: 1, magDefense: 0, dodge: 15,
+    actions: 2, damage: "1d4+DEX (dardo envenenado) — alcance 4 hex",
+    group: "Colônia Subterrânea de Vorn",
+    groupRole: "Instalador de armadilhas e atirador à distância.",
+    groupSynergy: "Conhece cada armadilha da Colônia — nunca as aciona acidentalmente. Pode reposicionar armadilha existente como Ação Livre 1x/rodada (move para hex adjacente).",
+    abilities: [
+      { name: "Dardo Alquímico", desc: "Dardo tem veneno de Vorn — fraco mas acessível em massa. Acerto: 1d4 de veneno imediato + Lento (−1 Movimento, 2 rodadas). Antídoto comum resolve. Cumulativo com outras fontes de Lento." },
+      { name: "Desaparecer nos Túneis", desc: "Como Ação Livre: se estiver adjacente a uma passagem de túnel marcada, desaparece completamente (Furtividade automática). Reaparece em qualquer outra passagem marcada na próxima rodada. A Colônia tem túneis conectados em toda a caverna." }
+    ],
+    hex: { layout: "Caverna com múltiplas passagens e armadilhas pré-instaladas", hint: "Os Kobolds conhecem cada armadilha — o grupo não. Percepção (difícil) ou Ferramentas de Ladrão (normal) para detectar armadilha antes de pisar. Armadilheiros que desaparecem nos túneis podem reaparecer em qualquer ponto — fechar as passagens (bloco de pedra, magia) restringe a mobilidade." },
+    spells: [], behavior: "Instala dardo, desaparece, reaparece em outro ponto, instala dardo. Nunca fica parado. Se capturado: fala de Vorn imediatamente (é a única moeda que tem).", loot: [{ item: "Dardos Alquímicos de Vorn (1d8 unidades)", chance: 70, qty: "1d8" }, { item: "Mapa dos Túneis da Colônia (valioso para quem usa o atalho)", chance: 30, qty: "1" }] },
+
+  { id: "kobold-guardiao-vorn",
+    name: "Kobold Guardião (Colônia Subterrânea de Vorn)",
+    difficulty: 2,
+    attrs: { FOR:2, DEX:1, AGI:2, INT:1, SAB:1 },
+    size: "normal", category: "Humanoide",
+    location: ["Câmara Principal da Colônia", "Entrada do Túnel"],
+    hp: 28, physDefense: 3, magDefense: 0, dodge: 13,
+    actions: 2, damage: "1d6+FOR (lança de osso) + armadilha próxima",
+    group: "Colônia Subterrânea de Vorn",
+    groupRole: "Linha de frente — usa as armadilhas do campo como extensão do combate.",
+    groupSynergy: "Pode ativar deliberadamente qualquer armadilha em raio 2 hex como Ação Livre (mesmo com aliados no raio — os Guardiões sabem se esquivar, os inimigos não).",
+    abilities: [
+      { name: "Usar Armadilha como Arma", desc: "Ação Livre: aciona armadilha em raio 2 hex deliberadamente. Os Guardiões treinaram ao redor das armadilhas — testam AGI automaticamente com vantagem (+1d4 na rolagem) para evitar o próprio dano." },
+      { name: "Retroceder e Redirecionar", desc: "Reação: ao ser atacado em melee, pode recuar 2 hex passando por hex de armadilha — o inimigo que seguir entra na armadilha. (O inimigo pode não saber que há armadilha no caminho.)" }
+    ],
+    hex: { layout: "Caverna com armadilhas visíveis e ocultas", hint: "Guardiões que ativam armadilhas deliberadamente são o pesadelo de grupos compactos — separe o grupo para não estar todos no raio de 2 hex de uma armadilha ao mesmo tempo. Retroceder e Redirecionar é uma armadilha comportamental — seguir o Guardião que recua pode ser perigoso." },
+    spells: [], behavior: "Fica na entrada da câmara principal. Ao ser atacado: recua por hex de armadilha. A cada turno: ativa a armadilha mais perto de 2 inimigos.", loot: [{ item: "Lança de Osso (funcional, 1d4 dano)", chance: 60, qty: "1" }] },
+
+  { id: "vorn-alquimista-kobold",
+    name: "Vorn, o Alquimista (Colônia Subterrânea de Vorn)",
+    difficulty: 2,
+    attrs: { FOR:0, DEX:2, AGI:1, INT:4, SAB:2 },
+    size: "normal", category: "Humanoide Elite",
+    location: ["Laboratório Central da Colônia"],
+    hp: 35, physDefense: 1, magDefense: 4, dodge: 13,
+    isElite: true,
+    group: "Colônia Subterrânea de Vorn",
+    groupRole: "Líder e inventor — raramente combate diretamente. Prefere negociar.",
+    groupSynergy: "Vorn criou todas as armadilhas da Colônia. Enquanto estiver presente, pode criar nova armadilha em qualquer hex vazio como Ação (unlimited — ele é muito mais habilidoso que os Armadilheiros).",
+    abilities: [
+      { name: "Proposta de Negócio", desc: "Passivo: Vorn tenta negociar ANTES do combate. Se o grupo ouvir sua proposta (não atacar por 1 rodada): ele oferece passagem pelo túnel em troca de 5 prata por pessoa OU de um ingrediente alquímico que ele precise. SAB (normal) para perceber que a oferta é legítima. Se o grupo aceitar: nenhum kobold ataca." },
+      { name: "Bomba Alquímica de Vorn", desc: "1 Ação (3/combate): lança bomba a 4 hex. Escolhe efeito: Ácido (1d8, −1 Def.Física por 2 rodadas), Paralítico (AGI normal ou Paralisado 1 rodada), Fumaça (área 3x3 hex, visibilidade 0 por 3 rodadas)." },
+      { name: "Fuga Calculada", desc: "Ao cair abaixo de 30% HP: usa fumaça e desaparece pelos túneis. Pode ser encontrado novamente mas estará em local diferente — e mais defensivo." }
+    ],
+    hex: { layout: "Laboratório com bancadas (cobertura), armadilhas customizadas e saídas múltiplas", hint: "Vorn NÃO quer lutar — a negociação é genuína. Se o grupo atacar sem ouvir: ele combate eficientemente mas é mais valioso como aliado. Um Vorn aliado pode fabricar Poções e Bombas para o grupo a preço de custo." },
+    spells: ["Bomba Alquímica de Vorn (3/combate)"],
+    behavior: "Proposta de Negócio primeiro, sempre. Se o grupo atacar: bombas de fumaça para cobrir os Guardiões e escapar. Se encurralado: rende-se e negocia novamente.", loot: [{ item: "Livro de Alquimia de Vorn (receitas de 5 bombas — subclasse Alquimista aprende 2)", chance: 80, qty: "1" }, { item: "Bomba Alquímica Sortida (3 tipos, 1 cada)", chance: 60, qty: "1" }, { item: "Acordo de Passagem (acesso ao atalho subterrâneo permanentemente)", chance: 100, qty: "1" }] }];
 
 /* ================================================================
    MONTARIAS — Sistema de Montaria do Mundo de Aether
