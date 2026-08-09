@@ -3638,26 +3638,104 @@ function consolidateCurrency(character) {
 function renderCurrencySection(character) {
   const currency = ensureCurrency(character);
 
+  // Total em bronze para exibição
+  const totalBronze = Object.entries(CURRENCY_VALUE_IN_BRONZE)
+    .reduce((sum, [k, v]) => sum + (currency[k] || 0) * v, 0);
+
+  // Formatar total de forma legível
+  function formatTotal(b) {
+    if (b === 0) return "0 bronze";
+    const p  = Math.floor(b / 10);
+    const o  = Math.floor(b / 1000);
+    const pl = Math.floor(b / 1000000);
+    if (pl >= 1)  return `${pl.toLocaleString()} platina`;
+    if (o  >= 1)  return `${o.toLocaleString()} ouro`;
+    if (p  >= 1)  return `${p.toLocaleString()} prata`;
+    return `${b.toLocaleString()} bronze`;
+  }
+
+  // Tabela de conversão: para cada moeda, de quanto vem e para quanto vai
+  const convTable = [
+    // bronze → prata: 10b = 1p
+    { from:"bronze", fromAmt:10,  to:"prata",  toAmt:1,  label:"10 🟫 → 1 ⚪" },
+    // prata → ouro: 100p = 1o
+    { from:"prata",  fromAmt:100, to:"ouro",   toAmt:1,  label:"100 ⚪ → 1 🟡" },
+    // ouro → platina: 1000o = 1pl
+    { from:"ouro",   fromAmt:1000,to:"platina",toAmt:1,  label:"1000 🟡 → 1 ⬜" },
+    // prata → bronze: 1p = 10b (troco)
+    { from:"prata",  fromAmt:1,   to:"bronze", toAmt:10, label:"1 ⚪ → 10 🟫" },
+    // ouro → prata: 1o = 100p (troco)
+    { from:"ouro",   fromAmt:1,   to:"prata",  toAmt:100,label:"1 🟡 → 100 ⚪" },
+    // platina → ouro: 1pl = 1000o (troco)
+    { from:"platina",fromAmt:1,   to:"ouro",   toAmt:1000,label:"1 ⬜ → 1000 🟡" },
+  ];
+
+  const denomColors = { bronze:"#a0522d", prata:"#888", ouro:"#b8960c", platina:"#6a8fa8" };
+  const denomBg     = { bronze:"rgba(160,82,45,0.09)", prata:"rgba(140,140,140,0.09)", ouro:"rgba(184,150,12,0.09)", platina:"rgba(106,143,168,0.09)" };
+
   return `
   <div class="sheet-section">
-    <h3 class="sheet-section-title">Dinheiro</h3>
-    <p class="section-hint">Bronze, Prata, Ouro e Platina não contam no peso/carga do personagem. 1 Prata = 10 Bronze · 1 Ouro = 100 Prata · 1 Platina = 1000 Ouro.</p>
+    <h3 class="sheet-section-title">💰 Dinheiro</h3>
 
-    <div class="currency-grid">
+    <!-- Total em bronze -->
+    <div class="currency-total-bar">
+      <span class="currency-total-label">Total equivalente</span>
+      <span class="currency-total-value" id="currency-total-display">${formatTotal(totalBronze)}</span>
+      <span class="currency-total-bronze">(${totalBronze.toLocaleString()} bronze)</span>
+    </div>
+
+    <!-- Grade de moedas: 1 por linha no mobile -->
+    <div class="currency-list">
       ${CURRENCY_DENOMINATIONS.map(d => `
-        <div class="currency-box">
-          <div class="currency-icon">${d.icon}</div>
-          <div class="currency-label">${d.label}</div>
-          <div class="currency-controls">
-            <button class="bar-btn" data-currency-dec="${d.key}">−</button>
-            <input type="number" class="bar-input-inline currency-input" id="currency-input-${d.key}" value="${currency[d.key]}" min="0">
-            <button class="bar-btn" data-currency-inc="${d.key}">+</button>
+        <div class="currency-row" style="border-left: 3px solid ${denomColors[d.key]}; background: ${denomBg[d.key]};">
+          <div class="currency-row-left">
+            <span class="currency-row-icon">${d.icon}</span>
+            <span class="currency-row-label">${d.label}</span>
+          </div>
+          <div class="currency-row-controls">
+            <button class="currency-btn currency-btn-dec" data-currency-dec="${d.key}" aria-label="Remover ${d.label}">−</button>
+            <input type="number" class="currency-input-v2" id="currency-input-${d.key}"
+                   value="${currency[d.key]}" min="0" aria-label="${d.label}">
+            <button class="currency-btn currency-btn-inc" data-currency-inc="${d.key}" aria-label="Adicionar ${d.label}">+</button>
           </div>
         </div>
       `).join("")}
     </div>
 
-    <button class="btn-secondary btn-consolidate-currency" id="btn-consolidate-currency">⇄ Juntar Moedas (converter para a maior denominação possível)</button>
+    <!-- Conversores -->
+    <div class="currency-converters">
+      <div class="currency-conv-title">🔄 Converter</div>
+      <div class="currency-conv-grid">
+        <!-- Subir denominação -->
+        <div class="currency-conv-group">
+          <div class="currency-conv-group-label">↑ Trocar por moeda maior</div>
+          ${convTable.slice(0,3).map(c => `
+            <button class="currency-conv-btn" data-conv-from="${c.from}" data-conv-from-amt="${c.fromAmt}" data-conv-to="${c.to}" data-conv-to-amt="${c.toAmt}">
+              ${c.label}
+            </button>
+          `).join("")}
+        </div>
+        <!-- Descer denominação (troco) -->
+        <div class="currency-conv-group">
+          <div class="currency-conv-group-label">↓ Dar troco</div>
+          ${convTable.slice(3).map(c => `
+            <button class="currency-conv-btn currency-conv-btn-down" data-conv-from="${c.from}" data-conv-from-amt="${c.fromAmt}" data-conv-to="${c.to}" data-conv-to-amt="${c.toAmt}">
+              ${c.label}
+            </button>
+          `).join("")}
+        </div>
+      </div>
+    </div>
+
+    <!-- Juntar tudo -->
+    <button class="btn-secondary btn-consolidate-currency" id="btn-consolidate-currency"
+            style="width:100%;margin-top:10px;">
+      ⇄ Juntar tudo na maior denominação possível
+    </button>
+
+    <p class="section-hint" style="margin-top:8px;">
+      1 Prata = 10 Bronze &nbsp;·&nbsp; 1 Ouro = 100 Prata &nbsp;·&nbsp; 1 Platina = 1000 Ouro
+    </p>
   </div>`;
 }
 
@@ -4826,6 +4904,26 @@ function attachSheetHandlers(character) {
     persistCurrentCharacter();
     renderSheet();
     showToast("Moedas convertidas para as maiores denominações possíveis.");
+  });
+
+  // Botões de conversão bidirecional
+  document.querySelectorAll("[data-conv-from]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const from    = btn.dataset.convFrom;
+      const fromAmt = parseInt(btn.dataset.convFromAmt);
+      const to      = btn.dataset.convTo;
+      const toAmt   = parseInt(btn.dataset.convToAmt);
+      const cur     = ensureCurrency(character);
+      if ((cur[from] || 0) < fromAmt) {
+        showToast(`Você não tem ${fromAmt} ${from} suficientes para converter.`);
+        return;
+      }
+      cur[from] = (cur[from] || 0) - fromAmt;
+      cur[to]   = (cur[to]   || 0) + toAmt;
+      persistCurrentCharacter();
+      renderSheet();
+      showToast(`Convertido: −${fromAmt} ${from} → +${toAmt} ${to}.`);
+    });
   });
 
   // Delete from sheet (só existe na aba inventário)
