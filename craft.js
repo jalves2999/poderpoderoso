@@ -480,3 +480,404 @@ window.learnAllRecipes = function(charId) {
   recipes.forEach(r => window.learnRecipe(charId, r.id));
   return `Todas as ${recipes.length} receitas aprendidas`;
 };
+
+/* ================================================================
+   SISTEMA DE FORJA — Encantamento de Armas e Armaduras
+   ================================================================ */
+
+let currentForgeFilter = "all";
+let selectedBaseItem   = null;   // item do inventário selecionado como base
+let pendingForge       = null;   // forja aguardando confirmação
+
+// ── Inicialização da forja ────────────────────────────────────────
+(function initForge() {
+  window.addEventListener("DOMContentLoaded", () => {
+    // Filtros de forja
+    document.querySelectorAll("[data-forge-filter]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll("[data-forge-filter]").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        currentForgeFilter = btn.dataset.forgeFilter;
+        renderForge();
+      });
+    });
+
+    // Seletor de item base
+    document.getElementById("forge-base-select")?.addEventListener("change", e => {
+      const inv = getInventory();
+      selectedBaseItem = inv.find(i => i.instanceId === e.target.value) || null;
+      updateForgeBaseInfo();
+      renderForge();
+    });
+
+    // Botões de forjar (delegado)
+    document.getElementById("forge-recipe-list")?.addEventListener("click", e => {
+      const btn = e.target.closest(".btn-forge");
+      if (btn) {
+        const id = btn.dataset.forgeId;
+        const recipe = (typeof FORGE_RECIPES !== "undefined" ? FORGE_RECIPES : []).find(r => r.id === id);
+        if (recipe) startForge(recipe);
+      }
+      // Toggle open
+      const header = e.target.closest(".forge-card-header");
+      if (header && !e.target.closest(".btn-forge")) {
+        header.closest(".forge-card").classList.toggle("open");
+      }
+    });
+
+    // Resultado da forja
+    document.getElementById("btn-crm-add")?.addEventListener("click", handleForgeAdd, true);
+    document.getElementById("btn-crm-close")?.addEventListener("click", handleForgeClose, true);
+  });
+})();
+
+// ── Helpers de forja ─────────────────────────────────────────────
+
+function getForgeRecipes() {
+  return typeof FORGE_RECIPES !== "undefined" ? FORGE_RECIPES : [];
+}
+
+/** Conta material de forja por tag */
+function countForgeMaterial(tag) {
+  return getInventory().filter(i =>
+    (i.materialTag === tag || i.craftingMaterialTag === tag) && i.smithingMaterial
+  ).length;
+}
+
+/** Verifica se tem o material da receita de forja */
+function hasForgeIngredients(recipe) {
+  return countForgeMaterial(recipe.material.tag) >= recipe.material.qty;
+}
+
+/** Verifica se o item base é compatível com a receita */
+function baseItemCompatible(recipe, item) {
+  if (!item) return false;
+  if (recipe.smeltingType === "weapon") {
+    return item.slot && (item.slot.includes("primary") || item.slot.includes("secondary")) &&
+           item.tier === "comum" && item.dmg; // é arma
+  }
+  if (recipe.smeltingType === "armor") {
+    return (item.physDefense !== undefined || item.category === "armor") &&
+           item.tier === "comum";
+  }
+  return false;
+}
+
+/** Itens do inventário que são armas ou armaduras comuns (base para forja) */
+function getForgeableItems() {
+  return getInventory().filter(i => {
+    if (i.tier !== "comum") return false;
+    const isWeapon = i.dmg && i.slot && (i.slot.includes("primary") || i.slot.includes("secondary"));
+    const isArmor  = i.physDefense !== undefined || (i.category === "armor" && !i.dmg);
+    return isWeapon || isArmor;
+  });
+}
+
+function updateForgeBaseInfo() {
+  const el = document.getElementById("forge-base-info");
+  if (!el) return;
+  if (!selectedBaseItem) { el.textContent = ""; return; }
+  const isWeapon = selectedBaseItem.dmg;
+  const type     = isWeapon ? `Arma — ${selectedBaseItem.dmg} de dano` : `Armadura — Def.Física ${selectedBaseItem.physDefense ?? 0}`;
+  el.textContent = `${selectedBaseItem.name} · ${type} · ${selectedBaseItem.weight ?? 0}kg`;
+}
+
+/** Popula o seletor de item base */
+function populateForgeBaseSelect() {
+  const sel = document.getElementById("forge-base-select");
+  if (!sel) return;
+  const items = getForgeableItems();
+  const prev  = sel.value;
+  sel.innerHTML = '<option value="">— selecione arma ou armadura comum —</option>';
+  items.forEach(i => {
+    const opt = document.createElement("option");
+    opt.value = i.instanceId;
+    opt.textContent = i.name + (i.equippedSlot ? " (equipado)" : "");
+    sel.appendChild(opt);
+  });
+  if (prev) { sel.value = prev; }
+  selectedBaseItem = items.find(i => i.instanceId === sel.value) || null;
+  updateForgeBaseInfo();
+}
+
+// ── Renderizar aba Forja ──────────────────────────────────────────
+
+function renderForge() {
+  populateForgeBaseSelect();
+
+  const container = document.getElementById("forge-recipe-list");
+  if (!container) return;
+
+  if (!currentChar) {
+    container.innerHTML = `<div class="craft-empty"><span class="craft-empty-icon">⚒</span>Selecione um personagem para forjar.</div>`;
+    return;
+  }
+
+  const all = getForgeRecipes();
+  let visible = all;
+  if      (currentForgeFilter === "weapon")   visible = all.filter(r => r.smeltingType === "weapon");
+  else if (currentForgeFilter === "armor")    visible = all.filter(r => r.smeltingType === "armor");
+  else if (currentForgeFilter === "lendario") visible = all.filter(r => r.tier === "lendario");
+  else if (currentForgeFilter === "available") {
+    visible = all.filter(r => hasForgeIngredients(r) && baseItemCompatible(r, selectedBaseItem));
+  }
+
+  if (visible.length === 0) {
+    container.innerHTML = `<div class="craft-empty"><span class="craft-empty-icon">⚒</span>Nenhuma receita encontrada.</div>`;
+    return;
+  }
+
+  container.innerHTML = visible.map(r => renderForgeCard(r)).join("");
+}
+
+function renderForgeCard(recipe) {
+  const haveMat   = countForgeMaterial(recipe.material.tag);
+  const needMat   = recipe.material.qty;
+  const matOk     = haveMat >= needMat;
+  const baseOk    = selectedBaseItem && baseItemCompatible(recipe, selectedBaseItem);
+  const canForge  = matOk && baseOk;
+  const thresh    = calcForgeBonus(recipe);
+  const diff      = recipe.skillTest?.difficulty || "normal";
+  const diffLabel = { normal:"Normal", dificil:"Difícil", critico:"Crítico" }[diff] || diff;
+  const target    = diff === "dificil" ? thresh.hard : diff === "critico" ? thresh.critical : thresh.normal;
+
+  const typeIcon  = recipe.smeltingType === "weapon" ? "⚔" : "🛡";
+  const tierClass = `tier-${recipe.tier}`;
+
+  const matRow = `
+    <div class="forge-material-row ${matOk ? "have" : "missing"}">
+      <span>${matOk ? "✅" : "❌"}</span>
+      <span style="flex:1">${recipe.material.label}</span>
+      <span class="forge-material-qty">${haveMat}/${needMat}</span>
+    </div>`;
+
+  const baseStatus = !selectedBaseItem
+    ? `<div class="forge-req-box">⚠ Selecione um item base acima antes de forjar.</div>`
+    : !baseItemCompatible(recipe, selectedBaseItem)
+    ? `<div class="forge-req-box" style="color:#c0392b">❌ <strong>${selectedBaseItem.name}</strong> não é compatível. Req: ${recipe.baseRequirement}</div>`
+    : `<div class="forge-req-box" style="color:#27ae60">✅ Usando: <strong>${selectedBaseItem.name}</strong></div>`;
+
+  return `
+  <div class="forge-card ${!canForge ? "unavailable" : ""}" data-forge-id="${recipe.id}">
+    <div class="forge-card-header">
+      <span class="forge-card-icon">${recipe.icon}</span>
+      <div class="forge-card-title-col">
+        <div class="forge-card-name">${recipe.name}</div>
+        <div class="forge-card-sub">${typeIcon} ${recipe.smeltingType === "weapon" ? "Arma" : "Armadura"} · ${diffLabel} · ${recipe.description}</div>
+      </div>
+      <span class="recipe-tier-badge ${tierClass}">${recipe.tier}</span>
+      <span class="recipe-status-dot ${canForge ? "dot-ok" : "dot-missing"}"></span>
+    </div>
+    <div class="forge-card-body">
+      <div class="forge-req-box" style="margin-bottom:4px">
+        <strong>Item base necessário:</strong> ${recipe.baseRequirement}
+      </div>
+      ${baseStatus}
+      ${matRow}
+      <div class="forge-enchant-box">
+        <span class="forge-enchant-label">✨ Encantamento</span>
+        ${recipe.enchantEffect}
+      </div>
+      <div class="craft-roll-section">
+        <div class="craft-roll-label">Teste de ${recipe.skillTest?.attr || "FOR"} para forjar</div>
+        <div class="craft-roll-info">
+          <span class="craft-roll-chip chip-n">Normal ≤${thresh.normal}</span>
+          <span class="craft-roll-chip chip-d">Difícil ≤${thresh.hard}</span>
+          <span class="craft-roll-chip chip-c">Crítico ≤${thresh.critical}</span>
+        </div>
+        <div style="font-size:11px;color:var(--ink-soft);margin-bottom:10px">
+          Alvo desta receita: <strong>${diffLabel} (≤${target})</strong>
+          &nbsp;·&nbsp; 🎯 Crítico positivo: ≤${Math.max(1,target-6)} ou d20=1
+          &nbsp;·&nbsp; 💀 Falha crítica: d20=20
+        </div>
+      </div>
+      <button class="btn-craft btn-forge" data-forge-id="${recipe.id}" ${!canForge ? "disabled" : ""}>
+        ${!selectedBaseItem ? "🔒 Selecione o item base" : !baseOk ? "❌ Item incompatível" : !matOk ? "❌ Material insuficiente" : "⚒ Forjar Encantamento"}
+      </button>
+    </div>
+  </div>`;
+}
+
+// ── Cálculo de bônus de forja ─────────────────────────────────────
+function calcForgeBonus(recipe) {
+  if (!currentChar) return { bonus:0, normal:10, hard:5, critical:1 };
+  const attrs  = currentChar.attributes || {};
+  const attr   = recipe.skillTest?.attr || "FOR";
+  const val    = attrs[attr] || 0;
+  // Bônus subclasse: Alquimista para int, Guerreiro/Caçador de Gigantes para FOR
+  const sub    = (currentChar.subclass || "").toLowerCase();
+  const bonus2 = (attr === "INT" && sub.includes("alquimista")) ||
+                 (attr === "FOR" && (sub.includes("guerreiro") || sub.includes("berserker") || sub.includes("cacador-gigantes") || sub.includes("runa-lamina"))) ? 2 : 0;
+  const bonus  = val + bonus2;
+  return {
+    bonus,
+    normal  : Math.min(19, 10 + bonus),
+    hard    : Math.max(1,   5 + bonus),
+    critical: Math.max(1,   1 + bonus),
+  };
+}
+
+// ── Executar forja ────────────────────────────────────────────────
+function startForge(recipe) {
+  if (!selectedBaseItem) return;
+  const thresh  = calcForgeBonus(recipe);
+  const roll    = rollD20();
+  const result  = evalCraft(roll, thresh, recipe);
+  const diff    = recipe.skillTest?.difficulty || "normal";
+  const target  = diff === "dificil" ? thresh.hard : diff === "critico" ? thresh.critical : thresh.normal;
+
+  pendingForge  = { recipe, roll, result, target, baseItem: selectedBaseItem };
+
+  // ── Preencher modal ──
+  document.getElementById("crm-icon").textContent  = recipe.icon;
+  document.getElementById("crm-title").textContent = recipe.name;
+  document.getElementById("crm-roll").textContent  = `d20 = ${roll} (alvo ≤ ${target}) · Base: ${selectedBaseItem.name}`;
+
+  const resultEl = document.getElementById("crm-result");
+
+  const forgedItemHtml = (bonus) => `
+    <div class="crm-forged-item">
+      <div class="crm-forged-name">${recipe.icon} ${selectedBaseItem.name} [Encantado]</div>
+      <div class="crm-forged-effect">${recipe.enchantEffect}${bonus ? `<br><span style="color:#b8960c">✨ Bônus crítico: ${bonus}</span>` : ""}</div>
+    </div>`;
+
+  if (result === "crit_success") {
+    const bonus         = pickRandom(recipe.critBonus || []);
+    pendingForge.bonus  = bonus;
+    resultEl.className  = "crm-result crm-crit-suc";
+    resultEl.innerHTML  = `
+      <div class="crm-label">✨ Sucesso Crítico na Forja!</div>
+      ${forgedItemHtml(bonus)}`;
+    document.getElementById("btn-crm-add").textContent = "⚒ Adicionar ao inventário";
+    document.getElementById("btn-crm-add").style.display = "";
+
+  } else if (result === "success") {
+    pendingForge.bonus  = null;
+    resultEl.className  = "crm-result crm-success";
+    resultEl.innerHTML  = `
+      <div class="crm-label">✅ Forja bem-sucedida!</div>
+      ${forgedItemHtml(null)}`;
+    document.getElementById("btn-crm-add").textContent = "⚒ Adicionar ao inventário";
+    document.getElementById("btn-crm-add").style.display = "";
+
+  } else if (result === "crit_fail") {
+    const penalty       = pickRandom(recipe.critFailEffect || ["O encantamento falhou catastroficamente."]);
+    pendingForge.penalty= penalty;
+    resultEl.className  = "crm-result crm-crit-fail";
+    resultEl.innerHTML  = `
+      <div class="crm-label">💀 Falha Crítica na Forja! (d20 = 20)</div>
+      <div class="crm-penalty">${penalty}</div>
+      <div style="font-size:12px;color:var(--ink-soft);margin-top:6px">Material consumido. Encantamento não aplicado.</div>`;
+    document.getElementById("btn-crm-add").style.display = "none";
+
+  } else {
+    resultEl.className  = "crm-result crm-fail";
+    resultEl.innerHTML  = `
+      <div class="crm-label">❌ Forja falhou</div>
+      <div style="color:var(--ink-soft)">O material foi desperdiçado. O item base permanece inalterado.</div>`;
+    document.getElementById("btn-crm-add").style.display = "none";
+  }
+
+  document.getElementById("result-overlay").classList.remove("hidden");
+}
+
+// ── Handlers do modal para forja ──────────────────────────────────
+function handleForgeAdd(e) {
+  // Apenas processa se for forja pendente (não alquimia)
+  if (!pendingForge) return;
+  e.stopImmediatePropagation();
+
+  const { recipe, result, bonus, baseItem } = pendingForge;
+  // Consumir material
+  consumeForgeMaterial(recipe);
+  // Transformar o item base em encantado
+  applyEnchantment(baseItem, recipe, bonus);
+  saveCharacters();
+  pendingForge  = null;
+  selectedBaseItem = null;
+  document.getElementById("forge-base-select").value = "";
+  document.getElementById("forge-base-info").textContent = "";
+  document.getElementById("result-overlay").classList.add("hidden");
+  renderAll();
+  showCraftToast(`⚒ ${baseItem.name} encantado com ${recipe.name}!`);
+}
+
+function handleForgeClose(e) {
+  if (!pendingForge) return;
+  // Falha/crit_fail: consume material mesmo assim
+  if (pendingForge.result === "fail" || pendingForge.result === "crit_fail") {
+    consumeForgeMaterial(pendingForge.recipe);
+    saveCharacters();
+  }
+  pendingForge = null;
+  document.getElementById("result-overlay").classList.add("hidden");
+  renderAll();
+}
+
+function consumeForgeMaterial(recipe) {
+  const inv = currentChar.inventory;
+  let toRemove = recipe.material.qty;
+  for (let i = inv.length - 1; i >= 0 && toRemove > 0; i--) {
+    const item = inv[i];
+    if ((item.materialTag === recipe.material.tag || item.craftingMaterialTag === recipe.material.tag) && item.smithingMaterial) {
+      inv.splice(i, 1);
+      toRemove--;
+    }
+  }
+}
+
+function applyEnchantment(baseItem, recipe, critBonus) {
+  // Modifica o item base diretamente no inventário
+  baseItem.name        = `${baseItem.name} [${recipe.name}]`;
+  baseItem.tier        = recipe.tier;
+  baseItem.isEnchanted = true;
+  baseItem.enchantId   = recipe.id;
+
+  // Adicionar efeito ao item
+  const bonusText = critBonus ? `\n✨ Bônus crítico: ${critBonus}` : "";
+  baseItem.effect  = (baseItem.effect ? baseItem.effect + "\n" : "") + `⚒ ${recipe.enchantEffect}${bonusText}`;
+  baseItem.note    = (baseItem.note  ? baseItem.note  + " " : "") + `Encantado com ${recipe.name}.`;
+
+  // Aplicar bônus numéricos
+  if (recipe.dmgBonus && baseItem.dmg) {
+    const extras = (baseItem.dmg.match(/\+.*/)?.[0] || "");
+    baseItem.dmg = baseItem.dmg.replace(/\+.*/,"") + extras + " +" + recipe.dmgBonus.split(" ")[0];
+  }
+  if (recipe.defBonus && (baseItem.physDefense !== undefined)) {
+    const match = recipe.defBonus.match(/\+(\d+) Def\.Física/);
+    if (match) baseItem.physDefense = (baseItem.physDefense || 0) + parseInt(match[1]);
+    const mMatch = recipe.defBonus.match(/\+(\d+) Def\.Mágica/);
+    if (mMatch) baseItem.magDefense = (baseItem.magDefense || 0) + parseInt(mMatch[1]);
+  }
+
+  baseItem.forgedAt = new Date().toLocaleDateString("pt-BR");
+  baseItem.forgedBy = currentChar?.name || "?";
+}
+
+// ── Sobrescrever renderAll para incluir forja ────────────────────
+const _origRenderAll = renderAll;
+// patch: adicionar renderForge ao renderAll
+const _patchedRenderAll = function() {
+  updateCharInfo();
+  if (currentTab === "recipes")   renderRecipes();
+  if (currentTab === "forge")     renderForge();
+  if (currentTab === "materials") renderMaterials();
+};
+// Substituir
+window.renderAll = _patchedRenderAll;
+
+// Também patch no attachTabListeners para incluir forge
+const _origAttachTabs = attachTabListeners;
+function attachTabListeners() {
+  document.querySelectorAll(".craft-tab-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".craft-tab-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      currentTab = btn.dataset.tab;
+      document.getElementById("tab-recipes").style.display   = currentTab === "recipes"   ? "" : "none";
+      document.getElementById("tab-forge").style.display     = currentTab === "forge"     ? "" : "none";
+      document.getElementById("tab-materials").style.display = currentTab === "materials" ? "" : "none";
+      window.renderAll();
+    });
+  });
+}

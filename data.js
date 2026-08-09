@@ -3097,7 +3097,109 @@ const MISC_ITEMS = [
   { name:"Pergaminho de Receita: Grande Bomba de Magma", category:"misc", subcategory:"recipe_scroll",
     recipeId:"rec_magma",         tier:"lendario",weight:0.05, consumable:true,
     effect:"Usar este item: aprende permanentemente a receita da Grande Bomba de Magma. Consumido ao usar.",
-    story:"Encadernado em couro de Karlac Juvenil. A tinta é laranja escuro. Nunca fica fria." }];
+    story:"Encadernado em couro de Karlac Juvenil. A tinta é laranja escuro. Nunca fica fria." },
+
+  /* ─── MATERIAIS DE FORJA — smithingMaterial:true ─────────────── */
+
+  { name:"Pedra de Afiar Rúnica", category:"misc", subcategory:"material",
+    craftingMaterial:true, smithingMaterial:true, materialTag:"pedra_afia_runica",
+    tier:"comum", weight:0.2, consumable:true,
+    smeltingType:"weapon",
+    effect:"Material de forja. Afiam e gravam runas básicas em armas de corte.",
+    story:"Pedra cinza com veio dourado. Usada por ferreiros anões há séculos." },
+
+  { name:"Óleo de Serpente Venenosa", category:"misc", subcategory:"material",
+    craftingMaterial:true, smithingMaterial:true, materialTag:"oleo_serpente",
+    tier:"comum", weight:0.15, consumable:true,
+    smeltingType:"weapon",
+    effect:"Material de forja. Infunde veneno duradouro em lâminas.",
+    story:"Extraído da glândula de Cobras do Sangue de Jurgmund. Viscoso e escuro." },
+
+  { name:"Pó de Osso de Wyvern", category:"misc", subcategory:"material",
+    craftingMaterial:true, smithingMaterial:true, materialTag:"po_osso_wyvern",
+    tier:"raro", weight:0.1, consumable:true,
+    smeltingType:"weapon",
+    effect:"Material de forja. Adiciona dureza sobrenatural e aura intimidadora à arma.",
+    story:"Wyverns não existem mais em Aether. Este pó é de uma era anterior." },
+
+  { name:"Cinzas de Karlac", category:"misc", subcategory:"material",
+    craftingMaterial:true, smithingMaterial:true, materialTag:"cinzas_karlac",
+    tier:"raro", weight:0.08, consumable:true,
+    smeltingType:"weapon",
+    effect:"Material de forja. Infunde fogo permanente na arma.",
+    story:"Coletadas do rastro deixado por um Karlac Juvenil. Ainda quentes." },
+
+  { name:"Cristal de Relâmpago Puro", category:"misc", subcategory:"material",
+    craftingMaterial:true, smithingMaterial:true, materialTag:"cristal_relampago",
+    tier:"raro", weight:0.25, consumable:true,
+    smeltingType:"weapon",
+    effect:"Material de forja. Encanta a arma com descargas elétricas em cada golpe.",
+    story:"Formado no ponto exato onde um raio atingiu a rocha de Atrelon." },
+
+  { name:"Sangue Congelado do Lich", category:"misc", subcategory:"material",
+    craftingMaterial:true, smithingMaterial:true, materialTag:"sangue_lich",
+    tier:"raro", weight:0.12, consumable:true,
+    smeltingType:"weapon",
+    effect:"Material de forja. Infunde gelo e necromancia na lâmina.",
+    story:"Do Lich Varek, extraído antes da destruição do Filactério. Cristalizado." },
+
+  { name:"Essência do Vazio Sombrio", category:"misc", subcategory:"material",
+    craftingMaterial:true, smithingMaterial:true, materialTag:"essencia_vazio",
+    tier:"lendario", weight:0.05, consumable:true,
+    smeltingType:"weapon",
+    effect:"Material de forja lendário. Infunde o Vazio na arma — dano sombrio que ignora defesas mágicas.",
+    story:"Da Loba Alfa das Sombras, extraída por Clérigo. Quase impossível de segurar sem sentir o vazio." },
+
+  { name:"Fragmento do Coração de Dragão", category:"misc", subcategory:"material",
+    craftingMaterial:true, smithingMaterial:true, materialTag:"coracao_dragao",
+    tier:"lendario", weight:0.3, consumable:true,
+    smeltingType:"weapon",
+    effect:"Material de forja lendário. A arma absorve e redireciona energia elemental.",
+    story:"Do Filhote Dracônico de Tharak. Tharak sentiria a perda — não use perto dele." },
+
+  /* ─── Materiais de forja para ARMADURAS ─────────────────────── */
+
+  { name:"Couro Endurecido de Lobo", category:"misc", subcategory:"material",
+    craftingMaterial:true, smithingMaterial:true, materialTag:"couro_lobo",
+    tier:"comum", weight:0.3, consumable:true,
+    smeltingType:"armor",
+    effect:"Material de reforço. Adiciona resistência e furtividade à armadura.",
+    story:"Da Alcateia das Sombras Cinzentas. Flexível e silencioso." },
+
+  { name:"Placas de Golem de Pedra", category:"misc", subcategory:"material",
+    craftingMaterial:true, smithingMaterial:true, materialTag:"placa_golem",
+    tier:"raro", weight:0.8, consumable:true,
+    smeltingType:"armor",
+    effect:"Material de reforço. Adiciona defesa física massiva e resistência a impacto.",
+    story:"Arrancadas de um Golem de Pedra Antiga. Pesadas mas quase indestrutíveis." },
+
+  { name:"Escama de Cobra Guardiã", category:"misc", subcategory:"material",
+    craftingMaterial:true, smithingMaterial:true, materialTag:"escama_cobra_guardia",
+    tier:"raro", weight:0.25, consumable:true,
+    smeltingType:"armor",
+    effect:"Material de reforço. Adiciona resistência a veneno e magia.",
+    story:"Da Cobra Guardiã de Jurgmund. Semi-translúcida e quase tão resistente quanto aço." },
+
+  { name:"Teia de Aranha Abissal", category:"misc", subcategory:"material",
+    craftingMaterial:true, smithingMaterial:true, materialTag:"teia_aranha_abissal",
+    tier:"raro", weight:0.1, consumable:true,
+    smeltingType:"armor",
+    effect:"Material de reforço. Adiciona propriedades adesivas e resistência a projéteis.",
+    story:"Da Aranha Abissal Tecelã. Mais forte que aço ao ser tecida." },
+
+  { name:"Fragmento do Construto de Durrak", category:"misc", subcategory:"material",
+    craftingMaterial:true, smithingMaterial:true, materialTag:"fragmento_construto",
+    tier:"lendario", weight:1.0, consumable:true,
+    smeltingType:"armor",
+    effect:"Material de reforço lendário. Adiciona resistência mecânica absoluta e deflexão automática.",
+    story:"Do Constructo da Forja de Durrak. O ferro-negro fundido não aceita calor nem frio." },
+
+  { name:"Couro do Caçador de Gigantes", category:"misc", subcategory:"material",
+    craftingMaterial:true, smithingMaterial:true, materialTag:"couro_cacador_gigantes",
+    tier:"raro", weight:0.4, consumable:true,
+    smeltingType:"armor",
+    effect:"Material de reforço. Adiciona resistência e bônus contra criaturas grandes.",
+    story:"Do couro recuperado de combates contra Gigantes. Cada marca conta uma história." }];
 
 
 /* ================================================================
@@ -8171,4 +8273,356 @@ const ALCHEMY_RECIPES = [
       "Dud: o frasco não quebra. Fica no chão pegando fogo lentamente — explode em 1d3 rodadas onde caiu.",
     ],
     weight:0.5, story:"Laranja escuro e quase sólido. Borbulha levemente. Manuseio com pinça de ferro." }
+];
+
+
+/* ═══════════════════════════════════════════════════════════════
+   RECEITAS DE FORJA — FORGE_RECIPES
+   O personagem usa um item base (arma/armadura COMUM) +
+   um material de forja. O resultado é o item base com
+   propriedades encantadas (raro → lendário).
+   ═══════════════════════════════════════════════════════════════ */
+
+const FORGE_RECIPES = [
+
+  /* ══════════════════════════════════════════════════════════════
+     FORJA DE ARMAS
+     skillTest: FOR (trabalho físico) + INT (gravura de runas)
+     ══════════════════════════════════════════════════════════════ */
+
+  { id:"forge_veneno",
+    name:"Lâmina Envenenada",
+    icon:"☠️", tier:"raro", category:"weapon",
+    smeltingType:"weapon",
+    description:"Infunde veneno duradouro na lâmina. Cada golpe aplica veneno ao alvo.",
+    material: { tag:"oleo_serpente", qty:2, label:"Óleo de Serpente Venenosa ×2" },
+    baseRequirement:"Qualquer arma de 1M ou 2M comum (exceto maça/martelo)",
+    skillTest: { attr:"FOR", difficulty:"normal" },
+    enchantEffect: "+1d4 de veneno por acerto (SAB normal para resistir, 2 rodadas). Armas contundentes não aceitam este encantamento.",
+    dmgBonus:"1d4 veneno",
+    critBonus:[
+      "Veneno dura 3 rodadas em vez de 2.",
+      "SAB (difícil) para resistir ao veneno.",
+      "+1d6 de veneno em vez de +1d4.",
+    ],
+    critFailEffect:[
+      "Veneno corrói a lâmina: −1 de dano base permanente na arma.",
+      "Só o cabo ficou envenenado — você sofre 1d4 de veneno ao empunhá-la.",
+      "Encantamento instável: 30% de chance por acerto de não aplicar veneno.",
+    ],
+    story:"A cobra não precisa morder duas vezes." },
+
+  { id:"forge_fogo",
+    name:"Lâmina de Chama",
+    icon:"🔥", tier:"raro", category:"weapon",
+    smeltingType:"weapon",
+    description:"A arma arde em chamas. Cada golpe causa dano de fogo adicional.",
+    material: { tag:"cinzas_karlac", qty:1, label:"Cinzas de Karlac ×1" },
+    baseRequirement:"Qualquer arma comum (exceto arco)",
+    skillTest: { attr:"FOR", difficulty:"normal" },
+    enchantEffect: "+1d6 de dano de fogo por acerto. A arma ilumina num raio de 3 hex (funciona como tocha). Alvos inflamáveis podem pegar fogo.",
+    dmgBonus:"1d6 fogo",
+    critBonus:[
+      "+1d8 de fogo em vez de +1d6.",
+      "Chama persiste no alvo: Queimando (1d4/rodada, 2 rodadas).",
+      "Fogo em área: acerto crítico de combate causa +1d4 em todos os hex adjacentes ao alvo.",
+    ],
+    critFailEffect:[
+      "A chama é fraca: +1d4 de fogo em vez de +1d6.",
+      "A arma arde a si mesma: −1 Def de arma por uso durante 3 combates.",
+      "Chama invertida: 20% de chance por acerto de queimar o próprio usuário (1d4).",
+    ],
+    story:"O forjador sussurrou o nome de Karlac ao dar a última martelada. A arma respondeu." },
+
+  { id:"forge_gelo",
+    name:"Lâmina de Gelo Eterno",
+    icon:"❄️", tier:"raro", category:"weapon",
+    smeltingType:"weapon",
+    description:"A arma congela o ponto de impacto. Acertos acumulam carga de frio.",
+    material: { tag:"sangue_lich", qty:1, label:"Sangue Congelado do Lich ×1" },
+    baseRequirement:"Qualquer arma de 1M ou 2M comum",
+    skillTest: { attr:"FOR", difficulty:"dificil" },
+    enchantEffect: "+1d4 de dano de gelo por acerto. Cada acerto acumula 1 carga de Frio no alvo (máx 3). Com 3 cargas: Congelado (imóvel 1 rodada, FOR normal para escapar).",
+    dmgBonus:"1d4 gelo + cargas",
+    critBonus:[
+      "+1d6 de gelo em vez de +1d4.",
+      "2 cargas de Frio por acerto em vez de 1.",
+      "Congelamento requer FOR (difícil) para escapar em vez de normal.",
+    ],
+    critFailEffect:[
+      "A arma fica tão fria que entorpece a mão: −1 AGI enquanto empunhada.",
+      "Gelo instável: 25% de chance de as cargas de Frio não acumularem.",
+      "Maldição do Lich: a arma sussurra ao ser empunhada — −1 Força de Vontade permanente enquanto equipada.",
+    ],
+    story:"O Lich não cedeu o sangue voluntariamente. A arma lembra disso." },
+
+  { id:"forge_relampago",
+    name:"Lâmina do Relâmpago",
+    icon:"⚡", tier:"raro", category:"weapon",
+    smeltingType:"weapon",
+    description:"A arma conduz eletricidade. Golpes causam descarga elétrica e saltam para alvos próximos.",
+    material: { tag:"cristal_relampago", qty:1, label:"Cristal de Relâmpago Puro ×1" },
+    baseRequirement:"Qualquer arma metálica comum (exceto madeira/osso)",
+    skillTest: { attr:"INT", difficulty:"dificil" },
+    enchantEffect: "+1d6 de dano elétrico por acerto. 30% de chance (d10 ≤ 3) de o raio saltar para 1 inimigo adjacente ao alvo (1d4 de dano). Armaduras metálicas no alvo: sem resistência ao elétrico.",
+    dmgBonus:"1d6 elétrico + salto",
+    critBonus:[
+      "+1d8 elétrico em vez de +1d6.",
+      "Salto garantido (100%) em acertos.",
+      "O relâmpago pode saltar até 2 vezes (2 alvos adjacentes, 1d4 cada).",
+    ],
+    critFailEffect:[
+      "A descarga vai para o usuário: 1d4 de dano elétrico ao atacar.",
+      "Condutor instável: apenas 10% de chance de dano elétrico.",
+      "Sobrecarga: na primeira vez que matar inimigo, raio atinge aliado mais próximo (1d6).",
+    ],
+    story:"O cristal de Atrelon não foi domado — foi convencido." },
+
+  { id:"forge_necro",
+    name:"Lâmina do Ceifador",
+    icon:"💀", tier:"raro", category:"weapon",
+    smeltingType:"weapon",
+    description:"A arma drena a força vital dos inimigos. Cada golpe restaura HP ao portador.",
+    material: { tag:"po_osso_sagrado", qty:2, label:"Pó de Osso Sagrado ×2" },
+    baseRequirement:"Qualquer arma de 1M ou 2M comum",
+    skillTest: { attr:"SAB", difficulty:"normal" },
+    enchantEffect: "Cada acerto restaura 1d4 HP ao portador (drena a vitalidade do alvo). Não funciona contra construtos ou mortos-vivos.",
+    dmgBonus:"drenagem 1d4 HP",
+    critBonus:[
+      "Drena 1d6 HP em vez de 1d4.",
+      "Também drena 1 de FOR temporária do alvo por 2 rodadas.",
+      "Se matar o alvo: drena HP total do golpe final (em vez de 1d4).",
+    ],
+    critFailEffect:[
+      "Drena vida do próprio portador: −1d4 HP por acerto.",
+      "A arma se corrói: perde 1 de dano base permanentemente.",
+      "Amaldiçoada: o portador não pode ser curado enquanto empunhada (a arma drena qualquer cura).",
+    ],
+    story:"O pó de osso sagrado corrompido não purifica — inverte. O ferreiro aprendeu isso tarde demais." },
+
+  { id:"forge_intimidacao",
+    name:"Arma do Terror",
+    icon:"😱", tier:"raro", category:"weapon",
+    smeltingType:"weapon",
+    description:"A arma irradia presença aterrorizante. O simples ato de sacar causa hesitação nos inimigos.",
+    material: { tag:"po_osso_wyvern", qty:1, label:"Pó de Osso de Wyvern ×1" },
+    baseRequirement:"Qualquer arma de 2M comum (peso e tamanho amplificam o efeito)",
+    skillTest: { attr:"FOR", difficulty:"normal" },
+    enchantEffect: "Ao sacar em combate: inimigos em raio 3 hex testam Força de Vontade (normal) ou ficam com −1d4 nos ataques por 1 rodada (primeiro turno apenas). Inimigos Dif.1 testam Força de Vontade (difícil).",
+    dmgBonus:"aura de terror",
+    critBonus:[
+      "Força de Vontade (difícil) para todos ao sacar.",
+      "Inimigos Dif.1-2 automaticamente falham no teste.",
+      "O efeito de intimidação dura 2 rodadas em vez de 1.",
+    ],
+    critFailEffect:[
+      "A aura é confusa: aliados em raio 2 hex também testam (Força de Vontade normal).",
+      "Fraca demais: apenas Dif.1 é afetado.",
+      "Aura invertida: o portador fica com −1d4 nos ataques no primeiro turno (a arma intimida quem a usa).",
+    ],
+    story:"O Wyvern não precisava de presença mágica. Bastava aparecer. A arma aprendeu isso." },
+
+  { id:"forge_vazio",
+    name:"Lâmina do Vazio",
+    icon:"🌑", tier:"lendario", category:"weapon",
+    smeltingType:"weapon",
+    description:"A arma foi tocada pelo Vazio. Dano sombrio que ignora Def.Mágica. Corrompe os que mata.",
+    material: { tag:"essencia_vazio", qty:1, label:"Essência do Vazio Sombrio ×1" },
+    baseRequirement:"Qualquer arma de 1M ou 2M comum de boa qualidade",
+    skillTest: { attr:"INT", difficulty:"critico" },
+    enchantEffect: "+1d8 de dano sombrio por acerto (ignora Def.Mágica completamente). Alvos mortos por esta arma: 30% de chance de se levantarem como Sombra Menor aliada por 3 rodadas. Portador sente o Vazio ao empunhá-la.",
+    dmgBonus:"1d8 sombrio (ignora Def.Mágica)",
+    critBonus:[
+      "+1d10 sombrio em vez de +1d8.",
+      "Levantamento de Sombra: 60% de chance em vez de 30%.",
+      "A Sombra levantada dura o combate inteiro em vez de 3 rodadas.",
+    ],
+    critFailEffect:[
+      "O Vazio é demais: portador perde 1 SAB temporária por combate enquanto a usa.",
+      "A Sombra levantada é hostil ao portador (30% de chance).",
+      "Maldição do Vazio: portador tem pesadelos — perde 1d4 HP ao acordar todo dia até cura sagrada (1 semana).",
+    ],
+    story:"O Vazio não foi adicionado à arma. Ele aceitou o convite." },
+
+  { id:"forge_dragao",
+    name:"Arma do Sangue de Dragão",
+    icon:"🐉", tier:"lendario", category:"weapon",
+    smeltingType:"weapon",
+    description:"A arma foi temperada no coração de um Filhote Dracônico. Absorve e redireciona energia elemental.",
+    material: { tag:"coracao_dragao", qty:1, label:"Fragmento do Coração de Dragão ×1" },
+    baseRequirement:"Qualquer arma 2M comum (requer base sólida para absorver o poder)",
+    skillTest: { attr:"FOR", difficulty:"critico" },
+    enchantEffect: "+1d8 de dano elemental (tipo muda por sessão — fogo, gelo ou relâmpago, determinado ao equipar). Ao receber dano do tipo elemental ativo: absorve e adiciona +1d6 ao próximo ataque. 1x por combate, pode mudar o tipo elemental como Ação Livre.",
+    dmgBonus:"1d8 elemental variável + absorção",
+    critBonus:[
+      "+1d10 elemental em vez de +1d8.",
+      "Absorção eleva para +1d8 no próximo ataque.",
+      "Pode mudar o tipo elemental 2x por combate em vez de 1x.",
+    ],
+    critFailEffect:[
+      "O coração resiste: absorção não funciona — apenas o +1d6 elemental fraco.",
+      "Elemento instável: o tipo muda aleatoriamente a cada turno (Mestre rola).",
+      "Tharak sente a perda: se dentro de 10 dias o portador encontrar Tharak, ele estará hostil.",
+    ],
+    story:"Tharak notará. É apenas uma questão de quando." },
+
+  /* ══════════════════════════════════════════════════════════════
+     REFORÇO DE ARMADURAS
+     skillTest: FOR (trabalho físico) ou DEX (precisão de costura/encaixe)
+     ══════════════════════════════════════════════════════════════ */
+
+  { id:"forge_armadura_furtiva",
+    name:"Armadura Silenciosa",
+    icon:"🌑", tier:"raro", category:"armor",
+    smeltingType:"armor",
+    description:"Reforço com couro de Lobo das Sombras. A armadura deixa de fazer barulho e melhora a Furtividade.",
+    material: { tag:"couro_lobo", qty:2, label:"Couro Endurecido de Lobo ×2" },
+    baseRequirement:"Qualquer armadura de couro comum (Armadura de Couro, Couro Batido, Manto das Sombras)",
+    skillTest: { attr:"DEX", difficulty:"normal" },
+    enchantEffect: "+1 Def.Física. Penalidade de Furtividade da armadura removida. Testes de Furtividade têm +1d4. Não soa ao mover-se.",
+    defBonus:"+1 Def.Física",
+    critBonus:[
+      "+2 Def.Física em vez de +1.",
+      "+1d6 em Furtividade em vez de +1d4.",
+      "Camuflagem passiva em ambientes escuros: Percepção (difícil) para detectar.",
+    ],
+    critFailEffect:[
+      "O couro foi mal costurado: −1 Def.Física permanente até reparar (Artesanato normal).",
+      "A armadura range estranhamente: −1d4 em Furtividade (pior que antes).",
+      "Pelagem instável: a armadura parece mudar de cor aleatoriamente (efeito visual, −1 em testes sociais formais).",
+    ],
+    story:"Os lobos se movem silenciosamente. O couro deles também." },
+
+  { id:"forge_armadura_pedra",
+    name:"Armadura de Pedra Viva",
+    icon:"🪨", tier:"raro", category:"armor",
+    smeltingType:"armor",
+    description:"Placas do Golem são encaixadas na armadura. Resistência massiva mas reduz levemente a agilidade.",
+    material: { tag:"placa_golem", qty:2, label:"Placas de Golem de Pedra ×2" },
+    baseRequirement:"Armadura de Cota de Malha ou de Placas comum",
+    skillTest: { attr:"FOR", difficulty:"dificil" },
+    enchantEffect: "+3 Def.Física. −1 Ação de Combate (a armadura fica mais pesada). Imune a Derrubado por fontes físicas. Resistência a dano contundente (−2 por dado).",
+    defBonus:"+3 Def.Física",
+    critBonus:[
+      "+4 Def.Física em vez de +3.",
+      "A penalidade de Ação é removida (o ferreiro encontrou equilíbrio perfeito).",
+      "Resistência a contundente ampliada: −3 por dado.",
+    ],
+    critFailEffect:[
+      "As placas não encaixam bem: +3 Def.Física mas −1 AGI permanente enquanto equipada.",
+      "Peso mal distribuído: o portador cai Derrubado uma vez no primeiro turno de combate (tropeça no próprio peso).",
+      "As placas racham: apenas +1 Def.Física — mal aproveitou o material.",
+    ],
+    story:"O Golem foi destruído. Suas placas recusam-se a servir a um mestre mais fraco." },
+
+  { id:"forge_armadura_veneno",
+    name:"Armadura da Escama Sagrada",
+    icon:"🐍", tier:"raro", category:"armor",
+    smeltingType:"armor",
+    description:"Escamas da Cobra Guardiã de Jurgmund forram a armadura. Resistência a veneno e magia.",
+    material: { tag:"escama_cobra_guardia", qty:3, label:"Escama de Cobra Guardiã ×3" },
+    baseRequirement:"Qualquer armadura comum (qualquer tipo)",
+    skillTest: { attr:"DEX", difficulty:"normal" },
+    enchantEffect: "+2 Def.Mágica. Imune a venenos Dif.1-2. Venenos Dif.3+ causam metade do efeito. 30% de chance (d10 ≤ 3) de refletir magia de veneno de volta ao lançador.",
+    defBonus:"+2 Def.Mágica",
+    critBonus:[
+      "+3 Def.Mágica em vez de +2.",
+      "Reflexo de veneno aumenta para 50% (d10 ≤ 5).",
+      "Imune a venenos Dif.1-3. Dif.4+ causa metade.",
+    ],
+    critFailEffect:[
+      "As escamas ficaram porosas: apenas +1 Def.Mágica.",
+      "A energia de Jurgmund rejeita o portador: −1 SAB temporária enquanto equipada (a serpente não aprova).",
+      "Reflexo errático: 10% de chance de refletir QUALQUER magia de volta ao lançador (incluindo curas de aliados).",
+    ],
+    story:"Jurgmund não se importa com quem usa as escamas de seus guardiões. A escama sim." },
+
+  { id:"forge_armadura_teia",
+    name:"Armadura Tecida do Abismo",
+    icon:"🕸️", tier:"raro", category:"armor",
+    smeltingType:"armor",
+    description:"Teia de Aranha Abissal entrelaçada na armadura. Absorve projéteis e prende atacantes.",
+    material: { tag:"teia_aranha_abissal", qty:2, label:"Teia de Aranha Abissal ×2" },
+    baseRequirement:"Armadura de Couro, Vestes ou Manto comum",
+    skillTest: { attr:"DEX", difficulty:"dificil" },
+    enchantEffect: "+2 Def.Física contra ataques à distância (flechas, projéteis mágicos). Ao ser acertado em melee: 20% de chance (d10 ≤ 2) de o atacante ficar Preso pela teia (FOR normal para escapar, 1 Ação).",
+    defBonus:"+2 Def.Fís (distância) + aprisionamento",
+    critBonus:[
+      "+3 Def.Física contra distância.",
+      "Aprisionamento: 40% de chance (d10 ≤ 4).",
+      "A teia estende: ao ficar Preso, o alvo fica Preso por 2 rodadas.",
+    ],
+    critFailEffect:[
+      "A teia é fraca: apenas +1 Def contra distância, sem aprisionamento.",
+      "A teia prende o próprio portador: −1 AGI enquanto equipada (move-se estranhamente).",
+      "A teia atrai aranhas: em ambientes naturais, pequenas aranhas aparecem ao redor do portador (impreca −1d4 em testes sociais).",
+    ],
+    story:"A Aranha Abissal Tecelã não perdoou a perda da teia. O portador pode sentir isso." },
+
+  { id:"forge_armadura_construto",
+    name:"Armadura do Núcleo Mecânico",
+    icon:"⚙️", tier:"lendario", category:"armor",
+    smeltingType:"armor",
+    description:"Fragmentos do Construto de Durrak fundidos na armadura. Resistência mecânica e deflexão automática.",
+    material: { tag:"fragmento_construto", qty:1, label:"Fragmento do Construto de Durrak ×1" },
+    baseRequirement:"Armadura de Placas Completa comum",
+    skillTest: { attr:"FOR", difficulty:"critico" },
+    enchantEffect: "+4 Def.Física. +2 Def.Mágica. Imune a fogo e dano de lava. 1x por combate, deflexão automática: quando receber ataque que causaria mais de 15 HP, pode deflectir automaticamente (nega completamente o dano, Ação Livre). Após deflectir: próxima Ação do portador tem +1d10 de dano (adrenalina mecânica).",
+    defBonus:"+4 Def.Física, +2 Def.Mágica",
+    critBonus:[
+      "+5 Def.Física em vez de +4.",
+      "Deflexão funciona 2x por combate em vez de 1x.",
+      "O limiar de deflexão baixa para 10 HP (qualquer golpe acima de 10 pode ser deflectido).",
+    ],
+    critFailEffect:[
+      "O núcleo resiste: apenas +2 Def.Física, sem deflexão e sem resistência a fogo.",
+      "Sobrecarga mecânica: 1x por combate, a armadura trava o portador por 1 Ação (mecanismo falha).",
+      "O espírito do Construto permanece: a armadura tenta às vezes guiar os movimentos do portador (Força de Vontade normal ou perde 1 Ação para resistir ao impulso mecânico).",
+    ],
+    story:"O Construto não foi destruído. Foi redistribuído. A distinção importa para ele." }
+,
+
+  { id:"forge_afiada",
+    name:"Lâmina Rúnica Afiada",
+    icon:"🔪", tier:"raro", category:"weapon",
+    smeltingType:"weapon",
+    description:"Runas de afiação gravadas na lâmina amplificam a força de corte e penetração.",
+    material: { tag:"pedra_afia_runica", qty:2, label:"Pedra de Afiar Rúnica ×2" },
+    baseRequirement:"Qualquer arma de corte comum (Adaga, Espada Curta, Espada Longa, Machado, Foice)",
+    skillTest: { attr:"FOR", difficulty:"normal" },
+    enchantEffect: "+1d4 de dano extra por acerto. A arma ignora 2 pontos de Def.Física do alvo (a lâmina rúnica penetra armaduras). Armas contundentes não aceitam este encantamento.",
+    dmgBonus:"1d4 + −2 Def alvo",
+    critBonus:[
+      "+1d6 de dano extra em vez de +1d4.",
+      "Ignora 3 pontos de Def.Física em vez de 2.",
+      "A lâmina se torna magicamente afiada: nunca perde o fio (sem desgaste de Defesa).",
+    ],
+    critFailEffect:[
+      "As runas fragmentam a lâmina: −1 de dano base permanente.",
+      "Afiação unilateral: +1d4 só contra armaduras (sem bônus contra alvos sem armadura).",
+      "Runa invertida: a lâmina perde 1 de dano base mas ganha +1 em defesa (agora é um escudo esquisito).",
+    ],
+    story:"As runas anãs de afiação têm 400 anos de história. Cada uma gravada por Dunforge leva 1 hora." },
+
+  { id:"forge_cacador",
+    name:"Armadura do Rastreador",
+    icon:"🏔", tier:"raro", category:"armor",
+    smeltingType:"armor",
+    description:"O couro do Caçador de Gigantes reforça a armadura com resistência e bônus contra criaturas grandes.",
+    material: { tag:"couro_cacador_gigantes", qty:1, label:"Couro do Caçador de Gigantes ×1" },
+    baseRequirement:"Qualquer armadura de couro ou manto comum",
+    skillTest: { attr:"FOR", difficulty:"normal" },
+    enchantEffect: "+2 Def.Física. Passivo: contra inimigos de tamanho Grande ou maior, ganha +1d6 de dano em todos os ataques e +1 Def.Física adicional. Imune a condição Derrubado causada por criaturas Grandes+.",
+    defBonus:"+2 Def.Física",
+    critBonus:[
+      "+3 Def.Física em vez de +2.",
+      "+1d8 de dano contra Grandes em vez de +1d6.",
+      "O bônus se estende para criaturas de qualquer tamanho (não só Grandes).",
+    ],
+    critFailEffect:[
+      "O couro encolhe: apenas +1 Def.Física.",
+      "O espírito do Caçador resiste: −1 SAB enquanto equipada (memórias do caçador interferem).",
+      "Marca do Colosso: criaturas Grandes+ sentem a armadura — ficam Hostis se o portador não iniciar combate.",
+    ],
+    story:"O Caçador de Gigantes que usou este couro nunca perdeu uma batalha. Não por sorte." }
 ];

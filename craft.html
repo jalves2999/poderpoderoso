@@ -198,11 +198,81 @@
     }
     .craft-filter-btn.active { background:var(--gold); color:#fff; border-color:var(--gold); }
 
+    /* Seletor de item base da forja */
+    .forge-base-section {
+      background:rgba(156,122,60,0.06); border:1px solid rgba(156,122,60,0.2);
+      border-radius:10px; padding:12px; margin-bottom:14px;
+    }
+    .forge-base-label {
+      font-family:var(--font-label); font-size:11px; text-transform:uppercase;
+      letter-spacing:.4px; color:var(--ink-soft); margin-bottom:8px;
+    }
+    .forge-base-select {
+      width:100%; padding:9px 10px; border:1px solid var(--line); border-radius:7px;
+      background:rgba(255,255,255,.7); font-family:var(--font-heading); font-size:14px;
+      color:var(--ink); margin-bottom:6px;
+    }
+    .forge-base-info {
+      font-size:12px; color:var(--ink-soft); min-height:16px;
+    }
+
+    /* Cards de receita de forja */
+    .forge-recipe-list { display:flex; flex-direction:column; gap:10px; }
+    .forge-card {
+      border:1px solid var(--line); border-radius:10px;
+      background:rgba(255,255,255,.35); overflow:hidden; transition:box-shadow .15s;
+    }
+    .forge-card.unavailable { opacity:.55; }
+    .forge-card:hover:not(.unavailable) { box-shadow:0 2px 10px rgba(0,0,0,.08); }
+    .forge-card-header {
+      display:flex; align-items:center; gap:10px;
+      padding:12px 14px; cursor:pointer; user-select:none;
+    }
+    .forge-card-icon { font-size:24px; flex-shrink:0; }
+    .forge-card-title-col { flex:1; min-width:0; }
+    .forge-card-name { font-family:var(--font-heading); font-size:15px; color:var(--ink); }
+    .forge-card-sub  { font-size:11px; color:var(--ink-soft); margin-top:2px; line-height:1.4; }
+    .forge-card-body { padding:0 14px 14px; display:none; }
+    .forge-card.open .forge-card-body { display:block; }
+    .forge-card.open .forge-card-header { border-bottom:1px solid var(--line); }
+
+    /* Material necessário */
+    .forge-material-row {
+      display:flex; align-items:center; gap:8px; padding:8px 10px;
+      border-radius:7px; margin:8px 0; font-size:13px;
+    }
+    .forge-material-row.have    { background:rgba(39,174,96,.08); }
+    .forge-material-row.missing { background:rgba(231,76,60,.08); }
+    .forge-material-qty { font-family:var(--font-heading); margin-left:auto; }
+    .forge-material-row.have    .forge-material-qty { color:#27ae60; }
+    .forge-material-row.missing .forge-material-qty { color:#e74c3c; }
+
+    /* Efeito de encantamento */
+    .forge-enchant-box {
+      padding:9px 11px; border-radius:7px; margin:8px 0;
+      background:rgba(156,122,60,0.07); border-left:3px solid var(--gold);
+      font-size:13px; color:var(--ink); line-height:1.55;
+    }
+    .forge-enchant-label {
+      font-family:var(--font-label); font-size:10px; text-transform:uppercase;
+      letter-spacing:.4px; color:var(--gold); display:block; margin-bottom:3px;
+    }
+    .forge-req-box {
+      font-size:12px; color:var(--ink-soft); padding:6px 10px;
+      background:rgba(0,0,0,.04); border-radius:6px; margin:6px 0;
+    }
+
+    /* Resultado da forja */
+    .crm-forged-item {
+      padding:10px 12px; border-radius:8px; margin:10px 0;
+      background:rgba(156,122,60,.08); border:1px solid rgba(156,122,60,.25);
+    }
+    .crm-forged-name { font-family:var(--font-heading); font-size:15px; color:var(--gold); }
+    .crm-forged-effect { font-size:13px; color:var(--ink); margin-top:4px; line-height:1.5; }
+
     @media(max-width:480px) {
-      .craft-body { padding:10px; }
-      .recipe-header { padding:10px; }
-      .recipe-body { padding:0 10px 10px; }
-      .mat-grid { grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); }
+      .forge-card-header { padding:10px; }
+      .forge-card-body   { padding:0 10px 10px; }
     }
   </style>
 </head>
@@ -226,7 +296,8 @@
 
   <!-- Abas -->
   <div class="craft-tabs">
-    <button class="craft-tab-btn active" data-tab="recipes">📜 Receitas</button>
+    <button class="craft-tab-btn active" data-tab="recipes">🧪 Alquimia</button>
+    <button class="craft-tab-btn" data-tab="forge">⚒ Forja</button>
     <button class="craft-tab-btn" data-tab="materials">🌿 Materiais</button>
   </div>
 
@@ -243,6 +314,28 @@
       </div>
       <div class="recipe-list" id="recipe-list"></div>
     </div>
+
+    <div id="tab-forge" style="display:none">
+      <div class="craft-filters" id="forge-filters">
+        <button class="craft-filter-btn active" data-forge-filter="all">Todos</button>
+        <button class="craft-filter-btn" data-forge-filter="weapon">⚔ Armas</button>
+        <button class="craft-filter-btn" data-forge-filter="armor">🛡 Armaduras</button>
+        <button class="craft-filter-btn" data-forge-filter="lendario">✦ Lendários</button>
+        <button class="craft-filter-btn" data-forge-filter="available">✅ Disponíveis</button>
+      </div>
+
+      <!-- Seletor de item base -->
+      <div class="forge-base-section" id="forge-base-section">
+        <div class="forge-base-label">⚒ Item base para encantar</div>
+        <select class="forge-base-select" id="forge-base-select">
+          <option value="">— selecione arma ou armadura comum —</option>
+        </select>
+        <div class="forge-base-info" id="forge-base-info"></div>
+      </div>
+
+      <div class="forge-recipe-list" id="forge-recipe-list"></div>
+    </div>
+
     <div id="tab-materials" style="display:none">
       <div class="mat-grid" id="mat-grid"></div>
     </div>
