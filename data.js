@@ -2906,7 +2906,198 @@ const MISC_ITEMS = [
     magicBonus: {},
     effect: "Material lendário doado voluntariamente por Tharak. Pode ser processada por ferreiro de elite em: (1) Armadura de Escama de Dragão (+5 Def.Física, resistência a fogo — reduz dano de fogo em 4/dado) ou (2) Escudo Dracônico (+4 Def.Física, +3 Def.Mágica, 1x/combate absorve sopro de dragão completamente). Requer 2 semanas de trabalho e 100 moedas.",
     story: "Tharak a arrancou do próprio flanco sem piscar. 'Doerá por uma semana. Mas minhas escamas crescem de volta. A amizade não cresce.'" }
-];
+,
+
+  /* ═══════════════════════════════════════════════════════════════
+     MATERIAIS DE CRAFTING — type:"material"
+     Aparecem no painel de Alquimia como ingredientes.
+     Peso sempre baixo (coleta de campo).
+     ═══════════════════════════════════════════════════════════════ */
+
+  // ── Plantas e Ervas ──────────────────────────────────────────
+  { name:"Erva de Cura Menor", category:"misc", subcategory:"material",
+    craftingMaterial:true, materialTag:"erva_cura_menor",
+    tier:"comum", weight:0.05, consumable:true,
+    effect:"Ingrediente de alquimia. Propriedades regenerativas leves.", story:"Comum em campos abertos. Cheiro suave de mel." },
+
+  { name:"Raiz de Cura", category:"misc", subcategory:"material",
+    craftingMaterial:true, materialTag:"raiz_cura",
+    tier:"comum", weight:0.08, consumable:true,
+    effect:"Ingrediente de alquimia. Propriedades regenerativas médias.", story:"Raiz vermelha com nervuras douradas. Mirna paga bem por ela." },
+
+  { name:"Flor do Pântano Cinzento", category:"misc", subcategory:"material",
+    craftingMaterial:true, materialTag:"flor_pantano",
+    tier:"comum", weight:0.04, consumable:true,
+    effect:"Ingrediente de alquimia. Propriedades purificantes.", story:"Cresce só no Pântano do Véu Cinzento. Petalas azul-acinzentadas." },
+
+  { name:"Cogumelo Relâmpago", category:"misc", subcategory:"material",
+    craftingMaterial:true, materialTag:"cogumelo_relampago",
+    tier:"comum", weight:0.06, consumable:true,
+    effect:"Ingrediente de alquimia. Propriedades elétricas latentes.", story:"Emite faíscas quando cortado. Não segurar por muito tempo." },
+
+  { name:"Musgo Gelo-Eterno", category:"misc", subcategory:"material",
+    craftingMaterial:true, materialTag:"musgo_gelo",
+    tier:"comum", weight:0.05, consumable:true,
+    effect:"Ingrediente de alquimia. Propriedades de resfriamento extremo.", story:"Frio ao toque mesmo no verão. Cresce em rochas de Atrelon." },
+
+  { name:"Pimenta do Inferno", category:"misc", subcategory:"material",
+    craftingMaterial:true, materialTag:"pimenta_inferno",
+    tier:"comum", weight:0.04, consumable:true,
+    effect:"Ingrediente de alquimia. Propriedades incendiárias concentradas.", story:"Vermelha e preta. Nunca lamber os dedos depois de manuseá-la." },
+
+  { name:"Erva da Invisibilidade", category:"misc", subcategory:"material",
+    craftingMaterial:true, materialTag:"erva_invisibilidade",
+    tier:"raro", weight:0.04, consumable:true,
+    effect:"Ingrediente de alquimia. Propriedades de ocultação mágica.", story:"Translúcida. Difícil de encontrar por razões óbvias." },
+
+  { name:"Raiz de Velocidade", category:"misc", subcategory:"material",
+    craftingMaterial:true, materialTag:"raiz_velocidade",
+    tier:"raro", weight:0.06, consumable:true,
+    effect:"Ingrediente de alquimia. Propriedades de aceleração do metabolismo.", story:"Treme levemente mesmo parada. Druidas a chamam de Raiz Inquieta." },
+
+  // ── Reagentes de Criatura ─────────────────────────────────────
+  { name:"Glândula de Veneno (Cobra)", category:"misc", subcategory:"material",
+    craftingMaterial:true, materialTag:"glandula_veneno_cobra",
+    tier:"comum", weight:0.08, consumable:true,
+    effect:"Ingrediente de alquimia. Base para venenos e antídotos.", story:"Deve ser mantida fria ou perde potência em 12 horas." },
+
+  { name:"Glândula de Veneno Paralisante", category:"misc", subcategory:"material",
+    craftingMaterial:true, materialTag:"glandula_paralisia",
+    tier:"raro", weight:0.08, consumable:true,
+    effect:"Ingrediente de alquimia. Propriedades paralisantes concentradas.", story:"Do Lagarto Venenoso Gigante. Raramente coletada com sucesso." },
+
+  { name:"Ácido de Slime", category:"misc", subcategory:"material",
+    craftingMaterial:true, materialTag:"acido_slime",
+    tier:"comum", weight:0.1, consumable:true,
+    effect:"Ingrediente de alquimia. Ácido corrosivo de baixa estabilidade.", story:"Frasco selado com cera especial. O frasco comum dura 3 dias." },
+
+  { name:"Núcleo de Relâmpago", category:"misc", subcategory:"material",
+    craftingMaterial:true, materialTag:"nucleo_relampago",
+    tier:"raro", weight:0.2, consumable:true,
+    effect:"Ingrediente de alquimia. Energia elétrica cristalizada.", story:"Do Elemental de Relâmpago. Faísca ao toque. Armazenar em madeira seca." },
+
+  { name:"Pena do Corvo Fantasma", category:"misc", subcategory:"material",
+    craftingMaterial:true, materialTag:"pena_corvo_fantasma",
+    tier:"raro", weight:0.01, consumable:true,
+    effect:"Ingrediente de alquimia. Propriedades espectrais e de presságio.", story:"Levemente translúcida. Flutua se solta." },
+
+  { name:"Essência do Eco", category:"misc", subcategory:"material",
+    craftingMaterial:true, materialTag:"essencia_eco",
+    tier:"raro", weight:0.05, consumable:true,
+    effect:"Ingrediente de alquimia. Capta e reflete energias mágicas.", story:"Do Espectro do Eco. Parece mudar de cor conforme a luz." },
+
+  { name:"Pó de Fada", category:"misc", subcategory:"material",
+    craftingMaterial:true, materialTag:"po_fada",
+    tier:"raro", weight:0.02, consumable:true,
+    effect:"Ingrediente de alquimia. Propriedades ilusórias e de alteração de estado.", story:"Brilha no escuro. Pixies ficam bravíssimas se roubado." },
+
+  { name:"Dente de Vampiro", category:"misc", subcategory:"material",
+    craftingMaterial:true, materialTag:"dente_vampiro",
+    tier:"raro", weight:0.05, consumable:true,
+    effect:"Ingrediente de alquimia. Propriedades de drenagem e restauração.", story:"Ainda perfura vidro grosso. Armazenar em estojo de couro." },
+
+  { name:"Escama de Karlac Juvenil", category:"misc", subcategory:"material",
+    craftingMaterial:true, materialTag:"escama_karlac",
+    tier:"raro", weight:0.3, consumable:true,
+    effect:"Ingrediente de alquimia. Resistência extrema a calor.", story:"Quase impossível de cortar. Vorn pagaria bem por uma." },
+
+  { name:"Núcleo de Magma Fundido", category:"misc", subcategory:"material",
+    craftingMaterial:true, materialTag:"nucleo_magma",
+    tier:"lendario", weight:0.5, consumable:true,
+    effect:"Ingrediente de alquimia lendário. Calor permanente cristalizado.", story:"Brilha laranja no escuro. Queima madeira ao contato após 10 minutos." },
+
+  // ── Reagentes Alquímicos Sintéticos ──────────────────────────
+  { name:"Água Destilada Arcana", category:"misc", subcategory:"material",
+    craftingMaterial:true, materialTag:"agua_arcana",
+    tier:"comum", weight:0.2, consumable:true,
+    effect:"Solvente base para poções. Necessário em quase todas as receitas.", story:"Agua comum purificada com magia menor. Alquimistas vendem em todo lugar." },
+
+  { name:"Pó de Osso Sagrado", category:"misc", subcategory:"material",
+    craftingMaterial:true, materialTag:"po_osso_sagrado",
+    tier:"comum", weight:0.05, consumable:true,
+    effect:"Ingrediente de alquimia. Propriedades purificantes e sagradas.", story:"Osso de criatura sagrada moído. Clérigos o usam em rituais menores." },
+
+  { name:"Catalisador de Cristal", category:"misc", subcategory:"material",
+    craftingMaterial:true, materialTag:"catalisador_cristal",
+    tier:"raro", weight:0.1, consumable:true,
+    effect:"Amplifica o efeito de qualquer poção. Usado como ingrediente final.", story:"Fragmento de cristal de Atrelon. Reage com magia de forma imprevisível." },
+
+  /* ─── PERGAMINHOS DE RECEITA — type:"recipe_scroll" ─────────── */
+
+  { name:"Pergaminho de Receita: Poção de Cura Menor",   category:"misc", subcategory:"recipe_scroll",
+    recipeId:"rec_cura_menor",    tier:"comum",   weight:0.05, consumable:true,
+    effect:"Usar este item: aprende permanentemente a receita da Poção de Cura Menor. Consumido ao usar.",
+    story:"Escrito com tinta vermelha sobre pergaminho fino. Odor leve de ervas." },
+
+  { name:"Pergaminho de Receita: Poção de Cura",         category:"misc", subcategory:"recipe_scroll",
+    recipeId:"rec_cura_media",    tier:"comum",   weight:0.05, consumable:true,
+    effect:"Usar este item: aprende permanentemente a receita da Poção de Cura. Consumido ao usar.",
+    story:"Páginas duplas dobradas. A tinta muda de cor no meio — o alquimista trocou de caneta." },
+
+  { name:"Pergaminho de Receita: Antídoto Aprimorado",   category:"misc", subcategory:"recipe_scroll",
+    recipeId:"rec_cura_veneno",   tier:"comum",   weight:0.05, consumable:true,
+    effect:"Usar este item: aprende permanentemente a receita do Antídoto Aprimorado. Consumido ao usar.",
+    story:"Cheiro forte de flores do pântano. Levemente úmido." },
+
+  { name:"Pergaminho de Receita: Poção de Purificação",  category:"misc", subcategory:"recipe_scroll",
+    recipeId:"rec_purificacao",   tier:"raro",    weight:0.05, consumable:true,
+    effect:"Usar este item: aprende permanentemente a receita da Poção de Purificação. Consumido ao usar.",
+    story:"Escrita em dois idiomas — o segundo é ilegível mas o resultado final é claro." },
+
+  { name:"Pergaminho de Receita: Frasco de Ácido",       category:"misc", subcategory:"recipe_scroll",
+    recipeId:"rec_acido",         tier:"comum",   weight:0.05, consumable:true,
+    effect:"Usar este item: aprende permanentemente a receita do Frasco de Ácido. Consumido ao usar.",
+    story:"Tem marcas de respingos de ácido nas bordas. O autor sobreviveu — provavelmente." },
+
+  { name:"Pergaminho de Receita: Coquetel de Fogo",      category:"misc", subcategory:"recipe_scroll",
+    recipeId:"rec_fogo",          tier:"comum",   weight:0.05, consumable:true,
+    effect:"Usar este item: aprende permanentemente a receita do Coquetel de Fogo. Consumido ao usar.",
+    story:"Cuidado ao manusear perto de chamas. A tinta é levemente inflamável." },
+
+  { name:"Pergaminho de Receita: Veneno de Contato",     category:"misc", subcategory:"recipe_scroll",
+    recipeId:"rec_veneno_contato",tier:"comum",   weight:0.05, consumable:true,
+    effect:"Usar este item: aprende permanentemente a receita do Veneno de Contato. Consumido ao usar.",
+    story:"Embalado em linho duplo. A receita está correta mas o autor não assinou." },
+
+  { name:"Pergaminho de Receita: Poção de Paralisia",    category:"misc", subcategory:"recipe_scroll",
+    recipeId:"rec_paralisia",     tier:"raro",    weight:0.05, consumable:true,
+    effect:"Usar este item: aprende permanentemente a receita da Poção de Paralisia. Consumido ao usar.",
+    story:"Letra pequena e precisa. Este alquimista sabia o que estava fazendo." },
+
+  { name:"Pergaminho de Receita: Bomba de Relâmpago",    category:"misc", subcategory:"recipe_scroll",
+    recipeId:"rec_acido_relampago",tier:"raro",   weight:0.05, consumable:true,
+    effect:"Usar este item: aprende permanentemente a receita da Bomba de Relâmpago. Consumido ao usar.",
+    story:"Tem marcas de queimadura nas bordas. Por raios, não por ácido." },
+
+  { name:"Pergaminho de Receita: Poção de Invisibilidade",category:"misc",subcategory:"recipe_scroll",
+    recipeId:"rec_invisibilidade",tier:"raro",    weight:0.05, consumable:true,
+    effect:"Usar este item: aprende permanentemente a receita da Poção de Invisibilidade. Consumido ao usar.",
+    story:"O pergaminho parece translúcido quando segurado contra a luz." },
+
+  { name:"Pergaminho de Receita: Poção de Velocidade",   category:"misc", subcategory:"recipe_scroll",
+    recipeId:"rec_velocidade",    tier:"raro",    weight:0.05, consumable:true,
+    effect:"Usar este item: aprende permanentemente a receita da Poção de Velocidade. Consumido ao usar.",
+    story:"Escrito muito rápido — a letra é quase ilegível. Temático." },
+
+  { name:"Pergaminho de Receita: Poção de Força",        category:"misc", subcategory:"recipe_scroll",
+    recipeId:"rec_forca",         tier:"comum",   weight:0.05, consumable:true,
+    effect:"Usar este item: aprende permanentemente a receita da Poção de Força. Consumido ao usar.",
+    story:"Manchado de algo avermelhado. Provavelmente vinho. Provavelmente." },
+
+  { name:"Pergaminho de Receita: Elixir de Resistência ao Fogo",category:"misc",subcategory:"recipe_scroll",
+    recipeId:"rec_resistencia_fogo",tier:"raro",  weight:0.05, consumable:true,
+    effect:"Usar este item: aprende permanentemente a receita do Elixir de Resistência ao Fogo. Consumido ao usar.",
+    story:"Sobreviveu a um incêndio. O alquimista também, graças ao próprio elixir." },
+
+  { name:"Pergaminho de Receita: Bomba de Névoa",        category:"misc", subcategory:"recipe_scroll",
+    recipeId:"rec_neblina",       tier:"comum",   weight:0.05, consumable:true,
+    effect:"Usar este item: aprende permanentemente a receita da Bomba de Névoa. Consumido ao usar.",
+    story:"As instruções são simples mas a nota final diz: 'não testar em espaços fechados'." },
+
+  { name:"Pergaminho de Receita: Grande Bomba de Magma", category:"misc", subcategory:"recipe_scroll",
+    recipeId:"rec_magma",         tier:"lendario",weight:0.05, consumable:true,
+    effect:"Usar este item: aprende permanentemente a receita da Grande Bomba de Magma. Consumido ao usar.",
+    story:"Encadernado em couro de Karlac Juvenil. A tinta é laranja escuro. Nunca fica fria." }];
 
 
 /* ================================================================
@@ -3900,6 +4091,7 @@ const WORLD_ITEM_CATALOG = {
 const NAV_PAGES = [
   { icon: "📖", label: "Glossário & Tutoriais", available: true,  action: "openGlossary" },
   { icon: "🐺", label: "Bestiário",             available: true,  action: "openBestiary" },
+  { icon: "⚗️", label: "Alquimia & Crafting",   available: true,  action: "openCraft" },
   { icon: "🗺", label: "História do Mundo",     available: true,  action: "openHistory" },
   { icon: "📅", label: "Acompanhamento",        available: true,  action: "openCampaignLog" },
   { icon: "🏰", label: "Locais & Reinos",       available: true,  action: "openLocations" },
@@ -7041,22 +7233,29 @@ const BESTIARY = [
     hex: { layout: "Caverna com armadilhas visíveis e ocultas", hint: "Guardiões que ativam armadilhas deliberadamente são o pesadelo de grupos compactos — separe o grupo para não estar todos no raio de 2 hex de uma armadilha ao mesmo tempo. Retroceder e Redirecionar é uma armadilha comportamental — seguir o Guardião que recua pode ser perigoso." },
     spells: [], behavior: "Fica na entrada da câmara principal. Ao ser atacado: recua por hex de armadilha. A cada turno: ativa a armadilha mais perto de 2 inimigos.", loot: [{ item: "Lança de Osso (funcional, 1d4 dano)", chance: 60, qty: "1" }] },
 
-  /*
-═══════════════════════════════════════════════════════════════════════════════
-  ONDE COLAR NO data.js:
-  Encontre a última linha do array BESTIARY (o último } antes do ];)
-  Cole todo este bloco DEPOIS do último monstro e ANTES do ];
-  Começa com: ,  (vírgula, pois vai após o último item existente)
-═══════════════════════════════════════════════════════════════════════════════
-*/
+  { id: "vorn-alquimista-kobold",
+    name: "Vorn, o Alquimista (Colônia Subterrânea de Vorn)",
+    difficulty: 2,
+    attrs: { FOR:0, DEX:2, AGI:1, INT:4, SAB:2 },
+    size: "normal", category: "Humanoide Elite",
+    location: ["Laboratório Central da Colônia"],
+    hp: 35, physDefense: 1, magDefense: 4, dodge: 13,
+    isElite: true,
+    group: "Colônia Subterrânea de Vorn",
+    groupRole: "Líder e inventor — raramente combate diretamente. Prefere negociar.",
+    groupSynergy: "Vorn criou todas as armadilhas da Colônia. Enquanto estiver presente, pode criar nova armadilha em qualquer hex vazio como Ação (unlimited — ele é muito mais habilidoso que os Armadilheiros).",
+    abilities: [
+      { name: "Proposta de Negócio", desc: "Passivo: Vorn tenta negociar ANTES do combate. Se o grupo ouvir sua proposta (não atacar por 1 rodada): ele oferece passagem pelo túnel em troca de 5 prata por pessoa OU de um ingrediente alquímico que ele precise. SAB (normal) para perceber que a oferta é legítima. Se o grupo aceitar: nenhum kobold ataca." },
+      { name: "Bomba Alquímica de Vorn", desc: "1 Ação (3/combate): lança bomba a 4 hex. Escolhe efeito: Ácido (1d8, −1 Def.Física por 2 rodadas), Paralítico (AGI normal ou Paralisado 1 rodada), Fumaça (área 3x3 hex, visibilidade 0 por 3 rodadas)." },
+      { name: "Fuga Calculada", desc: "Ao cair abaixo de 30% HP: usa fumaça e desaparece pelos túneis. Pode ser encontrado novamente mas estará em local diferente — e mais defensivo." }
+    ],
+    hex: { layout: "Laboratório com bancadas (cobertura), armadilhas customizadas e saídas múltiplas", hint: "Vorn NÃO quer lutar — a negociação é genuína. Se o grupo atacar sem ouvir: ele combate eficientemente mas é mais valioso como aliado. Um Vorn aliado pode fabricar Poções e Bombas para o grupo a preço de custo." },
+    spells: ["Bomba Alquímica de Vorn (3/combate)"],
+    behavior: "Proposta de Negócio primeiro, sempre. Se o grupo atacar: bombas de fumaça para cobrir os Guardiões e escapar. Se encurralado: rende-se e negocia novamente.", loot: [{ item: "Livro de Alquimia de Vorn (receitas de 5 bombas — subclasse Alquimista aprende 2)", chance: 80, qty: "1" }, { item: "Bomba Alquímica Sortida (3 tipos, 1 cada)", chance: 60, qty: "1" }, { item: "Acordo de Passagem (acesso ao atalho subterrâneo permanentemente)", chance: 100, qty: "1" }] }
 
 ,
 
-/* ═══════════════════════════════════════════════════════════════
-   MONSTROS COMUNS — DIF 1
-   Clássicos de RPG com mecânicas simples e ensinativas.
-   Bons para primeiras sessões e para ensinar o sistema.
-   ═══════════════════════════════════════════════════════════════ */
+
 
 /* ── Sem grupo ───────────────────────────────────────────────── */
 
@@ -7223,10 +7422,7 @@ const BESTIARY = [
   hex: { layout: "Floresta com vegetação densa", hint: "Efeitos aleatórios do Pó criam situações inesperadas e divertidas. A invisibilidade constante frustra jogadores que tentam só acertar — pensar em área ou esperar ela atacar para revelar posição." },
   spells: [], loot: [{ item: "Pó de Fada (3 doses — efeito aleatório)", chance: 60, qty: "1" }, { item: "Asa de Pixie (talismã — +1d4 em Acrobacia)", chance: 30, qty: "1" }] },
 
-/* ═══════════════════════════════════════════════════════════════
-   MONSTROS COMUNS — DIF 2
-   Mais mecânicas, mais sinergia, mais perigo estratégico.
-   ═══════════════════════════════════════════════════════════════ */
+
 
 /* ── Sem grupo ───────────────────────────────────────────────── */
 
@@ -7398,17 +7594,7 @@ const BESTIARY = [
   hex: { layout: "Local específico da morte", hint: "Investigação (normal) antes do combate pode revelar a história do Espectro e como dissipá-lo sem luta. Forçá-lo para o hex de sua morte o torna material temporariamente — janela de dano máximo. O Alvo da Vingança pode criar situações interessantes se um NPC do grupo for o responsável." },
   spells: [], loot: [{ item: "Objeto do Crime (item de missão — prova de quem causou a morte injusta)", chance: 80, qty: "1" }] },
 
-/* ══════════════════════════════════════════════════════════════
-   NOVO GRUPO: Horda dos Túmulos Abertos
-   Lore: Uma câmara selada foi aberta por buscadores de tesouro
-   imprudentes numa necrópole sob a cidade de Margem das Pedras.
-   O Necromante que selou a câmara há 300 anos usou um feitiço de
-   preservação — ao abrir, os mortos dentro despertaram com memória
-   parcial de quem eram. A Horda é perigosa porque são mortos-vivos
-   que ainda LEMBRAM de táticas humanas.
-   Encontrados: explorando necrópole sob Margem das Pedras,
-   ou após missão que abra a câmara selada.
-   ══════════════════════════════════════════════════════════════ */
+
 
 { id: "zumbi-soldado-tumulo",
   name: "Zumbi Soldado (Horda dos Túmulos Abertos)",
@@ -7465,15 +7651,7 @@ const BESTIARY = [
   spells: ["Reanimar da Tumba", "Praga Menor"],
   behavior: "Fica no fundo. Reanima todo turno. Ataca apenas se ameaçado diretamente.", loot: [{ item: "Amuleto do Sacerdote (item de história — conta o que aconteceu na necrópole)", chance: 100, qty: "1" }, { item: "Cajado Sagrado Corrompido (arma mágica — 2 usos de Praga)", chance: 40, qty: "1" }] },
 
-/* ══════════════════════════════════════════════════════════════
-   NOVO GRUPO: Alcateia dos Lobos da Planície
-   Lore: Lobos comuns do Grande Planalho que desenvolveram
-   comportamento de caça coordenada ao longo de gerações.
-   Não são corrompidos — são apenas muito bons no que fazem.
-   Encontrados em qualquer região aberta entre Margem das Pedras
-   e as Montanhas de Atrelon. O Batedeiro espiona primeiro,
-   o Corredor fatiga, o Alfa finaliza.
-   ══════════════════════════════════════════════════════════════ */
+
 
 { id: "lobo-batedeiro-planicie",
   name: "Lobo Batedeiro (Alcateia dos Lobos da Planície)",
@@ -7530,33 +7708,8 @@ const BESTIARY = [
   hex: { layout: "Centro do território, entra quando a caçada começa", hint: "O combo completo: Batedeiro Marca → Corredores Fatigam → Alfa ataca alvo Fatigado com ×4 de dano. O grupo que permite esse ciclo completar sofre as consequências. Matar o Batedeiro (impede Marcação) ou o Alfa (desbanda a Alcateia) são as melhores estratégias." },
   spells: [], behavior: "Espera longe até que 1+ Corredores tenham aplicado Fatigado. Então avança para o alvo Fatigado. Se o Batedeiro morrer: o Alfa uiva e recua — reavalia a situação antes de reengajar.", loot: [{ item: "Canino do Alfa da Planície (talismã — +1d4 em Intimidação)", chance: 50, qty: "1" }, { item: "Pele do Alfa (material premium — armadura de couro superior)", chance: 40, qty: "1" }] }
 
-/*
-═══════════════════════════════════════════════════════════════════════════════
-  FIM DO BLOCO
-  Total adicionado: 10 Dif.1 + 12 Dif.2 = 22 monstros
-  3 novos grupos: Horda dos Túmulos Abertos (3 membros),
-                  Alcateia dos Lobos da Planície (3 membros)
-  + 16 monstros sem grupo
-═══════════════════════════════════════════════════════════════════════════════
-*/,{ id: "vorn-alquimista-kobold",
-    name: "Vorn, o Alquimista (Colônia Subterrânea de Vorn)",
-    difficulty: 2,
-    attrs: { FOR:0, DEX:2, AGI:1, INT:4, SAB:2 },
-    size: "normal", category: "Humanoide Elite",
-    location: ["Laboratório Central da Colônia"],
-    hp: 35, physDefense: 1, magDefense: 4, dodge: 13,
-    isElite: true,
-    group: "Colônia Subterrânea de Vorn",
-    groupRole: "Líder e inventor — raramente combate diretamente. Prefere negociar.",
-    groupSynergy: "Vorn criou todas as armadilhas da Colônia. Enquanto estiver presente, pode criar nova armadilha em qualquer hex vazio como Ação (unlimited — ele é muito mais habilidoso que os Armadilheiros).",
-    abilities: [
-      { name: "Proposta de Negócio", desc: "Passivo: Vorn tenta negociar ANTES do combate. Se o grupo ouvir sua proposta (não atacar por 1 rodada): ele oferece passagem pelo túnel em troca de 5 prata por pessoa OU de um ingrediente alquímico que ele precise. SAB (normal) para perceber que a oferta é legítima. Se o grupo aceitar: nenhum kobold ataca." },
-      { name: "Bomba Alquímica de Vorn", desc: "1 Ação (3/combate): lança bomba a 4 hex. Escolhe efeito: Ácido (1d8, −1 Def.Física por 2 rodadas), Paralítico (AGI normal ou Paralisado 1 rodada), Fumaça (área 3x3 hex, visibilidade 0 por 3 rodadas)." },
-      { name: "Fuga Calculada", desc: "Ao cair abaixo de 30% HP: usa fumaça e desaparece pelos túneis. Pode ser encontrado novamente mas estará em local diferente — e mais defensivo." }
-    ],
-    hex: { layout: "Laboratório com bancadas (cobertura), armadilhas customizadas e saídas múltiplas", hint: "Vorn NÃO quer lutar — a negociação é genuína. Se o grupo atacar sem ouvir: ele combate eficientemente mas é mais valioso como aliado. Um Vorn aliado pode fabricar Poções e Bombas para o grupo a preço de custo." },
-    spells: ["Bomba Alquímica de Vorn (3/combate)"],
-    behavior: "Proposta de Negócio primeiro, sempre. Se o grupo atacar: bombas de fumaça para cobrir os Guardiões e escapar. Se encurralado: rende-se e negocia novamente.", loot: [{ item: "Livro de Alquimia de Vorn (receitas de 5 bombas — subclasse Alquimista aprende 2)", chance: 80, qty: "1" }, { item: "Bomba Alquímica Sortida (3 tipos, 1 cada)", chance: 60, qty: "1" }, { item: "Acordo de Passagem (acesso ao atalho subterrâneo permanentemente)", chance: 100, qty: "1" }] }];
+
+];
 
 /* ================================================================
    MONTARIAS — Sistema de Montaria do Mundo de Aether
@@ -7677,502 +7830,345 @@ const MOUNTS = [
     traits: ["Velocidade Absurda: velocidade 12 — o dobro de qualquer montaria comum. Em estrada aberta: pode percorrer o dobro da distância diária", "Invocação: responde a um assobio específico em até 1km de distância. Aparece em 1d4 minutos", "Passagem Suave: não levanta poeira, não faz barulho — −1 de encontro em viagem", "Imune a Medo: não entra em pânico com magia ou monstros"],
     weakness: "Não pode ser comprado — deve ser encontrado, conquistado ou recebido como recompensa. Desaparece se maltratar."
   }
-   /*
-═══════════════════════════════════════════════════════════════════════════════
-  ONDE COLAR NO data.js:
-  Encontre a última linha do array BESTIARY (o último } antes do ];)
-  Cole todo este bloco DEPOIS do último monstro e ANTES do ];
-  Começa com: ,  (vírgula, pois vai após o último item existente)
-═══════════════════════════════════════════════════════════════════════════════
-*/
+];
 
-,
 
 /* ═══════════════════════════════════════════════════════════════
-   MONSTROS COMUNS — DIF 1
-   Clássicos de RPG com mecânicas simples e ensinativas.
-   Bons para primeiras sessões e para ensinar o sistema.
+   RECEITAS DE ALQUIMIA
+   Cada receita é um item do tipo "recipe" que o personagem aprende
+   ao usar/equipar um Pergaminho de Receita correspondente.
    ═══════════════════════════════════════════════════════════════ */
 
-/* ── Sem grupo ───────────────────────────────────────────────── */
+const ALCHEMY_RECIPES = [
 
-{ id: "slime-acido",
-  name: "Slime Ácido",
-  difficulty: 1,
-  attrs: { FOR:1, DEX:0, AGI:0, INT:0, SAB:0 },
-  size: "normal", category: "Aberração",
-  location: ["Dungeon", "Caverna Úmida", "Esgoto", "Porão Abandonado"],
-  hp: 20, physDefense: 0, magDefense: 0, dodge: 5,
-  actions: 1, damage: "1d4+FOR (corrosão ácida)",
-  behavior: "Sem inteligência — move-se para qualquer coisa orgânica próxima. Não persegue se a presa sumir. Útil para ensinar que nem todo monstro pode ser cortado eficientemente.",
-  abilities: [
-    { name: "Corrosão Lenta", desc: "Cada acerto corrói 1 ponto de Def.Física do alvo (armadura se degrada). O dano de corrosão é permanente até reparar a armadura (Artesanato normal ou ferreiro). Sem armadura: o ácido causa +1d4 de queimadura adicional." },
-    { name: "Divisão", desc: "Ao receber dano cortante ou perfurante: em vez de morrer, divide-se em 2 Slimes Menores (HP 10 cada, dano 1d4). Fogo e dano contundente: mata normalmente sem divisão." },
-    { name: "Imune a Condições", desc: "Imune a veneno, sangramento, medo, paralisação e qualquer efeito mental. Sem sistema nervoso para afetar." }
-  ],
-  hex: { layout: "Qualquer dungeon", hint: "Ensinador de divisão — jogadores que cortam o Slime criam dois. Fogo ou contundente é a resposta correta. A Corrosão de armadura força decisões sobre quando parar de usar golpes físicos." },
-  spells: [], loot: [{ item: "Ácido de Slime (frasco — 1d6 dano ácido, 1 uso)", chance: 40, qty: "1" }] },
+  /* ── CURAS ─────────────────────────────────────────────────── */
+  { id:"rec_cura_menor",
+    name:"Poção de Cura Menor",
+    icon:"🧪", tier:"comum", category:"cura",
+    ingredients:[
+      { tag:"erva_cura_menor", qty:2, label:"Erva de Cura Menor ×2" },
+      { tag:"agua_arcana",     qty:1, label:"Água Destilada Arcana ×1" }
+    ],
+    skillTest: { attr:"INT", difficulty:"normal" },
+    baseEffect:"Cura 2d6+2 HP ao beber.",
+    critBonus:[
+      "Também remove 1 condição de veneno.",
+      "Cura 3d6+4 HP em vez do normal.",
+      "O efeito persiste: +1d4 HP no turno seguinte.",
+    ],
+    critFailEffect:[
+      "Cura apenas 1 HP — poção diluída demais.",
+      "Causa 1d4 de náusea (−1 Ação por 1 rodada).",
+      "Provoca sono leve: próxima Iniciativa com −2.",
+    ],
+    weight:0.3, story:"A mais básica de todas as poções. Cheiro de mel e algo metálico." },
 
-{ id: "morcego-noite-comum",
-  name: "Morcego da Noite",
-  difficulty: 1,
-  attrs: { FOR:0, DEX:2, AGI:3, INT:0, SAB:1 },
-  size: "normal", category: "Besta",
-  location: ["Caverna", "Dungeon", "Ruínas", "Torre Abandonada", "Floresta Densa"],
-  hp: 12, physDefense: 1, magDefense: 0, dodge: 17,
-  actions: 2, damage: "1d4+DEX (mordida frenética)",
-  behavior: "Em bando — nunca sozinho. Mais incômodo que perigoso individualmente. Desorientador em grande número.",
-  abilities: [
-    { name: "Ataque em Mergulho", desc: "Voa e mergulha de altitude: +1d4 de dano no primeiro ataque de cada turno se estiver em altitude maior que o alvo. Após o ataque: volta para altitude automaticamente (sem custo de Ação)." },
-    { name: "Ultrassom Perturbador", desc: "Se 3+ Morcegos atacarem o mesmo alvo no mesmo turno: o alvo testea Resistência (normal) ou fica Desorientado por 1 rodada (−1d4 em todos os testes — o som de frequência alta prejudica a concentração)." }
-  ],
-  hex: { layout: "Caverna com teto alto", hint: "Sozinhos são fáceis. Em grupo de 3+ ativam o Ultrassom — o incômodo real não é o dano mas a Desorientação cumulativa. Dano em área limpa grupos de morcegos eficientemente." },
-  spells: [], loot: [{ item: "Asa de Morcego (ingrediente alquímico)", chance: 30, qty: "1d3" }] },
+  { id:"rec_cura_media",
+    name:"Poção de Cura",
+    icon:"🧪", tier:"comum", category:"cura",
+    ingredients:[
+      { tag:"raiz_cura",       qty:2, label:"Raiz de Cura ×2" },
+      { tag:"erva_cura_menor", qty:1, label:"Erva de Cura Menor ×1" },
+      { tag:"agua_arcana",     qty:1, label:"Água Destilada Arcana ×1" }
+    ],
+    skillTest: { attr:"INT", difficulty:"normal" },
+    baseEffect:"Cura 3d8+4 HP ao beber.",
+    critBonus:[
+      "Também cura Sangramento e Veneno comuns.",
+      "Cura 4d10+6 HP em vez do normal.",
+      "Concede +1d4 HP de regeneração por 2 rodadas.",
+    ],
+    critFailEffect:[
+      "Cura 1d4 HP apenas (instável).",
+      "Causa enjôo: −1d4 em ataques por 2 rodadas.",
+      "Efeito invertido: perde 1d6 HP (reação alérgica).",
+    ],
+    weight:0.3, story:"Vermelho escuro e levemente brilhante. Tem sabor de ferro." },
 
-{ id: "goblin-xamã-basico",
-  name: "Goblin Xamã",
-  difficulty: 1,
-  attrs: { FOR:0, DEX:1, AGI:1, INT:2, SAB:2 },
-  size: "normal", category: "Humanoide",
-  location: ["Caverna Goblin", "Floresta Densa", "Acampamento Improvisado"],
-  hp: 16, physDefense: 1, magDefense: 3, dodge: 12,
-  actions: 2, damage: "1d4+SAB (bastão ritual) ou Magia Menor",
-  behavior: "Fica atrás dos guerreiros. Prioriza buffar aliados acima de atacar. Foge se ficar sozinho.",
-  abilities: [
-    { name: "Benção Tribal", desc: "1 Ação de Magia (1x/combate): aplica bênção tribal em 1 aliado goblin. Por 2 rodadas: +1d4 de dano e +1 na Chance de Acerto. O Xamã não pode ser o alvo." },
-    { name: "Maldição Menor", desc: "1 Ação de Magia: alvo a 4 hex testea SAB (normal). Falha: −1 em todos os ataques por 2 rodadas. Simples mas eficaz." }
-  ],
-  hex: { layout: "Atrás da linha de goblins", hint: "A Benção Tribal duplica a eficácia de qualquer aliado que recebe — eliminar o Xamã primeiro é sempre correto. Funciona como introdução ao conceito de 'matar o suporte antes do tank'." },
-  spells: ["Benção Tribal", "Maldição Menor"],
-  loot: [{ item: "Bastão Ritual (cajado funcional 1d4)", chance: 50, qty: "1" }, { item: "Ervas Rituais (componente de magia)", chance: 30, qty: "1d3" }] },
+  { id:"rec_cura_veneno",
+    name:"Antídoto Aprimorado",
+    icon:"💚", tier:"comum", category:"cura",
+    ingredients:[
+      { tag:"glandula_veneno_cobra", qty:1, label:"Glândula de Veneno (Cobra) ×1" },
+      { tag:"flor_pantano",          qty:1, label:"Flor do Pântano Cinzento ×1" },
+      { tag:"agua_arcana",           qty:1, label:"Água Destilada Arcana ×1" }
+    ],
+    skillTest: { attr:"INT", difficulty:"normal" },
+    baseEffect:"Remove todos os venenos comuns (Dif.1-2). Restaura SAB temporária perdida por veneno.",
+    critBonus:[
+      "Também remove venenos Dif.3 e paralisia de veneno.",
+      "Concede imunidade a venenos Dif.1-2 por 4 horas.",
+      "Cura também 2d6 HP de dano de veneno acumulado.",
+    ],
+    critFailEffect:[
+      "Remove apenas 1 carga de veneno (incompleto).",
+      "O veneno muda — ainda ativo mas diferente (Mestre decide).",
+      "Causa coceira intensa: −1d4 em Furtividade por 1 hora.",
+    ],
+    weight:0.2, story:"Verde pálido. Amargo ao extremo. Funciona mesmo assim." },
 
-{ id: "corvo-fantasma",
-  name: "Corvo Fantasma",
-  difficulty: 1,
-  attrs: { FOR:0, DEX:2, AGI:3, INT:1, SAB:2 },
-  size: "normal", category: "Espírito",
-  location: ["Campo de Batalha Antigo", "Cemitério", "Floresta Sombria", "Ruínas"],
-  hp: 14, physDefense: 0, magDefense: 4, dodge: 16,
-  actions: 2, damage: "1d4+SAB (bicada espectral — ignora Def.Física)",
-  behavior: "Assusta antes de atacar. Se o grupo mostrar medo (fugir ou recuar): persegue. Se o grupo avança: recua para distância segura e ataca à distância.",
-  abilities: [
-    { name: "Grasnido do Presságio", desc: "1 Ação Livre (1x/combate): grasna de forma sobrenatural. Todos no campo testam Força de Vontade (normal). Falha: −1d4 nos ataques por 1 rodada (o som arrepia e tira a concentração)." },
-    { name: "Etéreo Parcial", desc: "Passivo: armas não-mágicas causam metade do dano. Vulnerável a luz: em raio 2 hex de tocha ou magia de luz, perde Etéreo Parcial e é afetado normalmente por armas físicas." }
-  ],
-  hex: { layout: "Qualquer área", hint: "Introdução ao combate contra espíritos — ensina que armas normais são menos eficientes. Solução simples: acender tocha antes de atacar." },
-  spells: [], loot: [{ item: "Pena do Corvo Fantasma (componente — amuleto de presságio)", chance: 40, qty: "1d2" }] },
+  { id:"rec_purificacao",
+    name:"Poção de Purificação",
+    icon:"✨", tier:"raro", category:"cura",
+    ingredients:[
+      { tag:"flor_pantano",    qty:2, label:"Flor do Pântano Cinzento ×2" },
+      { tag:"po_osso_sagrado", qty:1, label:"Pó de Osso Sagrado ×1" },
+      { tag:"agua_arcana",     qty:1, label:"Água Destilada Arcana ×1" }
+    ],
+    skillTest: { attr:"SAB", difficulty:"normal" },
+    baseEffect:"Remove maldições menores e médias. Remove todas as condições negativas (veneno, sangramento, paralisação, medo).",
+    critBonus:[
+      "Remove também maldições maiores (normalmente exige rituais).",
+      "Concede +1d6 em todos os testes por 1 hora (pureza de corpo e mente).",
+      "Cura 4d8 HP adicionalmente.",
+    ],
+    critFailEffect:[
+      "Remove apenas 1 condição aleatória.",
+      "A maldição é empurrada — reaparece em 1d4 horas.",
+      "Causa desorientação: Confuso por 1 rodada.",
+    ],
+    weight:0.3, story:"Branca com partículas douradas. Quente ao toque mesmo fria." },
 
-{ id: "goblin-batedora",
-  name: "Goblin Batedora",
-  difficulty: 1,
-  attrs: { FOR:0, DEX:2, AGI:3, INT:1, SAB:1 },
-  size: "normal", category: "Humanoide",
-  location: ["Floresta", "Estrada", "Colinas", "Periferia de Acampamento Goblin"],
-  hp: 15, physDefense: 1, magDefense: 0, dodge: 15,
-  actions: 2, damage: "1d4+DEX (faca curta)",
-  behavior: "Observa e foge — raramente combate sozinha. Se encontrada sozinha: estava espionando e tem informação. Capturá-la viva é mais valioso que matá-la.",
-  abilities: [
-    { name: "Fuga Rápida", desc: "Passivo: ao cair abaixo de 50% HP, pode se mover 4 hex adicionais sem custo de Ação como Reação. Faz isso uma vez por combate automaticamente." },
-    { name: "Grito de Alerta", desc: "1 Ação Livre: grita para alertar aliados. Em 1d3 rodadas: 1d4 Goblins chegam ao combate (se houver acampamento próximo — Percepção normal do grupo para notar antes do grito)." }
-  ],
-  hex: { layout: "Borda do mapa — perto de saída", hint: "A ameaça real é o Grito de Alerta — silenciá-la antes que grite evita reforços. Capturar (derrubar e segurar em vez de matar) fornece informação sobre o acampamento próximo." },
-  spells: [], loot: [{ item: "Mapa rabiscado (localização aproximada do acampamento goblin)", chance: 60, qty: "1" }] },
+  /* ── OFENSIVAS ──────────────────────────────────────────────── */
+  { id:"rec_acido",
+    name:"Frasco de Ácido",
+    icon:"🟢", tier:"comum", category:"ofensiva",
+    ingredients:[
+      { tag:"acido_slime",  qty:2, label:"Ácido de Slime ×2" },
+      { tag:"agua_arcana",  qty:1, label:"Água Destilada Arcana ×1" }
+    ],
+    skillTest: { attr:"INT", difficulty:"normal" },
+    baseEffect:"Arremessado (alcance 4 hex, 1 Ação): 2d6 de dano ácido no alvo + −1 Def.Física por 2 rodadas.",
+    critBonus:[
+      "Também causa −1 Def.Física extra (total −2) por 3 rodadas.",
+      "Respingo: alvo adjacente ao principal sofre 1d6 de ácido.",
+      "Área 2x2 hex em vez de alvo único.",
+    ],
+    critFailEffect:[
+      "Dano ácido apenas 1d4 (frasco mal selado).",
+      "Explode na mão: 1d6 de dano no lançador.",
+      "O frasco falha ao quebrar — não causa dano, apenas molha.",
+    ],
+    weight:0.2, story:"Verde viscoso. O frasco corrói levemente se não for de vidro grau alquímico." },
 
-{ id: "esqueleto-mago-simples",
-  name: "Esqueleto Mago",
-  difficulty: 1,
-  attrs: { FOR:0, DEX:1, AGI:0, INT:3, SAB:1 },
-  size: "normal", category: "Morto-Vivo",
-  location: ["Dungeon", "Biblioteca Maldita", "Torre de Mago Abandonada", "Cripta"],
-  hp: 18, physDefense: 1, magDefense: 5, dodge: 10,
-  actions: 2, damage: "1d4 (ossos) ou Magia",
-  behavior: "Mantém distância e lança magias. A magia que usa depende do que o mago original sabia — o necromante que o criou gravou uma magia residual no esqueleto.",
-  abilities: [
-    { name: "Magia Residual", desc: "1 Ação de Magia (2x/combate): lança 1 magia gravada no esqueleto. O Mestre escolhe ou rola: 1-2 = Raio de Gelo (1d8+INT, alvo Lento), 3-4 = Projétil Mágico (1d6 automático, sem rolagem de acerto), 5-6 = Explosão Arcana menor (1d6 em raio 1 hex, AGI normal para metade)." },
-    { name: "Fragilidade dos Ossos do Mago", desc: "O esqueleto de um mago tem ossos mais finos. Dano contundente: +1d4 extra. Mas Def.Mágica 5 — as magias ainda residem nos ossos e protegem de encantamentos." }
-  ],
-  hex: { layout: "Fundo de sala, atrás de esqueletos guerreiros", hint: "Introdução ao 'matar o mago primeiro'. A Magia Residual é imprevisível — o Mestre pode usar isso para surpreender jogadores experientes que pensam que sabem o que vem." },
-  spells: ["Magia Residual (2x/combate — variável)"],
-  loot: [{ item: "Osso Arcano Imbuído (componente de magia)", chance: 50, qty: "1" }, { item: "Fragmento de Grimório (1 magia de nível 1 danificada)", chance: 25, qty: "1" }] },
+  { id:"rec_fogo",
+    name:"Coquetel de Fogo",
+    icon:"🔥", tier:"comum", category:"ofensiva",
+    ingredients:[
+      { tag:"pimenta_inferno", qty:2, label:"Pimenta do Inferno ×2" },
+      { tag:"agua_arcana",     qty:1, label:"Água Destilada Arcana ×1" }
+    ],
+    skillTest: { attr:"INT", difficulty:"normal" },
+    baseEffect:"Arremessado (alcance 4 hex, 1 Ação): 2d8 de dano de fogo. O hex pega fogo por 2 rodadas (1d4 de dano por rodada a quem estiver nele).",
+    critBonus:[
+      "Fogo persiste 3 rodadas. +1d6 de dano de fogo imediato.",
+      "Cone 3 hex em vez de ponto único.",
+      "Alvos atingidos ficam Queimando (1d4/rodada) independente da área.",
+    ],
+    critFailEffect:[
+      "Fogo por apenas 1 rodada. Dano reduzido a 1d6.",
+      "Explode no lançador: 1d8 de fogo.",
+      "Falha ao acender — apenas cria fumaça, cega 1 hex por 1 rodada.",
+    ],
+    weight:0.2, story:"Laranja opaco, levemente fumegante. Não agitar." },
 
-{ id: "gnomo-ladrão-novato",
-  name: "Gnomo Ladrão",
-  difficulty: 1,
-  attrs: { FOR:0, DEX:3, AGI:2, INT:2, SAB:1 },
-  size: "normal", category: "Humanoide",
-  location: ["Mercado", "Cidade", "Taverna", "Armazém"],
-  hp: 14, physDefense: 1, magDefense: 1, dodge: 15,
-  actions: 2, damage: "1d4+DEX (punhal)",
-  behavior: "Não quer combater — quer fugir com o que roubou. Só luta se encurralado. Preferência absoluta por Furtividade e fuga.",
-  abilities: [
-    { name: "Dedos Ágeis", desc: "Durante combate, se adjacente a inimigo distraído (atacando outro): pode tentar furtar 1 item do inventário do alvo como Ação Livre (DEX vs. Percepção do alvo). Se bem-sucedido: tem o item." },
-    { name: "Sumir na Multidão", desc: "Em ambiente urbano ou com 3+ criaturas no campo: pode usar Furtividade automaticamente como Ação Livre uma vez por combate, mesmo sem cobertura (usa o caos como disfarce)." }
-  ],
-  hex: { layout: "Área urbana ou interior de taverna", hint: "O Gnomo Ladrão pode roubar itens durante o combate — jogadores com itens valiosos na bolsa devem ficar atentos. A mecânica de Dedos Ágeis ensina que estar distraído tem consequências além do dano." },
-  spells: [], loot: [{ item: "Itens roubados de outros (1d4 moedas de prata + 1 item pequeno)", chance: 90, qty: "1" }, { item: "Ferramentas de Ladrão (kit básico)", chance: 40, qty: "1" }] },
+  { id:"rec_veneno_contato",
+    name:"Veneno de Contato",
+    icon:"💜", tier:"comum", category:"ofensiva",
+    ingredients:[
+      { tag:"glandula_veneno_cobra", qty:1, label:"Glândula de Veneno ×1" },
+      { tag:"flor_pantano",          qty:1, label:"Flor do Pântano Cinzento ×1" },
+      { tag:"agua_arcana",           qty:1, label:"Água Destilada Arcana ×1" }
+    ],
+    skillTest: { attr:"INT", difficulty:"normal" },
+    baseEffect:"Aplica em arma (1 Ação). Próximo acerto: 1d6/rodada de veneno por 3 rodadas. SAB (normal) para resistir.",
+    critBonus:[
+      "Veneno dura 4 rodadas em vez de 3.",
+      "SAB (difícil) para resistir em vez de normal.",
+      "Também causa −1 DEX temporária por rodada (veneno motor).",
+    ],
+    critFailEffect:[
+      "Veneno dura só 1 rodada.",
+      "O veneno contamina a arma de forma adversa: −1 no próximo ataque.",
+      "Respinga: o alquimista sofre 1d4 de veneno.",
+    ],
+    weight:0.15, story:"Roxo escuro. Inodoro. Por isso é perigoso." },
 
-{ id: "sapo-venenoso-gigante",
-  name: "Sapo Venenoso Gigante",
-  difficulty: 1,
-  attrs: { FOR:2, DEX:0, AGI:1, INT:0, SAB:1 },
-  size: "normal", category: "Besta",
-  location: ["Pântano", "Margem de Rio", "Floresta Úmida", "Caverna com Água"],
-  hp: 22, physDefense: 1, magDefense: 0, dodge: 11,
-  actions: 2, damage: "1d6+FOR (mordida venenosa)",
-  behavior: "Territorial mas lento. Não persegue por mais de 4 hex. Protege sua poça.",
-  abilities: [
-    { name: "Língua Pegajosa", desc: "1 Ação: dispara língua a 3 hex. Alvo testea FOR (normal) ou é puxado 2 hex em direção ao Sapo e fica Preso por 1 rodada (a língua mantém). O Sapo então morde automaticamente como Ação Livre." },
-    { name: "Veneno Paralisante Leve", desc: "Toda mordida: alvo acumula 1 carga de Veneno (máx 2). Com 2 cargas: −1 Ação por rodada por 2 rodadas. Antídoto ou Medicina (normal) remove." }
-  ],
-  hex: { layout: "Pântano com terreno irregular", hint: "A Língua Pegajosa puxa um personagem para perto e garante mordida automática — um combo que pode pegar desprevenidos. Matar rapidamente evita acúmulo de veneno." },
-  spells: [], loot: [{ item: "Glândula de Veneno do Sapo (ingrediente para poção)", chance: 50, qty: "1" }] },
+  { id:"rec_paralisia",
+    name:"Poção de Paralisia",
+    icon:"🔵", tier:"raro", category:"ofensiva",
+    ingredients:[
+      { tag:"glandula_paralisia", qty:1, label:"Glândula de Veneno Paralisante ×1" },
+      { tag:"cogumelo_relampago", qty:1, label:"Cogumelo Relâmpago ×1" },
+      { tag:"agua_arcana",        qty:1, label:"Água Destilada Arcana ×1" }
+    ],
+    skillTest: { attr:"INT", difficulty:"dificil" },
+    baseEffect:"Lançado ou aplicado: alvo testea Resistência (difícil) ou fica Paralisado por 2 rodadas.",
+    critBonus:[
+      "Paralisado por 3 rodadas sem resistência.",
+      "Resistência (crítico) em vez de difícil — quase impossível de resistir.",
+      "Também causa −1d4 FOR temporária durante a paralisia.",
+    ],
+    critFailEffect:[
+      "Paralisia apenas 1 rodada.",
+      "Não paralisa — apenas Lento (−2 Mov, 2 rodadas).",
+      "Efeito no lançador: Lento por 1 rodada.",
+    ],
+    weight:0.2, story:"Azul cristalino. Cheiro nenhum, sabor de água — impossível de detectar em bebida." },
 
-{ id: "zumbi-arrastão",
-  name: "Zumbi Arrastão",
-  difficulty: 1,
-  attrs: { FOR:3, DEX:0, AGI:0, INT:0, SAB:0 },
-  size: "normal", category: "Morto-Vivo",
-  location: ["Dungeon", "Necrotério", "Cemitério", "Campo de Batalha Antigo"],
-  hp: 28, physDefense: 2, magDefense: 0, dodge: 6,
-  actions: 1, damage: "1d6+FOR (aperto de zumbi)",
-  behavior: "Avança em linha reta. Nunca desvia. Lento mas persistente.",
-  abilities: [
-    { name: "Agarrar e Segurar", desc: "Ao acertar: além do dano, o alvo testea FOR (normal) ou fica Agarrado (pode agir mas não se mover). Enquanto Agarrado: o Zumbi causa 1d4 de esmagamento automático por rodada sem custo de Ação. Escapar: FOR (normal) gastando 1 Ação." },
-    { name: "Resistência dos Mortos", desc: "Imune a veneno, medo, sangramento e condições mentais. Dano cortante: −1 por dado (partes se separam mas não param). Fogo e dano sagrado: normais. Contundente: +1 por dado (esmaga estrutura óssea)." }
-  ],
-  hex: { layout: "Corredor estreito ou dungeon", hint: "O Agarrar em corredor estreito pode bloquear completamente o avanço — um Zumbi Arrastão numa porta é um problema sério para o grupo inteiro. Empurrar ou puxar para espaço aberto e rodeá-lo resolve." },
-  spells: [], loot: [{ item: "Osso de Zumbi (material alquímico básico)", chance: 20, qty: "1" }] },
+  { id:"rec_acido_relampago",
+    name:"Bomba de Relâmpago",
+    icon:"⚡", tier:"raro", category:"ofensiva",
+    ingredients:[
+      { tag:"nucleo_relampago",  qty:1, label:"Núcleo de Relâmpago ×1" },
+      { tag:"cogumelo_relampago",qty:1, label:"Cogumelo Relâmpago ×1" },
+      { tag:"catalisador_cristal",qty:1,label:"Catalisador de Cristal ×1" }
+    ],
+    skillTest: { attr:"INT", difficulty:"dificil" },
+    baseEffect:"Arremessado (alcance 5 hex, 1 Ação): 3d8 de dano elétrico em área 2x2 hex. AGI (normal) para metade. Armadura metálica: sem resistência.",
+    critBonus:[
+      "Encadeia: salta para inimigo a 2 hex do primeiro por 1d8 extra.",
+      "AGI (difícil) para metade em vez de normal.",
+      "Eletrocuta: alvos atingidos perdem 1 Ação no próximo turno.",
+    ],
+    critFailEffect:[
+      "Explode no lançador: 1d8 elétrico.",
+      "Dano reduzido: 1d6 apenas, sem encadeamento.",
+      "Chicoteia aleatoriamente: atinge alvo aleatório em raio 3 hex.",
+    ],
+    weight:0.25, story:"Amarela e zumbindo levemente. Faíscas visíveis no vidro. Manuseio com luva de couro." },
 
-{ id: "pixie-travessa",
-  name: "Pixie Travessa",
-  difficulty: 1,
-  attrs: { FOR:0, DEX:4, AGI:4, INT:2, SAB:1 },
-  size: "normal", category: "Fada",
-  location: ["Floresta Mágica", "Jardim Encantado", "Claro da Floresta", "Perto de Fadas Maiores"],
-  hp: 10, physDefense: 0, magDefense: 6, dodge: 18,
-  actions: 2, damage: "1d4+DEX (agulha mágica) — alcance 3 hex",
-  behavior: "Não é maliciosa — é travessa. Ataca quem entra em seu território mas sem intenção de matar. Acha o combate divertido. Para se o grupo mostrar humor ou fizer algo criativo.",
-  abilities: [
-    { name: "Pó de Fada", desc: "1 Ação (3/combate): joga pó em alvo a 3 hex. Efeito aleatório (d6): 1-2 = Sonolento (−1 Ação por 2 rodadas), 3-4 = Encolhido (−2 Def.Física, +2 Esquiva por 2 rodadas), 5-6 = Dança Involuntária (gasta 1 Ação dançando por 1 rodada — mas não sofre dano enquanto dança)." },
-    { name: "Invisibilidade de Fada", desc: "Como Ação Livre: fica invisível até atacar novamente. Não quebra ao se mover. Percepção (difícil) para localizar." }
-  ],
-  hex: { layout: "Floresta com vegetação densa", hint: "Efeitos aleatórios do Pó criam situações inesperadas e divertidas. A invisibilidade constante frustra jogadores que tentam só acertar — pensar em área ou esperar ela atacar para revelar posição." },
-  spells: [], loot: [{ item: "Pó de Fada (3 doses — efeito aleatório)", chance: 60, qty: "1" }, { item: "Asa de Pixie (talismã — +1d4 em Acrobacia)", chance: 30, qty: "1" }] },
+  /* ── UTILIDADE ──────────────────────────────────────────────── */
+  { id:"rec_invisibilidade",
+    name:"Poção de Invisibilidade",
+    icon:"👁️", tier:"raro", category:"utilidade",
+    ingredients:[
+      { tag:"erva_invisibilidade", qty:2, label:"Erva da Invisibilidade ×2" },
+      { tag:"po_fada",             qty:1, label:"Pó de Fada ×1" },
+      { tag:"agua_arcana",         qty:1, label:"Água Destilada Arcana ×1" }
+    ],
+    skillTest: { attr:"INT", difficulty:"dificil" },
+    baseEffect:"Invisível por 3 rodadas (ou até atacar). Furtividade automática enquanto invisível.",
+    critBonus:[
+      "Invisível por 5 rodadas e não quebra ao atacar (1x).",
+      "Também silencia os passos: Furtividade automática também por som.",
+      "Concede ao portador +1d8 no primeiro ataque invisível.",
+    ],
+    critFailEffect:[
+      "Invisível por 1 rodada apenas.",
+      "Efeito parcial: apenas 50% visível (−1 na Chance de Acerto dos inimigos, não invisibilidade total).",
+      "Efeito no lançador involuntariamente: aliado aleatório fica visível (luzes ao redor).",
+    ],
+    weight:0.2, story:"Incolor. Levemente brilhante no escuro. Se mantiver no bolso por dias, o bolso também some." },
 
-/* ═══════════════════════════════════════════════════════════════
-   MONSTROS COMUNS — DIF 2
-   Mais mecânicas, mais sinergia, mais perigo estratégico.
-   ═══════════════════════════════════════════════════════════════ */
+  { id:"rec_velocidade",
+    name:"Poção de Velocidade",
+    icon:"💨", tier:"raro", category:"utilidade",
+    ingredients:[
+      { tag:"raiz_velocidade",    qty:2, label:"Raiz de Velocidade ×2" },
+      { tag:"cogumelo_relampago", qty:1, label:"Cogumelo Relâmpago ×1" },
+      { tag:"agua_arcana",        qty:1, label:"Água Destilada Arcana ×1" }
+    ],
+    skillTest: { attr:"INT", difficulty:"dificil" },
+    baseEffect:"+1 Ação de Combate e +3 Movimento por 3 rodadas.",
+    critBonus:[
+      "+1 Ação de Combate e +1 Ação de Magia por 4 rodadas.",
+      "Também ignora terreno difícil durante o efeito.",
+      "+4 Movimento em vez de +3 e dura 4 rodadas.",
+    ],
+    critFailEffect:[
+      "+1 Ação apenas, sem bônus de Movimento. Dura 1 rodada.",
+      "Agitação: +1 Ação mas −1d4 em todos os testes de precisão.",
+      "Efeito oposto: −1 Movimento por 2 rodadas (coração acelerado demais).",
+    ],
+    weight:0.2, story:"Amarela brilhante. Fica levemente quente durante o efeito. O coração acelera." },
 
-/* ── Sem grupo ───────────────────────────────────────────────── */
+  { id:"rec_forca",
+    name:"Poção de Força",
+    icon:"💪", tier:"comum", category:"utilidade",
+    ingredients:[
+      { tag:"escama_karlac",  qty:1, label:"Escama de Karlac Juvenil ×1" },
+      { tag:"raiz_cura",      qty:1, label:"Raiz de Cura ×1" },
+      { tag:"agua_arcana",    qty:1, label:"Água Destilada Arcana ×1" }
+    ],
+    skillTest: { attr:"INT", difficulty:"normal" },
+    baseEffect:"+2 FOR temporária por 4 rodadas. Cada acerto físico causa +1d6 de dano extra.",
+    critBonus:[
+      "+3 FOR e +1d8 de dano extra. Dura 5 rodadas.",
+      "Também concede +1 Ação de Combate durante o efeito.",
+      "+2 FOR e imunidade a Derrubado durante o efeito.",
+    ],
+    critFailEffect:[
+      "+1 FOR apenas por 2 rodadas. Sem bônus de dano.",
+      "+2 FOR mas causa dor muscular: −1d4 em AGI temporariamente.",
+      "Força descalibrada: próximo ataque é automático (acerta) mas dano é 1 (força demais, sem controle).",
+    ],
+    weight:0.3, story:"Vermelha escura e densa. Cheiro de sangue quente. Tem gosto de cobre." },
 
-{ id: "elemental-terra-menor",
-  name: "Elemental de Terra Menor",
-  difficulty: 2,
-  attrs: { FOR:4, DEX:0, AGI:0, INT:0, SAB:1 },
-  size: "grande", category: "Elemental",
-  location: ["Dungeon", "Caverna", "Ruínas com Pedra", "Mina"],
-  hp: 50, physDefense: 7, magDefense: 1, dodge: 7,
-  actions: 2, damage: "1d10+FOR (punho de pedra)",
-  behavior: "Guardião de local específico — não persegue além de raio 5 hex do ponto que guarda. Lento mas devastador em melee.",
-  abilities: [
-    { name: "Pele de Pedra", desc: "Resistência a dano físico não-mágico (−2 por dado). Imune a veneno e condições mentais. Vulnerável a dano elétrico: +1d6 por dado (a corrente atravessa a pedra). Vulnerável a água em quantidade (balde d'água, magia aquática): perde 2 Def.Física por turno de exposição." },
-    { name: "Terremoto Local", desc: "1 Ação (1x/combate): bate no chão com ambos os punhos. Todos em raio 3 hex testam AGI (normal) ou caem Derrubados e perdem 1 Ação no próximo turno. Não afeta criaturas voadoras." },
-    { name: "Soterrar", desc: "Ao acertar: 30% de chance (d10 ≤ 3) de soterrar o alvo sob pedras — além do dano, alvo fica Preso (FOR difícil para escapar, 2 Ações). Em caverna: o teto pode rachar." }
-  ],
-  hex: { layout: "Caverna ou dungeon com pedra no chão", hint: "O Terremoto Derruba múltiplos alvos — grupo compacto é ideal para ele. Elétrico é a fraqueza menos óbvia mas mais eficiente. Manter distância evita o Soterrar mas expõe ao Terremoto." },
-  spells: [], loot: [{ item: "Núcleo de Terra (material para encantamentos de pedra)", chance: 50, qty: "1" }, { item: "Fragmento de Pedra Arcana (gema rústica — 5 prata)", chance: 60, qty: "1d3" }] },
+  { id:"rec_resistencia_fogo",
+    name:"Elixir de Resistência ao Fogo",
+    icon:"🔴", tier:"raro", category:"utilidade",
+    ingredients:[
+      { tag:"escama_karlac",   qty:1, label:"Escama de Karlac Juvenil ×1" },
+      { tag:"pimenta_inferno", qty:2, label:"Pimenta do Inferno ×2" },
+      { tag:"catalisador_cristal",qty:1,label:"Catalisador de Cristal ×1" }
+    ],
+    skillTest: { attr:"INT", difficulty:"dificil" },
+    baseEffect:"Resistência a fogo por 10 minutos: todo dano de fogo reduzido à metade.",
+    critBonus:[
+      "Imunidade completa a fogo (em vez de metade) por 10 min.",
+      "Resistência ao fogo dura 1 hora.",
+      "Também concede resistência a calor extremo e dano de magma.",
+    ],
+    critFailEffect:[
+      "Resistência só por 2 rodadas de combate.",
+      "Sensibilidade ao frio: +1d4 de dano por dano de gelo durante o efeito.",
+      "Causa calafrios: −1 em todos os testes por 1 hora (corpo em choque térmico).",
+    ],
+    weight:0.25, story:"Laranja queimado. Quente ao toque. Quem bebe sente que o estômago é uma fornalha." },
 
-{ id: "vampiro-bat-menor",
-  name: "Vampiro Jovem",
-  difficulty: 2,
-  attrs: { FOR:2, DEX:3, AGI:3, INT:3, SAB:2 },
-  size: "normal", category: "Morto-Vivo",
-  location: ["Cripta", "Torre Isolada", "Caverna Escura", "Mansão Abandonada"],
-  hp: 42, physDefense: 3, magDefense: 4, dodge: 15,
-  actions: 2, damage: "1d8+DEX (mordida drenante)",
-  behavior: "Calculado e frio. Testa o grupo antes de engajar plenamente. Foge para sombra ao receber dano sagrado. Tem orgulho — se humilhado, ataca com raiva (comportamento previsível).",
-  abilities: [
-    { name: "Drenar Vida", desc: "Ao acertar mordida: cura HP igual a 50% do dano causado. Contra alvo Agarrado: cura 100% do dano. Este efeito não funciona contra mortos-vivos ou construtos." },
-    { name: "Forma de Névoa", desc: "Reação ao receber dano letal (que levaria a 0 HP): em vez de morrer, transforma-se em névoa e escapa para um hex de sombra em raio 6. Volta com 5 HP no turno seguinte. Só funciona 1x por combate e não funciona contra dano sagrado." },
-    { name: "Hipnose do Olhar", desc: "1 Ação de Magia (1x/combate): olha fixamente para um alvo a até 3 hex. Alvo testea Força de Vontade (difícil). Falha: perde sua próxima Ação (fica paralisado olhando). Luz intensa (tocha adjacente ou magia): torna o Hipnose automático a falhar." }
-  ],
-  hex: { layout: "Cripta escura com sombras", hint: "Forma de Névoa: o grupo precisa de dano sagrado preparado para o golpe final — caso contrário ele escapa com 5 HP sempre. Hipnose paralisa por 1 Ação — usar em quem tem mais Ações por turno é a jogada do Vampiro." },
-  spells: [], loot: [{ item: "Capa de Vampiro Jovem (acessório — +1 SAB à noite)", chance: 40, qty: "1" }, { item: "Dente de Vampiro (ingrediente — poção de drenar vida)", chance: 60, qty: "1" }] },
+  { id:"rec_neblina",
+    name:"Bomba de Névoa",
+    icon:"🌫️", tier:"comum", category:"utilidade",
+    ingredients:[
+      { tag:"flor_pantano",  qty:2, label:"Flor do Pântano Cinzento ×2" },
+      { tag:"po_fada",       qty:1, label:"Pó de Fada ×1" },
+      { tag:"agua_arcana",   qty:1, label:"Água Destilada Arcana ×1" }
+    ],
+    skillTest: { attr:"INT", difficulty:"normal" },
+    baseEffect:"Arremessado (alcance 4 hex): névoa densa em área 3x3 hex por 3 rodadas. Visibilidade 0 na névoa. Ataques à distância: −4 na Chance de Acerto.",
+    critBonus:[
+      "Névoa dura 5 rodadas e área 4x4 hex.",
+      "A névoa também causa Lento a inimigos nela (−1 Mov).",
+      "Névoa espectal: apenas o lançador vê claramente através dela.",
+    ],
+    critFailEffect:[
+      "Névoa area 1x1 hex apenas (inútil em combate aberto).",
+      "Névoa irritante: todos na área espirram (barulho — Furtividade impossível).",
+      "Névoa pegajosa: quem estiver na área fica Lento (−1 Mov) — inclusive aliados.",
+    ],
+    weight:0.2, story:"Cinza pálida e viscosa. Ao quebrar o frasco, a névoa se expande em segundos." },
 
-{ id: "harpia-cantora",
-  name: "Harpia Cantora",
-  difficulty: 2,
-  attrs: { FOR:2, DEX:2, AGI:3, INT:1, SAB:3 },
-  size: "normal", category: "Humanoide Alado",
-  location: ["Penhasco", "Floresta Alta", "Ruínas de Torre", "Costa do Lago"],
-  hp: 38, physDefense: 2, magDefense: 3, dodge: 15,
-  actions: 2, damage: "1d6+DEX (garras) ou Canto",
-  behavior: "Prefere atrair vítimas antes de atacar. Em combate: mantém altitude, usa o Canto e desce para atacar quem estiver encantado.",
-  abilities: [
-    { name: "Canto Encantador", desc: "1 Ação de Magia (1x/2 rodadas): todos os inimigos em raio 6 hex testam Força de Vontade (normal). Falha: ficam Encantados por 2 rodadas — perdem 1 Ação por rodada enquanto caminham lentamente em direção à Harpia (o canto compele). Dano interrompe o encanto." },
-    { name: "Mergulho de Ataque", desc: "Ao atacar de altitude: +1d6 de dano e o alvo testea FOR (normal) ou é Derrubado. Após o mergulho: a Harpia volta para altitude como Ação Livre." }
-  ],
-  hex: { layout: "Área aberta com altitude disponível", hint: "O Canto encanta o grupo inteiro mas qualquer dano quebra o efeito — um aliado que resistiu pode atacar a Harpia para libertar os encantados. Fechar com ela em melee força-a a usar garras em vez do Canto." },
-  spells: [], loot: [{ item: "Pena de Harpia (ingrediente para poção de Encanto)", chance: 60, qty: "1d3" }] },
-
-{ id: "mimic-menor",
-  name: "Mímico de Baú",
-  difficulty: 2,
-  attrs: { FOR:3, DEX:2, AGI:0, INT:2, SAB:2 },
-  size: "normal", category: "Aberração",
-  location: ["Dungeon", "Tesouro Antigo", "Sala de Armadilhas"],
-  hp: 45, physDefense: 4, magDefense: 3, dodge: 8,
-  actions: 2, damage: "1d8+FOR (mordida adesiva)",
-  behavior: "Imóvel até ser aberto. Então ataca quem tentou abrir. Foca quem está mais próximo.",
-  abilities: [
-    { name: "Disfarce Perfeito", desc: "Passivo: parece um baú de tesouro normal. Investigação (difícil) para detectar antes de abrir. Percepção (normal) para notar que não tem dobradiças de baú normal. Ao ser aberto: combate começa automaticamente — o abridor está adjacente e é o primeiro alvo." },
-    { name: "Cola Adesiva", desc: "Ao acertar: o alvo fica Preso (grudado no Mímico, FOR difícil para escapar, 1 Ação). Enquanto Preso: o Mímico morde automaticamente por 1d6 por rodada sem custo. Aliados podem ajudar (FOR normal, 1 Ação). Fogo ou óleo derrete a cola (termina o efeito)." },
-    { name: "Psevdo-Tesouro", desc: "Se o abridor rolar Percepção (normal) ANTES de abrir: nota que o 'baú' está levemente quente. Se rolar Arcanismo (normal): reconhece a aura de criatura viva." }
-  ],
-  hex: { layout: "Sala de dungeon com outros baús reais", hint: "O humor do Mímico é parte da mecânica — jogadores que abrem baús sem checar merecem a surpresa. Introduz o hábito de 'Investigar antes de abrir'. A Cola Adesiva em corredor estreito pode prender um personagem sem que os aliados consigam ajudar." },
-  spells: [], loot: [{ item: "Cristal de Mímico (material raro — imitação de qualquer gema)", chance: 50, qty: "1" }, { item: "Baú de Tesouro Real (o que o Mímico comia — 1d20 prata + 1 item menor)", chance: 70, qty: "1" }] },
-
-{ id: "soldado-desertado-trauma",
-  name: "Soldado Desertado",
-  difficulty: 2,
-  attrs: { FOR:3, DEX:2, AGI:1, INT:2, SAB:1 },
-  size: "normal", category: "Humanoide",
-  location: ["Estrada", "Floresta Densa", "Ruínas", "Vilarejo Abandonado"],
-  hp: 40, physDefense: 5, magDefense: 2, dodge: 12,
-  actions: 2, damage: "1d8+1d4+FOR (espada de combate)",
-  behavior: "Traumatizado — ataca primeiro sem perguntar. Se o grupo não atacar de volta por 1 rodada: Percepção (normal) do grupo nota que ele está tremendo, não ameaçando. Pode ser abordado (Persuasão difícil — ele está com medo, não é malicioso).",
-  abilities: [
-    { name: "Treinamento de Soldado", desc: "Passivo: Formação básica — +1 na Chance de Defesa quando adjacente a 1 aliado. Disciplina: imune a Medo. Mas o trauma interfere: ao falhar um ataque, tem 20% de chance (d10 ≤ 2) de ficar paralisado por 1 rodada (flashback)." },
-    { name: "Rendição", desc: "Ao cair abaixo de 30% HP: para de atacar e levanta as mãos. Se o grupo não atacar: pode ser conversado (Persuasão normal após parar). Pode se tornar informante ou aliado temporário. Tem informações sobre quem ele servia." }
-  ],
-  hex: { layout: "Estrada ou ruínas", hint: "Monstro que pode ser resolvido sem combate. O flashback em 20% é imprevisível — pode salvar o grupo por sorte. A Rendição ensina que nem todo confronto precisa terminar em morte." },
-  spells: [], loot: [{ item: "Carta ao Familiar (item de missão — localização de quem ele servia)", chance: 80, qty: "1" }, { item: "Moedas (2d6 prata)", chance: 60, qty: "1" }] },
-
-{ id: "lagarto-venenoso-gigante",
-  name: "Lagarto Venenoso Gigante",
-  difficulty: 2,
-  attrs: { FOR:3, DEX:1, AGI:1, INT:0, SAB:2 },
-  size: "grande", category: "Besta",
-  location: ["Deserto", "Floresta Seca", "Ruínas Quentes", "Pântano Seco"],
-  hp: 48, physDefense: 5, magDefense: 0, dodge: 11,
-  actions: 2, damage: "1d8+1d4+FOR (mordida venenosa)",
-  behavior: "Espera imóvel (camuflado) até a presa estar a 2 hex. Então ataca sem aviso. Após a emboscada: luta até a morte se a presa estiver envenenada.",
-  abilities: [
-    { name: "Camuflagem", desc: "Passivo: em terreno natural (areia, pedra, vegetação seca), o Lagarto fica invisível a criaturas que não estejam a 3 hex ou menos. Percepção (difícil) para detectar antes de estar no raio de 3 hex." },
-    { name: "Veneno de Paralisação", desc: "Toda mordida injeta veneno. SAB (normal) para resistir. Falha: Paralisado por 2 rodadas (imóvel, pode agir mas não se mover). O Lagarto prefere alvos Paralisados — ganha +1d8 de dano contra eles." },
-    { name: "Cauda de Varredura", desc: "Reação ao ser atacado em melee: cauda varre o hex do atacante. Atacante testea AGI (normal) ou cai Derrubado (1d4 de impacto + Derrubado)." }
-  ],
-  hex: { layout: "Terreno natural aberto", hint: "A Camuflagem é a mecânica principal — o grupo pode ser emboscado sem saber. Percepção preventiva antes de cruzar área suspeita. Paralisação + bônus de dano contra paralisado cria pressão para curar rápido." },
-  spells: [], loot: [{ item: "Glândula de Veneno de Paralisação (ingrediente raro)", chance: 60, qty: "1" }, { item: "Escama de Lagarto Gigante (material — armadura de deserto)", chance: 40, qty: "1d3" }] },
-
-{ id: "banshee-menor",
-  name: "Banshee Menor",
-  difficulty: 2,
-  attrs: { FOR:0, DEX:2, AGI:2, INT:3, SAB:4 },
-  size: "normal", category: "Morto-Vivo",
-  location: ["Casa Mal-assombrada", "Campo de Batalha Antigo", "Floresta Sombria", "Cemitério"],
-  hp: 35, physDefense: 0, magDefense: 7, dodge: 14,
-  actions: 2, damage: "1d6+SAB (toque fantasmal — ignora Def.Física)",
-  behavior: "Grita antes de atacar. Mantém distância e usa o Lamento. Se o grupo usar magia de bênção ou luz sagrada: recua 3 hex automaticamente (instinto de auto-preservação).",
-  abilities: [
-    { name: "Lamento da Banshee", desc: "1 Ação (1x/2 rodadas): grito sobrenatural em raio 4 hex. Todos testam Força de Vontade (difícil). Falha: Aterrorizado por 2 rodadas (−1d6 em todos os testes e não pode se aproximar da Banshee voluntariamente). Criaturas que já resistiram ao Lamento neste combate: +1d4 à rolagem de resistência nas tentativas seguintes." },
-    { name: "Forma Imaterial", desc: "Passivo: imune a armas não-mágicas. Vulnerável a prata (mesmo efeito de arma mágica) e a dano sagrado (+1d6 por dado). Em luz intensa: perde Forma Imaterial por 3 rodadas." }
-  ],
-  hex: { layout: "Área mal-iluminada", hint: "O Lamento em área pode Aterrorizar o grupo inteiro — evitar ficar em raio 4 de forma compacta é crucial. Prata é a fraqueza acessível para quem não tem armas mágicas. Luz intensa a torna vulnerável a físico." },
-  spells: [], loot: [{ item: "Essência de Banshee (componente — Veneno Psíquico 1 dose)", chance: 40, qty: "1" }] },
-
-{ id: "homem-peixe-da-costa",
-  name: "Homem-Peixe das Profundezas",
-  difficulty: 2,
-  attrs: { FOR:3, DEX:2, AGI:2, INT:1, SAB:2 },
-  size: "normal", category: "Aberração Aquática",
-  location: ["Costa do Lago Central", "Rio Profundo", "Marismas", "Templo Submerso"],
-  hp: 42, physDefense: 4, magDefense: 3, dodge: 13,
-  actions: 2, damage: "1d8+1d4+FOR (tridentes e garras)",
-  behavior: "Em grupo — nunca solo. Fora d'água: −1 Ação por turno (fica mais lento). Na água: +1 Ação e +2 Movimento.",
-  abilities: [
-    { name: "Anfibiose Tática", desc: "Passivo: em hex de água ou lama: +1 Ação de Combate e +2 Movimento. Em terreno seco por mais de 3 rodadas seguidas: −1 Ação (começa a desidratar). Jogam adversários na água quando possível." },
-    { name: "Grito de Guerra Aquático", desc: "1 Ação (1x/combate): grito subsônico. Todos em raio 4 hex testam Resistência (normal). Falha: Enjoo por 2 rodadas (−1d4 em todos os testes — a frequência do grito desequilibra o ouvido interno)." },
-    { name: "Triângulo de Ataque", desc: "Se 3 Homens-Peixe estiverem adjacentes ao mesmo alvo: o alvo não pode esquivar (a formação triangular não deixa espaço para recuar). Cada um causa dano normal mas a perda de esquiva é significativa." }
-  ],
-  hex: { layout: "Costa ou pântano com água acessível", hint: "Puxar o grupo para a água é a estratégia dos Homens-Peixe — jamais entrar na água voluntariamente. O Triângulo de Ataque (3 adjacentes, sem esquiva) é a sinergia principal — quebrar o cerco de 3 é prioridade." },
-  spells: [], loot: [{ item: "Escama de Homem-Peixe (material — armadura aquática leve)", chance: 50, qty: "1d2" }, { item: "Tridente Ritual (arma funcional)", chance: 30, qty: "1" }] },
-
-{ id: "druida-corrompido-menor",
-  name: "Druida Corrompido do Bosque",
-  difficulty: 2,
-  attrs: { FOR:1, DEX:1, AGI:1, INT:2, SAB:5 },
-  size: "normal", category: "Humanoide Corrompido",
-  location: ["Floresta Maldita", "Bosque Corrompido", "Claro com Árvores Mortas"],
-  hp: 38, physDefense: 2, magDefense: 6, dodge: 12,
-  actions: 2, damage: "1d6+SAB (cajado de galhos retorcidos) ou Magia",
-  behavior: "Protege seu território. Não distingue mais entre inimigo e aliado — considera TUDO uma ameaça ao bosque. Um Druida verdadeiro do grupo pode tentar comunicação (SAB difícil).",
-  abilities: [
-    { name: "Controle da Natureza Corrompida", desc: "1 Ação de Magia (1x/2 rodadas): manipula o terreno em área 3x3 hex. Escolhe: Raízes (Preso, FOR normal), Espinhos (1d4 por rodada a quem estiver), ou Névoa (visibilidade −4 hex). O bosque obedece porque ele é parte do bosque — mesmo corrompido." },
-    { name: "Forma Animal Parcial", desc: "1 Ação (1x/combate): transforma parcialmente — garras de animal, olhos de fera. Por 3 rodadas: +1d6 em ataques físicos e imune a Medo. A transformação é incompleta (corrompida), então volta com dano ao próprio corpo: perde 1d4 HP ao reverter." },
-    { name: "Cura pela Terra", desc: "1 Ação (enquanto em terreno natural): cura 1d8+SAB HP em si mesmo ou aliado tocado. Esta cura funciona com energia corrompida — quem for curado sente náusea por 1 rodada (−1 em testes)." }
-  ],
-  hex: { layout: "Floresta com vegetação densa controlada por ele", hint: "O Controle da Natureza Corrompida muda o campo toda rodada — o terreno nunca é fixo. Força o grupo a se mover constantemente. Um Druida do grupo pode falar com ele e possivelmente revelar que ele pode ser salvo (Purificação Sagrada nível 3+ pode reverter a corrupção)." },
-  spells: ["Controle da Natureza Corrompida", "Cura pela Terra"],
-  loot: [{ item: "Cajado do Bosque Corrompido (arma mágica — Raízes 3 usos)", chance: 50, qty: "1" }, { item: "Amuleto Druídico Corrompido (pode ser purificado — vira bênção de natureza)", chance: 40, qty: "1" }] },
-
-{ id: "espectro-da-vingança",
-  name: "Espectro da Vingança",
-  difficulty: 2,
-  attrs: { FOR:0, DEX:3, AGI:3, INT:3, SAB:4 },
-  size: "normal", category: "Morto-Vivo",
-  location: ["Local de Assassinato", "Casa do Crime", "Dungeon de Tortura", "Qualquer Local de Morte Injusta"],
-  hp: 40, physDefense: 0, magDefense: 8, dodge: 15,
-  actions: 2, damage: "1d8+SAB (toque da vingança — ignora Def.Física)",
-  behavior: "Tem um alvo específico — quem matou ou prejudicou em vida. Se o grupo NÃO for esse alvo: testa SAB (normal) do Espectro para perceber. Se perceber: ataca o grupo apenas se interferirem. Resolver o crime pode dissipar o Espectro sem combate.",
-  abilities: [
-    { name: "Alvo da Vingança", desc: "Passivo: tem 1 alvo predeterminado (o responsável pela morte injusta). Contra esse alvo: todos os ataques são automáticos (sem rolagem de acerto) e causam +1d8 extra. Se o alvo morrer ou for punido de forma que o Espectro considere justa: dissolve-se em paz." },
-    { name: "Grilhões do Passado", desc: "1 Ação de Magia (1x/combate): projeta memória da morte em todos em raio 4 hex. Todos testam Força de Vontade (difícil). Falha: veem a morte do Espectro em primeira pessoa — ficam com −1d6 nos ataques por 2 rodadas (o choque emocional paralisa)." },
-    { name: "Imaterial Parcial", desc: "Passivo: armas não-mágicas causam metade do dano. Prata e dano sagrado: dano normal. Em local de sua própria morte (hex específico): fica completamente material por 3 rodadas (vulnerável a tudo)." }
-  ],
-  hex: { layout: "Local específico da morte", hint: "Investigação (normal) antes do combate pode revelar a história do Espectro e como dissipá-lo sem luta. Forçá-lo para o hex de sua morte o torna material temporariamente — janela de dano máximo. O Alvo da Vingança pode criar situações interessantes se um NPC do grupo for o responsável." },
-  spells: [], loot: [{ item: "Objeto do Crime (item de missão — prova de quem causou a morte injusta)", chance: 80, qty: "1" }] },
-
-/* ══════════════════════════════════════════════════════════════
-   NOVO GRUPO: Horda dos Túmulos Abertos
-   Lore: Uma câmara selada foi aberta por buscadores de tesouro
-   imprudentes numa necrópole sob a cidade de Margem das Pedras.
-   O Necromante que selou a câmara há 300 anos usou um feitiço de
-   preservação — ao abrir, os mortos dentro despertaram com memória
-   parcial de quem eram. A Horda é perigosa porque são mortos-vivos
-   que ainda LEMBRAM de táticas humanas.
-   Encontrados: explorando necrópole sob Margem das Pedras,
-   ou após missão que abra a câmara selada.
-   ══════════════════════════════════════════════════════════════ */
-
-{ id: "zumbi-soldado-tumulo",
-  name: "Zumbi Soldado (Horda dos Túmulos Abertos)",
-  difficulty: 1,
-  attrs: { FOR:2, DEX:1, AGI:1, INT:0, SAB:0 },
-  size: "normal", category: "Morto-Vivo",
-  location: ["Necrópole", "Câmara Selada", "Catacumba"],
-  hp: 25, physDefense: 4, magDefense: 0, dodge: 10,
-  actions: 2, damage: "1d6+FOR (espada enferrujada)",
-  group: "Horda dos Túmulos Abertos",
-  groupRole: "Linha de frente — forma linha de batalha como um soldado real faria.",
-  groupSynergy: "Se 3+ Zumbis Soldados estiverem em linha adjacente: formam Muralha dos Mortos — qualquer ataque em área que atingir a linha tem −2 de dano por alvo (os corpos absorvem o impacto dos lados).",
-  abilities: [
-    { name: "Memória Muscular", desc: "Passivo: mesmo sem inteligência, o corpo lembra o treinamento. +1 na Chance de Defesa se adjacente a outro Zumbi Soldado (o reflexo defensivo militar persiste)." },
-    { name: "Não Cai Facilmente", desc: "Imune a Derrubado por ataques simples. Contundente (maçã, martelo) pode Derrubá-lo normalmente." }
-  ],
-  hex: { layout: "Corredor de necrópole", hint: "A Muralha dos Mortos em corredor estreito é extremamente eficiente. Quebrar a linha é prioridade antes de usar área." },
-  spells: [], behavior: "Forma linha com outros Soldados. Avança lentamente em formação.", loot: [{ item: "Espada Enferrujada Antiga (sucata — 2 bronze)", chance: 70, qty: "1" }] },
-
-{ id: "esqueleto-arqueiro-tumulo",
-  name: "Esqueleto Arqueiro Veterano (Horda dos Túmulos Abertos)",
-  difficulty: 1,
-  attrs: { FOR:0, DEX:3, AGI:1, INT:0, SAB:0 },
-  size: "normal", category: "Morto-Vivo",
-  location: ["Necrópole", "Câmara Selada", "Catacumba"],
-  hp: 18, physDefense: 1, magDefense: 0, dodge: 13,
-  actions: 2, damage: "1d8+DEX (flecha — alcance 5 hex)",
-  group: "Horda dos Túmulos Abertos",
-  groupRole: "Suporte à distância — fica atrás dos Soldados e atira sobre eles.",
-  groupSynergy: "Pode atirar sobre aliados da Horda sem penalidade (os mortos-vivos não obstruem a linha de tiro magicamente). +1d4 de dano se o alvo estiver adjacente a um Zumbi Soldado (alvo contido).",
-  abilities: [
-    { name: "Tiro através da Muralha", desc: "Passivo: ignora cobertura de aliados mortos-vivos ao atirar. A flecha passa entre eles como se os ossos se abrissem para dar passagem." },
-    { name: "Chuva de Flechas", desc: "1 Ação (1x/combate): atira 3 flechas no mesmo turno em até 3 alvos diferentes. Cada uma causa 1d6+DEX. Não tem bônus de Tiro através da Muralha neste modo." }
-  ],
-  hex: { layout: "Atrás da linha de Soldados", hint: "O Arqueiro Veterano é mais perigoso que o Arqueiro comum — atira sobre aliados sem problema. Focar nele requer quebrar a linha de Soldados primeiro ou usar magia de longo alcance." },
-  spells: [], behavior: "Fica parado atrás da Muralha dos Mortos. Usa Chuva de Flechas no turno 2.", loot: [{ item: "Flechas Antigas (1d4 unidades, ainda funcionais)", chance: 60, qty: "1d4" }] },
-
-{ id: "zumbi-sacerdote-tumulo",
-  name: "Zumbi Sacerdote (Horda dos Túmulos Abertos)",
-  difficulty: 2,
-  attrs: { FOR:1, DEX:1, AGI:1, INT:1, SAB:3 },
-  size: "normal", category: "Morto-Vivo",
-  location: ["Necrópole", "Câmara Selada", "Câmara Central da Necrópole"],
-  hp: 32, physDefense: 2, magDefense: 5, dodge: 12,
-  actions: 2, damage: "1d6+SAB (cajado sagrado corrompido) ou Magia",
-  group: "Horda dos Túmulos Abertos",
-  groupRole: "Suporte mágico — reanima os caídos e amplifica a Horda.",
-  groupSynergy: "1x por turno como Ação Livre: reanima 1 Zumbi Soldado ou Esqueleto Arqueiro destruído neste combate com 10 HP (a memória do feitiço de preservação ainda funciona nele). Só funciona enquanto o Sacerdote viver.",
-  abilities: [
-    { name: "Reanimar da Tumba", desc: "Ação Livre (1x/turno): reanima morto-vivo aliado caído com 10 HP. Isso transforma o combate numa corrida — matar o Sacerdote primeiro ou nunca terminar." },
-    { name: "Praga Menor", desc: "1 Ação de Magia: alvo a 4 hex testea Resistência (normal). Falha: Doente por 3 rodadas (−1 FOR temporária por rodada). Medicina (normal) ou Cura Mágica remove." }
-  ],
-  hex: { layout: "Câmara central da necrópole", hint: "O Sacerdote que reanima é a razão pela qual a Horda nunca diminui de número. Matar o Sacerdote ANTES de qualquer outro é a prioridade absoluta — cada Soldado morto sem o Sacerdote é permanente." },
-  spells: ["Reanimar da Tumba", "Praga Menor"],
-  behavior: "Fica no fundo. Reanima todo turno. Ataca apenas se ameaçado diretamente.", loot: [{ item: "Amuleto do Sacerdote (item de história — conta o que aconteceu na necrópole)", chance: 100, qty: "1" }, { item: "Cajado Sagrado Corrompido (arma mágica — 2 usos de Praga)", chance: 40, qty: "1" }] },
-
-/* ══════════════════════════════════════════════════════════════
-   NOVO GRUPO: Alcateia dos Lobos da Planície
-   Lore: Lobos comuns do Grande Planalho que desenvolveram
-   comportamento de caça coordenada ao longo de gerações.
-   Não são corrompidos — são apenas muito bons no que fazem.
-   Encontrados em qualquer região aberta entre Margem das Pedras
-   e as Montanhas de Atrelon. O Batedeiro espiona primeiro,
-   o Corredor fatiga, o Alfa finaliza.
-   ══════════════════════════════════════════════════════════════ */
-
-{ id: "lobo-batedeiro-planicie",
-  name: "Lobo Batedeiro (Alcateia dos Lobos da Planície)",
-  difficulty: 1,
-  attrs: { FOR:1, DEX:2, AGI:3, INT:1, SAB:2 },
-  size: "normal", category: "Besta",
-  location: ["Grande Planície", "Estrada Norte", "Floresta Aberta"],
-  hp: 18, physDefense: 2, magDefense: 0, dodge: 15,
-  actions: 2, damage: "1d4+DEX (mordida rápida)",
-  group: "Alcateia dos Lobos da Planície",
-  groupRole: "Explorador — circula o perímetro e identifica o alvo mais fraco.",
-  groupSynergy: "O Batedeiro marca o alvo com uivo específico. Todos da Alcateia identificam o alvo marcado — ganham +1 Chance de Acerto contra ele neste combate.",
-  abilities: [
-    { name: "Marcação de Presa", desc: "1 Ação Livre (1x/combate): uiva para marcar 1 alvo. Todos os aliados da Alcateia no campo ganham +1 Chance de Acerto contra esse alvo." },
-    { name: "Velocidade de Batedeiro", desc: "Passivo: Movimento 7 (mais rápido que lobos comuns). Nunca fica adjacente ao grupo voluntariamente — sempre mantém 2+ hex de distância." }
-  ],
-  hex: { layout: "Planície aberta", hint: "O Batedeiro nunca luta de perto — fica no perímetro marcando alvos. Matar ele requer alcance ou perseguição. A Marcação de Presa coordena toda a Alcateia num alvo." },
-  spells: [], behavior: "Circula. Marca o alvo com menos HP ou menos mobilidade. Nunca fecha o combate.", loot: [{ item: "Pele de Lobo da Planície", chance: 50, qty: "1" }] },
-
-{ id: "lobo-corredor-planicie",
-  name: "Lobo Corredor (Alcateia dos Lobos da Planície)",
-  difficulty: 1,
-  attrs: { FOR:2, DEX:1, AGI:2, INT:1, SAB:1 },
-  size: "normal", category: "Besta",
-  location: ["Grande Planície", "Estrada Norte", "Floresta Aberta"],
-  hp: 22, physDefense: 3, magDefense: 0, dodge: 14,
-  actions: 2, damage: "1d6+FOR (mordida de perseguição)",
-  group: "Alcateia dos Lobos da Planície",
-  groupRole: "Perseguidor — fatiga o alvo que tenta fugir.",
-  groupSynergy: "Se o alvo Marcado pelo Batedeiro tentar se mover mais de 2 hex: o Corredor pode fazer Ataque de Oportunidade automático (sem custo de reação) ao alvo em movimento.",
-  abilities: [
-    { name: "Perseguição Implacável", desc: "Passivo: ao alvo tentar Fugir (mover mais de 2 hex em direção oposta): o Corredor move junto gratuitamente (sem custo de Ação) e ataca imediatamente. Não funciona se o alvo usar magia de teletransporte." },
-    { name: "Desgaste", desc: "Ao acertar 3x o mesmo alvo: o alvo fica Fatigado (−1 em todos os testes por 3 rodadas — o desgaste da perseguição). Cumulativo com outros Corredores: cada Corredor adicional que acerta 3x aplica Fatigado novamente." }
-  ],
-  hex: { layout: "Planície aberta com espaço para correr", hint: "O Corredor pune fuga — fugir do combate com essa Alcateia é quase impossível sem magia. O grupo que tenta recuar se expõe ao Ataque de Oportunidade automático." },
-  spells: [], behavior: "Segue o alvo Marcado. Se o alvo ficar parado: morde. Se tentar fugir: persegue com Ataque de Oportunidade.", loot: [{ item: "Pele de Lobo Corredor (material — botas de movimento +1)", chance: 40, qty: "1" }] },
-
-{ id: "lobo-alfa-planicie",
-  name: "Lobo Alfa da Planície (Alcateia dos Lobos da Planície)",
-  difficulty: 2,
-  attrs: { FOR:3, DEX:2, AGI:2, INT:2, SAB:2 },
-  size: "normal", category: "Besta",
-  location: ["Grande Planície", "Coração do Território da Alcateia"],
-  hp: 45, physDefense: 4, magDefense: 1, dodge: 13,
-  actions: 3, damage: "1d8+1d4+FOR (mordida do Alfa)",
-  group: "Alcateia dos Lobos da Planície",
-  groupRole: "Finalizador — entra apenas quando o alvo já está Fatigado ou Marcado.",
-  groupSynergy: "Ao atacar alvo Fatigado (por Desgaste do Corredor): dano TRIPLICADO (em vez de dobrado de crítico). Ao alvo estar Marcado E Fatigado: dano ×4 no primeiro ataque.",
-  abilities: [
-    { name: "Faro Apurado", desc: "Passivo: não pode ser surpreendido. Detecta Furtividade automaticamente em raio 5 hex. Percepção (normal) para localizar criaturas invisíveis em raio 3 hex." },
-    { name: "Derrubar e Segurar", desc: "Ao acertar: alvo testea FOR (normal) ou cai Derrubado (o Alfa joga o alvo no chão). Se Derrubado: o Alfa morde a garganta — próximo ataque automático causa +1d10 de dano." },
-    { name: "Rugido de Dominância", desc: "1 Ação Livre (1x/combate): ruge. Todos os lobos aliados ganham +2 em todas as rolagens por 2 rodadas. Inimigos testam Intimidação (normal) ou ficam com −1 na Chance de Acerto por 1 rodada." }
-  ],
-  hex: { layout: "Centro do território, entra quando a caçada começa", hint: "O combo completo: Batedeiro Marca → Corredores Fatigam → Alfa ataca alvo Fatigado com ×4 de dano. O grupo que permite esse ciclo completar sofre as consequências. Matar o Batedeiro (impede Marcação) ou o Alfa (desbanda a Alcateia) são as melhores estratégias." },
-  spells: [], behavior: "Espera longe até que 1+ Corredores tenham aplicado Fatigado. Então avança para o alvo Fatigado. Se o Batedeiro morrer: o Alfa uiva e recua — reavalia a situação antes de reengajar.", loot: [{ item: "Canino do Alfa da Planície (talismã — +1d4 em Intimidação)", chance: 50, qty: "1" }, { item: "Pele do Alfa (material premium — armadura de couro superior)", chance: 40, qty: "1" }] }
-
-/*
-═══════════════════════════════════════════════════════════════════════════════
-  FIM DO BLOCO
-  Total adicionado: 10 Dif.1 + 12 Dif.2 = 22 monstros
-  3 novos grupos: Horda dos Túmulos Abertos (3 membros),
-                  Alcateia dos Lobos da Planície (3 membros)
-  + 16 monstros sem grupo
-═══════════════════════════════════════════════════════════════════════════════
-*/
+  /* ── LENDÁRIA ───────────────────────────────────────────────── */
+  { id:"rec_magma",
+    name:"Grande Bomba de Magma",
+    icon:"🌋", tier:"lendario", category:"ofensiva",
+    ingredients:[
+      { tag:"nucleo_magma",      qty:1, label:"Núcleo de Magma Fundido ×1" },
+      { tag:"pimenta_inferno",   qty:3, label:"Pimenta do Inferno ×3" },
+      { tag:"catalisador_cristal",qty:2,label:"Catalisador de Cristal ×2" }
+    ],
+    skillTest: { attr:"INT", difficulty:"critico" },
+    baseEffect:"Arremessado (alcance 6 hex, 2 Ações): área 4x4 hex. 4d10 de dano de magma imediato + chão em brasa por 4 rodadas (2d6 de fogo por rodada a quem ficar). AGI (difícil) para metade do imediato.",
+    critBonus:[
+      "Erupção: magma sobe 2 hex de altitude, área 5x5 hex. Voadoras afetadas.",
+      "Chão em brasa dura o combate inteiro.",
+      "+2d10 de dano imediato e AGI (crítico) para metade.",
+    ],
+    critFailEffect:[
+      "Explode no lançador: 2d10 de fogo (frasco defeituoso).",
+      "Área 1x1 hex apenas — pouco magma escapou.",
+      "Dud: o frasco não quebra. Fica no chão pegando fogo lentamente — explode em 1d3 rodadas onde caiu.",
+    ],
+    weight:0.5, story:"Laranja escuro e quase sólido. Borbulha levemente. Manuseio com pinça de ferro." }
 ];

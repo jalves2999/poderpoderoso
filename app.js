@@ -1668,6 +1668,7 @@ let currentGlossaryTab = "classes";
 
 
 function openBestiary()    { window.open("bestiary.html",    "_blank"); }
+function openCraft()       { window.open("craft.html",       "_blank"); }
 function openLocations()   { window.open("locations.html",   "_blank"); }
 function openHistory()     { window.open("history.html",     "_blank"); }
 function openCampaignLog() { window.open("campaign-log.html","_blank"); }
@@ -5058,6 +5059,10 @@ function openItemDetailModal(item, character) {
     </div>` : ""}
 
     <div class="idd-footer">
+      ${bd.subcategory === "recipe_scroll" && bd.recipeId ? `
+        <button class="btn-primary" id="btn-use-recipe-scroll" style="flex:1">
+          📜 Aprender Receita
+        </button>` : ""}
       <button class="btn-secondary" id="item-detail-close-footer">Fechar</button>
     </div>`;
 
@@ -5068,6 +5073,23 @@ function openItemDetailModal(item, character) {
   document.getElementById("item-detail-close")?.addEventListener("click", close);
   document.getElementById("item-detail-close-footer")?.addEventListener("click", close);
   overlay.addEventListener("click", e => { if (e.target === overlay) close(); }, { once: true });
+
+  // Usar Pergaminho de Receita
+  document.getElementById("btn-use-recipe-scroll")?.addEventListener("click", () => {
+    if (!item.recipeId) return;
+    if (!character.knownRecipes) character.knownRecipes = [];
+    if (character.knownRecipes.includes(item.recipeId)) {
+      showToast("Você já conhece esta receita!");
+      return;
+    }
+    character.knownRecipes.push(item.recipeId);
+    // Remove o pergaminho do inventário
+    character.inventory = character.inventory.filter(i => i.instanceId !== item.instanceId);
+    persistCurrentCharacter();
+    renderSheet();
+    close();
+    showToast(`📜 Receita "${item.name.replace("Pergaminho de Receita: ", "")}" aprendida! Abra a página de Alquimia para criar.`);
+  });
 }
 
 function openAddItemModal(character) {

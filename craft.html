@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Alquimia — Grimório de Personagens</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* ── Layout exclusivo da página de craft ─────────────────── */
+    body { margin:0; min-height:100vh; background:var(--parchment); }
+
+    .craft-page { display:flex; flex-direction:column; min-height:100vh; }
+
+    /* Toolbar */
+    .craft-toolbar {
+      display:flex; align-items:center; gap:12px;
+      padding:10px 14px;
+      background:var(--parchment);
+      border-bottom:2px solid var(--line);
+      position:sticky; top:0; z-index:30;
+      backdrop-filter:blur(4px);
+    }
+    .craft-toolbar-title {
+      font-family:var(--font-heading); font-size:17px; color:var(--ink); flex:1;
+    }
+    .craft-toolbar a {
+      font-size:12px; color:var(--ink-soft); text-decoration:none;
+    }
+
+    /* Seletor de personagem */
+    .craft-char-bar {
+      padding:10px 14px; background:rgba(0,0,0,0.03);
+      border-bottom:1px solid var(--line);
+      display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+    }
+    .craft-char-bar label { font-family:var(--font-label); font-size:11px; text-transform:uppercase; letter-spacing:.4px; color:var(--ink-soft); }
+    .craft-char-select {
+      flex:1; min-width:160px; max-width:280px;
+      font-family:var(--font-heading); font-size:14px;
+      padding:6px 10px; border:1px solid var(--line); border-radius:6px;
+      background:rgba(255,255,255,.7); color:var(--ink);
+    }
+    .craft-char-info {
+      font-size:12px; color:var(--ink-soft); margin-left:auto;
+    }
+
+    /* Abas */
+    .craft-tabs {
+      display:flex; gap:4px; padding:10px 14px 0;
+      border-bottom:2px solid var(--line);
+      background:var(--parchment);
+    }
+    .craft-tab-btn {
+      padding:7px 14px; border:1px solid transparent; border-bottom:none;
+      border-radius:6px 6px 0 0; font-family:var(--font-heading); font-size:13px;
+      background:transparent; color:var(--ink-soft); cursor:pointer; transition:.15s;
+    }
+    .craft-tab-btn.active {
+      background:var(--parchment); border-color:var(--line);
+      color:var(--gold); border-bottom-color:var(--parchment);
+      margin-bottom:-2px; z-index:1;
+    }
+
+    /* Corpo */
+    .craft-body { flex:1; padding:14px; max-width:700px; margin:0 auto; width:100%; box-sizing:border-box; }
+
+    /* Seção de receitas */
+    .recipe-list { display:flex; flex-direction:column; gap:10px; }
+
+    .recipe-card {
+      border:1px solid var(--line); border-radius:10px;
+      background:rgba(255,255,255,.35); overflow:hidden;
+      transition:box-shadow .15s;
+    }
+    .recipe-card:hover { box-shadow:0 2px 10px rgba(0,0,0,.08); }
+    .recipe-card.unavailable { opacity:.6; }
+
+    .recipe-header {
+      display:flex; align-items:center; gap:10px;
+      padding:12px 14px; cursor:pointer; user-select:none;
+    }
+    .recipe-icon { font-size:24px; flex-shrink:0; }
+    .recipe-title-col { flex:1; min-width:0; }
+    .recipe-name { font-family:var(--font-heading); font-size:15px; color:var(--ink); }
+    .recipe-sub  { font-size:11px; color:var(--ink-soft); margin-top:2px; }
+    .recipe-tier-badge {
+      font-size:10px; padding:2px 8px; border-radius:10px; font-family:var(--font-label);
+      text-transform:uppercase; letter-spacing:.3px; flex-shrink:0;
+    }
+    .tier-comum   { background:rgba(0,0,0,.08); color:var(--ink-soft); }
+    .tier-raro    { background:rgba(100,60,200,.12); color:#6040cc; }
+    .tier-lendario{ background:rgba(184,150,12,.15); color:#927800; }
+    .recipe-status-dot {
+      width:10px; height:10px; border-radius:50%; flex-shrink:0;
+    }
+    .dot-ok      { background:#27ae60; }
+    .dot-missing { background:#e74c3c; }
+    .dot-norecipe{ background:#aaa; }
+
+    .recipe-body { padding:0 14px 14px; display:none; }
+    .recipe-card.open .recipe-body { display:block; }
+    .recipe-card.open .recipe-header { border-bottom:1px solid var(--line); padding-bottom:10px; margin-bottom:0; }
+
+    /* Ingredientes */
+    .ingredient-list { display:flex; flex-direction:column; gap:5px; margin:10px 0; }
+    .ingredient-row  {
+      display:flex; align-items:center; gap:8px;
+      font-size:13px; padding:5px 8px; border-radius:6px;
+    }
+    .ingredient-row.have    { background:rgba(39,174,96,.08); }
+    .ingredient-row.missing { background:rgba(231,76,60,.08); }
+    .ingredient-icon { font-size:16px; flex-shrink:0; }
+    .ingredient-name { flex:1; color:var(--ink); }
+    .ingredient-qty  { font-family:var(--font-heading); font-size:13px; }
+    .ingredient-row.have    .ingredient-qty { color:#27ae60; }
+    .ingredient-row.missing .ingredient-qty { color:#e74c3c; }
+    .ingredient-have-label { font-size:11px; color:var(--ink-soft); }
+
+    /* Efeito base */
+    .recipe-base-effect {
+      font-size:13px; color:var(--ink); line-height:1.55;
+      padding:8px 10px; background:rgba(0,0,0,.04); border-radius:6px; margin:8px 0;
+    }
+
+    /* Chance de acerto */
+    .craft-roll-section { margin-top:10px; }
+    .craft-roll-label { font-family:var(--font-label); font-size:11px; text-transform:uppercase; letter-spacing:.4px; color:var(--ink-soft); margin-bottom:6px; }
+    .craft-roll-info  {
+      display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px;
+    }
+    .craft-roll-chip {
+      padding:4px 10px; border-radius:12px; font-size:12px;
+      font-family:var(--font-heading); border:1px solid var(--line);
+    }
+    .chip-n { background:rgba(39,174,96,.1); color:#1e8449; border-color:rgba(39,174,96,.25); }
+    .chip-d { background:rgba(180,120,20,.1); color:#9a7010; border-color:rgba(180,120,20,.25); }
+    .chip-c { background:rgba(160,40,40,.1);  color:#a03030; border-color:rgba(160,40,40,.25); }
+
+    /* Botão criar */
+    .btn-craft {
+      width:100%; padding:13px; border:none; border-radius:8px;
+      background:var(--gold); color:#fff; font-family:var(--font-heading);
+      font-size:15px; cursor:pointer; transition:.15s;
+    }
+    .btn-craft:active { filter:brightness(.9); }
+    .btn-craft:disabled { opacity:.5; cursor:not-allowed; }
+
+    /* Modal de resultado */
+    .craft-result-overlay {
+      position:fixed; inset:0; background:rgba(0,0,0,.55);
+      z-index:200; display:flex; align-items:center; justify-content:center;
+      padding:16px; box-sizing:border-box;
+    }
+    .craft-result-overlay.hidden { display:none; }
+    .craft-result-modal {
+      background:var(--parchment); border-radius:14px;
+      border:2px solid var(--line); max-width:440px; width:100%;
+      padding:20px; position:relative; box-shadow:0 8px 32px rgba(0,0,0,.25);
+    }
+    .crm-icon    { font-size:48px; text-align:center; display:block; margin-bottom:8px; }
+    .crm-title   { font-family:var(--font-heading); font-size:20px; text-align:center; margin-bottom:4px; }
+    .crm-roll    { text-align:center; font-size:13px; color:var(--ink-soft); margin-bottom:14px; }
+    .crm-result  { font-size:14px; line-height:1.6; padding:10px 12px; border-radius:8px; margin-bottom:12px; }
+    .crm-success  { background:rgba(39,174,96,.1); border:1px solid rgba(39,174,96,.3); }
+    .crm-crit-suc { background:rgba(184,150,12,.12); border:1px solid rgba(184,150,12,.35); }
+    .crm-fail     { background:rgba(231,76,60,.08); border:1px solid rgba(231,76,60,.2); }
+    .crm-crit-fail{ background:rgba(100,0,0,.08); border:1px solid rgba(160,40,40,.3); }
+    .crm-label    { font-family:var(--font-label); font-size:10px; text-transform:uppercase; letter-spacing:.4px; color:var(--ink-soft); margin-bottom:4px; }
+    .crm-bonus    { font-size:13px; font-style:italic; color:#27ae60; margin-top:6px; }
+    .crm-penalty  { font-size:13px; font-style:italic; color:#c0392b; margin-top:6px; }
+    .crm-actions  { display:flex; gap:8px; }
+    .btn-crm-add  { flex:1; padding:10px; border:none; border-radius:8px; background:var(--gold); color:#fff; font-family:var(--font-heading); font-size:14px; cursor:pointer; }
+    .btn-crm-close{ flex:1; padding:10px; border:1px solid var(--line); border-radius:8px; background:transparent; font-family:var(--font-heading); font-size:14px; cursor:pointer; color:var(--ink); }
+
+    /* Inventário de materiais */
+    .mat-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:8px; }
+    .mat-card {
+      padding:10px; border:1px solid var(--line); border-radius:8px;
+      background:rgba(255,255,255,.3); display:flex; flex-direction:column; gap:4px;
+    }
+    .mat-card-name { font-family:var(--font-heading); font-size:13px; color:var(--ink); }
+    .mat-card-qty  { font-size:20px; font-family:var(--font-heading); color:var(--gold); }
+    .mat-card-tag  { font-size:10px; color:var(--ink-soft); }
+
+    /* Empty state */
+    .craft-empty {
+      text-align:center; padding:48px 16px; color:var(--ink-soft);
+      font-size:14px; line-height:1.7;
+    }
+    .craft-empty-icon { font-size:48px; display:block; margin-bottom:12px; }
+
+    /* Filtros */
+    .craft-filters { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px; }
+    .craft-filter-btn {
+      padding:5px 12px; border-radius:14px; border:1px solid var(--line);
+      background:transparent; font-size:12px; font-family:var(--font-heading);
+      cursor:pointer; color:var(--ink-soft); transition:.12s;
+    }
+    .craft-filter-btn.active { background:var(--gold); color:#fff; border-color:var(--gold); }
+
+    @media(max-width:480px) {
+      .craft-body { padding:10px; }
+      .recipe-header { padding:10px; }
+      .recipe-body { padding:0 10px 10px; }
+      .mat-grid { grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); }
+    }
+  </style>
+</head>
+<body>
+<div class="craft-page" id="craft-page">
+
+  <!-- Toolbar -->
+  <div class="craft-toolbar">
+    <a href="index.html">← Grimório</a>
+    <span class="craft-toolbar-title">⚗️ Alquimia</span>
+  </div>
+
+  <!-- Seletor de personagem -->
+  <div class="craft-char-bar">
+    <label for="char-select">Personagem</label>
+    <select class="craft-char-select" id="char-select">
+      <option value="">— selecione —</option>
+    </select>
+    <span class="craft-char-info" id="char-info"></span>
+  </div>
+
+  <!-- Abas -->
+  <div class="craft-tabs">
+    <button class="craft-tab-btn active" data-tab="recipes">📜 Receitas</button>
+    <button class="craft-tab-btn" data-tab="materials">🌿 Materiais</button>
+  </div>
+
+  <!-- Corpo -->
+  <div class="craft-body">
+    <div id="tab-recipes">
+      <!-- filtros -->
+      <div class="craft-filters" id="recipe-filters">
+        <button class="craft-filter-btn active" data-filter="all">Todas</button>
+        <button class="craft-filter-btn" data-filter="cura">💚 Cura</button>
+        <button class="craft-filter-btn" data-filter="ofensiva">💥 Ofensiva</button>
+        <button class="craft-filter-btn" data-filter="utilidade">🔧 Utilidade</button>
+        <button class="craft-filter-btn" data-filter="available">✅ Disponíveis</button>
+      </div>
+      <div class="recipe-list" id="recipe-list"></div>
+    </div>
+    <div id="tab-materials" style="display:none">
+      <div class="mat-grid" id="mat-grid"></div>
+    </div>
+  </div>
+
+  <!-- Modal de resultado -->
+  <div class="craft-result-overlay hidden" id="result-overlay">
+    <div class="craft-result-modal" id="result-modal">
+      <span class="crm-icon" id="crm-icon">⚗️</span>
+      <div class="crm-title" id="crm-title"></div>
+      <div class="crm-roll"  id="crm-roll"></div>
+      <div class="crm-result" id="crm-result"></div>
+      <div class="crm-actions">
+        <button class="btn-crm-add"   id="btn-crm-add">➕ Adicionar ao inventário</button>
+        <button class="btn-crm-close" id="btn-crm-close">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="data.js"></script>
+<script src="craft.js"></script>
+</body>
+</html>
