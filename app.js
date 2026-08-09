@@ -5219,144 +5219,181 @@ function updateCustomItemFieldsVisibility() {
 }
 
 /* ── Estado dos filtros do catálogo ─────────────────────────── */
-let catalogFilters = { type: "", tier: "", search: "" };
-let catalogSelectedItem = null; // { item, sourceCategory }
 
 /* Mapeamento de tipo-chip → categoria e predicado */
+/* ── Catálogo de itens ── */
+
+/* Mapeamento tipo-chip → itens */
 function getItemsByType(type) {
-  const miscCat = (sub) => (MISC_ITEMS || []).filter(i => !sub || i.subcategory === sub).map(i => ({ ...i, _cat: "misc" }));
+  const all_w1 = (WEAPONS_ONE_HAND || []).map(i => ({ ...i, _cat:"weapon"    }));
+  const all_w2 = (WEAPONS_TWO_HAND || []).map(i => ({ ...i, _cat:"weapon"    }));
+  const all_wr = (WEAPONS_RANGED   || []).map(i => ({ ...i, _cat:"weapon"    }));
+  const all_wm = (WEAPONS_MAGIC    || []).map(i => ({ ...i, _cat:"weapon"    }));
+  const all_sh = (SHIELDS          || []).map(i => ({ ...i, _cat:"shield"    }));
+  const all_ar = (ARMORS           || []).map(i => ({ ...i, _cat:"armor"     }));
+  const all_ac = (ACCESSORIES      || []).map(i => ({ ...i, _cat:"accessory" }));
+  const miscAll  = (MISC_ITEMS || []).map(i => ({ ...i, _cat:"misc" }));
+  const misc = sub => sub ? miscAll.filter(i => i.subcategory === sub) : miscAll;
+
+  // Materiais: craftingMaterial:true  OU  smithingMaterial:true
+  const matItems = miscAll.filter(i => i.craftingMaterial || i.smithingMaterial);
+
   switch (type) {
-    case "weapon1h":      return WEAPONS_ONE_HAND.map(i  => ({ ...i, _cat: "weapon" }));
-    case "weapon2h":      return WEAPONS_TWO_HAND.map(i  => ({ ...i, _cat: "weapon" }));
-    case "weaponranged":  return WEAPONS_RANGED.map(i    => ({ ...i, _cat: "weapon" }));
-    case "weaponmagic":   return WEAPONS_MAGIC.map(i     => ({ ...i, _cat: "weapon" }));
-    case "shield":        return SHIELDS.map(i            => ({ ...i, _cat: "shield" }));
-    case "armorleve":     return ARMORS.filter(a => (a.weight||0) <= 5 && !(a.movePenalty > 0)).map(i => ({ ...i, _cat: "armor" }));
-    case "armormedia":    return ARMORS.filter(a => (a.weight||0) > 5 && (a.weight||0) <= 12).map(i => ({ ...i, _cat: "armor" }));
-    case "armorpesada":   return ARMORS.filter(a => (a.weight||0) > 12 || (a.movePenalty > 0)).map(i => ({ ...i, _cat: "armor" }));
-    case "accessory":     return ACCESSORIES.map(i        => ({ ...i, _cat: "accessory" }));
-    case "misc":          return miscCat(null);
-    case "misc-potion":   return miscCat("potion");
-    case "misc-scroll":   return miscCat("scroll");
-    case "misc-artefato": return miscCat("artefato");
-    case "misc-gear":     return miscCat("gear");
-    default: return [
-      ...WEAPONS_ONE_HAND.map(i  => ({ ...i, _cat: "weapon" })),
-      ...WEAPONS_TWO_HAND.map(i  => ({ ...i, _cat: "weapon" })),
-      ...WEAPONS_RANGED.map(i    => ({ ...i, _cat: "weapon" })),
-      ...WEAPONS_MAGIC.map(i     => ({ ...i, _cat: "weapon" })),
-      ...SHIELDS.map(i           => ({ ...i, _cat: "shield" })),
-      ...ARMORS.map(i            => ({ ...i, _cat: "armor" })),
-      ...ACCESSORIES.map(i       => ({ ...i, _cat: "accessory" })),
-      ...miscCat(null),
+    case "weapon1h":       return all_w1;
+    case "weapon2h":       return all_w2;
+    case "weaponranged":   return all_wr;
+    case "weaponmagic":    return all_wm;
+    case "shield":         return all_sh;
+    case "armorleve":      return all_ar.filter(a => (a.weight||0) <= 5  && !(a.movePenalty > 0));
+    case "armormedia":     return all_ar.filter(a => (a.weight||0) >  5  && (a.weight||0) <= 12);
+    case "armorpesada":    return all_ar.filter(a => (a.weight||0) > 12  ||  (a.movePenalty > 0));
+    case "accessory":      return all_ac;
+    case "misc":           return misc(null);
+    case "misc-potion":    return misc("potion");
+    case "misc-scroll":    return misc("scroll");
+    case "misc-artefato":  return misc("artefato");
+    case "misc-gear":      return misc("gear");
+    case "misc-recipe":    return misc("recipe_scroll");
+    case "misc-material":  return matItems;
+    default:               return [
+      ...all_w1, ...all_w2, ...all_wr, ...all_wm,
+      ...all_sh, ...all_ar, ...all_ac, ...miscAll,
     ];
   }
 }
 
+/* Filtragem com busca + tier */
 function getFilteredCatalogItems() {
   let items = getItemsByType(catalogFilters.type);
+
   if (catalogFilters.tier) {
     items = items.filter(i => (i.tier || "comum") === catalogFilters.tier);
   }
+
   if (catalogFilters.search) {
     const q = catalogFilters.search.toLowerCase();
     items = items.filter(i =>
-      i.name.toLowerCase().includes(q) ||
+      (i.name || "").toLowerCase().includes(q) ||
+      (i.effect || "").toLowerCase().includes(q) ||
+      (i.note  || "").toLowerCase().includes(q) ||
       (i.story || "").toLowerCase().includes(q) ||
-      (i.note || "").toLowerCase().includes(q) ||
-      (i.effect || "").toLowerCase().includes(q)
+      (i.materialTag || "").toLowerCase().includes(q) ||
+      (i.subcategory || "").toLowerCase().includes(q)
     );
   }
   return items;
 }
 
-function tierLabel(tier) {
-  return { comum:"Comum", raro:"Raro", magico:"Mágico", lendario:"Lendário", unico:"Único", ancestral:"Ancestral" }[tier] || tier || "Comum";
+/* Labels auxiliares */
+function tierLabel(t) {
+  return { comum:"Comum", raro:"Raro", magico:"Mágico", lendario:"Lendário",
+           unico:"Único", ancestral:"Ancestral" }[t] || t || "Comum";
 }
-function tierClass(tier) {
-  return { comum:"tier-comum", raro:"tier-raro", magico:"tier-magico", lendario:"tier-lendario", unico:"tier-unico", ancestral:"tier-ancestral" }[tier] || "tier-comum";
+function tierClass(t) {
+  return "tier-" + (t || "comum");
 }
 function typeLabel(item) {
   if (item._cat === "shield")    return "Escudo";
   if (item._cat === "armor")     return "Armadura";
   if (item._cat === "accessory") return "Acessório";
   if (item._cat === "misc") {
-    return { potion:"🧪 Poção", scroll:"📜 Pergaminho", artefato:"💎 Artefato", gear:"🎒 Equipamento" }[item.subcategory] || "Misc.";
+    if (item.craftingMaterial || item.smithingMaterial)
+      return item.smeltingType === "armor" ? "🪨 Mat. Armadura"
+           : item.smeltingType === "weapon" ? "⚒ Mat. Arma"
+           : "🌿 Material";
+    return { potion:"🧪 Poção", scroll:"📜 Pergaminho",
+             artefato:"💎 Artefato", gear:"🎒 Equipamento",
+             recipe_scroll:"📜 Receita", material:"🌿 Material" }[item.subcategory] || "Misc.";
   }
-  if (item.heavyTwoHanded || WEAPONS_TWO_HAND.some(w => w.name === item.name)) return "Arma 2M";
-  if (WEAPONS_RANGED.some(w => w.name === item.name)) return "Arma Ranged";
-  if (WEAPONS_MAGIC.some(w => w.name === item.name))  return "Arma Arcana";
-  return "Arma 1M";
+  if (item._cat === "weapon") {
+    if ((WEAPONS_MAGIC  || []).some(w => w.name === item.name)) return "✨ Arcana";
+    if ((WEAPONS_RANGED || []).some(w => w.name === item.name)) return "🏹 Ranged";
+    if ((WEAPONS_TWO_HAND || []).some(w => w.name === item.name)) return "⚔ 2M";
+    return "🗡 1M";
+  }
+  return "—";
 }
 
+/* Renderiza a lista filtrada */
 function renderCatalogItemList() {
   const container = document.getElementById("catalog-item-list");
   const countEl   = document.getElementById("catalog-result-count");
-  const items = getFilteredCatalogItems();
+  if (!container) return;
 
+  const items = getFilteredCatalogItems();
   if (countEl) countEl.textContent = `${items.length} ite${items.length !== 1 ? "ns" : "m"}`;
 
   if (items.length === 0) {
-    container.innerHTML = `<p class="catalog-empty">Nenhum item encontrado. Tente outros filtros.</p>`;
-    catalogSelectedItem = null;
-    updateCatalogItemPreview();
+    container.innerHTML = `<p class="catalog-empty">Nenhum item encontrado para estes filtros.</p>`;
+    if (catalogSelectedItem) { catalogSelectedItem = null; updateCatalogItemPreview(); }
     return;
   }
 
+  /* Se o item selecionado não está no conjunto filtrado, limpar seleção */
+  if (catalogSelectedItem && !items.some(i => i.name === catalogSelectedItem.name && i._cat === catalogSelectedItem._cat)) {
+    catalogSelectedItem = null;
+  }
+
   container.innerHTML = items.map((item, idx) => {
-    const tier  = item.tier || "comum";
-    const isSelected = catalogSelectedItem && catalogSelectedItem.name === item.name;
-    const stat = item.dmg ? `⚔ ${item.dmg}` :
-                 item.physDefense !== undefined ? `🛡 ${item.physDefense} Def.` :
-                 item.effect ? item.effect.slice(0, 42) + (item.effect.length > 42 ? "…" : "") : "";
+    const tier       = item.tier || "comum";
+    const isSelected = catalogSelectedItem && catalogSelectedItem.name === item.name && catalogSelectedItem._cat === item._cat;
+    const stat = item.dmg
+      ? `⚔ ${item.dmg}`
+      : item.physDefense !== undefined
+      ? `🛡 ${item.physDefense} Def.`
+      : item.effect
+      ? item.effect.slice(0, 44) + (item.effect.length > 44 ? "…" : "")
+      : "";
+
     return `
-      <div class="catalog-list-item ${isSelected ? "selected" : ""}" data-catalog-idx="${idx}" title="${escapeHTML(item.name)}">
-        <div class="catalog-list-item-main">
-          <div class="catalog-list-item-name">${escapeHTML(item.name)}</div>
-          <div class="catalog-list-item-meta">
-            <span class="catalog-item-tier ${tierClass(tier)}">${tierLabel(tier)}</span>
-            <span class="catalog-item-type">${typeLabel(item)}</span>
-            ${item.weight !== undefined ? `<span class="catalog-item-weight">${item.weight}kg</span>` : ""}
-          </div>
-          ${stat ? `<div class="catalog-list-item-stat">${stat}</div>` : ""}
+    <div class="catalog-list-item ${isSelected ? "selected" : ""}" data-catalog-idx="${idx}" title="${escapeHTML(item.name)}">
+      <div class="catalog-list-item-main">
+        <div class="catalog-list-item-name">${escapeHTML(item.name)}</div>
+        <div class="catalog-list-item-meta">
+          <span class="catalog-item-tier ${tierClass(tier)}">${tierLabel(tier)}</span>
+          <span class="catalog-item-type">${typeLabel(item)}</span>
+          ${item.weight !== undefined ? `<span class="catalog-item-weight">${item.weight}kg</span>` : ""}
         </div>
-        <span class="catalog-list-item-check">${isSelected ? "✓" : ""}</span>
-      </div>`;
+        ${stat ? `<div class="catalog-list-item-stat">${stat}</div>` : ""}
+      </div>
+      <span class="catalog-list-item-check">${isSelected ? "✓" : ""}</span>
+    </div>`;
   }).join("");
 
-  // Handlers de seleção
+  /* Handlers de seleção */
   container.querySelectorAll(".catalog-list-item").forEach((el, idx) => {
     el.addEventListener("click", () => {
-      const item = items[idx];
-      catalogSelectedItem = item;
-      // Sincroniza selects ocultos (legado de peso)
-      const hiddenSel = document.getElementById("catalog-item-select");
-      const hiddenCat = document.getElementById("catalog-category-select");
-      if (hiddenCat) hiddenCat.value = item._cat;
-      if (hiddenSel) {
-        hiddenSel.innerHTML = `<option value="${escapeHTML(item.name)}">${escapeHTML(item.name)}</option>`;
-        hiddenSel.value = item.name;
-      }
+      catalogSelectedItem = items[idx];
+      _syncHiddenCatalogSelects(catalogSelectedItem);
       renderCatalogItemList();
       updateCatalogItemPreview();
       updateAddItemWeightPreview();
     });
   });
 
-  // Seleciona o primeiro automaticamente se nenhum está selecionado
+  /* Pré-selecionar primeiro se nada selecionado */
   if (!catalogSelectedItem && items.length > 0) {
     catalogSelectedItem = items[0];
-    const hiddenSel = document.getElementById("catalog-item-select");
-    const hiddenCat = document.getElementById("catalog-category-select");
-    if (hiddenCat) hiddenCat.value = items[0]._cat;
-    if (hiddenSel) {
-      hiddenSel.innerHTML = `<option value="${escapeHTML(items[0].name)}">${escapeHTML(items[0].name)}</option>`;
-      hiddenSel.value = items[0].name;
-    }
+    _syncHiddenCatalogSelects(catalogSelectedItem);
+    updateCatalogItemPreview();
+    updateAddItemWeightPreview();
+  } else if (catalogSelectedItem) {
     updateCatalogItemPreview();
   }
 }
 
+/* Sincroniza os selects ocultos (legado) */
+function _syncHiddenCatalogSelects(item) {
+  const hiddenCat = document.getElementById("catalog-category-select");
+  const hiddenSel = document.getElementById("catalog-item-select");
+  if (hiddenCat) hiddenCat.value = item._cat;
+  if (hiddenSel) {
+    hiddenSel.innerHTML = `<option value="${escapeHTML(item.name)}">${escapeHTML(item.name)}</option>`;
+    hiddenSel.value = item.name;
+  }
+}
+
+/* Preview do item selecionado */
 function updateCatalogItemPreview() {
   const preview = document.getElementById("catalog-item-preview");
   if (!preview) return;
@@ -5364,212 +5401,209 @@ function updateCatalogItemPreview() {
   if (!item) { preview.classList.add("hidden"); return; }
   preview.classList.remove("hidden");
 
-  const magicBonusLines = item.magicBonus ? Object.entries(item.magicBonus)
-    .filter(([k]) => k !== "attr" && k !== "attrValue")
+  const magLines  = item.magicBonus ? Object.entries(item.magicBonus)
+    .filter(([k]) => k !== "attr" && k !== "attrValue" && k !== "attr2" && k !== "attrValue2")
     .map(([k,v]) => {
-      const labels = { actions:"Ações", spellActions:"Ações de Magia", hp:"HP", carry:"Carga", slots:"Slots", move:"Movimento" };
-      return v > 0 ? `<span class="catalog-preview-bonus">+${v} ${labels[k]||k}</span>` : null;
+      const lbl = { actions:"Ações", spellActions:"Ações de Magia", hp:"HP", carry:"Carga",
+                    slots:"Slots", move:"Movimento" }[k];
+      return v > 0 && lbl ? `<span class="catalog-preview-bonus">+${v} ${lbl}</span>` : null;
     }).filter(Boolean).join("") : "";
-  const attrBonus = item.magicBonus?.attr ? `<span class="catalog-preview-bonus">+${item.magicBonus.attrValue} ${item.magicBonus.attr}</span>` : "";
+  const attrBonus  = item.magicBonus?.attr  ? `<span class="catalog-preview-bonus">+${item.magicBonus.attrValue} ${item.magicBonus.attr}</span>`   : "";
+  const attrBonus2 = item.magicBonus?.attr2 ? `<span class="catalog-preview-bonus">+${item.magicBonus.attrValue2} ${item.magicBonus.attr2}</span>` : "";
 
-  const setInfo = item.setName ? `<div class="catalog-preview-set">Conjunto: <em>${item.setName}</em></div>` : "";
-  const req = item.req ? `<div class="catalog-preview-row"><span>Req.:</span> <strong>${item.req}</strong></div>` : "";
-  const dmg = item.dmg ? `<div class="catalog-preview-row"><span>Dano:</span> <strong>${item.dmg}</strong></div>` : "";
-  const def = item.physDefense !== undefined ? `<div class="catalog-preview-row"><span>Def. Física:</span> <strong>${item.physDefense}</strong></div>` : "";
-  const defMag = item.magDefense !== undefined ? `<div class="catalog-preview-row"><span>Def. Mágica:</span> <strong>${item.magDefense}</strong></div>` : "";
-  const pen = item.movePenalty ? `<div class="catalog-preview-row"><span>Pen. Mov.:</span> <strong>−${item.movePenalty}</strong></div>` : "";
-  const wt  = item.weight !== undefined ? `<div class="catalog-preview-row"><span>Peso:</span> <strong>${item.weight}kg</strong></div>` : "";
-  const cons = item.consumable ? `<div class="catalog-preview-row" style="color:var(--wax-red-dark)"><span>Tipo:</span> <strong>🔥 Consumível (uso único)</strong></div>` : "";
-  const eff = item.effect ? `<div class="catalog-preview-effect">${escapeHTML(item.effect)}</div>` : "";
-  const story = item.story ? `<div class="catalog-preview-story">"${escapeHTML(item.story)}"</div>` : "";
-  const note  = item.note  ? `<div class="catalog-preview-note">📌 ${escapeHTML(item.note)}</div>` : "";
+  const matTag = (item.craftingMaterial || item.smithingMaterial)
+    ? `<div class="catalog-preview-row" style="color:#7a5a10"><span>Tag:</span> <code>${item.materialTag || "—"}</code></div>` : "";
+  const chargesHtml = item.charges
+    ? `<div class="catalog-preview-row"><span>Cargas:</span> <strong>${item.charges.max} ${item.charges.label} / ${item.charges.resetOn}</strong></div>` : "";
+  const rangeHtml = item.range
+    ? `<div class="catalog-preview-row"><span>Alcance:</span> <strong>${item.range} hex</strong></div>` : "";
 
   preview.innerHTML = `
     <div class="catalog-preview-header">
       <span class="catalog-preview-name">${escapeHTML(item.name)}</span>
-      <span class="catalog-item-tier ${tierClass(item.tier || "comum")}">${tierLabel(item.tier || "comum")}</span>
+      <span class="catalog-item-tier ${tierClass(item.tier||"comum")}">${tierLabel(item.tier||"comum")}</span>
     </div>
-    ${setInfo}
-    <div class="catalog-preview-stats">${dmg}${def}${defMag}${pen}${wt}${req}${cons}</div>
-    ${magicBonusLines || attrBonus ? `<div class="catalog-preview-bonuses">${magicBonusLines}${attrBonus}</div>` : ""}
-    ${eff}${note}${story}
+    ${item.setName   ? `<div class="catalog-preview-set">Conjunto: <em>${item.setName}</em></div>` : ""}
+    <div class="catalog-preview-stats">
+      ${item.dmg           ? `<div class="catalog-preview-row"><span>Dano:</span>      <strong>${item.dmg}</strong></div>` : ""}
+      ${item.physDefense !== undefined ? `<div class="catalog-preview-row"><span>Def.Física:</span> <strong>${item.physDefense}</strong></div>` : ""}
+      ${item.magDefense  !== undefined ? `<div class="catalog-preview-row"><span>Def.Mágica:</span> <strong>${item.magDefense}</strong></div>` : ""}
+      ${item.movePenalty ? `<div class="catalog-preview-row"><span>Pen.Mov.:</span>   <strong>−${item.movePenalty}</strong></div>` : ""}
+      ${item.req         ? `<div class="catalog-preview-row"><span>Req.:</span>        <strong>${item.req}</strong></div>` : ""}
+      ${item.weight !== undefined ? `<div class="catalog-preview-row"><span>Peso:</span> <strong>${item.weight}kg</strong></div>` : ""}
+      ${item.consumable  ? `<div class="catalog-preview-row" style="color:var(--wax-red-dark)"><span>Tipo:</span> <strong>🔥 Consumível</strong></div>` : ""}
+      ${chargesHtml}${rangeHtml}${matTag}
+    </div>
+    ${(magLines || attrBonus || attrBonus2) ? `<div class="catalog-preview-bonuses">${magLines}${attrBonus}${attrBonus2}</div>` : ""}
+    ${item.effect ? `<div class="catalog-preview-effect">${escapeHTML(item.effect)}</div>` : ""}
+    ${item.note   ? `<div class="catalog-preview-note">📌 ${escapeHTML(item.note)}</div>`  : ""}
+    ${item.story  ? `<div class="catalog-preview-story">"${escapeHTML(item.story)}"</div>` : ""}
   `;
 }
 
-// Bind dos chips de tipo e tier
+/* ── Estado dos filtros ─────────────────────────────────────────── */
+let catalogFilters     = { type:"", tier:"", search:"" };
+let catalogSelectedItem = null;
+
+/* ── Chips de tipo ──────────────────────────────────────────────── */
 document.querySelectorAll("#catalog-type-chips .catalog-chip").forEach(btn => {
   btn.addEventListener("click", () => {
     document.querySelectorAll("#catalog-type-chips .catalog-chip").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
-    catalogFilters.type = btn.dataset.catalogType;
-    catalogSelectedItem = null;
+    catalogFilters.type   = btn.dataset.catalogType;
+    catalogSelectedItem   = null;
     renderCatalogItemList();
     updateAddItemWeightPreview();
   });
 });
+
+/* ── Chips de tier ──────────────────────────────────────────────── */
 document.querySelectorAll("#catalog-tier-chips .catalog-chip").forEach(btn => {
   btn.addEventListener("click", () => {
     document.querySelectorAll("#catalog-tier-chips .catalog-chip").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
-    catalogFilters.tier = btn.dataset.catalogTier;
-    catalogSelectedItem = null;
+    catalogFilters.tier   = btn.dataset.catalogTier;
+    catalogSelectedItem   = null;
     renderCatalogItemList();
     updateAddItemWeightPreview();
   });
 });
+
+/* ── Busca em tempo real ────────────────────────────────────────── */
 document.getElementById("catalog-search").addEventListener("input", e => {
   catalogFilters.search = e.target.value.trim().toLowerCase();
-  catalogSelectedItem = null;
+  /* Ao digitar, limpar seleção só se o item atual não bater mais */
+  if (catalogSelectedItem) {
+    const q = catalogFilters.search;
+    const still = !q ||
+      (catalogSelectedItem.name || "").toLowerCase().includes(q) ||
+      (catalogSelectedItem.effect || "").toLowerCase().includes(q) ||
+      (catalogSelectedItem.materialTag || "").toLowerCase().includes(q);
+    if (!still) catalogSelectedItem = null;
+  }
   renderCatalogItemList();
   updateAddItemWeightPreview();
 });
 
+/* ── populateCatalogItemSelect (compat) ─────────────────────────── */
 function populateCatalogItemSelect() {
-  // Mantido por retrocompatibilidade — agora só renderiza a lista nova
-  catalogFilters = { type: "", tier: "", search: "" };
+  catalogFilters     = { type:"", tier:"", search:"" };
   catalogSelectedItem = null;
-  document.querySelectorAll("#catalog-type-chips .catalog-chip").forEach(b => b.classList.toggle("active", !b.dataset.catalogType));
-  document.querySelectorAll("#catalog-tier-chips .catalog-chip").forEach(b => b.classList.toggle("active", !b.dataset.catalogTier));
-  const srch = document.getElementById("catalog-search");
-  if (srch) srch.value = "";
+  // Resetar chips
+  document.querySelectorAll("#catalog-type-chips .catalog-chip").forEach(b => b.classList.toggle("active", b.dataset.catalogType === ""));
+  document.querySelectorAll("#catalog-tier-chips .catalog-chip").forEach(b => b.classList.toggle("active", b.dataset.catalogTier === ""));
+  const searchEl = document.getElementById("catalog-search");
+  if (searchEl) searchEl.value = "";
   renderCatalogItemList();
 }
 
-// Recalcula o preview de peso sempre que qualquer campo relevante do modal mudar
-["catalog-item-select", "catalog-item-qty", "generic-item-qty", "generic-item-weight"].forEach(id => {
-  const el = document.getElementById(id);
-  if (el) {
-    el.addEventListener("input", updateAddItemWeightPreview);
-    el.addEventListener("change", updateAddItemWeightPreview);
-  }
-});
-
-document.getElementById("add-item-modal-cancel").addEventListener("click", closeAddItemModal);
-
+/* ── Confirmar adição ───────────────────────────────────────────── */
 document.getElementById("add-item-modal-confirm").addEventListener("click", () => {
   if (!addItemModalCharacter) return;
   const character = addItemModalCharacter;
 
-  let pendingWeight = 0;
-  let itemLabel = "";
-
   if (addItemModalTab === "catalog") {
     const sourceItem = catalogSelectedItem;
-    const qty = parseInt(document.getElementById("catalog-item-qty").value) || 1;
+    const qty        = Math.max(1, parseInt(document.getElementById("catalog-item-qty").value) || 1);
     if (!sourceItem) { showToast("Selecione um item da lista."); return; }
-    const pendingWeight = (sourceItem.weight || 0) * qty;
-    const carry = calcCarryCapacity(character);
-    const currentWeight = calcTotalWeight(character);
-    if (round1(currentWeight + pendingWeight) > carry) {
-      const space = round1(carry - currentWeight);
-      showToast(`Carga máxima excedida! Faltam ${round1(pendingWeight - Math.max(space, 0))}kg de espaço livre (${Math.max(space, 0)}kg disponíveis).`);
+
+    const pendingW = (sourceItem.weight || 0) * qty;
+    const carry    = calcCarryCapacity(character);
+    const current  = calcTotalWeight(character);
+    if (round1(current + pendingW) > carry) {
+      const space = round1(carry - current);
+      showToast(`Carga máxima excedida! Espaço livre: ${Math.max(0, space)}kg.`);
       return;
     }
-    const category = sourceItem._cat || "weapon";
-    const newItem = makeInventoryItem({ ...sourceItem, kind: category }, null);
-    newItem.qty = qty;
-    character.inventory.push(newItem);
-    showToast(`${sourceItem.name} adicionado ao inventário.`);
+
+    for (let q = 0; q < qty; q++) {
+      const cat     = sourceItem._cat || "weapon";
+      const newItem = makeInventoryItem({ ...sourceItem, kind: cat }, null);
+      /* propagar campos especiais de alquimia/forja */
+      if (sourceItem.craftingMaterial)  newItem.craftingMaterial  = true;
+      if (sourceItem.smithingMaterial)  newItem.smithingMaterial   = true;
+      if (sourceItem.materialTag)       newItem.materialTag        = sourceItem.materialTag;
+      if (sourceItem.smeltingType)      newItem.smeltingType       = sourceItem.smeltingType;
+      if (sourceItem.recipeId)          newItem.recipeId           = sourceItem.recipeId;
+      if (sourceItem.subcategory)       newItem.subcategory        = sourceItem.subcategory;
+      if (sourceItem.consumable)        newItem.consumable         = sourceItem.consumable;
+      character.inventory.push(newItem);
+    }
+    showToast(`${qty > 1 ? qty + "× " : ""}${sourceItem.name} adicionado.`);
 
   } else if (addItemModalTab === "generic") {
-    const name = document.getElementById("generic-item-name").value.trim();
-    const qty = parseInt(document.getElementById("generic-item-qty").value) || 1;
+    const name   = document.getElementById("generic-item-name").value.trim();
+    const qty    = Math.max(1, parseInt(document.getElementById("generic-item-qty").value) || 1);
     const weight = parseFloat(document.getElementById("generic-item-weight").value) || 0;
-    if (!name) { showToast("Dê um nome ao item antes de adicionar."); return; }
-    pendingWeight = weight * qty;
-    itemLabel = name;
-
-    const carry = calcCarryCapacity(character);
-    const currentWeight = calcTotalWeight(character);
-    if (round1(currentWeight + pendingWeight) > carry) {
-      const space = round1(carry - currentWeight);
-      showToast(`Carga máxima excedida! Faltam ${round1(pendingWeight - (space > 0 ? space : 0))}kg de espaço livre (${space > 0 ? space : 0}kg disponíveis).`);
-      return;
+    if (!name) { showToast("Dê um nome ao item."); return; }
+    const carry   = calcCarryCapacity(character);
+    const current = calcTotalWeight(character);
+    if (round1(current + weight * qty) > carry) { showToast("Carga máxima excedida!"); return; }
+    for (let q = 0; q < qty; q++) {
+      character.inventory.push({ instanceId:uid(), name, weight, category:"gear",
+        baseData:null, equippedSlot:null, damageBonus:0, modifierText:"" });
     }
-
-    character.inventory.push({
-      instanceId: uid(), name, qty, weight, category: "gear",
-      baseData: null, equippedSlot: null, damageBonus: 0, modifierText: ""
-    });
-    showToast(`${name} adicionado ao inventário.`);
+    showToast(`${qty > 1 ? qty + "× " : ""}${name} adicionado.`);
 
   } else if (addItemModalTab === "custom") {
     const category = document.getElementById("custom-item-category").value;
-    const name = document.getElementById("custom-item-name").value.trim();
-    const weight = parseFloat(document.getElementById("custom-item-weight").value) || 0;
-    const note = document.getElementById("custom-item-note").value.trim();
-    if (!name) { showToast("Dê um nome ao item personalizado antes de adicionar."); return; }
-    pendingWeight = weight;
-    itemLabel = name;
+    const name     = document.getElementById("custom-item-name").value.trim();
+    const weight   = parseFloat(document.getElementById("custom-item-weight").value) || 0;
+    const note     = document.getElementById("custom-item-note").value.trim();
+    if (!name) { showToast("Dê um nome ao item personalizado."); return; }
+    const carry   = calcCarryCapacity(character);
+    const current = calcTotalWeight(character);
+    if (round1(current + weight) > carry) { showToast("Carga máxima excedida!"); return; }
 
-    const carry = calcCarryCapacity(character);
-    const currentWeight = calcTotalWeight(character);
-    if (round1(currentWeight + pendingWeight) > carry) {
-      const space = round1(carry - currentWeight);
-      showToast(`Carga máxima excedida! Faltam ${round1(pendingWeight - (space > 0 ? space : 0))}kg de espaço livre (${space > 0 ? space : 0}kg disponíveis).`);
-      return;
-    }
-
-    // Monta o baseData no mesmo formato dos itens de catálogo, conforme a categoria escolhida
     let baseData = null;
     if (category === "weapon") {
-      const dmg = document.getElementById("custom-weapon-dmg").value.trim() || "1d4";
-      const req = document.getElementById("custom-weapon-req").value.trim() || "—";
-      const defenseRaw = document.getElementById("custom-weapon-defense").value;
-      const defenseDegrade = defenseRaw === "null" ? null : parseInt(defenseRaw);
-      baseData = { name, dmg, req, weight, defenseDegrade, slot: ["primary", "secondary"], note: note || undefined };
+      baseData = { name,
+        dmg           : document.getElementById("custom-weapon-dmg").value.trim() || "1d4",
+        req           : document.getElementById("custom-weapon-req").value.trim() || "—",
+        defenseDegrade: (() => { const v = document.getElementById("custom-weapon-defense").value; return v === "null" ? null : parseInt(v); })(),
+        weight, slot:["primary","secondary"], note: note || undefined };
     } else if (category === "armor") {
-      baseData = {
-        name,
-        physDefense: parseInt(document.getElementById("custom-armor-physdef").value) || 0,
-        magDefense: parseInt(document.getElementById("custom-armor-magdef").value) || 0,
-        weight,
-        movePenalty: parseInt(document.getElementById("custom-armor-movepenalty").value) || 0,
-        req: document.getElementById("custom-armor-req").value.trim() || "—",
-        note: note || undefined
-      };
+      baseData = { name,
+        physDefense : parseInt(document.getElementById("custom-armor-physdef").value)    || 0,
+        magDefense  : parseInt(document.getElementById("custom-armor-magdef").value)     || 0,
+        movePenalty : parseInt(document.getElementById("custom-armor-movepenalty").value) || 0,
+        req         : document.getElementById("custom-armor-req").value.trim() || "—",
+        weight, note: note || undefined };
     } else if (category === "shield") {
-      baseData = {
-        name,
-        physDefense: parseInt(document.getElementById("custom-shield-physdef").value) || 0,
-        weight,
-        penalty: document.getElementById("custom-shield-penalty").value.trim() || "Nenhuma",
-        slot: ["shield"],
-        note: note || undefined
-      };
+      baseData = { name,
+        physDefense : parseInt(document.getElementById("custom-shield-physdef").value) || 0,
+        penalty     : document.getElementById("custom-shield-penalty").value.trim() || "Nenhuma",
+        weight, slot:["shield"], note: note || undefined };
     } else if (category === "accessory") {
-      const effect = document.getElementById("custom-accessory-effect").value.trim() || "Sem efeito definido.";
+      const effect = document.getElementById("custom-accessory-effect").value.trim() || "Sem efeito.";
       baseData = { name, weight, effect, note: note || undefined };
     }
 
-    // Bônus mágicos especiais (opcional, qualquer categoria pode ter)
     let magicBonus = null;
     if (document.getElementById("custom-item-is-magic").checked) {
       const attrKey = document.getElementById("custom-bonus-attr-select").value;
-      const attrValue = parseInt(document.getElementById("custom-bonus-attr-value").value) || 0;
       magicBonus = {
-        attr: attrKey || null,
-        attrValue: attrKey ? attrValue : 0,
-        hp: parseInt(document.getElementById("custom-bonus-hp").value) || 0,
-        move: parseInt(document.getElementById("custom-bonus-move").value) || 0,
-        actions: parseInt(document.getElementById("custom-bonus-actions").value) || 0,
-        spellActions: parseInt(document.getElementById("custom-bonus-spell-actions").value) || 0,
-        dodge: parseInt(document.getElementById("custom-bonus-dodge").value) || 0,
-        slots: parseInt(document.getElementById("custom-bonus-slots").value) || 0
+        attr        : attrKey || null,
+        attrValue   : attrKey ? (parseInt(document.getElementById("custom-bonus-attr-value").value) || 0) : 0,
+        hp          : parseInt(document.getElementById("custom-bonus-hp").value)           || 0,
+        move        : parseInt(document.getElementById("custom-bonus-move").value)         || 0,
+        actions     : parseInt(document.getElementById("custom-bonus-actions").value)      || 0,
+        spellActions: parseInt(document.getElementById("custom-bonus-spell-actions").value)|| 0,
+        dodge       : parseInt(document.getElementById("custom-bonus-dodge").value)        || 0,
+        slots       : parseInt(document.getElementById("custom-bonus-slots").value)        || 0,
       };
     }
 
-    character.inventory.push({
-      instanceId: uid(), name, qty: 1, weight, category,
-      baseData, equippedSlot: null, damageBonus: 0, modifierText: "", isCustom: true, magicBonus
-    });
-    showToast(`${name} (item personalizado) adicionado ao inventário.`);
+    character.inventory.push({ instanceId:uid(), name, qty:1, weight, category,
+      baseData, equippedSlot:null, damageBonus:0, modifierText:"", isCustom:true, magicBonus });
+    showToast(`${name} (personalizado) adicionado.`);
   }
 
   persistCurrentCharacter();
   closeAddItemModal();
   renderSheet();
 });
+
 
 /* ---------------------------------------------------------------------- */
 /* INIT                                                                   */
