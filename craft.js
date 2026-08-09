@@ -552,23 +552,45 @@ function hasForgeIngredients(recipe) {
 /** Verifica se o item base é compatível com a receita */
 function baseItemCompatible(recipe, item) {
   if (!item) return false;
+  const bd  = getItemData(item);
+  const cat = item.category || "";
   if (recipe.smeltingType === "weapon") {
-    return item.slot && (item.slot.includes("primary") || item.slot.includes("secondary")) &&
-           item.tier === "comum" && item.dmg; // é arma
+    const isWeapon = cat === "weapon" || (bd.dmg && (bd.slot || []).some(s => s === "primary" || s === "secondary"));
+    return isWeapon;
   }
   if (recipe.smeltingType === "armor") {
-    return (item.physDefense !== undefined || item.category === "armor") &&
-           item.tier === "comum";
+    const isArmor = cat === "armor" || (bd.physDefense !== undefined && cat !== "weapon" && cat !== "shield");
+    return isArmor;
   }
   return false;
+}
+
+/** Retorna os dados "brutos" de um item do inventário (baseData ou o próprio item) */
+function getItemData(invItem) {
+  return invItem.baseData || invItem;
 }
 
 /** Itens do inventário que são armas ou armaduras comuns (base para forja) */
 function getForgeableItems() {
   return getInventory().filter(i => {
-    if (i.tier !== "comum") return false;
-    const isWeapon = i.dmg && i.slot && (i.slot.includes("primary") || i.slot.includes("secondary"));
-    const isArmor  = i.physDefense !== undefined || (i.category === "armor" && !i.dmg);
+    // Itens já encantados não podem ser encantados novamente
+    if (i.isEnchanted) return false;
+
+    const bd = getItemData(i);
+
+    // Tier: pode estar no item raiz ou no baseData
+    const tier = i.tier || bd.tier || "comum";
+    if (tier !== "comum") return false;
+
+    // Categoria: item do inventário tem category no raiz
+    const cat = i.category || "";
+
+    // Arma: category === "weapon" ou tem dmg no baseData
+    const isWeapon = cat === "weapon" || (bd.dmg && (bd.slot || []).some(s => s === "primary" || s === "secondary"));
+
+    // Armadura: category === "armor" ou tem physDefense no baseData
+    const isArmor = cat === "armor" || (bd.physDefense !== undefined && cat !== "weapon" && cat !== "shield");
+
     return isWeapon || isArmor;
   });
 }
@@ -577,9 +599,13 @@ function updateForgeBaseInfo() {
   const el = document.getElementById("forge-base-info");
   if (!el) return;
   if (!selectedBaseItem) { el.textContent = ""; return; }
-  const isWeapon = selectedBaseItem.dmg;
-  const type     = isWeapon ? `Arma — ${selectedBaseItem.dmg} de dano` : `Armadura — Def.Física ${selectedBaseItem.physDefense ?? 0}`;
-  el.textContent = `${selectedBaseItem.name} · ${type} · ${selectedBaseItem.weight ?? 0}kg`;
+  const bd       = getItemData(selectedBaseItem);
+  const isWeapon = selectedBaseItem.category === "weapon" || bd.dmg;
+  const type     = isWeapon
+    ? `Arma — ${bd.dmg || "??"} de dano`
+    : `Armadura — Def.Física ${bd.physDefense ?? 0}`;
+  const tier = selectedBaseItem.tier || bd.tier || "comum";
+  el.textContent = `${selectedBaseItem.name} · ${type} · ${selectedBaseItem.weight ?? bd.weight ?? 0}kg · Tier: ${tier}`;
 }
 
 /** Popula o seletor de item base */
@@ -590,12 +616,20 @@ function populateForgeBaseSelect() {
   const prev  = sel.value;
   sel.innerHTML = '<option value="">— selecione arma ou armadura comum —</option>';
   items.forEach(i => {
-    const opt = document.createElement("option");
-    opt.value = i.instanceId;
-    opt.textContent = i.name + (i.equippedSlot ? " (equipado)" : "");
+    const bd   = getItemData(i);
+    const type = i.category === "weapon" || bd.dmg ? "⚔" : "🛡";
+    const opt  = document.createElement("option");
+    opt.value       = i.instanceId;
+    opt.textContent = `${type} ${i.name}${i.equippedSlot ? " (equipado)" : ""}`;
     sel.appendChild(opt);
   });
-  if (prev) { sel.value = prev; }
+  // Restaurar seleção anterior se ainda disponível
+  if (prev && items.some(i => i.instanceId === prev)) {
+    sel.value = prev;
+  } else {
+    sel.value = "";
+    selectedBaseItem = null;
+  }
   selectedBaseItem = items.find(i => i.instanceId === sel.value) || null;
   updateForgeBaseInfo();
 }
@@ -827,27 +861,53 @@ function consumeForgeMaterial(recipe) {
 }
 
 function applyEnchantment(baseItem, recipe, critBonus) {
-  // Modifica o item base diretamente no inventário
-  baseItem.name        = `${baseItem.name} [${recipe.name}]`;
-  baseItem.tier        = recipe.tier;
+  // Garante que baseData existe (itens de catálogo podem não ter)
+  if (!baseItem.baseData) baseItem.baseData = {};
+  const bd = baseItem.baseData;
+
+  // Renomear o item
+  baseItem.name  = `${baseItem.name} [${recipe.name}]`;
+  if (bd.name)    bd.name = baseItem.name;
+
+  // Tier: promover para o tier do encantamento
+  baseItem.tier = recipe.tier;
+  if (bd.tier !== undefined) bd.tier = recipe.tier;
+
+  // Marcar como encantado
   baseItem.isEnchanted = true;
   baseItem.enchantId   = recipe.id;
 
-  // Adicionar efeito ao item
+  // Efeito e nota
   const bonusText = critBonus ? `\n✨ Bônus crítico: ${critBonus}` : "";
-  baseItem.effect  = (baseItem.effect ? baseItem.effect + "\n" : "") + `⚒ ${recipe.enchantEffect}${bonusText}`;
-  baseItem.note    = (baseItem.note  ? baseItem.note  + " " : "") + `Encantado com ${recipe.name}.`;
+  baseItem.effect = (baseItem.effect || bd.effect || "") + `\n⚒ ${recipe.enchantEffect}${bonusText}`;
+  bd.effect       = baseItem.effect;
 
-  // Aplicar bônus numéricos
-  if (recipe.dmgBonus && baseItem.dmg) {
-    const extras = (baseItem.dmg.match(/\+.*/)?.[0] || "");
-    baseItem.dmg = baseItem.dmg.replace(/\+.*/,"") + extras + " +" + recipe.dmgBonus.split(" ")[0];
+  baseItem.note   = ((baseItem.note || bd.note || "") + ` Encantado: ${recipe.name}.`).trim();
+  bd.note         = baseItem.note;
+
+  // Bônus numéricos de dano
+  if (recipe.dmgBonus) {
+    const dmgMatch = recipe.dmgBonus.match(/^(\d+d\d+)/);
+    if (dmgMatch) {
+      const current = bd.dmg || baseItem.dmg || "";
+      const extras  = current.replace(/.*(\+.*)/, "$1").replace(current, ""); // extrai sufixo de +
+      bd.dmg       = current + `+${dmgMatch[1]}`;
+      baseItem.dmg = bd.dmg;
+    }
   }
-  if (recipe.defBonus && (baseItem.physDefense !== undefined)) {
-    const match = recipe.defBonus.match(/\+(\d+) Def\.Física/);
-    if (match) baseItem.physDefense = (baseItem.physDefense || 0) + parseInt(match[1]);
-    const mMatch = recipe.defBonus.match(/\+(\d+) Def\.Mágica/);
-    if (mMatch) baseItem.magDefense = (baseItem.magDefense || 0) + parseInt(mMatch[1]);
+
+  // Bônus numéricos de defesa
+  if (recipe.defBonus) {
+    const fMatch = recipe.defBonus.match(/\+(\d+)\s*Def\.Física/);
+    if (fMatch) {
+      bd.physDefense          = (bd.physDefense ?? baseItem.physDefense ?? 0) + parseInt(fMatch[1]);
+      baseItem.physDefense    = bd.physDefense;
+    }
+    const mMatch = recipe.defBonus.match(/\+(\d+)\s*Def\.Mágica/);
+    if (mMatch) {
+      bd.magDefense           = (bd.magDefense ?? baseItem.magDefense ?? 0) + parseInt(mMatch[1]);
+      baseItem.magDefense     = bd.magDefense;
+    }
   }
 
   baseItem.forgedAt = new Date().toLocaleDateString("pt-BR");
