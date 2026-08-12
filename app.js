@@ -334,6 +334,32 @@ function calcHealingBonus(character) {
   return getEffectiveAttr(character, "SAB") * multiplier;
 }
 
+/* ── Dado de Crítico ──────────────────────────────────────────────
+   Regra: todo personagem joga 1d10 junto com o dado de acerto.
+   Se o resultado for IGUAL OU MENOR que a Chance de Crítico → crítico!
+   Base: 1 (acerto somente no 1 natural).
+   Bônus de SAB: +1 por cada 4 pontos completos de SAB.
+   Ex: SAB 0→4 = chance 1, SAB 4→7 = chance 2, SAB 8→11 = chance 3.
+   Itens mágicos podem adicionar mais pontos via magicBonus.critChance.
+   Dano crítico: +50% do dano total final (após subtrair defesa).
+   Itens mágicos podem adicionar mais % via magicBonus.critDamage (em %).
+   ────────────────────────────────────────────────────────────────── */
+function calcCritChance(character) {
+  const sab       = getEffectiveAttr(character, "SAB");
+  const fromSAB   = Math.floor(sab / 4);  // +1 a cada 4 SAB
+  // Bônus de itens mágicos equipados
+  const fromItems = sumMagicItemBonus(character, "critChance")
+                  + sumAccessoryEffectValue(character, "critChance");
+  return 1 + fromSAB + fromItems;   // mínimo 1
+}
+
+/* Bônus de dano crítico acima dos 50% base (em %) */
+function calcCritDamageBonus(character) {
+  const fromItems = sumMagicItemBonus(character, "critDamage")
+                  + sumAccessoryEffectValue(character, "critDamage");
+  return 50 + fromItems;   // base 50%, itens podem adicionar mais
+}
+
 /* Calcula os valores de teste de uma perícia para o personagem.
    Retorna { bonus, normal, hard, critical, hasSkill }
    bonus = soma dos atributos efetivos listados em attrKeys + 2 se perícia aprendida
@@ -1667,8 +1693,9 @@ document.getElementById("btn-back-sheet").addEventListener("click", () => {
 let currentGlossaryTab = "classes";
 
 
-function openBestiary()    { window.open("bestiary.html",    "_blank"); }
-function openCraft()       { window.open("craft.html",       "_blank"); }
+function openBestiary()       { window.open("bestiary.html",         "_blank"); }
+function openCraft()          { window.open("craft.html",             "_blank"); }
+function openSessionPlanner() { window.open("session-planner.html",   "_blank"); }
 function openLocations()   { window.open("locations.html",   "_blank"); }
 function openHistory()     { window.open("history.html",     "_blank"); }
 function openCampaignLog() { window.open("campaign-log.html","_blank"); }
@@ -2333,6 +2360,34 @@ function renderRulesTab() {
             </ul>
           </div>
 
+          <!-- DADO DE CRÍTICO -->
+          <div class="rules-callout" style="background:rgba(215,38,56,0.05);border-left:3px solid #d72638;padding:12px 14px;border-radius:0 6px 6px 0;margin-bottom:8px">
+            <strong>3b. Dado de Crítico — 1d10</strong>
+            <ul class="rules-list">
+              <li>Junto com o dado de acerto (d10), role um <strong>segundo d10</strong> — este é o Dado de Crítico.</li>
+              <li>Se o resultado for <strong>igual ou menor que a Chance de Crítico</strong> do personagem → o ataque é Crítico.</li>
+              <li><strong>Base:</strong> 1 — apenas o 1 natural acerta o crítico.</li>
+              <li><strong>SAB:</strong> a cada 4 pontos completos de SAB, +1 na Chance de Crítico. (SAB 4→+1, SAB 8→+2, SAB 12→+3…)</li>
+              <li>Itens mágicos com <code>critChance</code> aumentam a chance. Itens com <code>critDamage</code> aumentam o bônus de dano.</li>
+            </ul>
+            <div class="rules-table-wrap">
+              <table class="rules-table">
+                <thead><tr><th>SAB</th><th>Chance de Crítico (d10 ≤)</th><th>Probabilidade</th></tr></thead>
+                <tbody>
+                  <tr><td>0–3</td><td>1</td><td>10%</td></tr>
+                  <tr><td>4–7</td><td>2</td><td>20%</td></tr>
+                  <tr><td>8–11</td><td>3</td><td>30%</td></tr>
+                  <tr><td>12–15</td><td>4</td><td>40%</td></tr>
+                  <tr><td>16+</td><td>5+</td><td>50%+</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div style="margin-top:8px;padding:8px 10px;background:rgba(215,38,56,0.07);border-radius:6px;font-size:13px">
+              <strong>💥 Dano Crítico:</strong> O dano final (após subtrair a Defesa do alvo) é aumentado em <strong>+50%</strong>. Itens com <code>critDamage</code> somam ao percentual base.<br>
+              <em>Exemplo: Dano final = 18. Crítico → 18 + 9 (50%) = 27 de dano.</em>
+            </div>
+          </div>
+
           <!-- 4. ESQUIVA -->
           <div class="rules-callout rules-callout-green">
             <strong>4. Esquiva — 1d20</strong>
@@ -2705,7 +2760,7 @@ function renderEquippedItemsPanel(character) {
     if (bd.req)            chips.push({ k:"📋 Req.",        v: bd.req,              cls:"chip-neutral" });
     // magicBonus
     if (bd.magicBonus) {
-      const MB_LABELS = { hp:"❤ HP", move:"🏃 Mov", actions:"⚡ Ações", spellActions:"✨ Ações Magia", slots:"🔮 Slots", carry:"📦 Carga" };
+      const MB_LABELS = { hp:"❤ HP", move:"🏃 Mov", actions:"⚡ Ações", spellActions:"✨ Ações Magia", slots:"🔮 Slots", carry:"📦 Carga", critChance:"🎯 Chance Crit", critDamage:"💥 Dano Crit %" };
       Object.entries(bd.magicBonus).forEach(([k,v]) => {
         if (k === "attr" || k === "attrValue" || !v) return;
         chips.push({ k: MB_LABELS[k] || k, v:`+${v}`, cls:"chip-magic" });
@@ -2875,8 +2930,13 @@ function renderDerivedSection(character, cls) {
   const magDef = calcMagicDefense(character);
   const dodge = calcDodgeChance(character);
   const healBonus = calcHealingBonus(character);
+  const critChance = calcCritChance(character);
+  const critDmgPct = calcCritDamageBonus(character);
   const dmg = calcDamageBreakdown(character);
   const weaponPenalty = calcWeaponRequirementPenalty(character);
+
+  const sab = getEffectiveAttr(character, "SAB");
+  const sabCritBonus = Math.floor(sab / 4);
 
   const stats = [
     { label: "Movimento", value: `${move} hex`, tooltip: "Quantos hexágonos você pode andar por turno. Ganha-se 1 por ponto de AGI (base 4), descontando penalidade de armadura/escudo pesado." },
@@ -2884,6 +2944,8 @@ function renderDerivedSection(character, cls) {
     { label: "Defesa Física", value: physDef, tooltip: "Reduz o dano de ataques físicos recebidos. Vem da armadura equipada e do escudo (se houver)." },
     { label: "Defesa Mágica", value: magDef, tooltip: "Reduz o dano de magias e ataques mágicos recebidos. Vem principalmente de armaduras arcanas/sagradas e itens mágicos." },
     { label: "Chance de Esquiva", value: `${dodge} ou menos (d20)`, tooltip: "Role 1d20: resultado igual ou menor que este valor esquiva totalmente o ataque. Base 10 — cada esquiva adicional na mesma rodada custa −2 (10, 8, 6…). Adagas e instrumentos concedem +1 de bônus." },
+    { label: "🎯 Chance de Crítico", value: `${critChance} ou menos (d10)`, tooltip: `Role 1d10 junto com o dado de acerto. Se o resultado for ${critChance} ou menos → Crítico! Base: 1 natural. SAB ${sab} → +${sabCritBonus} (1 por cada 4 pontos). Itens mágicos podem adicionar mais. O crítico aumenta o dano final em ${critDmgPct}%.`, highlight: critChance > 1 },
+    { label: "💥 Dano Crítico", value: `+${critDmgPct}% do dano final`, tooltip: `Quando o dado de crítico (d10) for ${critChance} ou menos: o dano final (após subtrair a defesa do alvo) é aumentado em ${critDmgPct}%. Base: 50%. Itens mágicos com critDamage aumentam essa porcentagem.`, highlight: critDmgPct > 50 },
     { label: "Slots de Magia", value: `${(character.activeSpells||[]).length}/${slots}`, tooltip: "Slots em uso / total disponível (INT + SAB). Cada magia equipada consome 1 slot. Desequipe magias para liberar slots. Classes conjuradoras têm garantia de pelo menos 1." },
     { label: "Carga", value: `${weight} / ${carry}`, tooltip: "Peso atual carregado / capacidade máxima. Base 20 + (FOR × 5), mais um bônus fixo por nível que varia por classe." }
   ];
@@ -2936,6 +2998,14 @@ function renderDerivedSection(character, cls) {
       `).join("")}
     </div>
     <p class="damage-formula-note">Dano total por ataque = (Dano da Arma + Dano Natural + bônus de modificadores) − Defesa do alvo. Some os dados indicados acima conforme a arma usada no ataque.</p>
+    <div class="crit-formula-box">
+      <span class="crit-formula-icon">🎯</span>
+      <div>
+        <div class="crit-formula-title">Dado de Crítico — d10 ≤ ${critChance}</div>
+        <div class="crit-formula-desc">Jogue 1d10 junto com o dado de acerto. Se o resultado for <strong>${critChance} ou menos</strong>, o ataque é Crítico — o dano final (após subtrair a Defesa) aumenta em <strong>+${critDmgPct}%</strong>.</div>
+        <div class="crit-formula-breakdown">Base 1 ${sabCritBonus > 0 ? `+ ${sabCritBonus} (SAB ${sab})` : ""} ${critChance - 1 - sabCritBonus > 0 ? `+ ${critChance - 1 - sabCritBonus} (itens)` : ""}${critDmgPct > 50 ? ` · Dano crítico: 50% base + ${critDmgPct - 50}% (itens) = ${critDmgPct}%` : ""}</div>
+      </div>
+    </div>
   </div>`;
 }
 
@@ -3897,6 +3967,8 @@ function buildPrintableSheet(character, cls, maxHP, resourceMax) {
         <div class="print-combat-cell"><span class="print-combat-label">Def. Mágica</span><span class="print-combat-value">${magDef}</span></div>
         <div class="print-combat-cell"><span class="print-combat-label">Slots de Magia</span><span class="print-combat-value">${slots}</span></div>
         <div class="print-combat-cell"><span class="print-combat-label">Carga</span><span class="print-combat-value">${weight}/${carry}kg</span></div>
+        <div class="print-combat-cell" style="border-color:#d72638"><span class="print-combat-label" style="color:#d72638">🎯 Crítico (d10)</span><span class="print-combat-value">${calcCritChance(character)} ou menos</span></div>
+        <div class="print-combat-cell" style="border-color:#d72638"><span class="print-combat-label" style="color:#d72638">💥 Dano Crítico</span><span class="print-combat-value">+${calcCritDamageBonus(character)}%</span></div>
       </div>
       <div class="print-damage-list">
         <strong>DANOS: ${buildCombinedDamageString(dmg)}</strong><br>
@@ -4981,7 +5053,7 @@ function openItemDetailModal(item, character) {
   if (item.qty > 1)      chips.push({ icon:"🔢", label:"Quantidade",    val: item.qty });
 
   // magicBonus
-  const MB = { hp:"❤ HP", move:"🏃 Mov", actions:"⚡ Ações", spellActions:"✨ Ações Magia", slots:"🔮 Slots", carry:"📦 Carga" };
+  const MB = { hp:"❤ HP", move:"🏃 Mov", actions:"⚡ Ações", spellActions:"✨ Ações Magia", slots:"🔮 Slots", carry:"📦 Carga", critChance:"🎯 Chance Crit", critDamage:"💥 Dano Crit %" };
   if (bd.magicBonus) {
     Object.entries(bd.magicBonus).forEach(([k,v]) => {
       if (!v) return;
@@ -5405,7 +5477,8 @@ function updateCatalogItemPreview() {
     .filter(([k]) => k !== "attr" && k !== "attrValue" && k !== "attr2" && k !== "attrValue2")
     .map(([k,v]) => {
       const lbl = { actions:"Ações", spellActions:"Ações de Magia", hp:"HP", carry:"Carga",
-                    slots:"Slots", move:"Movimento" }[k];
+                    slots:"Slots", move:"Movimento",
+                    critChance:"🎯 Chance Crítico", critDamage:"💥 Dano Crítico %" }[k];
       return v > 0 && lbl ? `<span class="catalog-preview-bonus">+${v} ${lbl}</span>` : null;
     }).filter(Boolean).join("") : "";
   const attrBonus  = item.magicBonus?.attr  ? `<span class="catalog-preview-bonus">+${item.magicBonus.attrValue} ${item.magicBonus.attr}</span>`   : "";

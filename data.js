@@ -1253,7 +1253,17 @@ const WEAPONS_ONE_HAND = [
     magicBonus: { spellActions: 1, attr: "INT", attrValue: 2 },
     effect: "Passivo: +2 INT e +1 Ação de Magia. Ativo (custa 2 Ações de Magia): dispara Feixe de Lua — raio de energia pura a 8 hex de alcance, 3d8+INT de dano arcano. O alvo testea Força de Vontade (difícil) ou fica com Def.Mágica −4 por 3 rodadas (a luz da lua corrói a resistência mágica). Ao acertar ataque físico: +1d6 de dano arcano grátis se tiver MP disponível.",
     note: "+2 INT, +1 Ação de Magia. Feixe de Lua: 8 hex, 3d8+INT + Def.Mágica −4. Ataque físico: +1d6 arcano grátis.",
-    story: "Forjada durante um eclipse completo nas Montanhas de Atrelon por um Mago que quis capturar o momento em que a lua e o sol se tocam. Funcionou. Ambos ficaram na lâmina." }];
+    story: "Forjada durante um eclipse completo nas Montanhas de Atrelon por um Mago que quis capturar o momento em que a lua e o sol se tocam. Funcionou. Ambos ficaram na lâmina." },
+
+  /* ─── ARMAS COM BÔNUS DE CRÍTICO ─────────────────────────────── */
+
+  { tier:"raro", name:"Adaga do Ponto Vital",
+    dmg:"1d6+1d4", req:"DEX", weight:0.5,
+    slot:["primary","secondary"], defenseDegrade:2,
+    magicBonus:{ critChance:1 },
+    effect:"Passivo: +1 na Chance de Crítico. A lâmina delgada foi forjada para encontrar juntas de armadura e nervos expostos — não para força bruta.",
+    note:"+1 Chance de Crítico.",
+    story:"Um cirurgião convertido em mercenário. A lâmina nunca mudou de propósito — apenas o alvo." }];
 
 const WEAPONS_TWO_HAND = [
   /* --- COMUNS --- */
@@ -2635,7 +2645,37 @@ const ACCESSORIES = [
     magicBonus: { attr: "SAB", attrValue: 2, attr2: "INT", attrValue2: 1 },
     effect: "Passivo: +2 SAB, +1 INT. 1x por sessão, ao cair a 0 HP: o medalhão ativa automaticamente — o portador revive com 50% HP e fica Imune a dano por 1 rodada completa. Após reviver: todos os aliados em raio 5 hex curam 2d8 HP (a ressurreição irradia). O medalhão então fica inativo até o próximo descanso longo.",
     note: "+2 SAB, +1 INT. 1x/sessão: morte → revive com 50% HP + imunidade 1 rodada + aliados curam 2d8. Recarrega em descanso longo.",
-    story: "Erd não era um rei nem um deus — era um pai. Fez este medalhão para que o filho voltasse de qualquer guerra. O filho nunca voltou mesmo assim. O medalhão ficou tentando." }];
+    story: "Erd não era um rei nem um deus — era um pai. Fez este medalhão para que o filho voltasse de qualquer guerra. O filho nunca voltou mesmo assim. O medalhão ficou tentando." },
+
+  /* ─── ITENS COM BÔNUS DE CRÍTICO ─────────────────────────────── */
+
+  { tier:"raro", name:"Anel do Olho Afiado",
+    slot:["accessory"], weight:0.05,
+    magicBonus:{ critChance:1 },
+    effect:"Passivo: +1 na Chance de Crítico (d10). O crítico agora acerta em um resultado a mais no dado de crítico. Empilhável com o bônus de SAB.",
+    note:"+1 Chance de Crítico. Empilha com SAB.",
+    story:"Esculpido do olho vítreo de um Lagarto Venenoso Gigante. Quem o usa começa a perceber aberturas que antes não via." },
+
+  { tier:"raro", name:"Anel do Golpe Brutal",
+    slot:["accessory"], weight:0.05,
+    magicBonus:{ critDamage:25 },
+    effect:"Passivo: +25% de bônus de dano em acertos críticos (total: 75% em vez de 50%). O extra se aplica sobre o dano final já calculado.",
+    note:"+25% dano crítico. Total: 75% (base 50% + 25% do anel).",
+    story:"Forjado com o sangue de um Berserker de Sangue Corrompido que nunca aprendeu a controlar a fúria. O anel aprendeu." },
+
+  { tier:"lendario", name:"Talismã do Assassino das Sombras",
+    slot:["accessory"], weight:0.1,
+    magicBonus:{ critChance:2, critDamage:50 },
+    effect:"Passivo: +2 na Chance de Crítico e +50% de dano crítico extra (total: 100% — dano crítico DOBRADO). Em Furtividade: o primeiro ataque tem Chance de Crítico adicional de +3 (não se empilha, usa o maior valor).",
+    note:"+2 Chance Crit. +50% dano crit (total 100%). Em Furtividade: +3 Crit no 1º ataque.",
+    story:"Pertenceu ao único assassino que desafiou o Deus Marcado diretamente e sobreviveu. Não está claro por quê ele sobreviveu." },
+
+  { tier:"raro", name:"Bracelete do Predador",
+    slot:["accessory"], weight:0.15,
+    magicBonus:{ critChance:1, attr:"DEX", attrValue:1 },
+    effect:"Passivo: +1 DEX e +1 na Chance de Crítico. O predador identifica o ponto fraco antes de atacar.",
+    note:"+1 DEX. +1 Chance de Crítico.",
+    story:"Feito com a pata dianteira da Loba Alfa das Sombras Cinzentas. O movimento dela era calculado. O bracelete aprendeu." }];
 
 const ALL_WEAPONS = [...WEAPONS_ONE_HAND, ...WEAPONS_TWO_HAND, ...WEAPONS_MAGIC, ...WEAPONS_RANGED];
 
@@ -4194,6 +4234,7 @@ const NAV_PAGES = [
   { icon: "📖", label: "Glossário & Tutoriais", available: true,  action: "openGlossary" },
   { icon: "🐺", label: "Bestiário",             available: true,  action: "openBestiary" },
   { icon: "⚗️", label: "Alquimia & Crafting",   available: true,  action: "openCraft" },
+  { icon: "📋", label: "Planejador de Sessão",  available: true,  action: "openSessionPlanner" },
   { icon: "🗺", label: "História do Mundo",     available: true,  action: "openHistory" },
   { icon: "📅", label: "Acompanhamento",        available: true,  action: "openCampaignLog" },
   { icon: "🏰", label: "Locais & Reinos",       available: true,  action: "openLocations" },

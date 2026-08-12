@@ -1229,6 +1229,40 @@ main {
 .damage-source-dice { font-family: var(--font-heading); color: var(--wax-red-dark); font-size: 15px; }
 .damage-source-modifier { font-size: 12px; color: var(--ink-soft); font-style: italic; line-height: 1.4; }
 
+/* ── Bloco de crítico ──────────────────────────────────────────── */
+.crit-formula-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  margin-top: 12px;
+  border-radius: 8px;
+  background: rgba(215, 38, 56, 0.06);
+  border: 1px solid rgba(215, 38, 56, 0.2);
+  border-left: 3px solid #d72638;
+}
+.crit-formula-icon { font-size: 22px; flex-shrink: 0; line-height: 1; margin-top: 1px; }
+.crit-formula-title {
+  font-family: var(--font-heading);
+  font-size: 14px;
+  color: #d72638;
+  margin-bottom: 3px;
+}
+.crit-formula-desc {
+  font-size: 13px;
+  color: var(--ink);
+  line-height: 1.55;
+}
+.crit-formula-breakdown {
+  font-size: 11px;
+  color: var(--ink-soft);
+  margin-top: 4px;
+  font-style: italic;
+}
+
+/* Highlight especial para dados de crítico */
+.derived-box-highlight .derived-box-value { color: #d72638; }
+
 @media (min-width: 600px) {
   .damage-source-row { flex-direction: row; align-items: baseline; gap: 10px; flex-wrap: wrap; }
   .damage-source-label { min-width: 0; }
