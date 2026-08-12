@@ -60,7 +60,12 @@ const CLASSES = {
           { cost: "2 Fúria, 1 Ação", effect: "+1d6 na Chance de Defesa até o início do próximo turno; as 2 primeiras defesas do turno não degradam." },
           { cost: "3 Fúria, 1 Ação", effect: "+1d8 na Chance de Defesa até o início do próximo turno; nenhuma defesa do turno degrada." }
         ] },
-      { name: "Provocar", cost: "1 Fúria, 1 Reação", effect: "Um inimigo adjacente tem −1d4 na Chance de Acerto contra qualquer alvo que não seja você até o fim da próxima rodada." },
+      { name: "Golpe da Fúria Perfeita", cost: "2 Fúria, 1 Ação", effect: "Canaliza toda a raiva num único golpe. +3 na Chance de Crítico no próximo ataque. Se crítico: +1d10 dano bruto extra de impacto puro (além do bônus percentual normal).",
+        levels: [
+          { cost: "2 Fúria, 1 Ação", effect: "Próximo ataque: +3 Chance de Crítico. Crítico: +1d10 dano bruto." },
+          { cost: "3 Fúria, 1 Ação", effect: "Próximo ataque: +4 Chance de Crítico. Crítico: +2d10 dano bruto + alvo testea FOR normal ou cai Derrubado." },
+          { cost: "4 Fúria, 1 Ação", effect: "Próximo ataque: +5 Chance de Crítico. Crítico: +3d10 dano bruto + Derrubado (FOR difícil) + alvo perde 2 Def.Física até o próximo turno (armadura racha)." }
+        ] },
       { name: "Contra-ataque", cost: "2 Fúria, 1 Reação", effect: "Ao defender com sucesso um ataque corpo a corpo, ataca o atacante de volta sem gastar Ação." },
       { name: "Fúria Sangrenta", cost: "3 Fúria, 1 Ação", effect: "Por 2 turnos: +1d6 no Dano Natural, mas −1d4 na Chance de Defesa." },
       { name: "Grito de Guerra", cost: "3 Fúria, 1 Ação", effect: "Aliados em até 2 hexágonos ganham +1d4 na Chance de Acerto até o fim da próxima rodada.",
@@ -122,7 +127,12 @@ const CLASSES = {
           { cost: "6 MP", effect: "Escolhe um elemento; por 4 rodadas, magias desse tipo causam +1d6 de dano." },
           { cost: "7 MP", effect: "Escolhe um elemento; por 5 rodadas, magias desse tipo causam +1d8 de dano e ignoram resistência elemental." }
         ] },
-      { name: "Reserva Arcana Ampliada", cost: "6 MP, fora de combate", effect: "Escolhe 1 magia conhecida e concede a ela +1 uso na contagem de cooldown atual (por batalha, por dia, ou por semana, conforme a magia). Pode ser usada 1 vez por descanso longo." }
+      { name: "Convergência Arcana", cost: "3 MP, 1 Ação de Magia", effect: "O Mago comprime a energia da próxima magia num ponto de perfeição absoluta. +3 na Chance de Crítico para a próxima magia (d10). Se a magia for crítica: além do dano crítico normal, o alvo perde −2 de Defesa Mágica permanente até o fim do combate (a convergência rasga a resistência mágica).",
+        levels: [
+          { cost: "3 MP, 1 Ação de Magia", effect: "Próxima magia: +3 Chance de Crítico. Crítico: alvo perde −2 Def.Mágica até fim do combate." },
+          { cost: "4 MP, 1 Ação de Magia", effect: "Próxima magia: +4 Chance de Crítico. Crítico: alvo perde −3 Def.Mágica + −1 SAB temporária (a mente foi atingida no ponto certo)." },
+          { cost: "5 MP, 1 Ação de Magia", effect: "Próxima magia: +5 Chance de Crítico. Crítico: alvo perde −4 Def.Mágica e fica Vulnerável a magias por 3 rodadas (recebe 25% mais dano mágico)." }
+        ] }
     ],
     skillsClass: [
       { name: "Arcanismo",           attr: "INT",     desc: "Teoria mágica, identificação de feitiços, runas e criaturas mágicas.", example: "Identificar que o artefato é um Foco de Invocação; reconhecer feitiço como Ilusão de 3º nível." },
@@ -188,7 +198,12 @@ const CLASSES = {
           { cost: "5 Foco, 1 Ação", effect: "Ataque em área (raio 2); cada criatura sofre um ataque individual." },
           { cost: "6 Foco, 1 Ação", effect: "Ataque em área (raio 2); cada criatura sofre dois ataques individuais." }
         ] },
-      { name: "Olho de Águia", cost: "3 Foco", effect: "Por 3 rodadas, alcance de ataques à distância +4 hexágonos; ignora cobertura parcial." }
+      { name: "Tiro da Fissura", cost: "2 Foco, 1 Ação", effect: "O Arqueiro mira na junta da armadura, na garganta exposta, no olho — qualquer ponto onde a proteção falha. +3 na Chance de Crítico no próximo ataque à distância. Se crítico: o tiro ignora TODA a Defesa Física do alvo (o ponto vital não tem proteção).",
+        levels: [
+          { cost: "2 Foco, 1 Ação", effect: "Próximo disparo: +3 Chance de Crítico. Crítico: ignora toda a Def.Física." },
+          { cost: "2 Foco, 1 Ação", effect: "Próximo disparo: +4 Chance de Crítico. Crítico: ignora toda Def.Física + alvo fica com −2 na Chance de Acerto por 2 rodadas (o ferimento atrapalha o foco)." },
+          { cost: "2 Foco, 1 Ação", effect: "Próximo disparo: +5 Chance de Crítico. Crítico: ignora toda Def.Física e Mágica + alvo perde 1 Ação no próximo turno (o tiro no ponto vital o impede de agir plenamente)." }
+        ] }
     ],
     skillsClass: [
       { name: "Percepção",       attr: "SAB",     desc: "Detectar alvos ocultos, emboscadas e detalhes sutis, especialmente à distância.", example: "Avistar Goblin espiando de rocha a 100m; perceber armadilha na trilha antes de pisar." },
@@ -224,14 +239,19 @@ const CLASSES = {
         ] },
       { name: "Passo nas Sombras", cost: "1 Ação", effect: "Move até o total sem provocar Ataques de Oportunidade, terminando em cobertura." },
       { name: "Emboscada", cost: "1 Ação", effect: "Se Oculto, move e ataca furtivamente sem revelar a posição antes do golpe." },
-      { name: "Veneno Paralisante", cost: "2 Cargas, 1 Ação", effect: "Ataque que impõe −1d4 Movimento e −1d4 Chance de Defesa por 2 rodadas.",
+      { name: "Ponto Vital", cost: "1 Carga, 1 Ação", effect: "O Ladino estuda o alvo por 1 Ação e mapeia seu ponto fraco. Próximo ataque neste turno ou no seguinte: +3 na Chance de Crítico (d10). Se o ataque for crítico: o bônus de dano crítico dobra (100% em vez de 50%).",
         levels: [
-          { cost: "2 Cargas, 1 Ação", effect: "Ataque que impõe −1d4 Movimento e −1d4 Chance de Defesa por 2 rodadas." },
-          { cost: "3 Cargas, 1 Ação", effect: "Ataque que impõe −1d6 Movimento e −1d4 Chance de Defesa por 3 rodadas." },
-          { cost: "3 Cargas, 1 Ação", effect: "Ataque que impõe −1d8 Movimento e −1d6 Chance de Defesa por 3 rodadas; o alvo não pode usar Reações na 1ª rodada." }
+          { cost: "1 Carga, 1 Ação", effect: "Próximo ataque: +3 na Chance de Crítico. Se crítico: dano crítico = 100%." },
+          { cost: "1 Carga, 1 Ação", effect: "Próximo ataque: +4 na Chance de Crítico. Se crítico: dano crítico = 150%. Pode ser ativado como Reação no turno do aliado (se for Caçador Sombrio)." },
+          { cost: "1 Carga, 1 Ação", effect: "Próximo ataque: +5 na Chance de Crítico. Se crítico: dano crítico = 200% e o alvo fica Atordoado por 1 rodada (o golpe no ponto vital o paralisa brevemente)." }
         ] },
       { name: "Reflexos de Gato", cost: "1 Reação", effect: "+2 na Chance de Defesa contra um ataque específico, mesmo desarmado." },
-      { name: "Roubo Rápido", cost: "1 Ação", effect: "Furta item pequeno ou desarma armadilha simples sem provocar reação." },
+      { name: "Lâmina Cega", cost: "2 Cargas, 1 Ação", effect: "O Ladino entrega-se ao instinto: até o final deste turno, todos os ataques ganham +3 na Chance de Crítico. Cada crítico acertado recupera 1 Carga de Veneno.",
+        levels: [
+          { cost: "2 Cargas, 1 Ação", effect: "+3 Chance de Crítico neste turno. Cada crítico recupera 1 Carga." },
+          { cost: "2 Cargas, 1 Ação", effect: "+4 Chance de Crítico neste turno. Cada crítico recupera 2 Cargas. Se 2+ críticos no turno: próximo turno mantém +2 na Chance de Crítico." },
+          { cost: "2 Cargas, 1 Ação", effect: "+5 Chance de Crítico neste turno. Cada crítico recupera todas as Cargas gastas. 3+ críticos no mesmo turno: Êxtase de Lâmina — os próximos 2 turnos têm +3 Chance de Crítico automático." }
+        ] },
       { name: "Golpe Duplo", cost: "1 Ação", effect: "2 ataques corpo a corpo no mesmo alvo, cada um com −1 na Chance de Acerto." },
       { name: "Sangramento Mortal", cost: "2 Cargas, 1 Ação", effect: "Se for Ataque Furtivo, aplica Sangramento: 1d6 contínuo por 3 rodadas.",
         levels: [
@@ -286,7 +306,12 @@ const CLASSES = {
           { cost: "5 Fé, 1 Ação", effect: "4d6 de dano sagrado contra mortos-vivos (2d6 contra outras criaturas); cega o alvo por 1 rodada." }
         ] },
       { name: "Escudo da Fé", cost: "2 Fé, 1 Reação", effect: "+3 de Defesa Física e Mágica fixa contra o próximo ataque." },
-      { name: "Estabilizar", cost: "1 Fé, 1 Ação", effect: "Aliado a 0 HP para de perder HP por efeitos contínuos." },
+      { name: "Julgamento Sagrado", cost: "2 Fé, 1 Ação", effect: "O Clérigo pronuncia julgamento sobre o alvo — a divindade decide se o golpe seguinte será definidor. O próximo ataque (seu ou de aliado adjacente) tem +2 na Chance de Crítico. Se for crítico: o acerto é considerado Dano Sagrado e causa +1d8 extra de energia divina (ignora Defesa Mágica de criaturas corrompidas e mortos-vivos).",
+        levels: [
+          { cost: "2 Fé, 1 Ação", effect: "Próximo ataque próprio ou de aliado adjacente: +2 Chance de Crítico. Crítico: +1d8 dano sagrado." },
+          { cost: "3 Fé, 1 Ação", effect: "Próximo ataque próprio ou de aliado em raio 3 hex: +3 Chance de Crítico. Crítico: +2d8 dano sagrado e o alvo fica Abalado por 1 rodada (−1d4 em todos os testes — a presença divina o perturba)." },
+          { cost: "4 Fé, 1 Ação", effect: "Próximo ataque próprio ou de qualquer aliado visível: +4 Chance de Crítico. Crítico: +3d8 dano sagrado + Abalado por 2 rodadas. Mortos-vivos e servos do Deus Marcado testam Força de Vontade (difícil) ou ficam Aterrorizados por 1 rodada." }
+        ] },
       { name: "Imposição de Mãos", cost: "4 Fé, 1 Ação", effect: "Remove veneno, doença ou maldição menor de um alvo tocado." },
       { name: "Ressurreição Menor", cost: "Toda a Fé (mín. 6), 1 Ação", effect: "1x/dia, restaura aliado caído há até 3 rodadas para 50% do HP máximo." }
     ],
