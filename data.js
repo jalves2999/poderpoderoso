@@ -994,7 +994,121 @@ const GENERAL_SPELLS = [
   { name: "Feixe Desintegrador", level: 5, category: "ataque",
     effect: "Feixe de energia pura a até 15 hex: 5d10+INT de dano arcano. Se o alvo chegar a 0 HP: é desintegrado completamente (sem cadáver, impossível ressuscitar por meios comuns). SAB crítico para sobreviver com 1 HP em vez de desintegrar.",
     castTime: "1 Ação de Magia", cooldown: "1 uso por combate" }
-];
+,
+
+  /* ═══════════════════════════════════════════════════════════════
+     MAGIAS DE BUFF — MECÂNICAS DE CRÍTICO
+     Cada magia cria uma condição que interage com o dado de crítico
+     de forma única. Algumas aumentam a chance, outras mudam o que
+     acontece quando o crítico ocorre — ricochete, garantia com custo,
+     explosão em área, maldição reversa, e mais.
+     ═══════════════════════════════════════════════════════════════ */
+
+  /* ── NÍVEL 1 — Introdução ao crítico ampliado ─────────────────── */
+
+  { name: "Olho Afiado",
+    level: 1, category: "buff/crítico",
+    effect: "Alvo (toque): +2 na Chance de Crítico (d10) por 3 rodadas. Simples e confiável — a primeira magia que um Mago aprende sobre precisão fatal.",
+    castTime: "1 Ação de Magia",
+    cooldown: "4 usos por batalha",
+    critInteraction: "Bônus direto: +2 na Chance de Crítico do alvo.",
+    note: "Buff de crítico base. Empilha com SAB e itens. Ideal para combinação com Ponto Vital do Ladino." },
+
+  { name: "Lâmina Sedenta",
+    level: 1, category: "buff/crítico",
+    effect: "Arma do alvo (toque) fica 'sedenta' por 3 rodadas: o primeiro crítico acertado durante o buff cura o portador em 1d8+INT HP (o golpe perfeito alimenta a arma e ela devolve vitalidade). Após a cura, o buff é consumido.",
+    castTime: "1 Ação de Magia",
+    cooldown: "3 usos por batalha",
+    critInteraction: "Ao acertar crítico: cura portador 1d8+INT HP. O buff é consumido após o primeiro crítico.",
+    note: "Buff de sustento. Excelente para Guerreiros e Ladinos que precisam de recuperação em combate agressivo." },
+
+  /* ── NÍVEL 2 — Efeitos de ricochete e propagação ─────────────── */
+
+  { name: "Ressonância Crítica",
+    level: 2, category: "buff/crítico",
+    effect: "Alvo (toque, 4 rodadas): ao acertar um crítico, a energia do impacto ressoa e salta automaticamente para o inimigo mais próximo em até 2 hex do alvo original — causando 50% do dano crítico no segundo alvo (sem nova rolagem de acerto). Se não houver inimigo em 2 hex: a ressonância salta até 4 hex mas com 25% do dano.",
+    castTime: "1 Ação de Magia",
+    cooldown: "3 usos por batalha",
+    critInteraction: "Crítico → dano salta automaticamente para inimigo mais próximo (2 hex: 50% do dano; 4 hex: 25%). Sem rolagem.",
+    note: "Buff de propagação. Mais eficaz em combate denso. Não precisa de segundo ataque — o efeito é automático." },
+
+  { name: "Eco de Sangue",
+    level: 2, category: "buff/crítico",
+    effect: "Alvo (toque, 3 rodadas): ao acertar um crítico, o eco do golpe se propaga em onda — todos os inimigos em raio 2 hex do alvo acertado sofrem 1d6+INT de dano de eco (não é físico nem mágico — é vibração pura, ignora ambas as defesas). O Eco não acerta aliados.",
+    castTime: "1 Ação de Magia",
+    cooldown: "2 usos por batalha",
+    critInteraction: "Crítico → onda automática: todos inimigos em raio 2 hex sofrem 1d6+INT de dano de eco (ignora defesas).",
+    note: "Versão de área do ricochete. Ideal para combate em cluster. O dano de eco é fixo — não aumenta com mais críticos no turno." },
+
+  { name: "Golpe Fantasma",
+    level: 2, category: "buff/crítico",
+    effect: "Alvo (toque, 4 rodadas): ao acertar um crítico, um duplicado espectral do golpe aparece e repete o ataque uma vez no mesmo alvo — causando 1d8 de dano espectral (ignora Def.Física, usa Def.Mágica). O duplicado é automático, não gasta Ação e não pode ser crítico.",
+    castTime: "1 Ação de Magia",
+    cooldown: "3 usos por batalha",
+    critInteraction: "Crítico → ataque fantasma automático: 1d8 espectral no mesmo alvo (ignora Def.Física, usa Def.Mágica). Sem nova rolagem.",
+    note: "Crítico gera ataque extra fantasma. Sinergia com Arqueiro (Tiro da Fissura já ignora Def.Física — o fantasma adiciona dano mágico)." },
+
+  /* ── NÍVEL 3 — Custo e garantia ──────────────────────────────── */
+
+  { name: "Olho do Predador",
+    level: 3, category: "buff/crítico",
+    effect: "Alvo (toque): o próximo ataque do alvo é Crítico Garantido — o dado de crítico não precisa ser rolado (considerado automaticamente como 1). MAS: após o golpe crítico garantido, o alvo perde o próximo turno inteiro (o corpo entra em choque após liberar toda a energia de uma vez). O alvo pode recusar a magia antes de ser aplicada.",
+    castTime: "1 Ação de Magia",
+    cooldown: "2 usos por combate",
+    critInteraction: "Próximo ataque = Crítico Automático. Custo: perde o próximo turno completamente (0 Ações).",
+    note: "Alto risco, alto retorno. Com Ponto Vital + Olho do Predador: crítico garantido com 200% de dano extra + atordoa o alvo. O turno perdido é o preço." },
+
+  { name: "Pacto do Último Golpe",
+    level: 3, category: "buff/sacrifício/crítico",
+    effect: "Alvo (toque, até fim do combate): o portador acumula cada dano recebido numa reserva de 'dívida de sangue'. Ao acertar um crítico: a reserva inteira é adicionada ao dano crítico como bônus fixo (dano recebido se transforma em dano causado). A reserva reseta após ser descarregada. Máximo de reserva: 40 HP.",
+    castTime: "1 Ação de Magia",
+    cooldown: "1 uso por combate",
+    critInteraction: "Crítico → dano acumulado da reserva de 'dívida de sangue' é adicionado ao dano crítico. Máx 40 HP de bônus.",
+    note: "Quanto mais o portador apanhar antes do crítico, mais letal o golpe. Combo devastador: deixar o aliado tomar dano conscientemente para acumular a reserva, então garantir o crítico com Olho do Predador." },
+
+  { name: "Fúria do Relâmpago",
+    level: 3, category: "buff/crítico",
+    effect: "Alvo (toque, 4 rodadas): +3 na Chance de Crítico em todos os ataques. Ao acertar um crítico, pode imediatamente fazer 1 ataque adicional gratuito (sem custo de Ação) no mesmo alvo ou em outro a 1 hex. O ataque gratuito tem −2 na Chance de Acerto mas pode ser crítico normalmente.",
+    castTime: "1 Ação de Magia",
+    cooldown: "2 usos por combate",
+    critInteraction: "+3 Chance de Crítico. Crítico → 1 ataque extra gratuito no mesmo turno (−2 Acerto, pode ser crítico).",
+    note: "Sinergia máxima com Lâmina Cega do Ladino: +5 Lâmina Cega + +3 Fúria do Relâmpago = 8+ na Chance de Crítico. Se o extra também for crítico: terceiro ataque?" },
+
+  /* ── NÍVEL 4 — Mecânicas únicas e arriscadas ──────────────────── */
+
+  { name: "Maldição Invertida",
+    level: 4, category: "buff/maldição/crítico",
+    effect: "Alvo inimigo (alcance 5 hex): maldiz o alvo por 4 rodadas com a Inversão Crítica. Enquanto maldito: todo ataque contra o alvo que for FALHA CRÍTICA (resultado 10 no dado de crítico) é tratado como CRÍTICO MÁXIMO em vez de falha — o azar se inverte. A maldição não afeta outros efeitos de falha crítica (como a perda de Ação da habilidade do Guerreiro). O alvo não sabe que está maldito.",
+    castTime: "1 Ação de Magia",
+    cooldown: "2 usos por combate",
+    critInteraction: "No alvo: resultado 10 no dado de crítico (pior resultado) = crítico máximo em vez de falha. A sorte se inverte.",
+    note: "Magia de controle indireta — não buffa o aliado, amaldiçoa o inimigo. Quem atacar o alvo maldito não pode 'errar' no pior sentido — o 10 vira sucesso crítico." },
+
+  { name: "Êxtase Letal",
+    level: 4, category: "buff/crítico/sacrifício",
+    effect: "Alvo (toque, 5 rodadas): +4 na Chance de Crítico e dano crítico = +100% (em vez de +50%). MAS cada crítico acertado causa 1d6 de dano ao próprio portador (o corpo não suporta a intensidade do impacto perfeito — retrocesso físico). O buff não pode ser cancelado antes de expirar. O portador pode ver os custos acontecendo mas não pode evitar.",
+    castTime: "1 Ação de Magia",
+    cooldown: "1 uso por combate",
+    critInteraction: "+4 Chance de Crítico. Dano crítico = 100%. Custo: cada crítico causa 1d6 de dano ao portador.",
+    note: "O buff mais poderoso de crítico disponível — mas autoflagela. Com Ladino de alta SAB (+3 base) + Êxtase Letal (+4): Crit 7+ no d10, 70%+ de chance, mas cada acerto perfeito dói." },
+
+  /* ── NÍVEL 5 — Singulares ─────────────────────────────────────── */
+
+  { name: "Convergência do Destino",
+    level: 5, category: "buff/crítico/ritual",
+    effect: "Alvo (toque, até fim do combate): o próximo crítico acertado pelo alvo tem dano multiplicado por 3 em vez de 1.5 (crítico triplo). Após o crítico triplo: o buff não pode ser reaplicado neste combate — o destino já se cumpriu. Se o combate terminar sem o crítico ocorrer: o buff persiste para o próximo combate da sessão.",
+    castTime: "2 Ações de Magia",
+    cooldown: "1 uso por sessão",
+    critInteraction: "Próximo crítico do alvo = ×3 de dano (em vez de ×1.5). Buff consumido após o crítico. Persiste entre combates se não disparado.",
+    note: "A magia de maior pico de dano do sistema. Combo: Pacto do Último Golpe (acumula reserva) + Olho do Predador (garante crítico) + Convergência do Destino (×3). Uma ação planejada para destruir um boss." },
+
+  { name: "Tempestade de Críticos",
+    level: 5, category: "buff/crítico/área",
+    effect: "Todos os aliados visíveis (raio 8 hex): por 3 rodadas, todos ganham +2 na Chance de Crítico. Efeito adicional: se 2 aliados diferentes acertarem críticos no mesmo turno, um pulso de energia é liberado — todos os inimigos em raio 3 hex do ponto médio entre os dois críticos sofrem 2d8+INT de dano puro (energia da sincronia). O pulso é automático e não conta como Ação.",
+    castTime: "2 Ações de Magia",
+    cooldown: "1 uso por combate",
+    critInteraction: "Buff em área: +2 Crit para todos. Sinergia: 2 críticos no mesmo turno → pulso de 2d8+INT automático em área entre eles.",
+    note: "A magia de crítico mais cooperativa do sistema. Premia grupos que criam críticos simultaneamente. Com 3+ personagens com alta Chance de Crítico: múltiplos pulsos por turno são possíveis." }];
 
 /* ---------------------------------------------------------------------- */
 /* EQUIPAMENTOS                                                           */
