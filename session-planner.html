@@ -1,519 +1,299 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  <title>Planejador de Sessão — Grimório de Aether</title>
-  <link rel="stylesheet" href="style.css">
-  <style>
-    /* ── Layout ────────────────────────────────────────────────── */
-    body { margin:0; background:var(--parchment); min-height:100vh; }
-    .sp-page { display:flex; flex-direction:column; min-height:100vh; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Planejador de Sessão — Aether</title>
+<link rel="stylesheet" href="style.css">
+<style>
+/* ── Reset & Base ────────────────────────────────────────────── */
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--parchment);min-height:100vh;font-family:var(--font-heading)}
 
-    /* Toolbar */
-    .sp-toolbar {
-      display:flex; align-items:center; gap:10px; padding:10px 14px;
-      background:var(--parchment); border-bottom:2px solid var(--line);
-      position:sticky; top:0; z-index:50; backdrop-filter:blur(4px);
-    }
-    .sp-toolbar a { font-size:12px; color:var(--ink-soft); text-decoration:none; flex-shrink:0; }
-    .sp-toolbar-title { font-family:var(--font-heading); font-size:17px; color:var(--ink); flex:1; }
-    .sp-toolbar-actions { display:flex; gap:6px; }
-    .btn-sp-new   { padding:6px 12px; border-radius:6px; border:none; background:var(--gold); color:#fff; font-family:var(--font-heading); font-size:13px; cursor:pointer; }
-    .btn-sp-save  { padding:6px 12px; border-radius:6px; border:1px solid var(--line); background:transparent; font-family:var(--font-heading); font-size:13px; cursor:pointer; color:var(--ink); }
+/* ── Toolbar ─────────────────────────────────────────────────── */
+.sp-bar{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 14px;border-bottom:2px solid var(--line);
+  background:var(--parchment);position:sticky;top:0;z-index:40;
+}
+.sp-bar a{font-size:12px;color:var(--ink-soft);text-decoration:none}
+.sp-bar-title{font-family:var(--font-heading);font-size:17px;color:var(--ink);flex:1}
+.btn-add-session{
+  padding:8px 14px;border:none;border-radius:6px;
+  background:var(--gold);color:#fff;font-family:var(--font-heading);
+  font-size:13px;cursor:pointer;white-space:nowrap;
+}
+.btn-add-session:active{filter:brightness(.9)}
 
-    /* Layout principal: lista de sessões (sidebar) + editor (main) */
-    .sp-layout { display:flex; flex:1; overflow:hidden; }
+/* ── Container principal ─────────────────────────────────────── */
+.sp-wrap{max-width:780px;margin:0 auto;padding:14px}
 
-    /* ── Sidebar: lista de sessões ─────────────────────────────── */
-    .sp-sidebar {
-      width:220px; flex-shrink:0; border-right:1px solid var(--line);
-      display:flex; flex-direction:column; background:rgba(0,0,0,.02);
-      overflow-y:auto;
-    }
-    .sp-sidebar-header {
-      padding:10px 12px 6px; font-family:var(--font-label);
-      font-size:10px; text-transform:uppercase; letter-spacing:.5px;
-      color:var(--ink-soft); border-bottom:1px solid var(--line);
-      display:flex; align-items:center; justify-content:space-between;
-    }
-    .sp-session-list { flex:1; overflow-y:auto; }
-    .sp-session-item {
-      padding:10px 12px; cursor:pointer; border-bottom:1px solid var(--line);
-      transition:background .12s;
-    }
-    .sp-session-item:hover { background:rgba(156,122,60,.06); }
-    .sp-session-item.active { background:rgba(156,122,60,.12); border-left:3px solid var(--gold); }
-    .sp-session-item-title { font-family:var(--font-heading); font-size:13px; color:var(--ink); }
-    .sp-session-item-meta  { font-size:11px; color:var(--ink-soft); margin-top:2px; }
+/* ── Acordeão de sessão ──────────────────────────────────────── */
+.session-block{
+  border:1px solid var(--line);border-radius:10px;
+  background:rgba(255,255,255,.3);margin-bottom:12px;overflow:hidden;
+}
+.session-head{
+  display:flex;align-items:center;gap:10px;
+  padding:12px 14px;cursor:pointer;user-select:none;
+  background:rgba(156,122,60,.06);border-bottom:1px solid transparent;
+  transition:background .12s;
+}
+.session-head:hover{background:rgba(156,122,60,.1)}
+.session-block.open>.session-head{border-bottom-color:var(--line)}
+.session-chevron{font-size:12px;color:var(--ink-soft);transition:transform .2s;flex-shrink:0}
+.session-block.open>.session-head .session-chevron{transform:rotate(90deg)}
+.session-name-input{
+  flex:1;border:none;background:transparent;font-family:var(--font-heading);
+  font-size:15px;color:var(--ink);outline:none;min-width:0;
+}
+.session-meta{font-size:11px;color:var(--ink-soft);flex-shrink:0;white-space:nowrap}
+.btn-del-session{
+  background:none;border:none;cursor:pointer;color:var(--ink-soft);
+  font-size:17px;flex-shrink:0;padding:0 2px;opacity:.5;transition:opacity .15s;
+}
+.btn-del-session:hover{opacity:1;color:#c0392b}
+.session-body{display:none;padding:12px 14px}
+.session-block.open>.session-body{display:block}
 
-    .sp-empty-sidebar {
-      padding:20px 12px; text-align:center; color:var(--ink-soft); font-size:13px; line-height:1.6;
-    }
+/* ── Notas da sessão ─────────────────────────────────────────── */
+.session-notes-input{
+  width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:6px;
+  background:rgba(255,255,255,.5);font-family:var(--font-heading);font-size:12px;
+  color:var(--ink);resize:vertical;min-height:48px;margin-bottom:12px;outline:none;
+}
+.session-notes-input:focus{border-color:var(--gold)}
 
-    /* ── Editor principal ──────────────────────────────────────── */
-    .sp-main { flex:1; overflow-y:auto; display:flex; flex-direction:column; }
+/* ── Botão "Adicionar local" ─────────────────────────────────── */
+.btn-add-location{
+  display:flex;align-items:center;gap:6px;
+  padding:8px 12px;border:1px dashed var(--line);border-radius:6px;
+  background:transparent;font-family:var(--font-heading);font-size:12px;
+  color:var(--ink-soft);cursor:pointer;transition:.12s;margin-bottom:4px;
+}
+.btn-add-location:hover{border-color:var(--gold);color:var(--gold)}
 
-    .sp-welcome {
-      flex:1; display:flex; flex-direction:column; align-items:center;
-      justify-content:center; padding:40px 20px; text-align:center; color:var(--ink-soft);
-    }
-    .sp-welcome-icon { font-size:56px; margin-bottom:16px; }
-    .sp-welcome h2 { font-family:var(--font-heading); font-size:22px; color:var(--ink); margin:0 0 8px; }
-    .sp-welcome p { font-size:14px; line-height:1.6; max-width:420px; margin:0 0 20px; }
+/* ── Acordeão de local ───────────────────────────────────────── */
+.location-block{
+  border:1px solid var(--line);border-radius:8px;
+  background:rgba(255,255,255,.25);margin-bottom:8px;overflow:hidden;
+}
+.location-head{
+  display:flex;align-items:center;gap:8px;
+  padding:10px 12px;cursor:pointer;user-select:none;
+  transition:background .12s;
+}
+.location-head:hover{background:rgba(0,0,0,.03)}
+.location-block.open>.location-head{border-bottom:1px solid var(--line)}
+.location-type-badge{
+  font-size:10px;padding:2px 7px;border-radius:8px;
+  font-family:var(--font-label);text-transform:uppercase;letter-spacing:.3px;
+  flex-shrink:0;
+}
+.type-cidade   {background:rgba(39,174,96,.12);color:#1e8449}
+.type-caminho  {background:rgba(243,156,18,.12);color:#9a6a00}
+.type-caverna  {background:rgba(100,100,100,.12);color:#555}
+.type-outro    {background:rgba(142,68,173,.12);color:#6a3a7a}
+.location-name-input{
+  flex:1;border:none;background:transparent;font-family:var(--font-heading);
+  font-size:13px;color:var(--ink);outline:none;min-width:0;
+}
+.btn-del-location{
+  background:none;border:none;cursor:pointer;color:var(--ink-soft);
+  font-size:15px;flex-shrink:0;opacity:.4;
+}
+.btn-del-location:hover{opacity:1;color:#c0392b}
+.location-body{display:none;padding:10px 12px}
+.location-block.open>.location-body{display:block}
 
-    /* Cabeçalho da sessão */
-    .sp-session-header {
-      padding:16px 18px 12px; border-bottom:1px solid var(--line);
-      background:rgba(156,122,60,.04);
-    }
-    .sp-session-name {
-      font-family:var(--font-heading); font-size:20px; color:var(--ink);
-      border:none; background:transparent; width:100%; outline:none;
-      padding:0; margin-bottom:6px;
-    }
-    .sp-session-meta-row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
-    .sp-session-meta-input {
-      font-size:12px; padding:4px 8px; border:1px solid var(--line);
-      border-radius:5px; background:rgba(255,255,255,.6); color:var(--ink);
-    }
-    .sp-status-badge {
-      padding:3px 10px; border-radius:10px; font-size:11px; font-family:var(--font-label);
-      text-transform:uppercase; letter-spacing:.3px; cursor:pointer; border:none;
-    }
-    .status-planejando { background:rgba(180,120,20,.15); color:#9a7010; }
-    .status-pronta     { background:rgba(39,174,96,.15);  color:#1e8449; }
-    .status-concluida  { background:rgba(100,100,100,.15); color:#666; }
+/* ── Seções dentro do local ──────────────────────────────────── */
+.loc-section{margin-bottom:12px}
+.loc-section-head{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:6px;
+}
+.loc-section-label{
+  font-family:var(--font-label);font-size:10px;text-transform:uppercase;
+  letter-spacing:.4px;color:var(--ink-soft);
+}
+.btn-loc-add{
+  display:flex;align-items:center;gap:4px;
+  padding:4px 9px;border:1px dashed var(--line);border-radius:5px;
+  background:transparent;font-family:var(--font-heading);font-size:11px;
+  color:var(--ink-soft);cursor:pointer;transition:.1s;
+}
+.btn-loc-add:hover{border-color:var(--gold);color:var(--gold)}
 
-    /* ── Abas do editor ────────────────────────────────────────── */
-    .sp-editor-tabs {
-      display:flex; gap:2px; padding:10px 18px 0; border-bottom:1px solid var(--line);
-      overflow-x:auto; background:var(--parchment);
-    }
-    .sp-tab-btn {
-      padding:6px 12px; border:1px solid transparent; border-bottom:none;
-      border-radius:6px 6px 0 0; font-family:var(--font-heading); font-size:12px;
-      background:transparent; color:var(--ink-soft); cursor:pointer;
-      white-space:nowrap; transition:.12s;
-    }
-    .sp-tab-btn.active {
-      background:var(--parchment); border-color:var(--line);
-      color:var(--gold); border-bottom-color:var(--parchment);
-      margin-bottom:-1px; z-index:1;
-    }
-    .sp-tab-btn .sp-tab-count {
-      display:inline-block; min-width:16px; height:16px; line-height:16px;
-      text-align:center; border-radius:8px; background:rgba(156,122,60,.2);
-      color:var(--gold); font-size:10px; margin-left:4px; padding:0 4px;
-    }
-    .sp-tab-btn.active .sp-tab-count { background:var(--gold); color:#fff; }
+/* ── Cards NPC, Inimigo, Tesouro ─────────────────────────────── */
+.entry-card{
+  border:1px solid var(--line);border-radius:7px;
+  background:rgba(255,255,255,.4);padding:9px 11px;
+  margin-bottom:6px;position:relative;
+}
+.entry-card-head{display:flex;align-items:flex-start;gap:8px}
+.entry-card-icon{font-size:18px;flex-shrink:0;line-height:1.2}
+.entry-card-body{flex:1;min-width:0}
+.entry-card-name{font-family:var(--font-heading);font-size:13px;color:var(--ink)}
+.entry-card-sub{font-size:11px;color:var(--ink-soft);margin-top:2px;line-height:1.4}
+.btn-del-entry{
+  position:absolute;top:7px;right:7px;
+  background:none;border:none;cursor:pointer;
+  font-size:14px;color:var(--ink-soft);opacity:.4;padding:0;
+}
+.btn-del-entry:hover{opacity:1;color:#c0392b}
 
-    /* ── Conteúdo das abas ─────────────────────────────────────── */
-    .sp-tab-content { display:none; padding:14px 18px; }
-    .sp-tab-content.active { display:block; }
+/* Check de marcação */
+.entry-check{
+  width:18px;height:18px;border-radius:4px;border:2px solid var(--line);
+  background:transparent;flex-shrink:0;cursor:pointer;display:flex;
+  align-items:center;justify-content:center;transition:.12s;margin-top:1px;
+}
+.entry-check.checked{background:var(--gold);border-color:var(--gold);color:#fff;font-size:11px}
 
-    /* ── Seção de bloco genérico ───────────────────────────────── */
-    .sp-block { margin-bottom:16px; }
-    .sp-block-label {
-      font-family:var(--font-label); font-size:10px; text-transform:uppercase;
-      letter-spacing:.4px; color:var(--ink-soft); margin-bottom:6px;
-    }
-    .sp-textarea {
-      width:100%; min-height:80px; padding:10px; border:1px solid var(--line);
-      border-radius:7px; background:rgba(255,255,255,.5); font-family:var(--font-heading);
-      font-size:13px; color:var(--ink); resize:vertical; box-sizing:border-box;
-      line-height:1.55;
-    }
-    .sp-textarea:focus { outline:none; border-color:var(--gold); }
+/* Sub-itens de NPC (loja) e inimigo (drops) */
+.entry-subitems{margin-top:8px;padding-top:6px;border-top:1px solid var(--line)}
+.entry-subitem{
+  display:flex;align-items:center;gap:6px;
+  padding:4px 0;font-size:12px;color:var(--ink);border-bottom:1px solid rgba(0,0,0,.05);
+}
+.entry-subitem:last-child{border-bottom:none}
+.entry-subitem-name{flex:1;font-family:var(--font-heading)}
+.entry-subitem-price{
+  font-family:var(--font-heading);font-size:12px;color:var(--gold);
+  white-space:nowrap;
+}
+.btn-del-subitem{
+  background:none;border:none;cursor:pointer;color:var(--ink-soft);
+  font-size:13px;opacity:.4;padding:0;
+}
+.btn-del-subitem:hover{opacity:1;color:#c0392b}
 
-    /* ── Cards de elemento adicionado ──────────────────────────── */
-    .sp-element-grid { display:flex; flex-direction:column; gap:7px; margin-bottom:10px; }
-    .sp-element-card {
-      display:flex; align-items:flex-start; gap:10px; padding:10px 12px;
-      border:1px solid var(--line); border-radius:8px;
-      background:rgba(255,255,255,.35); position:relative;
-    }
-    .sp-element-card-icon { font-size:20px; flex-shrink:0; line-height:1; margin-top:1px; }
-    .sp-element-card-body { flex:1; min-width:0; }
-    .sp-element-card-name { font-family:var(--font-heading); font-size:13px; color:var(--ink); }
-    .sp-element-card-sub  { font-size:11px; color:var(--ink-soft); margin-top:2px; }
-    .sp-element-card-note {
-      font-size:12px; color:var(--ink); margin-top:5px;
-      padding:5px 8px; background:rgba(0,0,0,.04); border-radius:5px;
-      border-left:2px solid var(--line);
-    }
-    .sp-element-card-note-input {
-      width:100%; border:none; background:transparent; font-size:12px; color:var(--ink);
-      font-family:var(--font-heading); outline:none; resize:none; padding:0; line-height:1.4;
-    }
-    .sp-element-card-note-input::placeholder { color:var(--ink-soft); }
-    .sp-element-card-remove {
-      position:absolute; top:8px; right:8px; width:22px; height:22px;
-      border-radius:50%; border:1px solid var(--line); background:rgba(231,76,60,.08);
-      color:#c0392b; cursor:pointer; font-size:14px; display:flex; align-items:center; justify-content:center;
-      opacity:0; transition:.12s;
-    }
-    .sp-element-card:hover .sp-element-card-remove { opacity:1; }
+/* ── Empty state ─────────────────────────────────────────────── */
+.sp-empty{
+  text-align:center;padding:48px 20px;color:var(--ink-soft);
+}
+.sp-empty-icon{font-size:48px;display:block;margin-bottom:12px}
+.sp-empty p{font-size:14px;line-height:1.7;margin-bottom:16px}
 
-    /* Cores por tipo */
-    .sp-card-npc      { border-left:3px solid #8e44ad; }
-    .sp-card-enemy    { border-left:3px solid #e74c3c; }
-    .sp-card-mission  { border-left:3px solid #e67e22; }
-    .sp-card-location { border-left:3px solid #27ae60; }
-    .sp-card-item     { border-left:3px solid #9c7a3c; }
-    .sp-card-scene    { border-left:3px solid #2980b9; }
+/* ── Picker (modal busca) ────────────────────────────────────── */
+.picker-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;
+  display:flex;align-items:flex-end;justify-content:center;
+}
+.picker-overlay.hidden{display:none}
+.picker-modal{
+  background:var(--parchment);border-radius:14px 14px 0 0;
+  border:1px solid var(--line);width:100%;max-width:520px;
+  max-height:85vh;display:flex;flex-direction:column;
+  box-shadow:0 -4px 24px rgba(0,0,0,.2);
+}
+@media(min-width:600px){
+  .picker-overlay{align-items:center}
+  .picker-modal{border-radius:14px;max-height:75vh}
+}
+.picker-header{
+  padding:12px 16px;border-bottom:1px solid var(--line);
+  display:flex;align-items:center;gap:10px;
+}
+.picker-title{font-family:var(--font-heading);font-size:15px;color:var(--ink);flex:1}
+.picker-close{background:none;border:none;cursor:pointer;font-size:20px;color:var(--ink-soft)}
+.picker-chips{
+  display:flex;gap:5px;flex-wrap:wrap;
+  padding:8px 12px;border-bottom:1px solid var(--line);
+}
+.picker-chip{
+  padding:3px 10px;border-radius:10px;border:1px solid var(--line);
+  background:transparent;font-size:11px;cursor:pointer;
+  font-family:var(--font-heading);color:var(--ink-soft);transition:.1s;
+}
+.picker-chip.active{background:var(--gold);color:#fff;border-color:var(--gold)}
+.picker-search-wrap{padding:8px 12px;border-bottom:1px solid var(--line)}
+.picker-search{
+  width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:6px;
+  background:rgba(255,255,255,.7);font-family:var(--font-heading);font-size:14px;
+  color:var(--ink);outline:none;
+}
+.picker-search:focus{border-color:var(--gold)}
+.picker-list{flex:1;overflow-y:auto;padding:6px 8px;display:flex;flex-direction:column;gap:3px}
+.picker-item{
+  padding:9px 10px;border-radius:6px;border:1px solid transparent;
+  cursor:pointer;display:flex;align-items:center;gap:9px;transition:.1s;
+}
+.picker-item:hover{background:rgba(156,122,60,.07);border-color:rgba(156,122,60,.2)}
+.picker-item-icon{font-size:18px;flex-shrink:0}
+.picker-item-body{flex:1;min-width:0}
+.picker-item-name{font-family:var(--font-heading);font-size:13px;color:var(--ink)}
+.picker-item-sub{font-size:11px;color:var(--ink-soft)}
 
-    /* ── Botão "Adicionar do compêndio" ────────────────────────── */
-    .sp-add-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
-    .btn-sp-add {
-      padding:7px 12px; border:1px dashed var(--line); border-radius:6px;
-      background:transparent; font-size:12px; font-family:var(--font-heading);
-      cursor:pointer; color:var(--ink-soft); transition:.12s; display:flex; align-items:center; gap:5px;
-    }
-    .btn-sp-add:hover { border-color:var(--gold); color:var(--gold); background:rgba(156,122,60,.05); }
+/* Picker de preço */
+.picker-price-row{
+  padding:10px 12px;border-top:1px solid var(--line);
+  display:flex;align-items:center;gap:8px;
+}
+.picker-price-input{
+  flex:1;padding:7px 10px;border:1px solid var(--line);border-radius:6px;
+  background:rgba(255,255,255,.7);font-family:var(--font-heading);font-size:13px;
+  color:var(--ink);outline:none;
+}
+.picker-price-input:focus{border-color:var(--gold)}
+.btn-picker-confirm{
+  padding:8px 14px;border:none;border-radius:6px;
+  background:var(--gold);color:#fff;font-family:var(--font-heading);
+  font-size:13px;cursor:pointer;white-space:nowrap;
+}
 
-    /* ── Picker (modal de busca do compêndio) ──────────────────── */
-    .sp-picker-overlay {
-      position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:200;
-      display:flex; align-items:center; justify-content:center; padding:16px;
-    }
-    .sp-picker-overlay.hidden { display:none; }
-    .sp-picker-modal {
-      background:var(--parchment); border-radius:12px; border:1px solid var(--line);
-      width:100%; max-width:500px; max-height:80vh; display:flex; flex-direction:column;
-      box-shadow:0 8px 32px rgba(0,0,0,.25);
-    }
-    .sp-picker-header {
-      padding:14px 16px; border-bottom:1px solid var(--line); display:flex; align-items:center; gap:10px;
-    }
-    .sp-picker-title { font-family:var(--font-heading); font-size:16px; color:var(--ink); flex:1; }
-    .sp-picker-close { background:none; border:none; cursor:pointer; font-size:20px; color:var(--ink-soft); padding:0; }
-    .sp-picker-search {
-      padding:10px 14px; border-bottom:1px solid var(--line);
-    }
-    .sp-picker-search input {
-      width:100%; padding:8px 10px; border:1px solid var(--line); border-radius:6px;
-      background:rgba(255,255,255,.7); font-family:var(--font-heading); font-size:14px;
-      color:var(--ink); box-sizing:border-box; outline:none;
-    }
-    .sp-picker-search input:focus { border-color:var(--gold); }
-    .sp-picker-list { flex:1; overflow-y:auto; padding:8px; display:flex; flex-direction:column; gap:4px; }
-    .sp-picker-item {
-      padding:9px 11px; border-radius:7px; border:1px solid transparent;
-      cursor:pointer; display:flex; align-items:center; gap:10px; transition:.1s;
-    }
-    .sp-picker-item:hover { background:rgba(156,122,60,.08); border-color:rgba(156,122,60,.2); }
-    .sp-picker-item-icon { font-size:18px; flex-shrink:0; }
-    .sp-picker-item-body { flex:1; min-width:0; }
-    .sp-picker-item-name { font-family:var(--font-heading); font-size:13px; color:var(--ink); }
-    .sp-picker-item-sub  { font-size:11px; color:var(--ink-soft); }
-    .sp-picker-empty { text-align:center; color:var(--ink-soft); padding:24px; font-size:13px; }
-    .sp-picker-chips { display:flex; gap:5px; flex-wrap:wrap; padding:8px 14px; border-bottom:1px solid var(--line); }
-    .sp-picker-chip {
-      padding:3px 10px; border-radius:10px; border:1px solid var(--line);
-      background:transparent; font-size:11px; cursor:pointer; font-family:var(--font-heading);
-      color:var(--ink-soft); transition:.1s;
-    }
-    .sp-picker-chip.active { background:var(--gold); color:#fff; border-color:var(--gold); }
-
-    /* ── Aba: Visão Geral ──────────────────────────────────────── */
-    .sp-overview-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-    .sp-overview-card {
-      padding:12px; border:1px solid var(--line); border-radius:8px;
-      background:rgba(255,255,255,.3);
-    }
-    .sp-overview-card-title { font-family:var(--font-heading); font-size:13px; color:var(--gold); margin-bottom:8px; }
-    .sp-overview-stat { display:flex; justify-content:space-between; font-size:12px; color:var(--ink); padding:3px 0; border-bottom:1px solid rgba(0,0,0,.05); }
-    .sp-overview-stat:last-child { border-bottom:none; }
-    .sp-overview-stat-val { font-family:var(--font-heading); color:var(--gold); }
-
-    /* Dificuldade estimada (como D&D Beyond encounter builder) */
-    .sp-difficulty-bar { margin-top:10px; }
-    .sp-difficulty-label { font-size:11px; color:var(--ink-soft); margin-bottom:4px; }
-    .sp-difficulty-track { height:8px; border-radius:4px; background:rgba(0,0,0,.1); overflow:hidden; }
-    .sp-difficulty-fill  { height:100%; border-radius:4px; transition:.3s; }
-    .diff-easy   { background:#27ae60; }
-    .diff-medium { background:#f39c12; }
-    .diff-hard   { background:#e74c3c; }
-    .diff-deadly { background:#8e44ad; }
-    .sp-difficulty-text { font-size:12px; font-family:var(--font-heading); margin-top:4px; }
-
-    /* ── Aba: Início Forte (Sly Flourish) ─────────────────────── */
-    .sp-strong-start-prompt {
-      padding:10px 12px; border-radius:8px; border-left:3px solid var(--gold);
-      background:rgba(156,122,60,.06); font-size:13px; color:var(--ink); line-height:1.6;
-      margin-bottom:12px;
-    }
-    .sp-hint-box {
-      padding:10px 12px; border-radius:7px; background:rgba(0,0,0,.04);
-      font-size:12px; color:var(--ink-soft); line-height:1.55; margin-top:8px;
-    }
-    .sp-hint-box strong { color:var(--ink); }
-
-    /* Segredos e reviravoltas (Sly Flourish "Secrets & Clues") */
-    .sp-secret-list { display:flex; flex-direction:column; gap:6px; }
-    .sp-secret-item {
-      display:flex; gap:8px; align-items:flex-start; padding:8px 10px;
-      background:rgba(142,68,173,.05); border:1px solid rgba(142,68,173,.15);
-      border-radius:6px;
-    }
-    .sp-secret-icon { font-size:16px; flex-shrink:0; }
-    .sp-secret-text { flex:1; font-size:13px; color:var(--ink); line-height:1.5; }
-    .sp-secret-input {
-      border:none; background:transparent; font-family:var(--font-heading); font-size:13px;
-      color:var(--ink); width:100%; outline:none; resize:none; line-height:1.5;
-    }
-
-    /* ── Badges de dificuldade ─────────────────────────────────── */
-    .diff-badge {
-      display:inline-block; padding:1px 6px; border-radius:8px;
-      font-size:10px; font-family:var(--font-label);
-    }
-    .diff-1 { background:rgba(39,174,96,.15);  color:#1e8449; }
-    .diff-2 { background:rgba(243,156,18,.15); color:#9a6a00; }
-    .diff-3 { background:rgba(231,76,60,.15);  color:#a03030; }
-    .diff-4 { background:rgba(142,68,173,.15); color:#6a3a7a; }
-    .diff-5 { background:rgba(0,0,0,.15);       color:#333; }
-
-    /* Drag indicator */
-    .sp-drag-handle { cursor:grab; color:var(--ink-soft); padding:0 4px; font-size:14px; flex-shrink:0; }
-    .sp-dragging { opacity:.5; border:2px dashed var(--gold) !important; }
-
-    /* ── Impressão / Export ────────────────────────────────────── */
-    .btn-sp-print { padding:6px 12px; border:1px solid var(--line); border-radius:6px; background:transparent; font-family:var(--font-heading); font-size:12px; cursor:pointer; color:var(--ink-soft); }
-
-    /* ── Responsivo ────────────────────────────────────────────── */
-    @media(max-width:600px) {
-      .sp-sidebar { display:none; }
-      .sp-sidebar.mobile-open { display:flex; position:fixed; left:0; top:0; bottom:0; z-index:100; }
-      .sp-overview-grid { grid-template-columns:1fr; }
-      .sp-toolbar-actions .btn-sp-save { display:none; }
-    }
-  </style>
+/* ── Toast ───────────────────────────────────────────────────── */
+#sp-toast{
+  position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+  background:rgba(30,30,30,.9);color:#fff;padding:9px 16px;
+  border-radius:18px;font-size:13px;z-index:999;
+  transition:opacity .3s;opacity:0;pointer-events:none;
+  max-width:90vw;text-align:center;
+}
+</style>
 </head>
 <body>
-<div class="sp-page" id="sp-page">
 
-  <!-- Toolbar -->
-  <div class="sp-toolbar">
-    <a href="index.html">← Grimório</a>
-    <span class="sp-toolbar-title">📋 Planejador de Sessão</span>
-    <div class="sp-toolbar-actions">
-      <button class="btn-sp-save" id="btn-sp-save" title="Salvar sessão atual">💾 Salvar</button>
-      <button class="btn-sp-new"  id="btn-sp-new">+ Nova Sessão</button>
-    </div>
+<!-- Toolbar -->
+<div class="sp-bar">
+  <a href="index.html">← Grimório</a>
+  <span class="sp-bar-title">📋 Planejador de Sessão</span>
+  <button class="btn-add-session" id="btn-add-session">+ Nova Sessão</button>
+</div>
+
+<div class="sp-wrap">
+  <!-- Empty state -->
+  <div class="sp-empty" id="sp-empty">
+    <span class="sp-empty-icon">📋</span>
+    <p>Nenhuma sessão ainda.<br>Crie a primeira e comece a organizar locais, NPCs, inimigos e tesouro.</p>
+    <button class="btn-add-session" id="btn-add-session-empty">+ Nova Sessão</button>
   </div>
 
-  <div class="sp-layout">
+  <!-- Lista de sessões -->
+  <div id="session-list"></div>
+</div>
 
-    <!-- Sidebar: lista de sessões -->
-    <div class="sp-sidebar" id="sp-sidebar">
-      <div class="sp-sidebar-header">
-        <span>Sessões</span>
-        <span id="sp-session-count" style="font-size:11px">0</span>
-      </div>
-      <div class="sp-session-list" id="sp-session-list"></div>
+<!-- Picker Modal -->
+<div class="picker-overlay hidden" id="picker-overlay">
+  <div class="picker-modal">
+    <div class="picker-header">
+      <span class="picker-title" id="picker-title">Selecionar</span>
+      <button class="picker-close" id="picker-close">✕</button>
     </div>
-
-    <!-- Editor principal -->
-    <div class="sp-main" id="sp-main">
-      <div class="sp-welcome" id="sp-welcome">
-        <span class="sp-welcome-icon">🗡</span>
-        <h2>Planejador de Sessão</h2>
-        <p>Crie sessões de RPG organizando NPCs, encontros, missões, locais e itens diretamente do compêndio de Aether.</p>
-        <p style="font-size:12px;opacity:.7">Inspirado no método <strong>Lazy DM</strong> (Sly Flourish), no <strong>Encounter Builder</strong> do D&D Beyond e nas scene cards do <strong>Foundry VTT</strong>.</p>
-        <button class="btn-sp-new" id="btn-welcome-new">+ Criar primeira sessão</button>
-      </div>
-
-      <div id="sp-editor" style="display:none; flex-direction:column; flex:1;">
-
-        <!-- Cabeçalho da sessão -->
-        <div class="sp-session-header">
-          <input class="sp-session-name" id="sp-session-name" placeholder="Nome da sessão..." maxlength="80">
-          <div class="sp-session-meta-row">
-            <input class="sp-session-meta-input" id="sp-session-number"  placeholder="Sessão #" style="width:80px">
-            <input class="sp-session-meta-input" id="sp-session-date"    type="date" style="width:140px">
-            <input class="sp-session-meta-input" id="sp-session-players" placeholder="Jogadores..." style="width:150px">
-            <button class="sp-status-badge" id="sp-status-btn">Planejando</button>
-            <button class="btn-sp-print" id="btn-sp-print" title="Imprimir / Exportar">🖨 Imprimir</button>
-            <button class="btn-sp-save" id="btn-sp-save2" style="margin-left:auto">💾 Salvar</button>
-          </div>
-        </div>
-
-        <!-- Abas do editor -->
-        <div class="sp-editor-tabs" id="sp-editor-tabs">
-          <button class="sp-tab-btn active" data-sptab="overview">📊 Visão Geral</button>
-          <button class="sp-tab-btn" data-sptab="strong-start">🎬 Início</button>
-          <button class="sp-tab-btn" data-sptab="scenes">🎭 Cenas<span class="sp-tab-count" id="cnt-scenes">0</span></button>
-          <button class="sp-tab-btn" data-sptab="npcs">👤 NPCs<span class="sp-tab-count" id="cnt-npcs">0</span></button>
-          <button class="sp-tab-btn" data-sptab="enemies">⚔ Encontros<span class="sp-tab-count" id="cnt-enemies">0</span></button>
-          <button class="sp-tab-btn" data-sptab="missions">📜 Missões<span class="sp-tab-count" id="cnt-missions">0</span></button>
-          <button class="sp-tab-btn" data-sptab="locations">🗺 Locais<span class="sp-tab-count" id="cnt-locations">0</span></button>
-          <button class="sp-tab-btn" data-sptab="items">🎒 Itens<span class="sp-tab-count" id="cnt-items">0</span></button>
-          <button class="sp-tab-btn" data-sptab="secrets">🔮 Segredos<span class="sp-tab-count" id="cnt-secrets">0</span></button>
-          <button class="sp-tab-btn" data-sptab="notes">📝 Notas</button>
-        </div>
-
-        <!-- ── VISÃO GERAL ──────────────────────────────────────── -->
-        <div class="sp-tab-content active" data-sptab-content="overview" style="overflow-y:auto">
-          <div class="sp-overview-grid" id="overview-grid">
-            <div class="sp-overview-card">
-              <div class="sp-overview-card-title">⚔ Encontros</div>
-              <div id="overview-enemies-list"></div>
-            </div>
-            <div class="sp-overview-card">
-              <div class="sp-overview-card-title">📊 Dificuldade Estimada</div>
-              <div class="sp-difficulty-bar">
-                <div class="sp-difficulty-label">Pressão total da sessão</div>
-                <div class="sp-difficulty-track"><div class="sp-difficulty-fill" id="difficulty-fill"></div></div>
-                <div class="sp-difficulty-text" id="difficulty-text">Sem encontros</div>
-              </div>
-              <div style="margin-top:10px;" id="overview-stats"></div>
-            </div>
-            <div class="sp-overview-card">
-              <div class="sp-overview-card-title">👤 NPCs Previstos</div>
-              <div id="overview-npcs-list"></div>
-            </div>
-            <div class="sp-overview-card">
-              <div class="sp-overview-card-title">📜 Missões Ativas</div>
-              <div id="overview-missions-list"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ── INÍCIO FORTE ─────────────────────────────────────── -->
-        <div class="sp-tab-content" data-sptab-content="strong-start" style="overflow-y:auto">
-          <div class="sp-strong-start-prompt">
-            <strong>🎬 Início Forte</strong> — A sessão começa <em>in media res</em>: já em ação, tensão ou decisão. Não comece com "vocês estão na taverna". Comece com o mundo já se movendo.
-          </div>
-          <div class="sp-block">
-            <div class="sp-block-label">A primeira cena (o que os jogadores veem e vivem nos primeiros 5 minutos)</div>
-            <textarea class="sp-textarea" id="sp-strong-start" rows="5" placeholder="Ex: A porta da estalagem explode. Um mensageiro ensanguentado entra, segura o papel com o nome do grupo e cai morto no chão. O papel tem um único símbolo — a Marca do Deus Marcado..."></textarea>
-          </div>
-          <div class="sp-hint-box">
-            <strong>Dica (Lazy DM):</strong> Descreva o mundo em 1-2 frases antes de perguntar o que os personagens fazem. Isso ancora a cena sem remover a agência dos jogadores.
-          </div>
-          <div class="sp-block" style="margin-top:14px">
-            <div class="sp-block-label">Gancho central desta sessão (o que puxa o grupo para frente)</div>
-            <textarea class="sp-textarea" id="sp-hook" rows="3" placeholder="Ex: Aela aperta a mão de quem está mais perto e aponta para o norte. O colar pulsa."></textarea>
-          </div>
-          <div class="sp-block" style="margin-top:14px">
-            <div class="sp-block-label">O que acontece se o grupo NÃO agir (pressão de tempo)</div>
-            <textarea class="sp-textarea" id="sp-clock" rows="3" placeholder="Ex: O Arauto chega à cidade em 2 dias. Com ou sem o grupo, ele vai encontrar Aela."></textarea>
-          </div>
-        </div>
-
-        <!-- ── CENAS ────────────────────────────────────────────── -->
-        <div class="sp-tab-content" data-sptab-content="scenes" style="overflow-y:auto">
-          <div class="sp-hint-box" style="margin-bottom:12px">
-            <strong>Cenas (Foundry VTT / Lazy DM):</strong> Liste as cenas possíveis — não como roteiro fixo, mas como possibilidades. O grupo pode pular, combinar ou criar cenas novas. Ter 3-5 cenas preparadas é suficiente para 4 horas.
-          </div>
-          <div class="sp-element-grid" id="scene-list"></div>
-          <div class="sp-add-row">
-            <button class="btn-sp-add" id="btn-add-scene-manual">✏️ Adicionar cena manualmente</button>
-          </div>
-        </div>
-
-        <!-- ── NPCs ─────────────────────────────────────────────── -->
-        <div class="sp-tab-content" data-sptab-content="npcs" style="overflow-y:auto">
-          <div class="sp-hint-box" style="margin-bottom:12px">
-            <strong>NPCs (Lazy DM):</strong> Para cada NPC defina: <em>nome</em>, <em>o que quer</em>, <em>o que faz se o grupo ajuda</em> e <em>o que faz se o grupo atrapalha</em>. Não precisa de ficha completa.
-          </div>
-          <div class="sp-element-grid" id="npc-list"></div>
-          <div class="sp-add-row">
-            <button class="btn-sp-add" id="btn-add-npc-manual">✏️ NPC manual</button>
-          </div>
-        </div>
-
-        <!-- ── ENCONTROS ────────────────────────────────────────── -->
-        <div class="sp-tab-content" data-sptab-content="enemies" style="overflow-y:auto">
-          <div class="sp-hint-box" style="margin-bottom:12px">
-            <strong>Encontros (D&D Beyond / Kobold Fight Club):</strong> Adicione monstros do bestiário. O sistema estima a dificuldade baseada na soma das dificuldades vs. o nível médio do grupo.
-          </div>
-          <div id="encounter-summary" style="margin-bottom:12px"></div>
-          <div class="sp-element-grid" id="enemy-list"></div>
-          <div class="sp-add-row">
-            <button class="btn-sp-add" id="btn-add-enemy">⚔ Buscar no Bestiário</button>
-            <button class="btn-sp-add" id="btn-add-enemy-manual">✏️ Inimigo manual</button>
-          </div>
-        </div>
-
-        <!-- ── MISSÕES ──────────────────────────────────────────── -->
-        <div class="sp-tab-content" data-sptab-content="missions" style="overflow-y:auto">
-          <div class="sp-hint-box" style="margin-bottom:12px">
-            <strong>Missões:</strong> Adicione missões do compêndio ou crie objetivos específicos da sessão. Marque como principal ou secundária.
-          </div>
-          <div class="sp-element-grid" id="mission-list"></div>
-          <div class="sp-add-row">
-            <button class="btn-sp-add" id="btn-add-mission">📜 Buscar Missões</button>
-            <button class="btn-sp-add" id="btn-add-mission-manual">✏️ Objetivo manual</button>
-          </div>
-        </div>
-
-        <!-- ── LOCAIS ───────────────────────────────────────────── -->
-        <div class="sp-tab-content" data-sptab-content="locations" style="overflow-y:auto">
-          <div class="sp-hint-box" style="margin-bottom:12px">
-            <strong>Locais:</strong> Para cada local anote o que é óbvio, o que requer investigação, e o que nunca é revelado (segredo do local).
-          </div>
-          <div class="sp-element-grid" id="location-list"></div>
-          <div class="sp-add-row">
-            <button class="btn-sp-add" id="btn-add-location-manual">🗺 Adicionar local</button>
-          </div>
-        </div>
-
-        <!-- ── ITENS ────────────────────────────────────────────── -->
-        <div class="sp-tab-content" data-sptab-content="items" style="overflow-y:auto">
-          <div class="sp-hint-box" style="margin-bottom:12px">
-            <strong>Recompensas e Loot:</strong> Itens que podem ser encontrados, comprados ou dados como recompensa nesta sessão.
-          </div>
-          <div class="sp-element-grid" id="item-list"></div>
-          <div class="sp-add-row">
-            <button class="btn-sp-add" id="btn-add-item">🎒 Buscar no Compêndio</button>
-            <button class="btn-sp-add" id="btn-add-item-manual">✏️ Item manual</button>
-          </div>
-        </div>
-
-        <!-- ── SEGREDOS & REVIRAVOLTAS ──────────────────────────── -->
-        <div class="sp-tab-content" data-sptab-content="secrets" style="overflow-y:auto">
-          <div class="sp-hint-box" style="margin-bottom:12px">
-            <strong>Segredos e Pistas (Sly Flourish):</strong> 10 segredos/pistas que os jogadores podem descobrir — mas provavelmente não descobrirão todos em uma sessão. Distribute naturalmente na narrativa.
-          </div>
-          <div class="sp-secret-list" id="secret-list"></div>
-          <button class="btn-sp-add" id="btn-add-secret" style="margin-top:8px">🔮 Adicionar segredo/pista</button>
-        </div>
-
-        <!-- ── NOTAS ────────────────────────────────────────────── -->
-        <div class="sp-tab-content" data-sptab-content="notes" style="overflow-y:auto">
-          <div class="sp-block">
-            <div class="sp-block-label">Notas do Mestre (visíveis apenas aqui)</div>
-            <textarea class="sp-textarea" id="sp-notes" rows="12" placeholder="Anotações livres, lembretes, ideias, backup plans...&#10;&#10;Ex: Se o grupo travar no enigma, Berna pode dar dica.&#10;Se fugirem muito cedo, o Arauto aparece na estrada."></textarea>
-          </div>
-          <div class="sp-block">
-            <div class="sp-block-label">Resumo pós-sessão (preencher depois)</div>
-            <textarea class="sp-textarea" id="sp-recap" rows="5" placeholder="O que aconteceu de fato..."></textarea>
-          </div>
-        </div>
-
-      </div><!-- #sp-editor -->
-    </div><!-- .sp-main -->
-  </div><!-- .sp-layout -->
-
-  <!-- ── Picker Modal ─────────────────────────────────────────── -->
-  <div class="sp-picker-overlay hidden" id="sp-picker-overlay">
-    <div class="sp-picker-modal">
-      <div class="sp-picker-header">
-        <span class="sp-picker-title" id="sp-picker-title">Selecionar</span>
-        <button class="sp-picker-close" id="sp-picker-close">✕</button>
-      </div>
-      <div class="sp-picker-chips" id="sp-picker-chips"></div>
-      <div class="sp-picker-search">
-        <input type="text" id="sp-picker-search-input" placeholder="🔍 Buscar...">
-      </div>
-      <div class="sp-picker-list" id="sp-picker-list"></div>
+    <div class="picker-chips" id="picker-chips"></div>
+    <div class="picker-search-wrap">
+      <input class="picker-search" id="picker-search" type="text" placeholder="🔍 Buscar...">
+    </div>
+    <div class="picker-list" id="picker-list"></div>
+    <!-- Linha de preço (só para itens de loja) -->
+    <div class="picker-price-row" id="picker-price-row" style="display:none">
+      <input class="picker-price-input" id="picker-price-input" type="text" placeholder="Preço (ex: 10 prata, 2 ouro...)">
+      <button class="btn-picker-confirm" id="picker-confirm">Adicionar</button>
     </div>
   </div>
+</div>
 
-</div><!-- .sp-page -->
+<div id="sp-toast"></div>
 
 <script src="data.js"></script>
 <script src="missions.js"></script>
