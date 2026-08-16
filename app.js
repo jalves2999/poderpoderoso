@@ -861,17 +861,28 @@ function renderSubclassStep() {
   const choiceRow = document.getElementById("choice-subclass");
   const detailBox = document.getElementById("subclass-detail");
 
-  choiceRow.innerHTML = Object.entries(SUBCLASSES).map(([key, sc]) => {
-    const hasSynergy = sc.sinergyClasses.includes(classKey);
-    const isChosen   = wizard.subclass === key;
+  // Só mostra subclasses com sinergia com a classe atual + a pura da classe
+  const available = Object.entries(SUBCLASSES).filter(([key, sc]) =>
+    sc.sinergyClasses.includes(classKey) || key === classKey + "-puro"
+  );
+
+  choiceRow.innerHTML = available.map(([key, sc]) => {
+    const isPuro   = key === classKey + "-puro";
+    const isChosen = wizard.subclass === key;
     return `
-      <div class="choice-card ${isChosen ? "selected" : ""} ${hasSynergy ? "choice-card-synergy" : ""}"
+      <div class="choice-card ${isChosen ? "selected" : ""} ${isPuro ? "choice-card-puro" : "choice-card-synergy"}"
            data-subclass="${key}">
         <div class="choice-icon">${sc.icon}</div>
         <div class="choice-name">${sc.name}</div>
-        ${hasSynergy ? `<div class="choice-synergy-badge">✨ Sinergia</div>` : ""}
+        <div class="${isPuro ? "choice-puro-badge" : "choice-synergy-badge"}">${isPuro ? "⭐ Puro" : "✨ Sinergia"}</div>
       </div>`;
   }).join("");
+
+  // Resetar subclasse se a atual não é mais válida para esta classe
+  if (wizard.subclass && !available.find(([k]) => k === wizard.subclass)) {
+    wizard.subclass = null;
+    wizard.subclassSkills = [];
+  }
 
   choiceRow.querySelectorAll("[data-subclass]").forEach(card => {
     card.addEventListener("click", () => {

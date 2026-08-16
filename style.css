@@ -4193,6 +4193,13 @@ main {
   border-radius: 8px; padding: 2px 7px; margin-top: 4px;
   font-family: var(--font-heading);
 }
+.choice-card-puro { border-color: #1a6bcc !important; background: rgba(26,107,204,0.04); }
+.choice-card-puro.selected { background: rgba(26,107,204,0.10); }
+.choice-puro-badge {
+  font-size: 10px; background: rgba(26,107,204,0.15); color: #1a6bcc;
+  border-radius: 8px; padding: 2px 7px; margin-top: 4px;
+  font-family: var(--font-heading);
+}
 
 /* Área de detalhes da subclasse */
 .subclass-detail { margin-top: 10px; display: flex; flex-direction: column; gap: 14px; }

@@ -3941,7 +3941,199 @@ const SUBCLASSES = {
     ]
   }
 
-};
+,
+
+  /* ═══════════════════════════════════════════════════════════════
+     SUBCLASSES PURAS — Exclusivas de cada classe base.
+     Aparecem SOMENTE para quem escolheu aquela classe.
+     Têm 2 habilidades exclusivas de custo 2 pontos cada —
+     habilidades poderosas e definidoras de estilo de combate.
+     ═══════════════════════════════════════════════════════════════ */
+
+  "guerreiro-puro": {
+    name: "Guerreiro Puro",
+    icon: "🗡",
+    description: "O Guerreiro em sua forma mais completa — sem magia, sem veneno, sem truques. Apenas aço, força e a capacidade de absorver ou infligir punição além do limite humano. Duas especializações definem seu estilo: ser o muro intransponível ou o martelo que tudo destrói.",
+    sinergyClasses: ["guerreiro"],
+    passiveBonus: "+2 de FOR permanentes. +1 Ação de Combate no nível 3 e mais +1 no nível 6 (além do progressão normal). O Guerreiro Puro não usa Ações de Magia — qualquer bônus de Ação de Magia se converte em +1 Ação de Combate.",
+    sinergyNote: "Exclusivo do Guerreiro. Nenhuma outra classe acessa estas habilidades.",
+    skills: [
+      {
+        id: "sub-guerreiro-puro-fortaleza",
+        name: "Fortaleza Inabalável",
+        cost: "2 pontos",
+        tier: 1,
+        exclusive: true,
+        levels: [
+          { level: 1, effect: "Passivo: +2 Def.Física permanente. Ativo (gasta 3 Fúria, 1 Ação): ativa Postura de Fortaleza por 4 rodadas — fica imóvel (não pode mover) mas ganha Def.Física adicional igual ao próprio FOR, imunidade a Derrubado, e qualquer ataque que causar menos de 5 de dano após a defesa é completamente absorvido (resultado 0). Pode sair da postura gastando 1 Fúria." },
+          { level: 2, effect: "+3 Def.Física permanente. Fortaleza: Def.Física +FOR, imune Derrubado e Empurrado, ataques abaixo de 8 de dano = 0. Pode atacar 1x por turno enquanto na postura (o corpo responde mesmo parado)." },
+          { level: 3, effect: "+4 Def.Física permanente. Fortaleza: Def.Física +FOR+2, imune a condições físicas de controle, ataques abaixo de 12 = 0. Ao sair da postura voluntariamente: ataque imediato gratuito com +1d12 de dano extra (a energia represada explode no primeiro movimento)." }
+        ],
+        example: "Ele parou de recuar. O Elemental bateu nele quatro vezes. Nenhum dos quatro chegou a nada."
+      },
+      {
+        id: "sub-guerreiro-puro-devastador",
+        name: "Golpe Devastador",
+        cost: "2 pontos",
+        tier: 1,
+        exclusive: true,
+        levels: [
+          { level: 1, effect: "Ativo (gasta 4 Fúria, 1 Ação): concentra toda a força num único golpe. O ataque causa dano TRIPLICADO (×3) se acertar. Se errar: perde 2 Fúria extra (desequilíbrio do esforço). 1x por combate. Não pode ser usado em conjunto com Fúria ativa." },
+          { level: 2, effect: "Dano ×3. Em vez de 1x, pode ser usado até 2x por combate. Se for Crítico: dano ×4 (o crítico da concentração total). Se errar: perde apenas 1 Fúria extra." },
+          { level: 3, effect: "Dano ×3 (×5 se Crítico). Sem limite de usos por combate — mas cada uso consecutivo custa +1 Fúria a mais. O Golpe Devastador escolhe automaticamente o ponto mais fraco do alvo: ignora metade da Def.Física (arredonda para cima)." }
+        ],
+        example: "O Colosso de Pedra tinha 12 de Defesa Física. Não importou."
+      }
+    ]
+  },
+
+  "mago-puro": {
+    name: "Mago Puro",
+    icon: "🔮",
+    description: "O Mago que não dividiu sua mente com outro ofício. Cada Slot é uma câmara carregada. Cada magia é calculada para o máximo efeito. Duas rotas: canalizar toda a energia num único ponto de intensidade letal, ou expandir o domínio até cobrir o campo inteiro.",
+    sinergyClasses: ["mago"],
+    passiveBonus: "+2 de INT permanentes. +2 Slots de Magia adicionais. Regenera 1 MP por turno passivamente (o corpo do Mago Puro aprendeu a recuperar enquanto age).",
+    sinergyNote: "Exclusivo do Mago. Nenhuma outra classe acessa estas habilidades.",
+    skills: [
+      {
+        id: "sub-mago-puro-amplificacao",
+        name: "Amplificação Canalizada",
+        cost: "2 pontos",
+        tier: 1,
+        exclusive: true,
+        levels: [
+          { level: 1, effect: "Ativo (custa 4 MP + 1 Slot, 1 Ação de Magia extra): a próxima magia lançada neste turno tem seu dano DOBRADO (×2) e seu alcance aumentado em 3 hex. O alvo não pode usar Defesa Mágica completa — apenas metade funciona (o volume de energia supera a resistência). 1x por combate." },
+          { level: 2, effect: "Dano ×2.5 (arredonda para cima por dado). Alcance +4 hex. Def.Mágica do alvo = 0 (a canalização supera qualquer resistência). A magia amplificada não pode ser interrompida neste turno. 1x por combate." },
+          { level: 3, effect: "Dano ×3. Alcance +5 hex. Def.Mágica = 0. A magia amplificada atinge todos os alvos em raio 2 hex ao redor do ponto de impacto (sem custo extra de Slots) — a energia transborda. 1x por combate. Após usar: o Mago não pode lançar magias de dano na rodada seguinte (esgotamento canalizado)." }
+        ],
+        example: "Um Slot. Quatro MP. O Dragão jovem recebeu o equivalente a uma hora de bombardeio arcano em um instante."
+      },
+      {
+        id: "sub-mago-puro-dominio",
+        name: "Domínio de Área",
+        cost: "2 pontos",
+        tier: 1,
+        exclusive: true,
+        levels: [
+          { level: 1, effect: "Passivo: toda magia de área do Mago tem o raio/alcance +2 hex automaticamente. Ativo (custa 3 MP, Ação Livre): por 3 rodadas, qualquer magia de área causa também metade do dano em todos os hexes adjacentes à área original (anel de transbordamento). 2x por combate." },
+          { level: 2, effect: "Passivo: +3 hex em área. Ativo: 4 rodadas. O transbordamento causa 75% do dano (em vez de metade). O Mago pode escolher excluir aliados do dano de transbordamento (controle fino de energia). 2x por combate." },
+          { level: 3, effect: "Passivo: +4 hex em área. Ativo: 5 rodadas. Transbordamento = dano total (as duas camadas de área causam o mesmo dano). Enquanto o Domínio está ativo: custo de Slots para magias de área é −1 (mínimo 1). Aliados excluídos automaticamente. 2x por combate." }
+        ],
+        example: "Ele errou o centro do grupo por dois hexes. Não fez diferença nenhuma."
+      }
+    ]
+  },
+
+  "arqueiro-puro": {
+    name: "Arqueiro Puro",
+    icon: "🏹",
+    description: "O Arqueiro que não se desviou para a floresta nem para o clã. Apenas o arco, a flecha, a distância e o olho. Dois caminhos: o controle total do campo com múltiplos alvos simultâneos, ou o tiro que não pode ser esquivado nem defendido.",
+    sinergyClasses: ["arqueiro"],
+    passiveBonus: "+2 de DEX permanentes. +2 de Foco (além do máximo normal). Ataques à distância do Arqueiro Puro ignoram a penalidade de cobertura parcial — ele sempre encontra o ângulo.",
+    sinergyNote: "Exclusivo do Arqueiro. Nenhuma outra classe acessa estas habilidades.",
+    skills: [
+      {
+        id: "sub-arqueiro-puro-saraivada",
+        name: "Saraivada de Flechas",
+        cost: "2 pontos",
+        tier: 1,
+        exclusive: true,
+        levels: [
+          { level: 1, effect: "Ativo (gasta 3 Foco, 2 Ações): dispara uma saraivada que atinge TODOS os inimigos em cone 5 hex ou linha 8 hex (escolhe a forma). Cada inimigo recebe 1d8+DEX de dano. Nenhum pode esquivar (a quantidade de flechas não deixa espaço). Def.Física se aplica normalmente. 1x por combate." },
+          { level: 2, effect: "Cone 6 hex ou linha 10 hex. Dano 1d10+DEX. Def.Física = metade (as flechas encontram frestas). Alvos atingidos ficam com −1 Movimento por 2 rodadas (flechas nas pernas). 1x por combate." },
+          { level: 3, effect: "Cone 8 hex ou linha 12 hex. Dano 1d12+DEX. Def.Física = 0 (volume absoluto de flechas, impossível de defender). Alvos testam AGI (difícil) ou ficam Derrubados. O Arqueiro pode usar como Ação Livre uma vez nesta Saraivada para mudar a forma (cone→linha ou vice-versa) enquanto dispara. 1x por combate." }
+        ],
+        example: "Todos os seis goblins caíram no mesmo segundo. Ele ainda tinha flechas."
+      },
+      {
+        id: "sub-arqueiro-puro-tiro-certeiro",
+        name: "Tiro Indefensável",
+        cost: "2 pontos",
+        tier: 1,
+        exclusive: true,
+        levels: [
+          { level: 1, effect: "Ativo (gasta 2 Foco, 1 Ação): o Arqueiro não se move neste turno. Mira por 1 Ação completa (gasta a segunda Ação do turno). No turno seguinte: o tiro é disparado — acerto automático (sem rolagem de d10), ignora Def.Física, alcance ilimitado em linha de visão. Dano normal +1d10 extra. O alvo pode tentar esquivar (d20) mas com −4 na rolagem." },
+          { level: 2, effect: "Mira: 1 Ação. Disparo: automático, ignora Def.Física e Mágica. +1d12 extra. Esquiva: −6. O Tiro atravessa cobertura total (paredes finas, pilares de madeira — apenas rocha sólida bloqueia)." },
+          { level: 3, effect: "Mira e disparo no mesmo turno (gasta todas as Ações do turno). Automático, ignora toda defesa. +2d10 extra. Esquiva impossível (o alvo não consegue reagir a tempo). Se for Crítico: o alvo perde também 1d4 de DEX permanente até cura mágica (o tiro acertou a articulação)." }
+        ],
+        example: "O Berserker estava atrás de um pilar de pedra. Não ajudou."
+      }
+    ]
+  },
+
+  "ladino-puro": {
+    name: "Ladino Puro",
+    icon: "🗡",
+    description: "O Ladino que não precisou de aliado para se tornar completo. Velocidade e veneno — o que mais precisaria? Dois caminhos: desaparecer no meio do combate e reaparecer onde ninguém espera, ou tornar o veneno tão concentrado que um único acerto é sentença.",
+    sinergyClasses: ["ladino"],
+    passiveBonus: "+2 de AGI permanentes. +2 Cargas de Veneno (além do máximo normal). O Ladino Puro não faz barulho ao se mover — Furtividade é automática ao mover-se (sem rolagem), apenas Percepção ativa de inimigos pode detectá-lo.",
+    sinergyNote: "Exclusivo do Ladino. Nenhuma outra classe acessa estas habilidades.",
+    skills: [
+      {
+        id: "sub-ladino-puro-sombra",
+        name: "Passo das Sombras",
+        cost: "2 pontos",
+        tier: 1,
+        exclusive: true,
+        levels: [
+          { level: 1, effect: "Ativo (gasta 2 Cargas, Ação Livre): desaparece completamente em sombra — torna-se invisível e intangível por 2 rodadas. Durante este tempo: pode se mover até 6 hex sem acionar ataques de oportunidade, não pode ser alvo de ataques ou magias, e pode atravessar criaturas (mas não paredes sólidas). Ao reaparecer: próximo ataque é acerto automático + 1d8 extra (Impacto do Reaparecimento). 1x por combate." },
+          { level: 2, effect: "3 rodadas de invisibilidade. Movimento 8 hex. Pode atravessar paredes finas (madeira, cortinas, portas). Ao reaparecer: acerto automático + 1d12 extra e alvo fica com −2 na Chance de Acerto por 2 rodadas (desorientação do reaparecimento). 1x por combate." },
+          { level: 3, effect: "4 rodadas de invisibilidade. Movimento 10 hex. Atravessa qualquer obstáculo exceto campo mágico de contenção. Ao reaparecer: escolhe de qual hex reaparece (em raio 10 hex de onde entrou nas sombras). Acerto automático + 2d10 extra + alvo fica Atordoado por 1 rodada. Pode ser usado 2x por combate." }
+        ],
+        example: "Ele estava no centro do círculo. Três inimigos. Quando reapareceu, havia apenas dois — e um deles estava no chão."
+      },
+      {
+        id: "sub-ladino-puro-veneno-mortal",
+        name: "Veneno Mortal",
+        cost: "2 pontos",
+        tier: 1,
+        exclusive: true,
+        levels: [
+          { level: 1, effect: "Passivo: os venenos do Ladino Puro ignoram resistência a veneno comum. Ativo (gasta 3 Cargas, 1 Ação): aplica Veneno Mortal numa arma. O primeiro acerto com esta arma: 2d8 de veneno imediato (ignora Def.Física e Mágica) + Envenenado Grave (1d8 de veneno por rodada por 4 rodadas, SAB difícil para resistir). O Veneno Mortal não pode ser removido com antídoto comum — requer Cura Mágica ou descanso longo. 1 carga de Veneno Mortal por combate." },
+          { level: 2, effect: "Veneno Mortal: 2d10 imediato + Envenenado Grave 1d10/rodada por 5 rodadas. SAB crítico para resistir. Resistência mágica a veneno também ignorada. Ao aplicar: o Ladino recupera 1 Carga de Veneno (o processo de concentrar o veneno é eficiente). 1 carga por combate." },
+          { level: 3, effect: "Veneno Mortal: 3d10 imediato + Envenenado Grave 1d12/rodada por 6 rodadas (irremovível em combate — nem Cura Mágica funciona durante o combate, apenas após). Ao matar com Veneno Mortal: o cadáver exala névoa venenosa em raio 1 hex (1d6 de veneno por 2 rodadas). 2 cargas de Veneno Mortal por combate." }
+        ],
+        example: "O antídoto não funcionou. O boticário disse que era impossível. O Ladino disse que dependia de quem fez o veneno."
+      }
+    ]
+  },
+
+  "clerigo-puro": {
+    name: "Clérigo Puro",
+    icon: "✝",
+    description: "O Clérigo que não dividiu a Fé. Cada ponto de Fé é uma oração respondida. Dois caminhos: tornar a cura tão poderosa que ressuscita o que parecia perdido, ou canalizar a energia divina em ondas de purificação que destroem o que é corrompido.",
+    sinergyClasses: ["clerigo"],
+    passiveBonus: "+2 de SAB permanentes. +3 pontos de Fé (além do máximo normal). Curas do Clérigo Puro sempre curam pelo menos o valor máximo dos dados (sem rolar abaixo de 4 em nenhum dado de cura).",
+    sinergyNote: "Exclusivo do Clérigo. Nenhuma outra classe acessa estas habilidades.",
+    skills: [
+      {
+        id: "sub-clerigo-puro-cura-milagrosa",
+        name: "Cura Milagrosa",
+        cost: "2 pontos",
+        tier: 1,
+        exclusive: true,
+        levels: [
+          { level: 1, effect: "Ativo (gasta 5 Fé + 1 Slot, 1 Ação): cura um aliado tocado em 4d8+SAB HP. Se o aliado estiver a 0 HP, esta magia o estabiliza e cura adicionalmente 2d6 HP extra (ressurreição do limiar). Remove todos os venenos, maldições menores e condições negativas do alvo. 1x por combate." },
+          { level: 2, effect: "5d10+SAB HP. A 0 HP: estabiliza + 3d8 extra. Remove também maldições maiores e condições permanentes. Se o alvo tiver morrido neste mesmo turno (não mais de 1 rodada atrás): a Cura Milagrosa pode ser usada para ressuscitá-lo com 1 HP (o milagre reverte a morte recente). 1x por combate." },
+          { level: 3, effect: "6d12+SAB HP. Ressuscita aliados mortos neste combate (não importa há quantas rodadas) com 30% HP. Remove qualquer condição ou maldição. Ao curar: o Clérigo emite pulso de energia sagrada — todos os aliados em raio 3 hex curam 2d6 também (a divindade não é mesquinha). 1x por combate." }
+        ],
+        example: "Ela tinha parado de respirar há um minuto. O Clérigo colocou a mão sobre o peito dela e disse uma única frase. Ela abriu os olhos."
+      },
+      {
+        id: "sub-clerigo-puro-onda-sagrada",
+        name: "Onda de Purificação",
+        cost: "2 pontos",
+        tier: 1,
+        exclusive: true,
+        levels: [
+          { level: 1, effect: "Ativo (gasta 4 Fé + 1 Slot, 1 Ação): emite onda divina em raio 5 hex. Inimigos corrompidos, mortos-vivos e servos de divindades malignas sofrem 3d8+SAB de dano sagrado (ignora Def.Física e Mágica deste tipo de criatura). Inimigos neutros sofrem metade. Aliados na área curam 1d6 HP. 2x por combate." },
+          { level: 2, effect: "Raio 6 hex. Dano 3d10+SAB. Corrompidos e mortos-vivos testam Força de Vontade (difícil) ou ficam Aterrorizados por 2 rodadas (fogem do Clérigo). Aliados curam 2d6 HP. Pode ser ativada como Reação quando um aliado é atacado (a onda protetora é um reflexo da fé). 2x por combate." },
+          { level: 3, effect: "Raio 8 hex. Dano 4d12+SAB. Criaturas do Deus Marcado e mortos-vivos Elite testam Força de Vontade (crítico) ou são banidas do plano material por 1d4 rodadas (desaparecem e reaparecem fora do raio). Aliados curam 3d6 HP e ficam imunes a medo e maldições por 3 rodadas. Pode ser ativada como Reação. 2x por combate." }
+        ],
+        example: "A cripta inteira ficou branca por um instante. Quando a luz sumiu, os esqueletos eram pó e os feridos estavam de pé."
+      }
+    ]
+  }};
 
 
 /* ================================================================
