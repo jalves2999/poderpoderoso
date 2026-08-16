@@ -2816,7 +2816,7 @@ const ACCESSORIES = [
     note:"+1 DEX. +1 Chance de Crítico.",
     story:"Feito com a pata dianteira da Loba Alfa das Sombras Cinzentas. O movimento dela era calculado. O bracelete aprendeu." }];
 
-const ALL_WEAPONS = [...WEAPONS_ONE_HAND, ...WEAPONS_TWO_HAND, ...WEAPONS_MAGIC, ...WEAPONS_RANGED];
+const ALL_WEAPONS = [...WEAPONS_ONE_HAND, ...WEAPONS_TWO_HAND, ...WEAPONS_MAGIC, ...WEAPONS_RANGED].filter(Boolean);
 
 
 /* Itens gerais simples de inventário (não-equipáveis) sugeridos na criação */
@@ -4548,7 +4548,7 @@ function getSpellsForCharacter(character) {
 
 /* Categorias de item para o modal "Adicionar item do mundo" */
 const WORLD_ITEM_CATALOG = {
-  weapon: ALL_WEAPONS.map(w => ({ ...w, category: "weapon" })),
+  weapon: ALL_WEAPONS.filter(Boolean).map(w => ({ ...w, category: "weapon" })),
   shield: SHIELDS.map(s => ({ ...s, category: "shield" })),
   armor: ARMORS.map(a => ({ ...a, category: "armor" })),
   accessory: ACCESSORIES.map(a => ({ ...a, category: "accessory" }))

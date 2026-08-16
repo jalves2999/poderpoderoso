@@ -1145,11 +1145,11 @@ const STARTER_KITS = {
 };
 
 function findEquipmentByName(name) {
-  const weapon = ALL_WEAPONS.find(w => w.name === name);
+  const weapon = ALL_WEAPONS.find(w => w && w.name === name);
   if (weapon) return { ...weapon, kind: "weapon" };
-  const shield = SHIELDS.find(s => s.name === name);
+  const shield = SHIELDS.find(s => s && s.name === name);
   if (shield) return { ...shield, kind: "shield" };
-  const armor = ARMORS.find(a => a.name === name);
+  const armor = ARMORS.find(a => a && a.name === name);
   if (armor) return { ...armor, kind: "armor" };
   return null;
 }
@@ -1173,7 +1173,7 @@ function renderEquipmentStep() {
     wizard.equipmentKitApplied = true;
   }
 
-  const isStarterEligible = i => (!i.tier || i.tier === "comum") && !i.setName;
+  const isStarterEligible = i => i && i.name && (!i.tier || i.tier === "comum") && !i.setName;
   const allOptions = [
     ...ALL_WEAPONS.filter(isStarterEligible).map(w => ({ ...w, kind: "weapon" })),
     ...SHIELDS.filter(isStarterEligible).map(s => ({ ...s, kind: "shield" })),
@@ -1322,10 +1322,10 @@ function finalizeCharacterCreation() {
 function makeInventoryItem(sourceItem, equippedSlot) {
   const category = sourceItem.kind || sourceItem.category || "gear";
   let baseData = null;
-  if (category === "weapon") baseData = ALL_WEAPONS.find(w => w.name === sourceItem.name) || null;
-  if (category === "shield") baseData = SHIELDS.find(s => s.name === sourceItem.name) || null;
-  if (category === "armor") baseData = ARMORS.find(a => a.name === sourceItem.name) || null;
-  if (category === "accessory") baseData = ACCESSORIES.find(a => a.name === sourceItem.name) || null;
+  if (category === "weapon")    baseData = ALL_WEAPONS.filter(Boolean).find(w => w.name === sourceItem.name) || null;
+  if (category === "shield")    baseData = SHIELDS.filter(Boolean).find(s => s.name === sourceItem.name) || null;
+  if (category === "armor")     baseData = ARMORS.filter(Boolean).find(a => a.name === sourceItem.name) || null;
+  if (category === "accessory") baseData = ACCESSORIES.filter(Boolean).find(a => a.name === sourceItem.name) || null;
 
   return {
     instanceId: uid(),
@@ -5402,14 +5402,14 @@ function updateCustomItemFieldsVisibility() {
 
 /* Mapeamento tipo-chip → itens */
 function getItemsByType(type) {
-  const all_w1 = (WEAPONS_ONE_HAND || []).map(i => ({ ...i, _cat:"weapon"    }));
-  const all_w2 = (WEAPONS_TWO_HAND || []).map(i => ({ ...i, _cat:"weapon"    }));
-  const all_wr = (WEAPONS_RANGED   || []).map(i => ({ ...i, _cat:"weapon"    }));
-  const all_wm = (WEAPONS_MAGIC    || []).map(i => ({ ...i, _cat:"weapon"    }));
-  const all_sh = (SHIELDS          || []).map(i => ({ ...i, _cat:"shield"    }));
-  const all_ar = (ARMORS           || []).map(i => ({ ...i, _cat:"armor"     }));
-  const all_ac = (ACCESSORIES      || []).map(i => ({ ...i, _cat:"accessory" }));
-  const miscAll  = (MISC_ITEMS || []).map(i => ({ ...i, _cat:"misc" }));
+  const all_w1 = (WEAPONS_ONE_HAND || []).filter(Boolean).map(i => ({ ...i, _cat:"weapon"    }));
+  const all_w2 = (WEAPONS_TWO_HAND || []).filter(Boolean).map(i => ({ ...i, _cat:"weapon"    }));
+  const all_wr = (WEAPONS_RANGED   || []).filter(Boolean).map(i => ({ ...i, _cat:"weapon"    }));
+  const all_wm = (WEAPONS_MAGIC    || []).filter(Boolean).map(i => ({ ...i, _cat:"weapon"    }));
+  const all_sh = (SHIELDS          || []).filter(Boolean).map(i => ({ ...i, _cat:"shield"    }));
+  const all_ar = (ARMORS           || []).filter(Boolean).map(i => ({ ...i, _cat:"armor"     }));
+  const all_ac = (ACCESSORIES      || []).filter(Boolean).map(i => ({ ...i, _cat:"accessory" }));
+  const miscAll  = (MISC_ITEMS || []).filter(Boolean).map(i => ({ ...i, _cat:"misc" }));
   const misc = sub => sub ? miscAll.filter(i => i.subcategory === sub) : miscAll;
 
   // Materiais: craftingMaterial:true  OU  smithingMaterial:true
@@ -5441,7 +5441,7 @@ function getItemsByType(type) {
 
 /* Filtragem com busca + tier */
 function getFilteredCatalogItems() {
-  let items = getItemsByType(catalogFilters.type);
+  let items = getItemsByType(catalogFilters.type).filter(i => i && i.name);
 
   if (catalogFilters.tier) {
     items = items.filter(i => (i.tier || "comum") === catalogFilters.tier);
