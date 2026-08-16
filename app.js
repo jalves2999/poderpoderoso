@@ -555,8 +555,10 @@ function buildCombinedDamageString(dmg) {
 /* Cumprir QUALQUER um dos atributos listados já satisfaz o requisito.   */
 /* ---------------------------------------------------------------------- */
 
-const REQ_THRESHOLD_NORMAL = 2;
-const REQ_THRESHOLD_HIGH = 4;
+/* Requisito normal: ter pelo menos 1 ponto no atributo.
+   Requisito alto ("alto"/"alta"): ter pelo menos 3 pontos no atributo. */
+const REQ_THRESHOLD_NORMAL = 1;
+const REQ_THRESHOLD_HIGH   = 3;
 
 function parseAttrRequirement(reqText) {
   if (!reqText || reqText === "—") return [];
@@ -2067,7 +2069,7 @@ function renderRulesTab() {
               <ul class="rules-list">
                 <li>+1 Ação de Combate a cada 5 DEX</li>
                 <li>Testes de precisão, ladinagem e armas de arremesso</li>
-                <li>Reduz penalidade de requisito de armas leves</li>
+                <li>Armas com req. DEX exigem pelo menos <strong>1 ponto em DEX</strong> para usar sem penalidade</li>
               </ul>
             </div>
             <div class="rules-attr-card">
@@ -2992,12 +2994,12 @@ function renderDerivedSection(character, cls) {
     <p class="section-hint">Toque e segure (ou passe o mouse) sobre qualquer estatística para ver como ela é calculada.</p>
     <div class="derived-grid">
       ${statsHTML}
-      ${weaponPenalty !== 0 ? `<div class="derived-box derived-box-danger" title="Sua arma exige um atributo mínimo que você não possui. Enquanto isso não for corrigido, todos os seus ataques com essa arma sofrem esta penalidade na Chance de Acerto.">
+      ${weaponPenalty !== 0 ? `<div class="derived-box derived-box-danger" title="Sua arma exige pelo menos 1 ponto no atributo indicado (ex: DEX 1 para uma Adaga). Com 0 pontos no atributo, todos os ataques com essa arma sofrem −2 na Chance de Acerto. Aloque pelo menos 1 ponto no atributo correto para remover a penalidade.">
         <div class="derived-box-label">Penalidade de Acerto <span class="derived-box-info">ⓘ</span></div>
         <div class="derived-box-value">${weaponPenalty}</div>
       </div>` : ""}
     </div>
-    ${weaponPenalty !== 0 ? `<p class="weapon-penalty-warning">⚠ Sua arma primária exige um atributo que você não possui em quantidade suficiente — aplique ${weaponPenalty} na Chance de Acerto enquanto estiver equipada com ela.</p>` : ""}
+    ${weaponPenalty !== 0 ? `<p class="weapon-penalty-warning">⚠ Sua arma primária exige pelo menos 1 ponto no atributo <strong>${getEquippedItem(character,"primary")?.baseData?.req || "indicado"}</strong> — que você tem 0. Aplique ${weaponPenalty} na Chance de Acerto enquanto equipada. Aloque 1 ponto no atributo para remover a penalidade.</p>` : ""}
 
     <h4 class="damage-subtitle">Dano Total de Ataque</h4>
     <div class="damage-combined-row">
@@ -5316,7 +5318,6 @@ function openAddItemModal(character) {
   document.getElementById("custom-bonus-hp").value = "0";
   document.getElementById("custom-bonus-move").value = "0";
   document.getElementById("custom-bonus-actions").value = "0";
-  document.getElementById("custom-bonus-reaction-actions").value = "0";
   document.getElementById("custom-bonus-spell-actions").value = "0";
   document.getElementById("custom-bonus-dodge").value = "0";
   document.getElementById("custom-bonus-slots").value = "0";
