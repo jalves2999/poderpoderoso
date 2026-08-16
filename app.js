@@ -1183,8 +1183,14 @@ function renderEquipmentStep() {
 
   allOptions.forEach(opt => {
     const selected = wizard.equipment.some(e => e.name === opt.name);
-    const metaLabel = opt.kind === "weapon" ? `Dano ${opt.dmg || "—"}` : opt.kind === "armor" ? `Def. Física ${opt.physDefense}` : opt.kind === "shield" ? `Def. Física +${opt.physDefense}` : `Item geral`;
-    const item = buildPickItem(opt.name, `${metaLabel} · ${opt.weight}kg`, opt.note || "", selected, () => {
+    const reqTag   = opt.kind === "weapon" && opt.req ? ` [${opt.req}]` : "";
+    const metaLabel = opt.kind === "weapon"
+      ? `${opt.dmg || "—"}${opt.req ? " · req. " + opt.req : ""} · ${opt.weight}kg`
+      : opt.kind === "armor"  ? `Def. Física ${opt.physDefense} · ${opt.weight}kg`
+      : opt.kind === "shield" ? `Def. Física +${opt.physDefense} · ${opt.weight}kg`
+      : `Item geral · ${opt.weight || 0}kg`;
+    const displayName = opt.name + reqTag;
+    const item = buildPickItem(displayName, metaLabel, opt.note || "", selected, () => {
       const idx = wizard.equipment.findIndex(e => e.name === opt.name);
       if (idx >= 0) wizard.equipment.splice(idx, 1);
       else wizard.equipment.push(opt);
