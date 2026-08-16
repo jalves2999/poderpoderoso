@@ -3023,30 +3023,42 @@ function renderDerivedSection(character, cls) {
 /* --- Habilidades de Classe (Fúria/MP/Foco/Veneno/Fé) --- */
 
 function renderClassAbilitiesSection(character, cls) {
-  if (!character.skills.abilities) character.skills.abilities = [];
+  if (!character.skills.abilities)      character.skills.abilities      = [];
   if (!character.skills.abilityLevels) character.skills.abilityLevels = {};
   const known  = character.skills.abilities;
   const levels = character.skills.abilityLevels;
   const points = character.unspentSkillPoints || 0;
+  const charLevel = character.level || 1;
 
-  // ── Habilidades de subclasse (pelo ID, não pelo nome) ───────────
-  const sc       = character.subclassKey ? SUBCLASSES[character.subclassKey] : null;
-  const scSkills = sc ? sc.skills.filter(sk => known.includes(sk.id)) : [];
+  // ── Subclasse ────────────────────────────────────────────────────
+  const sc        = character.subclassKey ? SUBCLASSES[character.subclassKey] : null;
+  const isPuro    = character.subclassKey?.endsWith("-puro");
+  const scKnown   = sc ? sc.skills.filter(sk => known.includes(sk.id)) : [];
 
+  // Habilidades de subclasse aprendíveis (não puras são sempre disponíveis;
+  // puras só ficam disponíveis a partir do nível 4)
+  const scAvailable = sc ? sc.skills.filter(sk => {
+    if (known.includes(sk.id)) return false;           // já aprendida
+    if (isPuro && charLevel < 4) return false;         // pura bloqueada abaixo nível 4
+    return true;
+  }) : [];
+
+  // ── Card de habilidade de subclasse conhecida ────────────────────
   const renderSubclassAbilityCard = (sk) => {
     const currentLevel = levels[sk.id] || 1;
-    const maxLevel     = sk.levels.length;
+    const maxLevel     = sk.levels?.length || 1;
     const canUpgrade   = currentLevel < maxLevel;
-    const currentData  = sk.levels[currentLevel - 1];
+    const currentData  = sk.levels?.[currentLevel - 1] || sk;
     const isClassSyn   = Array.isArray(sk.sinergyClasses) && sk.sinergyClasses.includes(character.classKey);
 
     return `
-      <div class="ability-card known ability-card-subclass ${isClassSyn ? "ability-card-synergy" : ""}">
+      <div class="ability-card known ability-card-subclass ${isClassSyn ? "ability-card-synergy" : ""} ${sk.exclusive ? "ability-card-exclusive" : ""}">
         <div class="ability-card-head">
           <span class="ability-card-name">${sk.name}</span>
           <div style="display:flex;gap:5px;flex-wrap:wrap;">
-            ${sk.commonToAll ? `<span class="ability-card-badge badge-common">Qualquer classe</span>` : ""}
-            ${isClassSyn    ? `<span class="ability-card-badge badge-synergy">✨ Sinergia</span>` : ""}
+            ${sk.exclusive      ? `<span class="ability-card-badge badge-exclusive">⭐ Puro</span>` : ""}
+            ${sk.commonToAll    ? `<span class="ability-card-badge badge-common">Qualquer classe</span>` : ""}
+            ${isClassSyn        ? `<span class="ability-card-badge badge-synergy">✨ Sinergia</span>` : ""}
           </div>
         </div>
         <div class="ability-level-dots" title="Nível ${currentLevel} de ${maxLevel}">
@@ -3064,70 +3076,126 @@ function renderClassAbilitiesSection(character, cls) {
       </div>`;
   };
 
-  // ── Habilidades de subclasse NÃO escolhidas (aparecem como bloqueadas) ─
-  const scSkillsLocked = sc ? sc.skills.filter(sk => !known.includes(sk.id)) : [];
-  const lockedSubclassHTML = scSkillsLocked.length ? `
-    <div class="ability-locked-subclass-row">
-      <div class="ability-locked-subclass-label">🔒 Habilidades da subclasse não escolhidas no início — indisponíveis</div>
-      ${scSkillsLocked.map(sk => `
-        <div class="ability-card locked ability-card-subclass-locked">
-          <div class="ability-card-head">
-            <span class="ability-card-name">${sk.name}</span>
-            <span class="ability-card-badge" style="background:rgba(0,0,0,0.1);color:var(--ink-soft)">Indisponível</span>
+  // ── Card de habilidade de subclasse disponível (não aprendida) ───
+  const renderSubclassAvailableCard = (sk) => {
+    const isPuroSkill = sk.exclusive;
+    const cost = sk.cost || "2 pontos";
+    return `
+      <div class="ability-card locked ability-card-subclass-available ${isPuroSkill ? "ability-card-exclusive" : ""}">
+        <div class="ability-card-head">
+          <span class="ability-card-name">${sk.name}</span>
+          <div style="display:flex;gap:5px;flex-wrap:wrap;">
+            ${isPuroSkill ? `<span class="ability-card-badge badge-exclusive">⭐ Puro</span>` : ""}
+            <span class="ability-card-badge">${cost}</span>
           </div>
-          <p class="ability-card-effect" style="opacity:.5">${sk.effect}</p>
-        </div>`).join("")}
-    </div>` : "";
+        </div>
+        <p class="ability-card-effect">${sk.levels?.[0]?.effect || sk.effect || ""}</p>
+        <button class="btn-secondary btn-learn-subclass-ability"
+          data-learn-subclass-id="${sk.id}"
+          ${points >= 2 ? "" : "disabled"}>
+          ${points >= 2 ? "Aprender (2 pontos)" : `Requer 2 pontos (você tem ${points})`}
+        </button>
+      </div>`;
+  };
+
+  // ── Habilidades da CLASSE (só as conhecidas) ─────────────────────
+  const knownClassSkills = cls.skills.filter(sk => known.includes(sk.name));
+
+  // Habilidades da classe NÃO aprendidas (para o picker abaixo)
+  const unlearnedClass = cls.skills.filter(sk => !known.includes(sk.name));
 
   return `
   <div class="sheet-section">
     <h3 class="sheet-section-title">Habilidades de Classe</h3>
     <p class="section-hint">Recurso: <strong>${cls.resource}</strong> — ${cls.resourceDesc}</p>
-    ${points > 0 ? `<div class="points-banner">★ Você tem <strong>${points}</strong> ponto(s) de habilidade para gastar abaixo.</div>` : ""}
+    ${points > 0 ? `<div class="points-banner">★ Você tem <strong>${points}</strong> ponto(s) de habilidade para gastar.</div>` : ""}
 
+    ${knownClassSkills.length > 0 ? `
     <div class="ability-card-grid">
-      ${cls.skills.map(skill => {
-        const isKnown    = known.includes(skill.name);
-        const isLevelable = Array.isArray(skill.levels) && skill.levels.length > 1;
+      ${knownClassSkills.map(skill => {
+        const isLevelable  = Array.isArray(skill.levels) && skill.levels.length > 1;
         const currentLevel = levels[skill.name] || 1;
         const maxLevel     = isLevelable ? skill.levels.length : 1;
         const currentData  = isLevelable ? skill.levels[currentLevel - 1] : skill;
-        const canUpgrade   = isKnown && isLevelable && currentLevel < maxLevel;
-
+        const canUpgrade   = isLevelable && currentLevel < maxLevel;
         return `
-        <div class="ability-card ${isKnown ? "known" : "locked"}">
+        <div class="ability-card known">
           <div class="ability-card-head">
             <span class="ability-card-name">${skill.name}</span>
-            ${isKnown ? `<span class="ability-card-badge">Aprendida</span>` : ""}
+            <span class="ability-card-badge">Aprendida</span>
           </div>
           ${isLevelable ? `
             <div class="ability-level-dots" title="Nível ${currentLevel} de ${maxLevel}">
               ${Array.from({ length: maxLevel }).map((_,i) => `<span class="ability-level-dot ${i < currentLevel ? "filled" : ""}"></span>`).join("")}
               <span class="ability-level-text">Nível ${currentLevel}/${maxLevel}</span>
-            </div>
-          ` : ""}
+            </div>` : ""}
           <div class="ability-card-cost">${currentData.cost}</div>
           <p class="ability-card-effect">${currentData.effect}</p>
-          ${!isKnown ? `<button class="btn-secondary btn-learn-ability" data-learn-ability="${skill.name}" ${points > 0 ? "" : "disabled"}>
-            ${points > 0 ? "Aprender (1 ponto)" : "Sem pontos disponíveis"}
-          </button>` : ""}
-          ${canUpgrade ? `<button class="btn-secondary btn-upgrade-ability" data-upgrade-ability="${skill.name}" ${points > 0 ? "" : "disabled"}>
+          ${canUpgrade ? `
+          <button class="btn-secondary btn-upgrade-ability" data-upgrade-ability="${skill.name}" ${points > 0 ? "" : "disabled"}>
             ${points > 0 ? `Evoluir para Nível ${currentLevel + 1} (1 ponto)` : "Sem pontos disponíveis"}
           </button>` : ""}
-          ${isKnown && isLevelable && currentLevel >= maxLevel ? `<div class="ability-max-level-note">✦ Nível máximo alcançado</div>` : ""}
-        </div>
-      `}).join("")}
-    </div>
+          ${isLevelable && currentLevel >= maxLevel ? `<div class="ability-max-level-note">✦ Nível máximo alcançado</div>` : ""}
+        </div>`;
+      }).join("")}
+    </div>` : `<p class="empty-inline-note">Nenhuma habilidade de classe aprendida ainda. Use os pontos abaixo para aprender.</p>`}
 
-    ${scSkills.length ? `
+    ${unlearnedClass.length > 0 ? `
+    <details class="ability-learn-details">
+      <summary class="ability-learn-summary">
+        + Aprender habilidade de classe (${unlearnedClass.length} disponív${unlearnedClass.length > 1 ? "eis" : "el"})
+      </summary>
+      <div class="ability-card-grid" style="margin-top:10px">
+        ${unlearnedClass.map(skill => {
+          const firstData = Array.isArray(skill.levels) ? skill.levels[0] : skill;
+          return `
+          <div class="ability-card locked">
+            <div class="ability-card-head">
+              <span class="ability-card-name">${skill.name}</span>
+            </div>
+            <div class="ability-card-cost">${firstData.cost || skill.cost || "1 ponto"}</div>
+            <p class="ability-card-effect">${firstData.effect || skill.effect || ""}</p>
+            <button class="btn-secondary btn-learn-ability" data-learn-ability="${skill.name}" ${points > 0 ? "" : "disabled"}>
+              ${points > 0 ? "Aprender (1 ponto)" : "Sem pontos disponíveis"}
+            </button>
+          </div>`;
+        }).join("")}
+      </div>
+    </details>` : ""}
+
+    ${sc ? `
     <h3 class="sheet-section-title" style="margin-top:18px">
-      ${sc.icon} Habilidades de Subclasse — ${sc.name}
+      ${sc.icon} ${sc.name}
     </h3>
-    <div class="ability-card-grid">
-      ${scSkills.map(renderSubclassAbilityCard).join("")}
+
+    ${isPuro ? `
+    <div class="ability-puro-notice">
+      <span class="ability-puro-notice-icon">⭐</span>
+      <div>
+        <strong>Subclasse Pura</strong> — As habilidades desta subclasse só podem ser aprendidas a partir do <strong>Nível 4</strong>.
+        ${charLevel < 4 ? `<span style="color:#c0392b"> Seu personagem está no nível <strong>${charLevel}</strong> — ainda não disponível.</span>` : `<span style="color:#27ae60"> Nível ${charLevel} — habilidades disponíveis para aprendizado!</span>`}
+      </div>
     </div>` : ""}
 
-    ${lockedSubclassHTML}
+    ${scKnown.length > 0 ? `
+    <div class="ability-card-grid">
+      ${scKnown.map(renderSubclassAbilityCard).join("")}
+    </div>` : ""}
+
+    ${scAvailable.length > 0 ? `
+    <details class="ability-learn-details">
+      <summary class="ability-learn-summary">
+        + Aprender habilidade de subclasse (${scAvailable.length} disponív${scAvailable.length > 1 ? "eis" : "el"})
+      </summary>
+      <div class="ability-card-grid" style="margin-top:10px">
+        ${scAvailable.map(renderSubclassAvailableCard).join("")}
+      </div>
+    </details>` : ""}
+
+    ${scKnown.length === 0 && scAvailable.length === 0 && isPuro && charLevel < 4 ? `
+    <p class="empty-inline-note" style="color:var(--ink-soft)">🔒 As habilidades do ${sc.name} ficam disponíveis a partir do Nível 4.</p>` : ""}
+    ` : ""}
+
   </div>`;
 }
 
@@ -4621,6 +4689,32 @@ function attachSheetHandlers(character) {
       persistCurrentCharacter();
       renderSheet();
       showToast(`Habilidade "${abilityName}" aprendida!`);
+    });
+  });
+
+  // Aprender habilidade de SUBCLASSE (custa 2 pontos)
+  document.querySelectorAll("[data-learn-subclass-id]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const points = character.unspentSkillPoints || 0;
+      if (points < 2) { showToast("Aprender habilidade de subclasse custa 2 pontos. Você não tem pontos suficientes."); return; }
+      const id = btn.dataset.learnSubclassId;
+      if (!character.skills.abilities) character.skills.abilities = [];
+      if (!character.skills.abilityLevels) character.skills.abilityLevels = {};
+      if (character.skills.abilities.includes(id)) return;
+      // Checar bloqueio de nível para subclasses puras
+      const isPuro = character.subclassKey?.endsWith("-puro");
+      const sc     = SUBCLASSES[character.subclassKey];
+      const sk     = sc?.skills.find(s => s.id === id);
+      if (isPuro && (character.level || 1) < 4) {
+        showToast("Habilidades de subclasse pura só podem ser aprendidas a partir do Nível 4.");
+        return;
+      }
+      character.skills.abilities.push(id);
+      character.skills.abilityLevels[id] = 1;
+      character.unspentSkillPoints -= 2;
+      persistCurrentCharacter();
+      renderSheet();
+      showToast(`Habilidade "${sk?.name || id}" aprendida! (2 pontos gastos)`);
     });
   });
 

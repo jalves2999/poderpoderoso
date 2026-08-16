@@ -4330,6 +4330,49 @@ main {
   cursor: default !important;
 }
 
+/* ── Aviso de subclasse pura ────────────────────────────────── */
+.ability-puro-notice {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 10px 12px; border-radius: 8px; margin-bottom: 12px;
+  background: rgba(26,107,204,0.07); border: 1px solid rgba(26,107,204,0.2);
+  border-left: 3px solid #1a6bcc; font-size: 13px; color: var(--ink);
+  line-height: 1.55;
+}
+.ability-puro-notice-icon { font-size: 20px; flex-shrink: 0; }
+
+/* ── Badge exclusivo ────────────────────────────────────────── */
+.ability-card .badge-exclusive {
+  background: rgba(26,107,204,0.12); color: #1a6bcc;
+  padding: 2px 7px; border-radius: 8px; font-size: 10px;
+  font-family: var(--font-heading);
+}
+.ability-card-exclusive { border-left: 3px solid #1a6bcc !important; }
+
+/* ── Card de subclasse disponível (não aprendida) ───────────── */
+.ability-card-subclass-available {
+  border-left: 3px solid rgba(26,107,204,0.35);
+  background: rgba(26,107,204,0.03);
+}
+
+/* ── Details/Summary para habilidades não aprendidas ───────── */
+.ability-learn-details {
+  margin-top: 10px;
+}
+.ability-learn-summary {
+  font-family: var(--font-heading);
+  font-size: 12px; color: var(--gold);
+  cursor: pointer; padding: 7px 10px;
+  border: 1px dashed var(--line); border-radius: 6px;
+  list-style: none; user-select: none;
+  transition: background .12s;
+}
+.ability-learn-summary:hover { background: rgba(156,122,60,0.06); }
+.ability-learn-summary::-webkit-details-marker { display: none; }
+.ability-learn-details[open] .ability-learn-summary {
+  border-style: solid; border-color: var(--gold);
+  background: rgba(156,122,60,0.05);
+}
+
 /* ================================================================
    IMPRESSÃO — Ajustes para subclasse e itens com notas
    ================================================================ */
