@@ -323,7 +323,7 @@ function calcDodgeChance(character) {
     dodge -= 2;
   }
   dodge += sumAccessoryEffectValue(character, "dodge");
-  return Math.max(1, dodge);
+  return Math.min(18, Math.max(1, dodge));
 }
 
 /* Bônus de Cura: aplicado a magias/habilidades que curam "+SAB". O Clérigo dobra esse
