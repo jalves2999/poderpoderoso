@@ -206,6 +206,7 @@ function renderSession(s){
     <span class="session-chevron">▶</span>
     <input class="session-name-input" value="${esc(s.name)}" placeholder="Nome da sessão" data-field="name" data-sid="${s.id}">
     <span class="session-meta">${lc} local${lc!==1?"is":""}</span>
+    <button class="btn-print-session" data-print-session="${s.id}" title="Imprimir esta sessão">🖨</button>
     <button class="btn-del-session" data-del-session="${s.id}" title="Excluir sessão">🗑</button>
   </div>
   <div class="session-body">
@@ -385,6 +386,14 @@ function bindAll(){
     });
   });
 
+  // Imprimir sessão
+  L.querySelectorAll("[data-print-session]").forEach(btn=>{
+    btn.addEventListener("click", e => {
+      e.stopPropagation();
+      printSession(btn.dataset.printSession);
+    });
+  });
+
   // Deletar local
   L.querySelectorAll("[data-del-loc]").forEach(btn=>{
     btn.addEventListener("click",()=>{
@@ -549,6 +558,109 @@ function bindAll(){
       spSave();render();reopenBlocks(btn.dataset.sid,btn.dataset.lid);
     });
   });
+}
+
+/* ── Impressão de sessão ───────────────────────────────────────── */
+function printSession(sid) {
+  const s = findSession(sid);
+  if (!s) return;
+
+  const DIFF_LABEL = ["","Fácil","Normal","Difícil","Elite","Lendário"];
+  const TYPE_LABEL = { cidade:"🏘 Cidade", caminho:"🛤 Caminho", caverna:"🕳 Caverna", outro:"📍 Outro" };
+  const TIER_PT    = { comum:"Comum", raro:"Raro", magico:"Mágico", lendario:"Lendário", ancestral:"Ancestral" };
+
+  const renderLocHtml = (l) => {
+    const npcsHtml = l.npcs.length ? `
+      <div class="p-section">
+        <div class="p-section-title">👤 NPCs</div>
+        ${l.npcs.map(n => `
+          <div class="p-entry ${n.checked?"p-checked":""}">
+            <span class="p-check">${n.checked?"☑":"☐"}</span>
+            <div class="p-entry-body">
+              <strong>${esc(n.name)}</strong>${n.desc?` — ${esc(n.desc)}`:""}
+              ${n.shop && n.items.length ? `
+                <div class="p-shop">
+                  <em>Loja:</em>
+                  ${n.items.map(it=>`<span class="p-shop-item">${esc(it.name)}${it.price?` · <strong>${esc(it.price)}</strong>`:""}</span>`).join("")}
+                </div>` : ""}
+            </div>
+          </div>`).join("")}
+      </div>` : "";
+
+    const enemiesHtml = l.enemies.length ? `
+      <div class="p-section">
+        <div class="p-section-title">⚔ Inimigos</div>
+        ${l.enemies.map(e => `
+          <div class="p-entry ${e.checked?"p-checked":""}">
+            <span class="p-check">${e.checked?"☑":"☐"}</span>
+            <div class="p-entry-body">
+              <strong>${esc(e.name)}</strong> — Dif.${e.difficulty} ${DIFF_LABEL[e.difficulty]||""}${e.category?` · ${esc(e.category)}`:""}
+              ${e.drops.length ? `<div class="p-drops">Drops: ${e.drops.map(d=>esc(d.name)+(d.tier&&d.tier!=="comum"?" ("+TIER_PT[d.tier]+")":"")).join(", ")}</div>` : ""}
+            </div>
+          </div>`).join("")}
+      </div>` : "";
+
+    const treasureHtml = l.treasure.length ? `
+      <div class="p-section">
+        <div class="p-section-title">💰 Tesouro</div>
+        ${l.treasure.map(t => `
+          <div class="p-entry ${t.checked?"p-checked":""}">
+            <span class="p-check">${t.checked?"☑":"☐"}</span>
+            <div class="p-entry-body">
+              ${esc(t.name)}${t.tier&&t.tier!=="comum"?` <em>(${TIER_PT[t.tier]})</em>`:""}
+            </div>
+          </div>`).join("")}
+      </div>` : "";
+
+    return `
+      <div class="p-location">
+        <div class="p-location-head">
+          <span class="p-location-type">${TYPE_LABEL[l.type]||l.type}</span>
+          <span class="p-location-name">${esc(l.name||"Local sem nome")}</span>
+        </div>
+        ${npcsHtml}${enemiesHtml}${treasureHtml}
+      </div>`;
+  };
+
+  const html = `<!DOCTYPE html>
+<html lang="pt-BR"><head>
+<meta charset="UTF-8">
+<title>${esc(s.name)} — Sessão</title>
+<style>
+  @page { margin: 15mm 14mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Georgia', serif; font-size: 11pt; color: #2a1a0e; line-height: 1.55; }
+  h1 { font-size: 20pt; border-bottom: 2px solid #9c7a3c; padding-bottom: 4mm; margin-bottom: 4mm; color: #3a2810; }
+  .p-notes { font-size: 10.5pt; color: #555; margin-bottom: 6mm; font-style: italic; white-space: pre-wrap; }
+  .p-location { border: 1px solid #c8a87a; border-left: 4px solid #9c7a3c; border-radius: 4px; padding: 5mm; margin-bottom: 5mm; break-inside: avoid; }
+  .p-location-head { display: flex; align-items: baseline; gap: 8px; margin-bottom: 4mm; }
+  .p-location-type { font-size: 9pt; background: #f5ead0; border: 1px solid #c8a87a; border-radius: 10px; padding: 1px 7px; color: #7a5c10; }
+  .p-location-name { font-size: 14pt; font-weight: bold; color: #3a2810; }
+  .p-section { margin-bottom: 3mm; }
+  .p-section-title { font-size: 9pt; text-transform: uppercase; letter-spacing: 0.4pt; color: #9c7a3c; margin-bottom: 2mm; font-weight: bold; }
+  .p-entry { display: flex; align-items: flex-start; gap: 5px; padding: 2mm 0; border-bottom: 1px solid #e8d8b0; }
+  .p-entry:last-child { border-bottom: none; }
+  .p-check { font-size: 13pt; flex-shrink: 0; color: #9c7a3c; line-height: 1.2; }
+  .p-entry-body { flex: 1; font-size: 10.5pt; }
+  .p-checked .p-entry-body { text-decoration: line-through; color: #999; }
+  .p-shop { font-size: 9.5pt; margin-top: 2mm; color: #555; }
+  .p-shop-item { display: inline-block; margin-right: 6px; }
+  .p-drops { font-size: 9.5pt; color: #666; margin-top: 1mm; }
+  @media print {
+    .p-location { break-inside: avoid; }
+  }
+</style>
+</head><body>
+  <h1>${esc(s.name)}</h1>
+  ${s.notes ? `<div class="p-notes">${esc(s.notes)}</div>` : ""}
+  ${s.locations.map(l => renderLocHtml(l)).join("")}
+</body></html>`;
+
+  const w = window.open("", "_blank", "width=900,height=700");
+  if (!w) { toast("⚠ Pop-up bloqueado. Permita pop-ups para esta página."); return; }
+  w.document.write(html);
+  w.document.close();
+  setTimeout(() => w.print(), 350);
 }
 
 /* ── Bootstrap ─────────────────────────────────────────────────── */
