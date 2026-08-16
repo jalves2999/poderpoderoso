@@ -1167,7 +1167,7 @@ const WEAPONS_ONE_HAND = [
     note: "Ao matar um inimigo com este punhal, o portador recupera 1d6 HP." },
 
   /* --- LENDÁRIOS (novos) --- */
-  { tier: "lendario", name: "Grande Espada do Crepúsculo", dmg: "1d20 + 1d8", req: "FOR (alto)", weight: 6, defenseDegrade: 0, slot: ["primary"],
+  { tier: "lendario", name: "Grande Espada do Crepúsculo", dmg: "1d20 + 1d8", req: "FOR alto", weight: 6, defenseDegrade: 0, slot: ["primary"],
     story: "Arma criada no momento exato de um eclipse que ocorreu durante a Grande Invasão de Atrelon. O ferreiro morreu no processo — a espada absorveu sua alma. O espírito ainda sussurra estratégias de batalha ao portador durante combates.",
     note: "Passivo: +1d8 de dano contra mortos-vivos e entidades de outro plano. Uma vez por combate: ataque extra gratuito ao reduzir um inimigo a 0 HP. Não degrada a Defesa enquanto equipada." },
 
@@ -1182,7 +1182,7 @@ const WEAPONS_ONE_HAND = [
   { tier: "raro", name: "Punhal da Abertura Vital", dmg: "2d6 + 1d4", req: "DEX/AGI", weight: 1, defenseDegrade: 2, slot: ["primary","secondary"],
     story: "Lâmina triangular que cria feridas que não fecham. Artesanato de um assassino que estudou anatomia por décadas.",
     note: "⚠ Acertos causam Sangramento (1d6/rodada, 3 rodadas). Em Falha Crítica (1 natural), o portador sofre o sangramento em si mesmo." },
-  { tier: "raro", name: "Maul da Pedra Viva", dmg: "2d10", req: "FOR alta", weight: 15, defenseDegrade: null, slot: ["primary"], heavyTwoHanded: true,
+  { tier: "raro", name: "Maul da Pedra Viva", dmg: "2d10", req: "FOR alto", weight: 15, defenseDegrade: null, slot: ["primary"], heavyTwoHanded: true,
     story: "Maul talhado de uma única pedra das Montanhas de Atrelon. Mais pesado que qualquer arma forjada.",
     note: "⚠ Usa DUAS Ações de Combate por ataque. Em compensação, ignora 3 pontos de Defesa Física do alvo." },
   { tier: "raro", name: "Espada do Eco Duplo", dmg: "1d10 + 1d8", req: "AGI/DEX", weight: 3, defenseDegrade: 1, slot: ["primary","secondary"],
@@ -1289,7 +1289,7 @@ const WEAPONS_ONE_HAND = [
 
   /* ── RAS'KURU (Divindade dos Orcs — Deus da Guerra e Resistência) ── */
   { tier: "ancestral", divine: "Ras'kuru", race: "orc",
-    name: "Garra de Ras'kuru", dmg: "2d8 + 1d10", req: "FOR alta", weight: 5, defenseDegrade: 3,
+    name: "Garra de Ras'kuru", dmg: "2d8 + 1d10", req: "FOR alto", weight: 5, defenseDegrade: 3,
     slot: ["primary"],
     story: "Ras'kuru perdeu a mão direita na primeira batalha que os orcs travaram ao lado de humanos contra os elfos. A mão caiu e no chão se transformou em esta garra de metal que nunca enferruja. Orcs acreditam que a garra é literalmente a mão do deus — que ele escolheu um orc para empunhá-la cada geração. O portador atual sente os sonhos de todos os portadores anteriores.",
     note: "🌟 DIVINO — Resistência de Ras'kuru: ao receber dano que reduziria o portador abaixo de 50% HP, pode declarar 'Resistência' (1x/combate) — o dano é reduzido à metade e o portador ganha +1d10 de dano nos próximos 2 turnos (raiva purificada). Passivo: imune a Derrubada e Atordoado. Se o portador morrer empunhando a Garra, todos os aliados em raio 6 hex ganham +2d8 de dano por 1 rodada (sacrifício inspira).",
@@ -1407,14 +1407,14 @@ const WEAPONS_ONE_HAND = [
 const WEAPONS_TWO_HAND = [
   /* --- COMUNS --- */
   { tier: "comum", name: "Espada de Duas Mãos", dmg: "1d12", req: "FOR", weight: 7, defenseDegrade: null, slot: ["primary"], note: "Alto dano, sem defesa ativa.", heavyTwoHanded: true },
-  { tier: "comum", name: "Machado Grande", dmg: "1d12 + 1d4", req: "FOR (alto)", weight: 9, defenseDegrade: null, slot: ["primary"], note: "Dano altíssimo.", heavyTwoHanded: true },
+  { tier: "comum", name: "Machado Grande", dmg: "1d12 + 1d4", req: "FOR alto", weight: 9, defenseDegrade: null, slot: ["primary"], note: "Dano altíssimo.", heavyTwoHanded: true },
   { tier: "comum", name: "Martelo de Guerra", dmg: "1d10 + 1d4", req: "FOR", weight: 8, defenseDegrade: null, slot: ["primary"], note: "Bom contra armaduras pesadas.", heavyTwoHanded: true },
   { tier: "comum", name: "Lança", dmg: "1d10", req: "FOR/DEX", weight: 6, defenseDegrade: null, slot: ["primary"], note: "Alcance 2 hexágonos corpo a corpo.", heavyTwoHanded: true },
   { tier: "comum", name: "Alabarda", dmg: "1d10 + 1d6", req: "FOR", weight: 8, defenseDegrade: null, slot: ["primary"], note: "Alcance 2 hex; Ataques de Oportunidade a 2 hex.", heavyTwoHanded: true },
   { tier: "comum", name: "Foice de Guerra", dmg: "1d10 + 1d4", req: "FOR/AGI", weight: 6, defenseDegrade: null, slot: ["primary"], note: "Acerto Crítico atinge também um inimigo adjacente com 1d6.", heavyTwoHanded: true },
 
   /* --- RAROS --- */
-  { tier: "raro", name: "Maul de Pedra Negra", dmg: "1d12 + 1d6", req: "FOR (alto)", weight: 12, defenseDegrade: null, slot: ["primary"],
+  { tier: "raro", name: "Maul de Pedra Negra", dmg: "1d12 + 1d6", req: "FOR alto", weight: 12, defenseDegrade: null, slot: ["primary"],
     story: "Esculpido de um único bloco de obsidiana das Cavernas de Durrak, onde o calor do subsolo impregna a rocha com energia bruta. O primeiro golpe de cada combate sempre causa Atordoamento.",
     note: "Primeiro ataque do combate: o alvo perde 1 Ação no próximo turno (independente de acertar).", heavyTwoHanded: true },
 
@@ -1430,7 +1430,7 @@ const WEAPONS_TWO_HAND = [
     note: "Magias de veneno conjuradas com este báculo adicionam +1d12. Uma vez por sessão: ao acertar um ataque, injeta Veneno do Abismo — 1d20 de dano distribuído por 5 rodadas.", heavyTwoHanded: true },
 
   /* --- LENDÁRIOS (novos) --- */
-  { tier: "lendario", name: "Malho do Trovão Petrificado", dmg: "1d12 + 1d12 + 1d6", req: "FOR (alto)", weight: 15, defenseDegrade: null, slot: ["primary"],
+  { tier: "lendario", name: "Malho do Trovão Petrificado", dmg: "1d12 + 1d12 + 1d6", req: "FOR alto", weight: 15, defenseDegrade: null, slot: ["primary"],
     story: "Um raio caiu no mesmo lugar por 40 dias consecutivos durante uma tempestade sobrenatural em Atrelon. Um anão encontrou o solo vitrificado e passou 10 anos moldando o martelo. A tormenta diz-se ter sido invocada pelo Lich das Montanhas como experimento.",
     note: "Ao acertar: cria uma onda de choque que empurra o alvo 2 hex e força todos os inimigos num raio de 2 hex a testar Resistência (difícil) ou cair prostrados. Dano de trovão +1d12 contra alvos usando armadura metálica.", heavyTwoHanded: true },
 
@@ -1453,7 +1453,7 @@ const WEAPONS_TWO_HAND = [
   { tier: "raro", name: "Alabarda do Vento Cortante", dmg: "1d12 + 1d10", req: "FOR/AGI", weight: 8, defenseDegrade: null, slot: ["primary"], heavyTwoHanded: true,
     story: "Lâmina em crescente que cria vácuo de ar ao girar. O giro é poderoso demais para ser controlado com precisão.",
     note: "⚠ Ataques atingem uma área de arco (até 2 inimigos adjacentes com uma Ação), mas o portador não pode usar Reações na rodada em que atacar com esta arma — o giro o desprotege completamente." },
-  { tier: "raro", name: "Claymore do Colapso", dmg: "2d8 + 1d8", req: "FOR alta", weight: 10, defenseDegrade: null, slot: ["primary"], heavyTwoHanded: true,
+  { tier: "raro", name: "Claymore do Colapso", dmg: "2d8 + 1d8", req: "FOR alto", weight: 10, defenseDegrade: null, slot: ["primary"], heavyTwoHanded: true,
     story: "Espada de duas mãos com lâmina que aumenta de peso ao descer — a inércia é brutal mas incontrolável.",
     note: "⚠ Após cada ataque (acerto ou erro), o portador move-se obrigatoriamente 1 hexágono na direção do alvo (sem custo de Ação, mas involuntário). Se houver parede/obstáculo, para. Se acertar, o alvo é Derrubado automaticamente além do dano." },
   { tier: "raro", name: "Bazão da Cobra Invertida", dmg: "1d12 + 1d8", req: "INT/SAB", weight: 4, defenseDegrade: null, slot: ["primary"], heavyTwoHanded: true,
@@ -1488,7 +1488,7 @@ const WEAPONS_TWO_HAND = [
 
   /* ── ÚNICOS AMALDIÇOADOS — Armas de 2M ── */
   { tier: "lendario", cursed: true,
-    name: "Báculo da Explosão de Mana", dmg: "1d6 + 1d4", req: "INT alta", weight: 3,
+    name: "Báculo da Explosão de Mana", dmg: "1d6 + 1d4", req: "INT alto", weight: 3,
     defenseDegrade: null, slot: ["primary"], heavyTwoHanded: true,
     story: "Criado por um mago que descobriu que HP é apenas mana condensada em carne. Usou o báculo durante 10 anos antes de morrer — não em batalha, mas de velhice precoce, com 34 anos de idade real mas aparência de 90. O báculo estava em perfeito estado ao seu lado.",
     note: "⚠ AMALDIÇOADA — Explosão de Mana: Ao conjurar a magia Explosão de Mana através deste báculo, o conjurador pode sacrificar HP permanentemente (não retorna com descanso — é HP máximo perdido para sempre). A cada 5 HP máx sacrificados, adiciona +1d20 de dano numa área 3x3 hex. Não há limite de sacrifício por conjuração. Se o conjurador chegar a 0 HP máx, morre instantaneamente e o báculo explode causando dano igual ao HP sacrificado em raio 10 hex.",
@@ -1921,7 +1921,7 @@ const WEAPONS_RANGED = [
     note: "Flechas disparadas deste arco ignoram Cobertura Parcial. Alcance máximo +2 hex." },
 
   /* --- MÁGICOS --- */
-  { tier: "magico", name: "Arco Élfico da Serpente Alada", dmg: "1d8 + 1d6", range: 16, req: "DEX (alto)", weight: 2, defenseDegrade: null, slot: ["primary"],
+  { tier: "magico", name: "Arco Élfico da Serpente Alada", dmg: "1d8 + 1d6", range: 16, req: "DEX alto", weight: 2, defenseDegrade: null, slot: ["primary"],
     story: "Presenteado pelos elfos de Sylvara a um caçador que salvou um ninho de cobras sagradas de Jurgmund. A corda é tecida com cabelos de elfa e veneno solidificado — nunca arrebenta.",
     note: "Flechas envenenadas automaticamente: 1d4 de dano contínuo por 2 rodadas. Alcance superior: ignora penalidade de longo alcance." },
 
@@ -2038,7 +2038,7 @@ const ARMORS = [
   { tier: "comum", name: "Armadura de Couro Batido", physDefense: 3, magDefense: 0, weight: 7, movePenalty: 0, req: "DEX", note: "Camadas sobrepostas; melhor proteção sem perder mobilidade." },
   { tier: "comum", name: "Cota de Malha", physDefense: 5, magDefense: 0, weight: 14, movePenalty: 1, req: "FOR", note: "Padrão de infantaria pesada." },
   { tier: "comum", name: "Armadura de Placas Parcial", physDefense: 7, magDefense: 0, weight: 20, movePenalty: 2, req: "FOR", note: "Cobertura completa de torso e membros; movimento reduzido." },
-  { tier: "comum", name: "Armadura de Placas Completa", physDefense: 9, magDefense: 0, weight: 28, movePenalty: 3, req: "FOR alta", note: "Proteção máxima; apenas para tanques de combate." },
+  { tier: "comum", name: "Armadura de Placas Completa", physDefense: 9, magDefense: 0, weight: 28, movePenalty: 3, req: "FOR alto", note: "Proteção máxima; apenas para tanques de combate." },
   { tier: "comum", name: "Vestes Arcanas", physDefense: 1, magDefense: 4, weight: 2, movePenalty: 0, req: "INT/SAB", note: "Tecido encantado que desvia energias mágicas." },
   { tier: "comum", name: "Vestes Sagradas", physDefense: 2, magDefense: 3, weight: 3, movePenalty: 0, req: "SAB", note: "Usada por clérigos; equilíbrio entre proteção física e mágica." },
   { tier: "comum", name: "Manto das Sombras", physDefense: 2, magDefense: 1, weight: 2, movePenalty: 0, req: "AGI", note: "+1d4 em testes de Furtividade enquanto equipada." },
@@ -2079,7 +2079,7 @@ const ARMORS = [
     note: "A cada inimigo abatido, +1d4 de dano temporário (não acumula além +1d8). SET — Berserker (1/3): Ira Sem Limite.",
     setBonus: { pieces: 3, ability: "Ira Sem Limite", effect: "Ao abater um inimigo, repete o valor exato de dano num segundo alvo em alcance sem re-rolar dados. Sem custo de Ação. (1x/batalha)" } },
 
-  { tier: "lendario", setName: "Muralha de Durrak", name: "Armadura de Ferro Negro de Durrak (Muralha de Durrak)", physDefense: 9, magDefense: 2, weight: 30, movePenalty: 3, req: "FOR alta",
+  { tier: "lendario", setName: "Muralha de Durrak", name: "Armadura de Ferro Negro de Durrak (Muralha de Durrak)", physDefense: 9, magDefense: 2, weight: 30, movePenalty: 3, req: "FOR alto",
     story: "Liga de minério negro extraído sob Durrak antes de cair. O ferreiro que a finalizou foi o último a sair das forjas enquanto a cidade ruía.",
     note: "HP < 25%: +1d8 Defesa Física automático até fim do combate. Imune a Derrubada enquanto de pé. SET — Muralha de Durrak (2/3): Bastião Inabalável.",
     setBonus: { pieces: 3, ability: "Bastião Inabalável", effect: "Reação gratuita: ao aliado adjacente receber dano letal, você absorve todo o dano (Resistência normal: metade). (1x/batalha)" } },
@@ -2108,7 +2108,7 @@ const ARMORS = [
   { tier: "raro", name: "Couro do Predador", physDefense: 3, magDefense: 2, weight: 4, movePenalty: -1, req: "AGI",
     story: "Couro de uma criatura das planícies que caçava em silêncio absoluto. Ao vestir, o portador herda parte do instinto do animal.",
     note: "+1 Movimento (movePenalty negativo = bônus). +1d6 em testes de Furtividade. MAS o portador fica levemente mais agressivo — ao receber dano em combate, faz Teste de Força de Vontade (normal) ou usa sua próxima Ação para atacar o agressor (não para mover ou usar habilidade)." },
-  { tier: "raro", name: "Placa do Guardião Imóvel", physDefense: 9, magDefense: 1, weight: 20, movePenalty: 3, req: "FOR alta",
+  { tier: "raro", name: "Placa do Guardião Imóvel", physDefense: 9, magDefense: 1, weight: 20, movePenalty: 3, req: "FOR alto",
     story: "A armadura mais pesada que pode ser forjada sem magia. Um guerreiro que a usa é uma fortaleza — que não se move.",
     note: "⚠ Defesa Física máxima para tier raro, mas −3 Movimento e imobilidade parcial: se o portador não se mover neste turno, ganha +2 de Defesa Física adicional (bônus passivo de posição). Ideal para tanques que seguram linha." },
 
@@ -2122,7 +2122,7 @@ const ARMORS = [
     curseDetails: "Dungeon: Templo do Sofrimento Eterno (Deserto Carmesim, dif.4). O HP dobrado é calculado pelo app como +999 HP — o Mestre deve aplicar manualmente o dobro e reverter os recursos." },
 
   { tier: "lendario", cursed: true,
-    name: "Casca do Caranguejo Primordial", physDefense: 12, magDefense: 0, weight: 25, movePenalty: 4, req: "FOR alta",
+    name: "Casca do Caranguejo Primordial", physDefense: 12, magDefense: 0, weight: 25, movePenalty: 4, req: "FOR alto",
     story: "Não é uma armadura forjada — é a casca real de um Caranguejo Primordial que habitava o fundo do Grande Lago antes de Magnalaga existir. Quando o portador a veste, a casca se funde parcialmente com seu corpo. Difícil de tirar. Muito difícil.",
     note: "⚠ AMALDIÇOADA — Fusão Parcial: Defesa Física 12 (a maior do mundo). Mas −4 Movimento, imune a Empurrão e Derrubada (bom) E também imune a Recuar e Movimento Voluntário (ruim — o portador literalmente não consegue se mover mais de 1 hex por Ação de Movimento). Para TIRAR a armadura: requer 30 minutos e teste de FOR (crítico) ou assistência de um clérigo. Se forçar a remoção sem o teste, perde 2d10 HP máx permanentemente.",
     curseDetails: "Localização: Fundo do lago, na câmara do Caranguejo Primordial (dif.4, único encontro no jogo com esta criatura)." },

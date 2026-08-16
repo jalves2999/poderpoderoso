@@ -583,8 +583,20 @@ function checkItemRequirement(character, baseData) {
   return { met, requirement };
 }
 
-/* Penalidade de Chance de Acerto por não cumprir requisito da arma equipada.
-   Retorna 0 se cumprir ou se não houver arma/requisito. */
+/* Formata o campo req para exibição legível ao jogador.
+   "FOR"      → "FOR ≥ 1"
+   "FOR alto" → "FOR ≥ 3"
+   "FOR/DEX"  → "FOR ≥ 1 ou DEX ≥ 1"  */
+function formatReq(reqText) {
+  if (!reqText || reqText === "—") return "—";
+  if (reqText === "qualquer") return "Qualquer atributo";
+  const isHigh  = /alto|alta/i.test(reqText);
+  const min     = isHigh ? REQ_THRESHOLD_HIGH : REQ_THRESHOLD_NORMAL;
+  const cleaned = reqText.replace(/\s*(alto|alta|\(alto\)|\(alta\))/gi, "").trim();
+  const attrs   = cleaned.split(/[/,\s]+/).filter(a => ATTRS.includes(a.toUpperCase())).map(a => a.toUpperCase());
+  if (attrs.length === 0) return reqText;
+  return attrs.map(a => `${a} ≥ ${min}`).join(" ou ");
+}
 function calcWeaponRequirementPenalty(character) {
   const primary = getEquippedItem(character, "primary");
   if (!primary || !primary.baseData) return 0;
@@ -1185,9 +1197,9 @@ function renderEquipmentStep() {
 
   allOptions.forEach(opt => {
     const selected = wizard.equipment.some(e => e.name === opt.name);
-    const reqTag   = opt.kind === "weapon" && opt.req ? ` [${opt.req}]` : "";
+    const reqTag    = opt.kind === "weapon" && opt.req ? ` [${formatReq(opt.req)}]` : "";
     const metaLabel = opt.kind === "weapon"
-      ? `${opt.dmg || "—"}${opt.req ? " · req. " + opt.req : ""} · ${opt.weight}kg`
+      ? `${opt.dmg || "—"}${opt.req ? " · req. " + formatReq(opt.req) : ""} · ${opt.weight}kg`
       : opt.kind === "armor"  ? `Def. Física ${opt.physDefense} · ${opt.weight}kg`
       : opt.kind === "shield" ? `Def. Física +${opt.physDefense} · ${opt.weight}kg`
       : `Item geral · ${opt.weight || 0}kg`;
@@ -2050,6 +2062,8 @@ function renderRulesTab() {
                 <li>HP máximo: <code>20 + FOR × hpPerFor</code> (varia por classe)</li>
                 <li>Dano natural corpo a corpo (tabela abaixo)</li>
                 <li>Carga máxima: <code>20 + FOR × 5</code></li>
+                <li>Armas com req. <strong>FOR</strong> exigem FOR ≥ 1</li>
+                <li>Armas com req. <strong>FOR alto</strong> exigem FOR ≥ 3 — armas pesadas e de alta brutalidade</li>
               </ul>
               <div class="rules-sub-table">
                 <div class="rules-sub-row"><span>FOR 0</span><span>—</span></div>
@@ -2070,6 +2084,7 @@ function renderRulesTab() {
                 <li>+1 Ação de Combate a cada 5 DEX</li>
                 <li>Testes de precisão, ladinagem e armas de arremesso</li>
                 <li>Armas com req. DEX exigem pelo menos <strong>1 ponto em DEX</strong> para usar sem penalidade</li>
+                <li>Armas com req. <strong>DEX alto</strong> exigem DEX ≥ 3 — armas técnicas avançadas</li>
               </ul>
             </div>
             <div class="rules-attr-card">
@@ -2776,7 +2791,7 @@ function renderEquippedItemsPanel(character) {
     if (bd.movePenalty)   chips.push({ k:"🏃 Movimento",   v: bd.movePenalty > 0 ? `−${bd.movePenalty}` : `+${-bd.movePenalty}`, cls: bd.movePenalty > 0 ? "chip-warn" : "chip-def" });
     if (bd.weight != null) chips.push({ k:"⚖ Peso",        v:`${bd.weight}kg`,     cls:"chip-neutral" });
     if (bd.range)          chips.push({ k:"🎯 Alcance",    v:`${bd.range}hex`,     cls:"chip-neutral" });
-    if (bd.req)            chips.push({ k:"📋 Req.",        v: bd.req,              cls:"chip-neutral" });
+    if (bd.req)            chips.push({ k:"📋 Req.",        v: formatReq(bd.req),              cls:"chip-neutral" });
     // magicBonus
     if (bd.magicBonus) {
       const MB_LABELS = { hp:"❤ HP", move:"🏃 Mov", actions:"⚡ Ações", spellActions:"✨ Ações Magia", slots:"🔮 Slots", carry:"📦 Carga", critChance:"🎯 Chance Crit", critDamage:"💥 Dano Crit %" };
@@ -3530,7 +3545,7 @@ function renderEquipmentSection(character) {
       chips = [
         { label: "Dano", value: itemData.dmg || "—", kind: "damage" },
         { label: "Peso", value: `${itemData.weight}kg`, kind: "neutral" },
-        { label: "Requisito", value: itemData.req || "—", kind: reqCheck.met ? "neutral" : "warn" },
+        { label: "Requisito", value: formatReq(itemData.req) || "—", kind: reqCheck.met ? "neutral" : "warn" },
         { label: "Defesa", value: defenseInfo, kind: defenseKind }
       ];
       if (itemData.range) chips.splice(1, 0, { label: "Alcance", value: `${itemData.range} hex`, kind: "neutral" });
@@ -3538,7 +3553,7 @@ function renderEquipmentSection(character) {
         chips.push({ label: "Esquiva", value: hasHeavyDefenseSkill ? "Sem penalidade" : "−2 (arma de 2 mãos pesada)", kind: hasHeavyDefenseSkill ? "neutral" : "warn" });
       }
       if (!reqCheck.met && cfg.key === "primary") {
-        requirementWarning = `<div class="equip-requirement-warning">⚠ Requisito não cumprido (${itemData.req}): −2 na Chance de Acerto enquanto esta arma estiver equipada como primária.</div>`;
+        requirementWarning = `<div class="equip-requirement-warning">⚠ Requisito não cumprido (${formatReq(itemData.req)}): −2 na Chance de Acerto enquanto esta arma estiver equipada como primária.</div>`;
       }
     }
     if (itemData && cfg.key === "shield") {
@@ -3555,11 +3570,11 @@ function renderEquipmentSection(character) {
         { label: "Def. Física", value: itemData.physDefense, kind: "defense" },
         { label: "Def. Mágica", value: itemData.magDefense, kind: "magic" },
         { label: "Peso", value: `${itemData.weight}kg`, kind: "neutral" },
-        { label: "Requisito", value: itemData.req || "—", kind: armorReqCheck.met ? "neutral" : "warn" }
+        { label: "Requisito", value: formatReq(itemData.req) || "—", kind: armorReqCheck.met ? "neutral" : "warn" }
       ];
       if (itemData.movePenalty) chips.push({ label: "Movimento", value: itemData.movePenalty < 0 ? `+${-itemData.movePenalty}` : `−${itemData.movePenalty}`, kind: itemData.movePenalty > 0 ? "warn" : "defense" });
       if (!armorReqCheck.met) {
-        requirementWarning = `<div class="equip-requirement-warning">⚠ Requisito não cumprido (${itemData.req}) — o mestre pode aplicar penalidades adicionais de manejo.</div>`;
+        requirementWarning = `<div class="equip-requirement-warning">⚠ Requisito não cumprido (${formatReq(itemData.req)}) — o mestre pode aplicar penalidades adicionais de manejo.</div>`;
       }
     }
     const subline = chips.length ? `<div class="equip-stat-chips">${chips.map(c => `<span class="equip-stat-chip equip-stat-chip-${c.kind}"><span class="equip-stat-chip-label">${c.label}</span>${c.value}</span>`).join("")}</div>` : "";
@@ -5162,7 +5177,7 @@ function openItemDetailModal(item, character) {
   if (bd.movePenalty)    chips.push({ icon:"🏃", label:"Pen. Movimento",val: bd.movePenalty > 0 ? `−${bd.movePenalty}` : `+${-bd.movePenalty}` });
   if (bd.penalty && bd.penalty !== "Nenhuma") chips.push({ icon:"⚠", label:"Penalidade", val: bd.penalty });
   if (bd.weight != null) chips.push({ icon:"⚖", label:"Peso",          val:`${bd.weight}kg` });
-  if (bd.req)            chips.push({ icon:"📋", label:"Requisito",     val: bd.req });
+  if (bd.req)            chips.push({ icon:"📋", label:"Requisito",     val: formatReq(bd.req) });
   if (item.qty > 1)      chips.push({ icon:"🔢", label:"Quantidade",    val: item.qty });
 
   // magicBonus
@@ -6311,7 +6326,7 @@ function renderItemsGlossary(query) {
         `<span class="equip-stat-chip equip-stat-chip-damage"><span class="equip-stat-chip-label">Dano</span>${w.dmg || "—"}</span>`,
         w.range ? `<span class="equip-stat-chip equip-stat-chip-neutral"><span class="equip-stat-chip-label">Alcance</span>${w.range} hex</span>` : "",
         `<span class="equip-stat-chip equip-stat-chip-neutral"><span class="equip-stat-chip-label">Peso</span>${w.weight}kg</span>`,
-        `<span class="equip-stat-chip equip-stat-chip-neutral"><span class="equip-stat-chip-label">Req.</span>${w.req || "—"}</span>`
+        `<span class="equip-stat-chip equip-stat-chip-neutral"><span class="equip-stat-chip-label">Req.</span>${formatReq(w.req)}</span>`
       ].filter(Boolean).join("");
       return renderItemGlossaryCard(w, chips);
     }).join("");
@@ -6344,7 +6359,7 @@ function renderItemsGlossary(query) {
         `<span class="equip-stat-chip equip-stat-chip-defense"><span class="equip-stat-chip-label">Def. Física</span>${a.physDefense}</span>`,
         `<span class="equip-stat-chip equip-stat-chip-magic"><span class="equip-stat-chip-label">Def. Mágica</span>${a.magDefense}</span>`,
         `<span class="equip-stat-chip equip-stat-chip-neutral"><span class="equip-stat-chip-label">Peso</span>${a.weight}kg</span>`,
-        `<span class="equip-stat-chip equip-stat-chip-neutral"><span class="equip-stat-chip-label">Req.</span>${a.req || "—"}</span>`
+        `<span class="equip-stat-chip equip-stat-chip-neutral"><span class="equip-stat-chip-label">Req.</span>${formatReq(a.req)}</span>`
       ].join("");
       return renderItemGlossaryCard(a, chips);
     }).join("");
