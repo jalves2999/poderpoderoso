@@ -84,9 +84,11 @@ function openPicker(mode,title,chips,cb){
   });
 
   const priceRow=document.getElementById("picker-price-row");
-  if(mode==="shop-item"){
+  if(mode==="shop-item"||mode==="shop-spell"||mode==="skill"){
     priceRow.style.display="flex";
     document.getElementById("picker-price-input").value="";
+    document.getElementById("picker-price-input").placeholder=
+      mode==="skill" ? "Preço para aprender (ex: 20 prata...)" : "Preço (ex: 10 prata, 2 ouro...)";
     document.getElementById("picker-confirm").onclick=()=>{
       if(!pickerSelected)return;
       cb({item:pickerSelected,price:document.getElementById("picker-price-input").value.trim()});
@@ -119,17 +121,33 @@ function renderPickerList(q){
       icon:"✨",name:s.name,sub:`Nível ${s.level} · ${(s.effect||"").substring(0,50)}…`}));
 
   } else if(pickerMode==="skill"){
-    // Perícias de todas as classes
+    // Perícias de todas as classes + perícias gerais
     const cls=typeof CLASSES!=="undefined"?CLASSES:{};
+    const genSkills=typeof GENERAL_SKILLS!=="undefined"?GENERAL_SKILLS:[];
     const allSkills=[];
-    Object.entries(cls).forEach(([key,c])=>{
-      (c.skillsClass||[]).forEach(s=>{
-        allSkills.push({_raw:{name:s.name,attr:s.attr||"",tier:"comum"},
-          icon:"📚",name:s.name,sub:`${c.name} · ${s.attr||""} · ${(s.desc||"").substring(0,50)}`});
+
+    // Perícias gerais
+    genSkills.forEach(s=>{
+      allSkills.push({
+        _raw:{name:s.name,attr:s.attr||"",tier:"comum",classKey:"geral"},
+        icon:"🌐",name:s.name,
+        sub:`Geral · ${s.attr||""} · ${(s.desc||"").substring(0,60)}`
       });
     });
+
+    // Perícias por classe
+    Object.entries(cls).forEach(([key,c])=>{
+      (c.skillsClass||[]).forEach(s=>{
+        allSkills.push({
+          _raw:{name:s.name,attr:s.attr||"",tier:"comum",classKey:key},
+          icon:"📚",name:s.name,
+          sub:`${c.name} · ${s.attr||""} · ${(s.desc||"").substring(0,50)}`
+        });
+      });
+    });
+
     items=allSkills.filter(s=>
-      (!pickerFilter||s.sub.toLowerCase().includes(pickerFilter))&&
+      (!pickerFilter||s._raw.classKey===pickerFilter||pickerFilter==="")&&
       (!q||(s.name||"").toLowerCase().includes(q)||(s.sub||"").toLowerCase().includes(q))
     );
 
@@ -590,7 +608,7 @@ function bindAll(){
   L.querySelectorAll("[data-add-skill]").forEach(btn=>{
     btn.addEventListener("click",()=>{
       openPicker("skill","📚 Perícia a Ensinar",
-        [["Todas",""],["Guerreiro","guerreiro"],["Mago","mago"],["Arqueiro","arqueiro"],["Ladino","ladino"],["Clérigo","clerigo"]],
+        [["Todas",""],["Gerais","geral"],["Guerreiro","guerreiro"],["Mago","mago"],["Arqueiro","arqueiro"],["Ladino","ladino"],["Clérigo","clerigo"]],
         ({item,price})=>{
           const n=findNPC(btn.dataset.sid,btn.dataset.lid,btn.dataset.addSkill);if(!n)return;
           if(!n.skills)n.skills=[];
