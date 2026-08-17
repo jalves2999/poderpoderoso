@@ -16,7 +16,14 @@ function uid()     { return Date.now().toString(36) + Math.random().toString(36)
 /* ── Modelos ───────────────────────────────────────────────────── */
 const newSession  = () => ({ id:uid(), name:"Nova Sessão", notes:"", locations:[], createdAt:Date.now() });
 const newLocation = t  => ({ id:uid(), name:"", type:t||"cidade", npcs:[], enemies:[], treasure:[] });
-const newNPC      = (n,d,shop) => ({ id:uid(), name:n, desc:d||"", shop:!!shop, items:[], checked:false });
+const newNPC = (n,d,shopType) => ({
+  id:uid(), name:n, desc:d||"",
+  shopType: shopType||"",      // ""=sem loja | "armas" | "magias" | "pocoes" | "pericias"
+  items:[],                    // itens à venda (armas/armaduras/acessórios/poções/magias)
+  skills:[],                   // perícias ensinadas [{name, attr, price}]
+  mission: null,               // null ou {desc:"", reward:""}
+  checked:false
+});
 const newEnemy    = (n,d,c)   => ({ id:uid(), name:n, difficulty:d||1, category:c||"", drops:[], checked:false });
 const newTreasure = (n,t)     => ({ id:uid(), name:n, tier:t||"comum", checked:false });
 const newShopItem = (n,t,p)   => ({ id:uid(), name:n, tier:t||"comum", price:p||"" });
@@ -95,18 +102,69 @@ function openPicker(mode,title,chips,cb){
 function renderPickerList(q){
   const el=document.getElementById("picker-list");
   let items=[];
+
   if(pickerMode==="enemy"){
     items=getBestiary()
       .filter(m=>(!pickerFilter||String(m.difficulty)===pickerFilter)&&
-                 (!q||m.name.toLowerCase().includes(q)||(m.category||"").toLowerCase().includes(q)))
+                 (!q||(m.name||"").toLowerCase().includes(q)||(m.category||"").toLowerCase().includes(q)))
       .map(m=>({_raw:m,icon:"💀",name:m.name,sub:`Dif.${m.difficulty} · ${m.category||"Criatura"}`}));
+
+  } else if(pickerMode==="shop-spell"){
+    // Magias do compêndio
+    const spells=(typeof GENERAL_SPELLS!=="undefined"?GENERAL_SPELLS:[])
+      .filter(Boolean)
+      .filter(s=>(!pickerFilter||String(s.level)===pickerFilter)&&
+                 (!q||(s.name||"").toLowerCase().includes(q)||(s.effect||"").toLowerCase().includes(q)));
+    items=spells.map(s=>({_raw:{name:s.name,tier:"magico",level:s.level,effect:s.effect},
+      icon:"✨",name:s.name,sub:`Nível ${s.level} · ${(s.effect||"").substring(0,50)}…`}));
+
+  } else if(pickerMode==="skill"){
+    // Perícias de todas as classes
+    const cls=typeof CLASSES!=="undefined"?CLASSES:{};
+    const allSkills=[];
+    Object.entries(cls).forEach(([key,c])=>{
+      (c.skillsClass||[]).forEach(s=>{
+        allSkills.push({_raw:{name:s.name,attr:s.attr||"",tier:"comum"},
+          icon:"📚",name:s.name,sub:`${c.name} · ${s.attr||""} · ${(s.desc||"").substring(0,50)}`});
+      });
+    });
+    items=allSkills.filter(s=>
+      (!pickerFilter||s.sub.toLowerCase().includes(pickerFilter))&&
+      (!q||(s.name||"").toLowerCase().includes(q)||(s.sub||"").toLowerCase().includes(q))
+    );
+
   } else {
-    items=getAllItems()
-      .filter(i=>(!pickerFilter||(i.tier||"comum")===pickerFilter)&&
-                 (!q||(i.name||"").toLowerCase().includes(q)||(i.effect||"").toLowerCase().includes(q)))
+    // Itens do compêndio (shop-item, item)
+    const catMap={
+      weapon:  [...(typeof WEAPONS_ONE_HAND!=="undefined"?WEAPONS_ONE_HAND:[]),
+                ...(typeof WEAPONS_TWO_HAND!=="undefined"?WEAPONS_TWO_HAND:[]),
+                ...(typeof WEAPONS_RANGED  !=="undefined"?WEAPONS_RANGED  :[]),
+                ...(typeof WEAPONS_MAGIC   !=="undefined"?WEAPONS_MAGIC   :[])].map(i=>({...i,_cat:"weapon"})),
+      armor:   (typeof ARMORS     !=="undefined"?ARMORS    :[]).map(i=>({...i,_cat:"armor"})),
+      accessory:(typeof ACCESSORIES!=="undefined"?ACCESSORIES:[]).map(i=>({...i,_cat:"accessory"})),
+      shield:  (typeof SHIELDS    !=="undefined"?SHIELDS   :[]).map(i=>({...i,_cat:"shield"})),
+      potion:  (typeof MISC_ITEMS !=="undefined"?MISC_ITEMS:[]).filter(i=>i&&i.subcategory==="potion").map(i=>({...i,_cat:"misc"})),
+      material:(typeof MISC_ITEMS !=="undefined"?MISC_ITEMS:[]).filter(i=>i&&(i.craftingMaterial||i.smithingMaterial)).map(i=>({...i,_cat:"misc"})),
+      scroll:  (typeof MISC_ITEMS !=="undefined"?MISC_ITEMS:[]).filter(i=>i&&(i.subcategory==="scroll"||i.subcategory==="recipe_scroll")).map(i=>({...i,_cat:"misc"})),
+    };
+    const all=[...Object.values(catMap).flat()];
+    const pool=pickerFilter&&catMap[pickerFilter]?catMap[pickerFilter]:all;
+    items=pool.filter(Boolean)
+      .filter(i=>!q||(i.name||"").toLowerCase().includes(q)||(i.effect||"").toLowerCase().includes(q))
       .map(i=>({_raw:i,icon:"🎒",name:i.name,
-                sub:[i.tier||"comum",i.dmg,i.physDefense!=null?"Def."+i.physDefense:null].filter(Boolean).join(" · ")}));
+                sub:[i.tier||"comum",i.dmg,i.physDefense!=null?"Def."+i.physDefense:null].filter(Boolean).join(" · ")}))
+      .filter(i=>i.name);
+    // Se filtro for tier (comum/raro/etc)
+    if(pickerFilter&&!catMap[pickerFilter]){
+      items=all.filter(Boolean)
+        .filter(i=>(!pickerFilter||(i.tier||"comum")===pickerFilter)&&
+                   (!q||(i.name||"").toLowerCase().includes(q)))
+        .map(i=>({_raw:i,icon:"🎒",name:i.name,
+                  sub:[i.tier||"comum",i.dmg,i.physDefense!=null?"Def."+i.physDefense:null].filter(Boolean).join(" · ")}))
+        .filter(i=>i.name);
+    }
   }
+
   pickerItems=items.slice(0,100);
   if(pickerItems.length===0){
     el.innerHTML=`<p style="text-align:center;padding:20px;color:var(--ink-soft);font-size:13px">Nenhum resultado.</p>`;
@@ -123,7 +181,7 @@ function renderPickerList(q){
   el.querySelectorAll(".picker-item").forEach(el2=>{
     el2.addEventListener("click",()=>{
       const it=pickerItems[parseInt(el2.dataset.idx)];
-      if(pickerMode==="shop-item"){
+      if(pickerMode==="shop-item"||pickerMode==="shop-spell"||pickerMode==="skill"){
         el.querySelectorAll(".picker-item").forEach(e=>e.style.background="");
         el2.style.background="rgba(156,122,60,.12)";
         pickerSelected=it._raw;
@@ -261,27 +319,65 @@ function renderLocation(sid,l){
 }
 
 function renderNPC(sid,lid,n){
+  const SHOP_ICONS = {armas:"⚔",magias:"✨",pocoes:"🧪",pericias:"📚"};
+  const SHOP_LABELS= {armas:"Armas, Armaduras & Acessórios",magias:"Magias & Pergaminhos",pocoes:"Poções & Materiais",pericias:"Mestre de Perícias"};
+  const shopIcon  = n.shopType ? SHOP_ICONS[n.shopType]  : "";
+  const shopLabel = n.shopType ? SHOP_LABELS[n.shopType] : "";
+
+  // Seção de itens da loja (armas/magias/poções)
+  const shopItemsHtml = (n.shopType && n.shopType !== "pericias") ? `
+    <div class="entry-subitems">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+        <span style="font-size:10px;color:var(--gold);font-family:var(--font-label);text-transform:uppercase;letter-spacing:.3px">${shopIcon} ${shopLabel}</span>
+        <button class="btn-loc-add" data-add-shop-item="${n.id}" data-sid="${sid}" data-lid="${lid}" style="font-size:10px;padding:2px 8px">+ Item</button>
+      </div>
+      ${n.items.length===0?`<p style="font-size:11px;color:var(--ink-soft)">Nenhum item.</p>`:
+        n.items.map(it=>`
+        <div class="entry-subitem">
+          <span class="entry-subitem-name">${esc(it.name)}</span>
+          <span class="entry-subitem-price">${esc(it.price||"—")}</span>
+          <button class="btn-del-subitem" data-del-shop-item="${it.id}" data-nid="${n.id}" data-sid="${sid}" data-lid="${lid}">✕</button>
+        </div>`).join("")}
+    </div>` : "";
+
+  // Seção de perícias ensinadas
+  const skillsHtml = (n.shopType === "pericias") ? `
+    <div class="entry-subitems">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+        <span style="font-size:10px;color:var(--gold);font-family:var(--font-label);text-transform:uppercase;letter-spacing:.3px">📚 Perícias Ensinadas</span>
+        <button class="btn-loc-add" data-add-skill="${n.id}" data-sid="${sid}" data-lid="${lid}" style="font-size:10px;padding:2px 8px">+ Perícia</button>
+      </div>
+      ${(n.skills||[]).length===0?`<p style="font-size:11px;color:var(--ink-soft)">Nenhuma perícia cadastrada.</p>`:
+        (n.skills||[]).map(sk=>`
+        <div class="entry-subitem">
+          <span class="entry-subitem-name">${esc(sk.name)}<span style="font-size:10px;color:var(--ink-soft);margin-left:4px">[${sk.attr||""}]</span></span>
+          <span class="entry-subitem-price">${esc(sk.price||"—")}</span>
+          <button class="btn-del-subitem" data-del-skill="${sk.id}" data-nid="${n.id}" data-sid="${sid}" data-lid="${lid}">✕</button>
+        </div>`).join("")}
+    </div>` : "";
+
+  // Seção de missão
+  const missionHtml = n.mission ? `
+    <div class="entry-subitems" style="border-top:1px solid var(--line);margin-top:6px;padding-top:6px">
+      <span style="font-size:10px;color:#e67e22;font-family:var(--font-label);text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:4px">📜 Missão</span>
+      <textarea class="sp-inline-ta" data-mission-desc="${n.id}" data-sid="${sid}" data-lid="${lid}" rows="2" placeholder="Descrição da missão...">${esc(n.mission.desc||"")}</textarea>
+      <input class="sp-inline-input" data-mission-reward="${n.id}" data-sid="${sid}" data-lid="${lid}" value="${esc(n.mission.reward||"")}" placeholder="Recompensa (ex: 50 prata + item raro)">
+      <button class="btn-loc-add" data-remove-mission="${n.id}" data-sid="${sid}" data-lid="${lid}" style="font-size:10px;color:#c0392b;border-color:#e74c3c;margin-top:4px">✕ Remover missão</button>
+    </div>` : `
+    <button class="btn-loc-add" data-add-mission="${n.id}" data-sid="${sid}" data-lid="${lid}" style="margin-top:6px;font-size:11px">📜 Adicionar Missão</button>`;
+
   return `
 <div class="entry-card" style="border-left:3px solid #8e44ad">
   <div class="entry-card-head">
     <div class="entry-check ${n.checked?"checked":""}" data-check-npc="${n.id}" data-sid="${sid}" data-lid="${lid}">${n.checked?"✓":""}</div>
     <div class="entry-card-body">
-      <div class="entry-card-name" style="${n.checked?"text-decoration:line-through;opacity:.5":""}">👤 ${esc(n.name||"NPC")}</div>
+      <div class="entry-card-name" style="${n.checked?"text-decoration:line-through;opacity:.5":""}">
+        👤 ${esc(n.name||"NPC")}
+        ${n.shopType?`<span style="font-size:11px;margin-left:6px;opacity:.7">${shopIcon} ${shopLabel}</span>`:""}
+        ${n.mission?`<span style="font-size:11px;margin-left:6px;color:#e67e22">📜</span>`:""}
+      </div>
       ${n.desc?`<div class="entry-card-sub">${esc(n.desc)}</div>`:""}
-      ${n.shop?`
-      <div class="entry-subitems">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
-          <span style="font-size:10px;color:var(--gold);font-family:var(--font-label);text-transform:uppercase;letter-spacing:.3px">🏪 Loja</span>
-          <button class="btn-loc-add" data-add-shop-item="${n.id}" data-sid="${sid}" data-lid="${lid}" style="font-size:10px;padding:2px 8px">+ Item</button>
-        </div>
-        ${n.items.length===0?`<p style="font-size:11px;color:var(--ink-soft)">Nenhum item.</p>`:
-          n.items.map(it=>`
-          <div class="entry-subitem">
-            <span class="entry-subitem-name">${esc(it.name)}</span>
-            <span class="entry-subitem-price">${esc(it.price||"—")}</span>
-            <button class="btn-del-subitem" data-del-shop-item="${it.id}" data-nid="${n.id}" data-sid="${sid}" data-lid="${lid}">✕</button>
-          </div>`).join("")}
-      </div>`:""}
+      ${shopItemsHtml}${skillsHtml}${missionHtml}
     </div>
   </div>
   <button class="btn-del-entry" data-del-npc="${n.id}" data-sid="${sid}" data-lid="${lid}">✕</button>
@@ -428,11 +524,17 @@ function bindAll(){
       const r=await miniPrompt([
         {key:"name",label:"Nome do NPC"},
         {key:"desc",label:"Papel / descrição (opcional)"},
-        {key:"shop",type:"checkbox",label:"É dono de loja?"},
+        {key:"shopType",type:"select",label:"Tipo de estabelecimento",options:[
+          ["","🚶 Sem loja"],
+          ["armas","⚔ Loja de Armas, Armaduras e Acessórios"],
+          ["magias","✨ Loja de Magias e Pergaminhos"],
+          ["pocoes","🧪 Loja de Poções e Materiais"],
+          ["pericias","📚 Mestre de Perícias"],
+        ]},
       ]);
       if(!r||!r.name)return;
       const l=findLocation(btn.dataset.sid,btn.dataset.addNpc);if(!l)return;
-      l.npcs.push(newNPC(r.name,r.desc,r.shop));
+      l.npcs.push(newNPC(r.name,r.desc,r.shopType));
       spSave();render();reopenBlocks(btn.dataset.sid,btn.dataset.addNpc);
     });
   });
@@ -457,13 +559,92 @@ function bindAll(){
   // Adicionar item de loja
   L.querySelectorAll("[data-add-shop-item]").forEach(btn=>{
     btn.addEventListener("click",()=>{
-      openPicker("shop-item","🏪 Item da Loja",
-        [["Todos",""],["Comum","comum"],["Raro","raro"],["Mágico","magico"],["Lendário","lendario"]],
+      // Descobrir o shopType do NPC
+      const n=findNPC(btn.dataset.sid,btn.dataset.lid,btn.dataset.addShopItem);
+      if(!n)return;
+      const st=n.shopType;
+      let title,chips,mode="shop-item";
+      if(st==="armas"){
+        title="⚔ Item para Loja de Armas/Armaduras";
+        chips=[["Todos",""],["Armas","weapon"],["Armaduras","armor"],["Acessórios","accessory"],["Escudos","shield"]];
+      } else if(st==="magias"){
+        title="✨ Magia ou Pergaminho";
+        chips=[["Todos",""],["Nível 1","1"],["Nível 2","2"],["Nível 3","3"],["Nível 4","4"],["Nível 5","5"]];
+        mode="shop-spell";
+      } else if(st==="pocoes"){
+        title="🧪 Poção ou Material";
+        chips=[["Todos",""],["Poções","potion"],["Materiais","material"],["Pergaminhos","scroll"]];
+      } else {
+        title="🎒 Item";
+        chips=[["Todos",""],["Comum","comum"],["Raro","raro"],["Lendário","lendario"]];
+      }
+      openPicker(mode,title,chips,({item,price})=>{
+        const npc=findNPC(btn.dataset.sid,btn.dataset.lid,btn.dataset.addShopItem);if(!npc)return;
+        npc.items.push(newShopItem(item.name,item.tier||"comum",price));
+        spSave();render();reopenBlocks(btn.dataset.sid,btn.dataset.lid);
+      });
+    });
+  });
+
+  // Adicionar perícia ensinada
+  L.querySelectorAll("[data-add-skill]").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      openPicker("skill","📚 Perícia a Ensinar",
+        [["Todas",""],["Guerreiro","guerreiro"],["Mago","mago"],["Arqueiro","arqueiro"],["Ladino","ladino"],["Clérigo","clerigo"]],
         ({item,price})=>{
-          const n=findNPC(btn.dataset.sid,btn.dataset.lid,btn.dataset.addShopItem);if(!n)return;
-          n.items.push(newShopItem(item.name,item.tier||"comum",price));
+          const n=findNPC(btn.dataset.sid,btn.dataset.lid,btn.dataset.addSkill);if(!n)return;
+          if(!n.skills)n.skills=[];
+          n.skills.push({id:uid(),name:item.name,attr:item.attr||"",price:price||""});
           spSave();render();reopenBlocks(btn.dataset.sid,btn.dataset.lid);
         });
+    });
+  });
+
+  // Deletar perícia
+  L.querySelectorAll("[data-del-skill]").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const n=findNPC(btn.dataset.sid,btn.dataset.lid,btn.dataset.nid);if(!n)return;
+      n.skills=(n.skills||[]).filter(s=>s.id!==btn.dataset.delSkill);
+      spSave();render();reopenBlocks(btn.dataset.sid,btn.dataset.lid);
+    });
+  });
+
+  // Adicionar missão ao NPC
+  L.querySelectorAll("[data-add-mission]").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const n=findNPC(btn.dataset.sid,btn.dataset.lid,btn.dataset.addMission);if(!n)return;
+      n.mission={desc:"",reward:""};
+      spSave();render();reopenBlocks(btn.dataset.sid,btn.dataset.lid);
+      // Focar no textarea da missão
+      setTimeout(()=>{
+        const ta=document.querySelector(`[data-mission-desc="${n.id}"]`);
+        if(ta)ta.focus();
+      },60);
+    });
+  });
+
+  // Remover missão
+  L.querySelectorAll("[data-remove-mission]").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const n=findNPC(btn.dataset.sid,btn.dataset.lid,btn.dataset.removeMission);if(!n)return;
+      n.mission=null;
+      spSave();render();reopenBlocks(btn.dataset.sid,btn.dataset.lid);
+    });
+  });
+
+  // Editar desc/reward da missão (autosave)
+  L.querySelectorAll("[data-mission-desc]").forEach(ta=>{
+    ta.addEventListener("input",()=>{
+      const n=findNPC(ta.dataset.sid,ta.dataset.lid,ta.dataset.missionDesc);
+      if(n&&n.mission)n.mission.desc=ta.value;
+      spSave();
+    });
+  });
+  L.querySelectorAll("[data-mission-reward]").forEach(inp=>{
+    inp.addEventListener("input",()=>{
+      const n=findNPC(inp.dataset.sid,inp.dataset.lid,inp.dataset.missionReward);
+      if(n&&n.mission)n.mission.reward=inp.value;
+      spSave();
     });
   });
 
@@ -570,21 +751,27 @@ function printSession(sid) {
   const TIER_PT    = { comum:"Comum", raro:"Raro", magico:"Mágico", lendario:"Lendário", ancestral:"Ancestral" };
 
   const renderLocHtml = (l) => {
+    const SHOP_LABELS={armas:"⚔ Loja de Armas/Armaduras",magias:"✨ Loja de Magias",pocoes:"🧪 Loja de Poções",pericias:"📚 Mestre de Perícias"};
     const npcsHtml = l.npcs.length ? `
       <div class="p-section">
         <div class="p-section-title">👤 NPCs</div>
-        ${l.npcs.map(n => `
+        ${l.npcs.map(n => {
+          const shopLabel=n.shopType?SHOP_LABELS[n.shopType]:"";
+          const shopItems=(n.shopType&&n.shopType!=="pericias"&&n.items.length)?
+            `<div class="p-shop"><em>${shopLabel}:</em> ${n.items.map(it=>`${esc(it.name)}${it.price?` · <strong>${esc(it.price)}</strong>`:""}`).join(", ")}</div>`:"";
+          const skillsSection=(n.shopType==="pericias"&&(n.skills||[]).length)?
+            `<div class="p-shop"><em>Perícias:</em> ${(n.skills||[]).map(s=>`${esc(s.name)} [${s.attr||""}]${s.price?` · ${esc(s.price)}`:""}`).join(", ")}</div>`:"";
+          const missionSection=n.mission?
+            `<div class="p-mission"><strong>📜 Missão:</strong> ${esc(n.mission.desc||"")}${n.mission.reward?`<br><em>Recompensa: ${esc(n.mission.reward)}</em>`:""}</div>`:"";
+          return `
           <div class="p-entry ${n.checked?"p-checked":""}">
             <span class="p-check">${n.checked?"☑":"☐"}</span>
             <div class="p-entry-body">
-              <strong>${esc(n.name)}</strong>${n.desc?` — ${esc(n.desc)}`:""}
-              ${n.shop && n.items.length ? `
-                <div class="p-shop">
-                  <em>Loja:</em>
-                  ${n.items.map(it=>`<span class="p-shop-item">${esc(it.name)}${it.price?` · <strong>${esc(it.price)}</strong>`:""}</span>`).join("")}
-                </div>` : ""}
+              <strong>${esc(n.name)}</strong>${n.desc?` — ${esc(n.desc)}`:""}${shopLabel?` <em>(${shopLabel})</em>`:""}
+              ${shopItems}${skillsSection}${missionSection}
             </div>
-          </div>`).join("")}
+          </div>`;
+        }).join("")}
       </div>` : "";
 
     const enemiesHtml = l.enemies.length ? `
@@ -646,6 +833,7 @@ function printSession(sid) {
   .p-shop { font-size: 9.5pt; margin-top: 2mm; color: #555; }
   .p-shop-item { display: inline-block; margin-right: 6px; }
   .p-drops { font-size: 9.5pt; color: #666; margin-top: 1mm; }
+  .p-mission { font-size: 10pt; margin-top: 2mm; padding: 2mm 3mm; background: #fef9f0; border-left: 3px solid #e67e22; border-radius: 3px; }
   @media print {
     .p-location { break-inside: avoid; }
   }
