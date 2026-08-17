@@ -418,8 +418,8 @@ function calcPhysicalDefense(character) {
   let def = 0;
   const armor = getEquippedItem(character, "armor");
   if (armor) def += (armor.baseData && armor.baseData.physDefense) || 0;
-  const shield = getEquippedItem(character, "shield");
-  if (shield) def += (shield.baseData && shield.baseData.physDefense) || 0;
+  // Escudos não somam Def. Física — sua vantagem é manter a chance de defesa
+  // sem o custo de redução por uso repetido (esquivas subsequentes).
   return def;
 }
 
@@ -1201,7 +1201,7 @@ function renderEquipmentStep() {
     const metaLabel = opt.kind === "weapon"
       ? `${opt.dmg || "—"}${opt.req ? " · req. " + formatReq(opt.req) : ""} · ${opt.weight}kg`
       : opt.kind === "armor"  ? `Def. Física ${opt.physDefense} · ${opt.weight}kg`
-      : opt.kind === "shield" ? `Def. Física +${opt.physDefense} · ${opt.weight}kg`
+      : opt.kind === "shield" ? `Escudo · ${opt.penalty && opt.penalty !== "Nenhuma" ? opt.penalty + " · " : ""}${opt.weight}kg`
       : `Item geral · ${opt.weight || 0}kg`;
     const displayName = opt.name + reqTag;
     const item = buildPickItem(displayName, metaLabel, opt.note || "", selected, () => {
@@ -2786,7 +2786,7 @@ function renderEquippedItemsPanel(character) {
     const bd = item.baseData || {};
     const chips = [];
     if (bd.dmg)           chips.push({ k:"⚔ Dano",        v: bd.dmg,              cls:"chip-atk" });
-    if (bd.physDefense)   chips.push({ k:"🛡 Def.Física",  v:`+${bd.physDefense}`, cls:"chip-def" });
+    if (bd.physDefense && category !== "shield") chips.push({ k:"🛡 Def.Física",  v:`+${bd.physDefense}`, cls:"chip-def" });
     if (bd.magDefense)    chips.push({ k:"✨ Def.Mágica",  v:`+${bd.magDefense}`,  cls:"chip-mag" });
     if (bd.movePenalty)   chips.push({ k:"🏃 Movimento",   v: bd.movePenalty > 0 ? `−${bd.movePenalty}` : `+${-bd.movePenalty}`, cls: bd.movePenalty > 0 ? "chip-warn" : "chip-def" });
     if (bd.weight != null) chips.push({ k:"⚖ Peso",        v:`${bd.weight}kg`,     cls:"chip-neutral" });
@@ -5941,7 +5941,7 @@ function printGlossaryItems() {
     { t:"⚔ Armas de Duas Mãos", l:WEAPONS_TWO_HAND,  s:it=>[it.dmg?`<span class="tag">⚔ ${it.dmg}</span>`:"",`<span class="tag">⚖ ${it.weight}kg</span>`].filter(Boolean).join("") },
     { t:"🔮 Armas Mágicas",     l:WEAPONS_MAGIC,     s:it=>[it.dmg?`<span class="tag">⚔ ${it.dmg}</span>`:"",it.range?`<span class="tag">🎯 ${it.range}hex</span>`:""  ].filter(Boolean).join("") },
     { t:"🏹 Armas à Distância", l:WEAPONS_RANGED,    s:it=>[it.dmg?`<span class="tag">⚔ ${it.dmg}</span>`:"",it.range?`<span class="tag">🎯 ${it.range}hex</span>`:""  ].filter(Boolean).join("") },
-    { t:"🛡 Escudos",           l:SHIELDS,           s:it=>[`<span class="tag">🛡+${it.physDefense}</span>`,`<span class="tag">⚖ ${it.weight}kg</span>`].join("") },
+    { t:"🛡 Escudos",           l:SHIELDS,           s:it=>[`<span class="tag">🛡 Escudo</span>`,`<span class="tag">⚖ ${it.weight}kg</span>`,it.penalty&&it.penalty!=="Nenhuma"?`<span class="tag">${it.penalty}</span>`:""].join("") },
     { t:"🧥 Armaduras",         l:ARMORS,            s:it=>[`<span class="tag">🛡 Fís.${it.physDefense}</span>`,`<span class="tag">✨ Mag.${it.magDefense||0}</span>`,`<span class="tag">⚖ ${it.weight}kg</span>`].join("") },
     { t:"💍 Acessórios",        l:ACCESSORIES,       s:it=>[`<span class="tag">⚖ ${it.weight}kg</span>`].join("") },
   ];
