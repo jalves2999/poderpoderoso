@@ -202,7 +202,7 @@ function renderMonsterCard(m) {
         <span class="monster-chip chip-def">🛡 ${m.physDefense}<small>Def. Física</small></span>
         <span class="monster-chip chip-mag">✨ ${m.magDefense}<small>Def. Mágica</small></span>
         <span class="monster-chip chip-dodge">${m.dodge}<small>Esquiva</small></span>
-        <span class="monster-chip chip-act">${m.actions}A ${m.reactions}R<small>Ações</small></span>
+        <span class="monster-chip chip-act">${m.actions}<small>Ações</small></span>
         <span class="monster-chip chip-dmg">⚔ ${m.damage}<small>Dano</small></span>
       </div>
       <div class="monster-attrs">
@@ -211,7 +211,6 @@ function renderMonsterCard(m) {
             <span class="monster-attr-key">${k}</span>
             <span class="monster-attr-val">${m.attrs?.[k] ?? 0}</span>
           </div>`).join('')}
-        ${m.attrs?.DEX !== undefined ? `<div class="monster-attr" style="background:none;border:none;flex:1;align-items:flex-start;justify-content:center;font-size:10px;color:var(--ink-soft);line-height:1.4;padding:5px 6px">⚔ <strong style="color:#7d2a2e">DEX</strong> define a dificuldade de acerto do jogador contra este monstro</div>` : ''}
       </div>
       <div class="monster-expand-hint">▾ Toque para detalhes</div>
     </div>
