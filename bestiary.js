@@ -51,11 +51,17 @@ function clearAllFilters() {
 
 /* ── Select de locais ────────────────────────────────────────── */
 function buildFilters() {
+  const LOC_ICONS = {
+    Floresta:'🌲', Caverna:'🕳', Dungeon:'⚓', Cidade:'🏘',
+    Ruínas:'🏚', Planície:'🌾', Montanha:'⛰', Pântano:'🌿',
+    Deserto:'🏜', Cemitério:'💀', Templo:'🏛', Estrada:'🛤'
+  };
   const allLocs = [...new Set(BESTIARY.flatMap(m => m.location))].sort();
   const locSel = document.getElementById("loc-select");
   allLocs.forEach(l => {
     const opt = document.createElement("option");
-    opt.value = l; opt.textContent = l;
+    opt.value = l;
+    opt.textContent = (LOC_ICONS[l] ? LOC_ICONS[l] + " " : "") + l;
     locSel.appendChild(opt);
   });
   updateActiveFilters();
@@ -181,7 +187,8 @@ function renderMonsterCard(m) {
       <p class="monster-story-text">${m.story}</p>
     </div>` : "";
 
-  const inBattle = battle.some(b => b.sourceId === m.id);
+  const LOC_ICONS = {Floresta:'🌲',Caverna:'🕳',Dungeon:'⚓',Cidade:'🏘',Ruínas:'🏚',Planície:'🌾',Montanha:'⛰',Pântano:'🌿',Deserto:'🏜',Cemitério:'💀',Templo:'🏛',Estrada:'🛤'};
+  const locStr = m.location.map(l => (LOC_ICONS[l]||'') + ' ' + l).join(' · ');
 
   return `
   <div class="monster-card ${diffCardClass(m.difficulty)} ${m.isElite ? "monster-card-elite" : ""}">
@@ -190,7 +197,7 @@ function renderMonsterCard(m) {
         <span class="monster-size-icon" title="${m.size}">${sizeIcon(m.size)}</span>
         <div class="monster-card-title-block">
           <span class="monster-name">${m.name}${m.isElite?" ⭐":""}</span>
-          <span class="monster-meta">${m.category} · ${m.location.join(", ")}</span>
+          <span class="monster-meta">${m.category} · ${locStr}</span>
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
           <span class="monster-skulls diff-skulls-${m.difficulty}" title="Dif. ${m.difficulty}">${skulls}</span>

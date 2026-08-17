@@ -4840,7 +4840,7 @@ const BESTIARY = [
   {
     id: "rato-das-ruinas", name: "Rato das Ruínas", difficulty: 1,
     attrs: {FOR:0,DEX:1,AGI:1,INT:0,SAB:0}, size: "pequeno",
-    category: "Besta", location: ["Cidade", "Ruínas", "Esgoto"],
+    category: "Besta", location: ["Cidade", "Ruínas"],
     hp: 15, physDefense: 2, magDefense: 0, dodge: 12,
     actions: 2,
     damage: "1d4 (mordida)",
@@ -4858,7 +4858,7 @@ const BESTIARY = [
   {
     id: "goblin-batedeira", name: "Goblin Batedeira", difficulty: 1,
     attrs: {FOR:0,DEX:1,AGI:1,INT:0,SAB:0}, size: "pequeno",
-    category: "Humanoide", location: ["Floresta", "Caverna", "Ruínas"],
+    category: "Humanoide", location: ["Caverna", "Floresta", "Ruínas"],
     hp: 25, physDefense: 2, magDefense: 0, dodge: 13,
     actions: 2,
     damage: "1d6 (faca enferrujada)",
@@ -4878,7 +4878,7 @@ const BESTIARY = [
   {
     id: "lobo-comum", name: "Lobo Comum", difficulty: 1,
     attrs: {FOR:1,DEX:0,AGI:1,INT:0,SAB:1}, size: "normal",
-    category: "Besta", location: ["Floresta", "Planície", "Montanha"],
+    category: "Besta", location: ["Floresta", "Montanha", "Planície"],
     hp: 30, physDefense: 2, magDefense: 0, dodge: 13,
     actions: 2,
     damage: "1d6+1d4 (mordida)",
@@ -4898,7 +4898,7 @@ const BESTIARY = [
   {
     id: "serpente-comum", name: "Serpente Venenosa", difficulty: 1,
     attrs: {FOR:0,DEX:1,AGI:1,INT:0,SAB:0}, size: "pequeno",
-    category: "Besta", location: ["Floresta", "Pântano", "Ruínas", "Serpentara"],
+    category: "Besta", location: ["Dungeon", "Floresta", "Pântano", "Ruínas", "Templo"],
     hp: 20, physDefense: 2, magDefense: 1, dodge: 13,
     actions: 2,
     damage: "1d4 (mordida) + Veneno: 1d4 por rodada, 2 rodadas",
@@ -4941,7 +4941,7 @@ const BESTIARY = [
   {
     id: "guerreiro-cultista", name: "Guerreiro Cultista da Marca", difficulty: 2,
     attrs: {FOR:2,DEX:1,AGI:1,INT:0,SAB:1}, size: "normal",
-    category: "Humanoide", location: ["Ruínas", "Caverna", "Floresta Profunda"],
+    category: "Humanoide", location: ["Caverna", "Floresta", "Ruínas"],
     hp: 65, physDefense: 4, magDefense: 2, dodge: 12,
     actions: 2,
     damage: "1d8+1d4 (espada marcada)",
@@ -4962,7 +4962,7 @@ const BESTIARY = [
   {
     id: "lobo-das-trevas", name: "Lobo das Trevas", difficulty: 2,
     attrs: {FOR:2,DEX:1,AGI:2,INT:0,SAB:1}, size: "normal",
-    category: "Besta Sombria", location: ["Floresta Profunda", "Caverna", "Planície à Noite"],
+    category: "Besta Sombria", location: ["Caverna", "Floresta", "Planície"],
     hp: 60, physDefense: 4, magDefense: 2, dodge: 12,
     actions: 2,
     damage: "1d8+1d4 (mordida sombria)",
@@ -4983,7 +4983,7 @@ const BESTIARY = [
   {
     id: "sacerdote-cobra", name: "Sacerdote de Jurgmund", difficulty: 2,
     attrs: {FOR:1,DEX:1,AGI:1,INT:2,SAB:2}, size: "normal",
-    category: "Humanoide", location: ["Serpentara", "Templo", "Cidade"],
+    category: "Humanoide", location: ["Cidade", "Dungeon", "Templo"],
     hp: 50, physDefense: 4, magDefense: 5, dodge: 12,
     actions: 2,
     damage: "1d6 (cajado sagrado)",
@@ -5006,7 +5006,7 @@ const BESTIARY = [
   {
     id: "golem-pedra", name: "Golem de Pedra Antiga", difficulty: 2,
     attrs: {FOR:3,DEX:0,AGI:0,INT:0,SAB:0}, size: "grande",
-    category: "Construto", location: ["Ruínas", "Dungeon", "Templo Antigo"],
+    category: "Construto", location: ["Dungeon", "Ruínas", "Templo"],
     hp: 100, physDefense: 7, magDefense: 1, dodge: 8,
     actions: 2,
     damage: "1d10+1d4 (soco de pedra)",
@@ -5074,7 +5074,7 @@ const BESTIARY = [
   {
     id: "mago-renegado", name: "Mago Renegado de Atrelon", difficulty: 3,
     attrs: {FOR:0,DEX:1,AGI:1,INT:5,SAB:3}, size: "normal",
-    category: "Humanoide", location: ["Ruínas de Atrelon", "Torre Abandonada", "Dungeon"],
+    category: "Humanoide", location: ["Dungeon", "Ruínas"],
     hp: 90, physDefense: 7, magDefense: 7, dodge: 11,
     actions: 2,
     damage: "1d8 (cajado) ou magias",
@@ -5102,7 +5102,7 @@ const BESTIARY = [
   {
     id: "cobra-rainha-jovem", name: "Cobra-Rainha Jovem", difficulty: 3,
     attrs: {FOR:3,DEX:2,AGI:2,INT:2,SAB:2}, size: "grande",
-    category: "Besta Sagrada", location: ["Serpentara", "Pântano", "Templo de Jurgmund"],
+    category: "Besta Sagrada", location: ["Dungeon", "Pântano", "Templo"],
     hp: 145, physDefense: 7, magDefense: 6, dodge: 11,
     actions: 3,
     damage: "1d10+1d4 (mordida venenosa) ou 1d8 (constrição)",
@@ -5128,7 +5128,7 @@ const BESTIARY = [
   {
     id: "lobo-do-vazio", name: "Lobo do Vazio", difficulty: 4,
     attrs: {FOR:4,DEX:3,AGI:4,INT:2,SAB:3}, size: "grande",
-    category: "Entidade do Vazio", location: ["Plano Liminar", "Floresta Maldita", "Onde o Véu é Fino"],
+    category: "Entidade do Vazio", location: ["Cemitério", "Floresta", "Templo"],
     hp: 195, physDefense: 8, magDefense: 8, dodge: 12,
     actions: 3,
     damage: "1d12+1d8 (mordida do vazio) + 1d6 dano de vazio",
@@ -5152,7 +5152,7 @@ const BESTIARY = [
   {
     id: "grande-sacerdote-cobra", name: "Grande Sacerdote de Jurgmund", difficulty: 4,
     attrs: {FOR:2,DEX:2,AGI:2,INT:6,SAB:5}, size: "normal",
-    category: "Humanoide Elite", location: ["Serpentara", "Grande Templo de Jurgmund"],
+    category: "Humanoide Elite", location: ["Dungeon", "Templo"],
     hp: 165, physDefense: 8, magDefense: 10, dodge: 12,
     actions: 3,
     damage: "1d8+1d4 (cetro sagrado) ou magias",
@@ -5180,7 +5180,7 @@ const BESTIARY = [
   {
     id: "general-fantasma", name: "General Elyon — O Traidor Fantasma", difficulty: 4,
     attrs: {FOR:4,DEX:3,AGI:3,INT:4,SAB:4}, size: "normal",
-    category: "Morto-Vivo Elite", location: ["Ruínas de Durrak", "Campo de Batalha Maldito"],
+    category: "Morto-Vivo Elite", location: ["Cemitério", "Dungeon", "Planície", "Ruínas"],
     hp: 180, physDefense: 8, magDefense: 9, dodge: 12,
     actions: 3,
     damage: "1d12+1d6 (Lâmina Partida — espectral) + 1d6 dano sagrado/profano",
@@ -5209,7 +5209,7 @@ const BESTIARY = [
   {
     id: "lich-atrelon", name: "O Lich das Montanhas de Atrelon", difficulty: 5,
     attrs: {FOR:2,DEX:3,AGI:3,INT:10,SAB:7}, size: "normal",
-    category: "Morto-Vivo Lendário", location: ["Pico de Atrelon", "Torre do Gelo Eterno"],
+    category: "Morto-Vivo Lendário", location: ["Dungeon", "Montanha"],
     hp: 255, physDefense: 9, magDefense: 14, dodge: 13,
     actions: 4,
     damage: "1d10+1d6 (toque gélido) ou magias",
@@ -5240,7 +5240,7 @@ const BESTIARY = [
   {
     id: "cobra-imortal-jurgmund", name: "A Serpente Imortal de Jurgmund", difficulty: 5,
     attrs: {FOR:5,DEX:4,AGI:5,INT:7,SAB:8}, size: "colossal",
-    category: "Divindade Menor", location: ["Núcleo de Serpentara", "Câmara Sagrada de Jurgmund"],
+    category: "Divindade Menor", location: ["Dungeon", "Templo"],
     hp: 345, physDefense: 10, magDefense: 12, dodge: 13,
     actions: 4,
     damage: "2d12+1d8 (mordida colossal) ou 1d12+1d6 (cauda) ou 2d10 (constrição)",
@@ -5270,7 +5270,7 @@ const BESTIARY = [
   {
     id: "deus-marcado-avatar", name: "Avatar do Deus Marcado", difficulty: 5,
     attrs: {FOR:8,DEX:5,AGI:5,INT:8,SAB:7}, size: "colossal",
-    category: "Divindade — Avatar", location: ["Qualquer lugar com Maldição Aberta", "Altar da Marca"],
+    category: "Divindade — Avatar", location: ["Cemitério", "Templo"],
     hp: 400, physDefense: 12, magDefense: 15, dodge: 13,
     actions: 5,
     damage: "2d12+1d12 (garra divina) ou 3d10 (uivo sônico colossal)",
@@ -5303,7 +5303,7 @@ const BESTIARY = [
   {
     id: "karlac-filhote", name: "Karlac Filhote", difficulty: 1,
     attrs: {FOR:1,DEX:0,AGI:1,INT:0,SAB:0}, size: "pequeno",
-    category: "Besta de Fogo", location: ["Deserto Carmesim"],
+    category: "Besta de Fogo", location: ["Deserto"],
     hp: 25, physDefense: 3, magDefense: 0, dodge: 12,
     actions: 2,
     damage: "1d6 (mordida ígnea)",
@@ -5322,7 +5322,7 @@ const BESTIARY = [
   {
     id: "serpentariano-patrulheiro", name: "Serpentariano Patrulheiro", difficulty: 1,
     attrs: {FOR:1,DEX:1,AGI:1,INT:0,SAB:0}, size: "normal",
-    category: "Humanoide Serpentariano", location: ["Montanhas de Atrelon", "Castelo da Cobra"],
+    category: "Humanoide Serpentariano", location: ["Dungeon", "Montanha", "Ruínas"],
     hp: 30, physDefense: 3, magDefense: 1, dodge: 13,
     actions: 2,
     damage: "1d6 (lança de osso) ou 1d4 (mordida venenosa)",
@@ -5343,7 +5343,7 @@ const BESTIARY = [
   {
     id: "anao-do-casco", name: "Anão Guardião do Casco", difficulty: 2,
     attrs: {FOR:3,DEX:1,AGI:0,INT:1,SAB:1}, size: "normal",
-    category: "Humanoide Anão", location: ["Grande Lago Central", "Cidadela do Casco"],
+    category: "Humanoide Anão", location: ["Dungeon", "Pântano"],
     hp: 70, physDefense: 6, magDefense: 2, dodge: 10,
     actions: 2,
     damage: "1d10+1d4 (machado do casco)",
@@ -5363,7 +5363,7 @@ const BESTIARY = [
   {
     id: "criatura-profundezas", name: "Criatura das Profundezas do Lago", difficulty: 2,
     attrs: {FOR:2,DEX:1,AGI:1,INT:0,SAB:2}, size: "normal",
-    category: "Aberração Aquática", location: ["Grande Lago Central"],
+    category: "Aberração Aquática", location: ["Pântano"],
     hp: 65, physDefense: 4, magDefense: 4, dodge: 12,
     actions: 3,
     damage: "1d8 (tentáculo) ou 1d6 (mordida ácida)",
@@ -5384,7 +5384,7 @@ const BESTIARY = [
   {
     id: "cultista-aralto", name: "Cultista do Aralto", difficulty: 2,
     attrs: {FOR:1,DEX:1,AGI:1,INT:1,SAB:2}, size: "normal",
-    category: "Humanoide Corrompido", location: ["Montanhas de Atrelon", "Reinos de Akaen", "Deserto Carmesim"],
+    category: "Humanoide Corrompido", location: ["Deserto", "Floresta", "Montanha", "Planície"],
     hp: 60, physDefense: 4, magDefense: 3, dodge: 12,
     actions: 2,
     damage: "1d8+1d4 (espada marcada pelo Deus Marcado)",
@@ -5405,7 +5405,7 @@ const BESTIARY = [
   {
     id: "serpentariano-sacerdote", name: "Sacerdote Serpentariano da Cobra", difficulty: 3,
     attrs: {FOR:1,DEX:1,AGI:2,INT:4,SAB:4}, size: "normal",
-    category: "Humanoide Serpentariano", location: ["Montanhas de Atrelon", "Castelo da Cobra"],
+    category: "Humanoide Serpentariano", location: ["Dungeon", "Montanha", "Ruínas"],
     hp: 115, physDefense: 7, magDefense: 8, dodge: 11,
     actions: 3,
     damage: "1d8 (cajado de cobra) ou magias",
@@ -5428,7 +5428,7 @@ const BESTIARY = [
   {
     id: "guardiao-fissura", name: "Guardião da Fissura", difficulty: 3,
     attrs: {FOR:4,DEX:1,AGI:1,INT:1,SAB:3}, size: "grande",
-    category: "Aberração Aquática Ancestral", location: ["Grande Lago Central"],
+    category: "Aberração Aquática Ancestral", location: ["Pântano"],
     hp: 155, physDefense: 7, magDefense: 6, dodge: 11,
     actions: 3,
     damage: "1d12+1d6 (garra ancestral) ou 1d10 (jato de água pressurizada)",
@@ -5449,7 +5449,7 @@ const BESTIARY = [
   {
     id: "aralto-menor", name: "Aralto da Marca — Forma Menor", difficulty: 3,
     attrs: {FOR:3,DEX:2,AGI:2,INT:3,SAB:3}, size: "normal",
-    category: "Campeão do Deus Marcado", location: ["Reinos de Akaen", "Montanhas de Atrelon", "Deserto Carmesim"],
+    category: "Campeão do Deus Marcado", location: ["Deserto", "Floresta", "Montanha", "Planície"],
     hp: 145, physDefense: 7, magDefense: 7, dodge: 11,
     actions: 3,
     damage: "1d10+1d6 (lâmina da Marca) + 1d4 dano de vazio",
@@ -5474,7 +5474,7 @@ const BESTIARY = [
   {
     id: "serpentariano-rei-vassk", name: "Rei Vassk — O Corrompido", difficulty: 4,
     attrs: {FOR:4,DEX:3,AGI:3,INT:5,SAB:5}, size: "normal",
-    category: "Humanoide Serpentariano Elite", location: ["Castelo da Cobra — Trono"],
+    category: "Humanoide Serpentariano Elite", location: ["Dungeon", "Ruínas"],
     hp: 175, physDefense: 8, magDefense: 9, dodge: 12,
     actions: 3,
     damage: "1d12+1d8 (Espada da Cobra Real) + 1d6 veneno sagrado corrompido",
@@ -5499,7 +5499,7 @@ const BESTIARY = [
   {
     id: "aralto-sussurrante", name: "O Aralto Sussurrante", difficulty: 4,
     attrs: {FOR:3,DEX:3,AGI:4,INT:6,SAB:5}, size: "normal",
-    category: "Campeão do Deus Marcado — Elite", location: ["Câmaras Profundas do Crânio", "Castelo da Cobra"],
+    category: "Campeão do Deus Marcado — Elite", location: ["Dungeon", "Ruínas"],
     hp: 195, physDefense: 8, magDefense: 10, dodge: 12,
     actions: 3,
     damage: "1d12+1d6 (Garra de Vazio) + 1d8 dano de vazio",
@@ -5528,7 +5528,7 @@ const BESTIARY = [
   {
     id: "grande-salamandra-karlac", name: "Grande Salamandra Karlac", difficulty: 5,
     attrs: {FOR:8,DEX:2,AGI:1,INT:2,SAB:2}, size: "colossal",
-    category: "Criatura Colossal — Guardiã do Deserto", location: ["Deserto Carmesim"],
+    category: "Criatura Colossal — Guardiã do Deserto", location: ["Deserto"],
     hp: 460, physDefense: 14, magDefense: 8, dodge: 8,
     actions: 4,
     damage: "3d12+1d10 (pisada) ou 2d12+1d8 (cauda) ou 2d10 (bafo de fogo)",
@@ -5552,7 +5552,7 @@ const BESTIARY = [
   {
     id: "dragao-dourado-karloth", name: "Dragão Dourado de Karloth", difficulty: 5,
     attrs: {FOR:7,DEX:4,AGI:4,INT:8,SAB:8}, size: "colossal",
-    category: "Entidade Colossal — Guardião do Mundo", location: ["Grande Planície Sudeste", "Vulcão de Karloth"],
+    category: "Entidade Colossal — Guardião do Mundo", location: ["Montanha", "Planície"],
     hp: 575, physDefense: 16, magDefense: 16, dodge: 13,
     actions: 5,
     damage: "3d12+2d10 (garra/mordida) ou 4d10 (bafo de luz dourada, 8 hex de alcance)",
@@ -5576,7 +5576,7 @@ const BESTIARY = [
   {
     id: "magnalaga-acordada", name: "Tartaruga Magnalaga — Forma Acordada", difficulty: 5,
     attrs: {FOR:6,DEX:4,AGI:4,INT:9,SAB:8}, size: "colossal",
-    category: "Ser Ancestral Transformado", location: ["Grande Lago Central"],
+    category: "Ser Ancestral Transformado", location: ["Pântano"],
     hp: 435, physDefense: 15, magDefense: 12, dodge: 6,
     actions: 3,
     damage: "2d12+1d10 (mordida) ou 2d10 (jato d'água purgativa, 10 hex)",
@@ -5605,7 +5605,7 @@ const BESTIARY = [
   /* ── MORTOS-VIVOS ── */
   { id:"zumbi-comum", name:"Zumbi Comum", difficulty:1,
     attrs: {FOR:2,DEX:0,AGI:0,INT:0,SAB:0}, size:"normal", category:"Morto-Vivo",
-    location:["Cemitério","Ruínas","Dungeon"], hp:50, physDefense:2, magDefense:0, dodge:8,
+    location: ["Cemitério", "Dungeon", "Ruínas"], hp:50, physDefense:2, magDefense:0, dodge:8,
     actions:1, damage:"1d6 (mordida podre)",
     abilities:[
       { name:"Infatigável", desc:"Imune a Atordoado, Exaustão e Medo. Nunca foge." },
@@ -5618,7 +5618,7 @@ const BESTIARY = [
 
   { id:"zumbi-abissal", name:"Zumbi Abissal", difficulty:3,
     attrs: {FOR:4,DEX:0,AGI:1,INT:0,SAB:1}, size:"normal", category:"Morto-Vivo",
-    location:["Fissura do Lago","Dungeon Profunda","Território do Deus Marcado"], hp:145, physDefense:7, magDefense:3, dodge:10,
+    location: ["Dungeon", "Pântano"], hp:145, physDefense:7, magDefense:3, dodge:10,
     actions:2, damage:"1d10+1d6 (garras abissais)",
     abilities:[
       { name:"Aura de Corrupção", desc:"Passivo: aliados em raio 2 hex têm −1 em todos os testes enquanto a aura estiver ativa. Clérigos imunes." },
@@ -5632,7 +5632,7 @@ const BESTIARY = [
 
   { id:"esqueleto-guerreiro", name:"Esqueleto Guerreiro", difficulty:1,
     attrs: {FOR:1,DEX:1,AGI:0,INT:0,SAB:0}, size:"normal", category:"Morto-Vivo",
-    location:["Tumba","Dungeon","Ruínas Élficas"], hp:30, physDefense:3, magDefense:0, dodge:11,
+    location: ["Cemitério", "Dungeon", "Ruínas"], hp:30, physDefense:3, magDefense:0, dodge:11,
     actions:2, damage:"1d8 (espada enferrujada)",
     abilities:[
       { name:"Osso Vazio", desc:"Imune a veneno, dano psíquico e condições mentais. Vulnerável a dano contundente (+1d4 extra)." },
@@ -5644,7 +5644,7 @@ const BESTIARY = [
 
   { id:"esqueleto-gigante", name:"Esqueleto Colossal", difficulty:4,
     attrs: {FOR:7,DEX:0,AGI:0,INT:0,SAB:0}, size:"colossal", category:"Morto-Vivo",
-    location:["Tumba Ancestral","Dungeon Profunda","Ruínas Élficas"], hp:210, physDefense:8, magDefense:2, dodge:9,
+    location: ["Cemitério", "Dungeon", "Ruínas"], hp:210, physDefense:8, magDefense:2, dodge:9,
     actions:3, damage:"2d10+1d8 (golpe de osso colossal)",
     abilities:[
       { name:"Pisar Esmagador", desc:"1 Ação: pisa em área 2x2 hex. Todos nessa área sofrem 2d8 dano contundente e testam AGI (difícil) ou ficam Derrubados." },
@@ -5658,7 +5658,7 @@ const BESTIARY = [
 
   { id:"vampiro-nobre", name:"Vampiro Nobre", difficulty:4,
     attrs: {FOR:4,DEX:4,AGI:4,INT:6,SAB:5}, size:"normal", category:"Morto-Vivo",
-    location:["Castelo Abandonado","Cidade","Ruínas Nobres"], hp:180, physDefense:8, magDefense:7, dodge:12,
+    location: ["Cidade", "Ruínas"], hp:180, physDefense:8, magDefense:7, dodge:12,
     actions:3, damage:"1d10+1d8 (mordida drenante)",
     abilities:[
       { name:"Mordida Drenante", desc:"Cada mordida rouba 1d8 HP do alvo e cura o vampiro pelo mesmo valor. Alvos drenados 3x seguidas ficam sob Domínio Parcial." },
@@ -5673,7 +5673,7 @@ const BESTIARY = [
 
   { id:"lobisomem", name:"Lobisomem", difficulty:3,
     attrs: {FOR:4,DEX:2,AGI:3,INT:1,SAB:2}, size:"grande", category:"Metamorfo",
-    location:["Floresta","Aldeia","Montanha"], hp:170, physDefense:7, magDefense:3, dodge:11,
+    location: ["Cidade", "Floresta", "Montanha"], hp:170, physDefense:7, magDefense:3, dodge:11,
     actions:3, damage:"1d10+1d8 (garras e mordida)",
     abilities:[
       { name:"Regeneração Selvagem", desc:"Regenera 8 HP por rodada. Prata, fogo e magia sagrada cancelam a regeneração por 2 rodadas. Dano de prata causa 1d4 extra permanente (não regenera)." },
@@ -5688,7 +5688,7 @@ const BESTIARY = [
   /* ── HUMANOIDES COM HABILIDADES ── */
   { id:"kobold-armadilheiro", name:"Kobold Armadilheiro", difficulty:1,
     attrs: {FOR:0,DEX:2,AGI:1,INT:1,SAB:0}, size:"pequeno", category:"Humanoide",
-    location:["Caverna","Dungeon","Floresta Profunda"], hp:25, physDefense:2, magDefense:1, dodge:13,
+    location: ["Caverna", "Dungeon", "Floresta"], hp:25, physDefense:2, magDefense:1, dodge:13,
     actions:2, damage:"1d4+1d4 (faca e armadilha)",
     abilities:[
       { name:"Armadilheiro Expert", desc:"Prepara armadilhas durante o combate (1 Ação). A armadilha ativa no próximo alvo que cruzar o hex: 1d6 dano + Preso (FOR normal para escapar). Pode ter até 3 armadilhas ativas." },
@@ -5701,7 +5701,7 @@ const BESTIARY = [
 
   { id:"orc-berserker", name:"Orc Berserker", difficulty:2,
     attrs: {FOR:3,DEX:1,AGI:0,INT:0,SAB:0}, size:"grande", category:"Humanoide",
-    location:["Planície","Acampamento","Floresta"], hp:100, physDefense:4, magDefense:1, dodge:11,
+    location: ["Estrada", "Floresta", "Planície"], hp:100, physDefense:4, magDefense:1, dodge:11,
     actions:3, damage:"1d12+1d6 (machado de guerra)",
     abilities:[
       { name:"Fúria do Sangue", desc:"Ao receber qualquer dano: entra em Fúria automaticamente por 3 rodadas. Em Fúria: +1d8 de dano mas não pode recuar nem usar itens." },
@@ -5714,7 +5714,7 @@ const BESTIARY = [
 
   { id:"elfo-sombrio", name:"Elfo das Sombras", difficulty:3,
     attrs: {FOR:1,DEX:4,AGI:4,INT:2,SAB:2}, size:"normal", category:"Humanoide",
-    location:["Floresta Profunda","Ruínas Élficas","Território Élfico"], hp:120, physDefense:7, magDefense:6, dodge:11,
+    location: ["Floresta", "Ruínas"], hp:120, physDefense:7, magDefense:6, dodge:11,
     actions:3, damage:"1d8+1d6 (lâmina da meia-luz)",
     abilities:[
       { name:"Passo das Sombras", desc:"Se estiver em área de sombra ou escuridão: teleporta para qualquer outra sombra em raio 8 hex como Ação gratuita (1x/turno)." },
@@ -5728,7 +5728,7 @@ const BESTIARY = [
 
   { id:"necromante-errante", name:"Necromante Errante", difficulty:3,
     attrs: {FOR:0,DEX:1,AGI:1,INT:5,SAB:3}, size:"normal", category:"Humanoide",
-    location:["Cemitério","Dungeon","Floresta Sombria"], hp:100, physDefense:7, magDefense:7, dodge:11,
+    location: ["Cemitério", "Dungeon", "Floresta"], hp:100, physDefense:7, magDefense:7, dodge:11,
     actions:2, damage:"1d6 (cajado ossado)",
     abilities:[
       { name:"Comandar Mortos", desc:"1 Ação: levanta até 2 esqueletos ou zumbis de cadáveres presentes no campo. Cada morto-vivo tem HP=20, dano=1d6. Máximo de 4 ativos." },
@@ -5743,7 +5743,7 @@ const BESTIARY = [
   /* ── CRIATURAS DE FLORESTA ── */
   { id:"ent-guardiao", name:"Ent Guardião da Floresta", difficulty:4,
     attrs: {FOR:7,DEX:0,AGI:0,INT:2,SAB:3}, size:"colossal", category:"Planta Viva",
-    location:["Floresta Ancestral","Floresta Profunda"], hp:240, physDefense:9, magDefense:2, dodge:8,
+    location: ["Floresta"], hp:240, physDefense:9, magDefense:2, dodge:8,
     actions:3, damage:"2d8+1d10 (galhos colossais)",
     abilities:[
       { name:"Raízes Aprisionadoras", desc:"1 Ação: raízes emergem em área 3x3 hex. Todos no terreno testam AGI (difícil) ou ficam Presos (Imóveis) por 2 rodadas. Liberar: FOR (normal) por Ação." },
@@ -5757,7 +5757,7 @@ const BESTIARY = [
 
   { id:"treant-jovem", name:"Treant Jovem", difficulty:2,
     attrs: {FOR:3,DEX:0,AGI:0,INT:1,SAB:1}, size:"grande", category:"Planta Viva",
-    location:["Floresta","Bosque","Planície com Árvores"], hp:110, physDefense:6, magDefense:1, dodge:9,
+    location: ["Floresta"], hp:110, physDefense:6, magDefense:1, dodge:9,
     actions:2, damage:"1d10+1d6 (galho poderoso)",
     abilities:[
       { name:"Enraizar", desc:"1 Ação: cria raízes em 1 hex adjacente — terreno difícil que custa 2 Ações para cruzar. Persiste até o treant morrer." },
@@ -5769,7 +5769,7 @@ const BESTIARY = [
 
   { id:"sombra-florestal", name:"Sombra Florestal", difficulty:2,
     attrs: {FOR:0,DEX:2,AGI:3,INT:1,SAB:1}, size:"normal", category:"Espírito",
-    location:["Floresta Profunda","Área Corrompida","Noite"], hp:70, physDefense:4, magDefense:6, dodge:12,
+    location: ["Floresta", "Planície"], hp:70, physDefense:4, magDefense:6, dodge:12,
     actions:2, damage:"1d8 (toque das sombras — dano sombrio)",
     abilities:[
       { name:"Intangível", desc:"Imune a dano físico de armas não-mágicas. Armas mágicas e magias causam dano normal. Fogo e luz sagrada causam 1d4 extra." },
@@ -5783,7 +5783,7 @@ const BESTIARY = [
   /* ── CRIATURAS GRANDES ── */
   { id:"mamute-das-planícies", name:"Mamute das Planícies", difficulty:3,
     attrs: {FOR:6,DEX:0,AGI:0,INT:0,SAB:1}, size:"colossal", category:"Besta",
-    location:["Grande Planície","Estepe","Neve"], hp:235, physDefense:7, magDefense:1, dodge:8,
+    location: ["Montanha", "Planície"], hp:235, physDefense:7, magDefense:1, dodge:8,
     actions:2, damage:"2d8+1d10 (chifres e pisoteio)",
     abilities:[
       { name:"Carga Imparável", desc:"Se mover 3+ hex em linha reta e atacar: dano dobrado e o alvo é Empurrado 3 hex e Derrubado (sem teste). Muro ou obstáculo: 1d10 para ambos." },
@@ -5797,7 +5797,7 @@ const BESTIARY = [
 
   { id:"gigante-das-pedras", name:"Gigante das Pedras", difficulty:4,
     attrs: {FOR:7,DEX:1,AGI:0,INT:1,SAB:1}, size:"colossal", category:"Gigante",
-    location:["Montanha","Caverna Grande","Ruínas"], hp:270, physDefense:10, magDefense:3, dodge:9,
+    location: ["Caverna", "Montanha", "Ruínas"], hp:270, physDefense:10, magDefense:3, dodge:9,
     actions:3, damage:"2d10+1d8 (punho de pedra)",
     abilities:[
       { name:"Arremesso de Pedra", desc:"1 Ação: arremessa pedra a até 12 hex. Dano: 2d8 + alvo e todos em raio 1 hex testam AGI (difícil) ou Derrubados." },
@@ -5812,7 +5812,7 @@ const BESTIARY = [
   /* ── CRIATURAS VOADORAS ── */
   { id:"harpia", name:"Harpia Caçadora", difficulty:2,
     attrs: {FOR:1,DEX:2,AGI:2,INT:1,SAB:0}, size:"normal", category:"Voadora",
-    location:["Penhasco","Floresta","Montanha"], hp:80, physDefense:4, magDefense:3, dodge:12,
+    location: ["Floresta", "Montanha"], hp:80, physDefense:4, magDefense:3, dodge:12,
     actions:3, damage:"1d8+1d6 (garras cortantes)",
     abilities:[
       { name:"Voadora", desc:"Ocupa hex aéreo (altitude 3). Ataques corpo a corpo de aliados no chão têm −1d4 de acerto. Ataques à distância são normais. Pode mergulhar: +1d6 de dano num ataque por rodada." },
@@ -5826,7 +5826,7 @@ const BESTIARY = [
 
   { id:"grifo", name:"Grifo das Montanhas", difficulty:3,
     attrs: {FOR:4,DEX:3,AGI:3,INT:1,SAB:2}, size:"grande", category:"Voadora",
-    location:["Montanha","Penhasco Alto","Região de Atrelon"], hp:160, physDefense:7, magDefense:3, dodge:11,
+    location: ["Montanha", "Templo"], hp:160, physDefense:7, magDefense:3, dodge:11,
     actions:3, damage:"1d10+1d8 (bico de águia + garras de leão)",
     abilities:[
       { name:"Voador de Altitude", desc:"Ocupa hex aéreo altitude 5 (muito alto). Fora do alcance de ataques corpo a corpo. Projéteis têm −1d4. Magias de área alcançam normalmente." },
@@ -5840,7 +5840,7 @@ const BESTIARY = [
 
   { id:"basilisco-asa", name:"Basilisco Voador", difficulty:4,
     attrs: {FOR:4,DEX:2,AGI:3,INT:1,SAB:2}, size:"grande", category:"Voadora",
-    location:["Dungeon Alta","Penhasco","Ruína de Atrelon"], hp:165, physDefense:8, magDefense:4, dodge:12,
+    location: ["Dungeon", "Montanha", "Ruínas"], hp:165, physDefense:8, magDefense:4, dodge:12,
     actions:3, damage:"1d10+1d8 (mordida petrificante)",
     abilities:[
       { name:"Olhar Petrificante", desc:"1 Ação: todos em cone 4 hex à frente testam FOR (difícil) ou ficam Paralisados por 1 rodada. 1 falha acumulada = Paralisado 2 rodadas. 2 falhas = Petrificado permanente (reversível por magia de nível 4+)." },
@@ -5855,7 +5855,7 @@ const BESTIARY = [
   /* ── CORROMPIDOS PELO DEUS MARCADO ── */
   { id:"urso-corrompido-marca", name:"Urso Corrompido pela Marca", difficulty:3,
     attrs: {FOR:4,DEX:1,AGI:1,INT:0,SAB:1}, size:"grande", category:"Besta Corrompida",
-    location:["Floresta Corrompida","Território dos Araltos"], hp:180, physDefense:7, magDefense:3, dodge:11,
+    location: ["Floresta", "Ruínas"], hp:180, physDefense:7, magDefense:3, dodge:11,
     actions:3, damage:"1d12+1d8 (garras corrompidas)",
     abilities:[
       { name:"Aura Corruptora", desc:"Passivo: aliados em raio 3 hex têm −1d4 em todos os testes. Clérigos de Jurgmund ou Sanctum imunes." },
@@ -5869,7 +5869,7 @@ const BESTIARY = [
 
   { id:"golem-marcado", name:"Golem da Marca", difficulty:4,
     attrs: {FOR:6,DEX:0,AGI:0,INT:0,SAB:1}, size:"grande", category:"Construto Corrompido",
-    location:["Fortaleza dos Araltos","Dungeon Corrompida"], hp:225, physDefense:9, magDefense:5, dodge:9,
+    location: ["Dungeon", "Ruínas"], hp:225, physDefense:9, magDefense:5, dodge:9,
     actions:3, damage:"2d8+1d8 (punho marcado)",
     abilities:[
       { name:"Núcleo da Marca", desc:"No centro do peito há um cristal carmesim. Atacar o cristal (−2 para acerto, requer mira declarada): causa dano duplo e pode desestabilizar o golem (SAB difícil ou Atordoado 1 rodada)." },
@@ -5884,7 +5884,7 @@ const BESTIARY = [
   /* ── CORROMPIDOS PELO SANGUE DA SERPENTE (não agressivos) ── */
   { id:"cobra-sangue-Jurgmund", name:"Cobra do Sangue de Jurgmund", difficulty:2,
     attrs: {FOR:1,DEX:1,AGI:2,INT:1,SAB:2}, size:"normal", category:"Besta Sagrada",
-    location:["Montanhas de Atrelon","Castelo da Cobra","Florestas Próximas ao Lago"], hp:80, physDefense:4, magDefense:5, dodge:12,
+    location: ["Dungeon", "Floresta", "Montanha", "Ruínas"], hp:80, physDefense:4, magDefense:5, dodge:12,
     abilities:[
       { name:"Não Agressiva por Natureza", desc:"Não ataca primeiro. Se atacada: defende-se e tenta se afastar. Apenas ataca 3x seguidas se encurralada." },
       { name:"Veneno Sagrado Passivo", desc:"Qualquer contato físico (atacar sem luvas, capturar): 1d6 de veneno sagrado por rodada por 3 rodadas. Antídoto mundano não funciona — precisa de cura mágica." },
@@ -5898,7 +5898,7 @@ const BESTIARY = [
 
   { id:"lagarto-cristal-cobra", name:"Lagarto de Cristal Cobriforme", difficulty:1,
     attrs: {FOR:0,DEX:1,AGI:1,INT:0,SAB:1}, size:"pequeno", category:"Besta Sagrada",
-    location:["Cavernas de Atrelon","Beira do Lago","Perto do Castelo"], hp:35, physDefense:4, magDefense:2, dodge:13,
+    location: ["Caverna", "Planície", "Pântano", "Ruínas"], hp:35, physDefense:4, magDefense:2, dodge:13,
     abilities:[
       { name:"Completamente Inofensivo", desc:"Nunca ataca voluntariamente. Foge de qualquer confronto. Se capturado e tratado bem: torna-se familiar (bônus de +1 em testes de Percepção e +1 Slot de Magia)." },
       { name:"Detector de Corrupção", desc:"Passivo: o lagarto brilha intensamente em vermelho ao detectar qualquer criatura corrompida pelo Deus Marcado em raio 10 hex. Excelente alarme." },
@@ -5912,7 +5912,7 @@ const BESTIARY = [
   /* ── CRIATURAS COM MAGIAS ÚNICAS ── */
   { id:"maga-da-floresta", name:"Maga da Floresta Antiga", difficulty:3,
     attrs: {FOR:0,DEX:1,AGI:1,INT:4,SAB:5}, size:"normal", category:"Humanoide",
-    location:["Floresta Ancestral","Círculo de Pedras","Bosque Sagrado"], hp:115, physDefense:7, magDefense:8, dodge:11,
+    location: ["Floresta", "Templo"], hp:115, physDefense:7, magDefense:8, dodge:11,
     actions:2, damage:"1d6 (cajado de madeira viva) + magia",
     abilities:[
       { name:"Controle da Flora", desc:"1 Ação: controla toda a vegetação em raio 6 hex por 3 rodadas. Pode: criar terreno difícil, fazer raízes aprisionarem (AGI difícil) ou criar paredes de galhos (Def.5, 20 HP)." },
@@ -5926,7 +5926,7 @@ const BESTIARY = [
 
   { id:"draconico-menor", name:"Dracônico Menor", difficulty:3,
     attrs: {FOR:3,DEX:2,AGI:2,INT:2,SAB:1}, size:"normal", category:"Dracônico",
-    location:["Montanhas","Cavernas","Ruínas de Atrelon"], hp:145, physDefense:7, magDefense:5, dodge:11,
+    location: ["Caverna", "Montanha", "Ruínas"], hp:145, physDefense:7, magDefense:5, dodge:11,
     actions:3, damage:"1d10+1d6 (garras e chama)",
     abilities:[
       { name:"Sopro de Chama", desc:"1 Ação (1x a cada 2 rodadas): sopro de fogo em cone 4 hex — 3d8 dano de fogo, metade com AGI (normal). Imune a fogo próprio." },
@@ -5940,7 +5940,7 @@ const BESTIARY = [
 
   { id:"espirito-fogo", name:"Espírito do Fogo Primordial", difficulty:4,
     attrs: {FOR:0,DEX:4,AGI:5,INT:2,SAB:2}, size:"normal", category:"Elemental",
-    location:["Vulcão Karloth","Deserto Carmesim","Área de Erupção"], hp:145, physDefense:8, magDefense:8, dodge:12,
+    location: ["Deserto", "Montanha"], hp:145, physDefense:8, magDefense:8, dodge:12,
     actions:3, damage:"2d8 (toque de chama pura)",
     abilities:[
       { name:"Corpo de Fogo", desc:"Imune a fogo e dano físico mundano. Dano de gelo causa 1d6 extra e reduz 1 Ação por rodada por 2 rodadas. Água apaga temporariamente (1 rodada)." },
@@ -5960,7 +5960,7 @@ const BESTIARY = [
 
   { id:"aranha-gigante", name:"Aranha Gigante da Caverna", difficulty:2,
     attrs: {FOR:2,DEX:2,AGI:1,INT:0,SAB:1}, size:"grande", category:"Besta",
-    location:["Caverna","Dungeon","Floresta Sombria"],
+    location: ["Caverna", "Dungeon", "Floresta"],
     hp:75, physDefense:4, magDefense:1, dodge:12,
     actions:2, damage:"1d8+1d4 (presas venenosas)",
     abilities:[
@@ -5974,7 +5974,7 @@ const BESTIARY = [
 
   { id:"gnoll-guerreiro", name:"Gnoll Guerreiro", difficulty:2,
     attrs: {FOR:2,DEX:1,AGI:1,INT:0,SAB:1}, size:"normal", category:"Humanoide",
-    location:["Planície","Deserto","Acampamento Nômade"],
+    location: ["Cidade", "Deserto", "Planície"],
     hp:85, physDefense:4, magDefense:1, dodge:12,
     actions:2, damage:"1d10+1d4 (lança serrilhada)",
     abilities:[
@@ -5987,7 +5987,7 @@ const BESTIARY = [
 
   { id:"serpente-constritora", name:"Serpente Constritora das Ruínas", difficulty:2,
     attrs: {FOR:3,DEX:0,AGI:1,INT:0,SAB:1}, size:"grande", category:"Besta",
-    location:["Ruínas","Floresta","Caverna"],
+    location: ["Caverna", "Floresta", "Ruínas"],
     hp:90, physDefense:4, magDefense:2, dodge:12,
     actions:2, damage:"1d8+1d6 (mordida e constrição)",
     abilities:[
@@ -6000,7 +6000,7 @@ const BESTIARY = [
 
   { id:"feiticeiro-goblin", name:"Feiticeiro Goblin", difficulty:2,
     attrs: {FOR:0,DEX:1,AGI:2,INT:2,SAB:1}, size:"pequeno", category:"Humanoide",
-    location:["Caverna","Acampamento Goblin","Dungeon"],
+    location: ["Caverna", "Dungeon", "Floresta", "Planície"],
     hp:55, physDefense:4, magDefense:5, dodge:12,
     actions:2, damage:"1d4 (cajadinho) + magias",
     abilities:[
@@ -6014,7 +6014,7 @@ const BESTIARY = [
 
   { id:"mumia-menor", name:"Múmia Menor", difficulty:2,
     attrs: {FOR:2,DEX:0,AGI:0,INT:1,SAB:2}, size:"normal", category:"Morto-Vivo",
-    location:["Tumba","Pirâmide","Deserto Carmesim"],
+    location: ["Cemitério", "Deserto"],
     hp:80, physDefense:4, magDefense:3, dodge:10,
     actions:2, damage:"1d8+1d4 (golpe ressecante)",
     abilities:[
@@ -6027,7 +6027,7 @@ const BESTIARY = [
 
   { id:"doppelganger-menor", name:"Imitador (Doppelganger Menor)", difficulty:2,
     attrs: {FOR:1,DEX:2,AGI:2,INT:3,SAB:1}, size:"normal", category:"Aberração",
-    location:["Cidade","Taverna","Dungeon Profunda"],
+    location: ["Cidade", "Dungeon"],
     hp:70, physDefense:4, magDefense:4, dodge:12,
     actions:2, damage:"1d8 (golpe surpresa)",
     abilities:[
@@ -6041,7 +6041,7 @@ const BESTIARY = [
 
   { id:"golem-gelo", name:"Golem de Gelo", difficulty:2,
     attrs: {FOR:3,DEX:0,AGI:0,INT:0,SAB:0}, size:"grande", category:"Construto",
-    location:["Neve","Montanha","Dungeon Gelada"],
+    location: ["Dungeon", "Montanha"],
     hp:100, physDefense:5, magDefense:2, dodge:8,
     actions:2, damage:"1d10+1d6 (soco de gelo)",
     abilities:[
@@ -6055,7 +6055,7 @@ const BESTIARY = [
 
   { id:"naiad-corrompida", name:"Náiade Corrompida", difficulty:2,
     attrs: {FOR:0,DEX:2,AGI:2,INT:1,SAB:3}, size:"normal", category:"Espírito",
-    location:["Rio","Grande Lago","Pântano"],
+    location: ["Planície", "Pântano"],
     hp:70, physDefense:4, magDefense:6, dodge:12,
     actions:2, damage:"1d6+1d4 (toque aquoso)",
     abilities:[
@@ -6071,7 +6071,7 @@ const BESTIARY = [
 
   { id:"minotauro-perdido", name:"Minotauro Perdido", difficulty:3,
     attrs: {FOR:5,DEX:1,AGI:1,INT:1,SAB:0}, size:"grande", category:"Humanoide",
-    location:["Labirinto","Dungeon","Ruínas"],
+    location: ["Dungeon", "Ruínas"],
     hp:170, physDefense:7, magDefense:2, dodge:11,
     actions:3, damage:"1d12+1d10 (machado colossal)",
     abilities:[
@@ -6085,7 +6085,7 @@ const BESTIARY = [
 
   { id:"quimera-jovem", name:"Quimera Jovem", difficulty:3,
     attrs: {FOR:4,DEX:2,AGI:2,INT:1,SAB:1}, size:"grande", category:"Besta",
-    location:["Montanha","Planície","Dungeon de Elite"],
+    location: ["Dungeon", "Montanha", "Planície"],
     hp:160, physDefense:7, magDefense:4, dodge:11,
     actions:3, damage:"1d10+1d6 (cabeças alternadas)",
     abilities:[
@@ -6099,7 +6099,7 @@ const BESTIARY = [
 
   { id:"bruxa-das-ervas", name:"Bruxa das Ervas Venenosas", difficulty:3,
     attrs: {FOR:0,DEX:1,AGI:1,INT:4,SAB:5}, size:"normal", category:"Humanoide",
-    location:["Pântano","Floresta Profunda","Ruínas"],
+    location: ["Floresta", "Pântano", "Ruínas"],
     hp:110, physDefense:7, magDefense:8, dodge:11,
     actions:2, damage:"1d6 (cajado venenoso) + veneno",
     abilities:[
@@ -6114,7 +6114,7 @@ const BESTIARY = [
 
   { id:"cavaleiro-sem-cabeca", name:"Cavaleiro Sem Cabeça", difficulty:3,
     attrs: {FOR:4,DEX:2,AGI:2,INT:2,SAB:0}, size:"normal", category:"Morto-Vivo",
-    location:["Estrada","Floresta","Cemitério Nobre"],
+    location: ["Estrada", "Floresta", "Pântano"],
     hp:155, physDefense:7, magDefense:3, dodge:11,
     actions:3, damage:"1d10+1d8 (espada do julgamento)",
     abilities:[
@@ -6128,7 +6128,7 @@ const BESTIARY = [
 
   { id:"escorpiao-gigante", name:"Escorpião Gigante do Deserto", difficulty:3,
     attrs: {FOR:4,DEX:2,AGI:1,INT:0,SAB:1}, size:"grande", category:"Besta",
-    location:["Deserto Carmesim","Planície Árida","Caverna"],
+    location: ["Caverna", "Deserto", "Planície"],
     hp:145, physDefense:7, magDefense:1, dodge:11,
     actions:3, damage:"1d10+1d6 (pinças) + 1d8 (ferrão)",
     abilities:[
@@ -6142,7 +6142,7 @@ const BESTIARY = [
 
   { id:"esfinx-menor", name:"Esfinge Menor", difficulty:3,
     attrs: {FOR:3,DEX:2,AGI:2,INT:5,SAB:4}, size:"grande", category:"Besta Mística",
-    location:["Deserto","Ruínas Élficas","Templo"],
+    location: ["Deserto", "Ruínas", "Templo"],
     hp:160, physDefense:7, magDefense:7, dodge:11,
     actions:3, damage:"1d10+1d8 (garras e bico)",
     abilities:[
@@ -6157,7 +6157,7 @@ const BESTIARY = [
 
   { id:"elemental-terra", name:"Elemental de Terra", difficulty:3,
     attrs: {FOR:6,DEX:0,AGI:0,INT:0,SAB:1}, size:"grande", category:"Elemental",
-    location:["Montanha","Caverna","Planície Pedregosa"],
+    location: ["Caverna", "Montanha", "Planície"],
     hp:180, physDefense:9, magDefense:2, dodge:8,
     actions:2, damage:"2d8+1d6 (soco de pedra)",
     abilities:[
@@ -6171,7 +6171,7 @@ const BESTIARY = [
 
   { id:"gargoyle", name:"Gárgula Guardiã", difficulty:3,
     attrs: {FOR:3,DEX:1,AGI:2,INT:1,SAB:2}, size:"normal", category:"Construto",
-    location:["Castelo","Ruínas","Templo","Topo de Torre"],
+    location: ["Planície", "Ruínas", "Templo"],
     hp:135, physDefense:8, magDefense:4, dodge:11,
     actions:3, damage:"1d8+1d6 (garras de pedra e chifres)",
     abilities:[
@@ -6185,7 +6185,7 @@ const BESTIARY = [
 
   { id:"mercenario-elite", name:"Mercenário de Elite", difficulty:3,
     attrs: {FOR:3,DEX:3,AGI:3,INT:2,SAB:2}, size:"normal", category:"Humanoide",
-    location:["Cidade","Dungeon Contratada","Estrada"],
+    location: ["Cidade", "Dungeon", "Estrada"],
     hp:130, physDefense:7, magDefense:3, dodge:11,
     actions:3, damage:"1d10+1d6 (espada longa ou arco)",
     abilities:[
@@ -6199,7 +6199,7 @@ const BESTIARY = [
 
   { id:"serpente-vento", name:"Serpente do Vento", difficulty:3,
     attrs: {FOR:1,DEX:4,AGI:5,INT:1,SAB:2}, size:"normal", category:"Besta Elemental",
-    location:["Montanhas de Atrelon","Penhasco","Planície Aberta"],
+    location: ["Montanha", "Planície"],
     hp:115, physDefense:7, magDefense:6, dodge:11,
     actions:3, damage:"1d8+1d6 (mordida + vento cortante)",
     abilities:[
@@ -6213,7 +6213,7 @@ const BESTIARY = [
 
   { id:"golem-carne", name:"Golem de Carne", difficulty:3,
     attrs: {FOR:5,DEX:0,AGI:0,INT:0,SAB:0}, size:"grande", category:"Construto",
-    location:["Laboratório do Necromante","Dungeon Profunda"],
+    location: ["Dungeon"],
     hp:190, physDefense:7, magDefense:2, dodge:9,
     actions:2, damage:"1d12+1d8 (soco brutal)",
     abilities:[
@@ -6234,7 +6234,7 @@ const BESTIARY = [
   /* ── Inimigos de missões faltantes ── */
 
   { id: "teldris-mago-traficante", name: "Teldris, o Mago Traficante", difficulty: 2, size: "normal", category: "Humanoide",
-    location: ["Cidade", "Mansão", "Laboratório Secreto"],
+    location: ["Cidade", "Dungeon"],
     hp: 85, physDefense: 4, magDefense: 6, dodge: 12,
     attrs: {FOR:0,DEX:1,AGI:1,INT:4,SAB:3},
     actions: 2, damage: "1d6 (cajado) + magias",
@@ -6247,7 +6247,7 @@ const BESTIARY = [
     loot: [{item:"Chave do Cofre",chance:100,qty:"1"},{item:"Documentos de Clientes",chance:100,qty:"1"},{item:"Poção de Invisibilidade",chance:60,qty:"1"},{item:"Ouro (2d20)",chance:100,qty:"1"}] },
 
   { id: "formiga-gigante-guerreira", name: "Formiga Gigante Guerreira", difficulty: 1, size: "normal", category: "Besta",
-    location: ["Formigueiro", "Subterrâneo", "Floresta"],
+    location: ["Caverna", "Dungeon", "Floresta", "Planície"],
     hp: 40, physDefense: 3, magDefense: 0, dodge: 11,
     attrs: {FOR:2,DEX:1,AGI:1,INT:0,SAB:1},
     actions: 2, damage: "1d6+1d4 (mandíbulas cortantes)",
@@ -6261,7 +6261,7 @@ const BESTIARY = [
     loot: [{item:"Mandíbula de Formiga Gigante (material resistente)",chance:50,qty:"1d2"},{item:"Mel Alquímico (ingrediente)",chance:30,qty:"1"}] },
 
   { id: "rainha-das-formigas", name: "Rainha das Formigas Gigantes", difficulty: 2, size: "grande", category: "Besta",
-    location: ["Câmara da Rainha", "Formigueiro Profundo"],
+    location: ["Dungeon"],
     hp: 115, physDefense: 5, magDefense: 1, dodge: 8,
     attrs: {FOR:4,DEX:0,AGI:0,INT:2,SAB:3},
     actions: 2, damage: "1d10+1d6 (mandíbulas pesadas)",
@@ -6275,7 +6275,7 @@ const BESTIARY = [
     loot: [{item:"Mel Real de Formiga (componente mágico raro)",chance:80,qty:"1d3"},{item:"Cera da Rainha (selante mágico)",chance:40,qty:"1"}] },
 
   { id: "soldado-da-guarda", name: "Soldado da Guarda", difficulty: 2, size: "normal", category: "Humanoide",
-    location: ["Cidade", "Fortaleza", "Palácio", "Fronteira"],
+    location: ["Cidade", "Dungeon", "Estrada", "Ruínas"],
     hp: 75, physDefense: 5, magDefense: 1, dodge: 12,
     attrs: {FOR:2,DEX:1,AGI:1,INT:1,SAB:1},
     actions: 2, damage: "1d8+1d4 (espada e escudo)",
@@ -6289,7 +6289,7 @@ const BESTIARY = [
     loot: [{item:"Equipamento de Guarda (armadura e arma padrão)",chance:70,qty:"1"},{item:"Chave de Seção",chance:30,qty:"1"},{item:"Moedas (1d10 prata)",chance:60,qty:"1"}] },
 
   { id: "banshee-aliada", name: "Banshee", difficulty: 4, size: "normal", category: "Morto-Vivo",
-    location: ["Navio Assombrado", "Cemitério", "Ruínas Costeiras", "Dungeon com Água"],
+    location: ["Cemitério", "Dungeon", "Pântano", "Ruínas"],
     hp: 85, physDefense: 8, magDefense: 7, dodge: 12,
     attrs: {FOR:0,DEX:3,AGI:5,INT:5,SAB:6},
     actions: 3, damage: "1d10 (toque psíquico — ignora Def Física)",
@@ -6304,7 +6304,7 @@ const BESTIARY = [
     loot: [{item:"Essência de Banshee (componente para magias de medo)",chance:60,qty:"1"},{item:"Colar da Vítima (item da vida anterior)",chance:40,qty:"1"}] },
 
   { id: "tharak-draconico-adulto", name: "Tharak, Dracônico Vermelho Adulto", difficulty: 5, size: "colossal", category: "Dracônico",
-    location: ["Forte do Norte", "Montanha", "Caverna Dracônica"],
+    location: ["Caverna", "Montanha", "Ruínas"],
     hp: 320, physDefense: 10, magDefense: 6, dodge: 12,
     isElite: true,
     attrs: {FOR:8,DEX:4,AGI:3,INT:6,SAB:5},
@@ -6321,7 +6321,7 @@ const BESTIARY = [
     loot: [{item:"Escama de Dracônico Adulto (lendário)",chance:80,qty:"1d3"},{item:"Ouro do Tesouro de Tharak (4d20 moedas de ouro)",chance:100,qty:"1"},{item:"Gema Dracônica (decorativa e valiosa — 50 ouro cada)",chance:60,qty:"1d4"}] },
 
   { id: "cavaleiro-esqueletico-montado", name: "Cavaleiro Esquelético Montado", difficulty: 3, size: "grande", category: "Morto-Vivo",
-    location: ["Tumba", "Dungeon", "Campo de Batalha Antigo"],
+    location: ["Cemitério", "Dungeon", "Planície", "Ruínas"],
     hp: 125, physDefense: 7, magDefense: 2, dodge: 11,
     attrs: {FOR:4,DEX:2,AGI:2,INT:1,SAB:0},
     actions: 3, damage: "1d10+1d8 (lança de osso + impacto do cavalo)",
@@ -6335,7 +6335,7 @@ const BESTIARY = [
     loot: [{item:"Lança de Osso Encantado (arma rara)",chance:40,qty:"1"},{item:"Armadura do Cavaleiro (desgastada mas funcional)",chance:50,qty:"1"},{item:"Ferraduras do Cavalo Fantasma (material mágico)",chance:25,qty:"1"}] },
 
   { id: "espectro-faminto-invocado", name: "Espectro Faminto", difficulty: 2, size: "normal", category: "Morto-Vivo",
-    location: ["Dungeon", "Cemitério", "Navio Assombrado", "Área com Mortes Violentas"],
+    location: ["Cemitério", "Dungeon", "Pântano", "Ruínas"],
     hp: 55, physDefense: 4, magDefense: 5, dodge: 12,
     attrs: {FOR:0,DEX:3,AGI:4,INT:2,SAB:3},
     actions: 2, damage: "1d8 (toque psíquico — ignora Def Física completamente)",
@@ -6364,7 +6364,7 @@ const BESTIARY = [
     attrs: { FOR:3, DEX:0, AGI:0, INT:0, SAB:0 },
     size: "normal",
     category: "Morto-Vivo",
-    location: ["Dungeon", "Cemitério", "Ruínas", "Área Corrompida"],
+    location: ["Cemitério", "Dungeon", "Floresta", "Planície", "Ruínas"],
     hp: 75, physDefense: 4, magDefense: 0, dodge: 8,
     actions: 2,
     damage: "1d8+1d4 (soco podre) ou Explosão",
@@ -6395,7 +6395,7 @@ const BESTIARY = [
     attrs: { FOR:0, DEX:3, AGI:2, INT:1, SAB:1 },
     size: "normal",
     category: "Humanoide",
-    location: ["Montanha", "Dungeon", "Floresta Nevada", "Torres Antigas"],
+    location: ["Dungeon", "Floresta", "Montanha", "Planície"],
     hp: 70, physDefense: 4, magDefense: 3, dodge: 12,
     actions: 2,
     damage: "1d8+1d4 (flecha de gelo) — alcance 6 hex",
@@ -6432,7 +6432,7 @@ const BESTIARY = [
     attrs: { FOR:0, DEX:1, AGI:1, INT:2, SAB:3 },
     size: "normal",
     category: "Humanoide",
-    location: ["Floresta Profunda", "Aldeia Maldita", "Ruínas Tribais", "Pântano"],
+    location: ["Cidade", "Floresta", "Pântano", "Ruínas"],
     hp: 60, physDefense: 4, magDefense: 5, dodge: 12,
     actions: 2,
     damage: "1d6+SAB (bastão ritual) ou Maldição",
@@ -6471,7 +6471,7 @@ const BESTIARY = [
     attrs: { FOR:2, DEX:4, AGI:4, INT:2, SAB:2 },
     size: "grande",
     category: "Besta Abissal",
-    location: ["Dungeon", "Caverna Profunda", "Floresta Maldita", "Teia do Abismo"],
+    location: ["Caverna", "Dungeon", "Floresta"],
     hp: 145, physDefense: 7, magDefense: 4, dodge: 11,
     actions: 3,
     damage: "1d10+1d6 (garras aracnídeas) + veneno",
@@ -6512,7 +6512,7 @@ const BESTIARY = [
     attrs: { FOR:1, DEX:5, AGI:5, INT:2, SAB:1 },
     size: "normal",
     category: "Elemental",
-    location: ["Planície Aberta", "Torre de Mago", "Ruínas com Tempestade", "Cume de Montanha"],
+    location: ["Dungeon", "Montanha", "Planície", "Ruínas"],
     hp: 115, physDefense: 7, magDefense: 8, dodge: 11,
     actions: 3,
     damage: "1d8+1d6 (descarga) — alcance 3 hex",
@@ -6553,7 +6553,7 @@ const BESTIARY = [
     attrs: { FOR:5, DEX:2, AGI:2, INT:0, SAB:0 },
     size: "normal",
     category: "Humanoide Corrompido",
-    location: ["Acampamento Corrompido", "Floresta do Deus Marcado", "Dungeon de Sangue", "Planície Devastada"],
+    location: ["Dungeon", "Floresta", "Planície"],
     hp: 160, physDefense: 7, magDefense: 1, dodge: 11,
     actions: 3,
     damage: "1d12+1d8 (machado de sangue)",
@@ -6596,7 +6596,7 @@ const BESTIARY = [
     attrs: { FOR:1, DEX:4, AGI:4, INT:7, SAB:6 },
     size: "normal",
     category: "Morto-Vivo Elite",
-    location: ["Torre Arcana", "Ruínas de Atrelon", "Nexo Dimensional", "Dungeon Profunda"],
+    location: ["Dungeon", "Ruínas", "Templo"],
     hp: 210, physDefense: 8, magDefense: 10, dodge: 12,
     actions: 4,
     damage: "1d8+INT (raio arcano) — alcance 5 hex",
@@ -6639,7 +6639,7 @@ const BESTIARY = [
     attrs: { FOR:6, DEX:3, AGI:2, INT:2, SAB:3 },
     size: "colossal",
     category: "Besta Lendária",
-    location: ["Pântano Profundo", "Lago Subterrâneo", "Caverna Úmida", "Costa do Lago Central"],
+    location: ["Caverna", "Pântano"],
     hp: 240, physDefense: 8, magDefense: 4, dodge: 10,
     actions: 4,
     damage: "1d12+1d8+FOR (mordida por cabeça ativa)",
@@ -6684,7 +6684,7 @@ const BESTIARY = [
     attrs: { FOR:6, DEX:5, AGI:5, INT:8, SAB:7 },
     size: "colossal",
     category: "Construto Lendário",
-    location: ["Nexo Dimensional", "Centro do Mapa", "Santuário Perdido", "Coração da Fissura"],
+    location: ["Dungeon", "Planície", "Pântano", "Templo"],
     hp: 345, physDefense: 12, magDefense: 12, dodge: 13,
     isElite: true,
     actions: 5,
@@ -6731,7 +6731,7 @@ const BESTIARY = [
     attrs: { FOR:4, DEX:7, AGI:7, INT:8, SAB:8 },
     size: "grande",
     category: "Entidade do Caos",
-    location: ["Tempestade Perpétua", "Cume de Atrelon", "Onde a Tormenta Começou"],
+    location: ["Montanha", "Planície", "Templo"],
     hp: 300, physDefense: 9, magDefense: 14, dodge: 13,
     isElite: true,
     actions: 5,
@@ -6780,7 +6780,7 @@ const BESTIARY = [
     attrs: { FOR:7, DEX:0, AGI:0, INT:1, SAB:1 },
     size: "colossal",
     category: "Elemental Lendário",
-    location: ["Monte Karloth", "Vulcão", "Câmara de Lava", "Forja Abandonada"],
+    location: ["Dungeon", "Montanha"],
     hp: 215, physDefense: 10, magDefense: 2, dodge: 6,
     actions: 2,
     damage: "2d8+1d10+FOR (soco de magma) — área 2 hex de respingo",
@@ -6823,7 +6823,7 @@ const BESTIARY = [
     attrs: { FOR:0, DEX:4, AGI:6, INT:5, SAB:5 },
     size: "normal",
     category: "Morto-Vivo Etéreo",
-    location: ["Dungeon", "Templo Antigo", "Câmara do Eco", "Onde Muitos Morreram Juntos"],
+    location: ["Cemitério", "Dungeon", "Planície", "Templo"],
     hp: 110, physDefense: 7, magDefense: 9, dodge: 11,
     actions: 3,
     damage: "1d8+SAB (toque etéreo — ignora Def.Física)",
@@ -6872,7 +6872,7 @@ const BESTIARY = [
     attrs: { FOR:0, DEX:2, AGI:1, INT:5, SAB:6 },
     size: "normal",
     category: "Humanoide Corrompido",
-    location: ["Floresta Profunda", "Casa Isolada", "Jardim Maldito", "Vila Abandonada"],
+    location: ["Cidade", "Floresta", "Planície"],
     hp: 125, physDefense: 7, magDefense: 8, dodge: 11,
     actions: 3,
     damage: "1d6+SAB (cajado envenenado) ou Magias de Veneno",
@@ -6925,7 +6925,7 @@ const BESTIARY = [
     attrs: { FOR:8, DEX:0, AGI:0, INT:1, SAB:1 },
     size: "colossal",
     category: "Construto",
-    location: ["Forja Abandonada", "Câmara Mecanizada", "Mina Profunda de Durrak"],
+    location: ["Caverna", "Dungeon"],
     hp: 330, physDefense: 14, magDefense: 2, dodge: 5,
     actions: 3,
     damage: "2d10+1d8+FOR (braço de prensa) ou Jato de Fogo",
@@ -6982,7 +6982,7 @@ const BESTIARY = [
     attrs: { FOR:2, DEX:4, AGI:4, INT:3, SAB:2 },
     size: "normal",
     category: "Humanoide Corrompido",
-    location: ["Esgoto da Cidade", "Porão de Taverna", "Armazém Abandonado", "Submundo Urbano"],
+    location: ["Cidade", "Dungeon"],
     hp: 100, physDefense: 4, magDefense: 4, dodge: 12,
     actions: 3,
     damage: "1d6+1d4+DEX (adaga envenenada)",
@@ -7035,7 +7035,7 @@ const BESTIARY = [
     attrs: { FOR:5, DEX:3, AGI:2, INT:3, SAB:2 },
     size: "normal",
     category: "Humanoide Elite",
-    location: ["Ruínas de Castelo", "Antiga Sala do Trono", "Estrada Abandonada", "Torre Caída"],
+    location: ["Estrada", "Planície", "Ruínas"],
     hp: 180, physDefense: 8, magDefense: 5, dodge: 11,
     actions: 3,
     damage: "1d10+1d8+FOR (espada bastarda) ou Magia Proibida",
@@ -7087,7 +7087,7 @@ const BESTIARY = [
     attrs: { FOR:1, DEX:2, AGI:1, INT:4, SAB:6 },
     size: "normal",
     category: "Humanoide Parasitado",
-    location: ["Templo Corrompido", "Hospital de Campanha", "Acampamento de Refugiados"],
+    location: ["Cidade", "Templo"],
     hp: 115, physDefense: 7, magDefense: 7, dodge: 11,
     actions: 3,
     damage: "1d6+SAB (toque de cura invertida) ou Magias",
@@ -7138,7 +7138,7 @@ const BESTIARY = [
     attrs: { FOR:7, DEX:0, AGI:0, INT:1, SAB:2 },
     size: "colossal",
     category: "Elemental Construído",
-    location: ["Torres Antigas de Atrelon", "Câmara Glacial", "Cume Nevado", "Cripta de Gelo"],
+    location: ["Cemitério", "Dungeon", "Montanha", "Ruínas"],
     hp: 235, physDefense: 9, magDefense: 3, dodge: 6,
     actions: 2,
     damage: "2d8+FOR (pancada de gelo) + Congelamento em área",
@@ -7198,7 +7198,7 @@ const BESTIARY = [
     attrs: { FOR:3, DEX:1, AGI:1, INT:0, SAB:1 },
     size: "grande",
     category: "Besta — Cria de Karlac",
-    location: ["Deserto Carmesim", "Oásis do Deserto", "Ruínas do Deserto", "Cratera de Calor"],
+    location: ["Deserto", "Montanha", "Ruínas"],
     hp: 100, physDefense: 5, magDefense: 1, dodge: 10,
     actions: 2,
     damage: "1d8+1d6+FOR (mordida ardente) + 1d4 fogo passivo",
@@ -7219,7 +7219,7 @@ const BESTIARY = [
     attrs: { FOR:2, DEX:1, AGI:1, INT:2, SAB:3 },
     size: "normal",
     category: "Humanoide Corrompido — Servo de Karlac",
-    location: ["Deserto Carmesim", "Acampamento do Culto", "Cratera Central"],
+    location: ["Deserto", "Dungeon", "Floresta", "Montanha", "Ruínas"],
     hp: 75, physDefense: 4, magDefense: 4, dodge: 12,
     actions: 2,
     damage: "1d6+SAB (tocha ritual) ou Magia de Calor",
@@ -7242,7 +7242,7 @@ const BESTIARY = [
     attrs: { FOR:2, DEX:2, AGI:2, INT:1, SAB:1 },
     size: "normal",
     category: "Dracônico — Filhote de Tharak",
-    location: ["Forte do Norte", "Caverna Dracônica", "Montanha Nevada"],
+    location: ["Caverna", "Montanha", "Ruínas"],
     hp: 70, physDefense: 4, magDefense: 2, dodge: 12,
     actions: 2,
     damage: "1d6+1d4+FOR (garras e mordida pequena)",
@@ -7263,7 +7263,7 @@ const BESTIARY = [
     attrs: { FOR:4, DEX:3, AGI:2, INT:2, SAB:2 },
     size: "normal",
     category: "Humanoide Dracônico",
-    location: ["Forte do Norte", "Passagem da Montanha", "Acampamento Dracônico"],
+    location: ["Caverna", "Montanha", "Ruínas"],
     hp: 135, physDefense: 7, magDefense: 3, dodge: 11,
     actions: 3,
     damage: "1d10+1d6+FOR (lança com ponta dracônica) ou Sopro de Fogo (limitado)",
@@ -7286,7 +7286,7 @@ const BESTIARY = [
     attrs: { FOR:0, DEX:3, AGI:3, INT:4, SAB:3 },
     size: "normal",
     category: "Morto-Vivo — Servo do Lich",
-    location: ["Montanhas de Atrelon", "Pico Nevado", "Túnel de Gelo", "Ruínas Congeladas"],
+    location: ["Montanha", "Ruínas"],
     hp: 65, physDefense: 4, magDefense: 6, dodge: 12,
     actions: 2,
     damage: "1d6+INT (toque glacial — ignora Def.Física)",
@@ -7307,7 +7307,7 @@ const BESTIARY = [
     attrs: { FOR:5, DEX:0, AGI:0, INT:1, SAB:1 },
     size: "grande",
     category: "Construto — Criação do Lich",
-    location: ["Pico de Atrelon", "Torre do Gelo Eterno", "Câmara do Filactério"],
+    location: ["Dungeon", "Montanha"],
     hp: 170, physDefense: 8, magDefense: 2, dodge: 7,
     actions: 2,
     damage: "1d10+1d8+FOR (punho de osso congelado) + respingo de gelo",
@@ -7331,7 +7331,7 @@ const BESTIARY = [
     attrs: { FOR:1, DEX:2, AGI:2, INT:3, SAB:4 },
     size: "normal",
     category: "Serpentariano Elite — Servo Divino",
-    location: ["Serpentara", "Castelo da Cobra", "Templo de Jurgmund", "Câmara do Culto"],
+    location: ["Dungeon", "Ruínas", "Templo"],
     hp: 80, physDefense: 4, magDefense: 6, dodge: 12,
     actions: 3,
     damage: "1d6+SAB (cajado de osso de serpente) ou Magia",
@@ -7352,7 +7352,7 @@ const BESTIARY = [
     attrs: { FOR:4, DEX:4, AGI:4, INT:3, SAB:4 },
     size: "grande",
     category: "Serpentariano Sagrado — Criatura de Jurgmund",
-    location: ["Câmara Sagrada de Jurgmund", "Corredor do Templo", "Ante-câmara da Serpente"],
+    location: ["Dungeon", "Templo"],
     hp: 155, physDefense: 7, magDefense: 7, dodge: 11,
     actions: 3,
     damage: "1d8+1d6+DEX (mordida sagrada) + veneno divino",
@@ -7375,7 +7375,7 @@ const BESTIARY = [
     attrs: { FOR:3, DEX:1, AGI:1, INT:2, SAB:2 },
     size: "normal",
     category: "Anão — Guardião de Magnalaga",
-    location: ["Cidadela do Casco", "Casco de Magnalaga", "Porto de Embarque do Lago"],
+    location: ["Cidade", "Dungeon"],
     hp: 90, physDefense: 6, magDefense: 2, dodge: 10,
     actions: 2,
     damage: "1d8+1d4+FOR (martelo de casco)",
@@ -7396,7 +7396,7 @@ const BESTIARY = [
     attrs: { FOR:6, DEX:1, AGI:0, INT:0, SAB:2 },
     size: "colossal",
     category: "Besta Aquática — Parasita de Magnalaga",
-    location: ["Profundezas do Lago Central", "Fundo do Casco de Magnalaga", "Caverna Subaquática"],
+    location: ["Caverna", "Dungeon", "Pântano"],
     hp: 180, physDefense: 9, magDefense: 1, dodge: 7,
     actions: 2,
     damage: "1d12+1d8+FOR (pinça colossal) + Esmagar",
@@ -7419,7 +7419,7 @@ const BESTIARY = [
     attrs: { FOR:3, DEX:3, AGI:3, INT:4, SAB:4 },
     size: "normal",
     category: "Campeão do Deus Marcado",
-    location: ["Qualquer lugar com Corrupção", "Altar da Marca", "Área Maldita", "Onde o Avatar Passou"],
+    location: ["Cemitério", "Floresta", "Planície", "Templo"],
     hp: 145, physDefense: 7, magDefense: 6, dodge: 11,
     actions: 3,
     damage: "1d8+1d6 (lâmina da marca) ou Magias da Corrupção",
@@ -7457,7 +7457,7 @@ const BESTIARY = [
     difficulty: 2,
     attrs: { FOR:1, DEX:3, AGI:1, INT:0, SAB:0 },
     size: "normal", category: "Morto-Vivo",
-    location: ["Pântano do Véu Cinzento", "Margem do Rio Mara", "Floresta Pantanosa"],
+    location: ["Floresta", "Pântano"],
     hp: 50, physDefense: 4, magDefense: 1, dodge: 12,
     actions: 2, damage: "1d8+DEX (flecha podre) — alcance 6 hex",
     group: "Legião do Lich do Pântano",
@@ -7476,7 +7476,7 @@ const BESTIARY = [
     difficulty: 2,
     attrs: { FOR:2, DEX:1, AGI:1, INT:0, SAB:0 },
     size: "normal", category: "Morto-Vivo",
-    location: ["Pântano do Véu Cinzento", "Margem do Rio Mara", "Floresta Pantanosa"],
+    location: ["Floresta", "Pântano"],
     hp: 65, physDefense: 4, magDefense: 0, dodge: 11,
     actions: 2, damage: "1d8+1d4+FOR (espada enferrujada)",
     group: "Legião do Lich do Pântano",
@@ -7495,7 +7495,7 @@ const BESTIARY = [
     difficulty: 2,
     attrs: { FOR:3, DEX:0, AGI:0, INT:0, SAB:0 },
     size: "normal", category: "Morto-Vivo",
-    location: ["Pântano do Véu Cinzento", "Margem do Rio Mara"],
+    location: ["Pântano"],
     hp: 70, physDefense: 4, magDefense: 0, dodge: 7,
     actions: 1, damage: "1d6+FOR (soco podre) ou Explosão",
     group: "Legião do Lich do Pântano",
@@ -7513,7 +7513,7 @@ const BESTIARY = [
     difficulty: 4,
     attrs: { FOR:2, DEX:3, AGI:3, INT:7, SAB:5 },
     size: "normal", category: "Morto-Vivo Elite",
-    location: ["Cripta Central do Pântano"],
+    location: ["Pântano"],
     hp: 195, physDefense: 8, magDefense: 10, dodge: 12,
     isElite: true,
     group: "Legião do Lich do Pântano",
@@ -7544,7 +7544,7 @@ const BESTIARY = [
     difficulty: 2,
     attrs: { FOR:2, DEX:2, AGI:3, INT:1, SAB:1 },
     size: "normal", category: "Besta Corrompida",
-    location: ["Floresta Negra", "Floresta Maldita", "Planície com Bruma do Vazio"],
+    location: ["Floresta", "Planície"],
     hp: 60, physDefense: 4, magDefense: 2, dodge: 12,
     actions: 2, damage: "1d6+1d4+DEX (mordida sombria)",
     group: "Alcateia das Sombras Cinzentas",
@@ -7562,7 +7562,7 @@ const BESTIARY = [
     difficulty: 3,
     attrs: { FOR:4, DEX:3, AGI:3, INT:2, SAB:3 },
     size: "normal", category: "Besta Corrompida",
-    location: ["Floresta Negra", "Coração da Floresta Maldita"],
+    location: ["Floresta", "Templo"],
     hp: 135, physDefense: 7, magDefense: 3, dodge: 11,
     actions: 3, damage: "1d10+1d6+FOR (mordida do Vazio)",
     group: "Alcateia das Sombras Cinzentas",
@@ -7592,7 +7592,7 @@ const BESTIARY = [
     difficulty: 1,
     attrs: { FOR:0, DEX:2, AGI:2, INT:1, SAB:0 },
     size: "normal", category: "Humanoide",
-    location: ["Grande Planície", "Estrada Comercial", "Atalho da Floresta", "Acampamento do Clã"],
+    location: ["Estrada", "Floresta", "Planície"],
     hp: 30, physDefense: 2, magDefense: 0, dodge: 13,
     actions: 2, damage: "1d6+DEX (besta curta) — alcance 5 hex",
     group: "Clã dos Espinhos de Ferro",
@@ -7610,7 +7610,7 @@ const BESTIARY = [
     difficulty: 1,
     attrs: { FOR:1, DEX:1, AGI:1, INT:1, SAB:0 },
     size: "normal", category: "Humanoide",
-    location: ["Grande Planície", "Estrada Comercial", "Acampamento do Clã"],
+    location: ["Estrada", "Floresta", "Planície"],
     hp: 40, physDefense: 4, magDefense: 0, dodge: 11,
     actions: 2, damage: "1d6+FOR (lança curta)",
     group: "Clã dos Espinhos de Ferro",
@@ -7628,7 +7628,7 @@ const BESTIARY = [
     difficulty: 2,
     attrs: { FOR:0, DEX:3, AGI:1, INT:3, SAB:1 },
     size: "normal", category: "Humanoide",
-    location: ["Grande Planície", "Estrada Comercial", "Acampamento do Clã"],
+    location: ["Estrada", "Floresta", "Planície"],
     hp: 45, physDefense: 4, magDefense: 2, dodge: 12,
     actions: 2, damage: "1d4+DEX (faca) ou Armadilha",
     group: "Clã dos Espinhos de Ferro",
@@ -7646,7 +7646,7 @@ const BESTIARY = [
     difficulty: 3,
     attrs: { FOR:3, DEX:3, AGI:2, INT:3, SAB:2 },
     size: "normal", category: "Humanoide Elite",
-    location: ["Acampamento Principal do Clã", "Caravana Contratada", "Fortaleza do Clã"],
+    location: ["Cidade", "Floresta", "Planície", "Ruínas"],
     hp: 140, physDefense: 7, magDefense: 3, dodge: 11,
     isElite: true,
     group: "Clã dos Espinhos de Ferro",
@@ -7676,7 +7676,7 @@ const BESTIARY = [
     difficulty: 1,
     attrs: { FOR:0, DEX:3, AGI:2, INT:2, SAB:0 },
     size: "normal", category: "Humanoide",
-    location: ["Túnel Subterrâneo", "Caverna do Rio Mara", "Atalho Subterrâneo"],
+    location: ["Caverna", "Dungeon"],
     hp: 25, physDefense: 2, magDefense: 0, dodge: 13,
     actions: 2, damage: "1d4+DEX (dardo envenenado) — alcance 4 hex",
     group: "Colônia Subterrânea de Vorn",
@@ -7694,7 +7694,7 @@ const BESTIARY = [
     difficulty: 2,
     attrs: { FOR:2, DEX:1, AGI:2, INT:1, SAB:1 },
     size: "normal", category: "Humanoide",
-    location: ["Câmara Principal da Colônia", "Entrada do Túnel"],
+    location: ["Caverna", "Dungeon"],
     hp: 50, physDefense: 4, magDefense: 0, dodge: 12,
     actions: 2, damage: "1d6+FOR (lança de osso) + armadilha próxima",
     group: "Colônia Subterrânea de Vorn",
@@ -7712,7 +7712,7 @@ const BESTIARY = [
     difficulty: 2,
     attrs: { FOR:0, DEX:2, AGI:1, INT:4, SAB:2 },
     size: "normal", category: "Humanoide Elite",
-    location: ["Laboratório Central da Colônia"],
+    location: ["Dungeon"],
     hp: 65, physDefense: 4, magDefense: 4, dodge: 12,
     isElite: true,
     group: "Colônia Subterrânea de Vorn",
@@ -7738,7 +7738,7 @@ const BESTIARY = [
   difficulty: 1,
   attrs: { FOR:1, DEX:0, AGI:0, INT:0, SAB:0 },
   size: "normal", category: "Aberração",
-  location: ["Dungeon", "Caverna Úmida", "Esgoto", "Porão Abandonado"],
+  location: ["Caverna", "Cidade", "Dungeon"],
   hp: 35, physDefense: 2, magDefense: 0, dodge: 5,
   actions: 1, damage: "1d4+FOR (corrosão ácida)",
   behavior: "Sem inteligência — move-se para qualquer coisa orgânica próxima. Não persegue se a presa sumir. Útil para ensinar que nem todo monstro pode ser cortado eficientemente.",
@@ -7755,7 +7755,7 @@ const BESTIARY = [
   difficulty: 1,
   attrs: { FOR:0, DEX:2, AGI:3, INT:0, SAB:1 },
   size: "normal", category: "Besta",
-  location: ["Caverna", "Dungeon", "Ruínas", "Torre Abandonada", "Floresta Densa"],
+  location: ["Caverna", "Dungeon", "Floresta", "Ruínas"],
   hp: 20, physDefense: 2, magDefense: 0, dodge: 13,
   actions: 2, damage: "1d4+DEX (mordida frenética)",
   behavior: "Em bando — nunca sozinho. Mais incômodo que perigoso individualmente. Desorientador em grande número.",
@@ -7771,7 +7771,7 @@ const BESTIARY = [
   difficulty: 1,
   attrs: { FOR:0, DEX:1, AGI:1, INT:2, SAB:2 },
   size: "normal", category: "Humanoide",
-  location: ["Caverna Goblin", "Floresta Densa", "Acampamento Improvisado"],
+  location: ["Caverna", "Floresta", "Ruínas"],
   hp: 30, physDefense: 2, magDefense: 3, dodge: 12,
   actions: 2, damage: "1d4+SAB (bastão ritual) ou Magia Menor",
   behavior: "Fica atrás dos guerreiros. Prioriza buffar aliados acima de atacar. Foge se ficar sozinho.",
@@ -7788,7 +7788,7 @@ const BESTIARY = [
   difficulty: 1,
   attrs: { FOR:0, DEX:2, AGI:3, INT:1, SAB:2 },
   size: "normal", category: "Espírito",
-  location: ["Campo de Batalha Antigo", "Cemitério", "Floresta Sombria", "Ruínas"],
+  location: ["Cemitério", "Floresta", "Planície", "Ruínas"],
   hp: 25, physDefense: 2, magDefense: 4, dodge: 13,
   actions: 2, damage: "1d4+SAB (bicada espectral — ignora Def.Física)",
   behavior: "Assusta antes de atacar. Se o grupo mostrar medo (fugir ou recuar): persegue. Se o grupo avança: recua para distância segura e ataca à distância.",
@@ -7804,7 +7804,7 @@ const BESTIARY = [
   difficulty: 1,
   attrs: { FOR:0, DEX:2, AGI:3, INT:1, SAB:1 },
   size: "normal", category: "Humanoide",
-  location: ["Floresta", "Estrada", "Colinas", "Periferia de Acampamento Goblin"],
+  location: ["Cidade", "Estrada", "Floresta", "Montanha"],
   hp: 25, physDefense: 2, magDefense: 0, dodge: 13,
   actions: 2, damage: "1d4+DEX (faca curta)",
   behavior: "Observa e foge — raramente combate sozinha. Se encontrada sozinha: estava espionando e tem informação. Capturá-la viva é mais valioso que matá-la.",
@@ -7820,7 +7820,7 @@ const BESTIARY = [
   difficulty: 1,
   attrs: { FOR:0, DEX:1, AGI:0, INT:3, SAB:1 },
   size: "normal", category: "Morto-Vivo",
-  location: ["Dungeon", "Biblioteca Maldita", "Torre de Mago Abandonada", "Cripta"],
+  location: ["Cemitério", "Dungeon", "Ruínas"],
   hp: 30, physDefense: 2, magDefense: 5, dodge: 10,
   actions: 2, damage: "1d4 (ossos) ou Magia",
   behavior: "Mantém distância e lança magias. A magia que usa depende do que o mago original sabia — o necromante que o criou gravou uma magia residual no esqueleto.",
@@ -7837,7 +7837,7 @@ const BESTIARY = [
   difficulty: 1,
   attrs: { FOR:0, DEX:3, AGI:2, INT:2, SAB:1 },
   size: "normal", category: "Humanoide",
-  location: ["Mercado", "Cidade", "Taverna", "Armazém"],
+  location: ["Cidade"],
   hp: 25, physDefense: 2, magDefense: 1, dodge: 13,
   actions: 2, damage: "1d4+DEX (punhal)",
   behavior: "Não quer combater — quer fugir com o que roubou. Só luta se encurralado. Preferência absoluta por Furtividade e fuga.",
@@ -7853,7 +7853,7 @@ const BESTIARY = [
   difficulty: 1,
   attrs: { FOR:2, DEX:0, AGI:1, INT:0, SAB:1 },
   size: "normal", category: "Besta",
-  location: ["Pântano", "Margem de Rio", "Floresta Úmida", "Caverna com Água"],
+  location: ["Caverna", "Floresta", "Pântano"],
   hp: 40, physDefense: 2, magDefense: 0, dodge: 11,
   actions: 2, damage: "1d6+FOR (mordida venenosa)",
   behavior: "Territorial mas lento. Não persegue por mais de 4 hex. Protege sua poça.",
@@ -7869,7 +7869,7 @@ const BESTIARY = [
   difficulty: 1,
   attrs: { FOR:3, DEX:0, AGI:0, INT:0, SAB:0 },
   size: "normal", category: "Morto-Vivo",
-  location: ["Dungeon", "Necrotério", "Cemitério", "Campo de Batalha Antigo"],
+  location: ["Cemitério", "Dungeon", "Planície", "Ruínas"],
   hp: 50, physDefense: 2, magDefense: 0, dodge: 6,
   actions: 1, damage: "1d6+FOR (aperto de zumbi)",
   behavior: "Avança em linha reta. Nunca desvia. Lento mas persistente.",
@@ -7885,7 +7885,7 @@ const BESTIARY = [
   difficulty: 1,
   attrs: { FOR:0, DEX:4, AGI:4, INT:2, SAB:1 },
   size: "normal", category: "Fada",
-  location: ["Floresta Mágica", "Jardim Encantado", "Claro da Floresta", "Perto de Fadas Maiores"],
+  location: ["Floresta"],
   hp: 20, physDefense: 2, magDefense: 6, dodge: 13,
   actions: 2, damage: "1d4+DEX (agulha mágica) — alcance 3 hex",
   behavior: "Não é maliciosa — é travessa. Ataca quem entra em seu território mas sem intenção de matar. Acha o combate divertido. Para se o grupo mostrar humor ou fizer algo criativo.",
@@ -7905,7 +7905,7 @@ const BESTIARY = [
   difficulty: 2,
   attrs: { FOR:4, DEX:0, AGI:0, INT:0, SAB:1 },
   size: "grande", category: "Elemental",
-  location: ["Dungeon", "Caverna", "Ruínas com Pedra", "Mina"],
+  location: ["Caverna", "Dungeon", "Ruínas"],
   hp: 90, physDefense: 7, magDefense: 1, dodge: 7,
   actions: 2, damage: "1d10+FOR (punho de pedra)",
   behavior: "Guardião de local específico — não persegue além de raio 5 hex do ponto que guarda. Lento mas devastador em melee.",
@@ -7922,7 +7922,7 @@ const BESTIARY = [
   difficulty: 2,
   attrs: { FOR:2, DEX:3, AGI:3, INT:3, SAB:2 },
   size: "normal", category: "Morto-Vivo",
-  location: ["Cripta", "Torre Isolada", "Caverna Escura", "Mansão Abandonada"],
+  location: ["Caverna", "Cemitério", "Cidade", "Planície"],
   hp: 75, physDefense: 4, magDefense: 4, dodge: 12,
   actions: 2, damage: "1d8+DEX (mordida drenante)",
   behavior: "Calculado e frio. Testa o grupo antes de engajar plenamente. Foge para sombra ao receber dano sagrado. Tem orgulho — se humilhado, ataca com raiva (comportamento previsível).",
@@ -7939,7 +7939,7 @@ const BESTIARY = [
   difficulty: 2,
   attrs: { FOR:2, DEX:2, AGI:3, INT:1, SAB:3 },
   size: "normal", category: "Humanoide Alado",
-  location: ["Penhasco", "Floresta Alta", "Ruínas de Torre", "Costa do Lago"],
+  location: ["Floresta", "Montanha", "Pântano", "Ruínas"],
   hp: 70, physDefense: 4, magDefense: 3, dodge: 12,
   actions: 2, damage: "1d6+DEX (garras) ou Canto",
   behavior: "Prefere atrair vítimas antes de atacar. Em combate: mantém altitude, usa o Canto e desce para atacar quem estiver encantado.",
@@ -7955,7 +7955,7 @@ const BESTIARY = [
   difficulty: 2,
   attrs: { FOR:3, DEX:2, AGI:0, INT:2, SAB:2 },
   size: "normal", category: "Aberração",
-  location: ["Dungeon", "Tesouro Antigo", "Sala de Armadilhas"],
+  location: ["Dungeon", "Ruínas"],
   hp: 80, physDefense: 4, magDefense: 3, dodge: 8,
   actions: 2, damage: "1d8+FOR (mordida adesiva)",
   behavior: "Imóvel até ser aberto. Então ataca quem tentou abrir. Foca quem está mais próximo.",
@@ -7972,7 +7972,7 @@ const BESTIARY = [
   difficulty: 2,
   attrs: { FOR:3, DEX:2, AGI:1, INT:2, SAB:1 },
   size: "normal", category: "Humanoide",
-  location: ["Estrada", "Floresta Densa", "Ruínas", "Vilarejo Abandonado"],
+  location: ["Cidade", "Estrada", "Floresta", "Ruínas"],
   hp: 70, physDefense: 5, magDefense: 2, dodge: 12,
   actions: 2, damage: "1d8+1d4+FOR (espada de combate)",
   behavior: "Traumatizado — ataca primeiro sem perguntar. Se o grupo não atacar de volta por 1 rodada: Percepção (normal) do grupo nota que ele está tremendo, não ameaçando. Pode ser abordado (Persuasão difícil — ele está com medo, não é malicioso).",
@@ -7988,7 +7988,7 @@ const BESTIARY = [
   difficulty: 2,
   attrs: { FOR:3, DEX:1, AGI:1, INT:0, SAB:2 },
   size: "grande", category: "Besta",
-  location: ["Deserto", "Floresta Seca", "Ruínas Quentes", "Pântano Seco"],
+  location: ["Deserto", "Floresta", "Pântano", "Ruínas"],
   hp: 85, physDefense: 5, magDefense: 0, dodge: 11,
   actions: 2, damage: "1d8+1d4+FOR (mordida venenosa)",
   behavior: "Espera imóvel (camuflado) até a presa estar a 2 hex. Então ataca sem aviso. Após a emboscada: luta até a morte se a presa estiver envenenada.",
@@ -8005,7 +8005,7 @@ const BESTIARY = [
   difficulty: 2,
   attrs: { FOR:0, DEX:2, AGI:2, INT:3, SAB:4 },
   size: "normal", category: "Morto-Vivo",
-  location: ["Casa Mal-assombrada", "Campo de Batalha Antigo", "Floresta Sombria", "Cemitério"],
+  location: ["Cemitério", "Cidade", "Floresta", "Planície", "Ruínas"],
   hp: 65, physDefense: 4, magDefense: 7, dodge: 12,
   actions: 2, damage: "1d6+SAB (toque fantasmal — ignora Def.Física)",
   behavior: "Grita antes de atacar. Mantém distância e usa o Lamento. Se o grupo usar magia de bênção ou luz sagrada: recua 3 hex automaticamente (instinto de auto-preservação).",
@@ -8021,7 +8021,7 @@ const BESTIARY = [
   difficulty: 2,
   attrs: { FOR:3, DEX:2, AGI:2, INT:1, SAB:2 },
   size: "normal", category: "Aberração Aquática",
-  location: ["Costa do Lago Central", "Rio Profundo", "Marismas", "Templo Submerso"],
+  location: ["Pântano", "Templo"],
   hp: 75, physDefense: 4, magDefense: 3, dodge: 12,
   actions: 2, damage: "1d8+1d4+FOR (tridentes e garras)",
   behavior: "Em grupo — nunca solo. Fora d'água: −1 Ação por turno (fica mais lento). Na água: +1 Ação e +2 Movimento.",
@@ -8038,7 +8038,7 @@ const BESTIARY = [
   difficulty: 2,
   attrs: { FOR:1, DEX:1, AGI:1, INT:2, SAB:5 },
   size: "normal", category: "Humanoide Corrompido",
-  location: ["Floresta Maldita", "Bosque Corrompido", "Claro com Árvores Mortas"],
+  location: ["Floresta"],
   hp: 70, physDefense: 4, magDefense: 6, dodge: 12,
   actions: 2, damage: "1d6+SAB (cajado de galhos retorcidos) ou Magia",
   behavior: "Protege seu território. Não distingue mais entre inimigo e aliado — considera TUDO uma ameaça ao bosque. Um Druida verdadeiro do grupo pode tentar comunicação (SAB difícil).",
@@ -8056,7 +8056,7 @@ const BESTIARY = [
   difficulty: 2,
   attrs: { FOR:0, DEX:3, AGI:3, INT:3, SAB:4 },
   size: "normal", category: "Morto-Vivo",
-  location: ["Local de Assassinato", "Casa do Crime", "Dungeon de Tortura", "Qualquer Local de Morte Injusta"],
+  location: ["Cemitério", "Cidade", "Dungeon"],
   hp: 70, physDefense: 4, magDefense: 8, dodge: 12,
   actions: 2, damage: "1d8+SAB (toque da vingança — ignora Def.Física)",
   behavior: "Tem um alvo específico — quem matou ou prejudicou em vida. Se o grupo NÃO for esse alvo: testa SAB (normal) do Espectro para perceber. Se perceber: ataca o grupo apenas se interferirem. Resolver o crime pode dissipar o Espectro sem combate.",
@@ -8075,7 +8075,7 @@ const BESTIARY = [
   difficulty: 1,
   attrs: { FOR:2, DEX:1, AGI:1, INT:0, SAB:0 },
   size: "normal", category: "Morto-Vivo",
-  location: ["Necrópole", "Câmara Selada", "Catacumba"],
+  location: ["Cemitério", "Dungeon", "Planície"],
   hp: 45, physDefense: 4, magDefense: 0, dodge: 10,
   actions: 2, damage: "1d6+FOR (espada enferrujada)",
   group: "Horda dos Túmulos Abertos",
@@ -8093,7 +8093,7 @@ const BESTIARY = [
   difficulty: 1,
   attrs: { FOR:0, DEX:3, AGI:1, INT:0, SAB:0 },
   size: "normal", category: "Morto-Vivo",
-  location: ["Necrópole", "Câmara Selada", "Catacumba"],
+  location: ["Cemitério", "Dungeon", "Planície"],
   hp: 30, physDefense: 2, magDefense: 0, dodge: 13,
   actions: 2, damage: "1d8+DEX (flecha — alcance 5 hex)",
   group: "Horda dos Túmulos Abertos",
@@ -8111,7 +8111,7 @@ const BESTIARY = [
   difficulty: 2,
   attrs: { FOR:1, DEX:1, AGI:1, INT:1, SAB:3 },
   size: "normal", category: "Morto-Vivo",
-  location: ["Necrópole", "Câmara Selada", "Câmara Central da Necrópole"],
+  location: ["Cemitério", "Dungeon"],
   hp: 60, physDefense: 4, magDefense: 5, dodge: 12,
   actions: 2, damage: "1d6+SAB (cajado sagrado corrompido) ou Magia",
   group: "Horda dos Túmulos Abertos",
@@ -8132,7 +8132,7 @@ const BESTIARY = [
   difficulty: 1,
   attrs: { FOR:1, DEX:2, AGI:3, INT:1, SAB:2 },
   size: "normal", category: "Besta",
-  location: ["Grande Planície", "Estrada Norte", "Floresta Aberta"],
+  location: ["Estrada", "Floresta", "Planície"],
   hp: 30, physDefense: 2, magDefense: 0, dodge: 13,
   actions: 2, damage: "1d4+DEX (mordida rápida)",
   group: "Alcateia dos Lobos da Planície",
@@ -8150,7 +8150,7 @@ const BESTIARY = [
   difficulty: 1,
   attrs: { FOR:2, DEX:1, AGI:2, INT:1, SAB:1 },
   size: "normal", category: "Besta",
-  location: ["Grande Planície", "Estrada Norte", "Floresta Aberta"],
+  location: ["Estrada", "Floresta", "Planície"],
   hp: 40, physDefense: 3, magDefense: 0, dodge: 13,
   actions: 2, damage: "1d6+FOR (mordida de perseguição)",
   group: "Alcateia dos Lobos da Planície",
@@ -8168,7 +8168,7 @@ const BESTIARY = [
   difficulty: 2,
   attrs: { FOR:3, DEX:2, AGI:2, INT:2, SAB:2 },
   size: "normal", category: "Besta",
-  location: ["Grande Planície", "Coração do Território da Alcateia"],
+  location: ["Floresta", "Planície"],
   hp: 80, physDefense: 4, magDefense: 1, dodge: 12,
   actions: 3, damage: "1d8+1d4+FOR (mordida do Alfa)",
   group: "Alcateia dos Lobos da Planície",
