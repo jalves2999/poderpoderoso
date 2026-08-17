@@ -187,6 +187,7 @@ function renderMonsterCard(m) {
       <p class="monster-story-text">${m.story}</p>
     </div>` : "";
 
+  const inBattle = battle.some(b => b.sourceId === m.id);
   const LOC_ICONS = {Floresta:'🌲',Caverna:'🕳',Dungeon:'⚓',Cidade:'🏘',Ruínas:'🏚',Planície:'🌾',Montanha:'⛰',Pântano:'🌿',Deserto:'🏜',Cemitério:'💀',Templo:'🏛',Estrada:'🛤'};
   const locStr = m.location.map(l => (LOC_ICONS[l]||'') + ' ' + l).join(' · ');
 
