@@ -74,7 +74,12 @@ const CLASSES = {
           { cost: "4 Fúria, 1 Ação", effect: "Aliados em até 3 hexágonos ganham +1d6 na Chance de Acerto até o fim da próxima rodada." },
           { cost: "5 Fúria, 1 Ação", effect: "Aliados em até 4 hexágonos ganham +1d6 na Chance de Acerto e +1d4 no Dano Natural até o fim da próxima rodada." }
         ] },
-      { name: "Quebra-Guarda", cost: "2 Fúria, 1 Ação", effect: "Ataque que, se acertar, ignora a Defesa Física vinda de escudo do alvo." },
+      { name: "Golpe Duplo", cost: "3 Fúria, 1 Ação", effect: "Realiza 2 ataques imediatos no mesmo alvo ou em alvos diferentes em alcance melee. Cada ataque rola dado de acerto e dano separadamente. Ambos podem ser críticos.",
+        levels: [
+          { cost: "3 Fúria, 1 Ação", effect: "2 ataques imediatos. Cada um rola acerto e dano separado. Ambos podem ser críticos." },
+          { cost: "3 Fúria, 1 Ação", effect: "2 ataques imediatos. Se ambos acertarem o mesmo alvo: +1d8 de dano bônus no segundo (o encadeamento perfeito desequilibra o alvo)." },
+          { cost: "3 Fúria, 1 Ação", effect: "2 ataques imediatos. Se ambos acertarem: +1d8 bônus no segundo. Se o primeiro for crítico: o segundo tem +3 na Chance de Crítico (a fúria do impacto guia a mão)." }
+        ] },
       { name: "Última Resistência", cost: "5 Fúria (todos), 1 Ação", effect: "Com HP ≤ 25%, gasta toda a Fúria para curar 1d10 + FOR. Uso único por combate." }
     ],
     skillsClass: [
@@ -410,9 +415,17 @@ const GENERAL_SPELLS = [
     effect: "Alvo tocado adiciona +1d6 em testes de Percepção e Pressentimento por 1 hora. Em batalha: não pode ser surpreendido e enxerga criaturas invisíveis em raio 4 hex.",
     castTime: "1 Ação (instantânea)", cooldown: "2 usos por sessão" },
 
+  { name: "Aceleração Menor", level: 2, category: "buff",
+    effect: "+1 Ação de ataque por turno durante 5 turnos. Ao final: Exausto Menor — o alvo perde 1 Ação no próximo turno (apenas um turno de penalidade).",
+    castTime: "1 Ação de Magia", cooldown: "3 usos por batalha" },
+
   { name: "Aceleração", level: 3, category: "buff",
-    effect: "Alvo tocado ganha +1 Ação extra por turno e +2 Movimento por 3 rodadas. Ao final das 3 rodadas, fica Exausto (−1d4 em todos os testes) por 2 rodadas.",
-    castTime: "1 Ação (instantânea)", cooldown: "2 usos por batalha" },
+    effect: "+1 Ação de ataque por turno durante 8 turnos. Ao final: Exausto — o alvo perde todas as Ações por 1 turno completo (não pode atacar, mover ou reagir).",
+    castTime: "1 Ação de Magia", cooldown: "2 usos por batalha" },
+
+  { name: "Aceleração Superior", level: 4, category: "buff",
+    effect: "+2 Ações de ataque por turno durante 4 rodadas. Ao final: Colapso de Adrenalina — o alvo perde um turno inteiro (0 Ações, 0 Reações, não pode ser protegido por aliados nesse turno).",
+    castTime: "1 Ação de Magia", cooldown: "1 uso por batalha" },
 
   { name: "Corpo de Ferro", level: 3, category: "buff",
     effect: "Alvo tocado ganha Resistência Física: todo dano físico sofrido é reduzido em 1d6 (rola a cada golpe) por 4 rodadas ou até ser interrompido por dano mágico.",
@@ -1108,7 +1121,94 @@ const GENERAL_SPELLS = [
     castTime: "2 Ações de Magia",
     cooldown: "1 uso por combate",
     critInteraction: "Buff em área: +2 Crit para todos. Sinergia: 2 críticos no mesmo turno → pulso de 2d8+INT automático em área entre eles.",
-    note: "A magia de crítico mais cooperativa do sistema. Premia grupos que criam críticos simultaneamente. Com 3+ personagens com alta Chance de Crítico: múltiplos pulsos por turno são possíveis." }];
+    note: "A magia de crítico mais cooperativa do sistema. Premia grupos que criam críticos simultaneamente. Com 3+ personagens com alta Chance de Crítico: múltiplos pulsos por turno são possíveis." },
+
+  /* ═══════════════════════════════════════════════════════════════
+     NOVAS MAGIAS — NÍVEL 4 E 5
+     Cobertura: controle, teleporte, ilusão, proteção, debuff, campo
+     ═══════════════════════════════════════════════════════════════ */
+
+  /* ── NÍVEL 4 ─────────────────────────────────────────────────── */
+
+  { name: "Aprisionamento Arcano",
+    level: 4, category: "controle",
+    effect: "Alvo visível em até 8 hex: correntes de energia arcana brotam do chão e o prendem. O alvo fica Imobilizado por 4 rodadas (não pode mover, mas pode atacar). FOR (difícil) para escapar gastando 1 Ação. Alvos de grande porte ou maior testam FOR (normal). Criaturas com DEX 5+ testam AGI no lugar de FOR.",
+    castTime: "1 Ação de Magia",
+    cooldown: "2 usos por combate" },
+
+  { name: "Véu de Ilusão",
+    level: 4, category: "ilusão",
+    effect: "O conjurador — ou um aliado tocado — torna-se invisível por 3 rodadas. Ataques ou magias lançadas pelo alvo encerram a invisibilidade imediatamente. Inimigos com SAB 5+ ou habilidade de Percepção Treinada podem tentar SAB (difícil) para detectar a presença (mas não a posição exata).",
+    castTime: "1 Ação de Magia",
+    cooldown: "2 usos por combate" },
+
+  { name: "Espelho de Batalha",
+    level: 4, category: "ilusão/proteção",
+    effect: "Cria 3 duplicatas ilusórias do conjurador adjacentes a ele. Cada ataque recebido pelo conjurador tem 50% de chance de atingir uma duplicata em vez dele (role d6: 1-3 = duplicata destruída, 4-6 = conjurador). Cada duplicata destruída remove uma das três chances. Dura até todas as duplicatas serem destruídas ou 5 rodadas.",
+    castTime: "1 Ação de Magia",
+    cooldown: "2 usos por combate" },
+
+  { name: "Maldição do Peso de Pedra",
+    level: 4, category: "debuff/controle",
+    effect: "Alvo visível em até 8 hex: fica com o corpo gradualmente pesado como pedra por 4 rodadas. Efeito cumulativo: Rodada 1 — Movimento −3 hex. Rodada 2 — Movimento 0 (imóvel). Rodada 3 — −2 Ações de combate. Rodada 4 — apenas 1 Ação, todos os testes com −1d6. SAB (difícil) ao final de cada rodada para resistir ao próximo estágio.",
+    castTime: "1 Ação de Magia",
+    cooldown: "1 uso por combate" },
+
+  { name: "Barreira Rúnica",
+    level: 4, category: "proteção/campo",
+    effect: "Erige uma parede de runas brilhantes em linha reta de 5 hex ou em arco de raio 3 hex (escolha ao conjurar). A barreira bloqueia projéteis físicos completamente. Magias que atravessam são reduzidas em −INT de dano. Criaturas podem atravessar gastando 3 Ações (a resistência mágica as desacelera). Dura 4 rodadas.",
+    castTime: "1 Ação de Magia",
+    cooldown: "1 uso por combate" },
+
+  { name: "Distorção Temporal",
+    level: 4, category: "controle/campo",
+    effect: "Escolhe uma área de raio 3 hex. Dentro dela, o tempo fica perturbado por 4 rodadas: todas as criaturas na área perdem 1 Ação por turno (exceto o conjurador). Aliados podem ser excluídos (máximo de 2 excluídos). Criaturas Dif.3 ou menor precisam de INT (difícil) para perceber o efeito antes de entrar na área.",
+    castTime: "1 Ação de Magia",
+    cooldown: "1 uso por combate" },
+
+  { name: "Passo Dimensional",
+    level: 4, category: "teleporte",
+    effect: "Teleporta-se instantaneamente para qualquer ponto visível em até 12 hex. Pode trazer um aliado consentidor adjacente. O teleporte não gasta Ação de Movimento — ocorre como parte da Ação de Magia. Ao chegar: pode imediatamente realizar 1 ataque ou lançar 1 magia (não precisa esperar o próximo turno).",
+    castTime: "1 Ação de Magia",
+    cooldown: "3 usos por combate" },
+
+  /* ── NÍVEL 5 ─────────────────────────────────────────────────── */
+
+  { name: "Grande Ilusão",
+    level: 5, category: "ilusão/controle",
+    effect: "Cria uma ilusão completa e convincente — uma criatura, um muro, um buraco, uma área em chamas — de até tamanho 5×5 hex. A ilusão tem som, aparência e temperatura simulados. Criaturas que interagem fisicamente percebem que é ilusão imediatamente. Observadores passivos testam INT (difícil) por turno para perceber. Dura até o conjurador perder concentração ou 6 rodadas.",
+    castTime: "2 Ações de Magia",
+    cooldown: "1 uso por combate" },
+
+  { name: "Névoa da Discórdia",
+    level: 5, category: "debuff/controle/área",
+    effect: "Lança névoa psíquica em raio 6 hex. Por 4 rodadas: todas as criaturas na área (exceto o conjurador) precisam passar em SAB (normal) no início de cada turno ou atacam o aliado mais próximo em vez do inimigo. Criaturas que falham ficam Confusas por aquele turno. Saindo da névoa, o efeito cessa imediatamente.",
+    castTime: "2 Ações de Magia",
+    cooldown: "1 uso por combate" },
+
+  { name: "Âncora do Plano",
+    level: 5, category: "controle/proteção",
+    effect: "Âncora planar em ponto do chão (raio 8 hex) por 5 rodadas: nenhuma criatura dentro da área pode teleportar, invocar criaturas, desaparecer, tornar-se intangível ou mudar de plano. Magias de deslocamento (Passo Dimensional, Passo das Sombras) falham automaticamente. O conjurador não é afetado. Criaturas que tentam resistir à âncora testam INT (crítico).",
+    castTime: "1 Ação de Magia",
+    cooldown: "1 uso por combate" },
+
+  { name: "Muralha de Força",
+    level: 5, category: "proteção/campo",
+    effect: "Evoca uma parede invisível e intransponível de força pura em linha de 8 hex ou círculo de raio 4 hex. Projéteis, magias e físico são completamente bloqueados — nada passa. A muralha não tem HP: só desaparece ao final de 5 rodadas ou se o conjurador cair inconsciente. Uma vez posicionada, não pode ser movida.",
+    castTime: "1 Ação de Magia",
+    cooldown: "1 uso por combate" },
+
+  { name: "Teleporte em Grupo",
+    level: 5, category: "teleporte/utilidade",
+    effect: "Teleporta o conjurador e até 4 aliados adjacentes para qualquer ponto visível em até 20 hex, ou para um local já visitado na sessão atual (não precisa de linha de visão para locais conhecidos). O teleporte ocorre no início do turno do conjurador, antes de qualquer Ação. Todos chegam adjacentes uns aos outros.",
+    castTime: "2 Ações de Magia",
+    cooldown: "1 uso por sessão" },
+
+  { name: "Domínio do Campo",
+    level: 5, category: "campo/controle",
+    effect: "O conjurador declara controle absoluto sobre área de raio 10 hex por 3 rodadas. Durante este tempo, como Ação Livre por turno, pode: mover 1 aliado até 5 hex sem gastar a Ação deles; ou criar 1 obstáculo de rocha/gelo/chamas em 1 hex que bloqueia passagem por 1 rodada; ou desfazer 1 efeito de controle sobre qualquer aliado na área. Cada opção pode ser usada 1× por turno.",
+    castTime: "2 Ações de Magia",
+    cooldown: "1 uso por sessão" }];
 
 /* ---------------------------------------------------------------------- */
 /* EQUIPAMENTOS                                                           */
@@ -4570,7 +4670,8 @@ const NAV_PAGES = [
   { icon: "📅", label: "Acompanhamento",        available: true,  action: "openCampaignLog" },
   { icon: "🏰", label: "Locais & Reinos",       available: true,  action: "openLocations" },
   { icon: "🗾", label: "Mapa de Aether",        available: true,  action: "openMap" },
-  { icon: "⚔",  label: "Campo de Batalha",      available: true,  action: "openBattleMap" }
+  { icon: "⚔",  label: "Campo de Batalha",      available: true,  action: "openBattleMap" },
+  { icon: "📄", label: "Ficha para Impressão",  available: true,  action: "openPrintSheet" }
 ];
 
 /* ---------------------------------------------------------------------- */
