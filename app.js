@@ -1727,6 +1727,7 @@ let currentGlossaryTab = "classes";
 function openBestiary()       { window.open("bestiary.html",         "_blank"); }
 function openCraft()          { window.open("craft.html",             "_blank"); }
 function openSessionPlanner() { window.open("session-planner.html",   "_blank"); }
+function openPrintSheet()     { window.open("ficha-impressa.html",    "_blank"); }
 function openLocations()   { window.open("locations.html",   "_blank"); }
 function openHistory()     { window.open("history.html",     "_blank"); }
 function openCampaignLog() { window.open("campaign-log.html","_blank"); }
@@ -2786,7 +2787,7 @@ function renderEquippedItemsPanel(character) {
     const bd = item.baseData || {};
     const chips = [];
     if (bd.dmg)           chips.push({ k:"⚔ Dano",        v: bd.dmg,              cls:"chip-atk" });
-    if (bd.physDefense && category !== "shield") chips.push({ k:"🛡 Def.Física",  v:`+${bd.physDefense}`, cls:"chip-def" });
+    if (bd.physDefense && item.category !== "shield") chips.push({ k:"🛡 Def.Física",  v:`+${bd.physDefense}`, cls:"chip-def" });
     if (bd.magDefense)    chips.push({ k:"✨ Def.Mágica",  v:`+${bd.magDefense}`,  cls:"chip-mag" });
     if (bd.movePenalty)   chips.push({ k:"🏃 Movimento",   v: bd.movePenalty > 0 ? `−${bd.movePenalty}` : `+${-bd.movePenalty}`, cls: bd.movePenalty > 0 ? "chip-warn" : "chip-def" });
     if (bd.weight != null) chips.push({ k:"⚖ Peso",        v:`${bd.weight}kg`,     cls:"chip-neutral" });
