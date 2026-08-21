@@ -869,6 +869,69 @@ function printSession(sid) {
   setTimeout(() => w.print(), 350);
 }
 
+/* ── Exportar sessões ──────────────────────────────────────────── */
+function exportSessions() {
+  if (sessions.length === 0) { toast("⚠ Nenhuma sessão para exportar."); return; }
+  const data = JSON.stringify({ _app:"grimorio-aether", _v:1, sessions }, null, 2);
+  const blob = new Blob([data], { type:"application/json" });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement("a");
+  const date = new Date().toLocaleDateString("pt-BR").replace(/\//g,"-");
+  a.href     = url;
+  a.download = `sessoes-aether-${date}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  toast(`📤 ${sessions.length} sessão(ões) exportada(s).`);
+}
+
+/* ── Importar sessões ──────────────────────────────────────────── */
+function importSessions(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const parsed = JSON.parse(e.target.result);
+      // Aceita array direto ou objeto com campo sessions
+      const imported = Array.isArray(parsed) ? parsed : parsed.sessions;
+      if (!Array.isArray(imported)) throw new Error("Formato inválido");
+
+      // Validar estrutura mínima
+      const valid = imported.filter(s => s && s.id && s.name);
+      if (valid.length === 0) { toast("⚠ Nenhuma sessão válida encontrada no arquivo."); return; }
+
+      // Mostrar opções: substituir ou mesclar
+      const msg = `Arquivo contém ${valid.length} sessão(ões).\n\nEscolha:\nOK = Mesclar com sessões existentes\nCancelar = Substituir todas as sessões`;
+      const merge = confirm(msg);
+
+      if (merge) {
+        // Mesclar: adicionar apenas sessões com IDs novos
+        const existingIds = new Set(sessions.map(s => s.id));
+        let added = 0;
+        valid.forEach(s => {
+          if (!existingIds.has(s.id)) { sessions.unshift(s); added++; }
+          else {
+            // ID já existe: gerar novo ID para evitar conflito
+            sessions.unshift({ ...s, id: uid(), name: s.name + " (importada)" });
+            added++;
+          }
+        });
+        spSave(); render();
+        toast(`📥 ${added} sessão(ões) importada(s) e mesclada(s).`);
+      } else {
+        if (!confirm(`Substituir TODAS as ${sessions.length} sessões existentes por ${valid.length} sessão(ões) importada(s)?`)) return;
+        sessions = valid;
+        spSave(); render();
+        if (valid.length > 0) openSession(valid[0].id);
+        toast(`📥 ${valid.length} sessão(ões) importada(s). Sessões anteriores substituídas.`);
+      }
+    } catch (err) {
+      toast("❌ Erro ao ler o arquivo. Verifique se é um JSON exportado pelo Grimório.");
+      console.error(err);
+    }
+  };
+  reader.readAsText(file);
+}
+
 /* ── Bootstrap ─────────────────────────────────────────────────── */
 window.addEventListener("DOMContentLoaded",()=>{
   spLoad(); render();
@@ -877,6 +940,15 @@ window.addEventListener("DOMContentLoaded",()=>{
   document.getElementById("picker-close").addEventListener("click",closePicker);
   document.getElementById("picker-overlay").addEventListener("click",e=>{if(e.target.id==="picker-overlay")closePicker();});
   document.getElementById("picker-search").addEventListener("input",e=>renderPickerList(e.target.value.trim().toLowerCase()));
+
+  // Exportar / Importar
+  document.getElementById("btn-export")?.addEventListener("click", exportSessions);
+  const fileInput = document.getElementById("import-file-input");
+  document.getElementById("btn-import")?.addEventListener("click", () => {
+    fileInput.value = "";
+    fileInput.click();
+  });
+  fileInput?.addEventListener("change", e => importSessions(e.target.files[0]));
 
   // Nova sessão
   const doNew=()=>{

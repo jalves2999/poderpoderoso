@@ -24,6 +24,13 @@ body{background:var(--parchment);min-height:100vh;font-family:var(--font-heading
   font-size:13px;cursor:pointer;white-space:nowrap;
 }
 .btn-add-session:active{filter:brightness(.9)}
+.btn-sp-io{
+  padding:6px 11px;border:1px solid rgba(255,255,255,.25);border-radius:6px;
+  background:rgba(255,255,255,.1);color:var(--parchment);
+  font-family:var(--font-heading);font-size:12px;cursor:pointer;
+  white-space:nowrap;transition:.12s;
+}
+.btn-sp-io:hover{background:rgba(255,255,255,.2);}
 
 /* ── Container principal ─────────────────────────────────────── */
 .sp-wrap{max-width:780px;margin:0 auto;padding:14px}
@@ -276,8 +283,13 @@ body{background:var(--parchment);min-height:100vh;font-family:var(--font-heading
 <div class="sp-bar">
   <a href="index.html">← Grimório</a>
   <span class="sp-bar-title">📋 Planejador de Sessão</span>
+  <button class="btn-sp-io" id="btn-import" title="Importar sessões de um arquivo JSON">📥 Importar</button>
+  <button class="btn-sp-io" id="btn-export" title="Exportar todas as sessões como JSON">📤 Exportar</button>
   <button class="btn-add-session" id="btn-add-session">+ Nova Sessão</button>
 </div>
+
+<!-- Input oculto para importar arquivo -->
+<input type="file" id="import-file-input" accept=".json" style="display:none">
 
 <div class="sp-wrap">
   <!-- Empty state -->
