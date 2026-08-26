@@ -1502,7 +1502,24 @@ const WEAPONS_ONE_HAND = [
     magicBonus:{ critChance:1 },
     effect:"Passivo: +1 na Chance de Crítico. A lâmina delgada foi forjada para encontrar juntas de armadura e nervos expostos — não para força bruta.",
     note:"+1 Chance de Crítico.",
-    story:"Um cirurgião convertido em mercenário. A lâmina nunca mudou de propósito — apenas o alvo." }];
+    story:"Um cirurgião convertido em mercenário. A lâmina nunca mudou de propósito — apenas o alvo." },
+
+  /* ─── LOOT DE MONSTROS — ARMAS 1M ────────────────────── */
+
+  { tier:"raro", name:"Adagas Geminadas",
+    dmg:"1d8", req:"DEX", weight:0.6,
+    defenseDegrade:2, slot:["primary","secondary"],
+    magicBonus:{ critChance:1 },
+    effect:"Par inseparável. Cada Ação de ataque com estas adagas realiza 2 ataques separados. +1 na Chance de Crítico (d10). Foram criadas para a Executora — respondem melhor a quem ataca em série.",
+    note:"2 ataques por Ação. +1 Chance de Crítico. Loot: A Executora Sem Nome.",
+    story:"Não têm nome gravado. Só marcas de sangue que nunca saem." },
+
+  { tier:"raro", name:"Espada Fantasmal",
+    dmg:"1d12", req:"FOR/DEX", weight:3,
+    defenseDegrade:1, slot:["primary","secondary"],
+    effect:"Lâmina semitransparente de energia espectral. Críticos com esta arma aplicam Maldição do Acéfalo no alvo por 1 rodada — o alvo fica Confuso e pode atacar aliado.",
+    note:"Crítico → Confusão no alvo. Loot: Cavaleiro Sem Cabeça.",
+    story:"Pertenceu a um cavaleiro que perdeu a cabeça numa batalha que ninguém mais lembra." }];
 
 const WEAPONS_TWO_HAND = [
   /* --- COMUNS --- */
@@ -1720,7 +1737,23 @@ const WEAPONS_TWO_HAND = [
     magicBonus: { attr: "FOR", attrValue: 2 },
     effect: "Passivo: +2 FOR. Passivo de escalada: cada acerto consecutivo no mesmo alvo (sem errar, sem trocar de alvo) aumenta o dano em +1d6 acumulado (máx +3d6 = 4º acerto em diante). Ao errar ou trocar de alvo: o acúmulo reseta. Ativo (custa 3 Fúria): Ruína — golpe no chão que cria fissura em linha reta de 4 hexes, 2d10 de dano, todos testam AGI (normal) ou caem Derrubados.",
     note: "+2 FOR. Acertos consecutivos: +1d6 por acerto (máx +3d6). Ruína: fissura 4 hex, 2d10, Derrubado.",
-    story: "Usada pelo último General do Exército da Ruína — uma força que ninguém nomeia mais. O General foi derrotado mas o machado não. Tem a habilidade disconcertante de estar levemente mais pesado cada dia que passa." }];
+    story: "Usada pelo último General do Exército da Ruína — uma força que ninguém nomeia mais. O General foi derrotado mas o machado não. Tem a habilidade disconcertante de estar levemente mais pesado cada dia que passa." },
+
+  /* ─── LOOT DE MONSTROS — ARMAS 2M ────────────────────── */
+
+  { tier:"raro", name:"A Espada do Gigante Caído",
+    dmg:"1d12+1d6", req:"FOR alto", weight:9,
+    defenseDegrade:1, slot:["primary"],
+    effect:"Arma descomunal arrancada das costas de uma Aranha dos Túmulos. Já encantada com Toxina do Túmulo — acertos têm 30% de chance (d10 ≤ 3) de aplicar Veneno do Túmulo (1d8/rodada, 3 rodadas, SAB difícil para resistir, antídoto comum não funciona). Impossível de encobrir — todos veem que você a carrega.",
+    note:"30% de Veneno do Túmulo por acerto. Req. FOR alto (≥3). Loot: Aranha dos Túmulos de Gigantes.",
+    story:"Pertenceu a um gigante que nunca foi identificado. A aranha carregava como troféu. Agora você carrega." },
+
+  { tier:"raro", name:"Corrente do Guardião",
+    dmg:"1d10", req:"FOR", weight:6,
+    defenseDegrade:1, slot:["primary"],
+    effect:"Alcance de 3 hex (corrente de ferro antigo de 4 metros). Críticos aplicam Acorrentado no alvo (Imóvel, −2 Ações, FOR normal para escapar com 1 Ação). Não pode ser encantada — o ferro antigo rejeita magia nova.",
+    note:"Alcance 3 hex. Crítico → Acorrentado. Não encantável. Loot: Guardião das Correntes.",
+    story:"O Guardião nunca largou essas correntes em vida. E em morte, também não quis." }];
 
 const WEAPONS_MAGIC = [
   /* --- COMUNS --- */
@@ -2352,7 +2385,16 @@ const ARMORS = [
     magicBonus: { attr: "INT", attrValue: 2, attr2: "SAB", attrValue2: 2, slots: 2 },
     effect: "Passivo: +2 INT, +2 SAB, +2 Slots. O portador nunca pode ser reduzido a 0 HP por um único ataque — qualquer golpe que causaria dano fatal deixa o portador com exatamente 1 HP em vez disso. Este efeito funciona 1x por combate. Após usar: as vestes ficam parcialmente translúcidas por 1d4 rodadas (o poder se recarrega). Imune a maldições de nível menor e médio.",
     note: "+2 INT, +2 SAB, +2 Slots. 1x/combate: qualquer golpe fatal → 1 HP em vez de morte. Imune a maldições menores/médias.",
-    story: "As vestes do último Rei de Aether — antes de Aether ter reinos, quando havia apenas um. O rei desapareceu e as vestes ficaram dobradas sobre um trono que ninguém mais reconhece. Quem as usa sente o peso de decisões que nunca foram suas." }];
+    story: "As vestes do último Rei de Aether — antes de Aether ter reinos, quando havia apenas um. O rei desapareceu e as vestes ficaram dobradas sobre um trono que ninguém mais reconhece. Quem as usa sente o peso de decisões que nunca foram suas." },
+
+  /* ─── LOOT DE MONSTROS — ARMADURAS ────────────────────── */
+
+  { tier:"raro", name:"Armadura do Cavaleiro Sem Nome",
+    physDefense:9, magDefense:1, movePenalty:1, weight:18,
+    req:"FOR",
+    effect:"Armadura negra de cavaleiro antigo. Altíssima proteção física. MALDITA: o portador tem pesadelos toda noite enquanto equipada (-1d4 em perícias no dia seguinte por cansaço). A maldição pode ser removida com Cura Mágica de Nível 4+ ou ritual especial.",
+    note:"Def.Fís 9. Maldita: pesadelos (−1d4 em perícias no dia seguinte). Loot: Cavaleiro Sem Cabeça.",
+    story:"Ninguém sabe o nome do cavaleiro. A armadura também não conta." }];
 
 const ACCESSORIES = [
   /* --- COMUNS --- */
@@ -2914,7 +2956,55 @@ const ACCESSORIES = [
     magicBonus:{ critChance:1, attr:"DEX", attrValue:1 },
     effect:"Passivo: +1 DEX e +1 na Chance de Crítico. O predador identifica o ponto fraco antes de atacar.",
     note:"+1 DEX. +1 Chance de Crítico.",
-    story:"Feito com a pata dianteira da Loba Alfa das Sombras Cinzentas. O movimento dela era calculado. O bracelete aprendeu." }];
+    story:"Feito com a pata dianteira da Loba Alfa das Sombras Cinzentas. O movimento dela era calculado. O bracelete aprendeu." },
+
+  /* ─── LOOT DE MONSTROS — ACESSÓRIOS ───────────────────── */
+
+  { tier:"raro", name:"Anel do Gigante (redimensionado)",
+    slot:["accessory"], weight:0.1,
+    magicBonus:{ attr:"FOR", attrValue:1 },
+    effect:"+1 FOR permanente. O anel pertenceu a um Gigante antigo — magicamente redimensionado para mãos humanas. Ao ser equipado, o usuário sente brevemente o peso do mundo nas costas.",
+    note:"+1 FOR. Loot: Aranha dos Túmulos de Gigantes.",
+    story:"O Gigante não tem nome registrado. O anel tem runas num idioma que ninguém lê mais." },
+
+  { tier:"raro", name:"Lente de Foco Mágico",
+    slot:["accessory"], weight:0.1,
+    magicBonus:{ slots:1 },
+    effect:"+1 Slot de Magia. Magias de dano direcionadas causam +1d4 extra de dano. Feita de fragmento do núcleo de um Golem de Espelhos — concentra energia mágica num ponto antes de liberá-la.",
+    note:"+1 Slot. +1d4 em magias direcionadas. Loot: Golem de Espelhos.",
+    story:"Olhar através dela mostra o mundo como o Golem via — linhas de energia em tudo." },
+
+  { tier:"raro", name:"Manto das Sombras",
+    slot:["accessory"], weight:0.5,
+    effect:"Em áreas com pouca luz ou sombra: Furtividade automática ao mover-se (sem rolagem). Em luz plena: +1d4 em testes de Furtividade. Ao usar Furtividade com sucesso, o próximo ataque tem +2 na Chance de Crítico.",
+    note:"Furtividade automática em sombra. +2 Crit no ataque após furtividade. Loot: A Executora Sem Nome.",
+    story:"Tecido com sombras reais colhidas em noites sem lua. Esqueceu como refletir luz." },
+
+  { tier:"raro", name:"Símbolo de Jurgmund Corrompido",
+    slot:["accessory"], weight:0.2,
+    magicBonus:{ attr:"SAB", attrValue:1 },
+    effect:"+1 SAB. Sonhos perturbadores ao dormir com ele equipado — o portador não descansa completamente. Passivo: magias de cura lançadas pelo portador têm 10% de chance de aplicar 1 carga de Maldição no alvo em vez de curar.",
+    note:"+1 SAB. Sonhos perturbadores. 10% cura vira Maldição. Loot: Sacerdote Corrompido de Jurgmund.",
+    story:"A serpente do símbolo pisca quando ninguém está olhando." },
+
+  { tier:"raro", name:"Olho de Corvino",
+    slot:["accessory"], weight:0.1,
+    magicBonus:{ attr:"SAB", attrValue:1 },
+    effect:"+1 SAB. Percepção automática em raio 8 hex — o portador não pode ser surpreendido e emboscadas são impossíveis contra ele. Em áreas escuras: vê perfeitamente. Efeito colateral: o olho substitui visualmente o olho direito do portador (aparência intimidadora).",
+    note:"+1 SAB. Sem surpresa. Visão no escuro. Loot: Caçador de Almas Corvino.",
+    story:"O Corvino colhia olhos de seus alvos. Irônico que o olho dele se tornasse tão valioso." },
+
+  { tier:"lendario", name:"Anel de Verdade",
+    slot:["accessory"], weight:0.1,
+    effect:"Passivo: desfaz automaticamente ilusões e disfarces em raio 2 hex do portador — invisibilidade, Véu de Ilusão, formas copiadas (como o Trocador de Pele) e Espelho de Batalha são inúteis perto dele. Ativo (1x/dia): o portador faz uma pergunta direta a alguém; o alvo testea SAB (crítico) para conseguir mentir.",
+    note:"Desfaz ilusões em raio 2 hex. 1x/dia: SAB crítico para mentir. Loot: Trocador de Pele.",
+    story:"Existe apenas um. O Trocador de Pele o carregava precisamente porque era o único ser que podia portá-lo sem nunca poder usá-lo." },
+
+  { tier:"raro", name:"Colar de Identificação do Cavaleiro",
+    slot:["accessory"], weight:0.1,
+    effect:"Quest Item: revela o nome e a ordem do Cavaleiro Sem Cabeça ao ser segurado por 1 minuto. Pode ser entregue a um historiador, família nobre ou templo em troca de recompensa (50+ ouro). Magicamente inquebrável.",
+    note:"Quest item. Revela identidade do Cavaleiro. Loot: Cavaleiro Sem Cabeça.",
+    story:"Gravado com um nome que ainda não está pronto para ser revelado." }];
 
 const ALL_WEAPONS = [...WEAPONS_ONE_HAND, ...WEAPONS_TWO_HAND, ...WEAPONS_MAGIC, ...WEAPONS_RANGED].filter(Boolean);
 
@@ -3478,7 +3568,107 @@ const MISC_ITEMS = [
     tier:"raro", weight:0.4, consumable:true,
     smeltingType:"armor",
     effect:"Material de reforço. Adiciona resistência e bônus contra criaturas grandes.",
-    story:"Do couro recuperado de combates contra Gigantes. Cada marca conta uma história." }];
+    story:"Do couro recuperado de combates contra Gigantes. Cada marca conta uma história." },
+
+  /* ─── LOOT DE MONSTROS — MATERIAIS E CONSUMÍVEIS ──────── */
+
+  { name:"Glândula de Veneno do Túmulo", category:"misc", subcategory:"material",
+    craftingMaterial:true, materialTag:"glandula_veneno_tumulo",
+    tier:"raro", weight:0.1, consumable:false,
+    effect:"Material alquímico raro. Usada para criar Veneno do Túmulo (imune a antídotos comuns). Também pode ser base para Poção de Resistência a Venenos avançada. Prazo de uso: 7 dias fora do corpo da aranha.",
+    story:"Exsuda veneno lentamente. Mantenha em frasco lacrado." },
+
+  { name:"Teia Endurecida", category:"misc", subcategory:"material",
+    craftingMaterial:true, materialTag:"teia_endurecida",
+    tier:"raro", weight:0.3, consumable:false,
+    effect:"Material para armadura. Mais resistente que aço ao ser tecida. Receita de Armadura Tecida do Abismo usa este material. Também pode ser usada como corda mágica resistente (aguenta até 300kg).",
+    story:"A Aranha dos Túmulos tecia por anos. Cada monstro no túmulo contribuiu com as fibras." },
+
+  { name:"Fragmento do Núcleo de Espelho", category:"misc", subcategory:"material",
+    craftingMaterial:true, materialTag:"nucleo_espelho",
+    tier:"lendario", weight:0.15, consumable:false,
+    effect:"Material lendário de forja. Usado em encantamentos de reflexo — qualquer arma ou armadura forjada com este fragmento ganha 20% de chance de refletir o próximo ataque recebido (1x/combate). Delicado: quebra se exposto a calor intenso.",
+    story:"O Golem não foi criado assim. O fragmento de espelho que serve de núcleo tem origem mais antiga." },
+
+  { name:"Pó de Espelho Arcano", category:"misc", subcategory:"material",
+    craftingMaterial:true, materialTag:"po_espelho_arcano",
+    tier:"raro", weight:0.05, consumable:true,
+    effect:"Cada dose: lançada no ar cria uma superfície reflexiva temporária de 3 hex por 2 rodadas. Magias que passam pela superfície têm 30% de chance de desviar. Também revela criaturas invisíveis na área (o pó gruda nelas).",
+    story:"Soa como cristais quando o frasco mexe." },
+
+  { name:"Essência de Morto-vivo", category:"misc", subcategory:"material",
+    craftingMaterial:true, materialTag:"essencia_morto_vivo",
+    tier:"raro", weight:0.05, consumable:false,
+    effect:"Usada em necromancia e alquimia. Pode ser componente de poção de Resistência à Morte (sobrevive a 1 golpe letal com 1 HP, 1x/dia). Mestre de Necromancia pode usá-la para reanimar um morto-vivo Dif.1 como aliado temporário.",
+    story:"Não é sangue. Não é alma. É o que sobra quando ambos partem mas a vontade fica." },
+
+  { name:"Veneno de Paralisação", category:"misc", subcategory:"potion",
+    tier:"raro", weight:0.1, consumable:true,
+    effect:"2 doses. Aplicado em arma: próximo acerto injeta o veneno. Alvo testea FOR (difícil) ou fica Paralisado por 1 turno inteiro (0 Ações, 0 Reações, não pode ser esquivado por ele). Após o turno: recupera automaticamente.",
+    story:"A Executora encomendava doses em grandes quantidades. Ninguém sabe de quem." },
+
+  { name:"Escamas de Serpente de Julgmund", category:"misc", subcategory:"material",
+    craftingMaterial:true, materialTag:"escamas_serpente_julgmund",
+    tier:"raro", weight:0.1, consumable:false,
+    effect:"Cada dose: componente para poção de Resistência Mágica (−2 de dano por dado de magia por 3 combates). O sacerdote as cultivava com cuidado — têm resíduos de energia divina corrompida.",
+    story:"Julgmund não sabe que suas serpentes foram corrompidas. Ou talvez saiba." },
+
+  { name:"Coração Ainda Batendo", category:"misc", subcategory:"material",
+    craftingMaterial:true, materialTag:"coracao_ainda_batendo",
+    tier:"lendario", weight:0.4, consumable:false,
+    effect:"Componente lendário de ritual de ressurreição. Um clérigo Nível 5+ pode realizar ritual de 1 hora usando este coração para ressuscitar um aliado morto há até 24 horas com 50% HP. Só funciona uma vez. Continua batendo até ser usado.",
+    story:"O sacerdote o arrancou de alguém importante. O coração não parou porque a alma se recusou a partir." },
+
+  { name:"Glândula de Mimetismo", category:"misc", subcategory:"material",
+    craftingMaterial:true, materialTag:"glandula_mimetismo",
+    tier:"raro", weight:0.1, consumable:false,
+    effect:"Componente para Poção de Disfarce Perfeito (disfarça completamente por 1 hora, inclui voz e detalhes físicos — detectável apenas por Anel de Verdade ou Arcanismo crítico). Muito procurada por espiões.",
+    story:"O Trocador de Pele tinha dezenas delas. Usava para aprimorar a própria habilidade." },
+
+  { name:"Fragmento de Memória", category:"misc", subcategory:"artefato",
+    tier:"raro", weight:0.05, consumable:true,
+    effect:"Contém uma memória completa de uma vítima anterior do Trocador de Pele. Ao segurar e concentrar por 1 minuto: o portador experimenta a memória como se fosse sua (informações, localidades, segredos da vítima). Quebra após o uso.",
+    story:"A pessoa que viveu esta memória provavelmente ainda não sabe que perdeu." },
+
+  { name:"Pele Adaptável", category:"misc", subcategory:"material",
+    craftingMaterial:true, materialTag:"pele_adaptavel",
+    tier:"raro", weight:0.4, consumable:false,
+    effect:"Tecido que muda de cor ao toque — se adapta ao ambiente em 1 rodada. Pode ser usado como material para Armadura Silenciosa (em conjunto com Couro de Lobo). Sozinho, funciona como capa que concede +1d6 em Furtividade.",
+    story:"Quente. Levemente. Não é desconfortável. Apenas perturbador." },
+
+  { name:"Núcleo de Animação", category:"misc", subcategory:"material",
+    craftingMaterial:true, materialTag:"nucleo_animacao",
+    tier:"lendario", weight:1.0, consumable:false,
+    effect:"Componente lendário. Um Mago ou Clérigo Nível 5+ pode usá-lo em ritual de 4 horas para animar um construto de pedra, metal ou madeira como servo permanente (age como Golem Dif.2, segue ordens simples). Alternativa: pode ser decomposto em 3 doses de Pó de Espelho Arcano.",
+    story:"O Guardião foi animado com um núcleo assim. Quem o fez não deixou assinatura." },
+
+  { name:"Elos de Ferro Antigo", category:"misc", subcategory:"material",
+    craftingMaterial:true, materialTag:"elos_ferro_antigo",
+    tier:"raro", weight:0.3, consumable:false,
+    effect:"Elos de metal pré-Lich de Atrelon — mais resistentes que aço moderno. Podem ser usados para reforçar armaduras (+1 Def.Física sem peso adicional) ou criar correntes/grilhões inquebrável por meios não-mágicos. Ferreiro especializado necessário.",
+    story:"Não enferrujam. Não dobram fácil. Foram feitos para durar mais que o mundo." },
+
+  { name:"Pena de Obsidiana", category:"misc", subcategory:"material",
+    craftingMaterial:true, materialTag:"pena_obsidiana",
+    tier:"raro", weight:0.05, consumable:true,
+    effect:"Cada pena funciona como projétil de arremesso mágico: alcance 6 hex, 1d8 de dano, sem rolagem de esquiva (chegam rápido demais — mesmo efeito do Caçador). Podem ser usadas com arcos ou como dardos. Não podem ser encantadas mas também não perdem fio.",
+    story:"Negras como void. Quando a luz atinge em certo ângulo, refletem estrelas que não existem." },
+
+  { name:"Frasco de Alma Aprisionada", category:"misc", subcategory:"artefato",
+    tier:"unico", weight:0.1, consumable:false,
+    effect:"Contém a alma da última vítima do Caçador de Almas Corvino. A alma pode ser: liberada em ritual (ato de bondade, recompensa de quest), consumida por necromante para poder (moralmente questionável), ou usada como componente de Convergência do Destino. O frasco pulsa levemente no escuro.",
+    story:"A alma dentro parece estar esperando. Não com medo. Com esperança." },
+
+  { name:"Bico de Obsidiana", category:"misc", subcategory:"material",
+    craftingMaterial:true, materialTag:"bico_obsidiana",
+    tier:"raro", weight:0.2, consumable:false,
+    effect:"Material para forja especial. Forjado com os outros ingredientes corretos, cria uma Adaga do Roubo de Vida (1d8, acertos curam o portador em 1d4 HP). Requer Ferreiro Especializado e Cinzas de Karlac como material adicional.",
+    story:"O Corvino usava para colher almas. A ironia de transformá-lo em instrumento de cura não escapa a ninguém." },
+
+  { name:"Chave da Passagem", category:"misc", subcategory:"artefato",
+    tier:"raro", weight:0.2, consumable:false,
+    effect:"Quest Item: abre a câmara, porta ou cofre que o Guardião das Correntes protegia. Inquebrável e insubstituível — se perdida, a câmara não pode ser aberta por meios normais. A câmara contém o que o Guardião protegia (Mestre decide o conteúdo).",
+    story:"Sempre existiu apenas uma cópia. O Guardião morreu para garantir isso." }];
 
 
 /* ================================================================
@@ -8284,7 +8474,883 @@ const BESTIARY = [
   spells: [], behavior: "Espera longe até que 1+ Corredores tenham aplicado Fatigado. Então avança para o alvo Fatigado. Se o Batedeiro morrer: o Alfa uiva e recua — reavalia a situação antes de reengajar.", loot: [{ item: "Canino do Alfa da Planície (talismã — +1d4 em Intimidação)", chance: 50, qty: "1" }, { item: "Pele do Alfa (material premium — armadura de couro superior)", chance: 40, qty: "1" }] }
 
 
-];
+,
+
+  /* ═══════════════════════════════════════════════════════════════
+     NOVOS MONSTROS — DIFICULDADE 3
+     Mecânicas únicas · Loot diferenciado · Lore de Aether
+     ═══════════════════════════════════════════════════════════════ */
+
+  {
+    id: "aranha-tumulos-gigantes",
+    name: "Aranha dos Túmulos de Gigantes",
+    difficulty: 3,
+    attrs: { FOR:4, DEX:4, AGI:3, INT:1, SAB:2 },
+    size: "grande",
+    category: "Besta Amaldiçoada",
+    location: ["Dungeon", "Cemitério", "Ruínas"],
+    hp: 155,
+    physDefense: 6,
+    magDefense: 4,
+    dodge: 12,
+    actions: 3,
+    damage: "1d10+1d6 (mordida venenosa) ou 1d12+1d6 (espada nas costas — acesso especial)",
+    abilities: [
+      { name: "Espada nas Costas",
+        desc: "Passivo: a espada cravada funciona como armamento. Qualquer personagem que acertar um ataque melee na aranha com rolagem ≤ 2 no d10 de acerto tem a mão rasgada pela lâmina — sofre 1d6 de dano e −1 na Chance de Acerto até cura. A espada pode ser REMOVIDA: requer 2 Ações adjacente + FOR (difícil). Removida, fica disponível como arma (1d12+FOR, mágica, nível raro)." },
+      { name: "Teia Viscosa",
+        desc: "1 Ação: cospe teia em cone de 3 hex. Alvos testam AGI (normal) ou ficam Presos por 2 rodadas. A teia é permanente no chão — qualquer criatura que entrar no hex sem testar AGI fica Presa automaticamente." },
+      { name: "Veneno do Túmulo",
+        desc: "Mordida aplica Veneno do Túmulo: 1d8 por rodada por 3 rodadas. SAB (difícil) para resistir. Antídotos comuns não funcionam — requer Cura Mágica ou Veneno Específico (item especial)." },
+      { name: "Sentido de Vibração",
+        desc: "Passivo: detecta qualquer criatura em raio 6 hex que toque o chão — invisibilidade e furtividade são inúteis contra ela." }
+    ],
+    spells: [],
+    behavior: "Posiciona-se no centro do túmulo, coberto de teia. Começa com Teia Viscosa para criar obstáculos antes de atacar. Prioriza atacar alvo com a espada nas costas (usando o dano da espada quando flanqueia). Não recua — defende o túmulo até a morte.",
+    loot: [
+      { item: "A Espada do Gigante Caído (arma rara — 1d12, mágica, já encantada com toxina)", chance: 100, qty: "1" },
+      { item: "Glândula de Veneno do Túmulo (material alquímico raro)", chance: 65, qty: "1d2" },
+      { item: "Teia Endurecida (material — receita de armadura rara)", chance: 40, qty: "1d3" },
+      { item: "Anel esquecido de um Gigante (acessório — FOR+1, tamanho reduzido magicamente)", chance: 15, qty: "1" }
+    ]
+  },
+
+  {
+    id: "cavaleiro-sem-cabeca",
+    name: "Cavaleiro Sem Cabeça",
+    difficulty: 3,
+    attrs: { FOR:4, DEX:3, AGI:2, INT:0, SAB:0 },
+    size: "medio",
+    category: "Morto-vivo",
+    location: ["Cemitério", "Ruínas", "Dungeon"],
+    hp: 145,
+    physDefense: 9,
+    magDefense: 3,
+    dodge: 9,
+    actions: 2,
+    damage: "1d12+1d8 (espada de duas mãos fantasmal)",
+    abilities: [
+      { name: "Imune a Críticos",
+        desc: "Passivo: não tem cabeça — críticos de ataque causam dano normal (sem o bônus de 50%). Ataques à cabeça simplesmente passam pelo espaço vazio." },
+      { name: "Maldição do Acéfalo",
+        desc: "Ao acertar qualquer ataque: o alvo deve testar SAB (normal) ou fica Confuso por 1 rodada (a presença perturbadora da criatura sem cabeça desoriente a mente)." },
+      { name: "Cabeça Fantasmal",
+        desc: "1 Ação (2x/combate): arremessa a cabeça fantasmal como projétil — alcance 8 hex, 1d10 de dano sagrado invertido (ignora Def. Física). A cabeça retorna automaticamente no turno seguinte." },
+      { name: "Último Ato",
+        desc: "Ao cair a 0 HP: o cavaleiro realiza 1 ataque final gratuito no alvo mais próximo antes de desaparecer. Não pode ser esquivado." }
+    ],
+    spells: [],
+    behavior: "Patrulha em silêncio absoluto. Não reage a sons — reage a luz e movimento. Foca no alvo de maior ameaça (maior dano causado). Usa Cabeça Fantasmal em alvos que tentam manter distância.",
+    loot: [
+      { item: "Armadura do Cavaleiro (armadura rara — Def.Física 9, penalidade −1 Movimento, maldita: pesadelos ao dormir)", chance: 70, qty: "1" },
+      { item: "Espada Fantasmal (arma rara — 1d12, causa Confusão em críticos)", chance: 50, qty: "1" },
+      { item: "Colar de Identificação (acessório — revela o nome do cavaleiro, quest item)", chance: 100, qty: "1" },
+      { item: "Essência de Morto-vivo (material — usado em necromancia e alquimia)", chance: 55, qty: "1d2" }
+    ]
+  },
+
+  {
+    id: "golem-de-espelhos",
+    name: "Golem de Espelhos",
+    difficulty: 3,
+    attrs: { FOR:3, DEX:4, AGI:2, INT:2, SAB:3 },
+    size: "medio",
+    category: "Construto",
+    location: ["Dungeon", "Ruínas", "Templo"],
+    hp: 140,
+    physDefense: 7,
+    magDefense: 10,
+    dodge: 10,
+    actions: 2,
+    damage: "1d8+1d6 (fragmentos de espelho) + reflexo (ver habilidade)",
+    abilities: [
+      { name: "Reflexo Mágico",
+        desc: "Passivo: qualquer magia de dano direcionada ao Golem tem 40% de chance (d10 ≤ 4) de ser refletida de volta ao conjurador com 75% do dano original. Magias de área não são refletidas." },
+      { name: "Fragmentos Cortantes",
+        desc: "Passivo: qualquer ataque melee que acerte o Golem causa 1d4 de dano reflexivo ao atacante (cacos de espelho voam). Escudo bloqueia esse dano." },
+      { name: "Ilusão de Espelho",
+        desc: "1 Ação (1x/combate): cria 2 cópias ilusórias idênticas. O alvo deve acertar o Golem real (33% de chance se houver 2 cópias, 50% com 1). Cópias são destruídas com 1 toque." },
+      { name: "Explosão de Reflexos",
+        desc: "Ao atingir 50% de HP: estoura fragmentos em todos os hex adjacentes — todos os personagens adjacentes sofrem 2d6 de dano cortante (AGI normal para metade)." }
+    ],
+    spells: [],
+    behavior: "Fica imóvel até ser atacado. Após o primeiro ataque, avança devagar. Prioriza ficar adjacente a conjuradores (para o reflexo mágico ser mais letal). Usa Ilusão de Espelho quando estiver Derrubado ou Preso.",
+    loot: [
+      { item: "Fragmento do Núcleo de Espelho (material lendário — para encantamentos de reflexo)", chance: 75, qty: "1" },
+      { item: "Espelho Intacto do Golem (item raro — mostra reflexo de 1 segundo no futuro, 1x/dia)", chance: 30, qty: "1" },
+      { item: "Pó de Espelho Arcano (material — 1d4 doses, pode criar superfície reflexiva temporária)", chance: 60, qty: "1d4" },
+      { item: "Lente de Foco Mágico (acessório raro — +1 Slot de Magia, +1d4 dano em magias direcionadas)", chance: 25, qty: "1" }
+    ]
+  },
+
+  {
+    id: "executora-sem-nome",
+    name: "A Executora Sem Nome",
+    difficulty: 3,
+    attrs: { FOR:3, DEX:5, AGI:4, INT:2, SAB:3 },
+    size: "medio",
+    category: "Humanoide Corrompido",
+    location: ["Dungeon", "Cidade", "Ruínas"],
+    hp: 130,
+    physDefense: 5,
+    magDefense: 6,
+    dodge: 14,
+    actions: 3,
+    damage: "1d8+1d6 (adaga geminada — ataca duas vezes por Ação)",
+    abilities: [
+      { name: "Adagas Geminadas",
+        desc: "Passivo: cada Ação de ataque realiza 2 ataques com rolagens separadas. Com 3 Ações por turno, pode realizar 6 rolagens de ataque no mesmo turno." },
+      { name: "Sombra de Lâmina",
+        desc: "Reação (1x/turno): ao ser atacada e errar a esquiva, pode imediatamente contra-atacar com 1 adaga antes de receber o dano (1d8+DEX, sem custo de Ação)." },
+      { name: "Marca do Alvo",
+        desc: "Ação Livre (1x/combate): designa 1 alvo como Marcado. Todos os ataques contra o alvo marcado têm +2 na Chance de Crítico e ignoram metade da Def. Física. A marca dura até o alvo morrer ou o combate terminar." },
+      { name: "Desaparecimento",
+        desc: "Ao atingir 30% de HP: gasta 1 turno inteiro para desaparecer na sombra mais próxima. Reaparece no turno seguinte em qualquer hex de sombra em raio 10 hex com HP restaurado em 1d20." }
+    ],
+    spells: [],
+    behavior: "Avalia o grupo por 1 turno sem atacar. Usa Marca do Alvo no conjurador ou no personagem com maior dano. Foca completamente no alvo marcado até morrer. Usa Desaparecimento como último recurso.",
+    loot: [
+      { item: "Adagas Geminadas (par de armas raras — 1d8 cada, +1 Chance de Crítico)", chance: 55, qty: "1 par" },
+      { item: "Contrato sem nome (quest item — revela quem a contratou)", chance: 100, qty: "1" },
+      { item: "Manto das Sombras (acessório raro — Furtividade automática em áreas escuras)", chance: 40, qty: "1" },
+      { item: "Veneno de Paralisação (consumível raro — 2 doses, paralisa alvo por 1 turno)", chance: 65, qty: "1d2" }
+    ]
+  },
+
+  {
+    id: "sacerdote-corrompido-jurgmund",
+    name: "Sacerdote Corrompido de Jurgmund",
+    difficulty: 3,
+    attrs: { FOR:1, DEX:2, AGI:1, INT:4, SAB:5 },
+    size: "medio",
+    category: "Humanoide / Morto-vivo",
+    location: ["Templo", "Dungeon", "Pântano"],
+    hp: 125,
+    physDefense: 4,
+    magDefense: 10,
+    dodge: 9,
+    actions: 2,
+    damage: "1d6+INT (maldição canalizada — ignora Def. Física)",
+    abilities: [
+      { name: "Bênção Invertida",
+        desc: "1 Ação de Magia (3x/combate): lança bênção corrompida em aliado do grupo — parece uma cura (o alvo sente calor) mas acumula 1 carga de Maldição. Com 3 cargas: o alvo sofre 2d10 de dano e fica Abalado por 2 rodadas. O sacerdote pode detonar todas as cargas como Ação Livre." },
+      { name: "Cura Parasita",
+        desc: "Passivo: cada 10 HP de dano que o sacerdote sofrer cura automaticamente 5 HP de um aliado aleatório visível. Aliados morrem de 'doença' que alimenta o sacerdote." },
+      { name: "Serpente de Julgamento",
+        desc: "1 Ação de Magia (2x/combate): invoca serpente fantasmal que persegue 1 alvo por 3 rodadas (move 6 hex/turno, Dif.2). Se tocar o alvo: 2d8 de veneno sagrado + Envenenado por 2 rodadas. A serpente é destruída por 1 golpe de dano sagrado." },
+      { name: "Escudo de Fé Corrompida",
+        desc: "Passivo: a primeira vez que atingir 0 HP em um combate, se levanta no turno seguinte com 30 HP (1x/combate). Ao se levantar, cura 1d6 de todos os aliados corrompidos visíveis." }
+    ],
+    spells: [],
+    behavior: "Fica na retaguarda. Começa lançando Bênção Invertida em personagens que parecem aliados (ou em si mesmo para confundir). Usa Serpente de Julgamento no personagem com maior Defesa. Explode as cargas de maldição quando 2+ cargas acumularam.",
+    loot: [
+      { item: "Símbolo de Jurgmund Corrompido (acessório raro — SAB+1, mas sonhos perturbadores)", chance: 70, qty: "1" },
+      { item: "Tomo da Bênção Invertida (livro — ensina Bênção Invertida como magia de nível 3)", chance: 35, qty: "1" },
+      { item: "Escamas de Serpente de Julgmund (material raro — 1d6 doses)", chance: 60, qty: "1d6" },
+      { item: "Coração Ainda Batendo (material lendário — componente de ritual de ressurreição)", chance: 20, qty: "1" }
+    ]
+  },
+
+  {
+    id: "troca-de-pele",
+    name: "Trocador de Pele",
+    difficulty: 3,
+    attrs: { FOR:2, DEX:4, AGI:4, INT:3, SAB:2 },
+    size: "medio",
+    category: "Metamorfo / Aberração",
+    location: ["Floresta", "Cidade", "Ruínas"],
+    hp: 135,
+    physDefense: 5,
+    magDefense: 5,
+    dodge: 13,
+    actions: 2,
+    damage: "1d10+1d6 (garra oculta) ou como forma copiada",
+    abilities: [
+      { name: "Forma Copiada",
+        desc: "O Trocador começa o combate na forma de 1 dos personagens jogadores (aparência perfeita). É impossível distingui-lo sem magia de detecção ou o Trocador atacar. Quando ataca pela primeira vez, revela a forma verdadeira (aberrante, com membros extras)." },
+      { name: "Membros Extras",
+        desc: "Forma verdadeira: 6 membros extras. Ataque que acerta pode agarrar (FOR difícil para escapar gastando 1 Ação). Alvos agarrados sofrem 1d6 de dano no início de cada turno do Trocador." },
+      { name: "Mimetismo de Voz",
+        desc: "Passivo (forma copiada): pode imitar a voz e comportamento do alvo. Aliados do personagem copiado que interagirem com ele sem suspeitar podem revelar informações. Detectar requer SAB (difícil)." },
+      { name: "Troca Rápida",
+        desc: "1 Ação (1x/combate): ao receber dano que reduziria abaixo de 50% HP, pode imediatamente assumir a forma de outro personagem presente — o dano é absorvido pela transição. Aliados devem verificar qual é o real." }
+    ],
+    spells: [],
+    behavior: "Infiltra o grupo como um dos personagens antes do combate, fingindo estar perdido ou separado. Fica perto do alvo mais valioso. Quando atacado ou quando acumular informações suficientes, revela a forma verdadeira e foca no mesmo alvo.",
+    loot: [
+      { item: "Glândula de Mimetismo (material raro — ingrediente de poção de disfarce perfeito)", chance: 75, qty: "1" },
+      { item: "Fragmento de Memória (item raro — contém uma memória roubada de vítima anterior)", chance: 55, qty: "1d2" },
+      { item: "Pele Adaptável (material — tecido que muda de cor ao toque, uso em armadura furtiva)", chance: 50, qty: "1" },
+      { item: "Anel de Verdade (acessório lendário — desfaz ilusões e disfarces em raio 2 hex)", chance: 15, qty: "1" }
+    ]
+  },
+
+  {
+    id: "guardiao-correntes",
+    name: "Guardião das Correntes",
+    difficulty: 3,
+    attrs: { FOR:5, DEX:1, AGI:1, INT:1, SAB:2 },
+    size: "grande",
+    category: "Construto / Morto-vivo",
+    location: ["Dungeon", "Templo", "Cemitério"],
+    hp: 170,
+    physDefense: 10,
+    magDefense: 4,
+    dodge: 7,
+    actions: 2,
+    damage: "1d12+1d8 (corrente girante — alcance 3 hex)",
+    abilities: [
+      { name: "Alcance de Corrente",
+        desc: "Passivo: os ataques têm alcance de 3 hex (correntes com 4 metros). Personagens que tentarem passar além de 3 hex do Guardião em linha reta sofrem ataque de oportunidade automático." },
+      { name: "Agrilhoamento",
+        desc: "Ao acertar: o alvo deve testar FOR (difícil) ou fica Acorrentado — Imóvel e com −2 Ações até escapar (FOR normal, 1 Ação). Máximo de 2 alvos acorrentados simultaneamente." },
+      { name: "Redoma de Ferro",
+        desc: "1 Ação (1x/combate): as correntes formam uma redoma esférica ao redor do Guardião em raio 2 hex. Por 2 rodadas: ninguém pode entrar ou sair dessa área. Personagens dentro ficam presos junto com ele." },
+      { name: "Correntes Irrompíveis",
+        desc: "Passivo: as correntes do Guardião são parte de seu corpo — não podem ser cortadas por armas comuns. Magias de fogo causam +50% de dano (o calor enfraquece o metal)." }
+    ],
+    spells: [],
+    behavior: "Protege uma passagem, câmara ou artefato. Nunca persegue além de 6 hex do objeto guardado. Começa com Redoma de Ferro se o grupo tentar passar em massa. Prioriza Acorrentar personagens de suporte (mago, clérigo).",
+    loot: [
+      { item: "Corrente do Guardião (arma rara — 1d10 alcance 3 hex, pode agarrar com acerto crítico)", chance: 60, qty: "1" },
+      { item: "Chave da Passagem (quest item — abre o que o Guardião protegia)", chance: 100, qty: "1" },
+      { item: "Núcleo de Animação (material lendário — pode ser usado para animar construto)", chance: 25, qty: "1" },
+      { item: "Elos de Ferro Antigo (material — 2d6 elos, mais resistentes que aço normal)", chance: 70, qty: "2d6" }
+    ]
+  },
+
+  {
+    id: "cacador-de-almas-corvino",
+    name: "Caçador de Almas Corvino",
+    difficulty: 3,
+    attrs: { FOR:2, DEX:5, AGI:4, INT:3, SAB:4 },
+    size: "medio",
+    category: "Morto-vivo / Besta",
+    location: ["Cemitério", "Floresta", "Planície"],
+    hp: 130,
+    physDefense: 5,
+    magDefense: 8,
+    dodge: 12,
+    actions: 3,
+    damage: "1d8+1d6 (bico de obsidiana) ou 1d10 (penas-lâmina, alcance 4 hex)",
+    abilities: [
+      { name: "Forma de Enxame",
+        desc: "Passivo: quando atingir 60% de HP, fragmenta-se em 6 corvos menores que agem como 1 criatura (mesmo HP compartilhado). Na forma de enxame: imune a dano de armas de 1 hex (são pequenos demais), mas vulnerável a magias de área (+50% dano). Um Descanso o reagrupa." },
+      { name: "Roubo de Alma",
+        desc: "Ao matar um alvo: absorve a alma. O alvo não pode ser ressuscitado por meios comuns enquanto o Corvino viver. A alma é liberada ao Corvino morrer." },
+      { name: "Penas-Lâmina",
+        desc: "1 Ação (4x/combate): lança 3 penas de obsidiana em alvos diferentes (ou no mesmo). Cada pena: 1d10 de dano, alcance 4 hex, sem rolagem de esquiva (chegam rápido demais)." },
+      { name: "Visão Compartilhada",
+        desc: "Passivo: percebe todos os seus alvos através dos olhos dos corvos. Não pode ser surpreendido. Emboscadas são impossíveis enquanto houver corvos dentro de 12 hex." }
+    ],
+    spells: [],
+    behavior: "Circula acima do grupo antes de atacar (3 turnos de observação). Usa Penas-Lâmina nos turnos de abertura. Foca no personagem com menor HP. Ao fragmentar-se em enxame, dispersa para dificultar ataques e reagrupa quando possível.",
+    loot: [
+      { item: "Pena de Obsidiana (material raro — 2d4 penas, podem ser usadas como projéteis mágicos)", chance: 80, qty: "2d4" },
+      { item: "Olho de Corvino (acessório raro — SAB+1, Percepção automática em raio 8 hex)", chance: 40, qty: "1" },
+      { item: "Frasco de Alma Aprisionada (item único — contém a alma da última vítima do Corvino)", chance: 100, qty: "1" },
+      { item: "Bico de Obsidiana (material — pode ser forjado em adaga rara com efeito de Roubo de Vida)", chance: 30, qty: "1" }
+    ]
+  },
+
+  /* ═══════════════════════════════════════════════════════════════
+     MONSTROS INSPIRADOS EM DARK SOULS
+     Mecânicas de padrão de ataque, postura, fases e punição por erro
+     Dificuldades 2–5 · Loot temático
+     ═══════════════════════════════════════════════════════════════ */
+
+  /* ── DIF 2 — Inimigos comuns ─────────────────────────────────── */
+
+  {
+    id: "morto-oco-guerreiro",
+    name: "Morto Oco — Guerreiro",
+    difficulty: 2,
+    attrs: { FOR:3, DEX:2, AGI:1, INT:0, SAB:0 },
+    size: "medio",
+    category: "Morto-vivo / Humanoide",
+    location: ["Ruínas", "Dungeon", "Cemitério"],
+    hp: 70,
+    physDefense: 5,
+    magDefense: 1,
+    dodge: 10,
+    actions: 2,
+    damage: "1d10+1d6 (espada enferrujada) ou 1d8+1d4 (escudo de choque)",
+    abilities: [
+      { name: "Sequência de Dois Golpes",
+        desc: "Passivo: quando acerta um ataque, pode gastar 1 Ação adicional automaticamente para realizar um segundo golpe imediato no mesmo alvo (sem rolagem nova de acerto — já tem o ritmo). O segundo golpe causa metade do dano." },
+      { name: "Postura de Escudo",
+        desc: "Passivo: se estiver com escudo equipado, ataques frontais sofrem −2 de dano (bloqueia parcialmente). Flancear o Oco remove esta proteção — atacar por trás ignora o escudo completamente." },
+      { name: "Resistência Oca",
+        desc: "Passivo: ao chegar a 0 HP tem 20% de chance (d10 ≤ 2) de continuar com 1 HP por mais 1 turno, em pé, olhando fixamente. No turno seguinte, cai." },
+      { name: "Sem Medo",
+        desc: "Passivo: imune a Aterrorizado, Confuso e Abalado. Não foge. Nunca." }
+    ],
+    spells: [],
+    behavior: "Patrulha em rota fixa. Ao detectar o grupo (SAB 0 — detecta por som ou visão a 6 hex), avança sem hesitar. Ataca o alvo mais próximo. Muda de alvo apenas se o atual morrer ou sair do alcance.",
+    loot: [
+      { item: "Fragmento de Osso Humano (material — componente alquímico, 1d4 usos)", chance: 80, qty: "1d4" },
+      { item: "Espada Enferrujada (arma comum deteriorada — 1d8, −1 Def por uso extra)", chance: 50, qty: "1" },
+      { item: "Alma de Guerreiro Oco (artefato — pode ser trocada por XP ou usada em ritual)", chance: 100, qty: "1" },
+      { item: "Escudo Rachado (escudo comum — defesa funcional mas com −1 permanente)", chance: 40, qty: "1" }
+    ]
+  },
+
+  {
+    id: "besta-oca-saltadora",
+    name: "Besta Oca Saltadora",
+    difficulty: 2,
+    attrs: { FOR:2, DEX:4, AGI:5, INT:0, SAB:1 },
+    size: "pequeno",
+    category: "Morto-vivo / Besta",
+    location: ["Dungeon", "Ruínas", "Caverna"],
+    hp: 55,
+    physDefense: 3,
+    magDefense: 1,
+    dodge: 14,
+    actions: 3,
+    damage: "1d6+1d4 (mordida) ou 1d8 (salto de abertura — ver habilidade)",
+    abilities: [
+      { name: "Salto de Abertura",
+        desc: "Se a Besta ainda não foi detectada (Furtividade vs Percepção do alvo): no primeiro turno, pode saltar de até 6 hex e atacar com 1d8+AGI de dano. Se o salto acertar, o alvo testea FOR (normal) ou cai Derrubado." },
+      { name: "Esquiva Instintiva",
+        desc: "Passivo: não pode ser atingida por mais de 2 ataques no mesmo turno — ao terceiro ataque do mesmo alvo, esquiva automaticamente (o corpo morto ainda tem reflexos de sobrevivência)." },
+      { name: "Uivo de Alerta",
+        desc: "Ao receber dano: uiva imediatamente. Qualquer Morto Oco ou Besta Oca em raio 8 hex que não esteja em combate move-se em direção ao som (o Mestre pode usar para reforçar o encontro)." }
+    ],
+    spells: [],
+    behavior: "Se esconde em fendas, tetos e cornijas. Aguarda o grupo passar embaixo antes de saltar. Após o primeiro ataque, ataca o alvo mais próximo alternando entre alvos para dificultar ataques concentrados.",
+    loot: [
+      { item: "Garra de Besta Oca (material — 1d4 garras, usadas em poções de Esquiva)", chance: 70, qty: "1d4" },
+      { item: "Alma de Besta Oca (artefato — trocada por XP)", chance: 100, qty: "1" }
+    ]
+  },
+
+  /* ── DIF 3 — Guardiões e inimigos nomeados ───────────────────── */
+
+  {
+    id: "cavaleiro-de-prata-oco",
+    name: "Cavaleiro de Prata Oco",
+    difficulty: 3,
+    attrs: { FOR:4, DEX:3, AGI:2, INT:1, SAB:1 },
+    size: "medio",
+    category: "Morto-vivo / Cavaleiro",
+    location: ["Dungeon", "Ruínas", "Templo"],
+    hp: 150,
+    physDefense: 9,
+    magDefense: 5,
+    dodge: 9,
+    actions: 2,
+    damage: "1d12+1d8 (lança de prata) ou 1d10+1d6 (estocada em arco — alcance 2 hex)",
+    abilities: [
+      { name: "Estocada em Arco",
+        desc: "1 Ação: ataca em arco que alcança todos os hex em linha de 2 hex à frente. Todos os alvos na linha testam AGI (normal) ou recebem dano completo. Uso típico para punir grupos que avançam em coluna." },
+      { name: "Escudo de Torre Perfeito",
+        desc: "Passivo: reduções de dano do escudo são dobradas (bloqueia 8 de Def. em vez de 4). Flanquear remove completamente — ataques laterais ou traseiros ignoram o escudo e a alta Def. Física é reduzida em 4." },
+      { name: "Combo de Três Golpes",
+        desc: "1 Ação (2x/combate): realiza 3 ataques em sequência no mesmo alvo. O terceiro ataque, se acertar, tem +3 na Chance de Crítico (o padrão termina no ponto mais forte). Após o combo, o Cavaleiro fica sem Ações por 1 turno (esgotamento do padrão)." },
+      { name: "Memória de Batalha",
+        desc: "Passivo: aprende com o grupo. A cada turno que o mesmo personagem esquivar com sucesso, o Cavaleiro ganha +1 na Chance de Acerto contra aquele alvo (máx +3). Muda de padrão ao perceber que um ataque foi esquivado 3 vezes." }
+    ],
+    spells: [],
+    behavior: "Patrulha câmaras internas. Posiciona-se em corredores estreitos para maximizar a Estocada em Arco. Usa Combo de Três Golpes no personagem com maior HP. Após o combo, recua 2 hex para recompor a postura.",
+    loot: [
+      { item: "Lança de Prata do Cavaleiro (arma rara — 1d12, alcance 2 hex, +1d4 vs mortos-vivos)", chance: 45, qty: "1" },
+      { item: "Fragmento de Armadura de Prata (material raro — para reforço de armadura)", chance: 65, qty: "1d2" },
+      { item: "Alma de Cavaleiro de Prata (artefato — alto valor em XP ou ritual)", chance: 100, qty: "1" },
+      { item: "Escudo de Torre de Prata (escudo raro — defesa passiva, sem penalidade de esquiva)", chance: 35, qty: "1" }
+    ]
+  },
+
+  {
+    id: "gargoyla-de-pedra-viva",
+    name: "Gárgula de Pedra Viva",
+    difficulty: 3,
+    attrs: { FOR:4, DEX:2, AGI:2, INT:1, SAB:2 },
+    size: "grande",
+    category: "Construto / Guardião",
+    location: ["Templo", "Ruínas", "Dungeon"],
+    hp: 160,
+    physDefense: 10,
+    magDefense: 4,
+    dodge: 8,
+    actions: 2,
+    damage: "1d12+1d8 (garra de pedra) ou 2d8 (cauda de pedra — alcance 2 hex atrás)",
+    abilities: [
+      { name: "Postura de Pedra",
+        desc: "Passivo: quando não atacou no último turno (ficou parado), parece uma estátua — Percepção (difícil) para identificá-la como ameaça. O primeiro ataque após 1 turno imóvel tem acerto automático (a surpresa é total)." },
+      { name: "Cauda de Pedra",
+        desc: "Reação (1x/turno): ao ser atacada por trás ou de lado: bate com a cauda de pedra em todos os hex adjacentes — 2d8 de dano, AGI (normal) para metade. A CAUDA PODE SER CORTADA: se receber 30+ de dano em um único golpe traseiro, cai. A cauda se torna item (material raro: Fragmento de Cauda de Gárgula)." },
+      { name: "Voo de Investida",
+        desc: "1 Ação (2x/combate): voa até 8 hex e mergulha no alvo — 2d10+FOR de dano, AGI (difícil) para esquivar. Todos os personagens em raio 1 hex do alvo sofrem 1d8 de dano de impacto (a pedra do chão estilhaça)." },
+      { name: "Resistência de Pedra",
+        desc: "Passivo: imune a veneno e sangramento. Dano de raio e trovão causa +50% (o metal condutor na pedra). Ataques com armas mágicas de fogo causam apenas metade do dano (a pedra aquece lentamente)." }
+    ],
+    spells: [],
+    behavior: "Fica parada em posição de estátua até o grupo passar embaixo ou interagir com o ambiente. Abre com acerto automático. Usa Voo de Investida quando múltiplos alvos estão agrupados. Nunca persegue além de 12 hex do ponto que guarda.",
+    loot: [
+      { item: "Fragmento de Pedra Viva (material raro — para armadura de pedra ou forja)", chance: 75, qty: "1d2" },
+      { item: "Fragmento de Cauda de Gárgula (material raro — só disponível se a cauda for cortada)", chance: 0, qty: "1" },
+      { item: "Alma de Gárgula (artefato — alto valor)", chance: 100, qty: "1" },
+      { item: "Olho de Pedra (acessório raro — imune a ilusões visuais, +1d4 em Percepção)", chance: 30, qty: "1" }
+    ]
+  },
+
+  /* ── DIF 4 — Guardiões nomeados e mini-bosses ────────────────── */
+
+  {
+    id: "cavaleiro-negro-maldito",
+    name: "Cavaleiro Negro — O Maldito",
+    difficulty: 4,
+    attrs: { FOR:5, DEX:3, AGI:2, INT:1, SAB:2 },
+    size: "grande",
+    category: "Morto-vivo / Cavaleiro Elite",
+    location: ["Dungeon", "Ruínas", "Templo"],
+    hp: 220,
+    physDefense: 11,
+    magDefense: 6,
+    dodge: 10,
+    actions: 3,
+    damage: "2d10+1d8 (gládio negro) ou 1d12+1d6 (escudo de choque — empurra 2 hex)",
+    abilities: [
+      { name: "Combo Pesado — Três Fases",
+        desc: "Passivo: o Cavaleiro tem 3 padrões de combo memorizados. Cada turno, usa um padrão diferente em sequência (o Mestre deve registrar qual fase está). Fase 1: 2 golpes verticais (+1d6 cada). Fase 2: 1 golpe horizontal que atinge raio 1 hex à frente. Fase 3: golpe de escudo (empurra 2 hex) + estocada imediata. Conhecer o padrão permite antecipar." },
+      { name: "Punição de Abertura",
+        desc: "Reação (ilimitada): sempre que um personagem errar um ataque corpo a corpo: o Cavaleiro realiza imediatamente 1 contra-ataque gratuito com +2 na Chance de Crítico. Não pode ser esquivado." },
+      { name: "Perseguição Implacável",
+        desc: "Passivo: se o grupo tentar fugir, o Cavaleiro persegue sem limite de distância na área atual. Só para se o grupo sair da área ou o Cavaleiro for morto. Move 5 hex por turno, nunca descansa." },
+      { name: "Aura Negra",
+        desc: "Passivo: presença corrói a magia. Magias de buff aplicadas em aliados adjacentes ao Cavaleiro têm duração reduzida em 1 turno. Magias de dano direcionadas a ele têm −1d4 no dano." }
+    ],
+    spells: [],
+    behavior: "Encontrado sozinho, sempre em local dramático (fim de corredor, topo de escada). Avança devagar. Usa o padrão de combo na sequência correta — o Mestre DEVE anotar a fase. Nunca recua. Nunca mostra emoção.",
+    loot: [
+      { item: "Gládio Negro Maldito (arma rara — 2d10, mágico, causa Abalado em críticos)", chance: 40, qty: "1" },
+      { item: "Armadura do Cavaleiro Negro (armadura rara — Def.Fís 11, maldição resistência: imune à primeira condição por combate)", chance: 30, qty: "1" },
+      { item: "Alma do Cavaleiro Negro (artefato lendário — valor enorme em XP ou ritual)", chance: 100, qty: "1" },
+      { item: "Fragmento de Aço Negro (material lendário — para forja de arma maldita)", chance: 55, qty: "1" }
+    ]
+  },
+
+  {
+    id: "sacerdotisa-dos-profundos",
+    name: "Sacerdotisa dos Profundos",
+    difficulty: 4,
+    attrs: { FOR:1, DEX:3, AGI:2, INT:4, SAB:6 },
+    size: "medio",
+    category: "Humanoide Corrompido / Conjuradora",
+    location: ["Dungeon", "Templo", "Pântano"],
+    hp: 190,
+    physDefense: 3,
+    magDefense: 14,
+    dodge: 11,
+    actions: 2,
+    damage: "1d6+SAB (tentáculo de luz corrompida — alcance 3 hex) ou magia",
+    abilities: [
+      { name: "Lágrimas Corrompidas",
+        desc: "1 Ação de Magia (3x/combate): chora lágrimas negras que formam poça de 2 hex à frente. A poça dura 3 rodadas: qualquer personagem que pisar nela recebe 1d8 de dano de corrupção por rodada e tem −2 na Chance de Acerto enquanto dentro dela." },
+      { name: "Bênção da Profundidade",
+        desc: "1 Ação de Magia (2x/combate): marca 1 personagem com a Bênção Corrompida — por 4 rodadas, toda cura que o personagem receber é convertida em 50% do valor como dano (metade cura, metade corrói). O alvo não sente diferença — a bênção é sutil." },
+      { name: "Eco das Profundezas",
+        desc: "Passivo: toda magia de dano que acertar a Sacerdotisa é parcialmente refletida — 25% do dano causa Abalado nos aliados em raio 2 hex do conjurador (a energia ressoa). Não aplica dano refletido, apenas a condição." },
+      { name: "Segundo Rosto",
+        desc: "Ao atingir 40% de HP: revela o segundo rosto nas costas — um rosto grotesco que começa a conjurar independentemente. Ganha +1 Ação de Magia por turno e seus ataques passam a causar adicionalmente 1d6 de dano de corrupção." }
+    ],
+    spells: [],
+    behavior: "Fica em posição de oração até ser atacada. Posiciona-se de costas para a parede — o segundo rosto não pode atacar se não tiver espaço atrás. Prioriza marcar o Clérigo com Bênção Corrompida primeiro (para sabotear curas). Usa Lágrimas para controlar o campo.",
+    loot: [
+      { item: "Véu da Sacerdotisa (acessório raro — SAB+2, mas reduz Def.Mágica em 3 — a sabedoria dela vem de corrupção)", chance: 45, qty: "1" },
+      { item: "Lágrima das Profundezas (material raro — componente de magia de corrupção ou veneno avançado)", chance: 70, qty: "1d3" },
+      { item: "Alma da Sacerdotisa (artefato lendário)", chance: 100, qty: "1" },
+      { item: "Tomo da Bênção Corrompida (ensina Bênção Corrompida como magia Nível 4)", chance: 30, qty: "1" }
+    ]
+  },
+
+  {
+    id: "bestia-oca-gigante",
+    name: "Besta Oca Gigante — O Fardo",
+    difficulty: 4,
+    attrs: { FOR:6, DEX:0, AGI:1, INT:0, SAB:1 },
+    size: "colossal",
+    category: "Morto-vivo / Colossal",
+    location: ["Dungeon", "Planície", "Ruínas"],
+    hp: 280,
+    physDefense: 8,
+    magDefense: 2,
+    dodge: 7,
+    actions: 2,
+    damage: "3d10+1d12 (pisada colossal — raio 2 hex) ou 2d12 (cabeçada — 4 hex de linha)",
+    abilities: [
+      { name: "Fardo Imóvel",
+        desc: "Passivo: a Besta se move apenas 2 hex por turno (corpo enorme demais). Porém, seus ataques alcançam raio 3 hex — nenhuma criatura de tamanho médio ou menor está segura perto dela." },
+      { name: "Cabeças Parasitas",
+        desc: "Passivo: 3 cabeças menores crescem do corpo principal. Cada cabeça têm 40 HP próprios e Def.Fís 4 — se destruídas, a Besta perde 1 Ação por combate. Cabeças são o ponto fraco (recebem +50% de dano). A Besta tem Def.Fís 8 no corpo, mas as cabeças têm 4." },
+      { name: "Gritar das Entranhas",
+        desc: "1 Ação (2x/combate): abre o torso revelando massa de tentáculos que golpeiam em raio 4 hex — 2d8 de dano, SAB (normal) ou os alvos ficam Aterrorizados por 1 rodada. O torso aberto reduz Def.Física para 4 por 1 turno (o interior é mole)." },
+      { name: "Não Vai Morrer Fácil",
+        desc: "Passivo: ao atingir 50% HP, as cabeças que restam fundem com o corpo principal — a Besta reganha 30 HP e ganha +2 de Def.Física (max 12). Fica mais lenta (1 hex por turno) mas mais resistente." }
+    ],
+    spells: [],
+    behavior: "Vagante — pode aparecer em qualquer encontro como reforço se o grupo demorar muito. Foca no personagem mais próximo. Prioriza usar Gritar das Entranhas quando 3+ personagens estão em raio 4 hex. As cabeças podem ser alvo independente.",
+    loot: [
+      { item: "Alma da Besta Fardo (artefato lendário — valor muito alto)", chance: 100, qty: "1" },
+      { item: "Fragmento de Cabeça Parasita (material — obtido apenas de cabeça destruída, lendário)", chance: 0, qty: "1" },
+      { item: "Osso Colossal (material — 2d4, usado em forja de armas pesadas ou construto)", chance: 65, qty: "2d4" },
+      { item: "Vísceras do Fardo (material raro — componente de ritual de fortalecimento)", chance: 50, qty: "1" }
+    ]
+  },
+
+  /* ── DIF 5 — BOSSES ──────────────────────────────────────────── */
+
+  {
+    id: "senhor-dos-cinzas",
+    name: "O Senhor das Cinzas",
+    difficulty: 5,
+    attrs: { FOR:5, DEX:4, AGI:3, INT:3, SAB:4 },
+    size: "grande",
+    category: "Morto-vivo Elite / Lorde",
+    location: ["Dungeon", "Ruínas", "Templo"],
+    hp: 380,
+    physDefense: 10,
+    magDefense: 10,
+    dodge: 12,
+    actions: 4,
+    damage: "2d12+1d10 (greatsword de cinzas) ou 2d8+INT (cinzas ardentes — alcance 5 hex) ou 1d10 (rajada de cinzas em área — raio 4 hex)",
+    abilities: [
+      { name: "Fase 1 — O Rei Morto (HP > 50%)",
+        desc: "Combate com espada. Usa 4 Ações: 2 ataques de espada + 1 arremesso de cinzas + 1 de posicionamento. Padrão: sempre ataca duas vezes seguidas no mesmo alvo antes de mudar. Cinzas ardentes aplicam Queimando por 2 rodadas." },
+      { name: "Fase 2 — O Cinzas Desperto (HP ≤ 50%)",
+        desc: "Ao atingir 50% HP: para completamente por 1 turno (invulnerável) e o ambiente pega fogo — todos os hex em raio 6 hex causam 1d4 de dano por turno. Ganha +1 Ação, +2 dano em todos os ataques, e começa a usar Rajada de Cinzas em área toda rodada como Ação Livre." },
+      { name: "Punição do Rei",
+        desc: "Reação (3x/combate): ao ser atingido por magia ou ataque à distância — absorve parte da energia e devolve como rajada de cinzas no conjurador (dano igual ao recebido, máx 20, AGI normal para metade)." },
+      { name: "Memória de Mil Mortes",
+        desc: "Passivo: cada turno, o Senhor fica marginalmente mais eficiente — ganha +1 na Chance de Acerto cumulativamente (máx +4). O combate deve ser rápido ou ele se torna imparável. Reinicia se o grupo fugir e voltar." },
+      { name: "Lamento das Cinzas",
+        desc: "1 Ação (1x/combate, apenas na Fase 2): a espada explode em pillar de cinzas — 3d12+FOR de dano em linha de 8 hex, sem rolagem de esquiva. O Senhor fica sem Ações no turno seguinte (o esforço o esgota)." }
+    ],
+    spells: [],
+    behavior: "Encontrado no trono de cinzas no centro de uma sala circular. Não fala. Levanta devagar. Fase 1: metódico, calculado, ataca em padrões. Fase 2: agressivo, ambiente letal, pressa é essencial. Lamento das Cinzas é o ataque decisivo — usado quando o grupo está alinhado.",
+    loot: [
+      { item: "Alma do Senhor das Cinzas (artefato lendário único — poder imenso de XP ou ritual de ascensão)", chance: 100, qty: "1" },
+      { item: "Greatsword das Cinzas (arma lendária — 2d12, aplica Queimando em críticos, cresce mais forte quando empunhada por quem já morreu antes)", chance: 60, qty: "1" },
+      { item: "Coroa das Cinzas (acessório lendário — FOR+2, SAB+2, mas atrai inimigos — aparecem encontros aleatórios 50% mais frequentes)", chance: 40, qty: "1" },
+      { item: "Cinzas do Rei (material lendário — componente de ritual para Convergência do Destino)", chance: 75, qty: "1" }
+    ]
+  },
+
+  {
+    id: "dragao-anciao-sem-escamas",
+    name: "Ancião Sem Escamas — O Que Permaneceu",
+    difficulty: 5,
+    attrs: { FOR:6, DEX:2, AGI:2, INT:5, SAB:5 },
+    size: "colossal",
+    category: "Dragão / Ancião",
+    location: ["Montanha", "Ruínas", "Dungeon"],
+    hp: 450,
+    physDefense: 13,
+    magDefense: 16,
+    dodge: 8,
+    actions: 4,
+    damage: "3d12+FOR (mordida colossal) ou 2d12+1d10 (garra) ou 3d10+INT (sopro de vazio — linha 10 hex)",
+    abilities: [
+      { name: "Pedra de Dragão — Invulnerabilidade Parcial",
+        desc: "Passivo: o Ancião petrificou partes do próprio corpo. Dano físico direto no tronco e cabeça é reduzido em 6 adicionalmente (além da Def. Física normal). Fraquezas: as PATAS não estão petrificadas (Def.Fís 8 nas patas) e os OLHOS têm 0 de defesa — atacar os olhos (requer manobra de Percepção difícil para mirar) causa dano normal + cega por 1 rodada." },
+      { name: "Sopro de Vazio",
+        desc: "1 Ação (4x/combate): sopra energia de vazio em linha de 10 hex, largura 2 hex. 3d10+INT de dano de vazio (ignora Def. Física, usa Def. Mágica). AGI (crítico) para sair da linha a tempo. O sopro também destrói terreno — hexes atingidos tornam-se escombros (−2 Movimento para atravessar)." },
+      { name: "Asa de Tempestade",
+        desc: "1 Ação (3x/combate): bate as asas — todos em raio 6 hex testam FOR (difícil) ou são empurrados 4 hex e ficam Derrubados. Voar cancela este efeito. A batida de asas pode apagar fogueiras, torches e fontes de luz em raio 10 hex." },
+      { name: "Sabedoria Anciã",
+        desc: "Passivo: não pode ser surpreendido. Conhece todos os personagens que estão na área (SAB 5 — lembra de qualquer coisa que passou pelo território). Nomeia o personagem com maior ameaça e foca nele primeiro." },
+      { name: "O Que Permaneceu",
+        desc: "Ao atingir 25% de HP: compreende que vai morrer e para de atacar por 1 turno. Olha para cada personagem. Depois descarrega tudo — ganha +2 Ações e +3 em todos os ataques pelos 2 turnos finais. Morre no terceiro." }
+    ],
+    spells: [],
+    behavior: "Não ataca imediatamente — examina o grupo por 2 turnos. Se o grupo tentar dialogar (INT ou SAB difícil), pode pausar o combate por 1d4 rodadas. Foca o alvo de maior ameaça. Usa Asa de Tempestade para separar o grupo. Sopro de Vazio em formações compactas.",
+    loot: [
+      { item: "Alma do Ancião (artefato lendário único — o maior valor de XP possível no sistema)", chance: 100, qty: "1" },
+      { item: "Escama de Vazio (material lendário — para armadura lendária ou arma que ignora Def.Mágica)", chance: 80, qty: "1d3" },
+      { item: "Dente do Ancião (arma lendária artesanal — pode ser forjada em adaga 2d8 que ignora toda Def.Mágica)", chance: 60, qty: "1" },
+      { item: "Olho do Ancião (acessório lendário — INT+2, SAB+2, vê ilusões e mentiras automaticamente)", chance: 35, qty: "1" },
+      { item: "Memória Anciã (artefato — contém todo o conhecimento do dragão, pode ser estudada por 1 semana para aprender 1 magia de nível 5 gratuitamente)", chance: 45, qty: "1" }
+    ]
+  },
+
+  /* ═══════════════════════════════════════════════════════════════
+     MONSTROS DARK SOULS — NOVOS
+     ═══════════════════════════════════════════════════════════════ */
+
+  /* ── DIF 2 ──────────────────────────────────────────────────── */
+
+  {
+    id: "cavaleiro-prata-oco",
+    name: "Cavaleiro de Prata Oco",
+    difficulty: 2,
+    attrs: { FOR:3, DEX:3, AGI:1, INT:0, SAB:1 },
+    size: "medio",
+    category: "Morto-vivo / Cavaleiro",
+    location: ["Dungeon","Ruínas","Cemitério"],
+    hp: 80, physDefense: 7, magDefense: 3, dodge: 9, actions: 2,
+    damage: "1d10+1d6 (lança de prata) ou 1d8+1d6 (espada curta)",
+    abilities: [
+      { name: "Postura de Lança",
+        desc: "Passivo: mantém distância de 2 hex. Qualquer alvo que tente se aproximar provoca ataque de oportunidade com a lança (1d10, sem custo de Ação). Ao ser flanqueado, troca para espada curta automaticamente." },
+      { name: "Escudo Branco",
+        desc: "Passivo: o escudo branco oco absorve o primeiro ataque de magia por combate completamente (anula o dano). Após absorver, o escudo racha e perde essa função." },
+      { name: "Combo de Três",
+        desc: "Ativo (1x/combate): realiza sequência de 3 ataques rápidos no mesmo alvo. Primeiro: 1d8. Segundo: 1d8. Terceiro: 1d10+1d6 (golpe pesado que não pode ser esquivado se os dois anteriores acertaram)." }
+    ],
+    spells: [],
+    behavior: "Patrulha portões e corredores. Mantém distância com a lança. Se o alvo se aproximar, recua 1 hex antes de atacar. Usa Combo de Três quando o alvo ficar com menos de 40% HP.",
+    loot: [
+      { item: "Lança de Prata Oca (arma rara — 1d10, alcance 2 hex, leve)", chance:55, qty:"1" },
+      { item: "Fragmento de Escudo Branco (material — encantamento de absorção de magia)", chance:60, qty:"1" },
+      { item: "Alma de Cavaleiro de Prata (artefato — troca por XP ou ritual)", chance:100, qty:"1" },
+      { item: "Elmo de Prata Rachado (armadura parcial — +1 Def.Física, maldito)", chance:30, qty:"1" }
+    ]
+  },
+
+  {
+    id: "gargula-pedra-viva",
+    name: "Gárgula de Pedra Viva",
+    difficulty: 2,
+    attrs: { FOR:3, DEX:2, AGI:2, INT:0, SAB:1 },
+    size: "medio",
+    category: "Construto / Besta",
+    location: ["Ruínas","Templo","Dungeon"],
+    hp: 75, physDefense: 8, magDefense: 2, dodge: 8, actions: 2,
+    damage: "1d10+1d6 (garras de pedra) ou 1d8 (golpe de cauda — alcance 2 hex)",
+    abilities: [
+      { name: "Cauda Cortável",
+        desc: "Passivo: a cauda da Gárgula é um ponto fraco. Se receber 15+ de dano num único golpe direcionado à cauda (mestre declara a intenção antes de rolar), a cauda é cortada. A Gárgula perde o ataque de cauda mas dropa Cauda de Pedra imediatamente. Cortar a cauda causa −1 Ação permanente ao monstro." },
+      { name: "Estátua Perfeita",
+        desc: "Passivo: enquanto imóvel e não ameaçada, parece uma estátua comum. Percepção (difícil) para identificar que está viva. Ataques surpresa têm +3 Chance de Crítico." },
+      { name: "Mergulho de Pedra",
+        desc: "1 Ação (2x/combate): voa e mergulha sobre um alvo em raio 5 hex. O alvo sofre 2d8 de dano e testa AGI (normal) ou fica Derrubado. A Gárgula não esquiva no turno em que usa esta habilidade." }
+    ],
+    spells: [],
+    behavior: "Fica estacionada em posição de estátua. Quando o grupo passa a menos de 4 hex, desperta silenciosamente. Tenta o primeiro ataque como surpresa. Usa Mergulho de Pedra no personagem mais afastado.",
+    loot: [
+      { item: "Cauda de Pedra (material raro — só disponível se cortada em combate, forja arma especial)", chance:0, qty:"1" },
+      { item: "Fragmento de Pedra Viva (material — 1d4 fragmentos, mais resistentes que pedra normal)", chance:75, qty:"1d4" },
+      { item: "Alma de Gárgula (artefato)", chance:100, qty:"1" },
+      { item: "Núcleo de Animação Menor (material — versão menor, anima objeto pequeno)", chance:20, qty:"1" }
+    ]
+  },
+
+  /* ── DIF 3 ──────────────────────────────────────────────────── */
+
+  {
+    id: "cavaleiro-prata-oco-elite",
+    name: "Cavaleiro de Prata Oco — Elite",
+    difficulty: 3,
+    attrs: { FOR:4, DEX:4, AGI:2, INT:1, SAB:2 },
+    size: "medio",
+    category: "Morto-vivo / Cavaleiro",
+    location: ["Dungeon","Ruínas","Templo"],
+    hp: 155, physDefense: 9, magDefense: 5, dodge: 11, actions: 3,
+    damage: "1d12+1d8 (espadão de prata) ou 1d10+1d6 (escudo-lança)",
+    abilities: [
+      { name: "Combo Bruto — Três Fases",
+        desc: "Passivo: quando ataca, realiza sempre sequência de 3 golpes por turno (1 por Ação). Fase 1: golpe horizontal (1d12). Fase 2: golpe diagonal (1d12). Fase 3: estocada (1d10+1d8, ignora metade da Def.Física). Se o alvo esquivar qualquer um, a fase seguinte tem −1 Chance de Acerto. Se as 3 fases acertarem: dano bônus +1d10." },
+      { name: "Punição por Esquiva Atrasada",
+        desc: "Passivo: se o alvo tentar esquivar e falhar (rolar acima da Chance de Esquiva), o Cavaleiro Elite detecta o padrão — o próximo ataque no mesmo turno tem +3 na Chance de Crítico." },
+      { name: "Postura Real",
+        desc: "1 Ação (1x/combate): assume postura imóvel por 1 turno. Não ataca. Na rodada seguinte: todos os ataques têm +2 Chance de Acerto e +1d12 de dano bônus. Aliados no combate ficam com −1 na Chance de Esquiva por 1 rodada (a presença impõe respeito)." },
+      { name: "Não Cai Nunca",
+        desc: "Passivo: imune a Derrubado. Ao receber dano que reduziria o HP abaixo de 25%: mantém 25% de HP mínimo por mais 1 turno (uma vez por combate). No turno seguinte, o limite some." }
+    ],
+    spells: [],
+    behavior: "Guarda câmaras importantes. Inicia sempre com Postura Real se tiver tempo (detecta o grupo com 8+ hex). O combo de três fases é automático — adapta qual golpe usar baseado na posição do alvo. Troca de alvo apenas se o atual morrer.",
+    loot: [
+      { item: "Espadão de Prata Elite (arma rara — 1d12+1d4, Postura Real: +1 ação de combate 1x/combate)", chance:50, qty:"1" },
+      { item: "Armadura de Prata Elite (armadura rara — Def.Física 9, Def.Mágica 5)", chance:45, qty:"1" },
+      { item: "Alma de Cavaleiro Elite (artefato — valor dobrado em rituais)", chance:100, qty:"1" },
+      { item: "Crest of the Silver Knight (emblema raro — abre portas seladas em templos antigos)", chance:35, qty:"1" }
+    ]
+  },
+
+  {
+    id: "demonio-touro-oco",
+    name: "Demônio Touro Oco",
+    difficulty: 3,
+    attrs: { FOR:6, DEX:1, AGI:1, INT:0, SAB:1 },
+    size: "enorme",
+    category: "Demônio / Besta",
+    location: ["Dungeon","Ruínas","Planície"],
+    hp: 175, physDefense: 8, magDefense: 2, dodge: 7, actions: 2,
+    damage: "1d12+1d12 (chifrada) ou 2d10+1d6 (esmagamento — área 2 hex)",
+    abilities: [
+      { name: "Chifrada Devastadora",
+        desc: "Ativo (2x/combate): carga em linha reta de até 6 hex, atingindo todos os alvos no caminho. Cada alvo sofre 1d12+1d12 e testa FOR (difícil) ou é lançado 2 hex para trás (Derrubado). O Demônio não pode mudar de direção durante a carga." },
+      { name: "Esmagamento de Área",
+        desc: "Ativo (1x/combate): levanta os braços e esmaga o solo — todos os personagens em raio 2 hex sofrem 2d10+FOR de dano (AGI normal para metade). Cria crateras no chão: esses hexes custam 2 de Movimento para atravessar pelo restante do combate." },
+      { name: "Fúria do Oco",
+        desc: "Passivo: ao atingir 50% de HP, entra em Fúria. Ganha +1 Ação de ataque por turno e +1d6 de dano em todos os golpes. Perde −2 de Esquiva (fica imprudente). A Fúria dura o restante do combate." },
+      { name: "Corpo Enorme",
+        desc: "Passivo: tamanho enorme — não pode entrar em espaços menores que 3 hex de largura. Recebe +50% de dano de magias de área (o corpo grande é alvo fácil). Ataques melee contra ele têm +1 Chance de Acerto (área fácil de acertar)." }
+    ],
+    spells: [],
+    behavior: "Patrulha uma grande área. Ao detectar o grupo, ruge (todos testam SAB normal ou ficam Abalados por 1 rodada). Usa Chifrada Devastadora imediatamente. Foca sempre no alvo com mais HP. Ao entrar em Fúria, ignora aliados e ataca o mais próximo.",
+    loot: [
+      { item: "Chifre de Demônio (material lendário — forja armas de chifre, +1d8 dano de fogo)", chance:65, qty:"1" },
+      { item: "Alma de Demônio Touro (artefato lendário — poder mágico imenso)", chance:100, qty:"1" },
+      { item: "Couro de Demônio (material — armadura de couro com Def.Física 8)", chance:50, qty:"1d2" },
+      { item: "Pó de Osso de Demônio (material raro — componente de poção de força bruta)", chance:70, qty:"1d4" }
+    ]
+  },
+
+  {
+    id: "fantasma-de-pedra",
+    name: "Fantasma de Pedra — Novo Londo",
+    difficulty: 3,
+    attrs: { FOR:1, DEX:5, AGI:5, INT:3, SAB:3 },
+    size: "medio",
+    category: "Fantasma / Aberração",
+    location: ["Pântano","Dungeon","Cemitério"],
+    hp: 120, physDefense: 0, magDefense: 12, dodge: 13, actions: 3,
+    damage: "1d10+DEX (garra espectral — ignora Def.Física) ou 1d8 (maldição acumulativa)",
+    abilities: [
+      { name: "Intangível",
+        desc: "Passivo: imune a dano físico comum — armas normais passam por ele sem efeito. Apenas armas encantadas (+mágico), armas rúnicas, ou magias causam dano. Exceção: armas banhadas em Água Transiente ou ungidas por um Clérigo (1x/combate) funcionam por 3 ataques." },
+      { name: "Maldição Acumulativa",
+        desc: "Cada acerto do Fantasma aplica 1 carga de Maldição no alvo. Com 3 cargas: o alvo é Petrificado por 1 turno (0 Ações, 0 Reações, Def.Física dobrada mas não pode mover ou agir). Com 5 cargas: o alvo sofre Petrificação Parcial permanente (−1 AGI) até Cura Mágica." },
+      { name: "Atravessar Paredes",
+        desc: "Passivo: pode mover-se através de paredes, pisos e obstáculos físicos. Só é bloqueado por barreiras mágicas (Muralha de Força, Barreira Rúnica, Âncora do Plano)." },
+      { name: "Forma Verdadeira",
+        desc: "Ao atingir 30% de HP: revela sua forma verdadeira — um rosto humano agonizante dentro da névoa. Ganha +2 Ações mas perde a capacidade de Atravessar Paredes (muito emocionalmente presente para ser intangível). Magia de Exorcismo ou SAB 5+ pode identificar o nome da alma e desfazer o Fantasma sem combate." }
+    ],
+    spells: [],
+    behavior: "Flutua silenciosamente. Atravessa paredes para aparecer atrás do grupo. Prioriza alvos sem armas mágicas (mais fáceis de afetar com Maldição). Recua através de paredes se ficar abaixo de 50% HP, reagrupa e retorna pelo ângulo menos protegido.",
+    loot: [
+      { item: "Essência de Fantasma (material — Água Transiente: unge 1 arma por 3 ataques, 1d3 doses)", chance:80, qty:"1d3" },
+      { item: "Fragmento de Maldição (material lendário — componente de magia de Petrificação)", chance:40, qty:"1" },
+      { item: "Alma Perdida de Novo Londo (artefato — libera um espírito preso, quest item)", chance:100, qty:"1" },
+      { item: "Cristal de Maldição (acessório raro — +1 INT, Maldições aplicadas pelo portador duram +1 rodada)", chance:25, qty:"1" }
+    ]
+  },
+
+  /* ── DIF 4 ──────────────────────────────────────────────────── */
+
+  {
+    id: "cavaleiro-negro-maldito-v2",
+    name: "Cavaleiro Negro — O Maldito",
+    difficulty: 4,
+    attrs: { FOR:5, DEX:4, AGI:2, INT:1, SAB:2 },
+    size: "medio",
+    category: "Morto-vivo / Cavaleiro",
+    location: ["Dungeon","Ruínas","Templo"],
+    hp: 230, physDefense: 10, magDefense: 6, dodge: 11, actions: 3,
+    damage: "1d12+1d10 (Espada das Almas Negras) ou 1d10+1d8 (lança do caos)",
+    abilities: [
+      { name: "Padrão de Ataque Maldito",
+        desc: "Passivo: o Cavaleiro Negro alterna entre dois modos por turno. Modo Pressão: 3 ataques rápidos de 1d12 cada. Modo Crítico: 1 ataque lento (gasta 2 Ações para preparar — visível), mas o golpe causa 3d12+FOR e ignora toda a Def.Física se acertar. O Mestre anuncia o modo no início do turno do Cavaleiro." },
+      { name: "Punição por Rolar",
+        desc: "Reação: se o alvo usar movimento de esquiva de mais de 2 hex (recuo rápido), o Cavaleiro Negro realiza 1 ataque gratuito de alcance. Este ataque não pode ser esquivado — foi feito para punir quem corre." },
+      { name: "Chama do Caos",
+        desc: "1 Ação de Magia (2x/combate): projeta chama negra em cone de 4 hex. Todos os alvos sofrem 2d10 de dano de fogo que ignora Def.Física (penetra armadura). Alvos que falhem em AGI (difícil) ficam Queimando por 2 rodadas." },
+      { name: "Imortal por Maldição",
+        desc: "Passivo: ao cair a 0 HP pela primeira vez, em vez de morrer, o Cavaleiro Negro se ajoelha por 1 turno (não age, não pode ser acertado adicionalmente). Levanta no turno seguinte com 40% HP e Modo Crítico ativado. Só morre na segunda vez que chegar a 0 HP." }
+    ],
+    spells: [],
+    behavior: "Fica imóvel até o grupo entrar na câmara. Não avisa — simplesmente começa a atacar. Alterna modos com disciplina. Usa Chama do Caos quando 3+ personagens estão agrupados. Após ressurgir, foca exclusivamente no personagem que o derrubou.",
+    loot: [
+      { item: "Espada das Almas Negras (arma lendária — 1d12+1d10, Modo Crítico 1x/combate: 3d12 ignora def)", chance:30, qty:"1" },
+      { item: "Armadura de Cavaleiro Negro (armadura lendária — Def.Física 12, Def.Mágica 8, −2 Movimento)", chance:25, qty:"1" },
+      { item: "Alma de Cavaleiro Negro (artefato lendário — poder imenso)", chance:100, qty:"1" },
+      { item: "Fragmento de Chama do Caos (material lendário — encanta arma com fogo negro)", chance:50, qty:"1" }
+    ]
+  },
+
+  {
+    id: "sacerdotisa-dos-profundos",
+    name: "Sacerdotisa dos Profundos",
+    difficulty: 4,
+    attrs: { FOR:1, DEX:3, AGI:2, INT:5, SAB:6 },
+    size: "medio",
+    category: "Humanoide / Corrompido",
+    location: ["Templo","Dungeon","Pântano"],
+    hp: 195, physDefense: 4, magDefense: 14, dodge: 10, actions: 2,
+    damage: "1d6+SAB (magia profunda — ignora Def.Física) ou 1d8+INT (raio de corrupção)",
+    abilities: [
+      { name: "Bênção dos Profundos",
+        desc: "1 Ação de Magia (3x/combate): cura a si mesma ou aliado corrupto em 3d10+SAB HP. Se lançada em morto-vivo: em vez de curar, aumenta em +2 Ações e +1d10 dano por 2 rodadas (os profundos energizam os mortos)." },
+      { name: "Maré de Corrupção",
+        desc: "1 Ação de Magia (2x/combate): onda de energia corrompida em raio 5 hex. Todos os personagens testam SAB (difícil) ou ficam Corrompidos por 3 rodadas — Corrompidos têm −1d4 em todos os testes e curas recebidas são reduzidas em 50%." },
+      { name: "Invocação dos Profundos",
+        desc: "1 Ação de Magia (1x/combate): invoca 2 Mortos Ocos Guerreiros (Dif.2) imediatamente adjacentes. Os invocados agem no turno seguinte ao da Sacerdotisa. Se ela morrer, os invocados dissolvem." },
+      { name: "Véu de Profundidade",
+        desc: "Passivo: ao atingir 40% de HP, o véu cai e revela a face corrompida. Todos os personagens em raio 4 hex testam SAB (normal) ou ficam Abalados por 2 rodadas. Ela ganha +2 Def.Mágica e +1 Ação de Magia pelo restante do combate." }
+    ],
+    spells: [],
+    behavior: "Mantém distância máxima. Começa invocando servos no primeiro turno. Usa Maré de Corrupção quando 3+ personagens agrupam. Cura a si mesma prioritariamente quando abaixo de 60% HP. Ao revelar o véu, usa Bênção nos servos invocados.",
+    loot: [
+      { item: "Símbolo dos Profundos (acessório lendário — SAB+2, magias de cura curam +50% mas curam também mortos-vivos aliados)", chance:35, qty:"1" },
+      { item: "Véu da Sacerdotisa (acessório raro — INT+1, Maré de Corrupção reduzida a 1x/combate mas ignora Def.Mágica)", chance:50, qty:"1" },
+      { item: "Alma de Sacerdotisa dos Profundos (artefato lendário)", chance:100, qty:"1" },
+      { item: "Essência dos Profundos (material lendário — 3 doses, componente de magias de invocação)", chance:60, qty:"1d3" }
+    ]
+  },
+
+  /* ── DIF 5 ──────────────────────────────────────────────────── */
+
+  {
+    id: "senhor-das-cinzas",
+    name: "O Senhor das Cinzas",
+    difficulty: 5,
+    attrs: { FOR:6, DEX:4, AGI:3, INT:4, SAB:5 },
+    size: "grande",
+    category: "Sem-morte / Lendário",
+    location: ["Dungeon","Templo","Ruínas"],
+    hp: 480, physDefense: 12, magDefense: 10, dodge: 12, actions: 4,
+    damage: "1d12+1d10+FOR (Espada da Primeira Chama) ou 3d8 (explosão de cinzas — área 3 hex)",
+    abilities: [
+      { name: "Primeira Fase — O Rei",
+        desc: "Até 50% HP: 4 Ações por turno. Combo de espada (2d12+FOR por Ação). Ao final de cada turno: emite pulso de cinzas em raio 2 hex (1d6 de dano, todos os personagens adjacentes). Imune a fogo nesta fase." },
+      { name: "Segunda Fase — A Cinza",
+        desc: "Ao atingir 50% HP: o corpo fragmenta-se em cinza por 1 turno completo (intangível, não age). No turno seguinte: reagrupa com aspecto diferente — agora vulnerável a fogo (+50% dano), mas ganha +2 Ações (total 6), Def.Física cai para 8, mas Def.Mágica sobe para 16. Todos os ataques causam +1d10 de dano de fogo." },
+      { name: "Chama da Primeira Centelha",
+        desc: "1 Ação de Magia (3x/combate, apenas Fase 2): projeta cone de chama primordial de 6 hex. 3d10+INT de dano de fogo, ignora toda Def.Física. Alvos que falhem em AGI (crítico) ficam Queimando por 3 rodadas (1d8/rodada)." },
+      { name: "Eu Fui o Primeiro",
+        desc: "Passivo: se qualquer personagem tentar ressuscitar um aliado dentro de raio 6 hex enquanto o Senhor viver, a ressurreição falha automaticamente — a Primeira Chama devora a alma antes que ela retorne." }
+    ],
+    spells: [],
+    behavior: "Senta em trono até o grupo entrar. Levanta sem pressa. Fase 1: metódico, poderoso, cada golpe calculado. Transição: solta um rugido que causa 1d10 de dano a todos em raio 8 hex (sem esquiva). Fase 2: errático, impulsivo, prioriza o conjurador.",
+    loot: [
+      { item: "Espada da Primeira Chama (arma lendária — 1d12+1d10, imune a fogo por 3 rodadas ao equipar)", chance:40, qty:"1" },
+      { item: "Cinza da Primeira Centelha (material lendário — 1 dose, encanta arma com Primeiro Fogo permanente)", chance:50, qty:"1" },
+      { item: "Coroa do Senhor das Cinzas (acessório lendário — FOR+2, SAB+1, Imune a fogo, maldita)", chance:30, qty:"1" },
+      { item: "Grande Alma do Senhor (artefato lendário — o mais valioso de todos)", chance:100, qty:"1" }
+    ]
+  },
+
+  {
+    id: "anciao-sem-escamas",
+    name: "O Ancião Sem Escamas",
+    difficulty: 5,
+    attrs: { FOR:8, DEX:2, AGI:1, INT:3, SAB:4 },
+    size: "colossal",
+    category: "Dragão / Sem-morte",
+    location: ["Montanha","Dungeon","Planície"],
+    hp: 580, physDefense: 16, magDefense: 8, dodge: 6, actions: 4,
+    damage: "2d12+1d12+FOR (mordida/garra) ou 3d10 (sopro de gelo eterno — área 8 hex)",
+    abilities: [
+      { name: "Partes Vulneráveis",
+        desc: "Passivo: o Ancião tem 3 pontos fracos declarados antes do combate: Olho Esquerdo (5 HP — dano direto ignora toda def), Ferida Antiga no Flanco (15 HP — recebe +100% dano), e Garras (10 HP — destruir remove 1 Ação permanente). Atacar ponto fraco requer intenção declarada + acerto. Quando destruídos: ficam marcados e o monstro reage de forma diferente." },
+      { name: "Sopro de Gelo Eterno",
+        desc: "1 Ação (4x/combate): sopro em cone de 8 hex. 3d10 de dano de gelo. Alvos que falhem em AGI (difícil) ficam Congelados por 2 rodadas (Imóveis, recebem +50% de dano físico). O chão nos hexes afetados fica escorregadio: custo de Movimento dobrado, AGI (normal) para não cair." },
+      { name: "Colossal — Imune a Controle",
+        desc: "Passivo: imune a Derrubado, Imobilizado, Acorrentado, Confuso e Aterrorizado. Feitiços de controle que funcionariam (Aprisionamento Arcano, Âncora do Plano) causam apenas −1 Ação por turno em vez de efeito completo." },
+      { name: "Último Rugido",
+        desc: "Ao atingir 20% de HP: rugido que causa 2d10 de dano a TODOS em raio 10 hex (sem esquiva). Nos 2 turnos seguintes: 6 Ações por turno e todos os ataques têm +3 Chance de Crítico — o dragão abandona toda prudência." }
+    ],
+    spells: [],
+    behavior: "Dorme. Requer 2+ turnos de ruído ou 1 ataque direto para despertar. Ao acordar: Sopro de Gelo imediato. Prioriza o grupo inteiro com ataques de área. Ao Último Rugido: ignora estratégia, ataca o mais próximo com tudo.",
+    loot: [
+      { item: "Escama do Ancião (material lendário — armadura superior, Def.Física 14 — 3 escamas necessárias)", chance:70, qty:"1d3" },
+      { item: "Olho do Ancião (material lendário — se o olho foi destruído: visão do futuro, 1x/semana)", chance:40, qty:"1" },
+      { item: "Garra do Ancião (material lendário — arma ou escudo de garra, +2d10 dano de gelo)", chance:50, qty:"1" },
+      { item: "Alma do Ancião Sem Escamas (artefato — o mais poderoso que existe)", chance:100, qty:"1" }
+    ]
+  }];
 
 /* ================================================================
    MONTARIAS — Sistema de Montaria do Mundo de Aether

@@ -2544,26 +2544,192 @@ function renderRulesTab() {
     {
       id: "condicoes",
       icon: "⚠",
-      title: "Condições",
+      title: "Condições e Status",
       content: `
         <div class="rules-block">
-          <p class="rules-intro">Condições são estados que afetam o personagem até serem removidas (cura, habilidade, fim de duração ou teste bem-sucedido).</p>
+          <p class="rules-intro">Condições são estados que afetam o personagem até serem removidas. Algumas duram turnos fixos, outras exigem teste ou recurso para remover.</p>
           <div class="rules-table-wrap">
             <table class="rules-table">
               <thead><tr><th>Condição</th><th>Efeito</th><th>Como Remover</th></tr></thead>
               <tbody>
-                <tr><td><strong>Atordoado</strong></td><td>Perde todas as Ações no próximo turno</td><td>Fim da duração ou Descanso Curto</td></tr>
-                <tr><td><strong>Derrubado</strong></td><td>−1d4 na Esquiva; levantar custa 1 Ação</td><td>Levantar (1 Ação)</td></tr>
-                <tr><td><strong>Envenenado</strong></td><td>Sofre dano por turno (varia); −1d4 em testes</td><td>Antídoto, Clérigo (Purificar), Descanso Longo</td></tr>
-                <tr><td><strong>Sangramento</strong></td><td>Sofre dano por turno (não acumula além do máximo indicado)</td><td>1 Ação (estabilizar) ou cura mágica</td></tr>
-                <tr><td><strong>Amedrontado</strong></td><td>Não pode se aproximar da fonte do medo; −1d4 em testes enquanto a vê</td><td>Sair do campo de visão da fonte; Descanso Longo</td></tr>
-                <tr><td><strong>Dominado</strong></td><td>Age sob controle do conjurador inimigo</td><td>Fim da duração; sofrer dano (teste SAB); cura mágica</td></tr>
-                <tr><td><strong>Paralisado</strong></td><td>Não pode agir nem reagir; Esquiva cai a 0</td><td>Fim da duração; teste SAB no início de cada turno</td></tr>
-                <tr><td><strong>Corrompido</strong></td><td>Sofre 1d6 por turno; 20% de chance de atacar aliados</td><td>Magia sagrada Nv 3+; Clérigo com Purificar</td></tr>
-                <tr><td><strong>Exausto</strong></td><td>−1d4 em todos os testes por 1–2 rodadas</td><td>Fim da duração</td></tr>
-                <tr><td><strong>Inconsciente</strong></td><td>0 Ações; Esquiva 0; pode ser executado (Ataque Fatal)</td><td>Estabilizar (1 HP); cura; Descanso</td></tr>
+                <tr><td><strong>Atordoado</strong></td><td>Perde 1 Ação no turno afetado</td><td>Automático (1 turno)</td></tr>
+                <tr><td><strong>Derrubado</strong></td><td>Não pode mover; levantar custa 1 Ação; −1d4 na Esquiva</td><td>Gastar 1 Ação para levantar</td></tr>
+                <tr><td><strong>Imobilizado</strong></td><td>Movimento = 0; pode atacar normalmente</td><td>FOR (varia por fonte) / Ação</td></tr>
+                <tr><td><strong>Preso</strong></td><td>Imóvel; FOR (normal) para escapar gastando 1 Ação</td><td>FOR (normal) + 1 Ação</td></tr>
+                <tr><td><strong>Acorrentado</strong></td><td>Imóvel, −2 Ações; FOR (normal) para escapar gastando 1 Ação</td><td>FOR (normal) + 1 Ação</td></tr>
+                <tr><td><strong>Confuso</strong></td><td>Ataca o aliado mais próximo no turno; SAB (normal) para resistir</td><td>SAB (normal) no início do turno / sair da área</td></tr>
+                <tr><td><strong>Aterrorizado</strong></td><td>Foge do causador; não pode atacá-lo; −1d4 em testes</td><td>SAB (difícil) / 1–2 turnos / sair da área</td></tr>
+                <tr><td><strong>Abalado</strong></td><td>−1d4 em todos os testes por 1–2 rodadas</td><td>Automático (fim da duração)</td></tr>
+                <tr><td><strong>Envenenado</strong></td><td>1d4–1d8 por rodada (varia); FOR ou SAB para resistir</td><td>Antídoto / Cura Mágica / Descanso Longo</td></tr>
+                <tr><td><strong>Envenenado Grave</strong></td><td>1d8–1d12/rodada; SAB (difícil); irremovível em combate</td><td>Cura Mágica (fora de combate) / Descanso Longo</td></tr>
+                <tr><td><strong>Congelado</strong></td><td>Imóvel 1 turno; +50% dano físico recebido</td><td>FOR (normal) ou fim do turno</td></tr>
+                <tr><td><strong>Queimando</strong></td><td>1d4–1d8 por rodada; 1 Ação para apagar</td><td>1 Ação / água / rolar no chão</td></tr>
+                <tr><td><strong>Sangramento</strong></td><td>1d4 por rodada; não acumula além do indicado</td><td>1 Ação (estabilizar) / Cura Mágica</td></tr>
+                <tr><td><strong>Corrompido</strong></td><td>−1d4 em testes; curas recebidas reduzidas em 50%</td><td>Magia Sagrada Nv.3+ / Clérigo (Purificar)</td></tr>
+                <tr><td><strong>Maldito</strong></td><td>Varia por fonte; pode aplicar cargas (3 = explosão de dano)</td><td>Cura Mágica Nv.4+ / Ritual</td></tr>
+                <tr><td><strong>Petrificado</strong></td><td>0 Ações, 0 Reações; Def.Física dobrada; não move</td><td>Cura Mágica / fim da duração</td></tr>
+                <tr><td><strong>Paralisado</strong></td><td>0 Ações, 0 Reações; Esquiva = 0</td><td>FOR (difícil) / Cura Mágica / fim do turno</td></tr>
+                <tr><td><strong>Dominado</strong></td><td>Age sob controle do conjurador inimigo</td><td>Sofrer dano (SAB normal); Cura Mágica; fim da duração</td></tr>
+                <tr><td><strong>Exausto Menor</strong></td><td>Perde 1 Ação no próximo turno (pós Aceleração Menor)</td><td>Automático após 1 turno</td></tr>
+                <tr><td><strong>Exausto</strong></td><td>Perde turno inteiro — 0 Ações, 0 Reações (pós Aceleração)</td><td>Automático após 1 turno</td></tr>
+                <tr><td><strong>Colapso de Adrenalina</strong></td><td>Perde turno + não pode ser protegido por aliados (pós Aceleração Superior)</td><td>Automático após 1 turno</td></tr>
+                <tr><td><strong>Vulnerável</strong></td><td>+25–50% de dano do tipo indicado</td><td>Indicado na fonte / Cura Mágica</td></tr>
+                <tr><td><strong>Inconsciente</strong></td><td>0 Ações; Esquiva 0; pode ser executado</td><td>Estabilizar (1 HP) / Cura / Descanso</td></tr>
               </tbody>
             </table>
+          </div>
+          <div class="rules-callout rules-callout-gold">
+            <strong>Condições de Exaustão — Aceleração</strong>
+            <ul class="rules-list">
+              <li><strong>Aceleração Menor (Nv.2):</strong> +1 Ação por 5 turnos → perde 1 Ação no próximo turno</li>
+              <li><strong>Aceleração (Nv.3):</strong> +1 Ação por 8 turnos → perde turno inteiro</li>
+              <li><strong>Aceleração Superior (Nv.4):</strong> +2 Ações por 4 rodadas → Colapso de Adrenalina</li>
+            </ul>
+          </div>
+        </div>
+      `
+    },
+    {
+      id: "subclasses",
+      icon: "⭐",
+      title: "Subclasses e Habilidades",
+      content: `
+        <div class="rules-block">
+          <p class="rules-intro">Subclasses specializam o personagem além da classe base. São de dois tipos: <strong>Sinergia</strong> (combinam duas classes) e <strong>Puras</strong> (exclusivas de uma classe, mais poderosas).</p>
+          <div class="rules-callout rules-callout-blue">
+            <strong>Subclasses de Sinergia (10)</strong>
+            <ul class="rules-list">
+              <li><strong>Paladino</strong> — Guerreiro + Clérigo</li>
+              <li><strong>Berserker</strong> — Guerreiro + Ladino</li>
+              <li><strong>Runa-Lâmina</strong> — Guerreiro + Mago</li>
+              <li><strong>Caçador de Gigantes</strong> — Guerreiro + Arqueiro</li>
+              <li><strong>Necromante</strong> — Mago + Clérigo</li>
+              <li><strong>Bardo</strong> — Mago + Ladino</li>
+              <li><strong>Alquimista</strong> — Mago + Arqueiro</li>
+              <li><strong>Druida</strong> — Arqueiro + Clérigo</li>
+              <li><strong>Caçador Sombrio</strong> — Ladino + Arqueiro</li>
+              <li><strong>Sussurro Sombrio</strong> — Ladino + Clérigo</li>
+            </ul>
+          </div>
+          <div class="rules-callout rules-callout-gold">
+            <strong>Subclasses Puras (5) — Nível 4+ obrigatório para aprender habilidades</strong>
+            <ul class="rules-list">
+              <li><strong>🗡 Guerreiro Puro</strong> — Fortaleza Inabalável · Golpe Devastador (×3)</li>
+              <li><strong>🔮 Mago Puro</strong> — Amplificação Canalizada (×3 dano) · Domínio de Área (+4 hex)</li>
+              <li><strong>🏹 Arqueiro Puro</strong> — Saraivada de Flechas (cone/linha todos) · Tiro Indefensável</li>
+              <li><strong>🗡 Ladino Puro</strong> — Passo das Sombras (invisível 4 rodadas) · Veneno Mortal (irremovível)</li>
+              <li><strong>✝ Clérigo Puro</strong> — Cura Milagrosa (ressuscita) · Onda de Purificação (8 hex)</li>
+            </ul>
+            <p style="margin-top:6px;font-size:12px">Custo: <strong>2 pontos</strong> por habilidade pura (em vez de 1). Exigem Nível 4+.</p>
+          </div>
+          <div class="rules-table-wrap">
+            <table class="rules-table">
+              <thead><tr><th>Tipo de Habilidade</th><th>Custo</th><th>Nível mínimo</th><th>Níveis</th></tr></thead>
+              <tbody>
+                <tr><td>Habilidade de Classe normal</td><td>1 ponto</td><td>Qualquer</td><td>1 → 2 → 3</td></tr>
+                <tr><td>Habilidade de Subclasse Sinergia</td><td>1 ponto</td><td>Qualquer</td><td>1 → 2 → 3</td></tr>
+                <tr><td>Habilidade de Subclasse Pura</td><td><strong>2 pontos</strong></td><td><strong>Nível 4+</strong></td><td>1 → 2 → 3</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `
+    },
+    {
+      id: "encontros",
+      icon: "⚔",
+      title: "Balanceamento de Encontros",
+      content: `
+        <div class="rules-block">
+          <p class="rules-intro">O bestiário de Aether tem <strong>178 monstros</strong> distribuídos em 5 dificuldades. Os HPs já foram calibrados para uma party de 4 jogadores. Duração estimada de combate com party equivalente ao nível do monstro:</p>
+          <div class="rules-table-wrap">
+            <table class="rules-table">
+              <thead><tr><th>Dificuldade</th><th>HP médio</th><th>Def.Física</th><th>Dodge</th><th>Rounds (4p equiv.)</th><th>Rounds (boss)</th></tr></thead>
+              <tbody>
+                <tr><td><span class="rules-badge diff-1">☠ Dif.1</span></td><td>~31 HP</td><td>2</td><td>~12</td><td>5–6</td><td>10–14</td></tr>
+                <tr><td><span class="rules-badge diff-2">☠☠ Dif.2</span></td><td>~74 HP</td><td>4</td><td>~11</td><td>5–6</td><td>10–14</td></tr>
+                <tr><td><span class="rules-badge diff-3">☠☠☠ Dif.3</span></td><td>~149 HP</td><td>7</td><td>~10</td><td>8–10</td><td>12–16</td></tr>
+                <tr><td><span class="rules-badge diff-4">☠☠☠☠ Dif.4</span></td><td>~200 HP</td><td>8</td><td>~11</td><td>8–9</td><td>15–20</td></tr>
+                <tr><td><span class="rules-badge diff-5">☠☠☠☠☠ Dif.5</span></td><td>~382 HP</td><td>9–16</td><td>~12</td><td>10–11</td><td>20+</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="rules-callout rules-callout-gold">
+            <strong>Locais de Encontro (12 canônicos)</strong>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 16px;margin-top:6px">
+              ${[['⚓','Dungeon',70],['🌲','Floresta',58],['🏚','Ruínas',57],['🌾','Planície',46],
+                 ['⛰','Montanha',36],['🕳','Caverna',29],['🌿','Pântano',25],['💀','Cemitério',24],
+                 ['🏘','Cidade',22],['🏛','Templo',22],['🛤','Estrada',13],['🏜','Deserto',12]]
+                .map(([i,n,c]) => `<div style="font-size:12px">${i} <strong>${n}</strong> — ${c} monstros</div>`).join("")}
+            </div>
+          </div>
+          <div class="rules-callout rules-callout-blue">
+            <strong>Soma de Dificuldades — pressão do encontro</strong>
+            <ul class="rules-list">
+              <li>Soma 1–4: Tranquilo — sem risco real</li>
+              <li>Soma 5–9: Equilibrado — tensão moderada, 1–2 KOs possíveis</li>
+              <li>Soma 10–14: Desafiador — combate longo, decisões importam</li>
+              <li>Soma 15–20: Perigoso — alto risco de morte</li>
+              <li>Soma 21+: Mortal — confronto final / boss épico</li>
+            </ul>
+          </div>
+        </div>
+      `
+    },
+    {
+      id: "mecanicas-especiais",
+      icon: "🎮",
+      title: "Mecânicas Especiais de Monstros",
+      content: `
+        <div class="rules-block">
+          <p class="rules-intro">Alguns monstros — especialmente os inspirados em Dark Souls — têm mecânicas únicas que mudam a forma de jogar o combate. O Mestre deve anunciar mecânicas visíveis antes que o jogador precise reagir.</p>
+          <div class="rules-callout rules-callout-gold">
+            <strong>Partes Destruíveis</strong>
+            <ul class="rules-list">
+              <li>Declarar intenção de atacar parte específica antes de rolar</li>
+              <li>Se acertar, o dano é aplicado à parte (HP separado, geralmente 10–20)</li>
+              <li>Parte destruída: monstro perde habilidade ou Ação relacionada</li>
+              <li>Exemplo: Gárgula de Pedra Viva — cauda cortável com 15+ dano num golpe</li>
+              <li>Exemplo: Ancião Sem Escamas — Olho (5 HP), Ferida (15 HP), Garras (10 HP)</li>
+            </ul>
+          </div>
+          <div class="rules-callout rules-callout-blue">
+            <strong>Fases de Combate</strong>
+            <ul class="rules-list">
+              <li>Monstros com fases mudam de comportamento ao atingir % de HP</li>
+              <li>A transição geralmente ocorre automaticamente no início do turno do monstro</li>
+              <li>Fase 2 pode alterar: Ações, imunidades, vulnerabilidades, padrão de ataque</li>
+              <li>Exemplo: Senhor das Cinzas — 50% HP → fragmenta-se em cinza por 1 turno, retorna com 6 Ações</li>
+              <li>Exemplo: Cavaleiro Negro Maldito — cai a 0 HP → ressurge com 40% HP e Modo Crítico</li>
+            </ul>
+          </div>
+          <div class="rules-callout rules-callout-green">
+            <strong>Padrões de Ataque Anunciados</strong>
+            <ul class="rules-list">
+              <li>Alguns monstros anunciam o próximo ataque com animação (1 Ação de "postura")</li>
+              <li>O Mestre anuncia: "O Cavaleiro Elite entra em postura — ataque pesado vem no próximo turno"</li>
+              <li>Jogadores podem usar isso para se reposicionar, usar habilidades ou proteger aliados</li>
+              <li>Interromper a postura antes do ataque (dano suficiente) pode cancelar o golpe especial</li>
+            </ul>
+          </div>
+          <div class="rules-callout rules-callout-red" style="background:rgba(125,42,46,0.06);border-left:3px solid var(--red)">
+            <strong style="color:var(--red)">Punição por Erro</strong>
+            <ul class="rules-list">
+              <li><strong>Punição por Esquiva Atrasada:</strong> falhar na esquiva → próximo ataque do monstro tem +3 Crit</li>
+              <li><strong>Punição por Rolar (Cavaleiro Negro):</strong> recuar mais de 2 hex → ataque gratuito inevitável</li>
+              <li><strong>Fragmentos Cortantes (Golem de Espelhos):</strong> acerto melee → 1d4 de reflexo no atacante</li>
+              <li><strong>Espada nas Costas (Aranha):</strong> acerto com rolagem ≤ 2 → atacante recebe dano da lâmina</li>
+            </ul>
+          </div>
+          <div class="rules-callout rules-callout-gold">
+            <strong>Resistências Especiais</strong>
+            <ul class="rules-list">
+              <li><strong>Intangível (Fantasma de Pedra):</strong> imune a armas não-encantadas; Água Transiente ativa 3 ataques físicos</li>
+              <li><strong>Imune a Críticos (Cavaleiro Sem Cabeça):</strong> não tem cabeça — críticos causam dano normal</li>
+              <li><strong>Reflexo Mágico (Golem de Espelhos):</strong> 40% de refletir magia direcionada de volta</li>
+              <li><strong>Imortal por Maldição (Cavaleiro Negro):</strong> primeira "morte" → ressurge com 40% HP</li>
+              <li><strong>Colossal (Ancião Sem Escamas):</strong> imune a todas as formas de controle; requer espaço ≥3 hex</li>
+            </ul>
           </div>
         </div>
       `
