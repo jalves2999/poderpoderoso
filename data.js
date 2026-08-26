@@ -1523,20 +1523,20 @@ const WEAPONS_ONE_HAND = [
 
 const WEAPONS_TWO_HAND = [
   /* --- COMUNS --- */
-  { tier: "comum", name: "Espada de Duas Mãos", dmg: "1d12", req: "FOR", weight: 7, defenseDegrade: null, slot: ["primary"], note: "Alto dano, sem defesa ativa.", heavyTwoHanded: true },
+  { tier: "comum", name: "Espada de Duas Mãos", dmg: "1d12 + 1d4", req: "FOR", weight: 7, defenseDegrade: null, slot: ["primary"], note: "Alto dano, sem defesa ativa.", heavyTwoHanded: true },
   { tier: "comum", name: "Machado Grande", dmg: "1d12 + 1d4", req: "FOR alto", weight: 9, defenseDegrade: null, slot: ["primary"], note: "Dano altíssimo.", heavyTwoHanded: true },
   { tier: "comum", name: "Martelo de Guerra", dmg: "1d10 + 1d4", req: "FOR", weight: 8, defenseDegrade: null, slot: ["primary"], note: "Bom contra armaduras pesadas.", heavyTwoHanded: true },
-  { tier: "comum", name: "Lança", dmg: "1d10", req: "FOR/DEX", weight: 6, defenseDegrade: null, slot: ["primary"], note: "Alcance 2 hexágonos corpo a corpo.", heavyTwoHanded: true },
+  { tier: "comum", name: "Lança", dmg: "1d10 + 1d4", req: "FOR/DEX", weight: 6, defenseDegrade: null, slot: ["primary"], note: "Alcance 2 hexágonos corpo a corpo.", heavyTwoHanded: true },
   { tier: "comum", name: "Alabarda", dmg: "1d10 + 1d6", req: "FOR", weight: 8, defenseDegrade: null, slot: ["primary"], note: "Alcance 2 hex; Ataques de Oportunidade a 2 hex.", heavyTwoHanded: true },
   { tier: "comum", name: "Foice de Guerra", dmg: "1d10 + 1d4", req: "FOR/AGI", weight: 6, defenseDegrade: null, slot: ["primary"], note: "Acerto Crítico atinge também um inimigo adjacente com 1d6.", heavyTwoHanded: true },
 
   /* --- RAROS --- */
-  { tier: "raro", name: "Maul de Pedra Negra", dmg: "1d12 + 1d6", req: "FOR alto", weight: 12, defenseDegrade: null, slot: ["primary"],
+  { tier: "raro", name: "Maul de Pedra Negra", dmg: "1d12 + 1d6 + 1d4", req: "FOR alto", weight: 12, defenseDegrade: null, slot: ["primary"],
     story: "Esculpido de um único bloco de obsidiana das Cavernas de Durrak, onde o calor do subsolo impregna a rocha com energia bruta. O primeiro golpe de cada combate sempre causa Atordoamento.",
     note: "Primeiro ataque do combate: o alvo perde 1 Ação no próximo turno (independente de acertar).", heavyTwoHanded: true },
 
   /* --- MÁGICOS --- */
-  { tier: "magico", name: "Foice da Lua da Marca", dmg: "1d10 + 1d6 + 1d4", req: "FOR/AGI", weight: 6, defenseDegrade: null, slot: ["primary"],
+  { tier: "magico", name: "Foice da Lua da Marca", dmg: "1d12 + 1d6 + 1d4", req: "FOR/AGI", weight: 6, defenseDegrade: null, slot: ["primary"],
     story: "Forjada sob a única Lua Vermelha que ocorre a cada 100 anos, quando o Deus Marcado ganha força suficiente para tingir o céu de carmesim. A foice corta não só a carne, mas o elo entre alma e corpo.",
     note: "Acerto Crítico: além de atingir um adjacente, aplica Maldição da Marca — alvo sofre 1d6 de dano no início de cada turno por 3 rodadas e não pode se curar enquanto Maldito.", heavyTwoHanded: true },
 
@@ -1553,15 +1553,15 @@ const WEAPONS_TWO_HAND = [
 
 
   /* --- RAROS/MÁGICOS: Ações de Magia e Combate (2M) --- */
-  { tier: "raro", name: "Cajado do Trovador de Batalha", dmg: "1d8 + 1d6", req: "INT/SAB", weight: 3, defenseDegrade: null, slot: ["primary"], heavyTwoHanded: true,
+  { tier: "raro", name: "Cajado do Trovador de Batalha", dmg: "1d8 + 1d6 + 1d4", req: "INT/SAB", weight: 3, defenseDegrade: null, slot: ["primary"], heavyTwoHanded: true,
     magicBonus: { spellActions: 1 },
     story: "Cajado que ecoa o som de batalha enquanto canaliza magia. Foi usado por um trovador-mago que compunha músicas durante os combates — e cada nota era uma magia.",
     note: "+1 Ação de Magia por rodada enquanto equipado. Todas as magias conjuradas com este cajado adicionam +1d4 ao efeito." },
-  { tier: "magico", name: "Báculo do Feiticeiro Guerreiro", dmg: "1d10 + 1d8", req: "INT/FOR", weight: 5, defenseDegrade: null, slot: ["primary"], heavyTwoHanded: true,
+  { tier: "magico", name: "Báculo do Feiticeiro Guerreiro", dmg: "1d12 + 1d8 + 1d4", req: "INT/FOR", weight: 5, defenseDegrade: null, slot: ["primary"], heavyTwoHanded: true,
     magicBonus: { spellActions: 1, actions: 1 },
     story: "Criado para guerreiros que aprenderam magia com Arcath mas não queriam abrir mão do combate corpo a corpo. O báculo pode ser usado como arma ou como foco mágico — e o portador pode fazer os dois no mesmo turno.",
     note: "+1 Ação de Magia e +1 Ação de Combate por rodada. Permite conjurar e atacar corpo a corpo no mesmo turno sem penalidade." },
-  { tier: "lendario", name: "Lança do Herói Arqueiro — Réplica Enchanted", dmg: "1d12 + 1d8", req: "DEX/FOR", weight: 5, defenseDegrade: null, slot: ["primary"], heavyTwoHanded: true,
+  { tier: "lendario", name: "Lança do Herói Arqueiro — Réplica Enchanted", dmg: "1d12 + 1d10 + 1d4", req: "DEX/FOR", weight: 5, defenseDegrade: null, slot: ["primary"], heavyTwoHanded: true,
     magicBonus: { actions: 2 },
     story: "Réplica encantada da lança do Herói Arqueiro Ferrath. O original foi destruído na Batalha Colossal, mas forjadores de Arcath conseguiram recriar parte do encantamento estudando fragmentos encontrados nas planícies.",
     note: "+2 Ações de Combate e +1 Reação por rodada. Ataques com esta lança alcançam 3 hexágonos em corpo a corpo e 12 hexágonos como arma arremessada (retorna ao portador)." },
@@ -1573,17 +1573,17 @@ const WEAPONS_TWO_HAND = [
   { tier: "raro", name: "Claymore do Colapso", dmg: "2d8 + 1d8", req: "FOR alto", weight: 10, defenseDegrade: null, slot: ["primary"], heavyTwoHanded: true,
     story: "Espada de duas mãos com lâmina que aumenta de peso ao descer — a inércia é brutal mas incontrolável.",
     note: "⚠ Após cada ataque (acerto ou erro), o portador move-se obrigatoriamente 1 hexágono na direção do alvo (sem custo de Ação, mas involuntário). Se houver parede/obstáculo, para. Se acertar, o alvo é Derrubado automaticamente além do dano." },
-  { tier: "raro", name: "Bazão da Cobra Invertida", dmg: "1d12 + 1d8", req: "INT/SAB", weight: 4, defenseDegrade: null, slot: ["primary"], heavyTwoHanded: true,
+  { tier: "raro", name: "Bazão da Cobra Invertida", dmg: "1d12 + 1d8 + 1d4", req: "INT/SAB", weight: 4, defenseDegrade: null, slot: ["primary"], heavyTwoHanded: true,
     story: "Cajado de um sacerdote de Jurgmund que inverteu os rituais — canaliza veneno em vez de cura. O símbolo da cobra está de cabeça para baixo.",
     note: "⚠ Magias conjuradas com este cajado adicionam +1d8 de veneno ao dano ou +1d8 à cura. MAS uma vez por combate, ao rolar 1 natural em qualquer teste enquanto o cajado está equipado, o veneno vaza e o portador sofre 1d8 de veneno (não evitável)." },
 
   /* --- ÚNICOS --- */
-  { tier: "unico", name: "Cajado da Tormenta", dmg: "1d10 + 1d6", req: "INT", weight: 5, defenseDegrade: null, slot: ["primary"],
+  { tier: "unico", name: "Cajado da Tormenta", dmg: "1d12 + 1d10 + 1d6", req: "INT", weight: 5, defenseDegrade: null, slot: ["primary"],
     story: "Pertencia ao Lich das Montanhas de Atrelon, um necromante que fez um pacto com entidades do plano do gelo para estender sua vida além da morte. O cajado absorveu séculos de magia glacial e agora respira frio por conta própria. Quando o Lich foi derrotado, o cajado foi selado — mas nunca destruído.",
     uniqueAbility: "Nevasca de Atrelon (2x/dia, 1 Ação de Magia): cria uma nevasca que dura 5 turnos em TODO o campo de batalha. Durante a nevasca: todos os hexágonos se tornam Terreno Difícil (custo dobrado de Movimento), Chance de Acerto à distância recebe −1d4, e qualquer criatura que terminar seu turno na neve sem proteção sofre 1d6 de dano de frio.",
     note: "Conjura magias de frio sem gastar Slot de Magia. Passivo: o portador é imune a efeitos de frio e neve.", heavyTwoHanded: true },
   /* --- SETS integrados --- */
-  { tier: "magico", setName: "Cólera Arcana", name: "Cajado da Tempestade Arcana (Cólera Arcana)", dmg: "1d10 + 1d8", req: "INT", weight: 4, defenseDegrade: null, slot: ["primary"], heavyTwoHanded: true,
+  { tier: "magico", setName: "Cólera Arcana", name: "Cajado da Tempestade Arcana (Cólera Arcana)", dmg: "1d12 + 1d8 + 1d4", req: "INT", weight: 4, defenseDegrade: null, slot: ["primary"], heavyTwoHanded: true,
     story: "Derivado dos estudos sobre o Cajado da Tormenta do Lich de Atrelon. Replicação instável e perigosa — violento por natureza.",
     note: "Magias de área +1 hex de raio. Uma vez por sessão, ao errar uma magia, pode re-conjurar sem gastar Slot. SET — Cólera Arcana (1/3): Sobrecarga Elemental.",
     setBonus: { pieces: 3, ability: "Sobrecarga Elemental", effect: "Magia de dano Nv3+ ganha +1 dado extra do tipo maior que já usa. Você sofre 1d6 de retaliação arcana. (1x/batalha)" } },
@@ -1593,26 +1593,26 @@ const WEAPONS_TWO_HAND = [
     story: "Forjado a partir de um fragmento de osso que Magnalaga espontaneamente expeliu durante um mergulho. O anão Hrissa o reconheceu como sinal — levou 6 anos forjando. O martelo parece mais leve do que deveria e a superfície de contato muda de textura como pele viva.",
     note: "Ao acertar: onde o alvo impacta o chão ou parede, todos os inimigos em raio 2 hex testam Resistência (normal) ou ficam Prostrados. +1d8 de dano adicional contra construtos e criaturas com carapaça. Passivo: imune a efeitos de atordoamento por impacto." },
 
-  { tier: "lendario", name: "Lança de Luz do Dragão Dourado", dmg: "1d12 + 1d10", req: "FOR/SAB", weight: 5, defenseDegrade: null, slot: ["primary"], heavyTwoHanded: true,
+  { tier: "lendario", name: "Lança de Luz do Dragão Dourado", dmg: "1d12 + 1d10 + 1d6", req: "FOR/SAB", weight: 5, defenseDegrade: null, slot: ["primary"], heavyTwoHanded: true,
     story: "Segundo a lenda, a Xamã Erkha passou 30 dias meditando no topo do Vulcão de Karloth. No último dia, uma escama dourada rolou pela encosta até seus pés — e ela a fundiu em lança com a ajuda do Ferreiro Durn. O dragão nunca reclamou.",
     note: "Dano de luz: +1d6 de luz sagrada em cada acerto — causa dano dobrado contra criaturas do Deus Marcado, Araltos e mortos-vivos. Uma vez por dia: a lança emite um pulso de luz dourada (alcance 4 hex) que remove qualquer efeito de Corrupção ou Maldição da Marca de aliados na área." },
 
   /* --- ÚNICO: tema Aether --- */
-  { tier: "unico", name: "Báculo do Crânio de Jurgmund", dmg: "1d12 + 1d8 + 1d6", req: "INT/SAB", weight: 5, defenseDegrade: null, slot: ["primary"], heavyTwoHanded: true,
+  { tier: "unico", name: "Báculo do Crânio de Jurgmund", dmg: "2d8 + 1d10 + 1d6", req: "INT/SAB", weight: 5, defenseDegrade: null, slot: ["primary"], heavyTwoHanded: true,
     story: "Fragmento do próprio crânio de Jurgmund, moldado pelos primeiros Serpentarianos em forma de báculo. Pulsa com calor vivo e ocasionalmente emite sons que só quem empunha consegue ouvir — sussurros em língua de serpente que descrevem eventos que ainda não aconteceram.",
     uniqueAbility: "Profecia da Cobra (1x/sessão): ao conjurar uma magia, pode escolher ver o resultado antes de confirmar o gasto do Slot. Se o resultado não for satisfatório, pode cancelar a magia sem custo — mas fica Atordoado por 1 rodada pela sobrecarga profética. Não acumula com outras magias de visão.",
     note: "Magias de veneno e cobra conjuradas com este báculo adicionam +1d12. Imunidade completa a venenos enquanto equipado. Aliados em raio 3 hex ganham resistência a veneno (+1d4 de Defesa Mágica contra venenos)." },
 
   /* ── ÚNICOS AMALDIÇOADOS — Armas de 2M ── */
   { tier: "lendario", cursed: true,
-    name: "Báculo da Explosão de Mana", dmg: "1d6 + 1d4", req: "INT alto", weight: 3,
+    name: "Báculo da Explosão de Mana", dmg: "1d10 + 1d8 + 1d6", req: "INT alto", weight: 3,
     defenseDegrade: null, slot: ["primary"], heavyTwoHanded: true,
     story: "Criado por um mago que descobriu que HP é apenas mana condensada em carne. Usou o báculo durante 10 anos antes de morrer — não em batalha, mas de velhice precoce, com 34 anos de idade real mas aparência de 90. O báculo estava em perfeito estado ao seu lado.",
     note: "⚠ AMALDIÇOADA — Explosão de Mana: Ao conjurar a magia Explosão de Mana através deste báculo, o conjurador pode sacrificar HP permanentemente (não retorna com descanso — é HP máximo perdido para sempre). A cada 5 HP máx sacrificados, adiciona +1d20 de dano numa área 3x3 hex. Não há limite de sacrifício por conjuração. Se o conjurador chegar a 0 HP máx, morre instantaneamente e o báculo explode causando dano igual ao HP sacrificado em raio 10 hex.",
     curseDetails: "Localização: Torre do Arquimago Louco (Reinos de Akaen, dif.4). A magia Explosão de Mana só existe neste báculo — não pode ser aprendida por grimório." },
 
   { tier: "unico", cursed: true,
-    name: "Arco Celeste de Akaen", dmg: "2d10 + 1d8", req: "DEX/AGI", weight: 2,
+    name: "Arco Celeste de Akaen", dmg: "2d10 + 1d8 + 1d4", req: "DEX/AGI", weight: 2,
     defenseDegrade: null, slot: ["primary"], heavyTwoHanded: true, range: 18,
     story: "Arco sem corda — as flechas aparecem de energia pura quando a intenção de disparar é formada. Pertenceu ao Arqueiro Herói Ferrath, que o usou para disparar a flecha que destruiu o núcleo do Deus Marcado. Mas o poder de criar flechas do nada vem de uma âncora: o portador doa seu movimento ao arco.",
     note: "⚠ AMALDIÇOADA — Ancorado: Não requer flechas e tem alcance 18 hex. MAS enquanto equipado, Movimento = 0 (o portador não pode se mover em combate de nenhuma forma — incluindo habilidades de movimento, empurrão involuntário ou qualquer deslocamento). Reações de movimento também são bloqueadas.",
@@ -1621,7 +1621,7 @@ const WEAPONS_TWO_HAND = [
 
   /* ── THURGOMUR (Divindade dos Anões — Deus da Forja e da Terra) ── */
   { tier: "ancestral", divine: "Thurgomur", race: "anão",
-    name: "Martelo de Thurgomur — O Primeiro Golpe", dmg: "2d10 + 1d8", req: "FOR", weight: 12, defenseDegrade: null,
+    name: "Martelo de Thurgomur — O Primeiro Golpe", dmg: "2d12 + 1d10", req: "FOR", weight: 12, defenseDegrade: null,
     slot: ["primary"], heavyTwoHanded: true,
     story: "O primeiro martelo que existiu — ou pelo menos os anões acreditam nisso. Thurgomur usou este martelo para bater a primeira pedra e criar as Montanhas de Atrelon. Depois o enterrou no núcleo da montanha como semente. Quando a Tartaruga Magnalaga absoveu a contaminação do Grande Lago, o vibração do processo fez o martelo subir à superfície pela primeira vez em 500 anos.",
     note: "🌟 DIVINO — Golpe da Criação: acertos com este martelo deixam marcas permanentes no campo de batalha — cada acerto cria um obstáculo de pedra de 1 hex (impassável, pode ser destruído com 20+ de dano). Passivo: o portador não pode ser movido contra sua vontade (raízes de pedra seguram). Uma vez por dia: 'Forja Divina' — toca um aliado e repara magicamente uma armadura ou arma quebrada E adiciona +1d6 de dano permanente a ela.",
@@ -1629,7 +1629,7 @@ const WEAPONS_TWO_HAND = [
 
   /* ── TOBI (Divindade dos Goblins — Deus da Travessura e Oportunidade) ── */
   { tier: "lendario", divine: "Tobi", race: "goblin",
-    name: "Estilingue de Oportunidade de Tobi", dmg: "1d6 + 1d6", req: "DEX", weight: 0.5, defenseDegrade: null,
+    name: "Estilingue de Oportunidade de Tobi", dmg: "2d6 + 1d6", req: "DEX", weight: 0.5, defenseDegrade: null,
     slot: ["primary"], range: 10,
     story: "Tobi não é um deus sério. Ele é o que os goblins chamam de deus mas que todos os outros chamariam de 'problema'. O estilingue foi construído pelo Goblin Mais Sortudo que Existiu, que nunca teve mais que 3 moedas mas sempre aparecia com comida, informações valiosas e às vezes cavalos que claramente não eram seus. Tobi abençoou o estilingue porque achou graça.",
     note: "🌟 DIVINO — Oportunidade de Tobi: cada projétil disparado tem 25% de chance (1d4=1) de acertar TAMBÉM um segundo alvo aleatório no raio (Tobi sempre aproveita oportunidades). Passivo: ao usar Furtividade no mesmo turno, o dano é triplicado (sneak attack divino). Uma vez por sessão: 'Sorte do Goblin' — troca qualquer resultado de dado (seu ou do inimigo) por outro resultado à sua escolha.",
@@ -1642,7 +1642,7 @@ const WEAPONS_TWO_HAND = [
 
   /* ── SET: Voto de Aço e Luz (3 peças) — Paladino ── */
   { tier: "lendario", subclass: "paladino", setName: "Voto de Aço e Luz",
-    name: "Martelo do Juramento (Voto de Aço e Luz)", dmg: "1d12 + 1d10", req: "FOR/SAB", weight: 9,
+    name: "Martelo do Juramento (Voto de Aço e Luz)", dmg: "2d10 + 1d8", req: "FOR/SAB", weight: 9,
     defenseDegrade: null, slot: ["primary"], heavyTwoHanded: true,
     story: "Forjado num altar de Sanctum durante uma guerra que nunca deveria ter acontecido. O ferreiro era clérigo, o clérigo era guerreiro. O martelo carrega ambas as naturezas — esmaga como metal, queima como fé.",
     note: "Cada acerto adiciona +1d6 de dano sagrado. Se o portador tiver um juramento ativo (magia Juramento Sagrado): o bônus sobe para +1d8 e o alvo fica com −1 em resistências por 2 rodadas.",
@@ -1651,7 +1651,7 @@ const WEAPONS_TWO_HAND = [
 
   /* ── SET: Raiz e Ramo (3 peças) — Druida ── */
   { tier: "magico", subclass: "druida", setName: "Raiz e Ramo",
-    name: "Cajado Raiz-Viva (Raiz e Ramo)", dmg: "1d8 + 1d6", req: "SAB/INT", weight: 3,
+    name: "Cajado Raiz-Viva (Raiz e Ramo)", dmg: "1d10 + 1d6 + 1d4", req: "SAB/INT", weight: 3,
     defenseDegrade: null, slot: ["primary"], heavyTwoHanded: true,
     story: "Não foi forjado — cresceu. Um druida plantou o galho de uma árvore ancestral em solo sagrado e esperou 40 anos. Quando o retirou, a raiz ainda pulsava. Ainda pulsa.",
     note: "Ao conjurar Enredar ou Moldar Terreno: a área afetada aumenta em +1 hex em todas as direções. Ao invocar um animal: o animal invocado aparece com 1 nível de força extra (HP+10, dano +1d4).",
@@ -1660,7 +1660,7 @@ const WEAPONS_TWO_HAND = [
 
   /* ── SET: Fúria Encadeada (3 peças) — Berserker ── */
   { tier: "lendario", subclass: "berserker", setName: "Fúria Encadeada",
-    name: "Machado Correntes (Fúria Encadeada)", dmg: "1d12 + 1d10", req: "FOR", weight: 10,
+    name: "Machado Correntes (Fúria Encadeada)", dmg: "1d12 + 1d10 + 1d6", req: "FOR", weight: 10,
     defenseDegrade: null, slot: ["primary"], heavyTwoHanded: true,
     story: "Duas lâminas unidas por uma corrente de metal vivo — a corrente não foi fundida, cresceu. O forjador tentou separar as lâminas depois. Não conseguiu. Desistiu. Vendeu o par. O comprador descobriu que a corrente aumenta com a raiva do portador.",
     note: "Ataques com este machado podem acertar 2 alvos adjacentes com 1 Ação (a corrente estende o alcance). Em Fúria de Batalha: o bônus de +1d8 da Fúria se aplica a AMBOS os alvos do ataque duplo.",
@@ -1671,7 +1671,7 @@ const WEAPONS_TWO_HAND = [
 
   /* ─── SET: Lâmina das Runas — 3ª peça (Runa-Lâmina) ────────── */
 
-  { tier: "lendario", name: "Greatsword das Runas Despertas", dmg: "1d12+1d8", req: "FOR", weight: 6,
+  { tier: "lendario", name: "Greatsword das Runas Despertas", dmg: "1d12 + 1d10 + 1d4", req: "FOR", weight: 6,
     slot: ["primary"], defenseDegrade: 2, heavyTwoHanded: true,
     setName: "Lâmina das Runas", subclass: "runa-lamina",
     magicBonus: { attr: "FOR", attrValue: 1 },
@@ -1682,14 +1682,14 @@ const WEAPONS_TWO_HAND = [
 
   /* ─── SET: Marca do Caçador — Caçador de Gigantes (guer+arq) 3p */
 
-  { tier: "raro", name: "Lança do Abatimento", dmg: "1d10+1d6", req: "FOR", weight: 4.5,
+  { tier: "raro", name: "Lança do Abatimento", dmg: "1d10 + 1d6 + 1d4", req: "FOR", weight: 4.5,
     slot: ["primary"], defenseDegrade: 2,
     setName: "Marca do Caçador", subclass: "cacador-gigantes",
     effect: "Contra inimigos de tamanho Grande ou maior: causa +1d8 de dano extra e o alvo testa FOR (normal) ou perde 1 de Movimento por rodada (tendão cortado). Pode ser arremessada como alcance 5 hex (1 Ação, retorna na próxima rodada se no chão).",
     note: "Contra alvos Grandes+: +1d8 extra e reduz Movimento. Arremesso alcance 5 hex.",
     story: "Criada na tradição dos caçadores da Planície Sudeste. Ponta larga para maximizar o dano em estruturas grandes." },
 
-  { tier: "lendario", name: "Maul do Gigante Caído", dmg: "2d8+1d6", req: "FOR", weight: 9,
+  { tier: "lendario", name: "Maul do Gigante Caído", dmg: "2d8 + 1d8", req: "FOR", weight: 9,
     slot: ["primary"], defenseDegrade: 1, heavyTwoHanded: true,
     setName: "Marca do Caçador", subclass: "cacador-gigantes",
     magicBonus: { attr: "FOR", attrValue: 2 },
@@ -1709,7 +1709,7 @@ const WEAPONS_TWO_HAND = [
     story: "Encontrado numa fortaleza de Gigantes das Pedras destruída na Grande Planície. Nenhum humano normal consegue levantá-lo. Quem consegue não precisa de mais nada." },
 
   { tier: "lendario", name: "Greatsword da Noite Negra",
-    dmg: "1d12+1d10", req: "FOR", weight: 7,
+    dmg: "1d12 + 1d10 + 1d6", req: "FOR", weight: 7,
     slot: ["primary"], defenseDegrade: 2, heavyTwoHanded: true,
     magicBonus: { attr: "FOR", attrValue: 1 },
     effect: "Passivo: +1 FOR. Ativo (custa 2 Fúria ou 2 MP): Onda de Trevas — aceno horizontal que lança projétil de energia sombria em linha reta de 6 hexes, atingindo TODOS no caminho. Dano: 2d8+FOR de dano sombrio (ignora Def.Física). Cada alvo testea Força de Vontade (normal) ou perde 1 Ação no próximo turno. 3 usos/combate.",
@@ -1717,7 +1717,7 @@ const WEAPONS_TWO_HAND = [
     story: "Esculpida da pedra negra de uma cratera que caiu do céu há 300 anos. A pedra nunca esquentou mesmo após séculos. A espada também não. Quem a carrega sente um frio específico — não no corpo. Nos pensamentos." },
 
   { tier: "ancestral", name: "Lança do Pai dos Dragões",
-    dmg: "1d12+1d10+1d6", req: "FOR", weight: 8,
+    dmg: "2d10 + 1d10 + 1d6", req: "FOR", weight: 8,
     slot: ["primary"], defenseDegrade: 2, heavyTwoHanded: false,
     magicBonus: { attr: "FOR", attrValue: 2, attr2: "SAB", attrValue2: 1 },
     effect: "Passivo: +2 FOR. Ativo (custa 4 Fúria ou 4 Fé, 1 uso/combate): Chama do Ancestral — o portador ergue a lança e dela emerge chama dracônica. Todos os inimigos em raio 5 hex sofrem 4d10+FOR de dano de fogo. AGI (difícil) para metade. Após a chama: o portador ganha 2 Ações de Combate adicionais neste turno (adrenalina dracônica). Após o combate: portador fica Exausto (−1 Ação) por 1 hora.",
@@ -1725,14 +1725,14 @@ const WEAPONS_TWO_HAND = [
     story: "A lança que Tharak, o Dracônico Vermelho Adulto, guardava mesmo doente e sofrendo. Não é sua — ele a guarda para o verdadeiro dono. Quando questionado sobre quem seria, Tharak fecha os olhos e não responde." },
 
   { tier: "lendario", name: "Claíde dos Irmãos Gêmeos",
-    dmg: "1d12+1d8", req: "FOR", weight: 6.5,
+    dmg: "1d12 + 1d10 + 1d4", req: "FOR", weight: 6.5,
     slot: ["primary"], defenseDegrade: 2, heavyTwoHanded: true,
     effect: "Passivo situacional: ao matar um inimigo com esta arma, o próximo ataque (no mesmo turno ou no seguinte) tem Chance de Acerto +2 e causa +1d8 de dano (o segundo irmão acorda). Se o segundo ataque também matar: ambos os irmãos estão desperados — todos os ataques até o fim da rodada ganham +2d6. Ao errar um ataque: perde o bônus acumulado (o irmão morto recolhe o outro).",
     note: "Matar inimigo: +2 Acerto e +1d8. Segunda morte no turno: +2d6 em todos até fim da rodada. Erro: perde tudo.",
     story: "Dois irmãos forjaram uma espada só porque não conseguiam decidir qual seria o verdadeiro dono. A solução foi simples: nenhum dos dois. A espada escolhe quem a usa — e espera que seja alguém que entenda que duas mãos são mais eficientes que uma." },
 
   { tier: "lendario", name: "Machado da Ruína Eterna",
-    dmg: "2d8+1d10", req: "FOR", weight: 9,
+    dmg: "2d8 + 1d10 + 1d4", req: "FOR", weight: 9,
     slot: ["primary"], defenseDegrade: 1, heavyTwoHanded: true,
     magicBonus: { attr: "FOR", attrValue: 2 },
     effect: "Passivo: +2 FOR. Passivo de escalada: cada acerto consecutivo no mesmo alvo (sem errar, sem trocar de alvo) aumenta o dano em +1d6 acumulado (máx +3d6 = 4º acerto em diante). Ao errar ou trocar de alvo: o acúmulo reseta. Ativo (custa 3 Fúria): Ruína — golpe no chão que cria fissura em linha reta de 4 hexes, 2d10 de dano, todos testam AGI (normal) ou caem Derrubados.",
@@ -1742,14 +1742,14 @@ const WEAPONS_TWO_HAND = [
   /* ─── LOOT DE MONSTROS — ARMAS 2M ────────────────────── */
 
   { tier:"raro", name:"A Espada do Gigante Caído",
-    dmg:"1d12+1d6", req:"FOR alto", weight:9,
+    dmg:"1d12 + 1d6 + 1d4", req:"FOR alto", weight:9,
     defenseDegrade:1, slot:["primary"],
     effect:"Arma descomunal arrancada das costas de uma Aranha dos Túmulos. Já encantada com Toxina do Túmulo — acertos têm 30% de chance (d10 ≤ 3) de aplicar Veneno do Túmulo (1d8/rodada, 3 rodadas, SAB difícil para resistir, antídoto comum não funciona). Impossível de encobrir — todos veem que você a carrega.",
     note:"30% de Veneno do Túmulo por acerto. Req. FOR alto (≥3). Loot: Aranha dos Túmulos de Gigantes.",
     story:"Pertenceu a um gigante que nunca foi identificado. A aranha carregava como troféu. Agora você carrega." },
 
   { tier:"raro", name:"Corrente do Guardião",
-    dmg:"1d10", req:"FOR", weight:6,
+    dmg:"1d10 + 1d6", req:"FOR", weight:6,
     defenseDegrade:1, slot:["primary"],
     effect:"Alcance de 3 hex (corrente de ferro antigo de 4 metros). Críticos aplicam Acorrentado no alvo (Imóvel, −2 Ações, FOR normal para escapar com 1 Ação). Não pode ser encantada — o ferro antigo rejeita magia nova.",
     note:"Alcance 3 hex. Crítico → Acorrentado. Não encantável. Loot: Guardião das Correntes.",
