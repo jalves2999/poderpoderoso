@@ -1519,7 +1519,59 @@ const WEAPONS_ONE_HAND = [
     defenseDegrade:1, slot:["primary","secondary"],
     effect:"Lâmina semitransparente de energia espectral. Críticos com esta arma aplicam Maldição do Acéfalo no alvo por 1 rodada — o alvo fica Confuso e pode atacar aliado.",
     note:"Crítico → Confusão no alvo. Loot: Cavaleiro Sem Cabeça.",
-    story:"Pertenceu a um cavaleiro que perdeu a cabeça numa batalha que ninguém mais lembra." }];
+    story:"Pertenceu a um cavaleiro que perdeu a cabeça numa batalha que ninguém mais lembra." },
+
+  /* ─── ARMAS DE ORC — 1 MÃO ─────────────────────────────────── */
+
+  /* COMUNS */
+  { tier:"comum", name:"Machadinha Orc",
+    dmg:"1d6+1d4", req:"FOR", weight:3, defenseDegrade:2,
+    slot:["primary","secondary"],
+    note:"Produção orc bruta: desbalanceada mas eficaz. Ideal para guerreiros iniciantes em território orc." },
+
+  { tier:"comum", name:"Clava de Osso Orc",
+    dmg:"1d6", req:"FOR", weight:4, defenseDegrade:2,
+    slot:["primary","secondary"],
+    note:"Osso de criatura grande reforçado com pregos de ferro bruto. Derruba alvos menores facilmente. Acertos com vantagem (flanqueamento): alvo testa FOR (normal) ou fica Derrubado." },
+
+  { tier:"comum", name:"Faca de Dente de Javali",
+    dmg:"1d4+1d4", req:"DEX", weight:1, defenseDegrade:2,
+    slot:["primary","secondary"],
+    note:"Artesanato tradicional orc. Dente de javali-gigante montado em cabo de osso. Favorita de exploradores e caçadores orc." },
+
+  /* RAROS */
+  { tier:"raro", name:"Cutelo do Chefe de Clã",
+    dmg:"1d8+1d6", req:"FOR", weight:5, defenseDegrade:1,
+    slot:["primary","secondary"],
+    story:"Pertenceu ao chefe de uma tribo da Planície Vermelha. Cada entalhe na lâmina representa um inimigo derrotado. Há muitos entalhes.",
+    note:"Se o portador tiver FOR ≥ 3: o cutelo causa +1d4 de dano extra (a força bruta amplifica o corte desigual da lâmina). Acertos consecutivos no mesmo alvo (2+): +1 Chance de Crítico acumulativo." },
+
+  { tier:"raro", name:"Crânio Esmagador de Grak",
+    dmg:"1d8+1d4", req:"FOR", weight:6, defenseDegrade:1,
+    slot:["primary","secondary"],
+    story:"Grak era o campeão do Clã Dente de Ferro. Este martelo improvisado — um crânio de ogro montado em poste de carvalho — foi sua arma por treze anos.",
+    note:"Acertos contra alvos com elmo ou capuz de metal: +1d6 extra de dano concussivo (o som do impacto ressoa internamente). Chance de Crítico +1 contra alvos com armadura pesada." },
+
+  { tier:"raro", name:"Lança de Caça Orc",
+    dmg:"1d8+1d4", req:"FOR/DEX", weight:2, defenseDegrade:1,
+    slot:["primary","secondary"],
+    story:"Orcs caçadores usam lanças balanceadas para abate rápido. Esta foi feita por uma mestre ferreiro orc e equilibra perfeitamente peso e alcance.",
+    note:"Alcance 2 hex (em vez de 1). Pode ser arremessada (alcance 5 hex, perde a arma mas reaparece no hex de impacto). Ataques de oportunidade com esta lança não custam Reação." },
+
+  /* MÁGICOS */
+  { tier:"magico", name:"Presa da Hiena-Sangue",
+    dmg:"1d8+1d6", req:"FOR/DEX", weight:3, defenseDegrade:1,
+    slot:["primary","secondary"],
+    magicBonus:{ attr:"FOR", attrValue:1 },
+    story:"Forjada com a presa de uma Hiena-Sangue — criatura sagrada para o Clã da Lua Vermelha. A arma ressoa com o instinto predatório da besta.",
+    note:"+1 FOR enquanto equipada. Ao acertar um alvo que já foi atingido neste turno: +1d6 de dano extra (instinto de bando — a arma responde ao cheiro de sangue fresco). Passivo: em combate com 3+ aliados, +1 Chance de Crítico." },
+
+  { tier:"magico", name:"Garra do Warchief",
+    dmg:"1d10+1d6", req:"FOR alto", weight:5, defenseDegrade:1,
+    slot:["primary","secondary"],
+    magicBonus:{ attr:"FOR", attrValue:1 },
+    story:"Criada pelo ferreiro-xamã Vrak para o Warchief do Grande Clã. A lâmina canta em orc quando banhada em sangue inimigo — os mortos do portador cantam com ela.",
+    note:"+1 FOR enquanto equipada. Req. FOR alto (≥3). A cada kill em combate: a Garra ganha +1d4 de dano bônus acumulativo (máximo +2d4). Os bônus se reiniciam após o combate. Em crítico: toda a dor acumulada explode — causa o dano normal do crítico mais todos os bônus de kills dobrados." }];
 
 const WEAPONS_TWO_HAND = [
   /* --- COMUNS --- */
@@ -1753,7 +1805,59 @@ const WEAPONS_TWO_HAND = [
     defenseDegrade:1, slot:["primary"],
     effect:"Alcance de 3 hex (corrente de ferro antigo de 4 metros). Críticos aplicam Acorrentado no alvo (Imóvel, −2 Ações, FOR normal para escapar com 1 Ação). Não pode ser encantada — o ferro antigo rejeita magia nova.",
     note:"Alcance 3 hex. Crítico → Acorrentado. Não encantável. Loot: Guardião das Correntes.",
-    story:"O Guardião nunca largou essas correntes em vida. E em morte, também não quis." }];
+    story:"O Guardião nunca largou essas correntes em vida. E em morte, também não quis." },
+
+  /* ─── ARMAS DE ORC — 2 MÃOS ─────────────────────────────────── */
+
+  /* COMUNS */
+  { tier:"comum", name:"Machadão de Guerra Orc",
+    dmg:"1d12+1d6", req:"FOR", weight:9, defenseDegrade:null,
+    slot:["primary"], heavyTwoHanded:true,
+    note:"Machado de dois gumes forjado à mão em forja de clã. Desbalanceado para qualquer não-orc, mas eficaz com força bruta. Não-orcs com FOR < 2: −1 Ação adicional de penalidade." },
+
+  { tier:"comum", name:"Poste de Osso Gigante",
+    dmg:"1d10+1d6", req:"FOR", weight:8, defenseDegrade:null,
+    slot:["primary"], heavyTwoHanded:true,
+    note:"Fêmur de gigante jovem transformado em arma de guerra. Usado por orcs mais jovens como prova de força. Acertos derrubam alvos de tamanho médio ou menor (FOR normal para resistir)." },
+
+  { tier:"comum", name:"Lança de Assalto Orc",
+    dmg:"1d10+1d4", req:"FOR/DEX", weight:5, defenseDegrade:null,
+    slot:["primary"],
+    note:"Lança longa de carvalho com ponta de ferro bruto. Alcance 3 hex. Usada em cargas de infantaria orc — quando em formação com 2+ aliados: +1d4 de dano." },
+
+  /* RAROS */
+  { tier:"raro", name:"Grande Machado do Clã Dente de Ferro",
+    dmg:"1d12+1d8+1d4", req:"FOR alto", weight:12, defenseDegrade:null,
+    slot:["primary"], heavyTwoHanded:true,
+    story:"O Clã Dente de Ferro forja seus machados de clã com o ferro das correntes que quebraram durante a Grande Libertação. Cada machado carrega o peso de uma geração.",
+    note:"Req. FOR alto (≥3). Ao acertar: alvo testa FOR (difícil) ou perde 1 Ação no próximo turno (o impacto desequilibra). Em Crítico: o alvo é automaticamente Derrubado sem teste." },
+
+  { tier:"raro", name:"Maul de Crânio Triplo",
+    dmg:"2d8+1d6", req:"FOR alto", weight:14, defenseDegrade:null,
+    slot:["primary"], heavyTwoHanded:true,
+    story:"Três crânios de ogro fundidos em metal de clã e montados num cabo de osso de dragão. Cada crânio representa um clã subjugado. Pesa o equivalente a uma criança.",
+    note:"Req. FOR alto (≥3). Ataques causam dano em área 1 hex — alvos adjacentes ao alvo principal sofrem metade do dano (AGI normal para evitar). Imune a ser desarmado." },
+
+  { tier:"raro", name:"Lança Envenenada do Caçador Orc",
+    dmg:"1d10+1d8", req:"FOR/DEX", weight:6, defenseDegrade:null,
+    slot:["primary"],
+    story:"Caçadores orc de elite empenam suas lanças com glândulas de víboras das Planícies Vermelhas. O veneno não mata — paralisa. Um alvo imóvel é presa fácil.",
+    note:"Alcance 3 hex. Acertos aplicam Veneno do Caçador: alvo testa FOR (normal) ou perde 1 Ação no próximo turno por 2 rodadas. 3 aplicações por combate (sem recarga durante o combate)." },
+
+  /* MÁGICOS */
+  { tier:"magico", name:"Fúria do Warchief — Alabarda Orc",
+    dmg:"1d12+1d10+1d4", req:"FOR alto", weight:10, defenseDegrade:null,
+    slot:["primary"], heavyTwoHanded:true,
+    magicBonus:{ attr:"FOR", attrValue:1 },
+    story:"Forjada pelo xamã Drak'ul com ferro vulcânico e sangue do próprio Warchief. A arma grita em orc quando balançada — um grito de guerra que corta o silêncio antes do impacto.",
+    note:"+1 FOR enquanto equipada. Req. FOR alto (≥3). Passivo: aliados em raio 2 hex com menos HP que o portador ganham +1d4 de dano (o Warchief protege os mais fracos). Ativo (2x/combate): golpe com grito de guerra — +2d6 de dano extra e alvo testa SAB (difícil) ou fica Aterrorizado por 1 rodada." },
+
+  { tier:"magico", name:"Destruidor de Fortalezas",
+    dmg:"2d8+1d8", req:"FOR alto", weight:15, defenseDegrade:null,
+    slot:["primary"], heavyTwoHanded:true,
+    magicBonus:{ hp:15 },
+    story:"Maul orc usado na derrubada de três fortalezas durante a Guerra dos Clãs. Encantado para ignorar estruturas — e eventualmente também ignorou a distinção entre estrutura e armadura.",
+    note:"+15 HP máximo enquanto equipado. Req. FOR alto (≥3). Ataques contra alvos com Def.Física ≥ 5: ignora metade da Def.Física (o maul foi feito para quebrar muros). Ativo (1x/combate): golpe de demolição — 3d10 de dano que ignora TODA a Def.Física do alvo." }];
 
 const WEAPONS_MAGIC = [
   /* --- COMUNS --- */
@@ -2394,7 +2498,59 @@ const ARMORS = [
     req:"FOR",
     effect:"Armadura negra de cavaleiro antigo. Altíssima proteção física. MALDITA: o portador tem pesadelos toda noite enquanto equipada (-1d4 em perícias no dia seguinte por cansaço). A maldição pode ser removida com Cura Mágica de Nível 4+ ou ritual especial.",
     note:"Def.Fís 9. Maldita: pesadelos (−1d4 em perícias no dia seguinte). Loot: Cavaleiro Sem Cabeça.",
-    story:"Ninguém sabe o nome do cavaleiro. A armadura também não conta." }];
+    story:"Ninguém sabe o nome do cavaleiro. A armadura também não conta." },
+
+  /* ─── ARMADURAS DE ORC ─────────────────────────────────────────── */
+
+  /* COMUNS */
+  { tier:"comum", name:"Couro de Porco-Espinho Orc",
+    physDefense:2, magDefense:0, weight:5, movePenalty:0,
+    req:"—",
+    note:"Couro de porco-espinho das Planícies costurado à mão. Barata e funcional. Os espinhos externos causam 1d2 de dano reflexivo a quem atacar em melee sem luvas." },
+
+  { tier:"comum", name:"Malha de Ferro Bruto Orc",
+    physDefense:4, magDefense:0, weight:10, movePenalty:0,
+    req:"FOR",
+    note:"Anéis de ferro bruto forjados em forja de clã. Irregular e ruidosa — −1d4 em testes de Furtividade. Mas o ferro orc é mais grosso que o humano: +1 HP por nível enquanto equipada." },
+
+  { tier:"comum", name:"Placas de Osso de Ogro",
+    physDefense:5, magDefense:0, weight:14, movePenalty:1,
+    req:"FOR",
+    note:"Placas de osso de ogro amarradas com couro. Pesada e restritiva — −1 Movimento — mas resistente. Grude: ataques que tentem Desarmar o portador têm −2 de chance de sucesso (os ossos trancam a arma)." },
+
+  /* RAROS */
+  { tier:"raro", name:"Armadura do Campeão de Clã",
+    physDefense:7, magDefense:2, weight:12, movePenalty:0,
+    req:"FOR",
+    story:"Armadura cerimonial do campeão do Clã Prateleira de Ossos. Mistura placas de ferro orc com couro de bestia e adornos de dentes dos inimigos derrotados pelo portador anterior.",
+    note:"O rugido do portador (Ação Livre, 1x/combate) intimida todos os inimigos em raio 3 hex: testam SAB (normal) ou ficam Abalados por 1 rodada. A armadura ressoa o som." },
+
+  { tier:"raro", name:"Pele de Ogro Curtida",
+    physDefense:8, magDefense:1, weight:16, movePenalty:1,
+    req:"FOR",
+    story:"Curtida por métodos orc: sol, sal e tempo. A pele de ogro tem espessura incomum — o ferreiro que a preparou levou três semanas só no curtimento.",
+    note:"−1 Movimento. Acertos físicos que causariam Sangramento no portador têm 50% de chance de ser absorvidos pela espessura da pele (não aplicam Sangramento). Imune a Derrubado causado por ataques físicos leves (dano < 10)." },
+
+  { tier:"raro", name:"Armadura Talhada do Xamã-Ferreiro",
+    physDefense:6, magDefense:5, weight:9, movePenalty:0,
+    req:"FOR/SAB",
+    story:"Criada pelo xamã-ferreiro Drak'ul com técnicas que mesclam metalurgia orc e rituais de proteção mágica. Os entalhes rúnicos na superfície queimam suavemente ao toque.",
+    note:"Incomum para armadura orc: oferece proteção mágica sólida. Magias de área que atingirem o portador têm efeito reduzido em −INT do conjurador (mínimo 0). 1x/combate: ao ser acertado por magia, pode refletir 1d6 de dano mágico ao conjurador." },
+
+  /* MÁGICAS */
+  { tier:"magico", name:"Couraça de Sangue de Dragão Orc",
+    physDefense:9, magDefense:4, weight:13, movePenalty:0,
+    req:"FOR",
+    magicBonus:{ attr:"FOR", attrValue:1 },
+    story:"Forjada com escamas de dragão jovem caçado pelo Clã da Prateleira de Ossos e banhos em seu sangue. O processo de forja durou quarenta dias — o ferreiro não dormiu uma noite.",
+    note:"+1 FOR enquanto equipada. Passivo: ao atingir HP ≤ 30%, o portador entra em Fúria de Dragão por 3 rodadas — +1d8 em todos os ataques, imune a Aterrorizado e Confuso. Pode ocorrer apenas 1x por combate." },
+
+  { tier:"magico", name:"Armadura do Warchief Ancestral",
+    physDefense:10, magDefense:5, weight:17, movePenalty:1,
+    req:"FOR",
+    magicBonus:{ attr:"FOR", attrValue:2 },
+    story:"Passada de Warchief a Warchief por gerações do Grande Clã. Nenhum ferreiro sabe mais como foi criada. Os espíritos dos Warchiefs anteriores vivem no metal — e eles têm opiniões.",
+    note:"+2 FOR enquanto equipada. −1 Movimento. Passivo: aliados em raio 3 hex ganham +1d4 em todos os testes de resistência (a presença do Warchief fortalece o clã). Ativo (1x/combate): os espíritos dos Warchiefs anteriores concedent proteção divina — o portador recebe Def.Física adicional igual ao FOR por 2 rodadas." }];
 
 const ACCESSORIES = [
   /* --- COMUNS --- */
