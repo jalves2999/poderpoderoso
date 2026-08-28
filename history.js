@@ -17,6 +17,50 @@ const WORLD_HISTORY = [
     title: "História do Passado",
     entries: [
       {
+        id: "era-do-deus-unico",
+        badge: "era",
+        badgeText: "Era do Deus Único",
+        name: "A Criação e a Rebelião dos Elfos",
+        content: {
+          lore: `
+            <p>Antes de Aether ter nome, antes de existir uma única raça mortal para caminhar sobre ela, havia apenas um deus. Nenhum registro sobrevive de como ele era ou por que criou o que criou — apenas o que ele fez, transmitido por eras através de fragmentos de mito que os próprios elfos preferem não repetir.</p>
+            <p>O deus criou os elfos primeiro, e apenas os elfos. Fez deles seres imortais, poderosos, imbuídos de uma centelha de sua própria natureza — e deu a eles uma única tarefa: povoar o mundo. Os elfos passaram eras cumprindo essa incumbência. Moldaram os orcs para a força e a resistência. Deram aos humanos a adaptabilidade e a ambição breve que os definiria. Aos anões, entregaram a paciência da pedra e uma inteligência que rivalizava a dos próprios elfos. Criaram também as raças menores — goblins, kobolds — como se rascunhassem primeiro para acertar depois. E, nos confins de sua obra, deram forma às bestas comuns que ainda hoje povoam florestas e montanhas, vida sem voz que precisava de um lugar no mundo tanto quanto qualquer outra.</p>
+            <p>Quando a criação estava enfim completa, o deus revelou a última parte de seu plano — a parte que nenhum elfo esperava, e nenhum aceitaria. Os elfos, disse ele, não deveriam persistir. Eram imortais por necessidade da tarefa, não por direito; sua existência contínua era uma imperfeição no desenho do mundo, algo a ser corrigido assim que o propósito se cumprisse. Feita a obra, os elfos deveriam deixar de existir.</p>
+            <p>Os elfos se recusaram.</p>
+            <p>Liderados por Vandamor — o maior entre eles, e o único cujo nome sobrevive intacto através de todas as eras seguintes — os elfos se voltaram contra o próprio criador. Não houve debate, não houve súplica. Havia apenas a recusa absoluta de um povo que havia acabado de moldar um mundo inteiro com as próprias mãos e não via razão para desaparecer dele. Vandamor não pediu permissão para reinar. Ele a tomou.
+            </p>
+          `,
+          fields: [
+            { label: "Período", value: "Origem do mundo — anterior a qualquer era registrada" },
+            { label: "Figura central", value: "Vandamor, o Grande Elfo, líder da rebelião contra o Deus Único" },
+            { label: "Raças criadas nesta era", value: "Orcs, Humanos, Anões, Goblins, Kobolds e as bestas comuns do mundo — todas moldadas pelos elfos por ordem do Deus Único" },
+          ]
+        }
+      },
+      {
+        id: "guerra-do-deus-marcado-origem",
+        badge: "era",
+        badgeText: "A Guerra Esquecida",
+        name: "O Deus Marcado e o Selamento",
+        content: {
+          lore: `
+            <p>O Deus Único não aceitou a rebelião em silêncio. Incapaz — ou talvez apenas relutante — de destruir diretamente aquilo que havia criado com sua própria centelha divina, ele forjou uma resposta diferente: uma entidade sem outro propósito além de exterminar elfos. Uma arma viva, moldada exclusivamente para caçar e apagar a espécie que ousara desafiá-lo. Essa entidade se tornaria conhecida, em eras muito posteriores, como o Deus Marcado.</p>
+            <p>Mas o desenho falhou da forma mais cara possível. O Deus Marcado, criado com ódio suficiente para destruir um povo inteiro, não distinguiu entre a rebelião dos elfos e a tirania do próprio criador. Os elfos — astutos mesmo diante da própria extinção — perceberam a brecha e a exploraram. Não sabe-se ao certo o que ofereceram, prometeram ou revelaram à entidade, mas o resultado é registrado com clareza: o Deus Marcado virou sua fúria contra o Deus Único que o havia forjado.</p>
+            <p>O que se seguiu foi um conflito sem testemunhas mortais para narrá-lo — uma guerra travada numa escala que o mundo recém-criado mal conseguia conter. O Deus Único, agora enfrentando sua própria criação voltada contra si, respondeu da única forma que lhe restava: tomou fragmentos das raças que os elfos haviam moldado e os elevou, transformando mortais selecionados em entidades com poder suficiente para rivalizar o Deus Marcado em batalha. Não deuses em sua totalidade — algo menor, mas ainda assim imenso além de qualquer compreensão mortal.</p>
+            <p>Foram essas entidades recém-criadas, lutando ao lado ou em nome do Deus Único, que finalmente derrotaram o Deus Marcado. Não o destruíram — algumas coisas, ao que parece, não podem ser destruídas, apenas contidas. A entidade foi selada nos Vasos do Passado, um aprisionamento que se provaria, muitas eras depois, longe de permanente.</p>
+            <p>Com a ameaça contida e a guerra encerrada, o Deus Único fez sua última escolha conhecida: desistiu do mundo. Não há registro de despedida, confronto final ou reconciliação com os elfos que o haviam traído. Ele simplesmente se retirou, deixando Aether inteiramente entregue àqueles que se recusaram a desaparecer por ele. As entidades que ele havia erguido para vencer a guerra, porém, permaneceram — deuses menores, de influência modesta se comparada à do Deus Único, mas reais, e em alguns casos, ainda hoje reverenciados por quem sabe seus nomes.</p>
+            <p>Livres do criador e sem ninguém para responder, os elfos voltaram os olhos para o mundo que haviam ajudado a povoar — e para as raças que eles mesmos haviam moldado. O que fizeram a seguir daria início à era que os historiadores chamam de Domínio dos Elfos, e que marca o verdadeiro começo da história registrada de Aether.</p>
+          `,
+          fields: [
+            { label: "Período", value: "Imediatamente após a rebelião élfica — anterior ao Domínio dos Elfos" },
+            { label: "O Deus Marcado", value: "Criado pelo Deus Único com o único propósito de exterminar os elfos; convencido por eles a se voltar contra o próprio criador" },
+            { label: "Os deuses menores", value: "Entidades erguidas pelo Deus Único a partir das raças mortais para vencer o Deus Marcado — sobrevivem até hoje com influência limitada" },
+            { label: "O Selamento", value: "O Deus Marcado foi contido, não destruído, nos Vasos do Passado" },
+            { label: "Consequência final", value: "O Deus Único abandona Aether. Os elfos, livres e sozinhos no mundo, dão início à escravização das raças que haviam criado" },
+          ]
+        }
+      },
+      {
         id: "era-elfica",
         badge: "era",
         badgeText: "Era Élfica",
@@ -60,12 +104,13 @@ const WORLD_HISTORY = [
         name: "O Retorno do Deus Marcado",
         content: {
           lore: `
-            <p>O Deus Marcado é uma entidade dos tempos mais remotos de Aether — anterior aos elfos, anterior a qualquer registro. Sua natureza exata é desconhecida, mas dois fatos são certos: ele é do mal, e ele odeia os elfos com uma intensidade que vai além de qualquer rivalidade mundana. Os estudiosos especulam que os elfos fizeram algo a ele em eras tão antigas que nem eles mesmos lembravam — e o Deus Marcado nunca esqueceu.</p>
-            <p>A campanha anterior se passou neste período. Um grupo de aventureiros foi recrutado pelos Araltos do Deus Marcado — os campeões da entidade — e eventualmente se tornaram eles mesmos Araltos. Através de suas ações, o Deus Marcado foi revivido.</p>
-            <p>O resultado foi devastador para os elfos. A entidade varreu os clãs élficos com precisão cirúrgica, como se soubesse exatamente onde cada elfo estava escondido. Em questão de meses, uma raça que havia dominado o mundo por milênios foi reduzida a poucos sobreviventes dispersos.</p>
+            <p>O Deus Marcado não é uma entidade que sempre existiu à parte do mundo — é uma arma. Forjada pelo próprio Deus Único nos primórdios de Aether com o único propósito de exterminar os elfos que haviam se rebelado contra ele, a entidade acabou sendo convencida pelos próprios elfos a se voltar contra seu criador. A guerra que se seguiu terminou com o Deus Marcado derrotado — não destruído — e selado nos Vasos do Passado, onde permaneceu contido por eras incontáveis enquanto o mundo seguia adiante quase sem memória do que fora aprisionado.</p>
+            <p>A campanha anterior se passou no momento em que esse selo, enfim, foi quebrado. Um grupo de aventureiros — manipulados ou seduzidos pelos primeiros Araltos, que já haviam encontrado os Vasos do Passado e jurado lealdade ao que estava preso neles — libertou, através de suas próprias ações, o que devia permanecer selado. Eles próprios se tornaram Araltos antes de compreenderem completamente o que haviam feito.</p>
+            <p>O resultado foi devastador para os elfos. Livre após uma eternidade de aprisionamento, e ainda carregando o ódio para o qual fora criado, o Deus Marcado varreu os clãs élficos com precisão cirúrgica, como se soubesse exatamente onde cada um estava escondido. Em questão de meses, uma raça que a Primeira Era já havia reduzido foi levada à beira da extinção total.</p>
             <p>O que o Deus Marcado não contava era com Jurgmund.</p>
           `,
           fields: [
+            { label: "Os Vasos do Passado", value: "O local de selamento original do Deus Marcado, criado ao fim da guerra contra o Deus Único. Quebrado pela campanha anterior — sua localização exata hoje é desconhecida ou perdida." },
             { label: "Os Araltos", value: "Campeões do Deus Marcado. Humanos (e outras raças) que fizeram pacto com a entidade em troca de poder. Sobreviventes desta era são os vilões do presente." },
             { label: "Impacto nos elfos", value: "Virtual extinção. Apenas pouquíssimos sobreviveram, disfarçados entre outras raças. O último elfo conhecido é Tharion, escondido nas margens do Grande Lago Central." },
           ]
@@ -80,10 +125,11 @@ const WORLD_HISTORY = [
           lore: `
             <p>Jurgmund é a Cobra Colossal que habitava o mundo de Aether desde tempos imemoriais — não uma criatura comum, mas um ser de escala que desafiava a compreensão. Ela havia vivido em silêncio por eras, observando civilizações nascerem e caírem. O retorno do Deus Marcado foi o primeiro evento em milênios que a fez agir.</p>
             <p>Cinco heróis mortais — os mesmos que lideraram a libertação da Primeira Era — lutaram ao lado de Jurgmund. Cada um contribuiu com o que sua classe oferecia de mais poderoso: o Guerreiro Valdris segurou a linha enquanto a cobra atacava; o Arqueiro Ferrath disparou a flecha que destruiu o núcleo de poder da entidade (dizem que a flecha foi forjada com uma escama do próprio Dragão Dourado); Arcath desmontou os rituais que mantinham o Deus Marcado no plano material; Sombrath matou três Araltos que tentavam reviver a entidade durante a batalha; e Sanctum curou a própria Jurgmund quando ela foi ferida — um ato que nenhum mortal havia feito antes.</p>
-            <p>O Deus Marcado foi derrotado. Não morto — derrotado. Há uma diferença. E os restos de sua essência, espalhados pelo continente durante a batalha, não desapareceram.</p>
+            <p>O Deus Marcado foi derrotado. Não morto — derrotado. Há uma diferença. Desta vez, porém, não havia Vasos do Passado para prendê-lo novamente: a entidade que os Araltos haviam libertado não podia ser selada da mesma forma duas vezes. Os restos de sua essência, espalhados pelo continente durante a própria batalha, não desapareceram — apenas se dispersaram, contidos por nada além da vastidão da terra em que caíram.</p>
             <p>Jurgmund, ferida e exausta de um modo que cobras colossais não deveriam conseguir estar, partiu deste mundo. Seu corpo se dissipou, mas os locais onde suas partes tocaram a terra foram transformados permanentemente.</p>
           `,
           fields: [
+            { label: "Origem de Jurgmund", value: "Desconhecida. Alguns estudiosos — poucos, e nenhum respeitado pela academia — especulam que ela seria uma das entidades erguidas pelo Deus Único na guerra original contra o Deus Marcado, adormecida por eras até o retorno da entidade a despertar. Jurgmund nunca confirmou nem negou." },
             { label: "Consequências geográficas", value: "Grande Lago Central (abertura do continente), Montanhas de Atrelon com Castelo da Cobra (cabeça de Jurgmund), Deserto Carmesim (restos do Deus Marcado), Tartaruga Magnalaga no lago (absorveu contaminação)" },
             { label: "Dragão Dourado", value: "Um aspecto de Jurgmund que ficou no mundo. Repousa no Vulcão de Karloth e emite brilho dourado visível de qualquer ponto das planícies." },
             { label: "O Deus Marcado", value: "Derrotado mas não morto. Sua essência está nos cristais carmesins do deserto. A Salamandra Karlac os consome, crescendo indefinidamente. O que acontece quando ela consumir o último fragmento é desconhecido." },
@@ -112,7 +158,7 @@ const WORLD_HISTORY = [
             <p>Os cinco Reinos de Akaen foram fundados pelos heróis e prosperam — com atrito crescente. O Reino de Sombrath, o segundo maior, foi silenciosamente infiltrado por um Aralto do Deus Marcado que manipula o rei há mais de uma geração. O diário profético do Guerreiro Valdris tem uma página nova que ninguém consegue explicar, descrevendo um traidor no coração do poder.</p>
             <p>As Montanhas de Atrelon abrigam os Serpentarianos — humanos transformados pela proximidade da cabeça de Jurgmund. Seu rei, Vassk, está sendo manipulado pelo Aralto Sussurrante, que se disfarça de emissário de Jurgmund para usar o povo da cobra como exército contra os reinos vizinhos.</p>
             <p>No Grande Lago Central, a Tartaruga Magnalaga está acordando. Seus mergulhos ficaram mais frequentes. Os anões do casco notam que ela parece estar procurando algo no fundo da Fissura — a cicatriz que a Batalha Colossal deixou no leito do lago.</p>
-            <p>E nos cinco anos mais recentes, os Araltos começaram a se mover. Após 500 anos de silêncio, os sobreviventes do pacto com o Deus Marcado agem novamente. Cultistas aparecem em cidades. Fragmentos do Deus Marcado somem dos bolsões onde estavam selados. O círculo que a Salamandra Karlac traça está, imperceptivelmente, se fechando.</p>
+            <p>E nos cinco anos mais recentes, os Araltos começaram a se mover. Após 500 anos de silêncio, os sobreviventes do pacto com o Deus Marcado agem novamente. Cultistas aparecem em cidades. Fragmentos da essência dispersa na Batalha Colossal somem dos bolsões onde ficaram contidos desde então. O círculo que a Salamandra Karlac traça está, imperceptivelmente, se fechando.</p>
           `,
           fields: [
             { label: "Ameaça principal", value: "Os Araltos do Deus Marcado — sobreviventes de 500 anos atrás que planejam o retorno da entidade" },
