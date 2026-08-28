@@ -87,9 +87,9 @@ const CLASSES = {
       { name: "Intimidação",           attr: "FOR/SAB", desc: "Usar presença física e reputação para desestabilizar inimigos antes ou durante o combate.", example: "Fazer mercenários reconsiderarem o ataque só pelo porte; ameaçar informante para que fale." },
       { name: "Defesa com Armas Pesadas", attr: "FOR/AGI", desc: "Permite usar armas de 2 mãos para defender. Sem esta perícia, armas 2M não podem defender. Com ela: −2 na Chance de Defesa por ataque defendido.", example: "Usar a haste do Maul para aparar golpe de espada.", combat: true, mechanicalEffect: "enable_two_hand_defense", combatDesc: "Permite usar armas de 2 mãos para defender, com −2 na Chance de Defesa por ataque defendido (em vez de ser impossível)." },
       { name: "Golpe de Derrubada",    attr: "FOR/AGI", desc: "Ao acertar corpo a corpo: alvo testa FOR (normal) ou cai Derrubado por 1 rodada.", example: "Troll derrubado: aliados adjacentes ganham +1 na Chance de Acerto contra ele.", combat: true, combatDesc: "Ao acertar ataque corpo a corpo, declare 'Derrubada'. Alvo testa FOR (normal): falha → Derrubado 1 rodada." },
-      { name: "Varredura",             attr: "FOR/AGI", desc: "1x/turno: ao acertar com arma 2M, gaste 1 Ação extra para golpear 2º inimigo adjacente por metade do dano.", example: "Claymore derruba Goblin; Varredura atinge o segundo por metade do dano.", combat: true, combatDesc: "1x/turno ao acertar com arma 2M: Ação extra para golpear 2º inimigo adjacente diferente por metade do dano." },
+      { name: "Resistência de Campo", attr: "FOR/SAB", desc: "Suportar combate prolongado, manter posição sob pressão e ressurgir de estados debilitantes.", example: "Continuar com HP ≤ 25% sem penalidade extra; negar Derrubado gastando 1 Fúria em vez de Ação." },
       { name: "Pressão Tática",        attr: "INT/SAB", desc: "1x/rodada, Ação Livre: analisa inimigo — ataques tratam a DEX dele como 1 ponto menor por 2 rodadas.", example: "Estuda o Orc Berserker DEX 0: tratado como DEX −1, +1 na Chance de Acerto.", combat: true, combatDesc: "1x/rodada, Ação Livre: analisa 1 inimigo visível. Seus ataques contra ele têm DEX inimiga −1 por 2 rodadas." },
-      { name: "Liderança",             attr: "SAB", desc: "Coordenar aliados em situações caóticas, elevar moral e manter coesão sob pressão.", example: "Reorganiza o grupo após emboscada; soldados continuam lutando mesmo com baixas." }
+      { name: "Liderança de Campo", attr: "FOR/SAB", desc: "Coordenar aliados em combate ativo — posicionamento, ordens e cobertura. A voz que grita enquanto a lâmina corta.", example: "Ordenar recuo coordenado como Ação Livre; indicar flanco; manter formação sob ataque surpresa." }
     ],    spellsFull: null
   },
 
@@ -115,7 +115,7 @@ const CLASSES = {
           { cost: "5 MP", effect: "A próxima magia ganha +2 dados extras do mesmo tipo já usado nela." },
           { cost: "7 MP", effect: "A próxima magia ganha +3 dados extras do mesmo tipo já usado nela e ignora 2 pontos de Defesa Mágica do alvo." }
         ] },
-      { name: "Conjuração Rápida", cost: "4 MP", effect: "A próxima magia é conjurada como Reação em vez de Ação (1x por turno)." },
+      { name: "Sentir a Morte", attr: "SAB/INT", desc: "Detectar mortos-vivos ocultos, almas presas, portais para o plano dos mortos e locais de morte violenta.", example: "Detectar fantasma invisível em raio 8 hex; sentir morte violenta numa sala; localizar entrada para o plano dos mortos." },
       { name: "Eco Arcano", cost: "5 MP", effect: "A próxima magia de alvo único também atinge um alvo adjacente, com metade do dano." },
       { name: "Escudo Arcano", cost: "3 MP, 1 Reação", effect: "Cria uma barreira que absorve os próximos 1d8 + INT de dano.",
         levels: [
@@ -144,9 +144,12 @@ const CLASSES = {
       { name: "Investigação",        attr: "INT",     desc: "Examinar ativamente pistas, decifrar textos arcanos e conectar informações dispersas.", example: "Decifrar mapa cifrado do culto; descobrir que dois eventos têm o mesmo culpado." },
       { name: "História",            attr: "INT",     desc: "Eventos históricos, reinos extintos, guerras e civilizações antigas de Aether.", example: "Saber que a torre era laboratório de arquimago desaparecido há 200 anos." },
       { name: "Percepção Mágica",    attr: "SAB/INT", desc: "Detectar auras mágicas, identificar encantamentos e sentir anomalias arcanas.", example: "Sentir que o espelho é um portal; identificar que o cofre tem feitiço de alarme.", combat: true, combatDesc: "Em combate: 1 Ação para identificar buffs/debuffs mágicos ativos no alvo e sua escola arcana." },
-      { name: "Conjuração Rápida",   attr: "INT/DEX", desc: "1x/combate: conjura magia Nível 1-2 como Reação após ataque declarado, antes de resolver.", example: "Escudo Arcano como Reação antes de receber o golpe do Troll.", combat: true, combatDesc: "1x/combate: conjure magia Nível 1-2 como Reação (após ataque declarado, antes de resolver). Consome Slot normalmente." },
-      { name: "Foco Ampliado",       attr: "INT",     desc: "Passivo: magias alcance ≤4 hex ganham +2 hex; áreas ganham +1 hex de raio.", example: "Bola de Fogo (raio 3) passa a raio 4. Raio (alcance 4) passa a 6.", combat: true, combatDesc: "Passivo permanente: magias com alcance ≤4 hex ganham +2 hex. Magias de área ganham +1 hex de raio. Não afeta magias de toque." }
-    ],    spellsFull: [
+      { name: "Necromancia Arcana", attr: "INT/SAB", desc: "Controlar, invocar e manipular mortos-vivos tecnicamente. Entender a linha entre vida e morte como fronteira atravessável.", example: "Ritual de 10min para levantar morto como servo; identificar força de morto-vivo pela aura; estabilizar morto-vivo aliado." },
+      { name: "Ritual Proibido",
+        attr: "INT",
+        desc: "Realizar rituais de necromancia fora de combate: levantar morto permanente, extrair alma, criar vínculo com entidade dos mortos, purificar ou corromper artefato.",
+        example: "Ritual de 1h para levantar morto permanente (1/semana máximo); extrair alma de Frasco de Alma Aprisionada sem destruí-la; criar elo com fantasma como informante." },
+      { name: "Sentir a Morte", attr: "SAB/INT", desc: "Detectar mortos-vivos ocultos, almas presas, portais para o plano dos mortos e locais de morte violenta.", example: "Detectar fantasma invisivel em raio 8 hex; sentir morte violenta numa sala; localizar entrada para o plano dos mortos." }],    spellsFull: [
       { name: "Mísseis Arcanos", level: 1, effect: "1d6 + 1d4 de dano mágico em alvo único (alcance 6).", castTime: "1 Ação (instantânea)", cooldown: "4 usos por batalha" },
       { name: "Toque Gélido", level: 1, effect: "1d8 de dano mágico (toque); reduz Movimento do alvo em 2 na próxima rodada.", castTime: "1 Ação (instantânea)", cooldown: "4 usos por batalha" },
       { name: "Mãos Faiscantes", level: 1, effect: "1d4 + 1d4 de dano elétrico em até 2 alvos adjacentes entre si (alcance 4).", castTime: "1 Ação (instantânea)", cooldown: "4 usos por batalha" },
@@ -216,8 +219,15 @@ const CLASSES = {
       { name: "Furtividade",     attr: "AGI/DEX", desc: "Mover-se silenciosamente para ganhar posição de tiro sem ser detectado.", example: "Aproximar-se do acampamento inimigo pelo barlavento para tiro sem alerta." },
       { name: "Natureza",        attr: "SAB",     desc: "Identificar criaturas, plantas, terrenos e fenômenos naturais. Essencial para caça.", example: "Saber que o pântano não suporta criatura Grande — forçar o Troll para lá." },
       { name: "Tiro em Movimento", attr: "DEX/AGI", desc: "Pode usar Ação de Movimento + Ação de Ataque à distância no mesmo turno sem −1 na Chance de Acerto.", example: "Reposiciona 3 hexes e atira com chance normal, sem a penalidade de movimento.", combat: true, combatDesc: "Pode usar Ação de Movimento + Ação de Ataque à distância no mesmo turno sem a penalidade de −1 na Chance de Acerto." },
-      { name: "Tiro Preciso",    attr: "DEX/SAB", desc: "1x/combate: mira completa — ignora cobertura parcial e causa +1d6 de dano.", example: "O Goblin atrás da barricada: cobertura ignorada, +1d6 no acerto.", combat: true, combatDesc: "1x/combate: gaste a Ação de Combate inteira mirando (sem mover). Próximo tiro: ignora cobertura parcial e +1d6 de dano." }
-    ],    spellsFull: null
+      { name: "Tiro Preciso",    attr: "DEX/SAB", desc: "1x/combate: mira completa — ignora cobertura parcial e causa +1d6 de dano.", example: "O Goblin atrás da barricada: cobertura ignorada, +1d6 no acerto.", combat: true, combatDesc: "1x/combate: gaste a Ação de Combate inteira mirando (sem mover). Próximo tiro: ignora cobertura parcial e +1d6 de dano." },
+      { name: "Leitura de Terreno",
+        attr: "SAB/INT",
+        desc: "Identificar posições vantajosas, ângulos de tiro, coberturas, flancos e pontos cegos. O Arqueiro Puro nunca atira sem conhecer o campo.",
+        example: "Identificar único ângulo sem cobertura num campo de batalha; detectar emboscada pelo posicionamento errado de guardas; localizar atirador inimigo por som e trajetória." },
+      { name: "Disparo em Condição Adversa",
+        attr: "DEX/AGI",
+        desc: "Atirar sem penalidade em condições adversas: vento forte, chuva intensa, escuridão parcial, montado em movimento, sob pressão de combate corpo a corpo.",
+        example: "Atirar a plena velocidade de montaria sem penalidade; manter precisão em tempestade; realizar tiro de supressão enquanto Derrubado sem desvantagem adicional." }],    spellsFull: null
   },
 
   ladino: {
@@ -325,9 +335,12 @@ const CLASSES = {
       { name: "Religião",          attr: "SAB/INT", desc: "Conhecimento dos deuses de Aether, rituais, símbolos sagrados, mortos-vivos e planos divinos.", example: "Reconhecer símbolo de Jurgmund; saber como afastar Espectro com oração." },
       { name: "Persuasão",         attr: "SAB",     desc: "Convencer de boa fé — negociar, ganhar confiança e influenciar com argumentos honestos.", example: "Convencer aldeões a confiar no grupo; mediar disputa entre fações rivais da cidade." },
       { name: "Força de Vontade",  attr: "INT/SAB", desc: "Resistir a efeitos mentais, dominação e pressão psicológica extrema.", example: "Resistir ao Sussurro da Dúvida; não ceder ao medo do Lamento da Banshee." },
-      { name: "Liderança",         attr: "SAB",     desc: "Coordenar aliados, elevar o moral e manter o grupo coeso sob pressão.", example: "Reorganiza o grupo após emboscada; mantém moral em batalha com baixas pesadas." },
-      { name: "Canalizar pelo Cajado", attr: "INT/SAB", desc: "Ao acertar com cajado/arma mágica: conjura magia Nível 1 no mesmo alvo gastando 1 Ação de Magia (sem Slot extra).", example: "Cajado acerta o Esqueleto; Canalizar: lança Raio Sagrado sem Slot adicional.", combat: true, combatDesc: "Ao acertar ataque com cajado ou arma mágica: gaste 1 Ação de Magia para conjurar magia Nível 1 conhecida no mesmo alvo. Não consome Slot — apenas a Ação de Magia." }
-    ],    spellsFull: [
+      { name: "Conforto Espiritual", attr: "SAB", desc: "Restaurar mente e espírito de aliados traumatizados ou aterrorizados. Única no grupo.", example: "Remover Aterrorizado como Ação; curar trauma narrativo entre sessões; estabilizar aliado em colapso mental." },
+      { name: "Exorcismo e Banimento", attr: "SAB/INT", desc: "Banir mortos-vivos, demônios e entidades do plano errado. Matar o corpo às vezes não basta.", example: "Forçar fantasma a partir sem combate físico; reduzir Resistência Mágica de mortos-vivos em 50%; identificar nome verdadeiro de entidade." },
+      { name: "Imposição de Fé",
+        attr: "SAB/FOR",
+        desc: "Usar a fé como barreira física: bloquear avanço de mortos-vivos pela presença divina, forçar criaturas corrompidas a recuar e amplificar curas em campo de batalha.",
+        example: "Forçar mortos-vivos Dif.1-2 a não se aproximar em raio 2 hex (SAB vs Dif); dobrar cura quando aliado está a 0 HP; criar zona sagrada temporária." }],    spellsFull: [
       { name: "Luz Sagrada", level: 1, effect: "1d6 de dano sagrado; cega criaturas das trevas por 1 rodada.", castTime: "1 Ação (instantânea)", cooldown: "4 usos por batalha" },
       { name: "Curar Feridas", level: 1, effect: "2d6 + SAB de cura em alvo único tocado.", castTime: "1 Ação (instantânea)", cooldown: "4 usos por batalha" },
       { name: "Proteção contra o Mal", level: 1, effect: "+1d4 na Chance de Defesa contra criaturas malignas por 3 rodadas.", castTime: "1 Ação (instantânea)", cooldown: "3 usos por sessão" },
@@ -366,7 +379,158 @@ const GENERAL_SKILLS = [
   { name: "Resistência a Intempéries", attr: "FOR/SAB", desc: "Suporta frio extremo, calor escaldante, fome prolongada e privação de sono sem sofrer penalidades severas.", example: "Continuar marchando durante uma tempestade de neve sem sucumbir à hipotermia." },
   { name: "Domesticação Animal", attr: "SAB", desc: "Amansa e treina animais comuns (não criaturas mágicas ou monstruosas) para realizar tarefas simples e obedecer comandos.", example: "Treinar um lobo filhote resgatado para seguir comandos básicos e alertar sobre perigos." },
   { name: "Escalada e Rapel", attr: "FOR/AGI", desc: "Supera terrenos verticais com o uso de cordas, ganchos e equipamento apropriado, reduzindo o risco de queda.", example: "Escalar a muralha de uma fortaleza inimiga durante a noite usando uma corda com gancho." }
-];
+,
+
+  /* ══════════════════════════════════════════════════════════════
+     PERÍCIAS GERAIS — EXPANDIDAS PARA A PARTY
+     Focadas em: Guerreiro Puro · Clérigo Puro · Arqueiro Puro · Mago Necromante
+     ══════════════════════════════════════════════════════════════ */
+
+  /* ── PARA O GUERREIRO PURO ──────────────────────────────────── */
+
+  {
+    name: "Manutenção de Armas e Armaduras",
+    attr: "FOR/INT",
+    desc: "Cuidar, reparar e otimizar equipamento de combate em campo. Um guerreiro que não mantém o equipamento é um guerreiro que vai enfrentar uma falha no pior momento possível.",
+    example: "Afiar uma lâmina embotada entre combates (+1d4 de dano no próximo combate); remover ferrugem de armadura antes de mergulho no pântano; identificar fissura invisível numa espada que quebraria no próximo impacto crítico.",
+    mechanics: "Treinado: durante descanso curto, pode restaurar 1 ponto de degrade de arma. Entre sessões: manutenção completa cancela penalidades acumuladas de desgaste. Excelente: pode melhorar temporariamente arma comum para funcionar como rara por 1 combate."
+  },
+
+  {
+    name: "Leitura de Inimigo",
+    attr: "FOR/SAB",
+    desc: "Observar um adversário por breve momento e inferir seu nível de ameaça, estilo de luta e possíveis fraquezas. Veteranos de combate reconhecem padrões que iniciantes não veem.",
+    example: "Identificar que um guarda está machucado no lado esquerdo pela forma como protege a costela; perceber que um monstro recua de fogo pelo ângulo que evita a tocha; calcular se um inimigo vale a luta antes de engajar.",
+    mechanics: "1 Ação Livre (1x/combate): o Mestre revela HP aproximado, Dificuldade e 1 imunidade ou fraqueza do alvo observado. Treinado: 2 informações. Excelente: 3 informações mais o padrão de ataque."
+  },
+
+  {
+    name: "Intimidação de Campo",
+    attr: "FOR/SAB",
+    desc: "Usar presença física, reputação e demonstração de força para dissuadir confrontos ou desmoralizar grupos de inimigos antes e durante o combate. Diferente de Intimidação — esta foca no grupo, não no indivíduo.",
+    example: "Executar um inimigo de forma calculada para desmoralizar o grupo (SAB difícil ou Abalados 2 rodadas); exigir rendição de bandidos que claramente perderam sem precisar matar mais; manter moral baixo de sitiantes pela reputação.",
+    mechanics: "Fora de combate: substituir combate por SAB (difícil) de inimigos Dif.1-2. Em combate: após kill, todos os inimigos em raio 4 hex testam SAB (normal) ou ficam Abalados 1 rodada (1x/combate, fora da habilidade de classe)."
+  },
+
+  /* ── PARA O CLÉRIGO PURO ─────────────────────────────────────── */
+
+  {
+    name: "Ritual Sagrado",
+    attr: "SAB/INT",
+    desc: "Conduzir cerimônias, abençoar locais, purificar objetos corrompidos e realizar sacramentos fora de combate. O Clérigo Puro não usa magia apenas em batalha — a fé é prática diária.",
+    example: "Abençoar acampamento para que mortos-vivos não se aproximem durante a noite; purificar poço envenenado por influência demoníaca; realizar ritual fúnebre que impede o morto de se levantar como morto-vivo.",
+    mechanics: "Treinado: abençoa área de raio 10 hex por 1 descanso longo — mortos-vivos Dif.1 não entram, Dif.2 testam SAB. Purificação: remove corrupção de objeto mágico (1 hora). Excelente: abençoa aliados com +1d4 em resistências por 1 sessão."
+  },
+
+  {
+    name: "Conhecimento do Plano dos Mortos",
+    attr: "SAB/INT",
+    desc: "Entender a cosmologia dos mortos — como almas transitam, onde ficam presas, quais entidades habitam o limiar. Complementa Exorcismo com teoria; o Clérigo Puro sabe o porquê, não apenas o como.",
+    example: "Identificar que uma alma está presa por objeto físico específico (não apenas 'assombrada'); reconhecer tipo de entidade pelo comportamento antes do combate; saber que este morto-vivo específico foi criado por magia e tem um vínculo que pode ser quebrado.",
+    mechanics: "Pergunta ao Mestre: antes de enfrentar morto-vivo ou espírito, pode fazer 2 perguntas (3 se excelente) sobre sua natureza, origem e como destruí-lo permanentemente. Fora de combate: pode localizar almas perdidas em raio de 1 dia de caminhada."
+  },
+
+  {
+    name: "Herbalismo Sagrado",
+    attr: "SAB/INT",
+    desc: "Identificar, colher e preparar ervas com propriedades curativas e purificadoras abençoadas. Diferente do herbalismo comum — o Clérigo sabe quais plantas crescem onde há presença divina e o que elas curam que medicina comum não cura.",
+    example: "Preparar cataplasma que remove Veneno Comum sem magia; identificar flor sagrada de Aethea que só cresce em solo abençoado; criar incenso que facilita meditação restauradora (recupera +1d6 HP em descanso curto).",
+    mechanics: "Entre sessões: prepara 1d4 doses de Erva Sagrada (remove 1 condição negativa de qualquer tipo, não-mágica). Treinado: 2d4 doses. Excelente: pode preparar dose que age como Antídoto Universal (funciona em venenos irremovíveis normalmente)."
+  },
+
+  /* ── PARA O ARQUEIRO PURO ────────────────────────────────────── */
+
+  {
+    name: "Camuflagem e Emboscada",
+    attr: "AGI/SAB",
+    desc: "Preparar posição de tiro furtiva, montar emboscada coordenada para o grupo e usar o terreno para desaparecer após o ataque. O Arqueiro Puro não apenas atira — controla quando e de onde.",
+    example: "Preparar ponto de atirador em 5 minutos que concede +1d4 em ataques à distância enquanto não for revelado; coordenar emboscada do grupo (todos atacam com vantagem no 1º turno); desaparecer após tiro crítico sem ser rastreado por percepção normal.",
+    mechanics: "Preparação (5min): próximo ataque à distância tem Acerto Automático (sem d10). Em emboscada coordenada: todos os aliados no 1º turno têm +2 Chance de Crítico. Treinado: posição de atirador sustenta 3 ataques antes de ser revelada."
+  },
+
+  {
+    name: "Armadilhas e Rastejos",
+    attr: "DEX/INT",
+    desc: "Detectar, construir e desativar armadilhas — desde simples laços até mecanismos complexos. O Arqueiro conhece o terreno entre ele e o inimigo melhor que ninguém.",
+    example: "Construir armadilha de laço que prende Dif.1-2 (sem teste de FOR para passar sem perceber); detectar armadilha de pedra antes do grupo cair; montar campo minado de armadilhas simples ao redor do acampamento antes de dormir.",
+    mechanics: "Construção (10min): armadilha para Dif.1-2 (AGI difícil para perceber). Treinado: armadilha para Dif.3 ou múltiplas Dif.1 em área. Detectar: SAB (normal) vs armadilhas; treinado: detecta automaticamente se mover devagar."
+  },
+
+  {
+    name: "Navegação por Estrelas",
+    attr: "SAB/INT",
+    desc: "Orientar o grupo usando posição estelar, vento, vegetação e outros marcos naturais — mesmo em terreno nunca visto, mesmo à noite. O Arqueiro Puro nunca se perde.",
+    example: "Determinar direção precisa sem mapa em floresta densa à noite; prever clima das próximas 24h pela formação de nuvens e vento; identificar que o grupo foi desviado magicamente e qual a direção real do destino.",
+    mechanics: "Passivo (treinado): o grupo nunca se perde por meios naturais. Ativo: SAB (normal) para detectar desvio mágico ou ilusão de terreno. Excelente: pode traçar rota que evita encontros aleatórios em 1 dia de viagem (o Arqueiro conhece os padrões de criaturas)."
+  },
+
+  {
+    name: "Disfarce e Infiltração",
+    attr: "DEX/SAB",
+    desc: "Alterar aparência, imitar comportamento de guarda ou servo, e mover-se em locais restritos sem levantar suspeita. Útil quando o arco não resolve — e às vezes o Arqueiro precisa chegar perto sem ser visto.",
+    example: "Passar por guarda de templo com uniforme improvisado e postura correta; imitar sotaque regional para não ser identificado como estrangeiro; entrar em festa nobre fingindo ser servo contratado.",
+    mechanics: "SAB (normal) para disfarce básico (aparência). SAB (difícil) para imitar função específica (guarda, servo, sacerdote). Treinado: pode manter disfarce sob pressão moderada. Excelente: o disfarce resiste a interrogatório curto."
+  },
+
+  /* ── PARA O MAGO NECROMANTE ──────────────────────────────────── */
+
+  {
+    name: "Alquimia Sombria",
+    attr: "INT/SAB",
+    desc: "Criar substâncias que operam na fronteira entre química e magia: venenos específicos, reagentes para rituais de necromancia, conservantes para tecidos mortos, solventes para enchantamentos. O Necromante usa alquimia como extensão da magia.",
+    example: "Criar dose de Veneno do Túmulo (irremovível por antídoto comum) a partir de Glândula de Veneno do Túmulo; preparar solução conservante que mantém corpo íntegro por 7 dias para ritual posterior; sintetizar reagente que torna Ritual Proibido 4 horas mais rápido.",
+    mechanics: "Treinado: com materiais corretos, cria 1d4 doses de veneno raro por descanso longo. Pode preparar reagentes que reduzem custo de materiais de rituais em 50%. Excelente: cria venenos que mimetizam efeito de condições (Petrificado temporário, Confuso, etc.)."
+  },
+
+  {
+    name: "Leitura de Presságios",
+    attr: "INT/SAB",
+    desc: "Interpretar sinais — movimentos de corvos, padrões de sangue, sonhos recorrentes, rachaduras em ossos queimados — como indicadores do que está por vir. O Necromante lida com a morte; a morte às vezes avisa.",
+    example: "Identificar que o corvos na vila estão apontando para o leste há três dias — algo morreu ou vai morrer lá; interpretar sonho perturbador de um aliado como aviso de traição dentro do grupo; perceber que o padrão de mortes numa cidade segue uma progressão deliberada.",
+    mechanics: "1x/sessão: o jogador faz uma pergunta sobre o futuro imediato (próxima sessão). O Mestre responde com uma pista críptica mas genuína. Treinado: 2 perguntas. Excelente: a resposta é direta em vez de críptica. Falha (SAB difícil): recebe pista falsa ou sem sentido."
+  },
+
+  {
+    name: "Herbalismo Sombrio",
+    attr: "INT/SAB",
+    desc: "Conhecer plantas, fungos e substâncias que afetam a morte, o morrer e o pós-morte — cogumelos que crescem em cadáveres, ervas que facilitam o transe de contato com mortos, venenos que preservam em vez de destruir.",
+    example: "Identificar cogumelo que cresce apenas em mortos-vivos — presença indica dungeon de necromante próximo; preparar chá de Flor do Esquecimento que facilita contato espiritual (bônus em Sentir a Morte por 1 hora); colher fungo preservante que mantém membro amputado reintegrável.",
+    mechanics: "Identificar: reconhece automaticamente qualquer planta ou fungo relacionado à morte. Preparar: cria poção de Contato Espiritual (bônus em Sentir a Morte e Ritual Proibido por 1 hora). Treinado: identifica origem de morto-vivo por flora ao redor do corpo."
+  },
+
+  /* ── PARA A PARTY COMO GRUPO ─────────────────────────────────── */
+
+  {
+    name: "Avaliação de Itens Raros",
+    attr: "INT/SAB",
+    desc: "Estimar o valor real, a procedência e as propriedades de itens raros, mágicos e únicos — especialmente os que não aparecem em catálogos comuns. O grupo encontra muita coisa estranha; saber o que têm é poder.",
+    example: "Identificar que o 'item comum' que o vendedor oferece é na verdade peça de um conjunto lendário; avaliar corretamente um acessório mágico sem precisar de identificação mágica; reconhecer que o 'cristal decorativo' é um Frasco de Alma Aprisionada.",
+    mechanics: "Passivo: identifica tier e efeito básico de qualquer item sem identificação mágica. Treinado: identifica efeitos completos. Excelente: detecta maldição, vínculo ou origem de item mágico sem spell. Falha: recebe avaliação parcialmente incorreta (o Mestre decide qual parte)."
+  },
+
+  {
+    name: "Viagem Furtiva",
+    attr: "AGI/SAB",
+    desc: "Mover o grupo inteiro através de território hostil sem ser detectado — coordenando ritmo, silêncio, cobertura e rota. Diferente de Furtividade individual: esta perícia só funciona em grupo.",
+    example: "Guiar o grupo através de patrulha de cultistas sem combate; atravessar floresta com mortos-vivos à noite sem ser detectado pelo Sentido de Vibração; transportar aliado ferido (que faz barulho) através de área vigiada.",
+    mechanics: "Toda a party recebe Furtividade funcional por 1 cena. SAB (normal) para terreno familiar; SAB (difícil) para território hostil ativo. Falha: 1 membro do grupo (mais ruidoso) é detectado. Excelente: furtividade funciona mesmo contra Sentido de Vibração e Percepção Mágica."
+  },
+
+  {
+    name: "Acampamento Seguro",
+    attr: "SAB/INT",
+    desc: "Estabelecer acampamento defensável — escolher posição, montar sentinelas eficientes, criar sistema de alerta e garantir que o grupo descanse sem ser surpreendido. Em mundo com mortos-vivos e cultistas, dormir mal é morrer devagar.",
+    example: "Identificar posição que maximiza visibilidade e minimiza flancos; montar sistema de alerta com fios e latas que acorda antes de qualquer furtividade funcionar; escolher local naturalmente protegido (cave, elevação, círculo de pedra).",
+    mechanics: "Descanso longo: se usado, elimina chance de encontro aleatório noturno. Treinado: o grupo recupera +1d6 HP adicional no descanso (o sono é mais profundo e seguro). Excelente: mortos-vivos e criaturas noturnas Dif.1-2 evitam a área naturalmente."
+  },
+
+  {
+    name: "Comércio de Itens Especiais",
+    attr: "SAB/INT",
+    desc: "Encontrar compradores e vendedores de itens que não aparecem em lojas comuns — partes de monstros, artefatos malditos, materiais de necromancia, relíquias religiosas proibidas. O mercado negro, o colecionador excêntrico, o templo que não faz perguntas.",
+    example: "Encontrar comprador para Frasco de Alma Aprisionada sem alertar as autoridades; localizar vendedor de Glândula de Veneno do Túmulo em cidade que tecnicamente os proíbe; negociar com culto menor pela informação que só eles têm.",
+    mechanics: "Em qualquer cidade de tamanho médio+: SAB (normal) para encontrar comprador/vendedor de item incomum em 1d4 horas. SAB (difícil) para itens muito restritos. Treinado: preço 20% melhor e mais rápido. Excelente: acesso a rede permanente de contatos em 3 cidades."
+  }];
 
 /* ---------------------------------------------------------------------- */
 /* MAGIAS GERAIS (universais — aprendidas em grimórios)                  */
@@ -1571,7 +1735,142 @@ const WEAPONS_ONE_HAND = [
     slot:["primary","secondary"],
     magicBonus:{ attr:"FOR", attrValue:1 },
     story:"Criada pelo ferreiro-xamã Vrak para o Warchief do Grande Clã. A lâmina canta em orc quando banhada em sangue inimigo — os mortos do portador cantam com ela.",
-    note:"+1 FOR enquanto equipada. Req. FOR alto (≥3). A cada kill em combate: a Garra ganha +1d4 de dano bônus acumulativo (máximo +2d4). Os bônus se reiniciam após o combate. Em crítico: toda a dor acumulada explode — causa o dano normal do crítico mais todos os bônus de kills dobrados." }];
+    note:"+1 FOR enquanto equipada. Req. FOR alto (≥3). A cada kill em combate: a Garra ganha +1d4 de dano bônus acumulativo (máximo +2d4). Os bônus se reiniciam após o combate. Em crítico: toda a dor acumulada explode — causa o dano normal do crítico mais todos os bônus de kills dobrados." },
+
+  /* ══════════════════════════════════════════════════════════════
+     SERPENTARIANOS E SACERDOTES DE JURGMUND
+     Itens refinados — guerreiros de escama e magos místicos
+     ══════════════════════════════════════════════════════════════ */
+
+  /* ── ARMAS DE 1 MÃO ─────────────────────────────────────────── */
+
+  /* COMUNS */
+  { tier:"comum", name:"Estoque Serpentariano",
+    dmg:"1d6", req:"DEX", weight:1.5, defenseDegrade:2,
+    slot:["primary","secondary"],
+    note:"Lâmina estreita e reta usada pelos patrulheiros serpentarianos de entrada. Forjada com liga de ferro e escama pulverizada — mais rígida que aço comum. A empunhadura imita a postura de uma cobra em repouso." },
+
+  { tier:"comum", name:"Adaga Ritual de Jurgmund",
+    dmg:"1d4+1d4", req:"DEX/SAB", weight:1, defenseDegrade:2,
+    slot:["primary","secondary"],
+    note:"Adaga cerimonial de aço prateado usada em rituais de Jurgmund. Pode ser usada em combate, mas é proibido matar com ela fora de cerimônia (cultistas não seguem essa regra). Sacerdotes e Clérigos ganham +1d4 em testes religiosos enquanto a carregam." },
+
+  /* RAROS */
+  { tier:"raro", name:"Lâmina da Escama Dourada",
+    dmg:"1d8+1d4", req:"DEX", weight:2, defenseDegrade:1,
+    slot:["primary","secondary"],
+    story:"Forjada pelos ferreiros-sacerdotes de Serpentara com escamas da Cobra-Rainha dourada — criatura sagrada abatida uma única vez por geração para este propósito. A lâmina reluz em dourado quando banhada em veneno.",
+    note:"Acertos aplicam Veneno Dourado de Jurgmund: 1d6 de veneno por 3 rodadas (SAB difícil para resistir). O veneno também reduz −1d4 em todos os testes do alvo enquanto ativo (a toxina embaralha o juízo)." },
+
+  { tier:"raro", name:"Garra do Guardião da Escama",
+    dmg:"1d8+1d6", req:"DEX/FOR", weight:3, defenseDegrade:1,
+    slot:["primary","secondary"],
+    story:"Arma exclusiva dos Guardiões da Escama — elite serpentariana que protege os santuários internos de Serpentara. A lâmina curva imita a trajetória de uma cobra atacando. Cada Guardião forja a própria.",
+    note:"Em combate adjacente a um aliado serpentariano ou sacerdote de Jurgmund: +1 Chance de Crítico e +1d4 de dano extra (os Guardiões são treinados para trabalhar em par). Se o alvo estiver Envenenado: +1d6 de dano adicional por Ação (a lâmina amplifica a toxina já presente)." },
+
+  { tier:"raro", name:"Fang Ritual — Dente de Julgamento",
+    dmg:"1d6+1d4", req:"SAB/DEX", weight:1.5, defenseDegrade:1,
+    slot:["primary","secondary"],
+    story:"Usado pelos sacerdotes de Jurgmund nas cerimônias de Julgamento — o ritual em que um preso é ferido com o Fang e a serpente decide se ele merece viver. Se o veneno não matar em 3 dias, o réu é solto. Muitos sacerdotes 'ajudam o julgamento'.",
+    note:"Passivo: acertos com este Fang aplicam Marca de Julgamento — o alvo fica marcado por 3 rodadas. Enquanto marcado, qualquer criatura serpentariana ou cobra aliada que atacar o alvo tem +2 Chance de Crítico. Ativo (1x/combate): Julgamento de Jurgmund — o ferimento pulsa com energia divina, causando 2d8 de dano sagrado que ignora toda defesa." },
+
+  /* MÁGICOS */
+  { tier:"magico", name:"Fang Sagrado de Vassk",
+    dmg:"1d10+1d6", req:"DEX/SAB", weight:2, defenseDegrade:1,
+    slot:["primary","secondary"],
+    magicBonus:{ attr:"SAB", attrValue:1 },
+    story:"Uma das três réplicas sagradas do Fang original de Vassk, o primeiro Rei Serpentariano. Guardada nos altares de Serpentara e concedida apenas a campeões. A lâmina está sempre quente ao toque.",
+    note:"+1 SAB enquanto equipado. Veneno de Vassk: acertos aplicam toxina especial — 1d8 de veneno por turno por 4 rodadas, SAB crítico para resistir, imune a antídotos comuns (requer Cura Mágica Nv.3+). Críticos com este Fang: o veneno entra na corrente sanguínea imediatamente causando +2d8 extra e Abalado por 2 rodadas." },
+
+  { tier:"magico", name:"Espiral do Oráculo — Lâmina Mística",
+    dmg:"1d8+1d6", req:"INT/SAB", weight:2, defenseDegrade:1,
+    slot:["primary","secondary"],
+    magicBonus:{ attr:"INT", attrValue:1, spellActions:1 },
+    story:"Criada pelos Oráculos Serpentarianos — os magos-sacerdotes que interpretam os movimentos das serpentes como profecia. A lâmina espiral não corta linearmente — corta em arco, como a trajetória de uma cobra.",
+    note:"+1 INT, +1 Ação de Magia enquanto equipada. Pode ser usada para lançar magias que normalmente precisariam de cajado (trata como cajado mágico para efeitos de slot). Acertos com a Espiral desorientam: alvo perde 1 Ação no próximo turno (SAB difícil para resistir). Críticos: o corte em espiral causa Sangramento profundo — 1d8 por rodada, irremovível por meios físicos." },
+
+  /* ══════════════════════════════════════════════════════════════
+     ELFOS ANTIGOS — LENDÁRIO E ANCESTRAL
+     Era anterior à escravidão — armas de Aethea e dos Elfos Primordiais
+     Refinamento absoluto: cada item é memória, não apenas metal
+     ══════════════════════════════════════════════════════════════ */
+
+  /* ── ARMAS DE 1 MÃO ÉLFICAS ─────────────────────────────────── */
+
+  /* LENDÁRIO */
+  { tier:"lendario", divine:"Aethea", race:"elfo",
+    name:"Lâmina do Véu Eterno",
+    dmg:"1d12+1d8+1d4", req:"DEX/INT", weight:1.5, defenseDegrade:0,
+    slot:["primary","secondary"],
+    story:"Forjada pelos primeiros elfos-ferreiros antes mesmo de Aethea assumir forma divina. Existe há tanto tempo que seus entalhes rúnicos foram reescritos três vezes — cada camada conta uma guerra diferente. A lâmina não envelhece. O portador, sim.",
+    effect:"Passivo: a lâmina é silenciosa absolutamente — ataques com ela nunca produzem som (útil em furtividade; Percepção auditiva é inútil contra ela). +1 Chance de Crítico. Ativo (2x/combate): Corte do Véu — o ataque atravessa a fronteira entre o plano físico e o etéreo; ignora TODA a Def.Física e Mágica. Crítico com Corte do Véu: o alvo fica Vulnerável a dano mágico (+50%) por 2 rodadas (o véu do alvo rasgou).",
+    note:"Silenciosa absolutamente. +1 Crit. 2x/combate: ignora toda defesa. Crítico: +50% dano mágico por 2 rodadas." },
+
+  { tier:"lendario", divine:"Aethea", race:"elfo",
+    name:"Adaga das Estrelas Caídas",
+    dmg:"1d10+1d8", req:"DEX/SAB", weight:1, defenseDegrade:1,
+    slot:["primary","secondary"],
+    story:"Cada vez que um elfo antigo morria na Era da Escravidão, uma estrela caía. Esta adaga foi forjada com metal de três dessas estrelas — metal que atravessou o firmamento e carrega a dor de três mortes élficas distintas. Aethea a abençoou em silêncio.",
+    effect:"Passivo: acertos com esta adaga aplicam Marca Estelar — o alvo brilha levemente por 3 rodadas (invisibilidade é anulada; todos os ataques contra ele têm +1 Chance de Acerto). Ativo (1x/combate): as três estrelas explodem — o alvo sofre 3d8 de dano de luz sagrada que ignora toda defesa, e fica Cego por 1 rodada (SAB difícil para resistir à cegueira).",
+    note:"+1 Acerto a todos vs alvo Marcado. 1x: 3d8 luz ignora defesa + cegueira 1 rodada." },
+
+  /* ANCESTRAL */
+  { tier:"ancestral", divine:"Aethea", race:"elfo",
+    name:"Estilha da Primeira Lua",
+    dmg:"1d12+1d10+1d6", req:"DEX/INT", weight:1.5, defenseDegrade:0,
+    slot:["primary","secondary"],
+    magicBonus:{ attr:"DEX", attrValue:2, attr2:"INT", attrValue2:2, critChance:2 },
+    story:"Não foi forjada. Aethea a arrancou da face da primeira lua quando os elfos foram acorrentados, e ela caiu como uma estilha de luz sólida. Quem a carrega sente o peso de algo que não deveria existir no plano físico. Ela não tem cabo — a mão do portador simplesmente não é cortada.",
+    effect:"Passivo: +2 DEX, +2 INT, +2 Chance de Crítico. Defesas com esta lâmina nunca reduzem a Chance de Esquiva (como escudo). Passivo: em noite aberta ou em ambientes com luz natural, o portador regenera 1 HP por rodada. Ativo (1x/combate): Lua em Estilhas — o portador desaparece por 1 turno inteiro (intangível, invisível) e reaparece em qualquer hex visível em raio 12 hex; o próximo ataque após reaparecer tem +4 Chance de Crítico e causa +2d10 extra de dano de luz.",
+    note:"+2 DEX/INT, +2 Crit. Sem degrade de esquiva. Regen HP à noite. 1x: desaparece e reaparece — +4 Crit e +2d10 luz." },
+
+  { tier:"ancestral", divine:"Aethea", race:"elfo",
+    name:"Fang do Mago-Guerreiro de Akaen",
+    dmg:"1d10+1d8+1d6", req:"DEX/INT", weight:2, defenseDegrade:0,
+    slot:["primary","secondary"],
+    magicBonus:{ attr:"DEX", attrValue:1, attr2:"INT", attrValue2:2, spellActions:1, critChance:1 },
+    story:"Os Magos-Guerreiros de Akaen eram a elite elfica que combinava espada e magia com elegância que humanos e orcs consideravam impossível. Esta lâmina pertenceu ao último deles — Akaen em pessoa, segundo os registros que sobreviveram. Ela ainda lembra o dono.",
+    effect:"Passivo: +1 DEX, +2 INT, +1 Ação de Magia, +1 Chance de Crítico. A lâmina pode canalizar magias — qualquer magia de dano lançada pelo portador pode ser entregue através de um ataque melee (não requer linha de visão; o toque aplica a magia diretamente). Ativo (2x/combate): Lâmina Arcana — o próximo ataque carrega uma magia já equipada sem gastar Slot adicional (a magia explode no contato).",
+    note:"+1 DEX, +2 INT, +1 Ação Magia, +1 Crit. Magias via melee. 2x: próximo ataque entrega magia sem gastar Slot." },
+
+  /* ══════════════════════════════════════════════════════════════
+     ITENS DE CRIATURAS MÍTICAS
+     Sem necessidade de lore direto — materiais impossíveis,
+     criaturas lendárias, mecânicas únicas
+     ══════════════════════════════════════════════════════════════ */
+
+  /* ── ARMAS DE 1 MÃO ─────────────────────────────────────────── */
+
+  { tier:"raro", name:"Faca de Dente de Basilisco",
+    dmg:"1d8+1d4", req:"DEX", weight:1.5, defenseDegrade:1,
+    slot:["primary","secondary"],
+    story:"O dente de um basilisco é o único material que não se dissolve no próprio veneno da criatura. Esta faca foi talhada de um dente de basilisco adulto por um artesão que trabalhou com olhos vendados — dente de basilisco petrifica quem olha diretamente para ele fora do crânio.",
+    note:"Acertos aplicam Toxina de Basilisco: alvo testa FOR (difícil) ou fica com −1 Movimento por 2 rodadas (a pele endurece levemente). 3 aplicações por combate. Se o mesmo alvo acumular 3 aplicações da toxina no mesmo combate: fica Petrificado por 1 turno (a toxina atingiu o limiar). A faca não pode ser afiada — o dente mantém a própria borda." },
+
+  { tier:"raro", name:"Garra de Grifo",
+    dmg:"1d8+1d6", req:"FOR/DEX", weight:2, defenseDegrade:1,
+    slot:["primary","secondary"],
+    story:"A garra traseira de um Grifo adulto, montada em cabo de madeira de cedro. Grifos perdem garras durante o emparelhamento — a fêmea arranca a garra do macho como prova de domínio. Esta veio de um macho que sobreviveu.",
+    note:"Ataques com esta garra contam como dois: um corte e um gancho. Se ambos acertarem (2 Ações gastas no mesmo alvo em sequência): o alvo é Agarrado (Imóvel, FOR normal para escapar com 1 Ação). Enquanto agarrado: ataques adicionais com a Garra causam +1d8 extra. Em voo ou altura elevada: +1 Chance de Crítico (o Grifo caçava de cima)." },
+
+  { tier:"magico", name:"Espora do Unicórnio",
+    dmg:"1d8+1d6", req:"SAB/DEX", weight:1, defenseDegrade:1,
+    slot:["primary","secondary"],
+    magicBonus:{ attr:"SAB", attrValue:1 },
+    story:"Não é o chifre inteiro — é um fragmento da ponta do chifre que se desprendeu naturalmente quando um unicórnio ancião passou por uma floresta densa. Nenhum unicórnio foi caçado. A floresta ainda existe. O unicórnio, dizem, passou apenas para verificar se o fragmento seria bem usado.",
+    note:"+1 SAB. Passivo: a arma purifica — qualquer veneno ou maldição que afete o portador tem sua duração reduzida em 1 rodada por turno (venenado por 4 rodadas passa a 3, depois 2, depois 1). Acertos em criaturas corrompidas, mortas-vivas ou amaldiçoadas: +1d8 de dano sagrado extra. Ativo (1x/combate): a espora brilha — cura o portador em 1d6+SAB HP e remove 1 condição negativa imediatamente." },
+
+  { tier:"lendario", name:"Chifre do Unicórnio — Espada",
+    dmg:"1d10+1d8+1d4", req:"SAB/DEX", weight:1.5, defenseDegrade:0,
+    slot:["primary","secondary"],
+    story:"O chifre completo de um unicórnio que ofereceu sua própria vida ao portador anterior, que estava morrendo de uma doença incurável. O unicórnio curou a doença e morreu. O chifre foi transformado em espada pelo curado — que jurou usá-la apenas para proteger os que não conseguem se proteger. A espada lembra o juramento.",
+    note:"Passivo: imune a veneno e maldições enquanto equipada. Passivo: ao curar um aliado a 0+ HP em combate (por qualquer meio), a espada ganha +1 Chance de Crítico cumulativo até o fim do combate (máximo +4). Ativo (2x/combate): Pureza Absoluta — o próximo ataque causa 2d10 de dano sagrado que ignora toda defesa e remove instantaneamente qualquer veneno, maldição ou condição negativa do alvo ALIADO tocado (pode ser usado em aliados em vez de inimigos, sem causar dano). Ativo (1x/sessão): ressuscita com 1 HP um aliado morto há menos de 1 turno — a espada pulsa com a memória do unicórnio que morreu por amor." },
+
+  { tier:"unico", name:"Punho da Fênix — Luva-Arma",
+    dmg:"1d10+1d8", req:"FOR/AGI", weight:0.5, defenseDegrade:1,
+    slot:["primary","secondary"],
+    story:"Não é uma arma comum. É uma luva forjada com penas de Fênix adulta tecidas em metal que não existe em catálogos de mineralogia. A pena central ainda arde — não queima a mão do portador, mas queima tudo o mais. O ferreiro que a fez não existe mais. Pergunta-se se era humano.",
+    note:"Passivo: ataques causam +1d6 de dano de fogo extra. Passivo: ao ser reduzido a 0 HP, o portador não morre imediatamente — entra em Estado de Fênix por 1 turno (imóvel, mas vivo e intangível às chamas). No turno seguinte: ressurge com 35% HP e todos os aliados em raio 3 hex curam 1d8 HP (a ressurreição irradia). Pode ocorrer 1x por descanso longo. Ativo (1x/combate): o punho envolve-se em chamas absolutas — próximo soco causa 3d8 de fogo que ignora Def.Física e Mágica, e o alvo fica Queimando por 3 rodadas (1d8/rodada)." }];
 
 const WEAPONS_TWO_HAND = [
   /* --- COMUNS --- */
@@ -1857,7 +2156,120 @@ const WEAPONS_TWO_HAND = [
     slot:["primary"], heavyTwoHanded:true,
     magicBonus:{ hp:15 },
     story:"Maul orc usado na derrubada de três fortalezas durante a Guerra dos Clãs. Encantado para ignorar estruturas — e eventualmente também ignorou a distinção entre estrutura e armadura.",
-    note:"+15 HP máximo enquanto equipado. Req. FOR alto (≥3). Ataques contra alvos com Def.Física ≥ 5: ignora metade da Def.Física (o maul foi feito para quebrar muros). Ativo (1x/combate): golpe de demolição — 3d10 de dano que ignora TODA a Def.Física do alvo." }];
+    note:"+15 HP máximo enquanto equipado. Req. FOR alto (≥3). Ataques contra alvos com Def.Física ≥ 5: ignora metade da Def.Física (o maul foi feito para quebrar muros). Ativo (1x/combate): golpe de demolição — 3d10 de dano que ignora TODA a Def.Física do alvo." },
+
+  /* ── ARMAS DE 2 MÃOS SERPENTARIANAS ─────────────────────────── */
+
+  /* COMUNS */
+  { tier:"comum", name:"Lança Cerimonial Serpentariana",
+    dmg:"1d10+1d4", req:"FOR/DEX", weight:4, defenseDegrade:null,
+    slot:["primary"],
+    note:"Lança de madeira sagrada de Serpentara com ponta de osso de cobra-rainha endurecido. Usada em paradas e cerimônias, mas perfeitamente funcional em batalha. Alcance 2 hex. O fuste tem entalhes rúnicos que sussurram em sibilante." },
+
+  { tier:"comum", name:"Bastão do Iniciado de Jurgmund",
+    dmg:"1d8+1d4", req:"SAB/INT", weight:2, defenseDegrade:null,
+    slot:["primary"],
+    note:"Bastão de osso de cobra-rainha usado pelos iniciados nos rituais de Jurgmund antes de ascender ao posto de sacerdote. Conta como cajado para efeitos de magia (+1 Slot enquanto equipado). Levemente vibrante ao toque de quem tem SAB ≥ 2." },
+
+  /* RAROS */
+  { tier:"raro", name:"Alabarda da Guarda Real Serpentariana",
+    dmg:"1d12+1d8+1d4", req:"FOR/DEX", weight:7, defenseDegrade:null,
+    slot:["primary"],
+    story:"Usada exclusivamente pela Guarda Real do Rei Vassk. Cada unidade tem apenas doze lançadores — e cada um sabe o nome dos outros onze. Quando um morre, a alabarda é fundida e reforjada em uma nova pela Guarda restante.",
+    note:"Alcance 3 hex. Ao matar um alvo com esta arma: todos os inimigos que viram o abate testam SAB (normal) ou ficam Abalados por 1 rodada (a execução precisa é intimidante). Em formação com outro portador desta arma: +1d8 de dano (a Guarda é treinada para batalhar em par)." },
+
+  { tier:"raro", name:"Cajado do Sacerdote Maior",
+    dmg:"1d10+1d8", req:"SAB/INT", weight:3, defenseDegrade:null,
+    slot:["primary"],
+    story:"Dado ao sacerdote que completa dez anos de serviço em Serpentara. Feito de vértebra de Cobra-Rainha empilhadas e fundidas com resina sagrada — flexível como cobra, rígido como doutrina.",
+    note:"Conta como cajado mágico (+2 Slots enquanto equipado). Magias lançadas com este cajado custam −1 MP (mínimo 1). Ativo (2x/combate): Benção de Jurgmund — todos os aliados em raio 3 hex curam 1d6+SAB HP e ficam imunes a veneno por 2 rodadas." },
+
+  /* MÁGICOS */
+  { tier:"magico", name:"Cajado do Oráculo dos Profundos",
+    dmg:"1d12+1d10+1d4", req:"SAB/INT", weight:3, defenseDegrade:null,
+    slot:["primary"],
+    magicBonus:{ attr:"SAB", attrValue:2, attr2:"INT", attrValue2:1, spellActions:1, slots:2 },
+    story:"Forjado com a vértebra da espinha dorsal da Serpente Imortal de Jurgmund — uma das três retiradas durante o sonho sagrado. O cajado não pertence a nenhum oráculo; ele escolhe o oráculo. Quando o portador morre, o cajado some.",
+    note:"+2 SAB, +1 INT, +1 Ação de Magia, +2 Slots enquanto equipado. Magias de veneno ou serpente lançadas com este cajado têm dano dobrado. Passivo: o portador sente qualquer serpente em raio 20 hex e pode comunicar intenção simples a elas. Ativo (1x/sessão): Oráculo de Jurgmund — a serpente no cajado sussurra uma verdade sobre o futuro imediato (o Mestre revela algo sobre o próximo encontro ou decisão)." },
+
+  { tier:"magico", name:"Lança Sagrada de Serpentara",
+    dmg:"1d12+1d10+1d6", req:"FOR/SAB", weight:5, defenseDegrade:null,
+    slot:["primary"],
+    magicBonus:{ attr:"FOR", attrValue:1, attr2:"SAB", attrValue2:1 },
+    story:"Uma das doze lanças sagradas mantidas no altar principal de Serpentara, usadas nas grandes caçadas sagradas. Cada uma tem o nome de uma das doze cobras-guardiãs fundadoras gravado na haste.",
+    note:"+1 FOR, +1 SAB enquanto equipada. Alcance 3 hex. Acertos aplicam Veneno Sagrado: 1d8/rodada por 3 rodadas, imune a antídotos — mas aliados do portador podem curar com Cura Mágica. Críticos: a lança vibra com energia divina — +2d8 sagrado e o alvo fica Marcado por Jurgmund (serpentes aliadas têm +3 Chance de Crítico contra ele pelo restante do combate)." },
+
+  /* ── ARMAS DE 2 MÃOS ÉLFICAS ─────────────────────────────────── */
+
+  /* LENDÁRIO */
+  { tier:"lendario", divine:"Aethea", race:"elfo",
+    name:"Arco da Última Canção de Aethea",
+    dmg:"1d12+1d10+1d6", req:"DEX alto", weight:2, defenseDegrade:null,
+    slot:["primary"],
+    story:"Aethea cantou enquanto os elfos eram escorraçados. Esta foi a última canção antes do silêncio — e o arco foi feito da madeira da árvore sob a qual ela cantou. A madeira ainda ressoa. Quem o tensiona ouve um fragmento da canção.",
+    effect:"Passivo: não precisa de flechas — projéteis de luz são criados ao tensionar (infinitos). Projéteis de luz ignoram cobertura física (passam por paredes finas, sombras, obstáculos). +1 Chance de Crítico. Ativo (2x/combate): A Última Canção — dispara uma nota de luz em linha reta ilimitada que atinge TODOS os alvos no caminho. Cada alvo sofre 2d10+DEX de dano de luz (AGI difícil para metade). Aliados na linha são excluídos automaticamente.",
+    note:"Projéteis infinitos de luz, ignoram cobertura. +1 Crit. 2x: linha ilimitada, todos os alvos, 2d10+DEX." },
+
+  { tier:"lendario", divine:"Aethea", race:"elfo",
+    name:"Cajado das Eras — Memória de Akaen",
+    dmg:"1d12+1d10", req:"INT/SAB", weight:2.5, defenseDegrade:null,
+    slot:["primary"],
+    magicBonus:{ attr:"INT", attrValue:2, attr2:"SAB", attrValue2:1, spellActions:1, slots:3 },
+    story:"O cajado de Akaen — o maior mago-arquiteto da civilização élfica, que desenhou as cidades que os escravizadores apagaram. Ele gravou nele toda a sua memória antes de morrer. O cajado lembra Akaen. Às vezes, Akaen fala através dele.",
+    effect:"Passivo: +2 INT, +1 SAB, +1 Ação de Magia, +3 Slots. Magias de nível 1–3 lançadas com este cajado não consomem Slots (Akaen as conhece de cor). Passivo: o cajado sussurra estratégias — uma vez por turno como Ação Livre, o portador pode perguntar ao cajado sobre uma criatura visível e receber seu HP aproximado, imunidades e ponto fraco (o Mestre responde com precisão). Ativo (1x/combate): Arquitetura Arcana — cria estrutura de força mágica de até 6×6 hex (parede, plataforma, teto) que dura 5 rodadas. Inquebrável por meios físicos.",
+    note:"+2 INT, +1 SAB, +1 Ação Magia, +3 Slots. Nv.1-3 grátis. Sussurro de Akaen: HP/imunidades/fraqueza. 1x: estrutura 6×6 hex." },
+
+  /* ANCESTRAL */
+  { tier:"ancestral", divine:"Aethea", race:"elfo",
+    name:"Espada Longa dos Primeiros Elfos",
+    dmg:"1d12+1d10+1d8", req:"DEX/INT", weight:3, defenseDegrade:0,
+    slot:["primary"],
+    magicBonus:{ attr:"DEX", attrValue:2, attr2:"INT", attrValue2:2, critChance:2, dodge:2 },
+    story:"Não tem nome em nenhuma língua viva. Os elfos que a forjaram usavam um idioma que não existe mais — destruído com eles. A lâmina tem entalhes que nenhum estudioso conseguiu decifrar. Aethea disse uma vez que a espada tem nome próprio. Ela não revelou qual.",
+    effect:"Passivo: +2 DEX, +2 INT, +2 Chance de Crítico, +2 Chance de Esquiva. Ataques com esta espada nunca degradam a Chance de Esquiva do portador (como escudo). Passivo: ao esquivar perfeitamente (rolar 1 no d20), o portador pode realizar 1 ataque gratuito imediato no atacante (a elegância élfica transforma esquiva em contraataque). Ativo (1x/combate): Memória dos Primeiros — a espada libera toda a memória dos elfos que a usaram. Por 3 rodadas, o portador tem +4 Chance de Crítico, +4 Chance de Esquiva, e todos os seus ataques ignoram a metade da Def.Física.",
+    note:"+2 DEX/INT, +2 Crit/Esquiva. Sem degrade. Esquiva perfeita → contraataque. 1x: +4 Crit/Esquiva, ignora metade def por 3 rodadas." },
+
+  { tier:"ancestral", divine:"Aethea", race:"elfo",
+    name:"Arco Estelar de Aethea — Original",
+    dmg:"2d10+1d10+1d8", req:"DEX alto", weight:2, defenseDegrade:null,
+    slot:["primary"],
+    magicBonus:{ attr:"DEX", attrValue:3, critChance:2, dodge:1 },
+    story:"Existe apenas um. O Arco Celeste de Akaen é uma réplica imperfeita deste. Aethea o carregava antes de se tornar deusa — era seu arco de caça quando ainda era mortal. Cada entalhe é uma memória de um animal caçado, uma pessoa amada, um céu visto. Ela o entregou ao último elfo primordial antes de ascender. Ele o enterrou em vez de usá-lo. Foi encontrado vazio.",
+    effect:"Passivo: +3 DEX, +2 Chance de Crítico, +1 Chance de Esquiva. Projéteis infinitos de luz élfica — atravessam cobertura, muros finos e invisibilidade. Passivo: em noite aberta, todos os ataques com este arco têm Acerto Automático (d10 não é necessário — Aethea guia cada flecha). Ativo (1x/sessão): Chuva de Estrelas de Aethea — dispara 12 flechas de luz simultaneamente em alvos à escolha em raio 15 hex. Cada flecha causa 1d12+DEX de dano de luz e ignora toda defesa. O portador escolhe a distribuição.",
+    note:"+3 DEX, +2 Crit, +1 Esquiva. À noite: acerto automático. 1x/sessão: 12 flechas, 1d12+DEX cada, ignora toda defesa." },
+
+  /* ── ARMAS DE 2 MÃOS MÍTICAS ────────────────────────────────── */
+
+  { tier:"raro", name:"Porrete de Crânio de Urso-Coruja",
+    dmg:"1d12+1d8", req:"FOR", weight:9, defenseDegrade:null,
+    slot:["primary"], heavyTwoHanded:true,
+    story:"O Urso-Coruja é uma criatura impossível que não deveria existir biologicamente. Nenhum bestiarista conseguiu explicar por que existe. O crânio, igualmente impossível — parte osso de urso, parte cartilagem de coruja — é mais resistente que aço. Este porrete foi feito por um caçador que simplesmente achou o crânio no meio da floresta. Sem corpo. Sem rastro.",
+    note:"Req: FOR ≥ 1. Acertos causam dano concussivo — alvo testa FOR (normal) ou fica Atordoado por 1 rodada (perde 1 Ação). Passivo: os olhos do crânio ainda veem (magicamente) — o portador tem Percepção automática em raio 5 hex e não pode ser surpreendido enquanto segura o porrete com as duas mãos. Críticos: o alvo fica Derrubado E Atordoado simultaneamente (o impacto é de outra ordem de grandeza)." },
+
+  { tier:"raro", name:"Lança da Sereia — Espinha Dorsal",
+    dmg:"1d10+1d8", req:"DEX/AGI", weight:3, defenseDegrade:null,
+    slot:["primary"],
+    story:"A espinha dorsal de uma Sereia-Guerreira que escolheu se tornar arma em vez de morrer na costa. O processo foi voluntário — as Sereias-Guerreiras não morrem de velhice, elas se transformam. A espinha mantém a flexibilidade do ser vivo e a rigidez do osso simultaneamente.",
+    note:"Alcance 2 hex (a espinha é longa e curva). Passivo: em combate em água ou chuva intensa, todos os ataques com esta lança têm +1 Chance de Acerto e +1d6 de dano extra (a Sereia reconhece o elemento). Ativo (2x/combate): a lança emite um som subsônico — todos os inimigos em raio 4 hex testam SAB (normal) ou ficam Abalados por 2 rodadas (o Canto da Sereia ainda mora na espinha)." },
+
+  { tier:"magico", name:"Cajado da Cauda de Quimera",
+    dmg:"1d12+1d8+1d4", req:"INT/FOR", weight:5, defenseDegrade:null,
+    slot:["primary"],
+    magicBonus:{ attr:"INT", attrValue:1, spellActions:1 },
+    story:"A cauda de uma Quimera é a parte mais esquecida da criatura — todos falam sobre as três cabeças. A cauda, porém, tem um veneno próprio diferente dos três pescoços, e mantém a energia das três naturezas (leão, cabra, serpente) em equilíbrio tenso. Este cajado foi feito por um alquimista que passou cinco anos tentando entender esse equilíbrio. Ele parou de tentar e simplesmente fez o cajado.",
+    note:"+1 INT, +1 Ação de Magia. Passivo: magias de elementos diferentes (fogo, gelo, raio, veneno) lançadas com este cajado têm +1d6 de dano extra (a Quimera é três naturezas — aprecia variedade). Ativo (3x/combate): a cauda ativa uma das três naturezas aleatoriamente — role d6: 1-2 Rugido de Leão (2d6 de dano físico em cone 3 hex), 3-4 Cuspe da Cabra (alvo recebe −2 DEX por 2 rodadas), 5-6 Veneno da Serpente (1d8/rodada por 3 rodadas, SAB difícil)." },
+
+  { tier:"lendario", name:"Mandíbula do Leviatã — Machado Duplo",
+    dmg:"1d12+1d10+1d8", req:"FOR alto", weight:11, defenseDegrade:null,
+    slot:["primary"], heavyTwoHanded:true,
+    story:"Dois dentes da mandíbula superior de um Leviatã adulto, montados em paralelo num cabo de osso de baleia. O Leviatã não foi morto — perdeu esses dentes numa batalha contra outro Leviatã, e eles afundaram. Foram encontrados no fundo do mar por mergulhadores que não conseguem explicar como chegaram tão fundo e voltaram.",
+    note:"Req. FOR alto (≥3). Ataques com este machado causam impacto de pressão — como uma mandíbula fechando. Cada acerto aplica 1 carga de Pressão do Leviatã. Com 3 cargas: o alvo sofre 2d10 de dano instantâneo que ignora toda defesa (a pressão acumulada colapsa). Passivo: o portador não afoga e pode respirar normalmente sob água (os dentes trazem o oceano consigo). Ativo (1x/combate): o machado emite onda de pressão em raio 4 hex — todos os alvos sofrem 1d12 de dano e testam FOR (difícil) ou são empurrados 3 hex para longe (o oceano expulsa)." },
+
+  { tier:"unico", name:"Grande Machado de Crânio de Dragão Branco",
+    dmg:"2d10+1d10+1d8", req:"FOR alto", weight:14, defenseDegrade:null,
+    slot:["primary"], heavyTwoHanded:true,
+    story:"O crânio completo de um Dragão Branco adulto montado num cabo de vértebra do mesmo dragão. O artesão que o fez era um anão que passou vinte anos caçando apenas este dragão específico, que havia destruído seu clã. Quando finalmente o matou, não sabia mais o que fazer. Fez isso. Há marcas no crânio de onde o anão bateu repetidas vezes mesmo depois de morto.",
+    note:"Req. FOR alto (≥3). Ataques emitem gelo: +1d8 de dano de gelo extra. Cada acerto aplica 1 carga de Gelo Dragônico. Com 3 cargas: o alvo é Congelado por 2 rodadas (Imóvel, +50% dano físico). Passivo: imune ao frio e a ataques de gelo enquanto empunhado. Passivo: o crânio ainda ruge silenciosamente — intimidação automática em Dif.1 e 2 sem teste (eles simplesmente recuam). Ativo (1x/combate): Sopro de Crânio — o crânio emite Sopro de Gelo do Dragão em cone 8 hex, 3d10 de gelo que ignora Def.Física. Alvos que falhem em AGI (difícil) ficam Congelados." }];
 
 const WEAPONS_MAGIC = [
   /* --- COMUNS --- */
@@ -2266,7 +2678,24 @@ const SHIELDS = [
     slot: ["shield"],
     effect: "Passivo: imune a dano de fogo (qualquer fonte). Ao receber dano de fogo (que seria ignorado): o escudo absorve e carrega a energia — próxima defesa libera essa energia no atacante (1d8 de fogo, automático). Ao usar Escudo Bash (perícia): o bash causa +1d6 de fogo extra e tem chance de Queimar o alvo (1d4/rodada, 2 rodadas).",
     note: "Imune a fogo. Absorve fogo → libera no próximo Bash. Bash: +1d6 fogo e Queimando.",
-    story: "Feito do couro do ventre de um dragão vermelho morto na Batalha Colossal. O dragão não queria morrer mas o guerreiro não tinha escolha. O escudo guarda algo do arrependimento de ambos." }];
+    story: "Feito do couro do ventre de um dragão vermelho morto na Batalha Colossal. O dragão não queria morrer mas o guerreiro não tinha escolha. O escudo guarda algo do arrependimento de ambos." },
+
+  /* ── ESCUDOS MÍTICOS ─────────────────────────────────────────── */
+
+  { tier:"lendario", name:"Escudo de Tartaruga-Colosso",
+    physDefense:0, weight:8, penalty:"Nenhuma",
+    story:"O casco de uma Tartaruga-Colosso adulta — criatura do tamanho de uma ilha que vive por milênios. Este fragmento de casco foi cedido pela própria criatura quando ela morreu de velhice natural. Quem o carrega sente uma calma inexplicável.",
+    note:"Passivo: o portador regenera 1 HP por rodada passivamente (a vitalidade da Tartaruga-Colosso ainda mora no casco). Passivo: condições de Derrubado e Empurrado são imunes — o casco da Colosso não cede. Ativo (1x/combate): retrai completamente sob o casco por 1 turno — imune a todo dano neste turno, mas não pode agir. Ao sair da retração: todos os aliados em raio 3 hex curam 1d8+FOR HP (a Colosso protege o bando)." },
+
+  { tier:"lendario", name:"Asa de Dragão Petrificado — Escudo",
+    physDefense:0, weight:5, penalty:"Nenhuma",
+    story:"Uma asa de Dragão que foi petrificada por um Basilisco antes de ser cortada — petrificada no meio do voo, capturada em pleno movimento. O artesão que a transformou em escudo disse que não teve escolha; a asa parecia querer isso.",
+    note:"Passivo: 25% de chance (d10 ≤ 2 ou 3) de que qualquer magia que atinja o portador seja Refletida de volta ao conjurador com 50% do dano (a pedra desvia energia). Físico: imune. Ativo (1x/combate): a asa se abre — o portador pode voar por 2 rodadas (Movimento +4 hex, pode passar por obstáculos físicos abaixo de 3 metros de altura). Ao pousar após o voo: pode realizar 1 ataque com +2d6 de dano (o impacto da descida)." },
+
+  { tier:"unico", name:"Concha da Sereia Ancestral",
+    physDefense:0, weight:1, penalty:"Nenhuma",
+    story:"Não é propriamente um escudo — é uma concha de um ser que existiu antes das Sereias como existem hoje. Antes das canções, antes dos naufrágilados, antes do oceano ser chamado de oceano. A concha ecoa com algo que não é som. Quem a segura ouve o oceano mesmo no deserto.",
+    note:"Passivo: defesas com esta concha emitem uma nota de som subsônico — o atacante que errar deve testar SAB (normal) ou fica Abalado por 1 rodada (o som desoriente). Passivo: o portador nunca precisa respirar sob água e tem Percepção automática em ambientes aquáticos. Ativo (2x/combate): O Eco — emite o som original da Sereia Ancestral em raio 6 hex; todos os inimigos testam SAB (difícil) ou ficam Confusos por 1 rodada (atacam aliado mais próximo). Aliados na área curam 1d6 HP." }];
 
 const ARMORS = [
   /* --- COMUNS --- */
@@ -2550,7 +2979,129 @@ const ARMORS = [
     req:"FOR",
     magicBonus:{ attr:"FOR", attrValue:2 },
     story:"Passada de Warchief a Warchief por gerações do Grande Clã. Nenhum ferreiro sabe mais como foi criada. Os espíritos dos Warchiefs anteriores vivem no metal — e eles têm opiniões.",
-    note:"+2 FOR enquanto equipada. −1 Movimento. Passivo: aliados em raio 3 hex ganham +1d4 em todos os testes de resistência (a presença do Warchief fortalece o clã). Ativo (1x/combate): os espíritos dos Warchiefs anteriores concedent proteção divina — o portador recebe Def.Física adicional igual ao FOR por 2 rodadas." }];
+    note:"+2 FOR enquanto equipada. −1 Movimento. Passivo: aliados em raio 3 hex ganham +1d4 em todos os testes de resistência (a presença do Warchief fortalece o clã). Ativo (1x/combate): os espíritos dos Warchiefs anteriores concedent proteção divina — o portador recebe Def.Física adicional igual ao FOR por 2 rodadas." },
+
+  /* ── ARMADURAS SERPENTARIANAS ────────────────────────────────── */
+
+  /* COMUNS */
+  { tier:"comum", name:"Vestes de Iniciado Serpentariano",
+    physDefense:1, magDefense:2, weight:2, movePenalty:0,
+    req:"—",
+    note:"Vestes de seda sagrada de Serpentara bordadas com padrões de escama. Baixa proteção física mas surpreendente resistência mágica para uma veste comum. Iniciados as recebem ao entrar no templo e as costuram eles mesmos." },
+
+  { tier:"comum", name:"Couro de Cobra-das-Ruínas",
+    physDefense:3, magDefense:1, weight:4, movePenalty:0,
+    req:"—",
+    note:"Couro de Serpente Constritora das Ruínas curtido com técnicas serpentarianas ancestrais. Silencioso ao movimento — sem penalidade em Furtividade. Resistente à umidade e venenos externos (o portador tem vantagem em testes de resistência a veneno ambiental)." },
+
+  { tier:"comum", name:"Escamas de Patrulheiro",
+    physDefense:4, magDefense:2, weight:6, movePenalty:0,
+    req:"FOR/DEX",
+    note:"Armadura de escamas serpentarianas costuradas em sobreposição — cada escama colocada manualmente pelo patrulheiro que a usa. Silenciosa, flexível e resistente. Padrão da infantaria leve de Serpentara." },
+
+  /* RARAS */
+  { tier:"raro", name:"Armadura do Guardião da Escama",
+    physDefense:6, magDefense:5, weight:8, movePenalty:0,
+    req:"FOR/DEX",
+    story:"Armadura exclusiva dos Guardiões da Escama — a elite de combate de Serpentara que protege os santuários internos. Cada set demora seis meses para ser feito: as escamas são colhidas em vida das cobras sagradas, que as oferecem voluntariamente.",
+    note:"Imune a veneno enquanto equipada (as escamas têm imunidade natural). Passivo: ataques melee que acertarem o portador têm 20% de chance (d10 ≤ 2) de ricochetearem nas escamas — o atacante sofre 1d4 de dano cortante. Em combate adjacente a aliado serpentariano: +1 Def.Física adicional (formação de escudo de escamas)." },
+
+  { tier:"raro", name:"Vestes do Sacerdote Maior de Jurgmund",
+    physDefense:3, magDefense:8, weight:3, movePenalty:0,
+    req:"SAB/INT",
+    story:"Tecidas com fios de seda de Cobra-Rainha e tingidas com o sangue purificado dos três rituais anuais de Jurgmund. O padrão de escamas desloca a luz levemente — em ambientes escuros, o portador parece levemente irreal.",
+    note:"Magias de veneno lançadas pelo portador têm +1d6 de dano extra. Passivo: uma vez por turno, ao ser acertado por magia, pode fazer SAB (normal) para absorver parte da energia — reduz o dano em −SAB (mínimo 0). Ativo (2x/combate): Escudo de Fé Serpentariana — por 2 rodadas, toda magia que causar menos de 8 de dano após def. mágica é anulada." },
+
+  { tier:"raro", name:"Couraça do Cavaleiro Serpentariano",
+    physDefense:8, magDefense:4, weight:11, movePenalty:0,
+    req:"FOR",
+    story:"Usada pelos cavaleiros montados de Serpentara — elite que combate sobre cobras-montaria gigantes. A couraça é feita de escamas de Cobra-Rainha adulta temperadas em fogo sagrado de Jurgmund. Perfeita em aparência; assustadora em combate.",
+    note:"Em crítico recebido: 30% de chance (d10 ≤ 3) de que as escamas desviem o golpe, convertendo o crítico em dano normal. Passivo: cobra-montaria ou aliado cobra em raio 3 hex ganha +1d4 em todos os ataques (o cavaleiro inspira as bestas de Jurgmund)." },
+
+  /* MÁGICAS */
+  { tier:"magico", name:"Armadura Sagrada do Sumo Sacerdote",
+    physDefense:7, magDefense:12, weight:7, movePenalty:0,
+    req:"SAB",
+    magicBonus:{ attr:"SAB", attrValue:2 },
+    story:"Existe apenas uma dúzia delas no mundo — uma para cada templo de Jurgmund reconhecido. Quando o Sumo Sacerdote morre, a armadura é dissolvida em ritual e reforjada para o sucessor. Não pode ser roubada sem consequências divinas.",
+    note:"+2 SAB enquanto equipada. Imune a veneno e a maldições de origem serpentariana. Passivo: magias de cura lançadas pelo portador curam +SAB de HP adicional. Ativo (1x/combate): Graça de Jurgmund — emite aura em raio 4 hex por 3 rodadas. Aliados na aura: +1d6 em todos os testes. Inimigos: −1d4 em todos os testes e testam SAB (difícil) ou ficam Aterrorizados por 1 rodada." },
+
+  { tier:"magico", name:"Escamas da Serpente Imortal",
+    physDefense:10, magDefense:10, weight:9, movePenalty:0,
+    req:"FOR/SAB",
+    magicBonus:{ attr:"FOR", attrValue:1, attr2:"SAB", attrValue2:1 },
+    story:"Fragmentos da pele da Serpente Imortal de Jurgmund — coletados durante os intervalos de muda, que ocorrem uma vez a cada cem anos. Tecidos em armadura por um ferreiro-oráculo em transe de sete dias. A armadura muda levemente de cor conforme a luz.",
+    note:"+1 FOR, +1 SAB enquanto equipada. Imune a veneno e à condição Envenenado. Passivo: regenera 2 HP por rodada passivamente (a imortalidade da Serpente ressoa no portador). Ao atingir 0 HP pela primeira vez no combate: a armadura pulsa com energia divina — o portador sobrevive com 10 HP e fica imune a dano por 1 turno (a Serpente Imortal nega a morte uma vez). Funciona 1x por descanso longo." },
+
+  /* ── ARMADURAS ÉLFICAS ───────────────────────────────────────── */
+
+  /* LENDÁRIO */
+  { tier:"lendario", divine:"Aethea", race:"elfo",
+    name:"Vestes da Maga Primordial",
+    physDefense:4, magDefense:14, weight:1.5, movePenalty:0,
+    req:"INT/SAB",
+    magicBonus:{ attr:"INT", attrValue:2, attr2:"SAB", attrValue2:1, slots:2, spellActions:1 },
+    story:"Vestes de uma das sete Magas Primordiais — as elfas que sustentaram o céu durante a Grande Tempestade antes de qualquer deus intervir. Elas nunca receberam nomes nas histórias humanas. As vestes lembram o nome da delas.",
+    note:"+2 INT, +1 SAB, +2 Slots, +1 Ação de Magia. Magias defensivas (proteção, cura, barreira) lançadas pelo portador custam −1 Slot (mínimo 1). Passivo: qualquer magia de área que atingir o portador sofre −INT de dano (o campo mágico antigo nas vestes dissipa energia). Ativo (1x/combate): As Sete Magas — o portador canaliza o espírito das sete e lança automaticamente Barreira Rúnica + Véu de Ilusão sem custo de Slot ou Ação Magia (os dois juntos, simultaneamente)." },
+
+  { tier:"lendario", divine:"Aethea", race:"elfo",
+    name:"Armadura do Cavaleiro Estelar",
+    physDefense:9, magDefense:9, weight:5, movePenalty:0,
+    req:"DEX/INT",
+    magicBonus:{ attr:"DEX", attrValue:2, critChance:1, dodge:1 },
+    story:"Os Cavaleiros Estelares eram os guerreiros-magos da corte de Akaen — os únicos que podiam lutar enquanto lançavam magias de nível 4 sem interrupção. Havia dezessete deles. Esta armadura pertenceu ao décimo quarto. Os outros dezesseis estão em tumbas que ninguém encontrou.",
+    note:"+2 DEX, +1 Crit, +1 Esquiva. A armadura é tão fina que parece tecido — mas tem a resistência de aço encantado. Passivo: o portador pode lançar magias enquanto ataca fisicamente no mesmo turno sem penalidade (normalmente exigiria habilidade especial). Passivo: ricochete estelar — 15% de chance (d10 ≤ 1 ou 2 dependendo da sorte) de que dano mágico recebido seja parcialmente desviado, reduzindo em −DEX. Ativo (1x/combate): Bênção Estelar — todos os aliados em raio 4 hex ganham +1d6 em todos os ataques e esquivas por 2 rodadas." },
+
+  /* ANCESTRAL */
+  { tier:"ancestral", divine:"Aethea", race:"elfo",
+    name:"Éter-Armadura dos Elfos Primordiais",
+    physDefense:8, magDefense:16, weight:2, movePenalty:0,
+    req:"INT/SAB",
+    magicBonus:{ attr:"INT", attrValue:3, attr2:"SAB", attrValue2:2, slots:4, spellActions:2, dodge:2 },
+    story:"Não é metal. Não é tecido. É éter solidificado — a substância do plano entre planos que os elfos primordiais aprenderam a tecer antes de descobrir o fogo. A armadura pré-existe ao mundo. Ela estava aqui antes dos elfos a encontrarem, e estará aqui quando todos partirem.",
+    note:"+3 INT, +2 SAB, +4 Slots, +2 Ações de Magia, +2 Esquiva. Passivo: qualquer magia que atinja o portador tem 50% de ser absorvida pela éter-armadura (converte o dano em MP regenerado no próximo turno do portador — 1 MP para cada 5 de dano absorvido). Passivo: o portador não precisa dormir — a éter-armadura filtra as toxinas do cansaço. Ativo (1x/sessão): Forma Etérea — por 3 rodadas, o portador torna-se parcialmente imaterial: imune a dano físico, pode atravessar paredes, mas não pode atacar fisicamente (apenas magias). Aliados que tocarem o portador durante a Forma Etérea curam 2d6 HP." },
+
+  { tier:"ancestral", divine:"Aethea", race:"elfo",
+    name:"Couraça do Último Rei de Akaen",
+    physDefense:12, magDefense:10, weight:6, movePenalty:0,
+    req:"FOR/DEX/INT",
+    magicBonus:{ attr:"FOR", attrValue:1, attr2:"DEX", attrValue2:2, attr3:"INT", attrValue3:2, critChance:2, dodge:2 },
+    story:"Akaen era rei, mago e guerreiro — três funções que nenhum elfo ousaria combinar, e que ele carregou com graça insolente. Esta couraça foi forjada para ele no dia de sua coroação por ferreiros que morreram na mesma semana, o processo os esgotou. Ela lembra cada batalha que Akaen travou.",
+    note:"+1 FOR, +2 DEX, +2 INT, +2 Crit, +2 Esquiva. Req: FOR ≥ 1, DEX ≥ 1, INT ≥ 1. Passivo: o portador ganha 1 Ação de Combate adicional no primeiro turno de cada combate (Akaen sempre atacou primeiro). Passivo: ao atingir HP ≤ 30%, a couraça emite pulso de energia élfica — todos os inimigos em raio 4 hex sofrem 2d8 de dano de luz e testam SAB (difícil) ou ficam Abalados por 2 rodadas (a dor de Akaen reage). Ativo (1x/combate): Memória de Rei — por 2 rodadas, o portador age duas vezes por turno (turno dobrado completo, não apenas ações extras)." },
+
+  /* ── ARMADURAS MÍTICAS ───────────────────────────────────────── */
+
+  { tier:"raro", name:"Couro de Basilisco Cego",
+    physDefense:6, magDefense:3, weight:7, movePenalty:0,
+    req:"FOR/DEX",
+    story:"Um Basilisco cego — seja de nascença ou por intervenção — não tem o poder de petrificação no olhar. Mas a pele mantém parte da qualidade petrificante. Este couro foi curtido por um artesão que usou ácido de salamandra para neutralizar 90% do efeito. Os outros 10% ficaram propositalmente.",
+    note:"Passivo: ataques melee que acertarem o portador têm 15% de chance (d10 ≤ 1) de que o atacante sinta rigidez momentânea — perde 1 Ação no turno seguinte (a pele ainda petrifica um pouco). Passivo: o portador é imune à habilidade Olhar Petrificante de qualquer criatura (a imunidade do couro se transfere). Resistente a veneno: venenos causam −2 de dano por dado enquanto esta armadura está equipada." },
+
+  { tier:"raro", name:"Escamas de Leviatã — Armadura Parcial",
+    physDefense:7, magDefense:4, weight:12, movePenalty:0,
+    req:"FOR",
+    story:"Escamas de Leviatã jovem coletadas por mergulhadores do fundo do oceano. Cada escama tem o tamanho de um prato. O processo de preparo envolve semanas de imersão em água salgada com ervas específicas para evitar que as escamas continuem crescendo (elas crescem durante 3 dias após a separação do corpo).",
+    note:"Passivo: imune a dano de água e pressão. Passivo: ataques físicos que causariam Sangramento no portador têm 40% de chance de não aplicá-lo (as escamas bloqueiam os cortes superficiais). Em combate subaquático ou sob chuva intensa: +1 Def.Física adicional (as escamas se fecham mais hermeticamente em contato com água). O portador não afoga." },
+
+  { tier:"magico", name:"Penas da Fênix — Vestes",
+    physDefense:3, magDefense:8, weight:2, movePenalty:0,
+    req:"—",
+    magicBonus:{ attr:"SAB", attrValue:1 },
+    story:"Penas de Fênix coletadas de um ninho abandonado. A Fênix não as perdeu por morte — ela simplesmente deixou o ninho e as penas ficaram. Quem trabalhou com elas afirma que as penas se recusaram a ser transformadas em qualquer coisa que não fosse para proteção.",
+    note:"+1 SAB. Passivo: ao ser reduzido a 0 HP, as vestes explodem em chamas protetoras — o portador sobrevive com 1 HP e todos os inimigos adjacentes sofrem 1d8 de dano de fogo (a Fênix nega a morte uma vez por combate). Passivo: imune a fogo e dano de calor. Ativo (1x/combate): as penas flamejam — o portador emite luz em raio 4 hex por 2 rodadas; criaturas que dependem de escuridão (mortos-vivos, demônios, criaturas das sombras) sofrem −1d6 em todos os ataques enquanto na luz." },
+
+  { tier:"lendario", name:"Couraça de Grifo Adulto",
+    physDefense:10, magDefense:6, weight:9, movePenalty:0,
+    req:"FOR/DEX",
+    magicBonus:{ attr:"DEX", attrValue:1, dodge:1 },
+    story:"O peito de um Grifo adulto — a parte mais dura do corpo da criatura, forjada por décadas de voo em velocidade extrema. Nenhum ferreiro sabe bem como fazer essa armadura funcionar sem que o peso a torne impraticável; quem a usa descobre que ela parece mais leve do que deveria. O Grifo ainda tem opiniões sobre isso.",
+    note:"+1 DEX, +1 Chance de Esquiva. Passivo: o portador pode saltar até 4 hex verticalmente ou horizontalmente sem custo de Movimento adicional (os músculos do Grifo infundem). Em altura ou superfícies elevadas: +1d6 em todos os ataques físicos (o instinto de caça aéreo do Grifo). Ativo (1x/combate): Mergulho de Grifo — o portador corre e salta sobre um alvo até 6 hex de distância, causando 2d10+DEX de dano. O alvo testa AGI (difícil) ou fica Derrubado." },
+
+  { tier:"lendario", name:"Armadura de Quimera — Três Naturezas",
+    physDefense:9, magDefense:9, weight:11, movePenalty:0,
+    req:"FOR/INT",
+    story:"Três partes de três Quimeras diferentes: o peitoral de leão, os espaldares de cabra-montês, e a calda-proteção de serpente. Cada parte foi adquirida separadamente por um colecionador que morreu antes de ver a armadura completa. Seu herdeiro a completou. A armadura não combinou perfeitamente — as três naturezas ainda brigam entre si. O portador sente isso.",
+    note:"Passivo: resistência a três tipos de dano simultaneamente — fogo (−2/dado), veneno (−2/dado), físico contundente (−2/dado). Passivo: ao início de cada turno, uma das três naturezas assume controle aleatoriamente (d6: 1-2 Leão=+1d6 ataque físico; 3-4 Cabra=+1 Esquiva; 5-6 Serpente=acertos aplicam Veneno leve 1d4/rodada por 2 rodadas). O portador não controla qual natureza — a armadura decide. Ativo (1x/combate): as três naturezas alinham-se por 2 rodadas — todos os três bônus ativos simultaneamente." }];
 
 const ACCESSORIES = [
   /* --- COMUNS --- */
@@ -3160,7 +3711,125 @@ const ACCESSORIES = [
     slot:["accessory"], weight:0.1,
     effect:"Quest Item: revela o nome e a ordem do Cavaleiro Sem Cabeça ao ser segurado por 1 minuto. Pode ser entregue a um historiador, família nobre ou templo em troca de recompensa (50+ ouro). Magicamente inquebrável.",
     note:"Quest item. Revela identidade do Cavaleiro. Loot: Cavaleiro Sem Cabeça.",
-    story:"Gravado com um nome que ainda não está pronto para ser revelado." }];
+    story:"Gravado com um nome que ainda não está pronto para ser revelado." },
+
+  /* ── ACESSÓRIOS SERPENTARIANOS ───────────────────────────────── */
+
+  { tier:"comum", name:"Amuleto da Escama de Jurgmund",
+    slot:["accessory"], weight:0.1,
+    effect:"Amuleto de escama de cobra-rainha benzido em templo de Jurgmund. Confere +1d4 em testes de resistência a veneno. Orcs, humanos e outros não-serpentarianos podem usá-lo sem efeitos colaterais, mas sacerdotes de Jurgmund reconhecem imediatamente quem o carrega.",
+    story:"Vendido nos templos por 5 prata. Comum, mas genuinamente abençoado." },
+
+  { tier:"raro", name:"Anel do Olho da Serpente",
+    slot:["accessory"], weight:0.1,
+    magicBonus:{ critChance:1 },
+    effect:"+1 Chance de Crítico. O olho vertical da serpente gravado no anel parece mover-se quando observado de perto. Portadores relatam ver padrões de movimentos antes que aconteçam — especialmente em combate próximo.",
+    story:"Forjado pelos ourives-sacerdotes com ouro do rio sagrado de Serpentara." },
+
+  { tier:"raro", name:"Tornozeleira da Cobra Silenciosa",
+    slot:["accessory"], weight:0.1,
+    effect:"Furtividade automática ao mover-se em ambientes naturais (floresta, caverna, ruínas com vegetação). Em ambientes artificiais: +1d6 em testes de Furtividade. Passivo: imune à habilidade 'Sentido de Vibração' de monstros que detectam por vibração no solo — a tornozeleira neutraliza a presença do portador.",
+    story:"Os caçadores serpentarianos a usam desde antes da fundação de Serpentara." },
+
+  { tier:"raro", name:"Colar do Sacerdote Juiz",
+    slot:["accessory"], weight:0.2,
+    magicBonus:{ attr:"SAB", attrValue:1 },
+    effect:"+1 SAB. Usado pelos sacerdotes que presidem os rituais de Julgamento de Jurgmund. Passivo: o portador detecta automaticamente mentiras flagrantes (não sutilezas — apenas afirmações diretamente falsas) em SAB (normal). Ativo (1x/dia): Palavras do Juiz — uma pergunta feita ao colar é respondida com Verdadeiro/Falso pelo espírito da serpente que habita o metal.",
+    story:"Cada sacerdote-juiz tem o seu. Quando morre, o colar é enterrado com ele — exceto quando não é." },
+
+  { tier:"magico", name:"Diadema do Oráculo Serpentariano",
+    slot:["accessory"], weight:0.15,
+    magicBonus:{ attr:"SAB", attrValue:2, attr2:"INT", attrValue2:1 },
+    effect:"+2 SAB, +1 INT. Usado pelos Oráculos que interpretam os padrões das serpentes. Passivo: magias de adivinhação e visão lançadas pelo portador custam −1 Slot (mínimo 1). Ativo (1x/combate): Visão Oracular — antes de um ataque inimigo declarado, pode ver o resultado antes de acontecer e decidir se esquiva ou absorve o golpe conscientemente (pode trocar Esquiva por Def.Física e vice-versa).",
+    story:"Os Oráculos nunca falam do que veem. Apenas de como deve ser evitado." },
+
+  { tier:"magico", name:"Marcas Rituais Serpentarianas",
+    slot:["accessory"], weight:0,
+    magicBonus:{ attr:"DEX", attrValue:1 },
+    effect:"Tatoo ritual inscrita em cerimônia de três dias pelos sacerdotes de Jurgmund. Não pode ser removida por meios físicos — faz parte da pele. +1 DEX permanente. Os padrões de escama nas marcas se movem levemente quando o portador está em perigo. Passivo: em combate, o portador recebe +1 em Chance de Esquiva (os padrões guiam o corpo instintivamente). Restrição: só pode ser feita por sacerdote de Jurgmund genuíno.",
+    story:"Uma honra concedida. Jamais vendida." },
+
+  /* ── ACESSÓRIOS ÉLFICOS ──────────────────────────────────────── */
+
+  /* LENDÁRIO */
+  { tier:"lendario", divine:"Aethea", race:"elfo",
+    name:"Circlet dos Videntes de Akaen",
+    slot:["accessory"], weight:0.1,
+    magicBonus:{ attr:"INT", attrValue:2, attr2:"SAB", attrValue2:2, spellActions:1 },
+    effect:"+2 INT, +2 SAB, +1 Ação de Magia. Os Videntes eram os profetas da corte de Akaen — elfos que liam o futuro nas estrelas e no movimento dos ventos. Passivo: magias de ilusão, visão e adivinhação têm alcance dobrado e duram o dobro do normal. Passivo: o portador nunca pode ser surpreendido e tem Percepção automática em raio 10 hex. Ativo (1x/combate): Visão dos Videntes — o portador vê os próximos 2 turnos do combate antes de acontecerem (o Mestre descreve o que os inimigos farão); o portador age com conhecimento perfeito, podendo agir antes ou preparar reação.",
+    story:"O último Vidente usou o Circlet para prever a própria morte. Mesmo assim não fugiu — disse que a morte dele era necessária. O Circlet foi encontrado no chão ao lado do corpo, impecavelmente limpo." },
+
+  { tier:"lendario", divine:"Aethea", race:"elfo",
+    name:"Luvas da Arqueira Primordial",
+    slot:["accessory"], weight:0.2,
+    magicBonus:{ attr:"DEX", attrValue:2, critChance:2 },
+    effect:"+2 DEX, +2 Chance de Crítico. Luvas de couro élfico primordial que nunca desgastam. As arqueiras que as usavam podiam disparar 12 flechas antes que a primeira tocasse o chão. Passivo: ataques à distância com o portador nunca sofrem penalidade por cobertura, vento, distância ou visibilidade reduzida. Passivo: ataques à distância do portador que acertam em crítico não gastam a flecha/projétil usados — eles retornam magicamente. Ativo (1x/combate): Flurry Élfico — realiza 4 ataques à distância imediatos como 1 Ação única, cada um com rolagem separada.",
+    story:"Foram encontradas num quiver enterrado que tinha duzentas flechas que ainda funcionavam. As flechas se desmancharam ao contato com o ar moderno. As luvas não." },
+
+  { tier:"lendario", divine:"Aethea", race:"elfo",
+    name:"Capa do Exilado de Akaen",
+    slot:["accessory"], weight:0.5,
+    magicBonus:{ attr:"DEX", attrValue:1, attr2:"INT", attrValue2:1, dodge:2 },
+    effect:"+1 DEX, +1 INT, +2 Chance de Esquiva. Usada pelos elfos exilados — os que saíram voluntariamente antes da escravidão, escolhendo o isolamento à capitulação. Passivo: o portador é impossível de rastrear por meios não-mágicos (sem pegadas, sem cheiro, sem rastro). Passivo: uma vez por turno, ao esquivar perfeitamente, pode mover-se até 3 hex adicionais sem custo de Ação (o exilado nunca para de se mover). Ativo (1x/combate): Passo do Exilado — desaparece completamente da percepção de todos os inimigos por 2 rodadas (não é invisibilidade — é ausência total de presença; Percepção mágica falha também).",
+    story:"Os exilados nunca voltaram. Mas às vezes encontram-se capas assim em lugares que não fazem sentido." },
+
+  /* ANCESTRAL */
+  { tier:"ancestral", divine:"Aethea", race:"elfo",
+    name:"Anel de Aethea — Fragmento da Deusa",
+    slot:["accessory"], weight:0,
+    magicBonus:{ attr:"DEX", attrValue:2, attr2:"INT", attrValue2:2, attr3:"SAB", attrValue3:2, critChance:2, dodge:2, spellActions:1, slots:2 },
+    effect:"+2 DEX, +2 INT, +2 SAB, +2 Crit, +2 Esquiva, +1 Ação de Magia, +2 Slots. Este anel é um fragmento do próprio poder de Aethea, cristalizado quando ela ascendeu à divindade. Existem três — este é um deles. Passivo: o portador não pode ser morto enquanto abaixo de 10 HP — qualquer golpe que derrubaria o portador a 0 ou abaixo falha automaticamente (uma vez por combate). Passivo: magias do portador têm +INT de dano extra por dado (cada dado causa mais). Ativo (1x/sessão): Toque de Aethea — toca um aliado morto há menos de 1 hora. O aliado retorna com 50% HP e todos os seus recursos restaurados. Aethea sofre — usar este poder com frequência tem consequências narrativas.",
+    story:"Aethea não sabe onde os três estão. Ela os escondeu de si mesma para não ser tentada a usá-los — um deus que usa seu próprio poder para ressuscitar mortais eventualmente esgota sua divindade." },
+
+  { tier:"ancestral", divine:"Aethea", race:"elfo",
+    name:"Elmo das Estrelas de Akaen",
+    slot:["accessory"], weight:0.5,
+    magicBonus:{ attr:"INT", attrValue:3, attr2:"SAB", attrValue2:2, spellActions:2, slots:3, critChance:1 },
+    effect:"+3 INT, +2 SAB, +2 Ações de Magia, +3 Slots, +1 Crit. O elmo de Akaen — que ele usava em batalha mesmo quando os outros magos não usavam elmo algum. Os entalhes nas laterais são equações arcanas que nenhum matemático moderno resolveu completamente. Passivo: o portador pode lançar magias de qualquer nível sem gastar Slot (apenas uma vez por magia por combate — cada magia pode ser lançada gratuitamente 1x). Passivo: magias de controle (Aprisionamento, Distorção Temporal, Âncora do Plano, etc.) têm duração dobrada quando lançadas pelo portador. Ativo (1x/sessão): Mente de Akaen — por 5 rodadas, o portador pode lançar qualquer magia do compêndio que nunca aprendeu, uma vez cada, sem custo de Slot (Akaen conhecia todas).",
+    story:"Akaen disse que usava o elmo não por proteção — mas para não ficar distraído pelos pensamentos dos outros enquanto calculava. O elmo, de alguma forma, ainda isola." },
+
+  { tier:"ancestral", divine:"Aethea", race:"elfo",
+    name:"Véu da Memória de Akaen — Completo",
+    slot:["accessory"], weight:0.1,
+    magicBonus:{ attr:"SAB", attrValue:3, attr2:"INT", attrValue2:2, dodge:3 },
+    effect:"+3 SAB, +2 INT, +3 Chance de Esquiva. O Véu completo — não o fragmento. Os fragmentos do Véu existem espalhados pelo mundo; este é a peça original intacta, que Aethea teceu com a memória coletiva de todos os elfos que morreram na Era da Escravidão. Passivo: o portador acessa memórias élficas antigas — pode fazer perguntas ao Mestre sobre história, lore e segredos do mundo (até 3 perguntas por sessão; o Mestre responde com o que os elfos antigos sabiam). Passivo: +3 Esquiva nunca reduz por usos múltiplos — o portador esquiva infinitas vezes sem penalidade acumulada. Ativo (1x/semana): Todas as Memórias — o portador revive brevemente como o elfo cuja memória é mais relevante para o momento. Por 1 hora, tem as habilidades, conhecimentos e fluência daquele elfo (o Mestre interpreta quem ele foi). O portador não se lembra do que fez durante a hora ao voltar.",
+    story:"Aethea o teceu durante a escravidão, enquanto seus filhos morriam um a um. Cada fio é uma vida. O véu tem mais fios do que qualquer contador poderia contar." },
+
+  /* ── ACESSÓRIOS MÍTICOS ──────────────────────────────────────── */
+
+  { tier:"raro", name:"Lágrima Cristalizada de Sereia",
+    slot:["accessory"], weight:0,
+    effect:"Uma lágrima de Sereia que cristalizou ao contato com o ar — as Sereias raramente choram fora da água, e quando choram no ar, as lágrimas congelam antes de cair. Esta foi encontrada flutuando. Passivo: o portador entende e fala o idioma aquático instintivamente. Passivo: em combate aquático, +1d4 em todos os testes e esquivas. Ativo (1x/combate): ao ser acertado por um golpe, pode desviar parte do dano — reduz o dano recebido em 1d8 (a lágrima absorve o impacto e racha levemente, se regenerando no próximo turno).",
+    story:"Sereias não choram por tristeza. Choram por beleza. O que essa Sereia viu para chorar fora d'água, ninguém sabe." },
+
+  { tier:"raro", name:"Pena da Harpia — Broche",
+    slot:["accessory"], weight:0.1,
+    magicBonus:{ attr:"AGI", attrValue:1 },
+    effect:"+1 AGI. Pena de uma Harpia-Guerreira adulta — criaturas que voam em velocidade impossível para seu tamanho. A pena, mesmo estática, parece prestes a ser levada pelo vento. Passivo: o portador nunca fica Derrubado por ataques físicos leves (dano < 8). Passivo: ao usar toda a Ação de Movimento em linha reta, o próximo ataque tem +1d6 de dano extra (o momento cinético da Harpia). Ativo (1x/combate): Grito de Harpia — emite o grito em raio 4 hex; todos os inimigos testam SAB (normal) ou ficam Atordoados por 1 rodada.",
+    story:"Harpias perdem penas durante os gritos de guerra. Esta foi encontrada cravada em um tronco de árvore — a pressão do grito a havia enterrado dois centímetros na madeira." },
+
+  { tier:"magico", name:"Corno de Unicórnio — Pó",
+    slot:["accessory"], weight:0.05,
+    effect:"3 doses de pó de corno de unicórnio puro. Cada dose pode ser: (1) soprada sobre um aliado — remove instantaneamente qualquer veneno, maldição ou condição negativa; (2) misturada a água — cria Poção de Cura Potente (cura 3d6+SAB HP); (3) lançada em um inimigo corrompido ou morto-vivo (alcance 3 hex) — causa 2d8 de dano sagrado que ignora toda defesa. O pó não se repõe. Use com sabedoria.",
+    story:"Este pó não vem de um unicórnio morto. Vem de um unicórnio que o doou voluntariamente em troca de uma promessa que o portador anterior não cumpriu. O unicórnio ainda espera." },
+
+  { tier:"magico", name:"Olho de Basilisco — Preservado",
+    slot:["accessory"], weight:0.2,
+    magicBonus:{ attr:"INT", attrValue:1 },
+    effect:"+1 INT. O olho de um Basilisco adulto, preservado em solução de óleo de salamandra para neutralizar 80% do poder petrificante. Os outros 20% ficaram. Passivo: o portador detecta automaticamente criaturas que usam disfarce mágico, ilusão ou invisibilidade em raio 5 hex (o olho ainda vê através de truques). Ativo (1x/combate): o portador remove o protetor do olho e olha diretamente para um alvo em raio 4 hex — o alvo testa FOR (difícil) ou fica Imóvel por 2 rodadas (versão enfraquecida da petrificação). Depois: o portador fica com −1d4 em Percepção por 1 rodada (o olho cansa os olhos do portador).",
+    story:"O frasco tem uma trava tripla. O vendedor que o ofereceu não dizia o preço antes de o comprador demonstrar que entendia o que estava comprando." },
+
+  { tier:"lendario", name:"Coração de Fênix — Amuleto",
+    slot:["accessory"], weight:0.3,
+    magicBonus:{ attr:"FOR", attrValue:1, attr2:"SAB", attrValue2:1 },
+    effect:"+1 FOR, +1 SAB. O coração de uma Fênix jovem que morreu antes de renascer pela primeira vez — algo que não deveria ser possível, mas aconteceu. O coração ainda bate. Não para. Nunca para. Passivo: ao ser reduzido a 0 HP, o portador não morre — entra em Combustão de Fênix: fica intangível e imóvel por 1 turno, depois ressurge com 40% HP e todos os inimigos adjacentes sofrem 2d6 de dano de fogo. Ocorre 1x por descanso longo. Passivo: imune a dano de fogo. Ativo (1x/sessão): o coração pulsa intensamente — o portador e todos os aliados em raio 4 hex ficam imunes a morte por 1 turno (golpes que derrubariam a 0 HP causam 1 HP em vez disso).",
+    story:"O coração não para porque a Fênix ainda não desistiu. Ela apenas está esperando a hora certa de renascer." },
+
+  { tier:"lendario", name:"Escama do Leviatã — Medalha",
+    slot:["accessory"], weight:0.5,
+    magicBonus:{ attr:"FOR", attrValue:2 },
+    effect:"+2 FOR. Uma única escama de Leviatã adulto, polida e perfurada para uso como medalha. O polimento levou 6 meses. A escama resistiu a todas as tentativas de entalhe — qualquer gravura foi feita a ácido. Passivo: o portador não pode ser empurrado, derrubado por impacto físico, ou movido involuntariamente (a massa do Leviatã ancora). Passivo: ataques físicos que causariam mais de 15 de dano ao portador têm esse excesso absorvido pela escama (dano máximo por ataque = 15, uma vez por rodada). Ativo (1x/combate): bate a medalha no chão — onda de pressão em raio 4 hex, 2d8 de dano a todos os inimigos (sem teste de resistência — a pressão simplesmente acontece).",
+    story:"Leviatãs não foram vistos em terra. Esta escama foi encontrada no pico de uma montanha. Ninguém tentou explicar." }];
 
 const ALL_WEAPONS = [...WEAPONS_ONE_HAND, ...WEAPONS_TWO_HAND, ...WEAPONS_MAGIC, ...WEAPONS_RANGED].filter(Boolean);
 
