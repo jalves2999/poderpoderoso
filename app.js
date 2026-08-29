@@ -1273,6 +1273,261 @@ function renderReviewStep() {
 
 document.getElementById("btn-wizard-finish").addEventListener("click", finalizeCharacterCreation);
 
+/* ════════════════════════════════════════════════════════════════
+   GERADOR RÁPIDO DE NPC
+   O usuário informa apenas nome e origem (e opcionalmente nível,
+   classe e tipo de loja). Tudo o mais — atributos, habilidades,
+   equipamento, dinheiro e itens à venda — é sorteado a partir
+   do compêndio (data.js), coerente com o nível gerado.
+   ════════════════════════════════════════════════════════════════ */
+
+function openQuickNpcModal() {
+  document.getElementById("qnpc-name").value = "";
+  document.getElementById("qnpc-origin").value = "";
+  document.getElementById("qnpc-level").value = "random";
+  document.getElementById("qnpc-class").value = "random";
+  document.getElementById("qnpc-shop").value = "none";
+  document.getElementById("quick-npc-modal-overlay").classList.remove("hidden");
+  setTimeout(() => document.getElementById("qnpc-name").focus(), 50);
+}
+
+function closeQuickNpcModal() {
+  document.getElementById("quick-npc-modal-overlay").classList.add("hidden");
+}
+
+document.getElementById("btn-quick-npc")?.addEventListener("click", openQuickNpcModal);
+document.getElementById("qnpc-cancel")?.addEventListener("click", closeQuickNpcModal);
+document.getElementById("qnpc-generate")?.addEventListener("click", generateQuickNpc);
+
+/* Faixa de tier de item disponível por nível de personagem */
+function tierRangeForLevel(level) {
+  if (level <= 2)  return ["comum"];
+  if (level <= 4)  return ["comum", "raro"];
+  if (level <= 6)  return ["raro", "magico"];
+  if (level <= 8)  return ["magico", "lendario"];
+  return ["lendario", "unico"];
+}
+
+/* Dinheiro coerente com o nível — mais alto, mais rico */
+function rollCurrencyForLevel(level) {
+  const base = level * (5 + Math.floor(Math.random() * 8));
+  return {
+    bronze: Math.floor(Math.random() * 10),
+    prata:  Math.floor(base * 0.6) + Math.floor(Math.random() * 5),
+    ouro:   level >= 3 ? Math.floor(base / 10) + Math.floor(Math.random() * 3) : 0,
+    platina: level >= 8 ? Math.floor(Math.random() * 2) : 0,
+  };
+}
+
+/* Distribui pontos de atributo de forma realista para um NPC de nível N,
+   priorizando o atributo principal da classe. */
+function rollAttrsForLevel(classKey, level) {
+  const cls = getClassDef(classKey);
+  const totalPoints = level + 2; // progressão similar à do wizard normal
+  const attrs = { FOR:0, DEX:0, AGI:0, INT:0, SAB:0 };
+  const priority = {
+    guerreiro: ["FOR","AGI","SAB","DEX","INT"],
+    mago:      ["INT","SAB","DEX","AGI","FOR"],
+    arqueiro:  ["DEX","AGI","SAB","INT","FOR"],
+    ladino:    ["DEX","AGI","INT","SAB","FOR"],
+    clerigo:   ["SAB","INT","FOR","DEX","AGI"],
+  }[classKey] || ["FOR","DEX","AGI","INT","SAB"];
+
+  let remaining = totalPoints;
+  let idx = 0;
+  while (remaining > 0) {
+    const weight = idx < 2 ? 2 : 1; // primeiros 2 atributos da prioridade recebem o dobro de chance
+    const attr = priority[Math.min(idx % priority.length, priority.length - 1)];
+    const give = Math.min(remaining, weight);
+    attrs[attr] += give;
+    remaining -= give;
+    idx++;
+    if (idx > 30) break; // segurança
+  }
+  return attrs;
+}
+
+/* Sorteia itens equipáveis (arma + armadura, e escudo se a classe combinar) coerentes com nível */
+function rollEquipmentForLevel(classKey, level) {
+  const tiers = tierRangeForLevel(level);
+  const weaponPool = classKey === "guerreiro"
+    ? [...ALL_WEAPONS]
+    : classKey === "mago"
+    ? WEAPONS_MAGIC.length ? WEAPONS_MAGIC.filter(Boolean) : ALL_WEAPONS
+    : classKey === "arqueiro"
+    ? WEAPONS_RANGED.filter(Boolean)
+    : ALL_WEAPONS;
+
+  const filteredWeapons = weaponPool.filter(Boolean).filter(w => tiers.includes(w.tier || "comum"));
+  const armorPool = ARMORS.filter(Boolean).filter(a => tiers.includes(a.tier || "comum"));
+
+  const equipment = [];
+  if (filteredWeapons.length) {
+    const w = filteredWeapons[Math.floor(Math.random() * filteredWeapons.length)];
+    equipment.push({ ...w, kind: "weapon" });
+  }
+  if (armorPool.length && Math.random() < 0.8) {
+    const a = armorPool[Math.floor(Math.random() * armorPool.length)];
+    equipment.push({ ...a, kind: "armor" });
+  }
+  if (classKey === "guerreiro" && Math.random() < 0.4) {
+    const shields = SHIELDS.filter(Boolean).filter(s => tiers.includes(s.tier || "comum"));
+    if (shields.length) equipment.push({ ...shields[Math.floor(Math.random() * shields.length)], kind: "shield" });
+  }
+  return equipment;
+}
+
+/* Sorteia 1-3 acessórios coerentes com nível para o inventário (não equipados) */
+function rollAccessoriesForLevel(level) {
+  const tiers = tierRangeForLevel(level);
+  const pool = ACCESSORIES.filter(Boolean).filter(a => tiers.includes(a.tier || "comum"));
+  if (!pool.length) return [];
+  const qty = 1 + Math.floor(Math.random() * 2);
+  const picked = [];
+  for (let i = 0; i < qty && pool.length; i++) {
+    picked.push({ ...pool[Math.floor(Math.random() * pool.length)], kind: "accessory" });
+  }
+  return picked;
+}
+
+/* Monta o estoque de uma loja, coerente com o nível do NPC dono */
+function rollShopStock(shopType, level) {
+  const tiers = tierRangeForLevel(level);
+  const priceByTier = { comum: "5-15 prata", raro: "1-3 ouro", magico: "5-10 ouro", lendario: "20-50 ouro", unico: "80+ ouro" };
+  const stock = [];
+
+  if (shopType === "armas") {
+    const pool = [...WEAPONS_ONE_HAND, ...WEAPONS_TWO_HAND, ...ARMORS, ...ACCESSORIES, ...SHIELDS]
+      .filter(Boolean).filter(i => tiers.includes(i.tier || "comum"));
+    const qty = 4 + Math.floor(Math.random() * 5);
+    for (let i = 0; i < qty && pool.length; i++) {
+      const item = pool[Math.floor(Math.random() * pool.length)];
+      stock.push({ name: item.name, tier: item.tier || "comum", price: priceByTier[item.tier || "comum"] });
+    }
+  } else if (shopType === "magias") {
+    const maxLv = Math.min(5, Math.ceil(level / 2));
+    const pool = GENERAL_SPELLS.filter(s => s.level <= maxLv);
+    const qty = 3 + Math.floor(Math.random() * 4);
+    for (let i = 0; i < qty && pool.length; i++) {
+      const spell = pool[Math.floor(Math.random() * pool.length)];
+      stock.push({ name: spell.name, tier: `Nível ${spell.level}`, price: `${spell.level * 15}-${spell.level * 25} prata` });
+    }
+  } else if (shopType === "pocoes") {
+    const pool = MISC_ITEMS.filter(Boolean).filter(i =>
+      (i.subcategory === "potion" || i.craftingMaterial || i.smithingMaterial) &&
+      tiers.includes(i.tier || "comum"));
+    const qty = 4 + Math.floor(Math.random() * 5);
+    for (let i = 0; i < qty && pool.length; i++) {
+      const item = pool[Math.floor(Math.random() * pool.length)];
+      stock.push({ name: item.name, tier: item.tier || "comum", price: priceByTier[item.tier || "comum"] });
+    }
+  } else if (shopType === "pericias") {
+    const allSkills = [
+      ...GENERAL_SKILLS.map(s => ({ name: s.name, attr: s.attr, cat: "Geral" })),
+      ...Object.entries(CLASSES).flatMap(([key, c]) =>
+        (c.skillsClass || []).map(s => ({ name: s.name, attr: s.attr, cat: c.name })))
+    ];
+    const qty = 3 + Math.floor(Math.random() * 4);
+    for (let i = 0; i < qty && allSkills.length; i++) {
+      const s = allSkills[Math.floor(Math.random() * allSkills.length)];
+      stock.push({ name: s.name, tier: `${s.cat} · ${s.attr}`, price: `${10 + level * 5}-${20 + level * 8} prata` });
+    }
+  }
+  return stock;
+}
+
+function generateQuickNpc() {
+  const name = document.getElementById("qnpc-name").value.trim();
+  if (!name) { showToast("Digite um nome para o NPC."); return; }
+  const origin = document.getElementById("qnpc-origin").value.trim();
+
+  const levelSel = document.getElementById("qnpc-level").value;
+  const level = levelSel === "random" ? (1 + Math.floor(Math.random() * 10)) : parseInt(levelSel);
+
+  const classSel = document.getElementById("qnpc-class").value;
+  const classKeys = Object.keys(CLASSES);
+  const classKey = classSel === "random" ? classKeys[Math.floor(Math.random() * classKeys.length)] : classSel;
+
+  let shopSel = document.getElementById("qnpc-shop").value;
+  if (shopSel === "random") {
+    const options = ["none", "none", "none", "armas", "magias", "pocoes", "pericias"]; // 3/7 chance de não ter loja
+    shopSel = options[Math.floor(Math.random() * options.length)];
+  }
+
+  const cls = getClassDef(classKey);
+  const attrs = rollAttrsForLevel(classKey, level);
+  const equipment = rollEquipmentForLevel(classKey, level);
+  const accessories = rollAccessoriesForLevel(level);
+  const currency = rollCurrencyForLevel(level);
+
+  // Perícias: 1 geral + 1 de classe, sorteadas
+  const generalSkill = GENERAL_SKILLS[Math.floor(Math.random() * GENERAL_SKILLS.length)];
+  const classSkillPool = cls.skillsClass || [];
+  const classSkill = classSkillPool.length ? classSkillPool[Math.floor(Math.random() * classSkillPool.length)] : null;
+
+  // Habilidade de classe inicial (a primeira, como no wizard normal)
+  const startAbility = cls.skills && cls.skills.length > 0 ? cls.skills[0] : null;
+
+  // Magia inicial se for classe conjuradora
+  const isCaster = classKey === "mago" || classKey === "clerigo";
+  const maxSpellLv = Math.min(5, Math.ceil(level / 2));
+  const spellPool = GENERAL_SPELLS.filter(s => s.level <= maxSpellLv);
+  const startSpell = isCaster && spellPool.length ? spellPool[Math.floor(Math.random() * spellPool.length)].name : null;
+
+  const finalAttrs = { ...attrs };
+  if (cls.startBonusAttr) finalAttrs[cls.startBonusAttr] = (finalAttrs[cls.startBonusAttr] || 0) + 1;
+
+  const character = {
+    id: uid(),
+    rosterType: "npc",
+    name, origin,
+    classKey, subclassKey: null,
+    level, xp: 0,
+    unspentAttrPoints: 0, unspentSkillPoints: 0,
+    attrs: finalAttrs,
+    currentHP: null, currentResource: 0,
+    skills: {
+      class: [generalSkill.name, ...(classSkill ? [classSkill.name] : [])],
+      general: [generalSkill.name],
+      abilities: startAbility ? [startAbility.name] : [],
+      abilityLevels: startAbility ? { [startAbility.name]: 1 } : {},
+    },
+    spells: startSpell ? [startSpell] : [],
+    activeSpells: [],
+    inventory: [],
+    notes: "",
+    createdAt: Date.now(),
+    currency,
+  };
+
+  // Equipar arma/armadura/escudo sorteados
+  let primaryTaken = false, shieldTaken = false, armorTaken = false;
+  equipment.forEach(item => {
+    let equippedSlot = null;
+    if (item.kind === "weapon" && !primaryTaken) { equippedSlot = "primary"; primaryTaken = true; }
+    else if (item.kind === "shield" && !shieldTaken) { equippedSlot = "shield"; shieldTaken = true; }
+    else if (item.kind === "armor" && !armorTaken) { equippedSlot = "armor"; armorTaken = true; }
+    character.inventory.push(makeInventoryItem(item, equippedSlot));
+  });
+  // Acessórios não equipados
+  accessories.forEach(item => character.inventory.push(makeInventoryItem(item, null)));
+
+  character.currentHP = calcMaxHP(character);
+
+  // Loja, se aplicável
+  if (shopSel && shopSel !== "none") {
+    character.shopType = shopSel;
+    character.shopStock = rollShopStock(shopSel, level);
+  }
+
+  characters.push(character);
+  saveCharacters(characters);
+  closeQuickNpcModal();
+  showToast(`🎲 ${name} foi gerado — Nv.${level} ${cls.name}${character.shopType ? " (com loja)" : ""}!`);
+  renderCharacterList();
+}
+
+
 function finalizeCharacterCreation() {
   const cls = getClassDef(wizard.classKey);
   const finalAttrs = { ...wizard.attrs };
@@ -2835,6 +3090,27 @@ function renderClassTutorials() {
 // Estado da aba ativa na ficha (persiste entre re-renders)
 let activeSheetTab = "vital";
 
+const SHOP_TYPE_LABELS = { armas:"⚔ Armas, Armaduras & Acessórios", magias:"✨ Magias & Pergaminhos", pocoes:"🧪 Poções & Materiais", pericias:"📚 Mestre de Perícias" };
+
+function renderNpcShopSection(character) {
+  const stock = character.shopStock || [];
+  return `
+  <div class="sheet-section">
+    <h3 class="sheet-section-title">🏪 Loja — ${SHOP_TYPE_LABELS[character.shopType] || character.shopType}</h3>
+    ${stock.length === 0 ? `<p class="empty-inline-note">Nenhum item em estoque.</p>` : `
+    <div class="ability-card-grid">
+      ${stock.map(it => `
+        <div class="ability-card known">
+          <div class="ability-card-head">
+            <span class="ability-card-name">${it.name}</span>
+            <span class="ability-card-badge">${it.tier}</span>
+          </div>
+          <p class="ability-card-effect">💰 ${it.price}</p>
+        </div>`).join("")}
+    </div>`}
+  </div>`;
+}
+
 function renderSheet() {
   const character = findCharacter(currentSheetId);
   if (!character) { showView("view-list"); return; }
@@ -2866,6 +3142,7 @@ function renderSheet() {
     `,
     inventario: `
       ${renderInventorySection(character)}
+      ${character.shopType ? renderNpcShopSection(character) : ""}
       ${renderMountSection(character)}
       ${renderNotesSection(character)}
       <div class="sheet-danger-zone">

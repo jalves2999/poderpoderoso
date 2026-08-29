@@ -39,6 +39,9 @@
       <button id="btn-new-character" class="btn-primary">
         <span class="btn-icon">✦</span> Criar Personagem
       </button>
+      <button id="btn-quick-npc" class="btn-secondary">
+        <span class="btn-icon">🎲</span> Gerar NPC
+      </button>
     </div>
 
     <div id="empty-state" class="empty-state hidden">
@@ -203,6 +206,71 @@
 
 <!-- Versão imprimível (A4), gerada à parte e só visível durante a impressão -->
 <div id="print-sheet-area" class="print-only"></div>
+
+<!-- Modal de Gerador Rápido de NPC -->
+<div id="quick-npc-modal-overlay" class="modal-overlay hidden">
+  <div class="modal-box modal-box-wide">
+    <h3 class="modal-title">🎲 Gerador Rápido de NPC</h3>
+    <p class="modal-subtitle">Preencha apenas o nome e a origem. Classe, nível, atributos, itens, dinheiro e loja (se houver) são sorteados automaticamente com base no compêndio.</p>
+
+    <div class="qnpc-field">
+      <label class="qnpc-label">Nome</label>
+      <input type="text" id="qnpc-name" class="qnpc-input" placeholder="Ex: Bruno Ferreira, Velha Silmara...">
+    </div>
+
+    <div class="qnpc-field">
+      <label class="qnpc-label">Origem <span class="qnpc-optional">(opcional)</span></label>
+      <input type="text" id="qnpc-origin" class="qnpc-input" placeholder="Ex: Margem das Pedras, Serpentara...">
+    </div>
+
+    <div class="qnpc-row">
+      <div class="qnpc-field qnpc-field-half">
+        <label class="qnpc-label">Nível</label>
+        <select id="qnpc-level" class="qnpc-input">
+          <option value="random" selected>🎲 Aleatório (1–10)</option>
+          <option value="1">Nível 1</option>
+          <option value="2">Nível 2</option>
+          <option value="3">Nível 3</option>
+          <option value="4">Nível 4</option>
+          <option value="5">Nível 5</option>
+          <option value="6">Nível 6</option>
+          <option value="7">Nível 7</option>
+          <option value="8">Nível 8</option>
+          <option value="9">Nível 9</option>
+          <option value="10">Nível 10</option>
+        </select>
+      </div>
+      <div class="qnpc-field qnpc-field-half">
+        <label class="qnpc-label">Classe</label>
+        <select id="qnpc-class" class="qnpc-input">
+          <option value="random" selected>🎲 Aleatória</option>
+          <option value="guerreiro">Guerreiro</option>
+          <option value="mago">Mago</option>
+          <option value="arqueiro">Arqueiro</option>
+          <option value="ladino">Ladino</option>
+          <option value="clerigo">Clérigo</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="qnpc-field">
+      <label class="qnpc-label">Tipo de estabelecimento</label>
+      <select id="qnpc-shop" class="qnpc-input">
+        <option value="none" selected>🚶 Sem loja — apenas NPC comum</option>
+        <option value="random">🎲 Aleatório (pode ou não ter loja)</option>
+        <option value="armas">⚔ Loja de Armas, Armaduras e Acessórios</option>
+        <option value="magias">✨ Loja de Magias e Pergaminhos</option>
+        <option value="pocoes">🧪 Loja de Poções e Materiais</option>
+        <option value="pericias">📚 Mestre de Perícias</option>
+      </select>
+    </div>
+
+    <div class="modal-actions">
+      <button id="qnpc-cancel" class="btn-secondary">Cancelar</button>
+      <button id="qnpc-generate" class="btn-primary">🎲 Gerar NPC</button>
+    </div>
+  </div>
+</div>
 
 <!-- Modal genérico de confirmação -->
 <div id="modal-overlay" class="modal-overlay hidden">
