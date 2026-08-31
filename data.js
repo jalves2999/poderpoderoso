@@ -1372,7 +1372,111 @@ const GENERAL_SPELLS = [
     level: 5, category: "campo/controle",
     effect: "O conjurador declara controle absoluto sobre área de raio 10 hex por 3 rodadas. Durante este tempo, como Ação Livre por turno, pode: mover 1 aliado até 5 hex sem gastar a Ação deles; ou criar 1 obstáculo de rocha/gelo/chamas em 1 hex que bloqueia passagem por 1 rodada; ou desfazer 1 efeito de controle sobre qualquer aliado na área. Cada opção pode ser usada 1× por turno.",
     castTime: "2 Ações de Magia",
-    cooldown: "1 uso por sessão" }];
+    cooldown: "1 uso por sessão" },
+
+  /* ══════════════════════════════════════════════════════════════
+     MAGIAS INSPIRADAS EM PATH OF EXILE
+     Foco: geometria hexagonal, totens, auras, cadeias, orbes,
+     áreas persistentes que evoluem e stacks de dano
+     ══════════════════════════════════════════════════════════════ */
+
+  /* ── NÍVEL 1 ─────────────────────────────────────────────────── */
+
+  { name: "Orbe Congelante", level: 1, category: "ataque/área",
+    effect: "Lança uma orbe de gelo que viaja 6 hex em linha reta, deixando um rastro de gelo em cada hex percorrido. Cada hex de rastro dura 2 rodadas: criaturas que entrarem ou terminarem o turno nele sofrem 1d4 de gelo e testam AGI (normal) ou têm o Movimento reduzido pela metade por 1 rodada. A orbe explode no hex final: 1d8+INT em raio 1 hex.",
+    castTime: "1 Ação de Magia", cooldown: "4 usos por combate" },
+
+  { name: "Faísca Ricochete", level: 1, category: "ataque/cadeia",
+    effect: "Dispara 3 faíscas elétricas que ricocheteiam entre alvos. Primeira faísca: alvo escolhido em até 5 hex (1d6+INT). Cada faísca seguinte salta para o inimigo mais próximo em até 3 hex do anterior (1d6+INT cada). Se não houver alvo em alcance, a faísca dissipa. Nunca ricocheteia para aliados.",
+    castTime: "1 Ação de Magia", cooldown: "4 usos por combate" },
+
+  { name: "Totem de Chamas Menor", level: 1, category: "invocacao/totem",
+    effect: "Crava um totem flamejante num hex adjacente. O totem tem 15 HP, Def.Física 3, não se move e dura 4 rodadas. No início de cada turno do conjurador, o totem dispara automaticamente uma chama em 1 inimigo em raio 5 hex: 1d6+INT de fogo. O totem não gasta Ação do conjurador para atacar. Inimigos podem destruí-lo.",
+    castTime: "1 Ação de Magia", cooldown: "2 usos por combate" },
+
+  /* ── NÍVEL 2 ─────────────────────────────────────────────────── */
+
+  { name: "Terreno Profanado", level: 2, category: "campo/debuff",
+    effect: "Corrompe uma área de raio 2 hex por 5 rodadas. Inimigos dentro sofrem 1d6 de dano no início de cada turno e recebem −1d4 em todos os testes. Aliados dentro recebem +1d4 em testes de resistência (o terreno reconhece o conjurador). A área pode ser expandida: cada nova conjuração adjacente estende o Terreno em +2 hex em vez de criar uma nova área.",
+    castTime: "1 Ação de Magia", cooldown: "3 usos por combate" },
+
+  { name: "Aura de Ódio", level: 2, category: "buff/aura",
+    effect: "Aura persistente em raio 3 hex centrada no conjurador, que se move com ele. Enquanto ativa: todos os aliados na aura causam +1d6 de dano elemental adicional em todos os ataques. Custa 2 MP por rodada para manter (o conjurador escolhe desativar como Ação Livre). Não acumula com outras auras do mesmo tipo.",
+    castTime: "1 Ação de Magia", cooldown: "Mantida enquanto houver MP" },
+
+  { name: "Corrente de Gelo", level: 2, category: "ataque/cadeia/controle",
+    effect: "Dispara uma corrente de gelo que atinge até 4 alvos em sequência (cada salto máximo 3 hex do anterior). Dano decrescente: 1º alvo 2d6+INT, 2º 2d6, 3º 1d8, 4º 1d6. Cada alvo atingido testa AGI (normal) ou tem Movimento reduzido em 2 hex por 2 rodadas. Se todos os 4 alvos forem atingidos: o último fica Congelado por 1 rodada.",
+    castTime: "1 Ação de Magia", cooldown: "3 usos por combate" },
+
+  { name: "Marca do Caçador", level: 2, category: "debuff/marca",
+    effect: "Marca um alvo visível em até 8 hex por 5 rodadas. O alvo marcado: recebe +25% de dano de todas as fontes, não pode se tornar invisível, e sua posição é sempre conhecida pelo grupo (mesmo através de paredes). Se o alvo marcado morrer: o conjurador recupera 1d6 MP e a marca salta automaticamente para o inimigo vivo mais próximo (até 6 hex).",
+    castTime: "1 Ação (instantânea)", cooldown: "3 usos por combate" },
+
+  { name: "Passo Relâmpago", level: 2, category: "mobilidade/ataque",
+    effect: "O conjurador se transforma em raio e viaja até 6 hex em linha reta até um hex visível. Todos os inimigos nos hexes atravessados sofrem 1d8+INT de dano elétrico (AGI normal para metade). Ao chegar: o conjurador pode realizar 1 ataque físico ou lançar 1 magia de nível 1 imediatamente sem gastar Ação adicional.",
+    castTime: "1 Ação de Magia", cooldown: "3 usos por combate" },
+
+  /* ── NÍVEL 3 ─────────────────────────────────────────────────── */
+
+  { name: "Totem de Ancestral", level: 3, category: "invocacao/totem",
+    effect: "Invoca um Totem Ancestral em hex visível até 5 hex. HP 40, Def.Física 6, dura 6 rodadas. O totem replica os ataques físicos do conjurador: sempre que o conjurador realiza um ataque físico, o totem realiza o mesmo ataque contra o alvo mais próximo dele (dano igual, rolagem separada). Máximo 1 totem ancestral por vez.",
+    castTime: "1 Ação de Magia", cooldown: "2 usos por combate" },
+
+  { name: "Chuva de Flechas Arcanas", level: 3, category: "ataque/área",
+    effect: "Escolhe uma área de raio 3 hex em até 10 hex de distância. Por 3 rodadas, no início de cada turno do conjurador, a área é bombardeada: todos os inimigos dentro sofrem 2d8+INT de dano arcano (AGI difícil para metade). Aliados são excluídos automaticamente. A área não se move após conjurada.",
+    castTime: "2 Ações de Magia", cooldown: "2 usos por combate" },
+
+  { name: "Explosão em Cadeia", level: 3, category: "ataque/cadeia",
+    effect: "Marca um alvo. Se ele morrer nos próximos 3 turnos, explode: 3d8+INT em raio 2 hex. Todos os inimigos mortos por essa explosão também explodem (reação em cadeia, dano decrescente 25% por elo). Se o alvo marcado não morrer em 3 turnos, a marca dissipa sem efeito.",
+    castTime: "1 Ação de Magia", cooldown: "2 usos por combate" },
+
+  { name: "Campo Estático", level: 3, category: "campo/controle",
+    effect: "Cria um campo elétrico permanente de raio 3 hex por 5 rodadas. Inimigos que entrarem ou se moverem dentro do campo sofrem 1d8 de dano elétrico por hex movido (o movimento dispara descargas). Inimigos que ficarem parados não sofrem dano — mas testam INT (normal) ou perdem 1 Ação por rodada (a estática interfere). Aliados imunes.",
+    castTime: "1 Ação de Magia", cooldown: "2 usos por combate" },
+
+  { name: "Vulnerabilidade", level: 3, category: "debuff/maldição",
+    effect: "Maldição de área: raio 4 hex, dura 4 rodadas. Todos os inimigos na área: Def.Física reduzida pela metade (arredondada para baixo), recebem +50% de dano de sangramento e veneno, e não podem se curar acima de 50% do HP máximo enquanto amaldiçoados. Novos inimigos que entrarem na área são afetados imediatamente.",
+    castTime: "1 Ação de Magia", cooldown: "2 usos por combate" },
+
+  /* ── NÍVEL 4 ─────────────────────────────────────────────────── */
+
+  { name: "Tempestade de Fogo Persistente", level: 4, category: "ataque/campo",
+    effect: "Área de raio 4 hex em até 12 hex. Dura 5 rodadas e cresce: rodada 1 = raio 4, rodada 2 = raio 5, rodada 3+ = raio 6. Todos os inimigos dentro sofrem 2d10+INT de fogo no início de cada turno (AGI difícil para metade) e ficam Queimando por 2 rodadas. O terreno afetado fica em brasas por 3 rodadas após o fim da magia (1d6 por hex atravessado).",
+    castTime: "2 Ações de Magia", cooldown: "1 uso por combate" },
+
+  { name: "Convocação de Espectros", level: 4, category: "invocacao",
+    effect: "Invoca 3 Espectros de inimigos derrotados neste combate (Dif. igual ou menor que 3). Cada Espectro tem 50% do HP original, mantém 1 habilidade do monstro original, e dura 6 rodadas. Os Espectros agem no turno do conjurador (sem custo de Ação). Se não houver inimigos derrotados, invoca 3 Sombras genéricas (HP 25, 1d8+INT de dano).",
+    castTime: "2 Ações de Magia", cooldown: "1 uso por combate" },
+
+  { name: "Aura de Determinação", level: 4, category: "buff/aura",
+    effect: "Aura em raio 4 hex que se move com o conjurador. Aliados dentro: +3 Def.Física, +2 Def.Mágica, imunes a Derrubado e Empurrado. Custa 4 MP por rodada. Ativo (1x enquanto a aura durar): Baluarte — todos os aliados na aura ficam imunes a dano por 1 turno completo (a aura absorve tudo, depois se dissipa e a magia termina).",
+    castTime: "1 Ação de Magia", cooldown: "Mantida enquanto houver MP" },
+
+  { name: "Ciclone Devorador", level: 4, category: "ataque/mobilidade",
+    effect: "O conjurador gira em movimento contínuo por 3 rodadas. Durante o Ciclone: pode se mover até 4 hex por turno como Ação Livre, e todos os inimigos em hexes adjacentes ao caminho percorrido sofrem 2d8+INT de dano por rodada (sem rolagem de acerto — o ciclone simplesmente atinge). O conjurador não pode lançar outras magias durante o Ciclone, apenas mover e atacar fisicamente.",
+    castTime: "1 Ação de Magia", cooldown: "1 uso por combate" },
+
+  /* ── NÍVEL 5 ─────────────────────────────────────────────────── */
+
+  { name: "Cadeia de Aniquilação", level: 5, category: "ataque/cadeia",
+    effect: "Dispara um raio devastador que atinge até 8 alvos em cadeia (saltos de até 4 hex). Dano: 3d12+INT no primeiro alvo, reduzindo 15% a cada salto. A cadeia pode retornar ao mesmo alvo se não houver outros — cada retorno causa dano completo novamente. Inimigos atingidos 2+ vezes ficam Atordoados por 1 rodada. Aliados nunca são atingidos.",
+    castTime: "2 Ações de Magia", cooldown: "1 uso por combate" },
+
+  { name: "Campo de Aniquilação Total", level: 5, category: "campo/ataque",
+    effect: "Marca uma área de raio 6 hex. A área permanece 4 rodadas e se comporta como zona morta: nenhuma cura funciona dentro dela, invocações não podem ser feitas, e todos os inimigos sofrem 3d10 de dano necrótico no início de cada turno (ignora Def.Física). Aliados dentro sofrem apenas 1d6 (o conjurador filtra parcialmente). O conjurador não pode sair da área enquanto a magia durar, ou ela se dissipa.",
+    castTime: "2 Ações de Magia", cooldown: "1 uso por sessão" },
+
+  { name: "Exército de Totens", level: 5, category: "invocacao/totem",
+    effect: "Invoca 5 Totens simultâneos em hexes visíveis até 8 hex (o conjurador escolhe os hexes). Cada Totem: HP 30, Def.Física 5, dura 5 rodadas. Cada Totem dispara automaticamente por rodada em 1 inimigo em raio 6 hex: 2d8+INT de dano elemental (o conjurador escolhe o elemento de cada totem ao invocar). Os Totens não gastam Ações do conjurador.",
+    castTime: "2 Ações de Magia", cooldown: "1 uso por combate" },
+
+  { name: "Convergência Elemental", level: 5, category: "ataque/campo",
+    effect: "Escolhe até 3 pontos no campo (raio 2 hex cada, até 12 hex de distância). Cada ponto recebe um elemento diferente: Fogo (2d10 + Queimando), Gelo (2d10 + Congelado 1 rodada), Raio (2d10 + Atordoado 1 rodada). Se dois pontos se sobrepuserem: a área de sobreposição recebe ambos os efeitos e +2d10 de dano extra. Se os três se sobrepuserem: Convergência Total — 6d10 na área tripla e todos os inimigos ali são Atordoados por 2 rodadas.",
+    castTime: "2 Ações de Magia", cooldown: "1 uso por sessão" },
+
+  { name: "Vórtice do Vazio", level: 5, category: "controle/campo",
+    effect: "Cria um vórtice em hex visível até 10 hex. Por 4 rodadas: no início de cada turno, todos os inimigos em raio 6 hex são puxados 2 hex em direção ao centro do vórtice (FOR difícil para resistir). Inimigos no hex central ou adjacente sofrem 3d10 de dano necrótico por rodada. Objetos soltos, projéteis e magias de área menores que nível 4 são absorvidos pelo vórtice e anulados.",
+    castTime: "2 Ações de Magia", cooldown: "1 uso por combate" }];
 
 /* ---------------------------------------------------------------------- */
 /* EQUIPAMENTOS                                                           */
@@ -1893,9 +1997,13 @@ const WEAPONS_TWO_HAND = [
 
 
   /* --- MÁGICOS (novos) --- */
-  { tier: "magico", name: "Báculo do Abismo Serpentino", dmg: "1d12 + 1d8 + 1d4", req: "INT/SAB", weight: 5, defenseDegrade: null, slot: ["primary"],
+  { tier: "magico", name: "Báculo do Abismo Serpentino", dmg: "1d6", req: "INT/SAB", weight: 5, defenseDegrade: null, slot: ["primary"],
     story: "Criado nas profundezas de Serpentara a partir do vértice de uma caverna onde cobras sagradas de Jurgmund se reuniam para hibernar. O centro do báculo pulsa com veneno purificado.",
-    note: "Magias de veneno conjuradas com este báculo adicionam +1d12. Uma vez por sessão: ao acertar um ataque, injeta Veneno do Abismo — 1d20 de dano distribuído por 5 rodadas.", heavyTwoHanded: true },
+    note: "Magias de veneno conjuradas com este báculo adicionam +1d12. Uma vez por sessão: ao acertar um ataque, injeta Veneno do Abismo — 1d20 de dano distribuído por 5 rodadas.", heavyTwoHanded: true,
+    charges: { max: 4, label: "Disparos", resetOn: "combate" },
+    range: 4,
+    effect: "Ação de Combate: gasta 1 Carga para disparar um raio de energia arcana a até 4 hex de distância. Dano: 1d6+INT. Sem Cargas restantes: a arma ainda pode ser usada em combate corpo a corpo pelo dano físico base.",
+    note: "4 disparo(s) por combate. Dano: 1d6+INT, alcance 4 hex." },
 
   /* --- LENDÁRIOS (novos) --- */
   { tier: "lendario", name: "Malho do Trovão Petrificado", dmg: "1d12 + 1d12 + 1d6", req: "FOR alto", weight: 15, defenseDegrade: null, slot: ["primary"],
@@ -1904,14 +2012,22 @@ const WEAPONS_TWO_HAND = [
 
 
   /* --- RAROS/MÁGICOS: Ações de Magia e Combate (2M) --- */
-  { tier: "raro", name: "Cajado do Trovador de Batalha", dmg: "1d8 + 1d6 + 1d4", req: "INT/SAB", weight: 3, defenseDegrade: null, slot: ["primary"], heavyTwoHanded: true,
+  { tier: "raro", name: "Cajado do Trovador de Batalha", dmg: "1d6", req: "INT/SAB", weight: 3, defenseDegrade: null, slot: ["primary"], heavyTwoHanded: true,
     magicBonus: { spellActions: 1 },
     story: "Cajado que ecoa o som de batalha enquanto canaliza magia. Foi usado por um trovador-mago que compunha músicas durante os combates — e cada nota era uma magia.",
-    note: "+1 Ação de Magia por rodada enquanto equipado. Todas as magias conjuradas com este cajado adicionam +1d4 ao efeito." },
-  { tier: "magico", name: "Báculo do Feiticeiro Guerreiro", dmg: "1d12 + 1d8 + 1d4", req: "INT/FOR", weight: 5, defenseDegrade: null, slot: ["primary"], heavyTwoHanded: true,
+    note: "+1 Ação de Magia por rodada enquanto equipado. Todas as magias conjuradas com este cajado adicionam +1d4 ao efeito.",
+    charges: { max: 3, label: "Disparos", resetOn: "combate" },
+    range: 4,
+    effect: "Ação de Combate: gasta 1 Carga para disparar um raio de energia arcana a até 4 hex de distância. Dano: 1d6+INT. Sem Cargas restantes: a arma ainda pode ser usada em combate corpo a corpo pelo dano físico base.",
+    note: "3 disparo(s) por combate. Dano: 1d6+INT, alcance 4 hex." },
+  { tier: "magico", name: "Báculo do Feiticeiro Guerreiro", dmg: "1d6", req: "INT/FOR", weight: 5, defenseDegrade: null, slot: ["primary"], heavyTwoHanded: true,
     magicBonus: { spellActions: 1, actions: 1 },
     story: "Criado para guerreiros que aprenderam magia com Arcath mas não queriam abrir mão do combate corpo a corpo. O báculo pode ser usado como arma ou como foco mágico — e o portador pode fazer os dois no mesmo turno.",
-    note: "+1 Ação de Magia e +1 Ação de Combate por rodada. Permite conjurar e atacar corpo a corpo no mesmo turno sem penalidade." },
+    note: "+1 Ação de Magia e +1 Ação de Combate por rodada. Permite conjurar e atacar corpo a corpo no mesmo turno sem penalidade.",
+    charges: { max: 4, label: "Disparos", resetOn: "combate" },
+    range: 4,
+    effect: "Ação de Combate: gasta 1 Carga para disparar um raio de energia arcana a até 4 hex de distância. Dano: 1d6+INT. Sem Cargas restantes: a arma ainda pode ser usada em combate corpo a corpo pelo dano físico base.",
+    note: "4 disparo(s) por combate. Dano: 1d6+INT, alcance 4 hex." },
   { tier: "lendario", name: "Lança do Herói Arqueiro — Réplica Enchanted", dmg: "1d12 + 1d10 + 1d4", req: "DEX/FOR", weight: 5, defenseDegrade: null, slot: ["primary"], heavyTwoHanded: true,
     magicBonus: { actions: 2 },
     story: "Réplica encantada da lança do Herói Arqueiro Ferrath. O original foi destruído na Batalha Colossal, mas forjadores de Arcath conseguiram recriar parte do encantamento estudando fragmentos encontrados nas planícies.",
@@ -1929,15 +2045,23 @@ const WEAPONS_TWO_HAND = [
     note: "⚠ Magias conjuradas com este cajado adicionam +1d8 de veneno ao dano ou +1d8 à cura. MAS uma vez por combate, ao rolar 1 natural em qualquer teste enquanto o cajado está equipado, o veneno vaza e o portador sofre 1d8 de veneno (não evitável)." },
 
   /* --- ÚNICOS --- */
-  { tier: "unico", name: "Cajado da Tormenta", dmg: "1d12 + 1d10 + 1d6", req: "INT", weight: 5, defenseDegrade: null, slot: ["primary"],
+  { tier: "unico", name: "Cajado da Tormenta", dmg: "1d6", req: "INT", weight: 5, defenseDegrade: null, slot: ["primary"],
     story: "Pertencia ao Lich das Montanhas de Atrelon, um necromante que fez um pacto com entidades do plano do gelo para estender sua vida além da morte. O cajado absorveu séculos de magia glacial e agora respira frio por conta própria. Quando o Lich foi derrotado, o cajado foi selado — mas nunca destruído.",
     uniqueAbility: "Nevasca de Atrelon (2x/dia, 1 Ação de Magia): cria uma nevasca que dura 5 turnos em TODO o campo de batalha. Durante a nevasca: todos os hexágonos se tornam Terreno Difícil (custo dobrado de Movimento), Chance de Acerto à distância recebe −1d4, e qualquer criatura que terminar seu turno na neve sem proteção sofre 1d6 de dano de frio.",
-    note: "Conjura magias de frio sem gastar Slot de Magia. Passivo: o portador é imune a efeitos de frio e neve.", heavyTwoHanded: true },
+    note: "Conjura magias de frio sem gastar Slot de Magia. Passivo: o portador é imune a efeitos de frio e neve.", heavyTwoHanded: true,
+    charges: { max: 5, label: "Disparos", resetOn: "combate" },
+    range: 4,
+    effect: "Ação de Combate: gasta 1 Carga para disparar um raio de energia arcana a até 4 hex de distância. Dano: 1d6+INT. Sem Cargas restantes: a arma ainda pode ser usada em combate corpo a corpo pelo dano físico base.",
+    note: "5 disparo(s) por combate. Dano: 1d6+INT, alcance 4 hex." },
   /* --- SETS integrados --- */
-  { tier: "magico", setName: "Cólera Arcana", name: "Cajado da Tempestade Arcana (Cólera Arcana)", dmg: "1d12 + 1d8 + 1d4", req: "INT", weight: 4, defenseDegrade: null, slot: ["primary"], heavyTwoHanded: true,
+  { tier: "magico", setName: "Cólera Arcana", name: "Cajado da Tempestade Arcana (Cólera Arcana)", dmg: "1d6", req: "INT", weight: 4, defenseDegrade: null, slot: ["primary"], heavyTwoHanded: true,
     story: "Derivado dos estudos sobre o Cajado da Tormenta do Lich de Atrelon. Replicação instável e perigosa — violento por natureza.",
     note: "Magias de área +1 hex de raio. Uma vez por sessão, ao errar uma magia, pode re-conjurar sem gastar Slot. SET — Cólera Arcana (1/3): Sobrecarga Elemental.",
-    setBonus: { pieces: 3, ability: "Sobrecarga Elemental", effect: "Magia de dano Nv3+ ganha +1 dado extra do tipo maior que já usa. Você sofre 1d6 de retaliação arcana. (1x/batalha)" } },
+    setBonus: { pieces: 3, ability: "Sobrecarga Elemental", effect: "Magia de dano Nv3+ ganha +1 dado extra do tipo maior que já usa. Você sofre 1d6 de retaliação arcana. (1x/batalha)" },
+    charges: { max: 4, label: "Disparos", resetOn: "combate" },
+    range: 4,
+    effect: "Ação de Combate: gasta 1 Carga para disparar um raio de energia arcana a até 4 hex de distância. Dano: 1d6+INT. Sem Cargas restantes: a arma ainda pode ser usada em combate corpo a corpo pelo dano físico base.",
+    note: "4 disparo(s) por combate. Dano: 1d6+INT, alcance 4 hex." },
 
   /* --- LENDÁRIOS: tema Aether --- */
   { tier: "lendario", name: "Malho dos Ossos de Magnalaga", dmg: "1d12 + 1d12 + 1d8", req: "FOR", weight: 14, defenseDegrade: null, slot: ["primary"], heavyTwoHanded: true,
@@ -1949,18 +2073,26 @@ const WEAPONS_TWO_HAND = [
     note: "Dano de luz: +1d6 de luz sagrada em cada acerto — causa dano dobrado contra criaturas do Deus Marcado, Araltos e mortos-vivos. Uma vez por dia: a lança emite um pulso de luz dourada (alcance 4 hex) que remove qualquer efeito de Corrupção ou Maldição da Marca de aliados na área." },
 
   /* --- ÚNICO: tema Aether --- */
-  { tier: "unico", name: "Báculo do Crânio de Jurgmund", dmg: "2d8 + 1d10 + 1d6", req: "INT/SAB", weight: 5, defenseDegrade: null, slot: ["primary"], heavyTwoHanded: true,
+  { tier: "unico", name: "Báculo do Crânio de Jurgmund", dmg: "1d6", req: "INT/SAB", weight: 5, defenseDegrade: null, slot: ["primary"], heavyTwoHanded: true,
     story: "Fragmento do próprio crânio de Jurgmund, moldado pelos primeiros Serpentarianos em forma de báculo. Pulsa com calor vivo e ocasionalmente emite sons que só quem empunha consegue ouvir — sussurros em língua de serpente que descrevem eventos que ainda não aconteceram.",
     uniqueAbility: "Profecia da Cobra (1x/sessão): ao conjurar uma magia, pode escolher ver o resultado antes de confirmar o gasto do Slot. Se o resultado não for satisfatório, pode cancelar a magia sem custo — mas fica Atordoado por 1 rodada pela sobrecarga profética. Não acumula com outras magias de visão.",
-    note: "Magias de veneno e cobra conjuradas com este báculo adicionam +1d12. Imunidade completa a venenos enquanto equipado. Aliados em raio 3 hex ganham resistência a veneno (+1d4 de Defesa Mágica contra venenos)." },
+    note: "Magias de veneno e cobra conjuradas com este báculo adicionam +1d12. Imunidade completa a venenos enquanto equipado. Aliados em raio 3 hex ganham resistência a veneno (+1d4 de Defesa Mágica contra venenos).",
+    charges: { max: 5, label: "Disparos", resetOn: "combate" },
+    range: 4,
+    effect: "Ação de Combate: gasta 1 Carga para disparar um raio de energia arcana a até 4 hex de distância. Dano: 1d6+INT. Sem Cargas restantes: a arma ainda pode ser usada em combate corpo a corpo pelo dano físico base.",
+    note: "5 disparo(s) por combate. Dano: 1d6+INT, alcance 4 hex." },
 
   /* ── ÚNICOS AMALDIÇOADOS — Armas de 2M ── */
   { tier: "lendario", cursed: true,
-    name: "Báculo da Explosão de Mana", dmg: "1d10 + 1d8 + 1d6", req: "INT alto", weight: 3,
+    name: "Báculo da Explosão de Mana", dmg: "1d6", req: "INT alto", weight: 3,
     defenseDegrade: null, slot: ["primary"], heavyTwoHanded: true,
     story: "Criado por um mago que descobriu que HP é apenas mana condensada em carne. Usou o báculo durante 10 anos antes de morrer — não em batalha, mas de velhice precoce, com 34 anos de idade real mas aparência de 90. O báculo estava em perfeito estado ao seu lado.",
     note: "⚠ AMALDIÇOADA — Explosão de Mana: Ao conjurar a magia Explosão de Mana através deste báculo, o conjurador pode sacrificar HP permanentemente (não retorna com descanso — é HP máximo perdido para sempre). A cada 5 HP máx sacrificados, adiciona +1d20 de dano numa área 3x3 hex. Não há limite de sacrifício por conjuração. Se o conjurador chegar a 0 HP máx, morre instantaneamente e o báculo explode causando dano igual ao HP sacrificado em raio 10 hex.",
-    curseDetails: "Localização: Torre do Arquimago Louco (Reinos de Akaen, dif.4). A magia Explosão de Mana só existe neste báculo — não pode ser aprendida por grimório." },
+    curseDetails: "Localização: Torre do Arquimago Louco (Reinos de Akaen, dif.4). A magia Explosão de Mana só existe neste báculo — não pode ser aprendida por grimório.",
+    charges: { max: 5, label: "Disparos", resetOn: "combate" },
+    range: 4,
+    effect: "Ação de Combate: gasta 1 Carga para disparar um raio de energia arcana a até 4 hex de distância. Dano: 1d6+INT. Sem Cargas restantes: a arma ainda pode ser usada em combate corpo a corpo pelo dano físico base.",
+    note: "5 disparo(s) por combate. Dano: 1d6+INT, alcance 4 hex." },
 
   { tier: "unico", cursed: true,
     name: "Arco Celeste de Akaen", dmg: "2d10 + 1d8 + 1d4", req: "DEX/AGI", weight: 2,
@@ -2002,12 +2134,16 @@ const WEAPONS_TWO_HAND = [
 
   /* ── SET: Raiz e Ramo (3 peças) — Druida ── */
   { tier: "magico", subclass: "druida", setName: "Raiz e Ramo",
-    name: "Cajado Raiz-Viva (Raiz e Ramo)", dmg: "1d10 + 1d6 + 1d4", req: "SAB/INT", weight: 3,
+    name: "Cajado Raiz-Viva (Raiz e Ramo)", dmg: "1d6", req: "SAB/INT", weight: 3,
     defenseDegrade: null, slot: ["primary"], heavyTwoHanded: true,
     story: "Não foi forjado — cresceu. Um druida plantou o galho de uma árvore ancestral em solo sagrado e esperou 40 anos. Quando o retirou, a raiz ainda pulsava. Ainda pulsa.",
     note: "Ao conjurar Enredar ou Moldar Terreno: a área afetada aumenta em +1 hex em todas as direções. Ao invocar um animal: o animal invocado aparece com 1 nível de força extra (HP+10, dano +1d4).",
     setBonus: { pieces: 3, ability: "A Floresta Responde",
-      effect: "Com 3 peças: 1x/combate como Ação Livre — o terreno em raio 6 hex torna-se favorável aos aliados (regen 2 HP/r, −2 Movimento inimigos, +1d4 nos testes de aliados). Dura 3 rodadas." } },
+      effect: "Com 3 peças: 1x/combate como Ação Livre — o terreno em raio 6 hex torna-se favorável aos aliados (regen 2 HP/r, −2 Movimento inimigos, +1d4 nos testes de aliados). Dura 3 rodadas." },
+    charges: { max: 4, label: "Disparos", resetOn: "combate" },
+    range: 4,
+    effect: "Ação de Combate: gasta 1 Carga para disparar um raio de energia arcana a até 4 hex de distância. Dano: 1d6+INT. Sem Cargas restantes: a arma ainda pode ser usada em combate corpo a corpo pelo dano físico base.",
+    note: "4 disparo(s) por combate. Dano: 1d6+INT, alcance 4 hex." },
 
   /* ── SET: Fúria Encadeada (3 peças) — Berserker ── */
   { tier: "lendario", subclass: "berserker", setName: "Fúria Encadeada",
@@ -2167,9 +2303,13 @@ const WEAPONS_TWO_HAND = [
     note:"Lança de madeira sagrada de Serpentara com ponta de osso de cobra-rainha endurecido. Usada em paradas e cerimônias, mas perfeitamente funcional em batalha. Alcance 2 hex. O fuste tem entalhes rúnicos que sussurram em sibilante." },
 
   { tier:"comum", name:"Bastão do Iniciado de Jurgmund",
-    dmg:"1d8+1d4", req:"SAB/INT", weight:2, defenseDegrade:null,
+    dmg: "1d6", req:"SAB/INT", weight:2, defenseDegrade:null,
     slot:["primary"],
-    note:"Bastão de osso de cobra-rainha usado pelos iniciados nos rituais de Jurgmund antes de ascender ao posto de sacerdote. Conta como cajado para efeitos de magia (+1 Slot enquanto equipado). Levemente vibrante ao toque de quem tem SAB ≥ 2." },
+    note:"Bastão de osso de cobra-rainha usado pelos iniciados nos rituais de Jurgmund antes de ascender ao posto de sacerdote. Conta como cajado para efeitos de magia (+1 Slot enquanto equipado). Levemente vibrante ao toque de quem tem SAB ≥ 2.",
+    charges: { max: 2, label: "Disparos", resetOn: "combate" },
+    range: 4,
+    effect: "Ação de Combate: gasta 1 Carga para disparar um raio de energia arcana a até 4 hex de distância. Dano: 1d6+INT. Sem Cargas restantes: a arma ainda pode ser usada em combate corpo a corpo pelo dano físico base.",
+    note: "2 disparo(s) por combate. Dano: 1d6+INT, alcance 4 hex." },
 
   /* RAROS */
   { tier:"raro", name:"Alabarda da Guarda Real Serpentariana",
@@ -2179,18 +2319,26 @@ const WEAPONS_TWO_HAND = [
     note:"Alcance 3 hex. Ao matar um alvo com esta arma: todos os inimigos que viram o abate testam SAB (normal) ou ficam Abalados por 1 rodada (a execução precisa é intimidante). Em formação com outro portador desta arma: +1d8 de dano (a Guarda é treinada para batalhar em par)." },
 
   { tier:"raro", name:"Cajado do Sacerdote Maior",
-    dmg:"1d10+1d8", req:"SAB/INT", weight:3, defenseDegrade:null,
+    dmg: "1d6", req:"SAB/INT", weight:3, defenseDegrade:null,
     slot:["primary"],
     story:"Dado ao sacerdote que completa dez anos de serviço em Serpentara. Feito de vértebra de Cobra-Rainha empilhadas e fundidas com resina sagrada — flexível como cobra, rígido como doutrina.",
-    note:"Conta como cajado mágico (+2 Slots enquanto equipado). Magias lançadas com este cajado custam −1 MP (mínimo 1). Ativo (2x/combate): Benção de Jurgmund — todos os aliados em raio 3 hex curam 1d6+SAB HP e ficam imunes a veneno por 2 rodadas." },
+    note:"Conta como cajado mágico (+2 Slots enquanto equipado). Magias lançadas com este cajado custam −1 MP (mínimo 1). Ativo (2x/combate): Benção de Jurgmund — todos os aliados em raio 3 hex curam 1d6+SAB HP e ficam imunes a veneno por 2 rodadas.",
+    charges: { max: 3, label: "Disparos", resetOn: "combate" },
+    range: 4,
+    effect: "Ação de Combate: gasta 1 Carga para disparar um raio de energia arcana a até 4 hex de distância. Dano: 1d6+INT. Sem Cargas restantes: a arma ainda pode ser usada em combate corpo a corpo pelo dano físico base.",
+    note: "3 disparo(s) por combate. Dano: 1d6+INT, alcance 4 hex." },
 
   /* MÁGICOS */
   { tier:"magico", name:"Cajado do Oráculo dos Profundos",
-    dmg:"1d12+1d10+1d4", req:"SAB/INT", weight:3, defenseDegrade:null,
+    dmg: "1d6", req:"SAB/INT", weight:3, defenseDegrade:null,
     slot:["primary"],
     magicBonus:{ attr:"SAB", attrValue:2, attr2:"INT", attrValue2:1, spellActions:1, slots:2 },
     story:"Forjado com a vértebra da espinha dorsal da Serpente Imortal de Jurgmund — uma das três retiradas durante o sonho sagrado. O cajado não pertence a nenhum oráculo; ele escolhe o oráculo. Quando o portador morre, o cajado some.",
-    note:"+2 SAB, +1 INT, +1 Ação de Magia, +2 Slots enquanto equipado. Magias de veneno ou serpente lançadas com este cajado têm dano dobrado. Passivo: o portador sente qualquer serpente em raio 20 hex e pode comunicar intenção simples a elas. Ativo (1x/sessão): Oráculo de Jurgmund — a serpente no cajado sussurra uma verdade sobre o futuro imediato (o Mestre revela algo sobre o próximo encontro ou decisão)." },
+    note:"+2 SAB, +1 INT, +1 Ação de Magia, +2 Slots enquanto equipado. Magias de veneno ou serpente lançadas com este cajado têm dano dobrado. Passivo: o portador sente qualquer serpente em raio 20 hex e pode comunicar intenção simples a elas. Ativo (1x/sessão): Oráculo de Jurgmund — a serpente no cajado sussurra uma verdade sobre o futuro imediato (o Mestre revela algo sobre o próximo encontro ou decisão).",
+    charges: { max: 4, label: "Disparos", resetOn: "combate" },
+    range: 4,
+    effect: "Ação de Combate: gasta 1 Carga para disparar um raio de energia arcana a até 4 hex de distância. Dano: 1d6+INT. Sem Cargas restantes: a arma ainda pode ser usada em combate corpo a corpo pelo dano físico base.",
+    note: "4 disparo(s) por combate. Dano: 1d6+INT, alcance 4 hex." },
 
   { tier:"magico", name:"Lança Sagrada de Serpentara",
     dmg:"1d12+1d10+1d6", req:"FOR/SAB", weight:5, defenseDegrade:null,
@@ -2212,12 +2360,16 @@ const WEAPONS_TWO_HAND = [
 
   { tier:"lendario", divine:"Aethea", race:"elfo",
     name:"Cajado das Eras — Memória de Akaen",
-    dmg:"1d12+1d10", req:"INT/SAB", weight:2.5, defenseDegrade:null,
+    dmg: "1d6", req:"INT/SAB", weight:2.5, defenseDegrade:null,
     slot:["primary"],
     magicBonus:{ attr:"INT", attrValue:2, attr2:"SAB", attrValue2:1, spellActions:1, slots:3 },
     story:"O cajado de Akaen — o maior mago-arquiteto da civilização élfica, que desenhou as cidades que os escravizadores apagaram. Ele gravou nele toda a sua memória antes de morrer. O cajado lembra Akaen. Às vezes, Akaen fala através dele.",
     effect:"Passivo: +2 INT, +1 SAB, +1 Ação de Magia, +3 Slots. Magias de nível 1–3 lançadas com este cajado não consomem Slots (Akaen as conhece de cor). Passivo: o cajado sussurra estratégias — uma vez por turno como Ação Livre, o portador pode perguntar ao cajado sobre uma criatura visível e receber seu HP aproximado, imunidades e ponto fraco (o Mestre responde com precisão). Ativo (1x/combate): Arquitetura Arcana — cria estrutura de força mágica de até 6×6 hex (parede, plataforma, teto) que dura 5 rodadas. Inquebrável por meios físicos.",
-    note:"+2 INT, +1 SAB, +1 Ação Magia, +3 Slots. Nv.1-3 grátis. Sussurro de Akaen: HP/imunidades/fraqueza. 1x: estrutura 6×6 hex." },
+    note:"+2 INT, +1 SAB, +1 Ação Magia, +3 Slots. Nv.1-3 grátis. Sussurro de Akaen: HP/imunidades/fraqueza. 1x: estrutura 6×6 hex.",
+    charges: { max: 5, label: "Disparos", resetOn: "combate" },
+    range: 4,
+    effect: "Ação de Combate: gasta 1 Carga para disparar um raio de energia arcana a até 4 hex de distância. Dano: 1d6+INT. Sem Cargas restantes: a arma ainda pode ser usada em combate corpo a corpo pelo dano físico base.",
+    note: "5 disparo(s) por combate. Dano: 1d6+INT, alcance 4 hex." },
 
   /* ANCESTRAL */
   { tier:"ancestral", divine:"Aethea", race:"elfo",
@@ -2253,11 +2405,15 @@ const WEAPONS_TWO_HAND = [
     note:"Alcance 2 hex (a espinha é longa e curva). Passivo: em combate em água ou chuva intensa, todos os ataques com esta lança têm +1 Chance de Acerto e +1d6 de dano extra (a Sereia reconhece o elemento). Ativo (2x/combate): a lança emite um som subsônico — todos os inimigos em raio 4 hex testam SAB (normal) ou ficam Abalados por 2 rodadas (o Canto da Sereia ainda mora na espinha)." },
 
   { tier:"magico", name:"Cajado da Cauda de Quimera",
-    dmg:"1d12+1d8+1d4", req:"INT/FOR", weight:5, defenseDegrade:null,
+    dmg: "1d6", req:"INT/FOR", weight:5, defenseDegrade:null,
     slot:["primary"],
     magicBonus:{ attr:"INT", attrValue:1, spellActions:1 },
     story:"A cauda de uma Quimera é a parte mais esquecida da criatura — todos falam sobre as três cabeças. A cauda, porém, tem um veneno próprio diferente dos três pescoços, e mantém a energia das três naturezas (leão, cabra, serpente) em equilíbrio tenso. Este cajado foi feito por um alquimista que passou cinco anos tentando entender esse equilíbrio. Ele parou de tentar e simplesmente fez o cajado.",
-    note:"+1 INT, +1 Ação de Magia. Passivo: magias de elementos diferentes (fogo, gelo, raio, veneno) lançadas com este cajado têm +1d6 de dano extra (a Quimera é três naturezas — aprecia variedade). Ativo (3x/combate): a cauda ativa uma das três naturezas aleatoriamente — role d6: 1-2 Rugido de Leão (2d6 de dano físico em cone 3 hex), 3-4 Cuspe da Cabra (alvo recebe −2 DEX por 2 rodadas), 5-6 Veneno da Serpente (1d8/rodada por 3 rodadas, SAB difícil)." },
+    note:"+1 INT, +1 Ação de Magia. Passivo: magias de elementos diferentes (fogo, gelo, raio, veneno) lançadas com este cajado têm +1d6 de dano extra (a Quimera é três naturezas — aprecia variedade). Ativo (3x/combate): a cauda ativa uma das três naturezas aleatoriamente — role d6: 1-2 Rugido de Leão (2d6 de dano físico em cone 3 hex), 3-4 Cuspe da Cabra (alvo recebe −2 DEX por 2 rodadas), 5-6 Veneno da Serpente (1d8/rodada por 3 rodadas, SAB difícil).",
+    charges: { max: 4, label: "Disparos", resetOn: "combate" },
+    range: 4,
+    effect: "Ação de Combate: gasta 1 Carga para disparar um raio de energia arcana a até 4 hex de distância. Dano: 1d6+INT. Sem Cargas restantes: a arma ainda pode ser usada em combate corpo a corpo pelo dano físico base.",
+    note: "4 disparo(s) por combate. Dano: 1d6+INT, alcance 4 hex." },
 
   { tier:"lendario", name:"Mandíbula do Leviatã — Machado Duplo",
     dmg:"1d12+1d10+1d8", req:"FOR alto", weight:11, defenseDegrade:null,
@@ -2273,8 +2429,16 @@ const WEAPONS_TWO_HAND = [
 
 const WEAPONS_MAGIC = [
   /* --- COMUNS --- */
-  { tier: "comum", name: "Cajado de Batalha", dmg: "1d8", req: "INT", weight: 4, defenseDegrade: null, slot: ["primary"], note: "Conjura sem penalidade.", heavyTwoHanded: true },
-  { tier: "comum", name: "Varinha", dmg: "1d4", req: "INT/SAB", weight: 1, defenseDegrade: 2, slot: ["primary","secondary"], note: "Canaliza magias menores." },
+  { tier: "comum", name: "Cajado de Batalha", dmg: "1d6", req: "INT", weight: 4, defenseDegrade: null, slot: ["primary"], note: "Conjura sem penalidade.", heavyTwoHanded: true,
+    charges: { max: 2, label: "Disparos", resetOn: "combate" },
+    range: 4,
+    effect: "Ação de Combate: gasta 1 Carga para disparar um raio de energia arcana a até 4 hex de distância. Dano: 1d6+INT. Sem Cargas restantes: a arma ainda pode ser usada em combate corpo a corpo pelo dano físico base.",
+    note: "2 disparo(s) por combate. Dano: 1d6+INT, alcance 4 hex." },
+  { tier: "comum", name: "Varinha", dmg: "1d4", req: "INT/SAB", weight: 1, defenseDegrade: 2, slot: ["primary","secondary"], note: "Canaliza magias menores.",
+    charges: { max: 2, label: "Disparos", resetOn: "combate" },
+    range: 4,
+    effect: "Ação de Combate: gasta 1 Carga para disparar um raio de energia arcana a até 4 hex de distância. Dano: 1d6+INT. Sem Cargas restantes: a arma ainda pode ser usada em combate corpo a corpo pelo dano físico base.",
+    note: "2 disparo(s) por combate. Dano: 1d6+INT, alcance 4 hex." },
   { tier: "comum", name: "Grimório de Combate", dmg: "—", req: "INT", weight: 2, defenseDegrade: 2, slot: ["secondary"], note: "+1 Slot de Magia enquanto equipado." },
   { tier: "comum", name: "Orbe Arcano", dmg: "1d4", req: "INT/SAB", weight: 1, defenseDegrade: 2, slot: ["secondary"], note: "+1d4 em testes de Arcanismo enquanto equipado." },
 
@@ -2284,9 +2448,13 @@ const WEAPONS_MAGIC = [
     note: "Magias conjuradas com este cetro adicionam +1d4 de dano. Uma vez por sessão, ao conjurar uma magia de cura, a cura é dobrada." },
 
   /* --- LENDÁRIOS --- */
-  { tier: "lendario", name: "Bastão das Entranhas do Mundo", dmg: "1d8 + 1d6 + 1d4", req: "INT/SAB", weight: 4, defenseDegrade: null, slot: ["primary"],
+  { tier: "lendario", name: "Bastão das Entranhas do Mundo", dmg: "1d6", req: "INT/SAB", weight: 4, defenseDegrade: null, slot: ["primary"],
     story: "Encontrado nas profundezas abaixo de Serpentara, onde o calor da terra se mistura com a energia primordial de Jurgmund. Os anéis de cobra que formam seu cabo nunca param de se mover levemente — como se estivessem vivos.",
-    note: "Passivo: +1d6 em todas as magias de veneno, terra ou natureza. Três vezes por dia, ao conjurar qualquer magia, pode adicionar um efeito de paralisia leve (alvo perde 1 Ação de Reação).", heavyTwoHanded: true },
+    note: "Passivo: +1d6 em todas as magias de veneno, terra ou natureza. Três vezes por dia, ao conjurar qualquer magia, pode adicionar um efeito de paralisia leve (alvo perde 1 Ação de Reação).", heavyTwoHanded: true,
+    charges: { max: 5, label: "Disparos", resetOn: "combate" },
+    range: 4,
+    effect: "Ação de Combate: gasta 1 Carga para disparar um raio de energia arcana a até 4 hex de distância. Dano: 1d6+INT. Sem Cargas restantes: a arma ainda pode ser usada em combate corpo a corpo pelo dano físico base.",
+    note: "5 disparo(s) por combate. Dano: 1d6+INT, alcance 4 hex." },
 
   /* ── DEUS DO VERMELHÃO (Divindade dos Karlacs — O Fogo que Cresce) ── */
   { tier: "ancestral", divine: "Vermelhão", race: "karlac",
@@ -2303,12 +2471,16 @@ const WEAPONS_MAGIC = [
 
   /* ── SET: Manto do Necromante (peça 2) ── */
   { tier: "magico", subclass: "necromante", setName: "Manto do Necromante",
-    name: "Báculo de Osso Oco (Manto do Necromante)", dmg: "1d6 + 1d4", req: "INT", weight: 2.5,
+    name: "Báculo de Osso Oco (Manto do Necromante)", dmg: "1d6", req: "INT", weight: 2.5,
     defenseDegrade: null, slot: ["primary"], heavyTwoHanded: false,
     story: "Feito com a espinha dorsal de um lich derrotado. O osso nunca esfriou completamente — ao toque, tem a temperatura exata de um corpo há uma hora morto. Conjuradores de necromância sentem os dedos formigarem ao segurar.",
     note: "Magias de necromancia conjuradas com este báculo têm alcance +2 hex e custo de Slot reduzido em 1 (mínimo 0). Pacto Sombrio: o espírito invocado tem HP dobrado.",
     setBonus: { pieces: 3, ability: "Colheita das Almas",
-      effect: "Com 3 peças do Manto do Necromante: Colheita das Almas ativada (ver Ceifador)." } },
+      effect: "Com 3 peças do Manto do Necromante: Colheita das Almas ativada (ver Ceifador)." },
+    charges: { max: 4, label: "Disparos", resetOn: "combate" },
+    range: 4,
+    effect: "Ação de Combate: gasta 1 Carga para disparar um raio de energia arcana a até 4 hex de distância. Dano: 1d6+INT. Sem Cargas restantes: a arma ainda pode ser usada em combate corpo a corpo pelo dano físico base.",
+    note: "4 disparo(s) por combate. Dano: 1d6+INT, alcance 4 hex." },
 
   /* ── SET: Voz e Melodia (3 peças) — Bardo ── */
   { tier: "raro", subclass: "bardo", setName: "Voz e Melodia",
@@ -2345,7 +2517,7 @@ const WEAPONS_MAGIC = [
     note: "5 disparos de gelo por combate. Acertos acumulam — 2 acertos no mesmo alvo: Paralisado 1 rodada (FOR normal para resistir).",
     story: "Feita com água do Lago Central congelada no inverno de Durrak e canalizada em madeira de pinheiro cinzento. Fria ao toque. Sempre." },
 
-  { tier: "magico", name: "Cajado do Raio", dmg: "1d8", req: "INT", weight: 3,
+  { tier: "magico", name: "Cajado do Raio", dmg: "1d6", req: "INT", weight: 3,
     slot: ["primary"], defenseDegrade: 2, heavyTwoHanded: false,
     charges: { max: 3, label: "Descargas de Raio", resetOn: "combate" },
     range: 4,
@@ -2391,10 +2563,10 @@ const WEAPONS_MAGIC = [
 
   { tier: "raro", name: "Varinha do Relâmpago Furtivo", dmg: "1d4", req: "DEX", weight: 0.2,
     slot: ["primary","secondary"], defenseDegrade: null,
-    charges: { max: 6, label: "Raios Furtivos", resetOn: "combate" },
+    charges: { max: 5, label: "Raios Furtivos", resetOn: "combate" },
     range: 4,
     effect: "Ação de Combate: gasta 1 Carga para disparar raio silencioso a até 4 hex. Dano: 1d6+DEX de relâmpago. O disparo não produz som nem luz visível — Furtividade não é comprometida ao disparar. Sem Cargas: dano base 1d4 silencioso.",
-    note: "6 disparos silenciosos por combate. Bardo e Ladino: disparar não revela posição oculta.",
+    note: "5 disparos silenciosos por combate. Bardo e Ladino: disparar não revela posição oculta.",
     story: "Favorita de assassinos que precisam matar à distância sem o barulho inconveniente de uma flecha." },
 
   { tier: "raro", name: "Orbe do Eco Arcano", dmg: "1d6", req: "INT", weight: 0.8,
@@ -2406,7 +2578,7 @@ const WEAPONS_MAGIC = [
     note: "3 disparos com ricochete por combate. +1 Ação de Magia permanente. O segundo alvo não pode ser o mesmo que o primeiro.",
     story: "A esfera completa um círculo perfeito antes de retornar. Físicos de Valdris tentam explicar. Magos riem deles." },
 
-  { tier: "raro", name: "Cajado das Raízes Vivas", dmg: "1d8", req: "SAB", weight: 3.5,
+  { tier: "raro", name: "Cajado das Raízes Vivas", dmg: "1d6", req: "SAB", weight: 3.5,
     slot: ["primary"], defenseDegrade: 2, heavyTwoHanded: false,
     charges: { max: 3, label: "Raízes", resetOn: "combate" },
     range: 4,
@@ -2442,10 +2614,10 @@ const WEAPONS_MAGIC = [
 
   /* ─── LENDÁRIO ───────────────────────────────────────────────── */
 
-  { tier: "lendario", name: "Cajado da Tempestade Eterna", dmg: "1d10", req: "INT", weight: 4,
+  { tier: "lendario", name: "Cajado da Tempestade Eterna", dmg: "1d6", req: "INT", weight: 4,
     slot: ["primary"], defenseDegrade: 2, heavyTwoHanded: false,
     charges: { max: 5, label: "Raios da Tempestade", resetOn: "combate" },
-    range: 5,
+    range: 4,
     magicBonus: { spellActions: 1, slots: 2 },
     effect: "Passivo: +1 Ação de Magia e +2 Slots. Ativo (Ação de Combate, gasta 1 Carga): dispara raio em linha reta de até 5 hex — atinge TODOS os alvos na linha. Dano: 2d10+INT de relâmpago. Armadura metálica: dano automático máximo. 2 Cargas: relâmpago em área 3 hex de raio no ponto de impacto (2d10+INT, AGI normal para metade).",
     note: "5 raios por combate. Alcance 5 hex. Afeta linha inteira de inimigos. +1 Ação de Magia e +2 Slots permanentes.",
@@ -2473,7 +2645,7 @@ const WEAPONS_MAGIC = [
   /* ─── SETS DE ARMAS MÁGICAS ──────────────────────────────────── */
 
   /* Set: Chama e Gelo (2 peças — varinha + orbe complementares) */
-  { tier: "raro", name: "Varinha da Chama Viva", dmg: "1d6", req: "INT", weight: 0.3,
+  { tier: "raro", name: "Varinha da Chama Viva", dmg: "1d4", req: "INT", weight: 0.3,
     slot: ["primary","secondary"], defenseDegrade: null,
     charges: { max: 5, label: "Chamas Vivas", resetOn: "combate" },
     range: 4,
@@ -2502,10 +2674,10 @@ const WEAPONS_MAGIC = [
     note: "+1 Ação de Magia e +2 Slots permanentes. Com Cajado de Cristal Puro: BÔNUS 2 PEÇAS — +1 Slot adicional e Capítulos duram 4 rodadas.",
     story: "Volume II de uma coleção de 7. Os outros 6 estão em lugares que a Torre of Arcath preferia não divulgar." },
 
-  { tier: "lendario", name: "Cajado de Cristal Puro", dmg: "1d8+1d6", req: "INT", weight: 3.5,
+  { tier: "lendario", name: "Cajado de Cristal Puro", dmg: "1d6", req: "INT", weight: 3.5,
     slot: ["primary"], defenseDegrade: 1, heavyTwoHanded: false,
     charges: { max: 4, label: "Feixes de Cristal", resetOn: "combate" },
-    range: 5,
+    range: 4,
     magicBonus: { slots: 2 },
     setName: "Grimório do Archmago",
     effect: "Passivo: +2 Slots. Ativo (Ação de Combate, gasta 1 Carga): dispara feixe de luz cristalina a até 5 hex. Dano: 1d10+1d6+INT de dano arcano. O feixe perfura — atinge todos na linha (cada um faz AGI normal para metade). Sem Cargas: dano base 1d8+1d6.",
@@ -2536,10 +2708,10 @@ const WEAPONS_MAGIC = [
     story: "Rennala foi a maior arquimaga de Atrelon antes da Batalha Colossal. Este orbe era seu olho — ela o usava para ver magias em formação antes que existissem. Quando ela morreu, o orbe guardou o que ela via no último momento. Às vezes mostra." },
 
   { tier: "lendario", name: "Báculo do Profeta Sangrento",
-    dmg: "1d8", req: "SAB", weight: 3,
+    dmg: "1d6", req: "SAB", weight: 3,
     slot: ["primary"], defenseDegrade: 2, heavyTwoHanded: false,
     charges: { max: 3, label: "Profecias", resetOn: "sessao" },
-    range: 5,
+    range: 4,
     magicBonus: { slots: 2, attr: "SAB", attrValue: 2 },
     effect: "Passivo: +2 SAB, +2 Slots. Ativo (1 Carga, 1 uso de Fé, alcance 5 hex): Profecia de Sangue — o portador sangra voluntariamente (perde 1d6 HP) para ver o próximo ataque do alvo. Por 2 rodadas: o portador sabe exatamente o que o alvo vai fazer — primeiro ataque do alvo é automaticamente bloqueado (sem rolar defesa). 3 Cargas/sessão — as profecias não renovam por combate, mas por sessão inteira.",
     note: "+2 SAB, +2 Slots. Profecia: perde 1d6 HP → bloqueia automaticamente 1 ataque do alvo por 2 rodadas. 3/sessão.",
@@ -10174,6 +10346,360 @@ const BESTIARY = [
       { item: "Olho do Ancião (material lendário — se o olho foi destruído: visão do futuro, 1x/semana)", chance:40, qty:"1" },
       { item: "Garra do Ancião (material lendário — arma ou escudo de garra, +2d10 dano de gelo)", chance:50, qty:"1" },
       { item: "Alma do Ancião Sem Escamas (artefato — o mais poderoso que existe)", chance:100, qty:"1" }
+    ]
+  },
+
+  /* ══════════════════════════════════════════════════════════════
+     NOVOS INIMIGOS — DIF 1 a 3
+     Mecânicas únicas · Loot conectado ao compêndio existente
+     ══════════════════════════════════════════════════════════════ */
+
+  /* ── DIFICULDADE 1 ───────────────────────────────────────────── */
+
+  {
+    id: "tecelao-de-teias-menor",
+    name: "Tecelão de Teias",
+    difficulty: 1,
+    attrs: { FOR:1, DEX:3, AGI:3, INT:1, SAB:2 },
+    size: "pequeno",
+    category: "Besta / Aracnídeo",
+    location: ["Floresta", "Caverna", "Ruínas"],
+    hp: 28, physDefense: 2, magDefense: 1, dodge: 13, actions: 2,
+    damage: "1d6+1d4 (mordida) ou teia (sem dano)",
+    abilities: [
+      { name: "Teia de Contenção",
+        desc: "1 Ação: lança teia em 1 alvo até 4 hex. O alvo testa AGI (normal) ou fica Preso por 2 rodadas (FOR normal + 1 Ação para escapar). O hex fica com teia permanente: qualquer criatura que entrar testa AGI ou fica Presa também." },
+      { name: "Rede de Fuga",
+        desc: "Passivo: pode se mover através de hexes com teia sem custo de Movimento (a própria teia acelera). Se houver 3+ hexes com teia no campo, o Tecelão pode teleportar entre eles como Ação Livre 1x por turno." },
+      { name: "Instinto de Bando",
+        desc: "Passivo: se houver outro Tecelão vivo no combate, ambos ganham +1 Chance de Acerto e +1d4 de dano. Tecelões raramente aparecem sozinhos." }
+    ],
+    spells: [],
+    behavior: "Aparece em grupos de 2-4. Prioriza prender o alvo mais rápido do grupo (maior AGI) antes de atacar. Recua para hexes com teia quando ferido. Nunca ataca em melee direto se puder prender antes.",
+    loot: [
+      { item: "Teia Endurecida (material — receita de Armadura Tecida do Abismo)", chance:60, qty:"1d2" },
+      { item: "Glândula de Seda (material comum — usado em Artesanato Geral)", chance:75, qty:"1d3" },
+      { item: "Pergaminho de Magia: Orbe Congelante (nv1)", chance:15, qty:"1" }
+    ]
+  },
+
+  {
+    id: "acolito-faiscante",
+    name: "Acólito Faiscante",
+    difficulty: 1,
+    attrs: { FOR:1, DEX:2, AGI:2, INT:3, SAB:2 },
+    size: "medio",
+    category: "Humanoide / Conjurador",
+    location: ["Cidade", "Ruínas", "Estrada"],
+    hp: 26, physDefense: 1, magDefense: 4, dodge: 12, actions: 2,
+    damage: "1d6+INT (faísca arcana, alcance 5 hex)",
+    abilities: [
+      { name: "Faísca em Cadeia Menor",
+        desc: "1 Ação de Magia (3x/combate): dispara faísca que ricocheteia entre até 2 alvos (saltos de 3 hex). Cada alvo sofre 1d6+INT. Versão simplificada de Faísca Ricochete — o Acólito ainda está aprendendo." },
+      { name: "Escudo Estático",
+        desc: "Passivo: enquanto tiver 50%+ de HP, o Acólito tem um campo estático. Atacantes melee sofrem 1d4 de dano elétrico ao acertá-lo. Abaixo de 50% HP o campo colapsa." },
+      { name: "Fuga Relâmpago",
+        desc: "Reação (1x/combate): ao receber dano que o reduziria abaixo de 30% HP, teleporta-se até 4 hex para longe do atacante. Não pode ser usado se estiver Preso ou Imobilizado." }
+    ],
+    spells: [],
+    behavior: "Mantém distância de 4-5 hex. Usa Faísca em Cadeia quando 2+ inimigos estão agrupados. Foge ao ficar ferido. Se acuado, ataca desesperadamente em melee (com penalidade).",
+    loot: [
+      { item: "Pergaminho de Magia: Faísca Ricochete (nv1)", chance:45, qty:"1" },
+      { item: "Cristal de Foco Menor (material — componente de crafting arcano)", chance:60, qty:"1d2" },
+      { item: "Amuleto do Conjurador Ágil (acessório raro)", chance:12, qty:"1" }
+    ]
+  },
+
+  {
+    id: "guardiao-totem-antigo",
+    name: "Guardião de Totem Antigo",
+    difficulty: 1,
+    attrs: { FOR:2, DEX:1, AGI:1, INT:1, SAB:3 },
+    size: "medio",
+    category: "Construto / Espírito",
+    location: ["Ruínas", "Floresta", "Templo"],
+    hp: 34, physDefense: 4, magDefense: 3, dodge: 9, actions: 1,
+    damage: "1d8+1d4 (golpe de madeira encantada)",
+    abilities: [
+      { name: "Vínculo com o Totem",
+        desc: "Passivo: o Guardião está vinculado a um Totem de madeira num hex fixo do mapa (o Mestre define). Enquanto o Totem existir (15 HP, Def.Física 3), o Guardião regenera 3 HP por rodada. Destruir o Totem interrompe a regeneração permanentemente." },
+      { name: "Chamado de Raízes",
+        desc: "1 Ação (2x/combate): raízes brotam em raio 2 hex ao redor do Totem. Inimigos na área testam AGI (normal) ou ficam Imobilizados por 1 rodada." },
+      { name: "Último Guardião",
+        desc: "Se o Totem for destruído: o Guardião entra em fúria — +1 Ação de combate e +1d6 de dano pelo restante do combate, mas perde toda a regeneração." }
+    ],
+    spells: [],
+    behavior: "Nunca se afasta mais de 4 hex do seu Totem. Prioriza atacar quem se aproxima do Totem. Se o Totem for atacado, ignora todos os outros alvos e foca no atacante.",
+    loot: [
+      { item: "Pergaminho de Magia: Totem de Chamas Menor (nv1)", chance:40, qty:"1" },
+      { item: "Madeira de Totem Antigo (material — usado em cajados e totens)", chance:70, qty:"1d3" },
+      { item: "Talismã do Guardião de Pedra (acessório raro)", chance:15, qty:"1" }
+    ]
+  },
+
+  /* ── DIFICULDADE 2 ───────────────────────────────────────────── */
+
+  {
+    id: "marcador-de-presas",
+    name: "Marcador de Presas",
+    difficulty: 2,
+    attrs: { FOR:2, DEX:4, AGI:3, INT:2, SAB:3 },
+    size: "medio",
+    category: "Humanoide / Caçador",
+    location: ["Floresta", "Planície", "Estrada"],
+    hp: 72, physDefense: 4, magDefense: 3, dodge: 12, actions: 2,
+    damage: "1d10+1d4 (besta pesada, alcance 6 hex)",
+    abilities: [
+      { name: "Marca de Caça",
+        desc: "Ação Livre (1x/turno): marca 1 alvo visível em até 8 hex por 4 rodadas. O alvo marcado recebe +25% de dano de TODOS os inimigos no combate e não pode se tornar invisível. Se o alvo marcado morrer, a marca salta automaticamente para o inimigo vivo mais próximo." },
+      { name: "Tiro Preparado",
+        desc: "Passivo: se o Marcador não se mover no turno, o próximo tiro tem +2 Chance de Acerto e +1d8 de dano. Ele prefere posições fixas elevadas." },
+      { name: "Recuo Calculado",
+        desc: "Reação: se um inimigo entrar em hex adjacente, o Marcador recua 3 hex sem gastar Ação e dispara um tiro reflexo (1d10, sem bônus). 2x por combate." }
+    ],
+    spells: [],
+    behavior: "Posiciona-se a 6-8 hex do grupo, preferindo elevação. Marca o alvo com maior dano do grupo e mantém a marca ativa. Recua se pressionado. Nunca engaja em melee voluntariamente.",
+    loot: [
+      { item: "Pergaminho de Magia: Marca do Caçador (nv2)", chance:50, qty:"1" },
+      { item: "Besta Pesada de Caça (arma rara — 1d10, alcance 6 hex)", chance:35, qty:"1" },
+      { item: "Capa Furtiva do Caçador (acessório raro)", chance:25, qty:"1" },
+      { item: "Virotes Marcadores (consumível — 1d6 unidades, aplicam Marca por 2 rodadas)", chance:65, qty:"1d6" }
+    ]
+  },
+
+  {
+    id: "profanador-de-solo",
+    name: "Profanador de Solo",
+    difficulty: 2,
+    attrs: { FOR:2, DEX:2, AGI:1, INT:4, SAB:3 },
+    size: "medio",
+    category: "Humanoide / Cultista",
+    location: ["Cemitério", "Pântano", "Ruínas"],
+    hp: 78, physDefense: 3, magDefense: 7, dodge: 10, actions: 2,
+    damage: "1d8+INT (toque corrompido, ignora Def.Física)",
+    abilities: [
+      { name: "Terreno Profanado",
+        desc: "1 Ação de Magia (3x/combate): corrompe área de raio 2 hex por 5 rodadas. Inimigos dentro sofrem 1d6 no início do turno e recebem −1d4 em testes. O Profanador e aliados corrompidos ganham +1d4 em resistências dentro da área. Conjurações adjacentes ESTENDEM a área em vez de criar nova." },
+      { name: "Alimentado pela Corrupção",
+        desc: "Passivo: enquanto estiver dentro de uma área de Terreno Profanado (própria ou de aliado), regenera 4 HP por rodada e ganha +1 Ação de Magia." },
+      { name: "Colapso do Solo",
+        desc: "Ativo (1x/combate): toda a área profanada explode. Todos os inimigos dentro sofrem 2d8+INT e testam AGI (difícil) ou ficam Derrubados. A área é consumida (deixa de existir)." }
+    ],
+    spells: [],
+    behavior: "Começa profanando o terreno onde está. Expande a área a cada turno em direção ao grupo. Fica sempre dentro da própria corrupção. Usa Colapso do Solo quando 3+ inimigos estão na área ou quando abaixo de 30% HP.",
+    loot: [
+      { item: "Pergaminho de Magia: Terreno Profanado (nv2)", chance:55, qty:"1" },
+      { item: "Essência de Morto-vivo (material raro)", chance:60, qty:"1d2" },
+      { item: "Símbolo de Jurgmund Corrompido (acessório raro)", chance:20, qty:"1" },
+      { item: "Solo Profanado Cristalizado (material — componente de magia de área)", chance:70, qty:"1d3" }
+    ]
+  },
+
+  {
+    id: "portador-de-aura",
+    name: "Portador de Aura",
+    difficulty: 2,
+    attrs: { FOR:3, DEX:2, AGI:2, INT:3, SAB:4 },
+    size: "medio",
+    category: "Humanoide / Suporte",
+    location: ["Cidade", "Templo", "Dungeon"],
+    hp: 80, physDefense: 5, magDefense: 6, dodge: 11, actions: 2,
+    damage: "1d8+1d4 (maça abençoada)",
+    abilities: [
+      { name: "Aura de Ódio",
+        desc: "Passivo permanente: aura de raio 3 hex centrada no Portador, que se move com ele. TODOS os aliados dentro causam +1d6 de dano elemental adicional em todos os ataques. A aura não pode ser dissipada — apenas matar o Portador a encerra." },
+      { name: "Alternar Aura",
+        desc: "Ação Livre (1x/turno): troca a aura ativa. Opções: Aura de Ódio (+1d6 dano aliados), Aura de Determinação (+2 Def.Física aliados), Aura de Velocidade (+2 hex Movimento aliados). Apenas 1 aura ativa por vez." },
+      { name: "Prioridade Tática",
+        desc: "Passivo: o Portador sempre se posiciona no centro do grupo inimigo, maximizando cobertura da aura. Aliados o protegem instintivamente: ataques contra o Portador têm −1 Chance de Acerto enquanto houver 2+ aliados adjacentes a ele." }
+    ],
+    spells: [],
+    behavior: "Nunca lidera o ataque. Fica no centro do grupo. Alterna auras conforme a situação (Ódio quando o grupo ataca, Determinação quando sob pressão). Foge se ficar sozinho.",
+    loot: [
+      { item: "Pergaminho de Magia: Aura de Ódio (nv2)", chance:50, qty:"1" },
+      { item: "Símbolo de Aura (acessório raro — permite manter 1 aura sem custo de MP por 3 rodadas)", chance:30, qty:"1" },
+      { item: "Amuleto da Memória de Batalha (acessório raro)", chance:20, qty:"1" },
+      { item: "Óleo de Canalização (consumível — próxima magia custa −2 MP, 1d3 doses)", chance:65, qty:"1d3" }
+    ]
+  },
+
+  {
+    id: "espectro-de-corrente",
+    name: "Espectro de Corrente",
+    difficulty: 2,
+    attrs: { FOR:1, DEX:4, AGI:4, INT:3, SAB:3 },
+    size: "medio",
+    category: "Morto-vivo / Espírito",
+    location: ["Cemitério", "Ruínas", "Dungeon"],
+    hp: 68, physDefense: 2, magDefense: 9, dodge: 13, actions: 3,
+    damage: "1d8+INT (descarga espectral, ignora Def.Física)",
+    abilities: [
+      { name: "Corrente Espectral",
+        desc: "1 Ação (3x/combate): descarga que salta entre até 3 alvos (saltos de 3 hex). 1d8+INT no primeiro, 1d6 no segundo, 1d4 no terceiro. Cada alvo testa INT (normal) ou perde 1 Ação no próximo turno (a descarga interfere na concentração)." },
+      { name: "Fase Parcial",
+        desc: "Passivo: 30% de chance (d10 ≤ 3) de que qualquer ataque físico simplesmente atravesse o Espectro sem causar dano. Magias sempre acertam normalmente." },
+      { name: "Ressonância de Grupo",
+        desc: "Passivo: se houver 2+ Espectros de Corrente no combate, eles compartilham dano — o dano é dividido igualmente entre todos. Matar um libera a divisão para os restantes." }
+    ],
+    spells: [],
+    behavior: "Aparece em duplas ou trios. Move-se erraticamente (nunca em linha reta). Usa Corrente Espectral quando o grupo está agrupado. Prioriza conjuradores (que dependem de concentração).",
+    loot: [
+      { item: "Pergaminho de Magia: Corrente de Gelo (nv2)", chance:45, qty:"1" },
+      { item: "Essência de Fantasma (material — Água Transiente)", chance:70, qty:"1d3" },
+      { item: "Anel do Eco de Sangue (acessório raro)", chance:18, qty:"1" },
+      { item: "Fragmento de Corrente Espectral (material — encanta arma com dano em cadeia)", chance:40, qty:"1" }
+    ]
+  },
+
+  /* ── DIFICULDADE 3 ───────────────────────────────────────────── */
+
+  {
+    id: "mestre-de-totens",
+    name: "Mestre de Totens",
+    difficulty: 3,
+    attrs: { FOR:2, DEX:3, AGI:2, INT:5, SAB:4 },
+    size: "medio",
+    category: "Humanoide / Xamã",
+    location: ["Floresta", "Montanha", "Ruínas"],
+    hp: 145, physDefense: 5, magDefense: 10, dodge: 11, actions: 2,
+    damage: "1d8+INT (bastão xamânico) — mas raramente ataca diretamente",
+    abilities: [
+      { name: "Invocar Totem",
+        desc: "1 Ação de Magia (por turno, sem limite): crava um totem em hex visível até 5 hex. Cada totem: 25 HP, Def.Física 4, dura até ser destruído. Tipos (o Mestre escolhe): Totem de Chamas (1d8+INT fogo por rodada em raio 5), Totem de Cura (cura 1d8 em 1 aliado por rodada), Totem de Barreira (aliados adjacentes ganham +3 Def.Física). Máximo 3 totens ativos." },
+      { name: "Rede de Totens",
+        desc: "Passivo: se houver 3 totens ativos formando um triângulo, todos os inimigos DENTRO do triângulo sofrem 2d6 de dano no início de cada turno e recebem −2 na Chance de Esquiva. Os jogadores podem quebrar a rede destruindo qualquer totem." },
+      { name: "Transferência Vital",
+        desc: "Reação (2x/combate): ao receber dano letal, transfere-o para um totem ativo — o totem é destruído e o Mestre sobrevive com 1 HP. Se não houver totens, a habilidade falha." },
+      { name: "Fúria dos Ancestrais",
+        desc: "Ativo (1x/combate): todos os totens ativos explodem simultaneamente. Cada totem causa 2d8 em raio 2 hex ao redor de si. O Mestre não pode invocar novos totens por 2 rodadas após usar." }
+    ],
+    spells: [],
+    behavior: "Turno 1: invoca 2 totens imediatamente. Turno 2: invoca o terceiro formando triângulo ao redor do grupo. Depois: repõe totens destruídos prioritariamente. Recua constantemente, nunca fica adjacente. Usa Fúria dos Ancestrais quando abaixo de 25% HP.",
+    loot: [
+      { item: "Pergaminho de Magia: Totem de Ancestral (nv3)", chance:55, qty:"1" },
+      { item: "Bastão do Mestre de Totens (arma 2M rara — permite invocar 1 totem por combate)", chance:35, qty:"1" },
+      { item: "Madeira de Totem Antigo (material)", chance:80, qty:"2d3" },
+      { item: "Colar de Vínculo Ancestral (acessório raro — INT+1, totens invocados duram +2 rodadas)", chance:25, qty:"1" }
+    ]
+  },
+
+  {
+    id: "arauto-da-vulnerabilidade",
+    name: "Arauto da Vulnerabilidade",
+    difficulty: 3,
+    attrs: { FOR:3, DEX:3, AGI:2, INT:5, SAB:5 },
+    size: "medio",
+    category: "Humanoide / Amaldiçoador",
+    location: ["Dungeon", "Templo", "Cemitério"],
+    hp: 152, physDefense: 6, magDefense: 12, dodge: 10, actions: 3,
+    damage: "1d10+INT (maldição direcionada, ignora Def.Física)",
+    abilities: [
+      { name: "Vulnerabilidade",
+        desc: "1 Ação de Magia (2x/combate): maldição em raio 4 hex por 4 rodadas. Todos os inimigos na área: Def.Física reduzida pela METADE, +50% de dano de sangramento e veneno, e não podem curar acima de 50% do HP máximo. Novos alvos que entrarem na área são afetados imediatamente." },
+      { name: "Amplificação de Maldição",
+        desc: "Passivo: cada inimigo sob efeito de qualquer maldição (Vulnerabilidade, Marca, Corrompido, Envenenado) dá +1d6 de dano aos ataques do Arauto contra ele. Cumulativo: 3 condições = +3d6." },
+      { name: "Colheita de Fraqueza",
+        desc: "1 Ação (2x/combate): ataca 1 alvo amaldiçoado. Se acertar: rouba 1d10 HP do alvo e cura o Arauto na mesma quantidade. Se o alvo tiver 2+ maldições ativas: rouba 2d10." },
+      { name: "Manto de Maldições",
+        desc: "Passivo: ao atingir 40% de HP, todas as maldições ativas no campo se intensificam — duração renovada e efeitos aumentados em 50%. Ocorre 1x por combate." }
+    ],
+    spells: [],
+    behavior: "Turno 1: lança Vulnerabilidade sobre o grupo agrupado. Depois: alterna entre Colheita de Fraqueza no alvo mais amaldiçoado e ataques normais. Mantém distância 4-6 hex. Renova Vulnerabilidade assim que expira.",
+    loot: [
+      { item: "Pergaminho de Magia: Vulnerabilidade (nv3)", chance:50, qty:"1" },
+      { item: "Cetro do Arauto (arma rara — 1d10, acertos aplicam Vulnerabilidade menor por 1 rodada)", chance:35, qty:"1" },
+      { item: "Cristal de Maldição (acessório raro — INT+1, maldições duram +1 rodada)", chance:30, qty:"1" },
+      { item: "Fragmento de Maldição (material lendário)", chance:20, qty:"1" }
+    ]
+  },
+
+  {
+    id: "senhor-do-campo-estatico",
+    name: "Senhor do Campo Estático",
+    difficulty: 3,
+    attrs: { FOR:3, DEX:4, AGI:3, INT:5, SAB:3 },
+    size: "medio",
+    category: "Humanoide / Elementalista",
+    location: ["Montanha", "Dungeon", "Planície"],
+    hp: 140, physDefense: 5, magDefense: 11, dodge: 12, actions: 3,
+    damage: "1d10+INT (descarga direcionada, alcance 6 hex)",
+    abilities: [
+      { name: "Campo Estático",
+        desc: "1 Ação de Magia (2x/combate): cria campo elétrico de raio 3 hex por 5 rodadas. Inimigos que se MOVEREM dentro do campo sofrem 1d8 por hex movido. Inimigos que ficarem PARADOS testam INT (normal) ou perdem 1 Ação por rodada. O Senhor e aliados são imunes ao próprio campo." },
+      { name: "Dilema Elétrico",
+        desc: "Passivo: enquanto houver um Campo Estático ativo, o Senhor ganha +2 Ações de combate. Ele força o grupo a escolher entre se mover (sofrer dano) ou ficar parado (perder ações) — e lucra com ambos." },
+      { name: "Passo Relâmpago",
+        desc: "Ação Livre (3x/combate): teleporta-se até 6 hex em linha reta. Todos os inimigos nos hexes atravessados sofrem 1d8+INT (AGI normal para metade). Pode terminar dentro do próprio campo estático sem sofrer dano." },
+      { name: "Sobrecarga Final",
+        desc: "Ao morrer: todos os Campos Estáticos ativos explodem. Todos os inimigos em raio 4 hex de cada campo sofrem 3d8 de dano elétrico (sem teste de resistência)." }
+    ],
+    spells: [],
+    behavior: "Turno 1: cria Campo Estático sobre o grupo. Usa Passo Relâmpago para reposicionar e criar segundo campo em ângulo diferente. Ataca de dentro dos próprios campos. Nunca fica adjacente por mais de 1 turno.",
+    loot: [
+      { item: "Pergaminho de Magia: Campo Estático (nv3)", chance:50, qty:"1" },
+      { item: "Pergaminho de Magia: Passo Relâmpago (nv2)", chance:40, qty:"1" },
+      { item: "Cinto da Sobrecarga Controlada (acessório raro)", chance:30, qty:"1" },
+      { item: "Núcleo Estático (material raro — encanta arma com dano elétrico em cadeia)", chance:45, qty:"1" }
+    ]
+  },
+
+  {
+    id: "coletor-de-espectros",
+    name: "Coletor de Espectros",
+    difficulty: 3,
+    attrs: { FOR:2, DEX:3, AGI:2, INT:5, SAB:5 },
+    size: "medio",
+    category: "Humanoide / Necromante",
+    location: ["Cemitério", "Dungeon", "Ruínas"],
+    hp: 138, physDefense: 4, magDefense: 12, dodge: 10, actions: 2,
+    damage: "1d8+INT (drenagem espectral, ignora Def.Física)",
+    abilities: [
+      { name: "Colheita de Almas",
+        desc: "Passivo: sempre que qualquer criatura morre no combate (aliada ou inimiga), o Coletor absorve a alma. Cada alma coletada: +1d6 de dano em todos os ataques e +5 HP máximo (cumulativo, sem limite). As almas são perdidas ao fim do combate." },
+      { name: "Convocação de Espectros",
+        desc: "1 Ação de Magia (custa 2 almas coletadas): invoca 1 Espectro de um inimigo derrotado no combate. O Espectro tem 50% do HP original, mantém 1 habilidade do monstro original e dura 5 rodadas. Máximo 3 Espectros ativos." },
+      { name: "Sacrifício Espectral",
+        desc: "Ação Livre (sem limite): destrói 1 Espectro ativo para curar 2d10 HP ou recuperar 1 Ação imediatamente. O Espectro se dissolve." },
+      { name: "Legião Final",
+        desc: "Ao atingir 20% de HP: converte TODAS as almas coletadas em Espectros simultaneamente (1 Espectro por alma, máximo 6). Os Espectros duram 3 rodadas. O Coletor fica com 1 HP e não pode ser curado — mas ganha +3 Ações por turno." }
+    ],
+    spells: [],
+    behavior: "Fica atrás dos próprios aliados, deixando-os morrer para coletar almas. Invoca Espectros assim que tem 2 almas. Sacrifica Espectros quando ferido. Usa Legião Final como último recurso — o combate fica caótico.",
+    loot: [
+      { item: "Pergaminho de Magia: Convocação de Espectros (nv4)", chance:40, qty:"1" },
+      { item: "Frasco de Alma Aprisionada (item único)", chance:70, qty:"1d2" },
+      { item: "Ceifador (Manto do Necromante) (arma mágica)", chance:25, qty:"1" },
+      { item: "Essência de Morto-vivo (material raro)", chance:75, qty:"1d3" }
+    ]
+  },
+
+  {
+    id: "duelista-do-eco",
+    name: "Duelista do Eco",
+    difficulty: 3,
+    attrs: { FOR:4, DEX:5, AGI:4, INT:2, SAB:3 },
+    size: "medio",
+    category: "Humanoide / Guerreiro",
+    location: ["Cidade", "Dungeon", "Estrada"],
+    hp: 150, physDefense: 7, magDefense: 5, dodge: 13, actions: 3,
+    damage: "1d10+1d6 (espada do eco) — ver Eco de Golpe",
+    abilities: [
+      { name: "Eco de Golpe",
+        desc: "Passivo: todo ataque do Duelista é ecoado 1 rodada depois. Se ele ataca no turno 1, o mesmo ataque (mesmo alvo, mesmo dano) se repete automaticamente no início do turno 2, sem gastar Ação. Os ecos acumulam: 3 ataques no turno 1 = 3 ecos no turno 2, mais os novos ataques do turno 2." },
+      { name: "Duelo Declarado",
+        desc: "Ação Livre (1x/combate): declara duelo contra 1 alvo. Contra esse alvo: +3 Chance de Crítico e +2 Chance de Acerto. Contra todos os outros: −3 Chance de Acerto. O duelo dura até um dos dois morrer." },
+      { name: "Paradas Sucessivas",
+        desc: "Reação (2x/turno): ao ser atacado em melee, pode aparar — role d10, se ≤ 5 o ataque é completamente bloqueado e o Duelista contra-ataca imediatamente (1d10+1d6, sem custo de Ação)." },
+      { name: "Eco Final",
+        desc: "Ao morrer: todos os ecos pendentes são disparados simultaneamente contra os alvos originais. Se ele tinha 4 ecos pendentes, todos acontecem de uma vez." }
+    ],
+    spells: [],
+    behavior: "Declara Duelo contra o personagem de maior dano imediatamente. Foca exclusivamente nesse alvo. Usa Paradas agressivamente. O ritmo de combate é enganoso — o dano real chega 1 rodada atrasado.",
+    loot: [
+      { item: "Espada do Eco Duplo (arma rara)", chance:45, qty:"1" },
+      { item: "Elmo do Reflexo Rápido (acessório raro)", chance:30, qty:"1" },
+      { item: "Anel da Ação Dupla (acessório raro)", chance:20, qty:"1" },
+      { item: "Fragmento de Eco (material — encanta arma para ecoar 1 ataque por combate)", chance:50, qty:"1" }
     ]
   }];
 
