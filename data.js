@@ -5851,6 +5851,7 @@ const WORLD_ITEM_CATALOG = {
 const NAV_PAGES = [
   { icon: "📖", label: "Glossário & Tutoriais", available: true,  action: "openGlossary" },
   { icon: "🐺", label: "Bestiário",             available: true,  action: "openBestiary" },
+  { icon: "🎒", label: "Compêndio de Itens",    available: true,  action: "openItems" },
   { icon: "⚗️", label: "Alquimia & Crafting",   available: true,  action: "openCraft" },
   { icon: "📋", label: "Planejador de Sessão",  available: true,  action: "openSessionPlanner" },
   { icon: "🗺", label: "História do Mundo",     available: true,  action: "openHistory" },

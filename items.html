@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Compêndio de Itens — Grimório de Personagens</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { margin: 0; min-height: 100vh; }
+
+    .items-page { display: flex; flex-direction: column; min-height: 100vh; }
+
+    /* ── Toolbar ─────────────────────────────────────────── */
+    .items-toolbar {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 14px;
+      background: var(--parchment);
+      border-bottom: 2px solid var(--line);
+      position: sticky; top: 0; z-index: 30;
+      backdrop-filter: blur(4px);
+    }
+    .items-page-title {
+      font-family: var(--font-heading);
+      font-size: 17px; margin: 0; color: var(--ink); flex: 1;
+    }
+    .items-result-count {
+      font-family: var(--font-heading);
+      font-size: 12px; color: var(--ink-soft); white-space: nowrap;
+    }
+    .btn-back-items {
+      font-family: var(--font-heading); font-size: 13px;
+      color: var(--ink-soft); background: none; border: none;
+      cursor: pointer; padding: 8px 4px; text-decoration: none;
+      display: flex; align-items: center; gap: 4px;
+      min-height: 44px; -webkit-tap-highlight-color: transparent;
+    }
+
+    /* ── Painel de filtros ───────────────────────────────── */
+    .items-filters {
+      background: var(--parchment-dark, #efe4cd);
+      border-bottom: 1px solid var(--line);
+      padding: 10px 14px 12px;
+      position: sticky; top: 55px; z-index: 25;
+    }
+    .items-search-row { display: flex; gap: 8px; margin-bottom: 10px; }
+    .items-search-input {
+      flex: 1; padding: 9px 12px;
+      border: 1px solid var(--line); border-radius: 8px;
+      font-family: var(--font-body); font-size: 15px;
+      background: #fff; color: var(--ink); box-sizing: border-box;
+      min-height: 42px;
+    }
+    .items-search-input:focus { outline: none; border-color: var(--gold); }
+    .btn-clear-filters {
+      padding: 9px 12px; border: 1px solid var(--line);
+      border-radius: 8px; background: #fff; cursor: pointer;
+      font-family: var(--font-heading); font-size: 13px;
+      color: var(--ink-soft); white-space: nowrap; min-height: 42px;
+    }
+    .btn-clear-filters:active { background: var(--parchment); }
+
+    .filter-group { margin-bottom: 8px; }
+    .filter-group:last-child { margin-bottom: 0; }
+    .filter-group-label {
+      font-family: var(--font-heading); font-size: 10px;
+      text-transform: uppercase; letter-spacing: .5px;
+      color: var(--ink-soft); margin-bottom: 5px; display: block;
+    }
+    .filter-chips {
+      display: flex; gap: 6px; flex-wrap: nowrap;
+      overflow-x: auto; padding-bottom: 4px;
+      -webkit-overflow-scrolling: touch; scrollbar-width: none;
+    }
+    .filter-chips::-webkit-scrollbar { display: none; }
+    .filter-chip {
+      padding: 6px 12px; border: 1px solid var(--line);
+      border-radius: 14px; background: #fff; cursor: pointer;
+      font-family: var(--font-heading); font-size: 12px;
+      color: var(--ink-soft); white-space: nowrap; flex-shrink: 0;
+      transition: .12s; -webkit-tap-highlight-color: transparent;
+      min-height: 34px;
+    }
+    .filter-chip.active {
+      background: var(--gold); color: #fff; border-color: var(--gold);
+    }
+    .filter-chip.tier-chip-raro.active     { background: #2d6ca8; border-color: #2d6ca8; }
+    .filter-chip.tier-chip-magico.active   { background: #6b3fa0; border-color: #6b3fa0; }
+    .filter-chip.tier-chip-lendario.active { background: #b8860b; border-color: #b8860b; }
+    .filter-chip.tier-chip-unico.active    { background: #a83232; border-color: #a83232; }
+    .filter-chip.tier-chip-ancestral.active{ background: #1a5c4a; border-color: #1a5c4a; }
+
+    /* Range sliders para peso/dano */
+    .filter-range-row { display: flex; gap: 14px; align-items: center; }
+    .filter-range-item { flex: 1; }
+    .filter-range-item input[type="range"] {
+      width: 100%; accent-color: var(--gold); margin-top: 2px;
+    }
+    .filter-range-value {
+      font-family: var(--font-heading); font-size: 11px; color: var(--gold-dark, #7a5c1e);
+    }
+
+    /* ── Grid de itens ───────────────────────────────────── */
+    .items-content { flex: 1; padding: 14px; }
+
+    .items-group-title {
+      font-family: var(--font-heading); font-size: 14px;
+      color: var(--gold-dark, #7a5c1e);
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 5px; margin: 18px 0 10px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .items-group-title:first-child { margin-top: 0; }
+    .items-group-count {
+      font-size: 11px; color: var(--ink-soft); font-weight: normal;
+    }
+
+    .items-grid {
+      display: grid; gap: 10px;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 560px) { .items-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 900px) { .items-grid { grid-template-columns: repeat(3, 1fr); } }
+
+    /* Card clicável */
+    .item-card {
+      background: var(--parchment); border: 1px solid var(--line);
+      border-radius: 8px; padding: 11px 13px; cursor: pointer;
+      transition: .12s; -webkit-tap-highlight-color: transparent;
+      display: flex; flex-direction: column; gap: 7px;
+      border-left: 3px solid var(--line);
+    }
+    .item-card:active { transform: scale(.985); background: #f7f0e3; }
+    .item-card.tier-raro      { border-left-color: #2d6ca8; }
+    .item-card.tier-magico    { border-left-color: #6b3fa0; }
+    .item-card.tier-lendario  { border-left-color: #b8860b; }
+    .item-card.tier-unico     { border-left-color: #a83232; }
+    .item-card.tier-ancestral { border-left-color: #1a5c4a; }
+
+    .item-card-head {
+      display: flex; align-items: flex-start; gap: 7px;
+      justify-content: space-between;
+    }
+    .item-card-name {
+      font-family: var(--font-heading); font-size: 14px;
+      color: var(--ink); line-height: 1.25; flex: 1;
+    }
+    .item-card-badges { display: flex; flex-direction: column; gap: 3px; align-items: flex-end; flex-shrink: 0; }
+
+    .item-tier-badge {
+      font-size: 9px; padding: 2px 7px; border-radius: 10px;
+      font-family: var(--font-heading); white-space: nowrap;
+      background: rgba(0,0,0,.06); color: var(--ink-soft);
+    }
+    .item-tier-badge.tier-raro      { background: rgba(45,108,168,.15);  color: #2d6ca8; }
+    .item-tier-badge.tier-magico    { background: rgba(107,63,160,.15);  color: #6b3fa0; }
+    .item-tier-badge.tier-lendario  { background: rgba(184,134,11,.18);  color: #8a6508; }
+    .item-tier-badge.tier-unico     { background: rgba(168,50,50,.15);   color: #a83232; }
+    .item-tier-badge.tier-ancestral { background: rgba(26,92,74,.15);    color: #1a5c4a; }
+    .item-set-badge {
+      font-size: 9px; padding: 2px 7px; border-radius: 10px;
+      background: rgba(74,158,80,.15); color: #2d6b32;
+      font-family: var(--font-heading); white-space: nowrap;
+    }
+
+    .item-card-chips { display: flex; gap: 5px; flex-wrap: wrap; }
+    .item-chip {
+      font-size: 11px; padding: 3px 8px; border-radius: 6px;
+      background: rgba(0,0,0,.045); color: var(--ink-soft);
+      font-family: var(--font-heading); white-space: nowrap;
+    }
+    .item-chip strong { color: var(--ink); font-weight: 600; }
+    .item-chip-dmg { background: rgba(125,42,46,.10); color: #7d2a2e; }
+    .item-chip-def { background: rgba(58,90,40,.10);  color: #3a5a28; }
+    .item-chip-mag { background: rgba(90,60,120,.10); color: #5a3c78; }
+
+    .item-card-preview {
+      font-size: 12px; color: var(--ink-soft); line-height: 1.45;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .items-empty {
+      text-align: center; padding: 50px 20px;
+      color: var(--ink-soft); font-size: 14px;
+    }
+
+    /* ── Modal de detalhes ───────────────────────────────── */
+    .item-modal-overlay {
+      position: fixed; inset: 0; z-index: 100;
+      background: rgba(30,20,10,.55); backdrop-filter: blur(3px);
+      display: flex; align-items: flex-end; justify-content: center;
+      padding: 0; opacity: 1; transition: opacity .18s;
+    }
+    .item-modal-overlay.hidden { display: none; }
+
+    .item-modal {
+      background: var(--parchment); width: 100%;
+      max-height: 92vh; overflow-y: auto;
+      border-radius: 16px 16px 0 0;
+      border-top: 3px solid var(--gold);
+      animation: slideUp .22s ease-out;
+      -webkit-overflow-scrolling: touch;
+    }
+    @keyframes slideUp { from { transform: translateY(30px); opacity: .6; } to { transform: translateY(0); opacity: 1; } }
+
+    @media (min-width: 620px) {
+      .item-modal-overlay { align-items: center; padding: 20px; }
+      .item-modal { max-width: 560px; border-radius: 12px; border-top-width: 3px; }
+    }
+
+    /* Cabeçalho fixo do modal */
+    .item-modal-header {
+      position: sticky; top: 0; z-index: 5;
+      background: var(--parchment);
+      border-bottom: 1px solid var(--line);
+      padding: 14px 16px 12px;
+      display: flex; align-items: flex-start; gap: 10px;
+    }
+    .item-modal-header-text { flex: 1; min-width: 0; }
+    .item-modal-title {
+      font-family: var(--font-heading); font-size: 18px;
+      color: var(--ink); margin: 0 0 5px; line-height: 1.25;
+    }
+    .item-modal-badges { display: flex; gap: 5px; flex-wrap: wrap; }
+    .btn-close-modal {
+      background: rgba(0,0,0,.06); border: none;
+      width: 34px; height: 34px; border-radius: 50%;
+      font-size: 17px; cursor: pointer; color: var(--ink-soft);
+      flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn-close-modal:active { background: rgba(0,0,0,.12); }
+
+    .item-modal-body { padding: 4px 16px 24px; }
+
+    /* Seções do modal */
+    .modal-section { margin-top: 16px; }
+    .modal-section:first-child { margin-top: 12px; }
+    .modal-section-label {
+      font-family: var(--font-heading); font-size: 10px;
+      text-transform: uppercase; letter-spacing: .8px;
+      color: var(--gold-dark, #7a5c1e); margin-bottom: 7px;
+      display: flex; align-items: center; gap: 5px;
+    }
+
+    /* Grid de stats no modal */
+    .modal-stats-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;
+    }
+    @media (min-width: 420px) { .modal-stats-grid { grid-template-columns: repeat(3, 1fr); } }
+    .modal-stat {
+      background: rgba(255,255,255,.5); border: 1px solid var(--line);
+      border-radius: 7px; padding: 8px 10px; text-align: center;
+    }
+    .modal-stat-label {
+      font-size: 9px; text-transform: uppercase; letter-spacing: .4px;
+      color: var(--ink-soft); font-family: var(--font-heading); display: block;
+    }
+    .modal-stat-value {
+      font-family: var(--font-heading); font-size: 15px;
+      color: var(--ink); font-weight: 600; margin-top: 2px; display: block;
+    }
+    .modal-stat.stat-dmg .modal-stat-value { color: #7d2a2e; }
+    .modal-stat.stat-def .modal-stat-value { color: #3a5a28; }
+    .modal-stat.stat-mag .modal-stat-value { color: #5a3c78; }
+
+    /* Blocos de texto do modal */
+    .modal-text-block {
+      background: rgba(255,255,255,.45);
+      border-left: 3px solid var(--line);
+      border-radius: 0 7px 7px 0;
+      padding: 10px 12px; font-size: 13.5px;
+      line-height: 1.6; color: var(--ink);
+    }
+    .modal-text-block.block-effect  { border-left-color: var(--gold); }
+    .modal-text-block.block-unique  { border-left-color: #a83232; background: rgba(168,50,50,.05); }
+    .modal-text-block.block-set     { border-left-color: #4a9e50; background: rgba(74,158,80,.06); }
+    .modal-text-block.block-story   {
+      border-left-color: var(--ink-soft); font-style: italic;
+      color: var(--ink-soft); font-size: 13px;
+    }
+    .modal-text-block.block-charges { border-left-color: #2d6ca8; background: rgba(45,108,168,.05); }
+
+    .modal-bonus-list { display: flex; flex-direction: column; gap: 5px; }
+    .modal-bonus-item {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 7px 11px; background: rgba(255,255,255,.5);
+      border: 1px solid var(--line); border-radius: 6px; font-size: 13px;
+    }
+    .modal-bonus-name { color: var(--ink-soft); }
+    .modal-bonus-value { font-family: var(--font-heading); color: var(--gold-dark, #7a5c1e); font-weight: 600; }
+
+    .modal-slot-tags { display: flex; gap: 5px; flex-wrap: wrap; }
+    .modal-slot-tag {
+      font-size: 11px; padding: 4px 9px; border-radius: 12px;
+      background: rgba(156,122,60,.12); color: var(--gold-dark, #7a5c1e);
+      font-family: var(--font-heading);
+    }
+  </style>
+</head>
+<body>
+
+<div class="items-page">
+
+  <!-- Toolbar -->
+  <div class="items-toolbar">
+    <a href="index.html" class="btn-back-items">← Grimório</a>
+    <h1 class="items-page-title">🎒 Compêndio de Itens</h1>
+    <span class="items-result-count" id="result-count">—</span>
+  </div>
+
+  <!-- Filtros -->
+  <div class="items-filters">
+    <div class="items-search-row">
+      <input type="text" id="search-input" class="items-search-input"
+             placeholder="Buscar por nome, efeito, história..." autocomplete="off">
+      <button class="btn-clear-filters" id="btn-clear">Limpar</button>
+    </div>
+
+    <div class="filter-group">
+      <span class="filter-group-label">Categoria</span>
+      <div class="filter-chips" id="category-chips"></div>
+    </div>
+
+    <div class="filter-group">
+      <span class="filter-group-label">Raridade (Tier)</span>
+      <div class="filter-chips" id="tier-chips"></div>
+    </div>
+
+    <div class="filter-group">
+      <span class="filter-group-label">Especiais</span>
+      <div class="filter-chips" id="special-chips"></div>
+    </div>
+
+    <div class="filter-group">
+      <div class="filter-range-row">
+        <div class="filter-range-item">
+          <span class="filter-group-label">
+            Peso máx: <span class="filter-range-value" id="weight-value">qualquer</span>
+          </span>
+          <input type="range" id="weight-range" min="0" max="20" step="0.5" value="20">
+        </div>
+        <div class="filter-range-item">
+          <span class="filter-group-label">
+            Dano médio mín: <span class="filter-range-value" id="dmg-value">qualquer</span>
+          </span>
+          <input type="range" id="dmg-range" min="0" max="20" step="1" value="0">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Conteúdo -->
+  <div class="items-content" id="items-content"></div>
+</div>
+
+<!-- Modal de detalhes -->
+<div class="item-modal-overlay hidden" id="item-modal-overlay">
+  <div class="item-modal" id="item-modal">
+    <div class="item-modal-header">
+      <div class="item-modal-header-text">
+        <h2 class="item-modal-title" id="modal-title">—</h2>
+        <div class="item-modal-badges" id="modal-badges"></div>
+      </div>
+      <button class="btn-close-modal" id="btn-close-modal" aria-label="Fechar">✕</button>
+    </div>
+    <div class="item-modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<script src="data.js"></script>
+<script src="items.js"></script>
+</body>
+</html>

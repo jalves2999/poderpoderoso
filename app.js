@@ -1983,6 +1983,7 @@ function openBestiary()       { window.open("bestiary.html",         "_blank"); 
 function openCraft()          { window.open("craft.html",             "_blank"); }
 function openSessionPlanner() { window.open("session-planner.html",   "_blank"); }
 function openPrintSheet()     { window.open("ficha-impressa.html",    "_blank"); }
+function openItems()       { window.open("items.html",       "_blank"); }
 function openLocations()   { window.open("locations.html",   "_blank"); }
 function openHistory()     { window.open("history.html",     "_blank"); }
 function openCampaignLog() { window.open("campaign-log.html","_blank"); }
@@ -2025,8 +2026,6 @@ function renderGlossaryContent() {
     container.innerHTML = renderAbilitiesGlossary(query);
   } else if (currentGlossaryTab === "spells") {
     container.innerHTML = renderSpellsGlossary(query);
-  } else if (currentGlossaryTab === "items") {
-    container.innerHTML = renderItemsGlossary(query);
   } else if (currentGlossaryTab === "skills") {
     container.innerHTML = renderSkillsGlossary(query);
   } else if (currentGlossaryTab === "curses") {
@@ -6359,47 +6358,6 @@ function printGlossaryAbilities() {
   _openPrintWindow(`Glossário de Perícias${query ? ` — "${query}"` : ""}`, bodyHTML);
 }
 
-function printGlossaryItems() {
-  const query = document.getElementById("glossary-search").value.trim().toLowerCase();
-  const matches = n => !query || n.toLowerCase().includes(query);
-  const TIER_ORDER = { comum:0, raro:1, magico:2, lendario:3, unico:4, ancestral:5 };
-  const TIER_COL   = { comum:"bg-gray", raro:"bg-blue", magico:"bg-purple", lendario:"bg-red", unico:"bg-red", ancestral:"bg-red" };
-  const sortByTier = (a,b) => (TIER_ORDER[a.tier]||0) - (TIER_ORDER[b.tier]||0);
-
-  const card = (it, statTags) => `
-    <div class="card">
-      <div class="card-name">${it.name}</div>
-      <div class="card-meta">
-        ${it.tier  ? `<span class="badge ${TIER_COL[it.tier]||"bg-gray"}">${it.tier}</span>` : ""}
-        ${it.cursed ? '<span class="badge bg-red">⚠ Amaldiçoado</span>' : ""}
-        ${it.divine ? `<span class="badge bg-purple">🌟 ${it.divine}</span>` : ""}
-      </div>
-      <div class="tags">${statTags}</div>
-      ${it.effect ? `<p class="card-effect">${it.effect}</p>` : ""}
-      ${it.note   ? `<p class="card-note">${it.note}</p>` : ""}
-      ${it.story  ? `<p class="card-story">"${it.story}"</p>` : ""}
-    </div>`;
-
-  const sections = [
-    { t:"⚔ Armas de Uma Mão",   l:WEAPONS_ONE_HAND,  s:it=>[it.dmg?`<span class="tag">⚔ ${it.dmg}</span>`:"",`<span class="tag">⚖ ${it.weight}kg</span>`,it.req?`<span class="tag">${it.req}</span>`:""].filter(Boolean).join("") },
-    { t:"⚔ Armas de Duas Mãos", l:WEAPONS_TWO_HAND,  s:it=>[it.dmg?`<span class="tag">⚔ ${it.dmg}</span>`:"",`<span class="tag">⚖ ${it.weight}kg</span>`].filter(Boolean).join("") },
-    { t:"🔮 Armas Mágicas",     l:WEAPONS_MAGIC,     s:it=>[it.dmg?`<span class="tag">⚔ ${it.dmg}</span>`:"",it.range?`<span class="tag">🎯 ${it.range}hex</span>`:""  ].filter(Boolean).join("") },
-    { t:"🏹 Armas à Distância", l:WEAPONS_RANGED,    s:it=>[it.dmg?`<span class="tag">⚔ ${it.dmg}</span>`:"",it.range?`<span class="tag">🎯 ${it.range}hex</span>`:""  ].filter(Boolean).join("") },
-    { t:"🛡 Escudos",           l:SHIELDS,           s:it=>[`<span class="tag">🛡 Escudo</span>`,`<span class="tag">⚖ ${it.weight}kg</span>`,it.penalty&&it.penalty!=="Nenhuma"?`<span class="tag">${it.penalty}</span>`:""].join("") },
-    { t:"🧥 Armaduras",         l:ARMORS,            s:it=>[`<span class="tag">🛡 Fís.${it.physDefense}</span>`,`<span class="tag">✨ Mag.${it.magDefense||0}</span>`,`<span class="tag">⚖ ${it.weight}kg</span>`].join("") },
-    { t:"💍 Acessórios",        l:ACCESSORIES,       s:it=>[`<span class="tag">⚖ ${it.weight}kg</span>`].join("") },
-  ];
-  let bodyHTML = "";
-  sections.forEach(sec => {
-    const fil = sec.l.filter(i => matches(i.name)).sort(sortByTier);
-    if (!fil.length) return;
-    bodyHTML += `<h2>${sec.t} (${fil.length})</h2><div class="print-grid">`;
-    bodyHTML += fil.map(it => card(it, sec.s(it))).join("");
-    bodyHTML += `</div>`;
-  });
-  _openPrintWindow(`Glossário de Itens${query ? ` — "${query}"` : ""}`, bodyHTML);
-}
-
 /* ── Glossário de Maldições & Bênçãos ─────────────────────────── */
 
 function renderCursesGlossary(query) {
@@ -6720,117 +6678,5 @@ function renderTierBadge(tier) {
   const cfg = TIER_CONFIG[tier];
   if (!cfg) return "";
   return `<span class="tier-badge" style="background:${cfg.color};">${cfg.label}</span>`;
-}
-
-function renderItemGlossaryCard(item, extraChips = "") {
-  const tierBadge = renderTierBadge(item.tier);
-  const setBadge = item.setName
-    ? `<span class="set-badge">🔗 ${item.setName}</span>`
-    : "";
-  const setBonusHTML = item.setBonus
-    ? `<div class="item-glossary-unique-ability" style="border-left-color:#4a9e50;">🔗 <strong>Bônus de Set (${item.setBonus.pieces} peças):</strong> ${item.setBonus.ability} — ${item.setBonus.effect}</div>`
-    : "";
-  const hasStory = item.story || item.uniqueAbility;
-  return `
-    <div class="item-glossary-card ${item.tier && item.tier !== "comum" ? "item-glossary-card-special" : ""} ${item.tier === "unico" || item.tier === "ancestral" ? "item-glossary-card-unique" : ""}">
-      <div class="item-glossary-name">${item.name} ${tierBadge}${setBadge}</div>
-      <div class="equip-stat-chips">${extraChips}</div>
-      ${item.note ? `<p class="item-glossary-note">✦ ${item.note}</p>` : ""}
-      ${item.story ? `<p class="item-glossary-story">📖 ${item.story}</p>` : ""}
-      ${setBonusHTML}
-      ${item.uniqueAbility ? `<div class="item-glossary-unique-ability">⭐ <strong>Habilidade Única:</strong> ${item.uniqueAbility}</div>` : ""}
-    </div>`;
-}
-
-function renderItemsGlossary(query) {
-  const matches = (name) => !query || name.toLowerCase().includes(query);
-  let totalCount = 0;
-
-  const weaponSections = [
-    { title: "Armas de Uma Mão", list: WEAPONS_ONE_HAND },
-    { title: "Armas de Duas Mãos", list: WEAPONS_TWO_HAND },
-    { title: "Armas Mágicas (Varinhas, Grimórios, Orbes)", list: WEAPONS_MAGIC },
-    { title: "Armas à Distância", list: WEAPONS_RANGED }
-  ];
-
-  // Ordena por tier: comum → raro → magico → lendario → unico → ancestral
-  const TIER_ORDER = { comum: 0, raro: 1, magico: 2, lendario: 3, unico: 4, ancestral: 5 };
-  const sortByTier = (a, b) => (TIER_ORDER[a.tier] || 0) - (TIER_ORDER[b.tier] || 0);
-
-  let html = "";
-
-  weaponSections.forEach(section => {
-    const filtered = section.list.filter(w => matches(w.name)).sort(sortByTier);
-    if (filtered.length === 0) return;
-    totalCount += filtered.length;
-    html += `<h3 class="glossary-group-title">⚔ ${section.title}</h3>`;
-    html += `<div class="item-glossary-grid">`;
-    html += filtered.map(w => {
-      const chips = [
-        `<span class="equip-stat-chip equip-stat-chip-damage"><span class="equip-stat-chip-label">Dano</span>${w.dmg || "—"}</span>`,
-        w.range ? `<span class="equip-stat-chip equip-stat-chip-neutral"><span class="equip-stat-chip-label">Alcance</span>${w.range} hex</span>` : "",
-        `<span class="equip-stat-chip equip-stat-chip-neutral"><span class="equip-stat-chip-label">Peso</span>${w.weight}kg</span>`,
-        `<span class="equip-stat-chip equip-stat-chip-neutral"><span class="equip-stat-chip-label">Req.</span>${formatReq(w.req)}</span>`
-      ].filter(Boolean).join("");
-      return renderItemGlossaryCard(w, chips);
-    }).join("");
-    html += `</div>`;
-  });
-
-  const filteredShields = SHIELDS.filter(s => matches(s.name)).sort(sortByTier);
-  if (filteredShields.length > 0) {
-    totalCount += filteredShields.length;
-    html += `<h3 class="glossary-group-title">🛡 Escudos</h3>`;
-    html += `<div class="item-glossary-grid">`;
-    html += filteredShields.map(s => {
-      const chips = [
-        `<span class="equip-stat-chip equip-stat-chip-defense"><span class="equip-stat-chip-label">Def. Física</span>+${s.physDefense}</span>`,
-        `<span class="equip-stat-chip equip-stat-chip-neutral"><span class="equip-stat-chip-label">Peso</span>${s.weight}kg</span>`,
-        `<span class="equip-stat-chip ${s.penalty !== "Nenhuma" ? "equip-stat-chip-warn" : "equip-stat-chip-neutral"}"><span class="equip-stat-chip-label">Penalidade</span>${s.penalty}</span>`
-      ].join("");
-      return renderItemGlossaryCard(s, chips);
-    }).join("");
-    html += `</div>`;
-  }
-
-  const filteredArmors = ARMORS.filter(a => matches(a.name)).sort(sortByTier);
-  if (filteredArmors.length > 0) {
-    totalCount += filteredArmors.length;
-    html += `<h3 class="glossary-group-title">🧥 Armaduras</h3>`;
-    html += `<div class="item-glossary-grid">`;
-    html += filteredArmors.map(a => {
-      const chips = [
-        `<span class="equip-stat-chip equip-stat-chip-defense"><span class="equip-stat-chip-label">Def. Física</span>${a.physDefense}</span>`,
-        `<span class="equip-stat-chip equip-stat-chip-magic"><span class="equip-stat-chip-label">Def. Mágica</span>${a.magDefense}</span>`,
-        `<span class="equip-stat-chip equip-stat-chip-neutral"><span class="equip-stat-chip-label">Peso</span>${a.weight}kg</span>`,
-        `<span class="equip-stat-chip equip-stat-chip-neutral"><span class="equip-stat-chip-label">Req.</span>${formatReq(a.req)}</span>`
-      ].join("");
-      return renderItemGlossaryCard(a, chips);
-    }).join("");
-    html += `</div>`;
-  }
-
-  const filteredAccessories = ACCESSORIES.filter(a => matches(a.name)).sort(sortByTier);
-  if (filteredAccessories.length > 0) {
-    totalCount += filteredAccessories.length;
-    html += `<h3 class="glossary-group-title">💍 Acessórios</h3>`;
-    html += `<div class="item-glossary-grid">`;
-    html += filteredAccessories.map(a => {
-      const chips = `<span class="equip-stat-chip equip-stat-chip-neutral"><span class="equip-stat-chip-label">Peso</span>${a.weight}kg</span>`;
-      const cardWithEffect = renderItemGlossaryCard({ ...a, note: a.effect }, chips);
-      return cardWithEffect;
-    }).join("");
-    html += `</div>`;
-  }
-
-  if (!html) return `<p class="empty-inline-note">Nenhum item encontrado para "${escapeHTML(query)}".</p>`;
-
-  const printBtn = `
-    <div class="glossary-print-bar">
-      <span class="glossary-print-info">📖 ${totalCount} item(ns)${query ? ` para "${escapeHTML(query)}"` : ""}</span>
-      <button class="glossary-print-btn" onclick="printGlossaryItems()">🖨 Imprimir Itens</button>
-    </div>`;
-
-  return printBtn + html;
 }
 
