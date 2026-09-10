@@ -1983,6 +1983,7 @@ function openBestiary()       { window.open("bestiary.html",         "_blank"); 
 function openCraft()          { window.open("craft.html",             "_blank"); }
 function openSessionPlanner() { window.open("session-planner.html",   "_blank"); }
 function openPrintSheet()     { window.open("ficha-impressa.html",    "_blank"); }
+function openCombatNotes()    { window.open("anotacoes-combate.html", "_blank"); }
 function openItems()       { window.open("items.html",       "_blank"); }
 function openLocations()   { window.open("locations.html",   "_blank"); }
 function openHistory()     { window.open("history.html",     "_blank"); }

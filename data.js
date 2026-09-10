@@ -5859,6 +5859,7 @@ const NAV_PAGES = [
   { icon: "🏰", label: "Locais & Reinos",       available: true,  action: "openLocations" },
   { icon: "🗾", label: "Mapa de Aether",        available: true,  action: "openMap" },
   { icon: "⚔",  label: "Campo de Batalha",      available: true,  action: "openBattleMap" },
+  { icon: "📝", label: "Anotações de Combate",  available: true,  action: "openCombatNotes" },
   { icon: "📄", label: "Ficha para Impressão",  available: true,  action: "openPrintSheet" }
 ];
 

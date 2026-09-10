@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anotações de Combate — Grimório de Aether</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --parchment:  #f7f0e3;
+  --parchment2: #f0e6cc;
+  --ink:        #2a1a0e;
+  --ink-soft:   #6b4c2a;
+  --gold:       #9c7a3c;
+  --gold-dark:  #7a5c1e;
+  --line:       #c8a87a;
+  --line-light: #dfc9a0;
+  --red:        #7d2a2e;
+  --blue:       #2d4a6b;
+
+  --font-title: 'Cinzel', 'Georgia', serif;
+  --font-body:  'Crimson Text', 'Georgia', serif;
+  --font-label: 'IM Fell English', 'Georgia', serif;
+}
+
+body { background: #d4c4a0; font-family: var(--font-body); color: var(--ink); min-height: 100vh; }
+
+/* ── Toolbar (só na tela) ───────────────────────────────────── */
+.toolbar {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 20px; background: var(--ink); position: sticky; top: 0; z-index: 100;
+}
+.toolbar a { color: var(--line-light); font-family: var(--font-body); font-size: 13px; text-decoration: none; }
+.toolbar-title { font-family: var(--font-title); font-size: 15px; color: var(--parchment); flex: 1; }
+.btn-print, .btn-blank {
+  padding: 7px 16px; border: none; border-radius: 5px;
+  font-family: var(--font-body); font-size: 13px; cursor: pointer; font-weight: 600;
+}
+.btn-print { background: var(--gold); color: #fff; }
+.btn-blank { background: rgba(255,255,255,.12); color: var(--parchment); border: 1px solid rgba(255,255,255,.25); }
+.btn-print:hover { background: var(--gold-dark); }
+.btn-blank:hover  { background: rgba(255,255,255,.2); }
+
+/* ── Folha ──────────────────────────────────────────────────── */
+.sheet {
+  max-width: 900px; margin: 20px auto;
+  background: var(--parchment);
+  border: 2px solid var(--gold);
+  border-radius: 4px;
+  padding: 20px 24px 24px;
+  box-shadow: 0 4px 24px rgba(0,0,0,.25);
+  position: relative;
+}
+.sheet::before {
+  content: ""; position: absolute; inset: 5px;
+  border: 1px solid var(--line-light); border-radius: 2px; pointer-events: none;
+}
+
+/* ── Cabeçalho ──────────────────────────────────────────────── */
+.sheet-header {
+  text-align: center; border-bottom: 2px solid var(--gold);
+  padding-bottom: 8px; margin-bottom: 12px;
+}
+.sheet-header-logo {
+  font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--gold); font-family: var(--font-label); margin-bottom: 3px;
+}
+.sheet-header-title { font-family: var(--font-title); font-size: 22px; color: var(--ink); letter-spacing: 2px; }
+.sheet-header-subtitle { font-family: var(--font-label); font-size: 12px; font-style: italic; color: var(--ink-soft); margin-top: 2px; }
+
+/* ── Campos de topo: sessão / data / mestre ─────────────────── */
+.top-fields { display: flex; gap: 16px; margin-bottom: 14px; flex-wrap: wrap; }
+.top-field { flex: 1; min-width: 140px; display: flex; flex-direction: column; gap: 2px; }
+.top-field-label {
+  font-family: var(--font-label); font-size: 9px; text-transform: uppercase;
+  letter-spacing: .6px; color: var(--ink-soft);
+}
+.top-field-line { border: none; border-bottom: 1.5px solid var(--line); height: 20px; width: 100%; }
+
+/* ── Título de seção (Jogadores / Inimigos) ────────────────── */
+.section-title {
+  font-family: var(--font-title); font-size: 13px; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--gold-dark);
+  border-bottom: 1.5px solid var(--gold); padding-bottom: 4px; margin: 14px 0 6px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.section-title-note { font-family: var(--font-label); font-size: 10px; font-style: italic; color: var(--ink-soft); text-transform: none; letter-spacing: 0; }
+
+/* ── Tabela de combatentes ──────────────────────────────────── */
+.combat-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+.combat-table th {
+  font-family: var(--font-label); font-size: 8.5px; text-transform: uppercase;
+  letter-spacing: .3px; color: var(--ink-soft); font-weight: normal;
+  border-bottom: 1.5px solid var(--gold); padding: 3px 2px; text-align: center;
+}
+.combat-table th.th-name  { text-align: left; }
+.combat-table td {
+  border-bottom: 1px solid var(--line-light);
+  padding: 4px 2px; text-align: center; height: 24px;
+}
+.combat-table td.td-name { text-align: left; }
+
+/* Larguras de coluna */
+.col-name   { width: 15%; }
+.col-init   { width: 6%; }
+.col-hp     { width: 13%; }
+.col-def    { width: 8%; }
+.col-mdef   { width: 8%; }
+.col-dex    { width: 6%; }
+.col-dodge  { width: 8%; }
+.col-buff   { width: 24%; }
+.col-note   { width: 12%; }
+
+/* Célula em branco preenchível */
+.cell-line { border-bottom: 1px solid var(--line); height: 15px; display: block; }
+.cell-hp-track {
+  display: flex; gap: 2px; justify-content: center; flex-wrap: wrap; padding: 1px 0;
+}
+.hp-pip {
+  width: 8px; height: 8px; border: 1px solid var(--red); border-radius: 50%;
+  flex-shrink: 0; opacity: .65;
+}
+
+/* Linha zebrada leve para leitura */
+.combat-table tbody tr:nth-child(even) { background: rgba(156,122,60,.05); }
+
+/* ── Legenda de ícones ──────────────────────────────────────── */
+.legend {
+  display: flex; gap: 14px; flex-wrap: wrap; margin-top: 6px;
+  font-size: 9.5px; color: var(--ink-soft); font-family: var(--font-label);
+}
+.legend b { color: var(--ink); }
+
+/* ── Bloco de iniciativa/rodada no rodapé de cada seção ─────── */
+.round-tracker {
+  display: flex; align-items: center; gap: 6px; margin-top: 6px;
+  font-family: var(--font-label); font-size: 9px; color: var(--ink-soft);
+}
+.round-box {
+  width: 18px; height: 18px; border: 1.5px solid var(--gold); border-radius: 3px; flex-shrink: 0;
+}
+
+/* ── Notas rápidas ──────────────────────────────────────────── */
+.quick-notes {
+  border: 1px solid var(--line); border-radius: 3px; margin-top: 10px;
+  height: 46px; width: 100%;
+  background-image: repeating-linear-gradient(to bottom, transparent 0px, transparent 14px, rgba(156,122,60,.3) 14px, rgba(156,122,60,.3) 15px);
+}
+
+/* ── Rodapé com regras rápidas ───────────────────────────────── */
+.sheet-footer {
+  border-top: 1px solid var(--line); padding-top: 6px; margin-top: 12px;
+  font-size: 8.5px; color: var(--ink-soft); font-family: var(--font-label);
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;
+}
+
+/* ── Impressão ──────────────────────────────────────────────── */
+@media print {
+  body { background: white; }
+  .toolbar { display: none; }
+  .sheet {
+    margin: 0; max-width: 100%; box-shadow: none; border-radius: 0;
+    padding: 8mm 9mm; width: 100%; min-height: 100vh;
+  }
+  .sheet::before { display: none; }
+  @page { size: A4 landscape; margin: 6mm; }
+}
+
+@media (max-width: 900px) {
+  .sheet { padding: 14px; margin: 8px; }
+  .combat-table { font-size: 11px; }
+  .col-buff { width: 30%; }
+}
+</style>
+</head>
+<body>
+
+<!-- Toolbar (tela) -->
+<div class="toolbar">
+  <a href="index.html">← Grimório</a>
+  <span class="toolbar-title">⚔ Anotações de Combate</span>
+  <button class="btn-print" onclick="window.print()">🖨 Imprimir</button>
+  <button class="btn-blank" id="btn-blank">🗒 Nova Folha em Branco</button>
+</div>
+
+<div class="sheet">
+
+  <!-- Cabeçalho -->
+  <div class="sheet-header">
+    <div class="sheet-header-logo">Grimório de Aether · RPG de Mesa</div>
+    <div class="sheet-header-title">Anotações de Combate</div>
+    <div class="sheet-header-subtitle">Ficha para acompanhamento dinâmico de encontros — Mestre</div>
+  </div>
+
+  <!-- Campos de topo -->
+  <div class="top-fields">
+    <div class="top-field">
+      <span class="top-field-label">Sessão / Data</span>
+      <div class="top-field-line"></div>
+    </div>
+    <div class="top-field">
+      <span class="top-field-label">Local do Encontro</span>
+      <div class="top-field-line"></div>
+    </div>
+    <div class="top-field">
+      <span class="top-field-label">Dificuldade / Tipo</span>
+      <div class="top-field-line"></div>
+    </div>
+    <div class="top-field" style="max-width:110px">
+      <span class="top-field-label">Rodada Atual</span>
+      <div class="top-field-line"></div>
+    </div>
+  </div>
+
+  <!-- ══════════════ JOGADORES ══════════════ -->
+  <div class="section-title">
+    <span>🛡 Jogadores</span>
+    <span class="section-title-note">Iniciativa em grupo: 1d10</span>
+  </div>
+  <table class="combat-table">
+    <thead>
+      <tr>
+        <th class="th-name col-name">Nome</th>
+        <th class="col-init">Init.</th>
+        <th class="col-hp">HP Máx / Atual</th>
+        <th class="col-def">Def.<br>Física</th>
+        <th class="col-mdef">Def.<br>Mágica</th>
+        <th class="col-dex">DEX</th>
+        <th class="col-dodge">Esquiva</th>
+        <th class="col-buff">Buffs / Condições Ativas</th>
+        <th class="col-note">Notas</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- 6 linhas para jogadores -->
+      <tr><td class="td-name"><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td></tr>
+      <tr><td class="td-name"><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td></tr>
+      <tr><td class="td-name"><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td></tr>
+      <tr><td class="td-name"><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td></tr>
+      <tr><td class="td-name"><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td></tr>
+      <tr><td class="td-name"><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td></tr>
+    </tbody>
+  </table>
+
+  <!-- ══════════════ INIMIGOS / NPCs ══════════════ -->
+  <div class="section-title">
+    <span>💀 Inimigos & NPCs em Combate</span>
+    <span class="section-title-note">Grupos de monstros iguais podem compartilhar 1 iniciativa</span>
+  </div>
+  <table class="combat-table">
+    <thead>
+      <tr>
+        <th class="th-name col-name">Nome / Tipo</th>
+        <th class="col-init">Init.</th>
+        <th class="col-hp">HP Máx / Atual</th>
+        <th class="col-def">Def.<br>Física</th>
+        <th class="col-mdef">Def.<br>Mágica</th>
+        <th class="col-dex">DEX</th>
+        <th class="col-dodge">Esquiva</th>
+        <th class="col-buff">Buffs / Condições Ativas</th>
+        <th class="col-note">Notas</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- 8 linhas para inimigos -->
+      <tr><td class="td-name"><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td></tr>
+      <tr><td class="td-name"><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td></tr>
+      <tr><td class="td-name"><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td></tr>
+      <tr><td class="td-name"><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td></tr>
+      <tr><td class="td-name"><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td></tr>
+      <tr><td class="td-name"><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td></tr>
+      <tr><td class="td-name"><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td></tr>
+      <tr><td class="td-name"><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td></tr>
+      <tr><td class="td-name"><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td><td><div class="cell-line"></div></td></tr>
+    </tbody>
+  </table>
+
+  <!-- Rastreador de rodada -->
+  <div class="round-tracker">
+    <span>Rodadas:</span>
+    <div class="round-box"></div><div class="round-box"></div><div class="round-box"></div>
+    <div class="round-box"></div><div class="round-box"></div><div class="round-box"></div>
+    <div class="round-box"></div><div class="round-box"></div><div class="round-box"></div>
+    <div class="round-box"></div>
+  </div>
+
+  <!-- Notas rápidas -->
+  <div class="quick-notes"></div>
+
+  <!-- Legenda -->
+  <div class="legend">
+    <span><b>Init.</b> = Iniciativa (1d10/grupo)</span>
+    <span><b>Esquiva</b> = d20 ≤ valor (máx 18, −2 por esquiva extra no turno)</span>
+    <span><b>Buffs</b>: ex. "Aceleração 3rd", "Envenenado 1d6×2", "Marcado"</span>
+    <span><b>HP Atual</b>: risque ou marque pips conforme dano recebido</span>
+  </div>
+
+  <div class="sheet-footer">
+    <span>Grimório de Aether · Anotações de Combate</span>
+    <span>Acerto: d10 ≤ 5 ± dif. DEX &nbsp;·&nbsp; Crítico: d10 ≤ Chance de Crítico &nbsp;·&nbsp; Dano: (Arma+Natural+Bônus)×Acertos − Def.Física</span>
+  </div>
+
+</div>
+
+<script>
+document.getElementById('btn-blank').addEventListener('click', () => {
+  window.open(location.href, '_blank');
+});
+</script>
+
+</body>
+</html>
