@@ -375,6 +375,8 @@ details.capitulo .corpo{padding:0 16px 14px}
 .tema-item{display:inline-block;font-size:.82rem;font-weight:700;color:var(--couro);border:1px solid var(--ouro);border-radius:10px;padding:0 8px;background:rgba(224,194,124,.25)}
 .desvantagem-item{margin-top:6px;padding:4px 8px;border-left:3px solid var(--lacre);background:rgba(142,27,27,.08);color:var(--tinta)}
 .historia-item{margin-top:6px;font-style:italic}
+.criatura{margin:10px 0;padding:10px 12px;border:1px solid var(--ouro);border-radius:3px;background:rgba(224,194,124,.12)}
+.criatura .sub-titulo{margin-top:0}
 .desvantagem{margin:10px 0;padding:10px 12px;border-left:4px solid var(--lacre);background:rgba(142,27,27,.1)}
 .historia{font-style:italic;color:var(--tinta-suave);border-top:1px solid rgba(185,142,59,.6);padding-top:8px}
 
@@ -1023,6 +1025,25 @@ function rMagias(){
   return h;
 }
 
+/* ----- Ficha de criatura invocada ----- */
+function fichaCriatura(cri){
+  const c = calcMonstro(cri, P.nivel, cri.dificuldade);
+  const qtd = cri.quantidade || 1;
+  return `<div class="criatura"><h3 class="sub-titulo">${esc(cri.nome)}${qtd > 1 ? ` × ${qtd}` : ''}</h3>
+    <p class="nota" style="margin:0 0 6px">No nível ${c.n} (o seu), ${TAMANHOS[cri.tamanho].nome.toLowerCase()}, dura ${esc(cri.duracao)}.${qtd > 1 ? ' Cada um tem esta ficha.' : ''} Os números sobem com o seu nível.</p>
+    <dl class="ficha-magia">
+      <dt>Vida</dt><dd><b>${fmt(c.vida)}</b></dd>
+      <dt>Defesa física</dt><dd><b>${fmt(c.defF)}</b></dd>
+      <dt>Defesa mágica</dt><dd><b>${fmt(c.defM)}</b></dd>
+      <dt>Defesa no d10</dt><dd>${c.defD10} ou menos</dd>
+      ${cri.naoLuta ? '<dt>Ataques</dt><dd>Não luta</dd>' : `<dt>Ataques por turno</dt><dd><b>${c.ataquesTurno}</b></dd>`}
+      <dt>Movimento</dt><dd>${c.movimento} hex${cri.voa ? ', voando' : ''}</dd>
+    </dl>
+    ${cri.naoLuta ? '' : `<ul class="lista-simples">${c.ataques.map(a => `<li><b>${esc(a.nome)}:</b> ${realce(`${a.dados}d10 × ${c.n}`)}${a.tipo === 'magico' ? ' mágico' : ''}, ${esc(a.alcance.toLowerCase())}${a.efeito ? `. ${realce(esc(a.efeito))}` : ''}</li>`).join('')}</ul>`}
+    ${(cri.habilidades || []).length ? `<ul class="lista-simples">${cri.habilidades.map(h => `<li><b>${esc(h.nome)}:</b> ${realce(esc(h.efeito))}</li>`).join('')}</ul>` : ''}
+  </div>`;
+}
+
 /* ----- Modal de magia ----- */
 let modalMagia = null;
 function renderModalMagia(){
@@ -1045,6 +1066,7 @@ function renderModalMagia(){
       <dt>Custo</dt><dd>${c} slot${c > 1 ? 's' : ''} (tier ${TIERS[m.tier].nome.toLowerCase()})</dd>
     </dl>
     <p>${realce(esc(m.efeito))}</p>
+    ${m.criatura ? fichaCriatura(m.criatura) : ''}
     ${m.desvantagem ? `<div class="desvantagem"><b>Desvantagem:</b> ${realce(esc(m.desvantagem))}</div>` : ''}
     ${m.historia ? `<p class="historia">${esc(m.historia)}</p>` : ''}
     ${formula ? `<div class="formula">${realce(formula)}</div>` : ''}
