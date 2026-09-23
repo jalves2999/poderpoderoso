@@ -1,0 +1,1622 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2b1a10">
+<title>Livro do Aventureiro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&family=EB+Garamond:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pergaminho:#eadbb4;
+  --pergaminho-claro:#f4e9cc;
+  --tinta:#1a1209;
+  --tinta-suave:#3f301d;
+  --lapis:#1c3a78;
+  --rubrica:#9e1a0f;
+  --couro:#3b2517;
+  --couro-escuro:#22150c;
+  --lacre:#8e1b1b;
+  --lacre-escuro:#5e1010;
+  --ouro:#b98e3b;
+  --ouro-claro:#e0c27c;
+  --musgo:#4a5a2e;
+  --titulo:'UnifrakturCook','Old English Text MT',Georgia,serif;
+  --texto:'EB Garamond','Garamond','Palatino Linotype',Palatino,Georgia,serif;
+  --topo:76px;
+  color-scheme:light;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%}
+html{font-size:17px}
+body{font-family:var(--texto);font-size:1.06rem;line-height:1.5;color:var(--tinta);background:var(--couro-escuro)}
+.livro{
+  max-width:720px;margin:0 auto;min-height:100vh;
+  padding-bottom:calc(76px + env(safe-area-inset-bottom,0px));
+  background:
+    radial-gradient(ellipse at 15% 8%,rgba(255,250,230,.55),transparent 55%),
+    radial-gradient(ellipse at 90% 95%,rgba(110,70,20,.22),transparent 55%),
+    radial-gradient(ellipse at 100% 30%,rgba(110,70,20,.12),transparent 40%),
+    repeating-linear-gradient(90deg,rgba(90,60,20,.025) 0 1px,transparent 1px 4px),
+    var(--pergaminho);
+  box-shadow:0 0 40px rgba(0,0,0,.6) inset;
+}
+
+/* ---------- Cabeçalho ---------- */
+.topo{
+  position:sticky;top:0;z-index:5;text-align:center;
+  padding:calc(10px + env(safe-area-inset-top,0px)) 58px 10px;
+  background:linear-gradient(180deg,var(--couro),var(--couro-escuro));
+  border-bottom:3px double var(--ouro);color:var(--ouro-claro);
+}
+.topo h1{font-family:var(--titulo);font-weight:700;font-size:1.75rem;line-height:1.05;margin:0;text-shadow:0 2px 0 #000}
+.topo .quem{font-style:italic;font-size:.95rem;color:#d9c6a0;margin-top:2px;min-height:1.3em}
+.botao-menu{
+  position:absolute;left:10px;top:calc(12px + env(safe-area-inset-top,0px));width:44px;height:44px;cursor:pointer;
+  background:none;border:1px solid var(--ouro);border-radius:3px;color:var(--ouro-claro);font-size:1.4rem;line-height:1;
+}
+
+/* ---------- Menu lateral ---------- */
+.veu{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:25}
+.veu[hidden]{display:none}
+.gaveta{
+  position:fixed;top:0;bottom:0;left:0;z-index:30;width:min(86vw,330px);overflow-y:auto;
+  padding:calc(16px + env(safe-area-inset-top,0px)) 12px calc(16px + env(safe-area-inset-bottom,0px));
+  background:linear-gradient(180deg,var(--couro),var(--couro-escuro));border-right:3px double var(--ouro);color:var(--ouro-claro);
+  transform:translateX(-105%);transition:transform .25s ease;visibility:hidden;
+}
+.gaveta.aberta{transform:none;visibility:visible}
+.gaveta .cab{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.gaveta .cab b{font-family:var(--titulo);font-size:1.6rem}
+.gaveta .cab button{width:44px;height:44px;background:none;border:1px solid var(--ouro);border-radius:3px;color:var(--ouro-claro);font-size:1.3rem;cursor:pointer}
+.gaveta h3{font-family:var(--texto);font-style:italic;font-weight:400;color:#cbb487;font-size:1rem;margin:16px 6px 6px;border-bottom:1px solid rgba(185,142,59,.5);padding-bottom:4px}
+.gaveta .ir{display:flex;align-items:center;gap:12px;width:100%;min-height:48px;padding:8px 10px;cursor:pointer;
+  background:none;border:none;border-radius:3px;color:var(--ouro-claro);font-family:var(--texto);font-size:1.08rem;font-weight:600;text-align:left}
+.gaveta .ir .ic{width:1.6em;text-align:center;font-size:1.2rem}
+.gaveta .ir[aria-current=page]{background:rgba(224,194,124,.14);box-shadow:inset 3px 0 0 var(--ouro)}
+
+/* ---------- Seções ---------- */
+.folha{padding:6px 14px 20px}
+.bloco{
+  position:relative;margin:14px 0;padding:14px 14px 12px;
+  background:linear-gradient(180deg,rgba(255,252,240,.45),rgba(214,192,140,.25));
+  border:1px solid var(--tinta-suave);border-radius:3px;
+  box-shadow:inset 0 0 0 4px rgba(234,219,180,.9),inset 0 0 0 5px rgba(185,142,59,.7),0 1px 3px rgba(40,20,5,.25);
+}
+.bloco h2{font-family:var(--titulo);font-weight:700;font-size:1.45rem;line-height:1.1;color:var(--lacre);
+  margin:0 0 10px;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.bloco h2 small{font-family:var(--texto);font-size:1.0rem;color:var(--tinta-suave);font-weight:600}
+.bloco p{margin:6px 0}
+.titulo-pagina{font-family:var(--titulo);font-size:2rem;color:var(--lacre);margin:14px 2px 2px;line-height:1.1}
+.intro{margin:0 2px 8px;color:var(--tinta-suave);font-style:italic}
+.nota{font-size:1.0rem;color:var(--tinta-suave);font-style:italic;margin:4px 0 0}
+.capitular::first-letter{float:left;font-family:var(--titulo);font-size:3.1em;line-height:.8;color:var(--lacre);padding:4px 6px 0 0}
+
+/* ---------- Campos ---------- */
+.campo{display:flex;flex-direction:column;gap:4px;margin-bottom:12px}
+.campo label{font-weight:600;font-size:.95rem}
+input[type=text],input[type=search],select,textarea{
+  font-family:var(--texto);font-size:17px;color:var(--tinta);width:100%;min-height:46px;
+  padding:10px 12px;border:1px solid var(--tinta-suave);border-radius:3px;
+  background:var(--pergaminho-claro);box-shadow:inset 0 1px 3px rgba(60,35,10,.2);
+}
+select{
+  -webkit-appearance:none;appearance:none;padding-right:36px;
+  background-image:linear-gradient(45deg,transparent 50%,var(--tinta) 50%),linear-gradient(135deg,var(--tinta) 50%,transparent 50%);
+  background-position:calc(100% - 18px) 50%,calc(100% - 12px) 50%;background-size:6px 6px;background-repeat:no-repeat;
+}
+select:disabled{opacity:.45}
+textarea{min-height:110px;font-size:14px;font-family:ui-monospace,Consolas,monospace}
+:focus-visible{outline:3px solid var(--ouro);outline-offset:2px}
+
+/* ---------- Selos ---------- */
+.selo{
+  width:44px;height:44px;border-radius:50%;border:none;flex:none;cursor:pointer;
+  font-family:var(--texto);font-size:1.5rem;font-weight:700;line-height:1;color:#f5e2bd;
+  background:radial-gradient(circle at 35% 30%,#b23a3a,var(--lacre) 55%,var(--lacre-escuro));
+  box-shadow:0 2px 3px rgba(0,0,0,.4),inset 0 -3px 4px rgba(0,0,0,.35),inset 0 2px 2px rgba(255,200,180,.25);
+}
+.selo:active{transform:scale(.94)}
+.selo:disabled{filter:grayscale(1);opacity:.35}
+.nivel{display:flex;align-items:center;gap:14px}
+.nivel .num{font-size:2rem;font-weight:700;min-width:2.2ch;text-align:center}
+
+/* ---------- Atributos ---------- */
+.atributo{display:grid;grid-template-columns:1fr auto auto auto;gap:10px;align-items:center;padding:8px 0;border-top:1px dotted rgba(92,74,51,.5)}
+.atributo:first-of-type{border-top:none}
+.atributo .nome{font-weight:700}
+.atributo .nome span{font-weight:400;color:var(--tinta-suave)}
+.atributo .desc{font-size:0.95rem;color:var(--tinta-suave);line-height:1.25}
+.atributo .valor{font-size:1.6rem;font-weight:700;min-width:1.6ch;text-align:center}
+.atributo .extra{font-size:.8rem;color:var(--musgo);font-weight:700;display:block;text-align:center}
+.restante{font-family:var(--texto);font-size:.9rem;padding:2px 10px;border-radius:12px;background:var(--musgo);color:#f2ead3;white-space:nowrap}
+.restante.zero{background:var(--tinta-suave)}
+.classe-info{border-top:1px solid rgba(185,142,59,.6);padding-top:10px;margin-top:4px}
+
+/* ---------- Itens ---------- */
+.tier{display:inline-block;font-size:.78rem;font-weight:700;padding:1px 8px;border-radius:10px;color:#fbf2dc;vertical-align:2px}
+.slot,.entrada{padding:10px 0;border-top:1px dotted rgba(92,74,51,.5)}
+.slot:first-of-type,.entrada:first-of-type{border-top:none;padding-top:0}
+.slot label{font-weight:700;display:block;margin-bottom:4px}
+.entrada .nome{font-weight:700;font-size:1.05rem}
+.detalhe{font-size:1.0rem;color:var(--tinta-suave);margin-top:4px;line-height:1.35}
+.detalhe em{color:var(--tinta)}
+
+/* ---------- Filtros ---------- */
+.filtros{position:sticky;top:var(--topo);z-index:3;margin:10px -14px 0;padding:10px 14px;background:var(--pergaminho);border-bottom:1px solid rgba(92,74,51,.4)}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin-top:8px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;min-height:40px;padding:6px 14px;border-radius:20px;cursor:pointer;
+  border:1px solid var(--tinta-suave);background:var(--pergaminho-claro);color:var(--tinta);font-family:var(--texto);font-size:.95rem;font-weight:600}
+.chip[aria-pressed=true]{background:var(--couro);color:var(--ouro-claro);border-color:var(--ouro)}
+
+/* ---------- Magias ---------- */
+.contador{position:sticky;top:var(--topo);z-index:3;margin:12px 0 0;padding:10px 14px;
+  background:var(--couro);color:var(--ouro-claro);border:1px solid var(--ouro);border-radius:3px;display:flex;justify-content:space-between;align-items:center;font-weight:600}
+.contador .barra{flex:1;height:8px;margin:0 12px;background:rgba(255,255,255,.12);border-radius:4px;overflow:hidden}
+.contador .barra i{display:block;height:100%;background:var(--ouro)}
+.contador.excedido .barra i{background:#d14a4a}
+.magia{display:grid;grid-template-columns:34px 1fr;gap:8px;padding:10px 0;border-top:1px dotted rgba(92,74,51,.5)}
+.magia:first-of-type{border-top:none}
+.magia input{width:26px;height:26px;margin:2px 0 0;accent-color:var(--lacre)}
+.magia.bloqueada{opacity:.5}
+.magia .titulo{font-weight:700}
+.magia .info{font-size:0.98rem;color:var(--tinta-suave)}
+.valor-calc{font-size:1.0rem;color:var(--musgo);font-weight:600;margin-top:2px}
+
+/* ---------- Habilidades ---------- */
+.hab{display:grid;grid-template-columns:52px 1fr;gap:12px;padding:12px 0;border-top:1px dotted rgba(92,74,51,.5)}
+.hab:first-of-type{border-top:none;padding-top:2px}
+.hab .nv{width:48px;height:48px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  border:2px solid var(--ouro);background:var(--pergaminho-claro);line-height:1}
+.hab .nv small{font-size:.66rem;color:var(--tinta-suave)}
+.hab .nv b{font-size:1.25rem}
+.hab.liberada .nv{background:var(--couro);color:var(--ouro-claro)}
+.hab.liberada .nv small{color:#cbb487}
+.hab.travada{opacity:.6}
+.hab .titulo{font-weight:700;font-size:1.05rem}
+.hab .meta{font-size:0.96rem;color:var(--tinta-suave)}
+
+/* ---------- Status ---------- */
+.aviso{margin:6px 0;padding:8px 12px;background:rgba(142,27,27,.1);border-left:4px solid var(--lacre);font-size:.95rem}
+.resultado p{margin:6px 0;display:flex;justify-content:space-between;gap:10px}
+.resultado b{white-space:nowrap}
+
+/* ---------- Tutoriais ---------- */
+details.capitulo{margin:12px 0;border:1px solid var(--tinta-suave);border-radius:3px;background:rgba(255,252,240,.35);
+  box-shadow:inset 0 0 0 4px rgba(234,219,180,.9),inset 0 0 0 5px rgba(185,142,59,.7)}
+details.capitulo summary{list-style:none;cursor:pointer;padding:14px 16px;font-family:var(--titulo);font-size:1.35rem;color:var(--lacre);display:flex;justify-content:space-between;align-items:center;gap:10px}
+details.capitulo summary::-webkit-details-marker{display:none}
+details.capitulo summary::after{content:'▾';font-family:var(--texto);color:var(--ouro);font-size:1rem}
+details.capitulo[open] summary::after{content:'▴'}
+details.capitulo .corpo{padding:0 16px 14px}
+.formula{margin:10px 0;padding:10px 12px;background:var(--couro);color:var(--ouro-claro);border-radius:3px;font-weight:600;line-height:1.4}
+.tabela{overflow-x:auto;margin:10px 0}
+.tabela table{border-collapse:collapse;width:100%;min-width:420px;font-size:1.0rem}
+.tabela th,.tabela td{border:1px solid rgba(92,74,51,.45);padding:6px 8px;text-align:left;vertical-align:top}
+.tabela th{background:rgba(59,37,23,.12)}
+.corpo ul{padding-left:1.2em;margin:6px 0}
+.corpo li{margin:4px 0}
+
+/* ---------- Botões ---------- */
+.botoes{display:flex;flex-wrap:wrap;gap:10px}
+.btn{font-family:var(--texto);font-size:1.02rem;font-weight:700;min-height:46px;padding:10px 16px;cursor:pointer;
+  border:1px solid var(--couro);border-radius:3px;color:var(--tinta);background:linear-gradient(180deg,var(--ouro-claro),var(--ouro));box-shadow:0 2px 0 var(--couro)}
+.btn:active{transform:translateY(1px);box-shadow:0 1px 0 var(--couro)}
+.btn.lacre{background:linear-gradient(180deg,#a83030,var(--lacre-escuro));color:#f5e2bd}
+.btn.simples{background:transparent;box-shadow:none}
+.btn.pequeno{min-height:40px;padding:6px 12px;font-size:.95rem}
+.salvo{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-top:1px dotted rgba(92,74,51,.5)}
+.salvo:first-of-type{border-top:none}
+.salvo .n{font-weight:700}
+.salvo .m{font-size:0.98rem;color:var(--tinta-suave)}
+.vazio{font-style:italic;color:var(--tinta-suave)}
+
+
+/* ---------- Escolha de item (slot) ---------- */
+.escolher{display:flex;align-items:center;gap:12px;width:100%;min-height:56px;padding:10px 12px;cursor:pointer;text-align:left;
+  font-family:var(--texto);font-size:1.02rem;color:var(--tinta);
+  border:1px solid var(--tinta-suave);border-radius:3px;background:var(--pergaminho-claro);box-shadow:inset 0 1px 3px rgba(60,35,10,.2)}
+.escolher .txt{flex:1;min-width:0}
+.escolher .txt b{display:block}
+.escolher .vazio-slot{font-style:italic;color:var(--tinta-suave)}
+.escolher .seta{color:var(--ouro);font-size:1.3rem}
+.escolher:disabled{opacity:.5;cursor:not-allowed}
+
+/* ---------- Modal de itens ---------- */
+.modal-fundo{position:fixed;inset:0;z-index:50;background:rgba(15,8,3,.6);display:flex;align-items:flex-end;justify-content:center}
+.modal-fundo[hidden]{display:none}
+.modal{
+  width:100%;max-width:720px;max-height:88vh;display:flex;flex-direction:column;
+  background:
+    radial-gradient(ellipse at 15% 0%,rgba(255,250,230,.6),transparent 55%),
+    var(--pergaminho);
+  border-top:3px double var(--ouro);border-radius:10px 10px 0 0;box-shadow:0 -6px 30px rgba(0,0,0,.5);
+  padding-bottom:env(safe-area-inset-bottom,0px);animation:subir .22s ease-out;
+}
+@keyframes subir{from{transform:translateY(40px);opacity:.4}to{transform:none;opacity:1}}
+.modal .cab{display:flex;align-items:center;gap:10px;padding:14px 16px 10px;border-bottom:1px solid rgba(92,74,51,.4)}
+.modal .cab h2{flex:1;margin:0;font-family:var(--titulo);font-weight:700;font-size:1.5rem;color:var(--lacre);line-height:1.1}
+.modal .cab small{display:block;font-family:var(--texto);font-size:0.98rem;color:var(--tinta-suave);font-weight:400}
+.modal .cab button{width:44px;height:44px;flex:none;cursor:pointer;background:none;border:1px solid var(--tinta-suave);border-radius:3px;font-size:1.2rem;color:var(--tinta)}
+.modal .chips{padding:8px 16px 0;margin:0}
+.modal .lista{overflow-y:auto;padding:4px 16px 16px;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.modal .grupo{font-style:italic;color:var(--tinta-suave);margin:14px 0 4px;padding-bottom:3px;border-bottom:1px solid rgba(185,142,59,.6)}
+.opcao{display:block;width:100%;text-align:left;cursor:pointer;margin:6px 0;padding:10px 12px;
+  font-family:var(--texto);font-size:1rem;color:var(--tinta);
+  background:rgba(255,252,240,.55);border:1px solid rgba(92,74,51,.35);border-radius:3px}
+.opcao .nome{font-weight:700;font-size:1.06rem;display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.opcao .marca{font-size:0.95rem;color:var(--musgo);font-weight:700;white-space:nowrap}
+.opcao .alerta{font-size:0.96rem;color:var(--lacre);font-weight:600;margin-top:4px}
+.opcao[aria-selected=true]{border:2px solid var(--ouro);background:rgba(224,194,124,.3)}
+.opcao.remover{font-style:italic;color:var(--tinta-suave)}
+@media (prefers-reduced-motion:reduce){.modal{animation:none}}
+
+/* ---------- Painel de status ---------- */
+.dica{margin:10px 2px 0;font-size:1.0rem;color:var(--tinta-suave);font-style:italic}
+.painel{margin:18px 0 4px}
+.painel > h2{font-family:var(--titulo);font-weight:700;font-size:1.4rem;line-height:1.1;color:var(--lacre);margin:0 2px 8px;
+  display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.painel > h2 small{font-family:var(--texto);font-size:0.96rem;color:var(--tinta-suave);font-weight:600}
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+@media (min-width:520px){.cards{grid-template-columns:repeat(3,minmax(0,1fr))}.cards.q4{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.card{position:relative;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:2px;min-height:86px;
+  padding:10px 12px;text-align:left;cursor:pointer;font-family:var(--texto);color:var(--tinta);
+  background:linear-gradient(180deg,rgba(255,252,240,.75),rgba(230,211,163,.45));border:1px solid var(--tinta-suave);border-radius:4px;
+  box-shadow:inset 0 0 0 3px rgba(244,233,204,.9),inset 0 0 0 4px rgba(185,142,59,.55),0 1px 2px rgba(40,20,5,.2)}
+.card::after{content:'ⓘ';position:absolute;top:7px;right:9px;font-size:.78rem;color:var(--ouro)}
+.card:active{transform:scale(.98)}
+.card .rot{font-size:0.96rem;font-weight:600;color:var(--tinta-suave);line-height:1.2;padding-right:14px}
+.card .val{font-size:1.5rem;font-weight:700;line-height:1.1;overflow-wrap:anywhere;margin-top:2px}
+.card .sub{font-size:0.9rem;color:var(--tinta-suave);line-height:1.25;margin-top:auto;padding-top:2px}
+.card.vida{background:linear-gradient(180deg,#4a2e1c,var(--couro-escuro));border-color:var(--ouro);color:var(--ouro-claro);
+  box-shadow:inset 0 0 0 3px rgba(59,37,23,.9),inset 0 0 0 4px rgba(185,142,59,.7),0 1px 3px rgba(0,0,0,.35)}
+.card.vida .rot,.card.vida .sub{color:#cbb487}
+.card.vida .val{font-size:1.9rem}
+.card.alerta{border-color:var(--lacre);box-shadow:inset 0 0 0 3px rgba(244,233,204,.9),inset 0 0 0 4px rgba(142,27,27,.55),0 1px 2px rgba(40,20,5,.2)}
+.card.alerta .sub{color:var(--lacre);font-weight:700}
+.attrs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.attr{display:flex;flex-direction:column;align-items:center;gap:1px;min-height:78px;padding:8px 2px;cursor:pointer;font-family:var(--texto);color:var(--tinta);
+  background:rgba(255,252,240,.55);border:1px solid rgba(92,74,51,.45);border-radius:4px}
+.attr:active{transform:scale(.97)}
+.attr .sig{font-size:.78rem;font-weight:700;color:var(--tinta-suave);letter-spacing:.02em}
+.attr .v{font-size:1.45rem;font-weight:700;line-height:1.1}
+.attr .v sup{font-size:.6em;color:var(--musgo)}
+.attr .tp{font-size:0.82rem;line-height:1.2;color:var(--musgo);font-weight:700;text-align:center}
+.legenda{font-size:0.92rem;color:var(--tinta-suave);margin:6px 2px 0}
+.lista-hab{margin:0;padding:0;list-style:none}
+.lista-hab li{padding:8px 0;border-top:1px dotted rgba(92,74,51,.5)}
+.lista-hab li:first-child{border-top:none;padding-top:0}
+.lista-hab b{font-size:1.02rem}
+.lista-hab span{font-size:0.96rem;color:var(--tinta-suave)}
+.avisos .aviso:first-child{margin-top:12px}
+.info-corpo{padding:12px 0 8px;font-size:1rem;line-height:1.5}
+.info-corpo .btn{margin-top:12px}
+
+/* ---------- Habilidades compráveis ---------- */
+.hc{padding:12px 0;border-top:1px dotted rgba(92,74,51,.5)}
+.hc:first-of-type{border-top:none;padding-top:2px}
+.hc .topo-hc{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+.hc .nome{font-weight:700;font-size:1.08rem}
+.cat{display:inline-block;font-size:.74rem;font-weight:700;padding:1px 8px;border-radius:10px;color:#fbf2dc;white-space:nowrap}
+.hc .meta{font-size:0.96rem;color:var(--tinta-suave);margin:2px 0 4px}
+.hc .exemplos{margin:6px 0 2px;padding-left:1.1em;font-size:1.0rem;color:var(--tinta-suave)}
+.hc .exemplos li{margin:3px 0}
+.hc .dados{font-size:1.0rem;color:var(--musgo);font-weight:600;margin-top:4px}
+.hc .acoes-hc{display:flex;gap:8px;align-items:center;margin-top:8px}
+.hc .acoes-hc .btn:disabled{opacity:.45;cursor:not-allowed}
+.hc.aprendida{background:linear-gradient(90deg,rgba(185,142,59,.18),transparent 70%);margin:0 -14px;padding-left:14px;padding-right:14px;box-shadow:inset 3px 0 0 var(--ouro)}
+.hc.travada{opacity:.62}
+.selo-ok{font-size:0.95rem;font-weight:700;color:var(--musgo)}
+.nivel-bloco h2 small.livre{color:var(--musgo)}
+.furia{background:linear-gradient(180deg,rgba(142,27,27,.12),rgba(214,192,140,.25))}
+.medidor{display:flex;gap:6px;flex-wrap:wrap;margin:4px 0 12px}
+.medidor i{width:26px;height:26px;border-radius:50%;border:2px solid var(--lacre-escuro);background:var(--pergaminho-claro);box-shadow:inset 0 1px 2px rgba(60,35,10,.3)}
+.medidor i.acesa{background:radial-gradient(circle at 40% 35%,#ffd27a,#e0622a 45%,var(--lacre) 75%,var(--lacre-escuro));box-shadow:0 0 6px rgba(224,98,42,.6)}
+.furia .valor-furia{font-size:2rem;font-weight:700;line-height:1}
+.furia .valor-furia small{font-size:1rem;color:var(--tinta-suave);font-weight:600}
+
+.alvo{padding:10px 0;border-top:1px dotted rgba(92,74,51,.5)}
+.alvo:first-of-type{border-top:none;padding-top:0}
+.alvo .linha-alvo{display:flex;gap:8px;align-items:center}
+.alvo .linha-alvo input{flex:1;min-height:42px;font-weight:700}
+.alvo .linha-alvo .fechar{width:42px;height:42px;flex:none;cursor:pointer;background:none;border:1px solid var(--tinta-suave);border-radius:3px;font-size:1.05rem;color:var(--tinta)}
+.alvo .medidor{margin:8px 0}
+.alvo .medidor i{width:22px;height:22px}
+.alvo .medidor b{margin-left:6px;align-self:center}
+.alvo .botoes{gap:6px}
+
+/* ---------- Realce de dados e atributos ---------- */
+.dado{color:var(--rubrica);font-weight:700;white-space:nowrap}
+.atr{color:var(--lapis);font-weight:700;letter-spacing:.02em}
+.card.vida .dado,.bolsa .dado,.formula .dado{color:#ffb39e}
+.card.vida .atr,.formula .atr{color:#b9cdf5}
+.detalhe,.hc .meta,.magia .info,.evo .efeito,.atributo .desc{color:var(--tinta-suave)}
+.hc > div,.hc .exemplos{color:var(--tinta)}
+
+/* ---------- Evolução ---------- */
+.bolsa{position:sticky;top:var(--topo);z-index:3;margin:12px 0 0;padding:10px 14px;background:var(--couro);color:var(--ouro-claro);
+  border:1px solid var(--ouro);border-radius:3px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.bolsa .resta{font-size:1.6rem;font-weight:700;line-height:1}
+.bolsa .resta small{display:block;font-size:.8rem;font-weight:400;color:#cbb487}
+.bolsa .lado{text-align:right;font-size:0.98rem;color:#cbb487}
+.bolsa.negativo .resta{color:#ff9a8a}
+.recebidos{display:flex;align-items:center;gap:10px}
+.recebidos input{max-width:140px;text-align:center;font-size:1.3rem;font-weight:700}
+.evo{padding:12px 0;border-top:1px dotted rgba(92,74,51,.5)}
+.evo:first-of-type{border-top:none;padding-top:2px}
+.evo .topo-evo{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.evo .nome{font-weight:700;font-size:1.05rem}
+.evo .gasto{font-size:0.95rem;color:var(--tinta-suave);white-space:nowrap}
+.evo .efeito{font-size:1.0rem;color:var(--tinta-suave)}
+.bolinhas{display:flex;gap:6px;margin:8px 0 6px}
+.bolinhas i{width:22px;height:22px;border-radius:50%;border:2px solid var(--ouro);background:var(--pergaminho-claro);box-shadow:inset 0 1px 2px rgba(60,35,10,.3)}
+.bolinhas i.cheia{background:radial-gradient(circle at 35% 30%,#f3d98f,var(--ouro) 60%,#7d5c1f);box-shadow:0 1px 2px rgba(0,0,0,.35)}
+.evo .custos{font-size:0.94rem;color:var(--tinta-suave)}
+.evo .custos s{opacity:.6}
+.evo .acoes-evo{display:flex;gap:8px;align-items:center;margin-top:8px}
+.evo .acoes-evo .btn:disabled{opacity:.45;cursor:not-allowed}
+.testes{width:100%;border-collapse:collapse;font-size:.95rem}
+.testes th,.testes td{padding:6px 4px;border-bottom:1px dotted rgba(92,74,51,.5);text-align:center}
+.testes th:first-child,.testes td:first-child{text-align:left}
+
+/* ---------- Navegação inferior ---------- */
+.abas{position:fixed;left:0;right:0;bottom:0;z-index:10;display:grid;grid-template-columns:repeat(6,1fr);max-width:720px;margin:0 auto;
+  padding-bottom:env(safe-area-inset-bottom,0px);background:linear-gradient(180deg,var(--couro),var(--couro-escuro));border-top:3px double var(--ouro)}
+.abas button{font-family:var(--texto);background:none;border:none;color:#bfa77a;cursor:pointer;min-height:62px;padding:6px 1px;font-size:.72rem;font-weight:600;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.abas button .ic{font-size:1.35rem;line-height:1}
+.abas button[aria-selected=true]{color:var(--ouro-claro);background:rgba(224,194,124,.12);box-shadow:inset 0 3px 0 var(--ouro)}
+
+.aviso-toast{position:fixed;left:50%;bottom:calc(80px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);
+  background:var(--couro);color:var(--ouro-claro);border:1px solid var(--ouro);padding:10px 18px;border-radius:3px;
+  font-weight:600;z-index:40;opacity:0;pointer-events:none;transition:opacity .2s;max-width:90vw;text-align:center}
+.aviso-toast.visivel{opacity:1}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="livro">
+  <header class="topo" id="topo">
+    <button class="botao-menu" id="abrir-menu" aria-label="Abrir índice" aria-controls="gaveta" aria-expanded="false">☰</button>
+    <h1>Livro do Aventureiro</h1>
+    <div class="quem" id="quem"></div>
+  </header>
+  <main class="folha" id="conteudo"></main>
+</div>
+
+<div class="veu" id="veu" hidden></div>
+<div class="modal-fundo" id="modal-fundo" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-titulo">
+    <div class="cab"><h2 id="modal-titulo"></h2><button id="fechar-modal" aria-label="Fechar">✕</button></div>
+    <div id="modal-filtros"></div>
+    <div class="lista" id="modal-lista"></div>
+  </div>
+</div>
+<aside class="gaveta" id="gaveta" aria-label="Índice">
+  <div class="cab"><b>Índice</b><button id="fechar-menu" aria-label="Fechar índice">✕</button></div>
+  <div id="lista-menu"></div>
+</aside>
+
+<nav class="abas" role="tablist" aria-label="Seções da ficha">
+  <button role="tab" data-aba="ficha"   aria-selected="true"><span class="ic">📜</span>Ficha</button>
+  <button role="tab" data-aba="equipar" aria-selected="false"><span class="ic">⚔️</span>Equipar</button>
+  <button role="tab" data-aba="magias"  aria-selected="false"><span class="ic">✨</span>Magias</button>
+  <button role="tab" data-aba="status"  aria-selected="false"><span class="ic">🛡️</span>Status</button>
+  <button role="tab" data-aba="evolucao" aria-selected="false"><span class="ic">⭐</span>Evolução</button>
+  <button role="tab" data-aba="habilidades" aria-selected="false"><span class="ic">⚜️</span>Habilidades</button>
+</nav>
+<div class="aviso-toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="data.js"></script>
+<script>
+(function(){
+'use strict';
+
+/* ================= Utilidades ================= */
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt = n => Math.round(n).toLocaleString('pt-BR');
+const clamp = (v,a,b) => Math.max(a, Math.min(b, v));
+const semAcento = s => String(s).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+
+const LS_SALVOS = 'rpgHex_personagens';
+const LS_ATUAL  = 'rpgHex_atual';
+function lsGet(k, padrao){ try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : padrao; } catch(e){ return padrao; } }
+function lsSet(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch(e){ return false; } }
+
+let toastTimer;
+function toast(msg){
+  const t = $('#toast'); t.textContent = msg; t.classList.add('visivel');
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('visivel'), 2200);
+}
+
+/* ================= Dados auxiliares ================= */
+const PUNHO = { id:'', nome:'Desarmado', tier:'comum', categoria:'desarmado', maos:1, dados:0, peso:0, alcance:1, efeito:'' };
+const TODOS = [...ARMAS, ...ESCUDOS, ...ARMADURAS, ...ACESSORIOS];
+const item = id => TODOS.find(i => i.id === id) || null;
+const magia = id => MAGIAS.find(m => m.id === id) || null;
+const classe = id => CLASSES.find(c => c.id === id) || CLASSES[0];
+const custo = m => REGRAS.custoSlotPorTier[m.tier] || 1;
+const ehEscudo = it => ESCUDOS.includes(it);
+
+const SLOTS = [
+  { id:'arma',       nome:'Arma principal', lista:() => ARMAS },
+  { id:'secundaria', nome:'Mão secundária (escudo ou foco de uma mão)', lista:() => [...ESCUDOS, ...ARMAS.filter(a => a.maos === 1 && a.foco)] },
+  { id:'elmo',       nome:'Elmo',     lista:() => ARMADURAS.filter(a => a.slot === 'elmo') },
+  { id:'peitoral',   nome:'Peitoral', lista:() => ARMADURAS.filter(a => a.slot === 'peitoral') },
+  { id:'luvas',      nome:'Luvas',    lista:() => ARMADURAS.filter(a => a.slot === 'luvas') },
+  { id:'botas',      nome:'Botas',    lista:() => ARMADURAS.filter(a => a.slot === 'botas') },
+  { id:'acess1',     nome:'Acessório I',   lista:() => ACESSORIOS },
+  { id:'acess2',     nome:'Acessório II',  lista:() => ACESSORIOS },
+  { id:'acess3',     nome:'Acessório III', lista:() => ACESSORIOS },
+  { id:'acess4',     nome:'Acessório IV',  lista:() => ACESSORIOS }
+];
+
+const RE_ATR = new RegExp('\\b(' + ATRIBUTOS.map(a => a.id).join('|') + '|DF|DM)\\b', 'g');
+const RE_DADO = /([+−]?\d*d10(?: × (?:nível|\d+))?)/g;
+// Realça dados (vermelho) e atributos (azul) num texto já escapado, sem tags.
+function realce(txt){
+  return String(txt).replace(RE_DADO, '<b class="dado">$1</b>').replace(RE_ATR, '<b class="atr">$1</b>');
+}
+function tierBadge(t){ const d = TIERS[t] || TIERS.comum; return `<span class="tier" style="background:${d.cor}">${d.nome}</span>`; }
+
+/* ================= Páginas ================= */
+const PAGINAS = {
+  ficha:       { nome:'Ficha',                 ic:'📜', grupo:'Seu personagem' },
+  equipar:     { nome:'Equipamento',           ic:'⚔️', grupo:'Seu personagem' },
+  magias:      { nome:'Magias equipadas',      ic:'✨', grupo:'Seu personagem' },
+  status:      { nome:'Status',                ic:'🛡️', grupo:'Seu personagem' },
+  evolucao:    { nome:'Evolução',              ic:'⭐', grupo:'Seu personagem' },
+  habilidades: { nome:'Habilidades',           ic:'⚜️', grupo:'Seu personagem' },
+  salvos:      { nome:'Personagens salvos',    ic:'💾', grupo:'Seu personagem' },
+  itens:       { nome:'Compêndio de itens',    ic:'📖', grupo:'Biblioteca' },
+  grimorio:    { nome:'Compêndio de magias',   ic:'🔮', grupo:'Biblioteca' },
+  tutoriais:   { nome:'Tutoriais',             ic:'🕯️', grupo:'Biblioteca' }
+};
+
+/* ================= Personagem ================= */
+function novo(classeId){
+  const a = {}; ATRIBUTOS.forEach(x => a[x.id] = REGRAS.attrMin);
+  return { id:null, nome:'', classe: classeId || CLASSES[0].id, nivel:1, atributos:a, equip:{}, magias:[], pontosExtras:0, evolucao:{}, habilidades:[], recursoAtual:null, alvos:[] };
+}
+function normalizar(p){
+  const base = novo(p && p.classe);
+  if (!p || typeof p !== 'object') return base;
+  const r = Object.assign({}, base, p);
+  r.classe = classe(r.classe).id;
+  r.atributos = Object.assign({}, base.atributos, p.atributos || {});
+  ATRIBUTOS.forEach(x => r.atributos[x.id] = clamp(parseInt(r.atributos[x.id]) || 1, REGRAS.attrMin, REGRAS.attrMax));
+  r.equip = Object.assign({}, p.equip || {});
+  r.magias = Array.isArray(p.magias) ? p.magias.filter(magia) : [];
+  r.nivel = clamp(parseInt(r.nivel) || 1, 1, REGRAS.nivelMax);
+  r.pontosExtras = Math.max(0, parseInt(p.pontosExtras) || 0);
+  delete r.pontosEvolucao;
+  const habsClasse = classe(r.classe).habilidades.map(h => h.id);
+  r.habilidades = Array.isArray(p.habilidades) ? [...new Set(p.habilidades)].filter(id => habsClasse.includes(id)) : [];
+  r.alvos = Array.isArray(p.alvos) ? p.alvos.slice(0, 12).map(a => ({ nome: String((a && a.nome) || '').slice(0, 30), marcas: Math.max(0, parseInt(a && a.marcas) || 0) })) : [];
+  r.recursoAtual = p.recursoAtual == null || p.recursoAtual === '' ? null : Math.max(0, parseInt(p.recursoAtual) || 0);
+  r.evolucao = {};
+  EVOLUCOES.forEach(ev => { const k = clamp(parseInt((p.evolucao || {})[ev.id]) || 0, 0, REGRAS.evolucao.maxBolinhas); if (k) r.evolucao[ev.id] = k; });
+  return r;
+}
+let P = normalizar(lsGet(LS_ATUAL, null));
+function guardarRascunho(){ lsSet(LS_ATUAL, P); }
+
+function pontos(grupo, p = P){
+  const pool = CATEGORIAS_CLASSE[classe(p.classe).categoria].pontos[grupo];
+  const usado = ATRIBUTOS.filter(a => a.grupo === grupo).reduce((s,a) => s + p.atributos[a.id], 0);
+  return { pool, usado, resta: pool - usado };
+}
+
+/* ================= Evolução ================= */
+const evolucao = id => EVOLUCOES.find(e => e.id === id);
+function pesoAttr(attrId, p = P){
+  const v = clamp(p.atributos[attrId], 1, 10);
+  return REGRAS.evolucao.pesos[v];
+}
+function custoBolinha(ev, i, p = P){ return pesoAttr(ev.attr, p) * ev.gasto * Math.pow(REGRAS.evolucao.multiplicador, i); }
+function gastoEvolucao(ev, p = P){
+  let t = 0; for (let i = 0; i < (p.evolucao[ev.id] || 0); i++) t += custoBolinha(ev, i, p); return t;
+}
+function pontosPorNivel(p = P){ return p.nivel * REGRAS.evolucao.pontosPorNivel; }
+function pontosTotais(p = P){ return pontosPorNivel(p) + (p.pontosExtras || 0); }
+function pontosGastos(p = P){ return EVOLUCOES.reduce((s, ev) => s + gastoEvolucao(ev, p), 0); }
+function bonusEvolucao(p){
+  const E = { dadoFisico:0, dadoMagico:0, carga:0, vida:0, acoesAtaque:0, reacoes:0, critFaixa:0, maestria:0, recurso:0, pericia:{}, teste:{} };
+  EVOLUCOES.forEach(ev => {
+    const k = p.evolucao[ev.id] || 0; if (!k) return;
+    for (const chave in ev.bonus) {
+      const v = ev.bonus[chave];
+      if (typeof v === 'object') for (const a in v) E[chave][a] = (E[chave][a] || 0) + v[a] * k;
+      else E[chave] += v * k;
+    }
+  });
+  return E;
+}
+
+/* ================= Cálculo ================= */
+function calcular(p){
+  const cls = classe(p.classe), n = p.nivel, mult = Math.ceil(n / 2), avisos = [];
+
+  const arma = item(p.equip.arma) || PUNHO;
+  const lista = []; const vistos = new Set();
+  SLOTS.forEach(s => {
+    const it = item(p.equip[s.id]); if (!it) return;
+    if (s.id === 'secundaria' && arma.maos === 2) return;
+    let efetivo = true;
+    if (s.id.startsWith('acess')) {
+      if (vistos.has(it.id)) { efetivo = false; avisos.push(`${it.nome} está equipado mais de uma vez: o efeito não acumula, só o peso conta.`); }
+      vistos.add(it.id);
+    }
+    lista.push({ slot:s, it, efetivo });
+  });
+  const ef = lista.filter(x => x.efetivo);
+  const escudo = (ef.find(x => x.slot.id === 'secundaria' && ehEscudo(x.it)) || {}).it || null;
+
+  // Atributos finais
+  const bonusAttr = {};
+  ef.forEach(({it}) => { if (it.atributos) for (const k in it.atributos) bonusAttr[k] = (bonusAttr[k] || 0) + it.atributos[k]; });
+  const A = {};
+  ATRIBUTOS.forEach(a => A[a.id] = p.atributos[a.id] + (bonusAttr[a.id] || 0));
+
+  // Somatórios
+  const B = { slots:0, carga:0, mov:0, critDano:0, dadoMagico:0, dadoCura:0, ignoraDF:0, alcanceArco:0 };
+  const fontes = { slots:[], carga:[], mov:[], critDano:[], dadoMagico:[], dadoCura:[] };
+  let df = 0, dm = 0, peso = 0; const partesDF = [], partesDM = [];
+  lista.forEach(({it}) => peso += it.peso || 0);
+  ef.forEach(({it}) => {
+    if (it.df) { df += it.df; partesDF.push(`${it.nome} ${it.df}`); }
+    if (it.dm) { dm += it.dm; partesDM.push(`${it.nome} ${it.dm}`); }
+    const b = it.bonus || {};
+    for (const k in B) if (b[k]) { B[k] += b[k]; if (fontes[k]) fontes[k].push(`${it.nome} +${b[k]}`); }
+  });
+
+  // Arma e penalidades
+  const cat = CATEGORIAS_ARMA[arma.categoria] || CATEGORIAS_ARMA.desarmado;
+  const falta = Math.max(0, (cat.forMin || 0) - A.FOR);
+  if (falta) avisos.push(`FOR insuficiente para ${arma.nome} (pede ${cat.forMin}): −${falta * REGRAS.penalidadeFOR.dex} DEX e −${falta * REGRAS.penalidadeFOR.movimento} de movimento.`);
+  const dexEf = Math.max(0, A.DEX - falta * REGRAS.penalidadeFOR.dex);
+
+  const E = bonusEvolucao(p);
+  const carga = REGRAS.cargaBase + A.FOR * REGRAS.cargaPorFOR + B.carga + E.carga;
+  const excesso = Math.max(0, peso - carga);
+  const penCarga = Math.ceil(excesso / REGRAS.pesoPorPenalidade);
+  if (excesso) avisos.push(`Sobrecarga: ${fmt(peso)} kg para ${fmt(carga)} kg de carga, −${penCarga} de movimento.`);
+  const movBruto = REGRAS.movimentoBase + A.AGI * REGRAS.movimentoPorAGI + B.mov;
+  const movimento = Math.max(1, movBruto - penCarga - falta * REGRAS.penalidadeFOR.movimento);
+
+  // Vida e defesas
+  const vida = REGRAS.vidaBase + A.CON * cls.fatorVida * n + E.vida;
+  const defF = df * A.CON * mult;
+  const defM = dm * A.FDV * mult;
+
+  // Chance de defesa
+  const bonusEscudo = escudo ? escudo.defesa : 0;
+  const defesaBruta = dexEf + bonusEscudo;
+  const defesaD10 = clamp(defesaBruta, 0, REGRAS.defesaMaxD10);
+
+  // Ações de ataque por turno
+  const acoesExtra = cat.acoesExtra || 0;
+  const perdaEscudo = escudo ? (escudo.perdeAcao || 0) : 0;
+  const acoesAtaque = Math.max(0, A.AGI + E.acoesAtaque + acoesExtra - perdaEscudo);
+  const custoAtaque = cat.custo || 1;
+  let ataquesFis, turnosPorAtaque = 1;
+  if (acoesAtaque === 0) { ataquesFis = 0; avisos.push(`Com ${escudo.nome}, você fica sem ataques físicos. Aumente a AGI ou use um escudo leve.`); }
+  else if (acoesAtaque >= custoAtaque) ataquesFis = Math.floor(acoesAtaque / custoAtaque);
+  else { ataquesFis = 0; turnosPorAtaque = Math.ceil(custoAtaque / acoesAtaque); }
+  const ataquesMag = A.INT;
+
+  // Dano físico (só dados)
+  const dadosF = A.FOR + E.dadoFisico + (arma.dados || 0);
+
+  // Magia e cura
+  const dadosM = A.INT + E.dadoMagico + B.dadoMagico;
+  const dadosC = A.FDV + B.dadoCura;
+  const slots = A.INT * REGRAS.slotsPorINT + B.slots;
+  const slotsUsados = p.magias.reduce((s,id) => s + (magia(id) ? custo(magia(id)) : 0), 0);
+  if (slotsUsados > slots) avisos.push(`As magias equipadas usam ${slotsUsados} slots, mas você tem ${slots}. Remova alguma na aba Magias.`);
+
+  // Crítico
+  const perCrit = REGRAS.bonusDeItemContaParaPER ? A.PER : p.atributos.PER;
+  const faixaBase = (perCrit >= REGRAS.perLimiarCritico ? REGRAS.critComPER : REGRAS.critBase) / 10;
+  const faixaCrit = Math.min(10, faixaBase + E.critFaixa);
+  const crit = faixaCrit * 10;
+  const reacoes = REGRAS.reacoesBase + E.reacoes;
+  const gastos = pontosGastos(p);
+  const totalEvo = pontosTotais(p);
+  if (gastos > totalEvo) avisos.push(`A evolução usa ${fmt(gastos)} pontos, mas o personagem tem ${fmt(totalEvo)}. Desfaça alguma bolinha na aba Evolução.`);
+  const critBonus = REGRAS.critBonusBase + B.critDano;
+
+  Object.keys(GRUPOS).forEach(g => {
+    const pt = pontos(g, p);
+    if (pt.resta > 0) avisos.push(`Ainda ${pt.resta === 1 ? 'resta 1 ponto' : `restam ${pt.resta} pontos`} em ${GRUPOS[g].nome.toLowerCase()}.`);
+  });
+
+  const habilidades = cls.habilidades.filter(h => (p.habilidades || []).includes(h.id));
+  const pontosHab = REGRAS.habilidades.pontosIniciais + Math.floor(n / REGRAS.habilidades.pontosACadaNiveis);
+  const pontosHabGastos = habilidades.reduce((s, h) => s + (h.pontos || 1), 0);
+  if (pontosHabGastos > pontosHab) avisos.push(`As habilidades aprendidas custam ${pontosHabGastos} pontos, mas no nível ${n} você tem ${pontosHab}. Esqueça alguma na aba Habilidades.`);
+  habilidades.filter(h => h.nivel > n).forEach(h => avisos.push(`${h.nome} exige nível ${h.nivel}.`));
+  const recursoMax = cls.recursoBase != null ? cls.recursoBase + E.recurso : null;
+  const recursoInicial = recursoMax == null ? 0 : cls.recursoInicio === 'max' ? recursoMax : (cls.recursoInicio || 0);
+  const recursoAtual = recursoMax == null ? 0 : clamp(p.recursoAtual == null ? recursoInicial : p.recursoAtual, 0, recursoMax);
+
+  return { cls, n, mult, A, bonusAttr, arma, cat, falta, dexEf, carga, peso, excesso, penCarga, movBruto, movimento,
+    vida, df, dm, defF, defM, partesDF, partesDM, escudo, bonusEscudo, defesaBruta, defesaD10,
+    acoesExtra, perdaEscudo, acoesAtaque, custoAtaque, ataquesFis, turnosPorAtaque, ataquesMag,
+    dadosF, dadosM, dadosC, slots, slotsUsados, crit, faixaBase, faixaCrit, critBonus, B, fontes, avisos, habilidades, pontosHab, pontosHabGastos, recursoMax, recursoInicial, recursoAtual, E, reacoes, gastos, totalEvo };
+}
+
+/* ================= Renderização ================= */
+let aba = 'ficha';
+
+function atualizarTopo(){
+  const cls = classe(P.classe);
+  $('#quem').textContent = `${P.nome || 'Aventureiro sem nome'}, ${cls.nome.toLowerCase()} de nível ${P.nivel}`;
+  document.documentElement.style.setProperty('--topo', $('#topo').offsetHeight + 'px');
+}
+
+const RENDER = {
+  ficha:() => rFicha(), equipar:() => rEquipar(), magias:() => rMagias(), status:() => rStatus(), evolucao:() => rEvolucao(), salvos:() => rSalvos(),
+  itens:() => rCompItens(), habilidades:() => rHabilidades(), grimorio:() => rCompMagias(), tutoriais:() => rTutoriais()
+};
+
+function render(){
+  atualizarTopo();
+  document.querySelectorAll('.abas button').forEach(b => b.setAttribute('aria-selected', b.dataset.aba === aba));
+  $('#conteudo').innerHTML = RENDER[aba]();
+  renderMenu();
+  guardarRascunho();
+}
+
+function renderMenu(){
+  const grupos = {};
+  Object.entries(PAGINAS).forEach(([id,pg]) => (grupos[pg.grupo] = grupos[pg.grupo] || []).push([id,pg]));
+  $('#lista-menu').innerHTML = Object.entries(grupos).map(([g, itens]) =>
+    `<h3>${g}</h3>` + itens.map(([id,pg]) =>
+      `<button class="ir" data-ir="${id}"${id === aba ? ' aria-current="page"' : ''}><span class="ic">${pg.ic}</span>${pg.nome}</button>`).join('')
+  ).join('');
+}
+
+function irPara(id){ aba = id; render(); window.scrollTo(0, 0); }
+function abrirMenu(){ $('#gaveta').classList.add('aberta'); $('#veu').hidden = false; $('#abrir-menu').setAttribute('aria-expanded','true'); setTimeout(() => $('#fechar-menu').focus(), 50); }
+function fecharMenu(){ $('#gaveta').classList.remove('aberta'); $('#veu').hidden = true; $('#abrir-menu').setAttribute('aria-expanded','false'); }
+
+/* ----- Ficha ----- */
+function rFicha(){
+  const cls = classe(P.classe), catC = CATEGORIAS_CLASSE[cls.categoria], r = calcular(P);
+  let h = `<section class="bloco"><h2>Identidade</h2>
+    <div class="campo"><label for="f-nome">Nome</label>
+      <input type="text" id="f-nome" value="${esc(P.nome)}" placeholder="Como o bardo vai chamar você?" maxlength="40" autocomplete="off"></div>
+    <div class="campo"><label for="f-classe">Classe</label>
+      <select id="f-classe">${CLASSES.map(c => `<option value="${c.id}"${c.id === P.classe ? ' selected' : ''}>${c.nome}</option>`).join('')}</select></div>
+    <div class="campo"><label>Nível</label>
+      <div class="nivel"><button class="selo" data-nivel="-1" aria-label="Diminuir nível"${P.nivel <= 1 ? ' disabled' : ''}>−</button>
+      <span class="num">${P.nivel}</span>
+      <button class="selo" data-nivel="1" aria-label="Aumentar nível"${P.nivel >= REGRAS.nivelMax ? ' disabled' : ''}>+</button></div></div>
+    <div class="classe-info">
+      <p class="capitular">${esc(cls.descricao)}</p>
+      <p><b>Categoria:</b> ${catC.nome} (${catC.pontos.fisico} físicos, ${catC.pontos.mental} mentais, ${catC.pontos.social} sociais)</p>
+      <p><b>Vida por nível:</b> CON × ${cls.fatorVida}. <b>Recurso:</b> ${esc(cls.recurso)}.</p>
+      <p><b>Armas:</b> ${esc(cls.armas)}. <b>Armaduras:</b> ${esc(cls.armaduras)}.</p>
+      <p><b>Passiva, ${esc(cls.passiva.nome)}:</b> ${realce(esc(cls.passiva.texto))}</p>
+      <p><b>Habilidades:</b> ${r.habilidades.length} aprendidas, ${r.pontosHab - r.pontosHabGastos} ${r.pontosHab - r.pontosHabGastos === 1 ? 'ponto livre' : 'pontos livres'}. <button class="btn pequeno simples" data-ir="habilidades">Abrir habilidades</button></p>
+    </div></section>`;
+
+  Object.keys(GRUPOS).forEach(g => {
+    const pt = pontos(g);
+    h += `<section class="bloco"><h2>${GRUPOS[g].nome} <span class="restante${pt.resta === 0 ? ' zero' : ''}">${pt.resta} de ${pt.pool}</span></h2>`;
+    ATRIBUTOS.filter(a => a.grupo === g).forEach(a => {
+      const v = P.atributos[a.id], bonus = r.bonusAttr[a.id] || 0;
+      h += `<div class="atributo">
+        <div><div class="nome">${a.id} <span>${esc(a.nome)}</span></div><div class="desc">${realce(esc(a.desc))}</div></div>
+        <button class="selo" data-attr="${a.id}" data-d="-1" aria-label="Diminuir ${a.nome}"${v <= REGRAS.attrMin ? ' disabled' : ''}>−</button>
+        <div class="valor">${v}${bonus ? `<span class="extra">+${bonus} item</span>` : ''}</div>
+        <button class="selo" data-attr="${a.id}" data-d="1" aria-label="Aumentar ${a.nome}"${(v >= REGRAS.attrMax || pt.resta <= 0) ? ' disabled' : ''}>+</button>
+      </div>`;
+    });
+    h += `</section>`;
+  });
+  h += `<p class="nota">Os pontos são distribuídos só no nível 1: mínimo ${REGRAS.attrMin} e máximo ${REGRAS.attrMax} por atributo.</p>`;
+  return h;
+}
+
+/* ----- Descrição de itens ----- */
+function tipoItem(it){
+  if (ARMAS.includes(it)) return it.foco ? 'Arma mágica' : 'Arma';
+  if (ehEscudo(it)) return 'Escudo';
+  if (ARMADURAS.includes(it)) return 'Armadura';
+  return 'Acessório';
+}
+function detalheItem(it){
+  if (!it) return '';
+  const partes = [];
+  if (ARMAS.includes(it)) {
+    const c = CATEGORIAS_ARMA[it.categoria];
+    partes.push(`${c.nome}, ${it.maos === 2 ? 'duas mãos' : 'uma mão'}`);
+    if (it.dados) partes.push(`dano ${it.dados}d10`);
+    if (c.acoesExtra) partes.push(`+${c.acoesExtra} ação de ataque por turno`);
+    if (c.custo > 1) partes.push(`cada ataque custa ${c.custo} ações`);
+    if (c.forMin) partes.push(`FOR ${c.forMin}`);
+    if (it.alcance > 1) partes.push(`alcance ${it.alcance}`);
+  } else if (ehEscudo(it)) {
+    partes.push(`Escudo ${it.tipoEscudo}, +${it.defesa} na chance de defesa`);
+    if (it.perdeAcao) partes.push(`−${it.perdeAcao} ação de ataque`);
+  } else if (ARMADURAS.includes(it)) {
+    partes.push(TIPOS_ARMADURA[it.tipo]);
+    partes.push(`DF ${it.df}, DM ${it.dm}`);
+  } else if (it.df || it.dm) {
+    partes.push(`DF ${it.df}, DM ${it.dm}`);
+  }
+  partes.push(`${it.peso} kg`);
+  return `<div class="detalhe">${tierBadge(it.tier)} ${realce(partes.join(', '))}${it.efeito ? `<br><em>${realce(esc(it.efeito))}</em>` : ''}</div>`;
+}
+
+/* ----- Equipar ----- */
+function rEquipar(){
+  const r = calcular(P);
+  const doisMaos = r.arma.maos === 2;
+  let h = `<section class="bloco"><h2>Equipamento <small>${fmt(r.peso)} de ${fmt(r.carga)} kg</small></h2>`;
+  SLOTS.forEach(s => {
+    const it = item(P.equip[s.id]);
+    const desativado = s.id === 'secundaria' && doisMaos;
+    h += `<div class="slot"><label id="rot-${s.id}">${s.nome}</label>
+      <button class="escolher" data-escolher="${s.id}" aria-labelledby="rot-${s.id}"${desativado ? ' disabled' : ''}>
+        <span class="txt">${desativado ? '<span class="vazio-slot">Ocupada pela arma de duas mãos</span>'
+          : it ? `<b>${esc(it.nome)}</b>` : '<span class="vazio-slot">Toque para escolher</span>'}</span>
+        <span class="seta" aria-hidden="true">›</span></button>
+      ${desativado ? '' : detalheItem(it)}</div>`;
+    if (s.id === 'botas') h += `</section><section class="bloco"><h2>Acessórios <small>efeitos iguais não acumulam</small></h2>`;
+  });
+  h += `</section>`;
+  return h;
+}
+
+/* ----- Modal de escolha de item ----- */
+let modalSlot = null, modalTier = 'todos';
+function alertaItem(it, slotId){
+  const r = calcular(P), msgs = [];
+  if (ARMAS.includes(it)) {
+    const c = CATEGORIAS_ARMA[it.categoria];
+    if (c.forMin && r.A.FOR < c.forMin) msgs.push(`Pede FOR ${c.forMin}; você tem ${r.A.FOR}`);
+    if (slotId === 'arma' && it.maos === 2 && P.equip.secundaria) msgs.push('Duas mãos: vai liberar a mão secundária');
+  }
+  if (ehEscudo(it) && it.perdeAcao && r.A.AGI + r.acoesExtra - it.perdeAcao <= 0) msgs.push('Com sua AGI, você ficaria sem ataques físicos');
+  if (slotId.startsWith('acess')) {
+    const outro = SLOTS.some(s => s.id !== slotId && s.id.startsWith('acess') && P.equip[s.id] === it.id);
+    if (outro) msgs.push('Já equipado em outro slot: o efeito não acumula');
+  }
+  const atual = item(P.equip[slotId]);
+  const pesoNovo = r.peso - (atual ? atual.peso || 0 : 0) + (it.peso || 0);
+  if (pesoNovo > r.carga && pesoNovo > r.peso) msgs.push(`Peso total ficaria ${fmt(pesoNovo)} de ${fmt(r.carga)} kg`);
+  return msgs.length ? `<div class="alerta">${msgs.map(esc).join('. ')}.</div>` : '';
+}
+function renderModal(){
+  const s = SLOTS.find(x => x.id === modalSlot); if (!s) return;
+  const atual = P.equip[s.id] || '';
+  const todos = s.lista();
+  const tiersPresentes = Object.keys(TIERS).filter(t => todos.some(it => it.tier === t));
+  $('#modal-titulo').innerHTML = `${esc(s.nome.replace(/ \(.*\)/, ''))}<small>${todos.length} itens disponíveis</small>`;
+  $('#modal-filtros').innerHTML = tiersPresentes.length > 1
+    ? chips('modal-tier', Object.assign({ todos:'Todos' }, ...tiersPresentes.map(t => ({ [t]: TIERS[t].nome }))), modalTier) : '';
+  const lista = todos.filter(it => modalTier === 'todos' || it.tier === modalTier);
+  const grupos = {};
+  lista.forEach(it => {
+    const g = s.id === 'secundaria' ? (ehEscudo(it) ? 'Escudos' : 'Focos de uma mão')
+      : s.id === 'arma' ? (it.foco ? 'Armas mágicas' : CATEGORIAS_ARMA[it.categoria].nome)
+      : ARMADURAS.includes(it) ? TIPOS_ARMADURA[it.tipo] : TIERS[it.tier].nome;
+    (grupos[g] = grupos[g] || []).push(it);
+  });
+  let h = atual ? `<button class="opcao remover" data-item="">Deixar vazio</button>` : '';
+  Object.entries(grupos).forEach(([g, its]) => {
+    h += `<div class="grupo">${esc(g)}</div>` + its.map(it => `
+      <button class="opcao" data-item="${it.id}" aria-selected="${it.id === atual}">
+        <span class="nome"><span>${esc(it.nome)}</span>${it.id === atual ? '<span class="marca">Equipado</span>' : ''}</span>
+        ${detalheItem(it)}${alertaItem(it, s.id)}</button>`).join('');
+  });
+  if (!lista.length) h += `<p class="vazio">Nenhum item deste tier para este slot.</p>`;
+  $('#modal-lista').innerHTML = h;
+}
+function abrirModal(slotId){
+  modalSlot = slotId; modalTier = 'todos';
+  renderModal();
+  $('#modal-fundo').hidden = false;
+  document.body.style.overflow = 'hidden';
+  $('#modal-lista').scrollTop = 0;
+  try { history.pushState({ modal:true }, ''); } catch(e) {}
+  const sel = $('#modal-lista [aria-selected=true]');
+  (sel || $('#fechar-modal')).focus();
+}
+let modalVolta = null;
+function abrirInfo(id, origem){
+  const inf = INFO[id]; if (!inf) return;
+  modalSlot = null; modalVolta = origem || null;
+  $('#modal-titulo').innerHTML = `${inf.titulo}${inf.sub ? `<small>${inf.sub}</small>` : ''}`;
+  $('#modal-filtros').innerHTML = '';
+  $('#modal-lista').innerHTML = `<div class="info-corpo">${inf.html}</div>`;
+  $('#modal-fundo').hidden = false;
+  document.body.style.overflow = 'hidden';
+  $('#modal-lista').scrollTop = 0;
+  try { history.pushState({ modal:true }, ''); } catch(e) {}
+  $('#fechar-modal').focus();
+}
+function fecharModal(viaHistorico){
+  if ($('#modal-fundo').hidden) return;
+  $('#modal-fundo').hidden = true;
+  document.body.style.overflow = '';
+  const volta = modalVolta || document.querySelector(`[data-escolher="${modalSlot}"]`);
+  modalSlot = null; modalVolta = null;
+  if (!viaHistorico && history.state && history.state.modal) { try { history.back(); } catch(e) {} }
+  if (volta) volta.focus();
+}
+function equipar(slotId, id){
+  P.equip[slotId] = id;
+  if (slotId === 'arma') {
+    const a = item(id);
+    if (a && a.maos === 2 && P.equip.secundaria) { P.equip.secundaria = ''; toast('Mão secundária liberada: a arma usa as duas mãos'); }
+  }
+  const it = item(id);
+  const y = window.scrollY;
+  fecharModal(); render(); window.scrollTo(0, y);
+  toast(it ? `${it.nome} equipado` : 'Slot esvaziado');
+}
+
+/* ----- Magias equipadas ----- */
+function valorMagia(m, r){
+  if (!m.calc) return '';
+  if (m.calc === 'dano') {
+    const d = r.dadosM + m.dado;
+    return realce(`Dano: ${d}d10 × ${r.n} (${r.A.INT} INT${r.B.dadoMagico ? ` + ${r.B.dadoMagico} foco` : ''}${m.dado ? ` + ${m.dado} magia` : ''}, vezes o nível)`);
+  }
+  if (m.calc === 'cura') {
+    const d = r.dadosC + m.dado;
+    return realce(`Cura: ${d}d10 × ${r.n} (${r.A.FDV} FDV${r.B.dadoCura ? ` + ${r.B.dadoCura} foco` : ''}${m.dado ? ` + ${m.dado} magia` : ''}, vezes o nível)`);
+  }
+  if (m.calc === 'absorve') {
+    const d = r.A.FDV + m.dado;
+    return realce(`Absorve: ${d}d10 × ${r.n} (FDV, vezes o nível)`);
+  }
+  return '';
+}
+function infoMagia(m){
+  const c = custo(m);
+  return realce(`${c} slot${c > 1 ? 's' : ''}${m.dado && m.calc !== 'absorve' ? `, ${m.dado}d10` : ''}, ${esc(m.alcance)}, recarga ${m.recarga} ${m.recarga === 1 ? 'turno' : 'turnos'}${m.efeito ? `. ${esc(m.efeito)}` : ''}`);
+}
+
+function rMagias(){
+  const r = calcular(P);
+  const pct = r.slots ? Math.min(100, r.slotsUsados / r.slots * 100) : 100;
+  let h = `<div class="contador${r.slotsUsados > r.slots ? ' excedido' : ''}"><span>Slots</span>
+    <span class="barra"><i style="width:${pct}%"></i></span><span>${r.slotsUsados} de ${r.slots}</span></div>
+    <p class="nota">Slots = INT ${r.A.INT} × ${REGRAS.slotsPorINT}${r.B.slots ? ` + ${r.B.slots} dos itens` : ''}. Você faz até ${r.ataquesMag} ${r.ataquesMag > 1 ? 'ataques mágicos' : 'ataque mágico'} por turno (INT).</p>`;
+  Object.keys(TIPOS_MAGIA).forEach(t => {
+    h += `<section class="bloco"><h2>${TIPOS_MAGIA[t]}</h2>`;
+    MAGIAS.filter(m => m.tipo === t).forEach(m => {
+      const marcada = P.magias.includes(m.id), c = custo(m);
+      const bloqueada = !marcada && r.slotsUsados + c > r.slots;
+      const v = valorMagia(m, r);
+      h += `<label class="magia${bloqueada ? ' bloqueada' : ''}">
+        <input type="checkbox" data-magia="${m.id}"${marcada ? ' checked' : ''}${bloqueada ? ' disabled' : ''}>
+        <div><div class="titulo">${esc(m.nome)} ${tierBadge(m.tier)}</div>
+        <div class="info">${infoMagia(m)}</div>
+        ${v ? `<div class="valor-calc">${v}</div>` : ''}</div></label>`;
+    });
+    h += `</section>`;
+  });
+  return h;
+}
+
+/* ----- Status ----- */
+let INFO = {};
+function card(id, rotulo, valor, sub, explica, classe = ''){
+  INFO[id] = { titulo: rotulo, html: explica };
+  return `<button class="card${classe ? ' ' + classe : ''}" data-info="${id}">
+    <span class="rot">${rotulo}</span><span class="val">${valor}</span>${sub ? `<span class="sub">${sub}</span>` : ''}</button>`;
+}
+function painel(titulo, cards, extra = '', classeGrade = ''){
+  return `<section class="painel"><h2>${titulo}${extra}</h2><div class="cards${classeGrade ? ' ' + classeGrade : ''}">${cards.join('')}</div></section>`;
+}
+
+function textoAtaques(r){
+  if (r.acoesAtaque === 0) return 'nenhum';
+  if (r.turnosPorAtaque > 1) return `1 a cada ${r.turnosPorAtaque} turnos`;
+  return String(r.ataquesFis);
+}
+
+function rStatus(){
+  const r = calcular(P), A = r.A, n = r.n;
+  INFO = {};
+  let h = '';
+  if (r.avisos.length) h += `<div class="avisos">${r.avisos.map(a => `<div class="aviso">${esc(a)}</div>`).join('')}</div>`;
+  h += `<p class="dica">Toque num card para ver a conta completa.</p>`;
+
+  const listaDF = r.partesDF.length ? r.partesDF.join(' + ') : 'nenhum item';
+  const listaDM = r.partesDM.length ? r.partesDM.join(' + ') : 'nenhum item';
+
+  // ----- Sobrevivência -----
+  h += painel('Sobrevivência', [
+    card('vida', 'Vida', fmt(r.vida), `CON ${A.CON} × ${r.cls.fatorVida} × nível ${n}${r.E.vida ? `, +${r.E.vida}` : ''}`,
+      `<div class="formula">Vida = ${REGRAS.vidaBase} + CON × fator da classe × nível${r.E.vida ? ' + evolução' : ''}</div>
+       ${REGRAS.vidaBase} + ${A.CON} × ${r.cls.fatorVida} × ${n}${r.E.vida ? ` + ${r.E.vida}` : ''} = <b>${fmt(r.vida)}</b>`, 'vida'),
+    card('defd10', 'Chance de defesa', `${r.defesaD10} ou menos`, `${r.defesaD10 * 10}% no d10${r.escudo ? ', com escudo' : ''}`,
+      `<p>Quando um ataque vem na sua direção, role 1d10: com resultado igual ou menor que o valor, você defende.</p>
+       <div class="formula">Defesa = DEX + escudo (máximo ${REGRAS.defesaMaxD10})</div>
+       DEX ${A.DEX}${r.falta ? ` − ${r.falta * REGRAS.penalidadeFOR.dex} (FOR abaixo do exigido pela arma)` : ''}` +
+       (r.escudo ? ` + ${r.bonusEscudo} (${esc(r.escudo.nome)})` : '') + ` = ${r.defesaBruta}` +
+       (r.defesaBruta > REGRAS.defesaMaxD10 ? `, limitado a ${REGRAS.defesaMaxD10} porque um 10 sempre falha` : '') +
+       `<br>Resultado: defende com <b>${r.defesaD10} ou menos</b>.` +
+       (r.escudo ? '' : `<p>Um escudo na mão secundária soma +1 (leve) ou +2 (pesado).</p>`)),
+    card('df', 'Defesa física', fmt(r.defF), `${r.df} dos itens × CON ${A.CON} × ${r.mult}`,
+      `<div class="formula">Defesa física = itens × CON × ⌈nível ÷ 2⌉</div>
+       Itens: ${esc(listaDF)} = ${r.df}<br>${r.df} × ${A.CON} × ${r.mult} = <b>${fmt(r.defF)}</b>
+       <p>É subtraída de cada ataque físico que você não conseguiu defender.</p>`),
+    card('dm', 'Defesa mágica', fmt(r.defM), `${r.dm} dos itens × FDV ${A.FDV} × ${r.mult}`,
+      `<div class="formula">Defesa mágica = itens × FDV × ⌈nível ÷ 2⌉</div>
+       Itens: ${esc(listaDM)} = ${r.dm}<br>${r.dm} × ${A.FDV} × ${r.mult} = <b>${fmt(r.defM)}</b>
+       <p>É subtraída de cada ataque mágico recebido.</p>`)
+  ], '', 'q4');
+
+  // ----- Ataque -----
+  let expFis = `<div class="formula">Ataques físicos = AGI + evolução + arma muito leve − escudo pesado</div>AGI ${A.AGI}` +
+    (r.E.acoesAtaque ? ` + ${r.E.acoesAtaque} (evolução)` : '') +
+    (r.acoesExtra ? ` + ${r.acoesExtra} (arma ${r.cat.nome.toLowerCase()})` : '') +
+    (r.perdaEscudo ? ` − ${r.perdaEscudo} (${esc(r.escudo.nome)})` : '') +
+    ` = <b>${r.acoesAtaque}</b> ${r.acoesAtaque === 1 ? 'ação' : 'ações'} de ataque.<p>`;
+  if (r.acoesAtaque === 0) expFis += 'Sem ações de ataque, você não ataca fisicamente neste turno.';
+  else if (r.custoAtaque > 1 && r.turnosPorAtaque > 1) expFis += `${esc(r.arma.nome)} custa ${r.custoAtaque} ações por ataque. Com ${r.acoesAtaque} por turno, o ataque é preparado num turno e sai no seguinte.`;
+  else if (r.custoAtaque > 1) expFis += `${esc(r.arma.nome)} custa ${r.custoAtaque} ações por ataque: ${r.acoesAtaque} ÷ ${r.custoAtaque} = <b>${r.ataquesFis}</b> ${r.ataquesFis === 1 ? 'ataque' : 'ataques'}${r.acoesAtaque % r.custoAtaque ? ', sobrando 1 ação' : ''}.`;
+  else expFis += `Cada ataque com ${esc(r.arma.nome)} custa 1 ação: <b>${r.ataquesFis}</b> ${r.ataquesFis === 1 ? 'ataque' : 'ataques'} por turno.`;
+  expFis += '</p>';
+
+  h += painel('Ataque', [
+    card('atqfis', 'Ataques físicos', textoAtaques(r), `por turno${r.custoAtaque > 1 ? ', 2 ações cada' : ''}`, expFis, r.acoesAtaque === 0 ? 'alerta' : ''),
+    card('fis', 'Dano físico', `${r.dadosF}d10 × ${n}`, `${esc(r.arma.nome)}, por ataque`,
+      `<div class="formula">Dano = (FOR${r.E.dadoFisico ? ' + dano natural' : ''} + dado da arma) d10 × nível</div>
+       Arma: ${esc(r.arma.nome)} (${r.arma.dados || 0}d10)<br>(${A.FOR}${r.E.dadoFisico ? ` + ${r.E.dadoFisico}` : ''} + ${r.arma.dados || 0}) d10 × ${n} = <b>${r.dadosF}d10 × ${n}</b>
+       <p>Some os dados, multiplique pelo nível e subtraia a defesa física do alvo em cada ataque.</p>`),
+    card('atqmag', 'Ataques mágicos', r.ataquesMag, 'por turno (INT)',
+      `<div class="formula">Ataques mágicos = INT</div>INT ${A.INT} = <b>${r.ataquesMag}</b> por turno.
+       <p>Cada magia lançada gasta 1 ataque mágico. Os ataques mágicos são separados dos físicos.</p>`),
+    card('mag', 'Dano mágico', `${r.dadosM}d10 × ${n}`, '+ dados da magia',
+      `<div class="formula">Dano mágico = (INT${r.E.dadoMagico ? ' + poder mágico' : ''} + foco + dado da magia) d10 × nível</div>
+       Sem a magia: (${A.INT}${r.E.dadoMagico ? ` + ${r.E.dadoMagico}` : ''} + ${r.B.dadoMagico}) d10 × ${n} = <b>${r.dadosM}d10 × ${n}</b>
+       <p>Some os dados da magia usada. Veja cada uma na aba Magias.</p>`),
+    card('crit', 'Crítico', `${r.crit}%`, `${r.faixaCrit === 1 ? '1' : `1 a ${r.faixaCrit}`} no d10, +${r.critBonus}%`,
+      `<div class="formula">Role um d10 separado: ${r.faixaCrit === 1 ? 'resultado 1' : `resultado de 1 a ${r.faixaCrit}`} é crítico</div>
+       PER ${A.PER}: ${A.PER >= REGRAS.perLimiarCritico ? `como é ${REGRAS.perLimiarCritico} ou mais, a faixa base é 1 a 2.` : `faixa base só no 1 (precisa de PER ${REGRAS.perLimiarCritico} para 1 a 2).`}` +
+       (r.E.critFaixa ? `<br>Evolução: +${r.E.critFaixa} na faixa.` : '') +
+       `<p>Bônus: ${REGRAS.critBonusBase}% base${r.fontes.critDano.length ? ` + ${esc(r.fontes.critDano.join(', '))}` : ''} = <b>+${r.critBonus}%</b>, aplicado no final do cálculo.</p>`),
+    card('cura', 'Cura', `${r.dadosC}d10 × ${n}`, '+ dados da magia',
+      `<div class="formula">Cura = (FDV + foco + dado da magia) d10 × nível</div>
+       Sem a magia: (${A.FDV} + ${r.B.dadoCura}) d10 × ${n} = <b>${r.dadosC}d10 × ${n}</b>`)
+  ]);
+
+  // ----- Campo de batalha e recursos -----
+  h += painel('Campo e recursos', [
+    card('mov', 'Movimento', `${r.movimento} hex`, r.penCarga || r.falta ? 'reduzido' : `${REGRAS.movimentoBase} + AGI ${A.AGI}`,
+      `<div class="formula">Movimento = ${REGRAS.movimentoBase} + AGI × ${REGRAS.movimentoPorAGI}${r.B.mov ? ' + itens' : ''}</div>
+       ${REGRAS.movimentoBase} + ${A.AGI}${r.B.mov ? ` + ${r.B.mov}` : ''} = ${r.movBruto}` +
+       (r.penCarga ? `<br>Sobrecarga: −${r.penCarga}` : '') + (r.falta ? `<br>FOR abaixo do exigido pela arma: −${r.falta * REGRAS.penalidadeFOR.movimento}` : '') +
+       `<br>Resultado: <b>${r.movimento}</b> hexágonos (mínimo 1).`, r.penCarga || r.falta ? 'alerta' : ''),
+    card('reacao', 'Reações', r.reacoes, 'por turno',
+      `<div class="formula">Reações = ${REGRAS.reacoesBase} base + evolução de AGI</div>
+       ${REGRAS.reacoesBase}${r.E.reacoes ? ` + ${r.E.reacoes}` : ''} = <b>${r.reacoes}</b>
+       <p>Usadas por habilidades do tipo reação, fora do seu turno.</p>`),
+    card('carga', 'Carga', `${fmt(r.peso)}/${fmt(r.carga)} kg`, r.excesso ? `sobrecarga de ${fmt(r.excesso)} kg` : 'dentro do limite',
+      `<div class="formula">Carga = ${REGRAS.cargaBase} kg + FOR × ${REGRAS.cargaPorFOR} kg${r.B.carga ? ' + itens' : ''}${r.E.carga ? ' + evolução' : ''}</div>
+       ${REGRAS.cargaBase} + ${A.FOR} × ${REGRAS.cargaPorFOR}${r.B.carga ? ` + ${r.B.carga}` : ''}${r.E.carga ? ` + ${r.E.carga}` : ''} = <b>${fmt(r.carga)} kg</b>
+       <br>Peso equipado: ${fmt(r.peso)} kg.
+       <p>Cada ${REGRAS.pesoPorPenalidade} kg acima da carga custa 1 hexágono de movimento.</p>`, r.excesso ? 'alerta' : ''),
+    card('slots', 'Slots de magia', `${r.slotsUsados}/${r.slots}`, r.slotsUsados > r.slots ? 'excedido' : 'em uso',
+      `<div class="formula">Slots = INT × ${REGRAS.slotsPorINT}${r.B.slots ? ' + itens' : ''}</div>
+       ${A.INT} × ${REGRAS.slotsPorINT}${r.fontes.slots.length ? ` + ${esc(r.fontes.slots.join(', '))}` : ''} = <b>${r.slots}</b><br>Em uso: ${r.slotsUsados}.`,
+      r.slotsUsados > r.slots ? 'alerta' : ''),
+    card('recurso', r.cls.recurso, r.cls.recursoNoAlvo ? (k => `${k} ${k === 1 ? 'alvo' : 'alvos'}`)(P.alvos.filter(a => a.marcas > 0).length) : r.recursoMax != null ? `${r.recursoAtual}/${r.recursoMax}` : `+${r.E.recurso}`,
+      r.cls.recursoNoAlvo ? `até ${r.recursoMax} por inimigo` : r.recursoMax != null ? 'atual / máximo' : 'recurso da classe',
+      `<p>${esc(r.cls.recurso)} é o recurso que o ${r.cls.nome.toLowerCase()} gasta para usar habilidades.</p>` +
+      (r.recursoMax != null
+        ? `<div class="formula">Máximo${r.cls.recursoNoAlvo ? ' por inimigo' : ''} = ${r.cls.recursoBase} base + evolução de FDV</div>${r.cls.recursoBase}${r.E.recurso ? ` + ${r.E.recurso}` : ''} = <b>${r.recursoMax}</b>
+           <p>${esc(r.cls.recursoRegra)}</p><button class="btn" data-ir="habilidades">Controlar ${esc(r.cls.recurso)}</button>`
+        : `A evolução de FDV soma <b>+${r.E.recurso}</b>. A quantidade base será definida junto com as habilidades desta classe.`)),
+    card('maestria', 'Maestria', r.E.maestria, r.E.maestria ? `−${r.E.maestria} no poder inimigo` : 'sem maestria',
+      `<p>Cada bolinha de Maestria (evolução de DEX) tira 1 do poder de inimigos que não têm maestria.</p>Você tem <b>${r.E.maestria}</b>.`)
+  ]);
+
+  // ----- Atributos, testes e perícias -----
+  const resta = r.totalEvo - r.gastos;
+  INFO.evo = { titulo:'Pontos de evolução', html:
+    `<div class="formula">Pontos = nível × ${REGRAS.evolucao.pontosPorNivel} + extras do mestre</div>
+     ${n} × ${REGRAS.evolucao.pontosPorNivel}${P.pontosExtras ? ` + ${P.pontosExtras}` : ''} = ${fmt(r.totalEvo)}<br>Gastos: ${fmt(r.gastos)}<br>Disponíveis: <b>${fmt(resta)}</b>
+     <br><button class="btn" data-ir="evolucao">Abrir Evolução</button>` };
+  h += `<section class="painel"><h2>Atributos <button class="btn pequeno simples" data-info="evo">${fmt(resta)} pontos de evolução</button></h2><div class="attrs">` +
+    ATRIBUTOS.map(a => {
+      const t = r.E.teste[a.id] || 0, pe = r.E.pericia[a.id] || 0, bi = r.bonusAttr[a.id] || 0;
+      INFO['attr-' + a.id] = { titulo: `${a.id}, ${a.nome}`, html:
+        `<p>${esc(a.desc)}.</p>Valor distribuído: ${P.atributos[a.id]}${bi ? `<br>Itens: +${bi}` : ''}<br>Valor final: <b>${A[a.id]}</b>
+         <br>Bônus em testes: ${t ? `+${t}` : 'nenhum'}<br>Bônus em perícias: ${pe ? `+${pe}` : 'nenhum'}
+         <br>Peso na evolução: ${pesoAttr(a.id)}` };
+      return `<button class="attr" data-info="attr-${a.id}"><span class="sig">${a.id}</span>
+        <span class="v">${A[a.id]}${bi ? `<sup>+${bi}</sup>` : ''}</span>
+        <span class="tp">${t ? `T+${t}` : ''}${t && pe ? '<br>' : ''}${pe ? `P+${pe}` : ''}</span></button>`;
+    }).join('') +
+    `</div><p class="legenda">T = bônus em testes, P = bônus em perícias, vindos da evolução.</p></section>`;
+
+  // ----- Habilidades -----
+  const livres = r.pontosHab - r.pontosHabGastos;
+  h += `<section class="bloco"><h2>Habilidades aprendidas <small>${livres} ${livres === 1 ? 'ponto livre' : 'pontos livres'}</small></h2><ul class="lista-hab">
+    <li><b>${esc(r.cls.passiva.nome)}</b> <span>passiva de classe</span><br><span>${realce(esc(r.cls.passiva.texto))}</span></li>` +
+    r.habilidades.map(hb => `<li><b>${esc(hb.nome)}</b> <span>${hb.categoria ? esc(hb.categoria.toLowerCase()) + ', ' : ''}${esc(hb.custo.toLowerCase())}${hb.recursoGasto ? `, ${esc(r.cls.recurso)} ${esc(hb.recursoGasto)}` : ''}, recarga ${esc(hb.recarga)}</span><br><span>${realce(esc(hb.efeito))}</span></li>`).join('') +
+    `</ul>${r.habilidades.length ? '' : '<p class="vazio">Nenhuma habilidade aprendida ainda.</p>'}<button class="btn pequeno simples" data-ir="habilidades">Abrir habilidades</button></section>`;
+  return h;
+}
+
+/* ----- Evolução ----- */
+function rEvolucao(){
+  const gasto = pontosGastos(), total = pontosTotais(), resta = total - gasto, max = REGRAS.evolucao.maxBolinhas;
+  let h = `<div class="bolsa${resta < 0 ? ' negativo' : ''}"><div class="resta">${fmt(resta)}<small>pontos disponíveis</small></div>
+    <div class="lado">${fmt(gasto)} gastos<br>de ${fmt(total)} no total</div></div>
+    <section class="bloco"><h2>Pontos de evolução</h2>
+      <p style="margin-top:0">Cada nível dá ${REGRAS.evolucao.pontosPorNivel} pontos: nível ${P.nivel} × ${REGRAS.evolucao.pontosPorNivel} = <b>${fmt(pontosPorNivel())}</b>.</p>
+      <label for="evo-extras" style="font-weight:600;display:block;margin:8px 0 4px">Pontos extras dados pelo mestre</label>
+      <div class="recebidos"><button class="selo" data-evo-pontos="-1" aria-label="Menos 1 ponto extra"${P.pontosExtras <= 0 ? ' disabled' : ''}>−</button>
+      <input type="text" inputmode="numeric" id="evo-extras" value="${P.pontosExtras}">
+      <button class="selo" data-evo-pontos="1" aria-label="Mais 1 ponto extra">+</button></div>
+      <p class="nota">Total: ${fmt(pontosPorNivel())} do nível + ${fmt(P.pontosExtras)} extras = ${fmt(total)}.</p>
+    </section>`;
+  if (resta < 0) h += `<div class="aviso">Você gastou ${fmt(-resta)} pontos a mais do que tem. Desfaça alguma bolinha.</div>`;
+
+  ATRIBUTOS.forEach(a => {
+    const evs = EVOLUCOES.filter(ev => ev.attr === a.id); if (!evs.length) return;
+    const v = P.atributos[a.id], peso = pesoAttr(a.id);
+    h += `<section class="bloco"><h2>${a.id} ${esc(a.nome)} <small>valor ${v}, peso ${peso}</small></h2>`;
+    evs.forEach(ev => {
+      const k = P.evolucao[ev.id] || 0;
+      const custos = Array.from({ length:max }, (_, i) => custoBolinha(ev, i));
+      const prox = k < max ? custos[k] : null;
+      const pode = prox !== null && prox <= resta;
+      h += `<div class="evo">
+        <div class="topo-evo"><span class="nome">${esc(ev.nome)}</span><span class="gasto">gasto ×${ev.gasto}</span></div>
+        <div class="efeito">${realce(esc(ev.efeito))} por bolinha${ev.bonus.recurso ? ` (${esc(classe(P.classe).recurso)})` : ''}</div>
+        <div class="bolinhas" aria-label="${k} de ${max} bolinhas">${custos.map((_, i) => `<i class="${i < k ? 'cheia' : ''}"></i>`).join('')}</div>
+        <div class="custos">Custos: ${custos.map((c, i) => i < k ? `<s>${fmt(c)}</s>` : fmt(c)).join(', ')}</div>
+        <div class="acoes-evo">
+          <button class="btn pequeno" data-evo-add="${ev.id}"${pode ? '' : ' disabled'}>${prox === null ? 'Completo' : `Evoluir por ${fmt(prox)}`}</button>
+          ${k ? `<button class="btn pequeno simples" data-evo-rem="${ev.id}">Desfazer</button>` : ''}
+        </div></div>`;
+    });
+    h += `</section>`;
+  });
+  h += `<p class="nota">Peso = 11 − valor do atributo distribuído no nível 1. A primeira bolinha custa peso × gasto, e cada bolinha seguinte custa o dobro da anterior, até ${max}.</p>`;
+  return h;
+}
+
+/* ----- Salvos ----- */
+function rSalvos(){
+  const salvos = lsGet(LS_SALVOS, []);
+  let h = `<section class="bloco"><h2>Este personagem</h2>
+    <p style="margin-top:0">${P.id ? 'Salvar grava as mudanças por cima da versão guardada.' : 'Ainda não foi salvo neste aparelho.'}</p>
+    <div class="botoes"><button class="btn" data-acao="salvar">Salvar personagem</button>
+    <button class="btn simples" data-acao="novo">Criar novo</button></div></section>`;
+  h += `<section class="bloco"><h2>Personagens salvos <small>${salvos.length}</small></h2>`;
+  if (!salvos.length) h += `<p class="vazio">Nenhum personagem salvo. Monte sua ficha e toque em Salvar personagem.</p>`;
+  salvos.forEach(s => {
+    const c = classe(s.classe);
+    h += `<div class="salvo"><div><div class="n">${esc(s.nome || 'Sem nome')}</div>
+      <div class="m">${c.nome}, nível ${s.nivel}${s.salvoEm ? `, salvo em ${new Date(s.salvoEm).toLocaleDateString('pt-BR')}` : ''}</div></div>
+      <div class="botoes"><button class="btn pequeno" data-carregar="${esc(s.id)}">Abrir</button>
+      <button class="btn pequeno lacre" data-apagar="${esc(s.id)}">Apagar</button></div></div>`;
+  });
+  h += `</section>`;
+  h += `<section class="bloco"><h2>Cópia de segurança</h2>
+    <p style="margin-top:0">Limpar os dados do navegador apaga os personagens. Exporte o texto abaixo e guarde onde quiser, ou cole um texto exportado para restaurar.</p>
+    <textarea id="backup" aria-label="Texto de backup" spellcheck="false"></textarea>
+    <div class="botoes" style="margin-top:10px"><button class="btn" data-acao="exportar">Exportar</button>
+    <button class="btn simples" data-acao="importar">Importar</button></div></section>`;
+  return h;
+}
+
+/* ----- Compêndio de itens ----- */
+const filtroItens = { cat:'todos', tier:'todos', busca:'' };
+const CATS_ITENS = { todos:'Todos', armas:'Armas', magicas:'Armas mágicas', escudos:'Escudos', armaduras:'Armaduras', acessorios:'Acessórios' };
+function catItem(it){
+  if (ARMAS.includes(it)) return it.foco ? 'magicas' : 'armas';
+  if (ehEscudo(it)) return 'escudos';
+  if (ARMADURAS.includes(it)) return 'armaduras';
+  return 'acessorios';
+}
+function chips(grupo, opcoes, atual){
+  return `<div class="chips" role="group">` + Object.entries(opcoes).map(([v, rot]) =>
+    `<button class="chip" data-filtro="${grupo}" data-valor="${v}" aria-pressed="${v === atual}">${rot}</button>`).join('') + `</div>`;
+}
+const opcoesTier = () => Object.assign({ todos:'Todos os tiers' }, ...Object.entries(TIERS).map(([k,v]) => ({ [k]: v.nome })));
+
+function rCompItens(){
+  return `<h2 class="titulo-pagina">Compêndio de itens</h2>
+    <p class="intro">Tudo o que existe nas forjas e nos tesouros do reino.</p>
+    <div class="filtros">
+      <input type="search" id="busca-itens" value="${esc(filtroItens.busca)}" placeholder="Buscar por nome ou efeito" aria-label="Buscar itens">
+      ${chips('itens-cat', CATS_ITENS, filtroItens.cat)}
+      ${chips('itens-tier', opcoesTier(), filtroItens.tier)}
+    </div>
+    <div id="lista-comp">${listaItens()}</div>`;
+}
+function listaItens(){
+  const b = semAcento(filtroItens.busca.trim());
+  const filtrados = TODOS.filter(it =>
+    (filtroItens.cat === 'todos' || catItem(it) === filtroItens.cat) &&
+    (filtroItens.tier === 'todos' || it.tier === filtroItens.tier) &&
+    (!b || semAcento(it.nome + ' ' + (it.efeito || '')).includes(b)));
+  if (!filtrados.length) return `<section class="bloco"><p class="vazio">Nenhum item com esses filtros. Tente outro tier ou limpe a busca.</p></section>`;
+  let h = '';
+  Object.keys(CATS_ITENS).filter(c => c !== 'todos').forEach(c => {
+    const its = filtrados.filter(it => catItem(it) === c); if (!its.length) return;
+    h += `<section class="bloco"><h2>${CATS_ITENS[c]} <small>${its.length}</small></h2>` +
+      its.map(it => `<div class="entrada"><div class="nome">${esc(it.nome)}</div>${detalheItem(it)}</div>`).join('') + `</section>`;
+  });
+  return h;
+}
+
+/* ----- Compêndio de magias ----- */
+const filtroMagias = { tipo:'todos', tier:'todos', busca:'' };
+function rCompMagias(){
+  return `<h2 class="titulo-pagina">Compêndio de magias</h2>
+    <p class="intro">Qualquer personagem pode aprender magias, desde que tenha slots para equipá-las.</p>
+    <div class="filtros">
+      <input type="search" id="busca-magias" value="${esc(filtroMagias.busca)}" placeholder="Buscar por nome ou efeito" aria-label="Buscar magias">
+      ${chips('magias-tipo', Object.assign({ todos:'Todas' }, TIPOS_MAGIA), filtroMagias.tipo)}
+      ${chips('magias-tier', opcoesTier(), filtroMagias.tier)}
+    </div>
+    <div id="lista-comp">${listaMagias()}</div>`;
+}
+function listaMagias(){
+  const b = semAcento(filtroMagias.busca.trim()), r = calcular(P);
+  const filtradas = MAGIAS.filter(m =>
+    (filtroMagias.tipo === 'todos' || m.tipo === filtroMagias.tipo) &&
+    (filtroMagias.tier === 'todos' || m.tier === filtroMagias.tier) &&
+    (!b || semAcento(m.nome + ' ' + m.efeito).includes(b)));
+  if (!filtradas.length) return `<section class="bloco"><p class="vazio">Nenhuma magia com esses filtros. Tente outro tipo ou limpe a busca.</p></section>`;
+  let h = '';
+  Object.keys(TIPOS_MAGIA).forEach(t => {
+    const ms = filtradas.filter(m => m.tipo === t); if (!ms.length) return;
+    h += `<section class="bloco"><h2>${TIPOS_MAGIA[t]} <small>${ms.length}</small></h2>` +
+      ms.map(m => {
+        const formula = m.calc === 'dano' ? `Dano: (INT + foco + ${m.dado})d10 × nível` :
+          m.calc === 'cura' ? `Cura: (FDV + foco${m.dado ? ` + ${m.dado}` : ''})d10 × nível` :
+          m.calc === 'absorve' ? 'Absorve: FDV d10 × nível' : '';
+        const v = valorMagia(m, r);
+        return `<div class="entrada"><div class="nome">${esc(m.nome)} ${tierBadge(m.tier)}</div>
+          <div class="detalhe">${infoMagia(m)}${formula ? `<br><em>${realce(formula)}</em>` : ''}</div>
+          ${v ? `<div class="valor-calc">Para ${esc(P.nome || 'seu personagem')}: ${v}</div>` : ''}</div>`;
+      }).join('') + `</section>`;
+  });
+  return h;
+}
+
+/* ----- Habilidades ----- */
+let habClasse = null;
+const COR_CATEGORIA = { 'Dano':'#8e1b1b', 'Defesa':'#2c5a8c', 'Cura própria':'#4a5a2e', 'Sacrifício':'#5a2d5e',
+  'Ampliar':'#8e1b1b', 'Modificar':'#2c5a8c', 'Fundir':'#5a2d5e', 'Mana':'#4a5a2e', 'Proteção própria':'#6d5a40',
+  'Furtividade':'#3b3b52', 'Assassinato':'#8e1b1b', 'Veneno':'#3d6b2a',
+  'Precisão':'#a8761c', 'Perfuração':'#8e1b1b', 'Mobilidade':'#2c5a8c' };
+
+function dadosHabilidade(hb, r){
+  if (!hb.calc) return '';
+  const max = r.recursoMax || 0, min = hb.calc.minimo || 1, rec = esc(r.cls.recurso), k = hb.calc.porPonto;
+  if (max < min) return `<div class="dados">${realce(`Precisa de pelo menos ${min} ${rec}; seu máximo é ${max}.`)}</div>`;
+  if (hb.calc.tipo === 'dano')
+    return `<div class="dados">${realce(`Com ${min} ${rec}: ${r.dadosF + k * min}d10 × ${r.n}. Com ${max}: ${r.dadosF + k * max}d10 × ${r.n}.`)}</div>`;
+  if (hb.calc.tipo === 'cura')
+    return `<div class="dados">${realce(`Com ${min} ${rec}: ${k * min}d10 × ${r.n}. Com ${max}: ${k * max}d10 × ${r.n}.`)}</div>`;
+  if (hb.calc.tipo === 'curaMagia')
+    return `<div class="dados">${realce(`Com ${min} ${rec}: +${k * min}d10. Com ${max}: +${k * max}d10. Sua cura base é ${r.dadosC}d10 + o dado da magia, × ${r.n}.`)}</div>`;
+  if (hb.calc.tipo === 'curaPropria')
+    return `<div class="dados">${realce(`Com ${min} ${rec}: ${r.dadosC + k * min}d10 × ${r.n}. Com ${max}: ${r.dadosC + k * max}d10 × ${r.n}.`)}</div>`;
+  if (hb.calc.tipo === 'magia')
+    return `<div class="dados">${realce(`Com ${min} ${rec}: +${k * min}d10. Com ${max}: +${k * max}d10. Seu dano mágico base é ${r.dadosM}d10 + o dado da magia, × ${r.n}.`)}</div>`;
+  return '';
+}
+
+function rHabilidades(){
+  const id = habClasse || P.classe, cls = classe(id), minha = id === P.classe, r = calcular(P);
+  const livres = r.pontosHab - r.pontosHabGastos, intervalo = REGRAS.habilidades.intervaloNiveis;
+  const novoFormato = cls.habilidades.every(h => h.categoria);
+  let h = `<h2 class="titulo-pagina">Habilidades</h2>
+    <p class="intro">Você começa com ${REGRAS.habilidades.pontosIniciais} ponto de habilidade no nível 1 e ganha mais 1 a cada ${REGRAS.habilidades.pontosACadaNiveis} níveis. Novas habilidades são liberadas a cada ${intervalo} níveis e custam 1 ponto cada. Como os pontos são poucos, escolha bem: as de níveis anteriores continuam à venda.</p>
+    ${chips('hab-classe', Object.fromEntries(CLASSES.map(c => [c.id, c.nome])), id)}`;
+
+  if (minha) {
+    h += `<div class="bolsa${livres < 0 ? ' negativo' : ''}"><div class="resta">${livres}<small>${livres === 1 ? 'ponto de habilidade' : 'pontos de habilidade'}</small></div>
+      <div class="lado">${r.pontosHabGastos} gastos<br>de ${r.pontosHab} no nível ${r.n}</div></div>`;
+    if (r.recursoMax != null && cls.recursoNoAlvo) {
+      const max = r.recursoMax;
+      h += `<section class="bloco furia"><h2>${esc(cls.recurso)}s <small>até ${max} por inimigo</small></h2>` +
+        (P.alvos.length ? '' : `<p class="vazio">Nenhum inimigo marcado. Adicione um inimigo quando acertar o primeiro ataque.</p>`) +
+        P.alvos.map((a, idx) => {
+          const m = Math.min(a.marcas, max);
+          return `<div class="alvo">
+            <div class="linha-alvo"><input type="text" class="alvo-nome" data-idx="${idx}" value="${esc(a.nome)}" placeholder="Inimigo ${idx + 1}" maxlength="30" aria-label="Nome do inimigo ${idx + 1}">
+              <button class="fechar" data-alvo-rem="${idx}" aria-label="Remover inimigo">✕</button></div>
+            <div class="medidor">${Array.from({ length:max }, (_, i) => `<i class="${i < m ? 'acesa' : ''}"></i>`).join('')}<b>${m}</b></div>
+            <div class="botoes">
+              ${(cls.recursoGanhos || []).map(g => `<button class="btn pequeno" data-marca="${idx}" data-valor="${g.valor}"${m >= max ? ' disabled' : ''}>${esc(g.rotulo)} +${g.valor}</button>`).join('')}
+              <button class="btn pequeno simples" data-marca="${idx}" data-valor="-1"${m < 1 ? ' disabled' : ''}>Consumir 1</button>
+              <button class="btn pequeno simples" data-marca="${idx}" data-valor="todas"${m < 1 ? ' disabled' : ''}>Consumir todas</button>
+            </div></div>`;
+        }).join('') +
+        `<div class="botoes" style="margin-top:12px"><button class="btn" data-alvo-add="1"${P.alvos.length >= 12 ? ' disabled' : ''}>Adicionar inimigo</button>
+          <button class="btn simples" data-rec="inicio"${P.alvos.length ? '' : ' disabled'}>Novo combate</button></div>
+        <p class="nota">${esc(cls.recursoRegra)} O máximo por inimigo é ${cls.recursoBase} mais a evolução de FDV.</p></section>`;
+    } else if (r.recursoMax != null) {
+      const atual = r.recursoAtual, max = r.recursoMax;
+      h += `<section class="bloco furia"><h2>${esc(cls.recurso)} <small>máximo ${max}</small></h2>
+        <div class="valor-furia">${atual}<small> de ${max}</small></div>
+        <div class="medidor" aria-label="${atual} de ${max}">${Array.from({ length:max }, (_, i) => `<i class="${i < atual ? 'acesa' : ''}"></i>`).join('')}</div>
+        <div class="botoes">
+          ${(cls.recursoGanhos || []).map(g => `<button class="btn" data-rec="${g.valor}"${atual >= max ? ' disabled' : ''}>${esc(g.rotulo)} +${g.valor}</button>`).join('')}
+          ${[1, 2, 3].map(q => `<button class="btn simples pequeno" data-rec="-${q}"${atual < q ? ' disabled' : ''}>Gastar ${q}</button>`).join('')}
+          <button class="btn simples pequeno" data-rec="inicio"${atual === r.recursoInicial ? ' disabled' : ''}>Novo combate</button>
+        </div>
+        ${cls.recursoPorAcao ? `<p style="margin:10px 0 0"><b>Você tem ${r.acoesAtaque} ${r.acoesAtaque === 1 ? 'ação' : 'ações'} de ataque por turno.</b> Cada uma pode virar um tiro ou 1 ${esc(cls.recurso)}.</p>` : ''}
+        <p class="nota">${esc(cls.recursoRegra)} O máximo é ${cls.recursoBase} mais a evolução de FDV.</p></section>`;
+    }
+  }
+
+  h += `<section class="bloco"><h2>${esc(cls.nome)} <small>${esc(cls.papel)}</small></h2>
+      <p class="capitular">${esc(cls.descricao)}</p>
+      <p><b>Recurso:</b> ${esc(cls.recurso)}${cls.recursoBase != null ? `, máximo base ${cls.recursoBase}` : ''}. <b>Vida por nível:</b> CON × ${cls.fatorVida}.</p>
+      <p><b>Passiva, ${esc(cls.passiva.nome)}:</b> ${realce(esc(cls.passiva.texto))}</p>
+    </section>`;
+  if (!novoFormato) h += `<div class="aviso">As habilidades desta classe são provisórias e ainda serão refeitas no formato novo, com o recurso ${esc(cls.recurso)}.</div>`;
+
+  const niveis = [...new Set(cls.habilidades.map(hb => hb.nivel))].sort((a, b) => a - b);
+  niveis.forEach(nv => {
+    const liberado = P.nivel >= nv;
+    h += `<section class="bloco nivel-bloco"><h2>Nível ${nv} <small>${!minha ? '' : liberado ? 'liberado' : `libera no nível ${nv}`}</small></h2>`;
+    cls.habilidades.filter(hb => hb.nivel === nv).forEach(hb => {
+      const tem = minha && P.habilidades.includes(hb.id);
+      const pode = minha && !tem && liberado && livres >= (hb.pontos || 1);
+      const estado = !minha ? '' : tem ? ' aprendida' : liberado ? '' : ' travada';
+      h += `<div class="hc${estado}">
+        <div class="topo-hc"><span class="nome">${esc(hb.nome)}</span>${hb.categoria ? `<span class="cat" style="background:${COR_CATEGORIA[hb.categoria] || '#6d5a40'}">${esc(hb.categoria)}</span>` : ''}</div>
+        <div class="meta">${esc(hb.tipo)}, ${esc(hb.custo.toLowerCase())}${hb.recursoGasto ? `, <b>${esc(cls.recurso)}: ${esc(hb.recursoGasto)}</b>` : ''}, recarga ${esc(hb.recarga)}, alcance ${esc(hb.alcance.toLowerCase())}</div>
+        <div>${realce(esc(hb.efeito))}</div>
+        ${hb.exemplos ? `<ul class="exemplos">${hb.exemplos.map(x => `<li>${realce(esc(x))}</li>`).join('')}</ul>` : ''}
+        ${minha ? dadosHabilidade(hb, r) : ''}
+        ${minha ? `<div class="acoes-hc">${tem
+          ? `<span class="selo-ok">Aprendida</span><button class="btn pequeno simples" data-hab-rem="${hb.id}">Esquecer</button>`
+          : `<button class="btn pequeno" data-hab-add="${hb.id}"${pode ? '' : ' disabled'}>${!liberado ? `Nível ${nv}` : livres < 1 ? 'Sem pontos' : 'Aprender por 1 ponto'}</button>`}</div>` : ''}
+      </div>`;
+    });
+    h += `</section>`;
+  });
+  if (!minha) h += `<p class="nota">Mostrando a classe ${esc(cls.nome)}. Seu personagem é ${esc(classe(P.classe).nome.toLowerCase())}; toque na classe dele para aprender habilidades.</p>`;
+  return h;
+}
+
+/* ----- Tutoriais ----- */
+function tabela(cab, linhas){
+  return `<div class="tabela"><table><thead><tr>${cab.map(c => `<th>${c}</th>`).join('')}</tr></thead><tbody>` +
+    linhas.map(l => `<tr>${l.map(c => `<td>${c}</td>`).join('')}</tr>`).join('') + `</tbody></table></div>`;
+}
+function rTutoriais(){
+  const R = REGRAS;
+  const caps = [
+    ['Criando seu personagem', `
+      <p>Todo personagem começa no nível 1 com os pontos já distribuídos. Depois disso os atributos não mudam: a evolução vem do nível, que multiplica dano, vida e defesa, e dos itens.</p>
+      <p>Cada atributo fica entre ${R.attrMin} e ${R.attrMax}. A quantidade de pontos depende da categoria da classe:</p>
+      ${tabela(['Categoria','Classes','Físicos','Mentais','Sociais'], Object.entries(CATEGORIAS_CLASSE).map(([k,c]) =>
+        [c.nome, CLASSES.filter(x => x.categoria === k).map(x => x.nome).join(', '), c.pontos.fisico, c.pontos.mental, c.pontos.social]))}
+      <p>Itens Perfeitos ou superiores podem dar atributos e passar do limite de ${R.attrMax}.</p>`],
+    ['Os atributos', tabela(['Sigla','Nome','O que faz'], ATRIBUTOS.map(a => [a.id, a.nome, a.desc]))],
+    ['Vida', `
+      <div class="formula">Vida = ${R.vidaBase} + CON × fator da classe × nível</div>
+      <p>O CON distribuído no nível 1 já conta desde o começo.</p>
+      ${tabela(['Classe','Fator','Vida com CON 3 no nível 1','No nível 10'], CLASSES.map(c =>
+        [c.nome, c.fatorVida, fmt(R.vidaBase + 3 * c.fatorVida), fmt(R.vidaBase + 3 * c.fatorVida * 10)]))}`],
+    ['Defesa física e mágica', `
+      <div class="formula">Defesa física = soma da DF dos itens × CON × ⌈nível ÷ 2⌉<br>Defesa mágica = soma da DM dos itens × FDV × ⌈nível ÷ 2⌉</div>
+      <p>⌈nível ÷ 2⌉ é a metade do nível arredondada para cima: 1 no nível 1, 3 no nível 5 e 5 no nível 10.</p>
+      <p>A defesa é subtraída de <b>cada ataque</b> recebido, e não do total. Por isso um ataque forte passa pela armadura melhor do que vários ataques fracos.</p>
+      <p>Cada peça de armadura tem um orçamento de defesa dividido entre física e mágica. Quanto mais protege de um tipo, menos protege do outro:</p>
+      ${tabela(['Tipo','Peça pequena','Peitoral','Quem usa'], [
+        ['Placas', 'DF 3, DM 0', 'DF 6, DM 0', 'Guerreiros com FOR alta'],
+        ['Malha', 'DF 2, DM 1', 'DF 4, DM 2', 'Quem quer equilíbrio'],
+        ['Couro', 'DF 2, DM 0', 'DF 4, DM 0', 'Ladinos e arqueiros'],
+        ['Brocado rúnico', 'DF 0, DM 3', 'DF 0, DM 6', 'Clérigos'],
+        ['Tecido encantado', 'DF 0, DM 2', 'DF 0, DM 4', 'Magos']])}
+      <p class="nota">Valores dos itens comuns. Os raros somam +1 nas peças pequenas e +2 no peitoral.</p>`],
+    ['Chance de defesa e escudos', `
+      <div class="formula">Defende quando 1d10 ≤ DEX + bônus do escudo</div>
+      <p>Quando um ataque físico vem na sua direção, você rola 1d10. Com DEX 5, defende com resultado 5 ou menos (50%). Um ataque defendido não causa dano.</p>
+      <p>O escudo vai na mão secundária, então só pode ser usado com arma de uma mão. Ele não tem DF nem DM:</p>
+      <ul><li><b>Escudo leve:</b> +1 na chance de defesa. DEX 5 passa a defender com 6 ou menos.</li>
+      <li><b>Escudo pesado:</b> +2 na chance de defesa, mas você perde 1 ação de ataque por turno.</li></ul>
+      <p>O máximo é ${R.defesaMaxD10}: um 10 no dado sempre falha. A FOR abaixo do exigido pela arma também reduz a DEX, e com ela a defesa.</p>`],
+    ['Dano físico', `
+      <div class="formula">Dano por ataque = (FOR + dado da arma) d10 × nível − defesa física do alvo</div>
+      <p>O app não calcula o dano: ele mostra quantos d10 você rola. Some FOR e o dado da arma, role esses dados, some o resultado e multiplique pelo nível.</p>
+      <p><b>Exemplo:</b> FOR 3 com uma arma de 3d10 rola <b>6d10 × nível</b>. No nível 5, se os dados somarem 32, o dano é 32 × 5 = 160, antes da defesa do alvo.</p>
+      <p>A defesa física do alvo é subtraída de cada ataque separadamente. O dano mínimo de qualquer ataque é ${R.danoMinimoPct}% do dano antes da defesa.</p>`],
+    ['Categorias de arma', `
+      ${tabela(['Categoria','Dado base','Efeito nos ataques','FOR mínima'],
+        Object.entries(CATEGORIAS_ARMA).filter(([k]) => k !== 'desarmado' && k !== 'foco').map(([k,c]) => {
+          const base = { muito_leve:'1d10', leve:'1d10', media:'2d10', pesada:'3d10', muito_pesada:'5d10' }[k];
+          const ef = c.acoesExtra ? `+${c.acoesExtra} ação de ataque por turno` : c.custo > 1 ? `cada ataque custa ${c.custo} ações` : 'normal';
+          return [c.nome, base, ef, c.forMin || '—'];
+        }))}
+      <p><b>Muito leve:</b> dano baixo, mas dá 1 ação de ataque a mais por turno. Um ladino com AGI 4 e adaga ataca 5 vezes.</p>
+      <p><b>Muito pesada:</b> cada ataque custa 2 ações, mas rola 5d10 da arma. Um guerreiro com AGI 2 e martelo de guerra ataca 1 vez por turno, com muito mais dados em cada golpe. Como a defesa do alvo sai de cada ataque, poucos golpes grandes passam melhor por armaduras grossas.</p>
+      <p>Com FOR abaixo da mínima, cada ponto que falta tira ${R.penalidadeFOR.dex} de DEX e ${R.penalidadeFOR.movimento} de movimento.</p>`],
+    ['Ataques por turno', `
+      <div class="formula">Ataques físicos = AGI (+1 com arma muito leve, −1 com escudo pesado)<br>Ataques mágicos = INT</div>
+      <p>Cada ponto de AGI é 1 ação de ataque físico por turno, e cada ponto de INT é 1 ataque mágico. Um não substitui o outro: um personagem com AGI 2 e INT 3 pode atacar 2 vezes com a arma e lançar 3 magias no mesmo turno.</p>
+      <p>Armas muito pesadas gastam 2 ações por ataque. Com AGI 1, o ataque é preparado num turno e sai no seguinte.</p>
+      <p>Habilidades físicas gastam ações de ataque físico, e habilidades mágicas gastam ataques mágicos, conforme a descrição de cada uma.</p>`],
+    ['Crítico', `
+      <div class="formula">Role 1d10 separado: 1 é crítico (${R.critBase}%), ou 1 e 2 com PER ${R.perLimiarCritico}+ (${R.critComPER}%)</div>
+      <p>O crítico soma +${R.critBonusBase}% ao dano <b>final</b>, já depois da defesa. Itens e buffs podem aumentar esse bônus.</p>
+      <p>Classes guerreiras não conseguem PER ${R.perLimiarCritico} com os pontos do nível 1: esse é um caminho de ladinos, arqueiros e magos, ou de itens raros.</p>`],
+    ['Magias', `
+      <div class="formula">Slots = INT × ${R.slotsPorINT} + bônus dos itens</div>
+      ${tabela(['Tier','Custo em slots'], Object.entries(R.custoSlotPorTier).map(([k,v]) => [TIERS[k].nome, v]))}
+      <div class="formula">Dano mágico = (INT em d10 + foco + dado da magia) × nível − defesa mágica<br>Cura = (FDV em d10 + foco + dado da magia) × nível</div>
+      <p>Qualquer classe pode equipar magias. Um guerreiro com INT 1 tem 2 slots e causa pouco dano mágico, mas pode usar uma Pele de Pedra ou um Pés Ligeiros. A recarga é quantos turnos esperar para lançar a mesma magia de novo.</p>`],
+    ['Carga e movimento', `
+      <div class="formula">Carga = ${R.cargaBase} kg + FOR × ${R.cargaPorFOR} kg<br>Movimento = ${R.movimentoBase} hex + AGI × ${R.movimentoPorAGI} hex</div>
+      <p>Com FOR 1 você carrega ${R.cargaBase + R.cargaPorFOR} kg, e com FOR 5 carrega ${R.cargaBase + 5 * R.cargaPorFOR} kg. Cada ${R.pesoPorPenalidade} kg acima da carga tira 1 hexágono de movimento.</p>
+      <p><b>Exemplo:</b> um conjunto completo de placas pesa 21 kg. Com um martelo de guerra (9 kg), são 30 kg, o limite exato de quem tem FOR 2.</p>
+      <p>Com AGI 1 você anda ${R.movimentoBase + R.movimentoPorAGI} hexágonos por turno, e com AGI 5 anda ${R.movimentoBase + 5 * R.movimentoPorAGI}.</p>`],
+    ['Evolução', `
+      <p>A cada nível o personagem ganha ${REGRAS.evolucao.pontosPorNivel} pontos de evolução (o nível 1 já conta), e o mestre pode dar pontos extras. Eles compram bolinhas em melhorias ligadas a cada atributo, até ${REGRAS.evolucao.maxBolinhas} bolinhas por melhoria.</p>
+      <div class="formula">Peso = 11 − valor do atributo<br>1ª bolinha = peso × gasto<br>Cada bolinha seguinte = dobro da anterior</div>
+      ${tabela(['Valor do atributo', ...Object.keys(REGRAS.evolucao.pesos)], [['Peso', ...Object.values(REGRAS.evolucao.pesos)]])}
+      <p>Quanto maior o atributo, mais barato é evoluir nele. Um personagem forte melhora a força com facilidade, e um fraco paga caro para compensar.</p>
+      <p><b>Exemplo:</b> FOR 4 tem peso 7. Dano natural tem gasto ×5, então a 1ª bolinha custa 7 × 5 = 35, e as seguintes custam 70, 140, 280 e 560.</p>
+      ${tabela(['Atributo','Melhoria','Efeito por bolinha','Gasto'], EVOLUCOES.map(ev => [ev.attr, ev.nome, ev.efeito, `×${ev.gasto}`]))}
+      <p>Os pontos de recurso alimentam as habilidades de classe: ${CLASSES.map(c => `${c.nome.toLowerCase()} usa ${c.recurso}`).join(', ')}.</p>`],
+    ['Habilidades e recursos', `
+      <div class="formula">Pontos de habilidade = ${REGRAS.habilidades.pontosIniciais} + 1 a cada ${REGRAS.habilidades.pontosACadaNiveis} níveis<br>Novas habilidades a cada ${REGRAS.habilidades.intervaloNiveis} níveis, 1 ponto cada</div>
+      <p>O ponto do nível 1 é grátis e fica guardado até o nível ${REGRAS.habilidades.intervaloNiveis}, quando aparecem as primeiras 3 habilidades da classe. Depois disso chegam mais 3 habilidades e mais 1 ponto a cada ${REGRAS.habilidades.intervaloNiveis} níveis:</p>
+      ${tabela(['Nível', ...[1, 5, 10, 15, 20]], [['Pontos', ...[1, 5, 10, 15, 20].map(nv => REGRAS.habilidades.pontosIniciais + Math.floor(nv / REGRAS.habilidades.pontosACadaNiveis))], ['Habilidades à venda', ...[1, 5, 10, 15, 20].map(nv => Math.floor(nv / REGRAS.habilidades.intervaloNiveis) * 3)]])}
+      <p>No nível 20 você tem 5 pontos para 12 habilidades, então cada personagem da mesma classe acaba diferente.</p>
+      <p>Cada classe usa um recurso para ativar as habilidades: ${CLASSES.map(c => `${c.nome.toLowerCase()} usa ${c.recurso}`).join(', ')}. A evolução de FDV aumenta o máximo.</p>
+      ${CLASSES.filter(c => c.recursoRegra).map(c => `<p><b>${esc(c.recurso)} (${c.nome.toLowerCase()}):</b> ${esc(c.recursoRegra)} O máximo é ${c.recursoBase} mais a evolução.</p>`).join('')}
+      <p>Quanto mais recurso gasto, mais forte a habilidade. Um Golpe Furioso com 1 Fúria soma +1d10; com 5, soma +5d10. As habilidades de guerreiro são divididas em quatro tipos:</p>
+      ${tabela(['Tipo','Para que serve'], [
+        ['Dano', 'Ataques mais fortes, somando d10 por Fúria gasta'],
+        ['Defesa', 'Reduzir dano recebido e proteger aliados'],
+        ['Cura própria', 'Recuperar a própria vida'],
+        ['Sacrifício', 'Pagar vida além da Fúria para um efeito muito mais forte']])}
+      <p>As do mago mexem nas próprias magias, e são usadas junto com uma magia equipada:</p>
+      ${tabela(['Tipo','Para que serve'], [
+        ['Ampliar', 'Deixar a magia mais forte: mais dados, ignorar defesa mágica'],
+        ['Modificar', 'Mudar a forma da magia: alcance, área, gatilho'],
+        ['Fundir', 'Juntar 2 ou 3 magias equipadas numa só, somando dados e efeitos'],
+        ['Mana', 'Recuperar MP, já que ele não volta sozinho']])}
+      <p>As do clérigo fortalecem curas e bênçãos e mantêm o próprio clérigo vivo:</p>
+      ${tabela(['Tipo','Para que serve'], [
+        ['Ampliar', 'Curas com mais dados e buffs com efeitos maiores'],
+        ['Modificar', 'Buffs mais longos, curas em área e efeitos que atingem o próprio clérigo'],
+        ['Cura própria', 'Recuperar a própria vida sem depender de magia'],
+        ['Proteção própria', 'Reduzir ou anular o dano recebido']])}
+      <p>As do ladino consomem as Marcas que ele colocou nos inimigos:</p>
+      ${tabela(['Tipo','Para que serve'], [
+        ['Furtividade', 'Sumir, se reposicionar pelas costas e evitar golpes'],
+        ['Assassinato', 'Golpes enormes que gastam todas as Marcas de um alvo'],
+        ['Veneno', 'Dano por turno que ignora a defesa e atrapalha o inimigo']])}
+      <p>As do arqueiro gastam o Foco que ele junta trocando tiros por mira:</p>
+      ${tabela(['Tipo','Para que serve'], [
+        ['Precisão', 'Aumentar a chance e o dano do crítico'],
+        ['Perfuração', 'Ignorar ou quebrar a defesa física, e atravessar vários alvos'],
+        ['Mobilidade', 'Se mover sem ser interceptado e atirar enquanto anda']])}
+      <p><b>Exemplo de Foco:</b> um arqueiro com AGI 3 tem 3 ações de ataque. Ele pode atirar 3 vezes, ou mirar com 2 (2 Foco) e dar 1 tiro com Flecha Perfurante, ignorando 20% da defesa. Ou pode mirar com as 3 e guardar o Foco para o próximo turno.</p>
+      <p><b>Exemplo de Marcas:</b> um ladino com AGI 4 e adaga ataca 5 vezes. Se 3 ataques passarem pela defesa, o alvo fica com 3 Marcas, e um Golpe Certeiro com essas 3 soma +3d10.</p>
+      <p><b>Recuperar Fé:</b> um clérigo com 2 ações de ataque e 2 ataques mágicos pode gastar 1 de cada para recuperar 1 Fé e ainda atacar e lançar uma magia no mesmo turno.</p>
+      <p><b>Exemplo de fusão:</b> com Fusão Elemental, Chama (2d10) + Rajada de Gelo (1d10) viram Vapor Escaldante: 3d10 + INT em cone, deixando os alvos lentos. Como é um ataque só, a defesa mágica do alvo é subtraída uma vez, e não duas.</p>`],
+    ['Tiers de itens', `
+      ${tabela(['Tier','O que oferece'], [
+        [TIERS.comum.nome, 'Valores base, sem efeito especial'],
+        [TIERS.raro.nome, '+1d10 nas armas, +1 ou +2 de defesa nas armaduras e um efeito especial'],
+        [TIERS.perfeito.nome, 'Dois modificadores e pode dar atributos'],
+        [TIERS.lendario.nome, 'Dois modificadores e uma habilidade exclusiva'],
+        [TIERS.unico.nome, 'Item com nome e história, só existe um no mundo; pode ter uma desvantagem']])}
+      <p>Acessórios iguais não acumulam: dois Anéis de Guarda contam como um.</p>`],
+    ['Diferenças entre as classes', `
+      ${tabela(['Classe','Papel','Vida','Armas','Armaduras'], CLASSES.map(c => [c.nome, c.papel, `CON × ${c.fatorVida}`, c.armas, c.armaduras]))}
+      <ul>${CLASSES.map(c => `<li><b>${c.nome}:</b> ${c.descricao} Passiva ${c.passiva.nome}: ${c.passiva.texto}</li>`).join('')}</ul>
+      <p>Cada classe tem alvos em que brilha: o ladino destrói magos e arqueiros, mas quase não arranha guerreiros de placas; o guerreiro atravessa armaduras, mas sofre com magia; o mago ignora placas, mas cai rápido se alcançado.</p>`]
+  ];
+  return `<h2 class="titulo-pagina">Tutoriais</h2>
+    <p class="intro">Como cada número da ficha é calculado. Toque num capítulo para abrir.</p>` +
+    caps.map(([t, corpo], i) => `<details class="capitulo"${i === 0 ? ' open' : ''}><summary>${t}</summary><div class="corpo">${corpo}</div></details>`).join('');
+}
+
+/* ================= Eventos ================= */
+const conteudo = $('#conteudo');
+
+document.querySelector('.abas').addEventListener('click', e => {
+  const b = e.target.closest('button[data-aba]'); if (b) irPara(b.dataset.aba);
+});
+$('#abrir-menu').addEventListener('click', abrirMenu);
+$('#fechar-menu').addEventListener('click', fecharMenu);
+$('#veu').addEventListener('click', fecharMenu);
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { if (!$('#modal-fundo').hidden) fecharModal(); else fecharMenu(); } });
+$('#fechar-modal').addEventListener('click', () => fecharModal());
+$('#modal-fundo').addEventListener('click', e => {
+  if (e.target === e.currentTarget) { fecharModal(); return; }
+  const b = e.target.closest('button'); if (!b) return;
+  if (b.dataset.filtro === 'modal-tier') { modalTier = b.dataset.valor; renderModal(); $('#modal-lista').scrollTop = 0; return; }
+  if (b.dataset.ir) { fecharModal(); irPara(b.dataset.ir); return; }
+  if (b.dataset.item !== undefined && modalSlot) equipar(modalSlot, b.dataset.item);
+});
+window.addEventListener('popstate', () => fecharModal(true));
+$('#lista-menu').addEventListener('click', e => {
+  const b = e.target.closest('[data-ir]'); if (!b) return;
+  fecharMenu(); irPara(b.dataset.ir);
+});
+
+conteudo.addEventListener('click', e => {
+  const t = e.target.closest('button'); if (!t) return;
+
+  if (t.dataset.ir) { irPara(t.dataset.ir); return; }
+  if (t.dataset.escolher) { abrirModal(t.dataset.escolher); return; }
+  if (t.dataset.evoPontos) {
+    P.pontosExtras = Math.max(0, P.pontosExtras + parseInt(t.dataset.evoPontos));
+    const y = window.scrollY; render(); window.scrollTo(0, y); return;
+  }
+  if (t.dataset.evoAdd || t.dataset.evoRem) {
+    const ev = evolucao(t.dataset.evoAdd || t.dataset.evoRem); if (!ev) return;
+    const k = P.evolucao[ev.id] || 0;
+    if (t.dataset.evoAdd) {
+      const c = custoBolinha(ev, k), resta = pontosTotais() - pontosGastos();
+      if (k >= REGRAS.evolucao.maxBolinhas || c > resta) return;
+      P.evolucao[ev.id] = k + 1; toast(`${ev.nome}: bolinha ${k + 1} por ${fmt(c)} pontos`);
+    } else if (k > 0) {
+      const c = custoBolinha(ev, k - 1);
+      if (k - 1) P.evolucao[ev.id] = k - 1; else delete P.evolucao[ev.id];
+      toast(`${ev.nome}: ${fmt(c)} pontos devolvidos`);
+    }
+    const y = window.scrollY; render(); window.scrollTo(0, y); return;
+  }
+  if (t.dataset.nivel) { P.nivel = clamp(P.nivel + parseInt(t.dataset.nivel), 1, REGRAS.nivelMax); render(); return; }
+
+  if (t.dataset.attr) {
+    const id = t.dataset.attr, d = parseInt(t.dataset.d), a = ATRIBUTOS.find(x => x.id === id);
+    const pt = pontos(a.grupo), v = P.atributos[id] + d;
+    if (v < REGRAS.attrMin || v > REGRAS.attrMax || (d > 0 && pt.resta <= 0)) return;
+    P.atributos[id] = v; render(); return;
+  }
+
+  if (t.dataset.info) { abrirInfo(t.dataset.info, t); return; }
+  if (t.dataset.rec) {
+    const r = calcular(P); if (r.recursoMax == null) return;
+    const v = t.dataset.rec;
+    if (v === 'inicio') { P.recursoAtual = null; P.alvos = []; }
+    else P.recursoAtual = clamp(r.recursoAtual + parseInt(v), 0, r.recursoMax);
+    const y = window.scrollY; render(); window.scrollTo(0, y); return;
+  }
+  if (t.dataset.alvoAdd) {
+    if (P.alvos.length < 12) P.alvos.push({ nome:'', marcas:0 });
+    const y = window.scrollY; render(); window.scrollTo(0, y); return;
+  }
+  if (t.dataset.alvoRem !== undefined) {
+    P.alvos.splice(parseInt(t.dataset.alvoRem), 1);
+    const y = window.scrollY; render(); window.scrollTo(0, y); return;
+  }
+  if (t.dataset.marca !== undefined) {
+    const a = P.alvos[parseInt(t.dataset.marca)], max = calcular(P).recursoMax; if (!a) return;
+    const v = t.dataset.valor;
+    a.marcas = v === 'todas' ? 0 : clamp(Math.min(a.marcas, max) + parseInt(v), 0, max);
+    if (v === 'todas') toast(`Marcas de ${a.nome || 'inimigo'} consumidas`);
+    const y = window.scrollY; render(); window.scrollTo(0, y); return;
+  }
+  if (t.dataset.habAdd || t.dataset.habRem) {
+    const cls = classe(P.classe), hb = cls.habilidades.find(x => x.id === (t.dataset.habAdd || t.dataset.habRem)); if (!hb) return;
+    if (t.dataset.habAdd) {
+      const r = calcular(P);
+      if (P.nivel < hb.nivel || r.pontosHab - r.pontosHabGastos < (hb.pontos || 1) || P.habilidades.includes(hb.id)) return;
+      P.habilidades.push(hb.id); toast(`${hb.nome} aprendida`);
+    } else {
+      P.habilidades = P.habilidades.filter(x => x !== hb.id); toast(`${hb.nome} esquecida: 1 ponto devolvido`);
+    }
+    const y = window.scrollY; render(); window.scrollTo(0, y); return;
+  }
+
+  if (t.dataset.filtro) {
+    const v = t.dataset.valor;
+    ({ 'itens-cat':() => filtroItens.cat = v, 'itens-tier':() => filtroItens.tier = v,
+       'magias-tipo':() => filtroMagias.tipo = v, 'magias-tier':() => filtroMagias.tier = v,
+       'hab-classe':() => habClasse = v })[t.dataset.filtro]();
+    const y = window.scrollY; render(); window.scrollTo(0, y); return;
+  }
+
+  if (t.dataset.carregar) {
+    const s = lsGet(LS_SALVOS, []).find(x => x.id === t.dataset.carregar);
+    if (s) { P = normalizar(s); habClasse = null; irPara('status'); toast(`${P.nome || 'Personagem'} aberto`); }
+    return;
+  }
+
+  if (t.dataset.apagar) {
+    const salvos = lsGet(LS_SALVOS, []), s = salvos.find(x => x.id === t.dataset.apagar);
+    if (!s || !confirm(`Apagar ${s.nome || 'este personagem'}? Isso não pode ser desfeito.`)) return;
+    lsSet(LS_SALVOS, salvos.filter(x => x.id !== s.id));
+    if (P.id === s.id) P.id = null;
+    render(); toast('Personagem apagado'); return;
+  }
+
+  switch (t.dataset.acao) {
+    case 'salvar': {
+      const salvos = lsGet(LS_SALVOS, []);
+      if (!P.id) P.id = 'p' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+      const copia = JSON.parse(JSON.stringify(P)); copia.salvoEm = Date.now();
+      const i = salvos.findIndex(x => x.id === P.id);
+      i >= 0 ? salvos[i] = copia : salvos.push(copia);
+      toast(lsSet(LS_SALVOS, salvos) ? 'Personagem salvo' : 'Não foi possível salvar neste navegador');
+      render(); break;
+    }
+    case 'novo':
+      if (!confirm('Criar um personagem novo? Mudanças não salvas nesta ficha serão perdidas.')) return;
+      P = novo(); habClasse = null; irPara('ficha'); toast('Ficha em branco pronta'); break;
+    case 'exportar': {
+      const txt = JSON.stringify(lsGet(LS_SALVOS, []));
+      const ta = $('#backup'); ta.value = txt; ta.select();
+      if (navigator.clipboard) navigator.clipboard.writeText(txt).then(() => toast('Backup copiado'), () => toast('Backup pronto na caixa de texto'));
+      else toast('Backup pronto na caixa de texto');
+      break;
+    }
+    case 'importar': {
+      try {
+        const dados = JSON.parse($('#backup').value);
+        if (!Array.isArray(dados)) throw new Error();
+        const salvos = lsGet(LS_SALVOS, []);
+        let novos = 0;
+        dados.forEach(d => { const p = normalizar(d); if (!p.id) p.id = 'p' + Math.random().toString(36).slice(2, 10);
+          p.salvoEm = d.salvoEm || Date.now();
+          const i = salvos.findIndex(x => x.id === p.id); i >= 0 ? salvos[i] = p : (salvos.push(p), novos++); });
+        lsSet(LS_SALVOS, salvos); render(); toast(`Importados: ${dados.length} (${novos} novos)`);
+      } catch (err) { toast('Texto inválido: cole um backup exportado por este app'); }
+      break;
+    }
+  }
+});
+
+conteudo.addEventListener('change', e => {
+  const t = e.target;
+  if (t.id === 'evo-extras') { const y = window.scrollY; render(); window.scrollTo(0, y); return; }
+  if (t.id === 'f-classe') {
+    if (P.habilidades.length && !confirm('Trocar de classe apaga as habilidades aprendidas. Continuar?')) { t.value = P.classe; return; }
+    P.classe = t.value; habClasse = null; P.habilidades = []; P.recursoAtual = null; P.alvos = [];
+    Object.keys(GRUPOS).forEach(g => {
+      if (pontos(g).resta < 0) ATRIBUTOS.filter(a => a.grupo === g).forEach(a => P.atributos[a.id] = REGRAS.attrMin);
+    });
+    render(); return;
+  }
+  if (t.dataset.magia) {
+    const id = t.dataset.magia;
+    P.magias = t.checked ? [...new Set([...P.magias, id])] : P.magias.filter(x => x !== id);
+    const y = window.scrollY; render(); window.scrollTo(0, y); return;
+  }
+});
+
+conteudo.addEventListener('input', e => {
+  const t = e.target;
+  if (t.id === 'f-nome') { P.nome = t.value; atualizarTopo(); guardarRascunho(); return; }
+  if (t.classList.contains('alvo-nome')) { const a = P.alvos[parseInt(t.dataset.idx)]; if (a) { a.nome = t.value; guardarRascunho(); } return; }
+  if (t.id === 'evo-extras') {
+    t.value = t.value.replace(/\D/g, '');
+    P.pontosExtras = parseInt(t.value) || 0; guardarRascunho(); return;
+  }
+  if (t.id === 'busca-itens') { filtroItens.busca = t.value; $('#lista-comp').innerHTML = listaItens(); return; }
+  if (t.id === 'busca-magias') { filtroMagias.busca = t.value; $('#lista-comp').innerHTML = listaMagias(); return; }
+});
+
+window.addEventListener('resize', () => document.documentElement.style.setProperty('--topo', $('#topo').offsetHeight + 'px'));
+
+render();
+})();
+</script>
+</body>
+</html>
