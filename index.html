@@ -120,7 +120,7 @@ textarea{min-height:110px;font-size:14px;font-family:ui-monospace,Consolas,monos
 }
 .selo:active{transform:scale(.94)}
 .selo:disabled{filter:grayscale(1);opacity:.35}
-.nivel{display:flex;align-items:center;gap:14px}
+.nivel{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .nivel .num{font-size:2rem;font-weight:700;min-width:2.2ch;text-align:center}
 
 /* ---------- Atributos ---------- */
@@ -336,6 +336,78 @@ details.capitulo .corpo{padding:0 16px 14px}
 .detalhe,.hc .meta,.magia .info,.evo .efeito,.atributo .desc{color:var(--tinta-suave)}
 .hc > div,.hc .exemplos{color:var(--tinta)}
 
+/* ---------- Lista de magias ---------- */
+.linha-magia{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:9px 0;border-top:1px dotted rgba(63,48,29,.45)}
+.linha-magia:first-of-type,.bloco .nota + .linha-magia{border-top:none}
+.linha-magia input{width:26px;height:26px;margin:0;accent-color:var(--lacre)}
+.linha-magia.bloqueada{opacity:.5}
+.linha-magia .meio{min-width:0;line-height:1.3}
+.nome-magia{display:inline;padding:0;margin:0 6px 0 0;border:none;background:none;cursor:pointer;text-align:left;
+  font-family:var(--texto);font-size:1.08rem;font-weight:700;color:var(--tinta);
+  text-decoration:underline;text-decoration-color:var(--ouro);text-decoration-thickness:2px;text-underline-offset:3px}
+.nome-magia .ponto{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:1px}
+.linha-magia .resumo{font-size:.98rem;color:var(--tinta-suave)}
+.linha-magia .lado{text-align:right;font-size:.88rem;color:var(--tinta-suave);white-space:nowrap;line-height:1.3}
+.usos{font-weight:700;color:var(--musgo);font-size:1rem}
+.usos.zerado,.usos-num.zerado{color:var(--lacre)}
+.linha-magia.equipada .nome-magia{color:var(--lacre-escuro)}
+.reset-usos{margin:10px 0 0}
+.resumo-grande{font-size:1.15rem;font-weight:700;margin:0 0 8px}
+.ficha-magia{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin:0 0 10px;padding:10px 12px;background:rgba(255,252,240,.6);border:1px solid rgba(63,48,29,.35);border-radius:3px}
+.ficha-magia dt{font-weight:700}
+.ficha-magia dd{margin:0}
+.usos-bloco{margin-top:12px;padding:10px 12px;border-left:3px solid var(--ouro);background:rgba(255,252,240,.5)}
+.usos-bloco .btn{margin-top:8px}
+.usos-num{font-weight:700;color:var(--musgo)}
+
+.tema-item{display:inline-block;font-size:.82rem;font-weight:700;color:var(--couro);border:1px solid var(--ouro);border-radius:10px;padding:0 8px;background:rgba(224,194,124,.25)}
+.desvantagem-item{margin-top:6px;padding:4px 8px;border-left:3px solid var(--lacre);background:rgba(142,27,27,.08);color:var(--tinta)}
+.historia-item{margin-top:6px;font-style:italic}
+.desvantagem{margin:10px 0;padding:10px 12px;border-left:4px solid var(--lacre);background:rgba(142,27,27,.1)}
+.historia{font-style:italic;color:var(--tinta-suave);border-top:1px solid rgba(185,142,59,.6);padding-top:8px}
+
+/* ---------- Bestiário ---------- */
+.estrelas{letter-spacing:1px;font-size:1rem;white-space:nowrap}
+.tag-dif{display:inline-block;font-size:.8rem;font-weight:700;padding:1px 8px;border-radius:10px;color:#fbf2dc;white-space:nowrap}
+.tag-esp{display:inline-block;font-size:.8rem;font-weight:700;padding:1px 8px;border-radius:10px;background:var(--couro);color:var(--ouro-claro);border:1px solid var(--ouro)}
+.linha-mon{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:9px 0;border-top:1px dotted rgba(63,48,29,.45)}
+.linha-mon:first-of-type{border-top:none}
+.linha-mon .resumo{font-size:.98rem;color:var(--tinta-suave)}
+.linha-mon .lado{text-align:right}
+.mapa{display:block;position:relative;margin:10px 0 0;border:2px solid var(--couro);border-radius:3px;overflow:hidden;box-shadow:0 2px 6px rgba(0,0,0,.35)}
+.mapa img{display:block;width:100%;height:auto}
+.mapa .falta{display:none;padding:20px;text-align:center;font-style:italic;color:var(--tinta-suave)}
+.mapa.sem-imagem img{display:none}
+.mapa.sem-imagem .falta{display:block}
+.lugar h2{font-size:1.3rem}
+.lugar-lista{margin-top:8px;line-height:1.9}
+.local-mon{display:inline-block;font-size:.9rem;color:var(--lapis);font-weight:600}
+.batalha{background:linear-gradient(180deg,rgba(59,37,23,.12),rgba(214,192,140,.25))}
+.inimigo{padding:12px 0;border-top:1px solid rgba(63,48,29,.45)}
+.inimigo:first-of-type{border-top:none;padding-top:4px}
+.inimigo.caido{opacity:.7}
+.inimigo .topo-ini{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.inimigo .topo-ini .nv{font-weight:700}
+.inimigo .topo-ini .fechar{margin-left:auto;width:40px;height:40px;cursor:pointer;background:none;border:1px solid var(--tinta-suave);border-radius:3px;font-size:1rem;color:var(--tinta)}
+.barra-vida{position:relative;height:26px;margin:8px 0;border:1px solid var(--lacre-escuro);border-radius:3px;background:var(--pergaminho-claro);overflow:hidden}
+.barra-vida i{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(180deg,#b23a3a,var(--lacre));transition:width .2s}
+.barra-vida span{position:relative;display:block;text-align:center;font-weight:700;line-height:24px;color:var(--tinta);text-shadow:0 0 3px #fff,0 0 3px #fff}
+.linha-dano{display:flex;gap:6px;align-items:center}
+.linha-dano input{max-width:110px;min-height:42px;text-align:center}
+.mini-stats{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 4px}
+.mini-stats span{font-size:.92rem;padding:2px 8px;border:1px solid rgba(63,48,29,.4);border-radius:12px;background:rgba(255,252,240,.6)}
+.ataques-ini{font-size:.98rem;margin:4px 0}
+.controle-nivel{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 10px}
+.controle-nivel .num{font-size:1.6rem;font-weight:700;min-width:2ch;text-align:center}
+.attrs-mon{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;text-align:center;margin:8px 0 10px}
+.attrs-mon div{padding:4px 0;border:1px solid rgba(63,48,29,.4);border-radius:3px;background:rgba(255,252,240,.6)}
+.attrs-mon b{display:block;font-size:1.15rem}
+.attrs-mon span{font-size:.75rem;font-weight:700;color:var(--lapis)}
+.lista-simples{margin:6px 0;padding-left:1.1em}
+.lista-simples li{margin:4px 0}
+.sub-titulo{font-family:var(--titulo);font-weight:700;font-size:1.25rem;color:var(--lacre);margin:14px 0 4px}
+.inimigo .botoes{margin-top:6px;gap:6px}
+
 /* ---------- Evolução ---------- */
 .bolsa{position:sticky;top:var(--topo);z-index:3;margin:12px 0 0;padding:10px 14px;background:var(--couro);color:var(--ouro-claro);
   border:1px solid var(--ouro);border-radius:3px;display:flex;justify-content:space-between;align-items:center;gap:10px}
@@ -474,13 +546,15 @@ const PAGINAS = {
   salvos:      { nome:'Personagens salvos',    ic:'💾', grupo:'Seu personagem' },
   itens:       { nome:'Compêndio de itens',    ic:'📖', grupo:'Biblioteca' },
   grimorio:    { nome:'Compêndio de magias',   ic:'🔮', grupo:'Biblioteca' },
+  bestiario:   { nome:'Bestiário',             ic:'🐉', grupo:'Biblioteca' },
+  atlas:       { nome:'Atlas',                 ic:'🗺️', grupo:'Biblioteca' },
   tutoriais:   { nome:'Tutoriais',             ic:'🕯️', grupo:'Biblioteca' }
 };
 
 /* ================= Personagem ================= */
 function novo(classeId){
   const a = {}; ATRIBUTOS.forEach(x => a[x.id] = REGRAS.attrMin);
-  return { id:null, nome:'', classe: classeId || CLASSES[0].id, nivel:1, atributos:a, equip:{}, magias:[], pontosExtras:0, evolucao:{}, habilidades:[], recursoAtual:null, alvos:[] };
+  return { id:null, nome:'', classe: classeId || CLASSES[0].id, nivel:1, atributos:a, equip:{}, magias:[], pontosExtras:0, evolucao:{}, habilidades:[], recursoAtual:null, alvos:[], usosMagia:{} };
 }
 function normalizar(p){
   const base = novo(p && p.classe);
@@ -496,6 +570,8 @@ function normalizar(p){
   delete r.pontosEvolucao;
   const habsClasse = classe(r.classe).habilidades.map(h => h.id);
   r.habilidades = Array.isArray(p.habilidades) ? [...new Set(p.habilidades)].filter(id => habsClasse.includes(id)) : [];
+  r.usosMagia = {};
+  Object.entries(p.usosMagia || {}).forEach(([id, v]) => { const k = Math.max(0, parseInt(v) || 0); if (k && magia(id)) r.usosMagia[id] = k; });
   r.alvos = Array.isArray(p.alvos) ? p.alvos.slice(0, 12).map(a => ({ nome: String((a && a.nome) || '').slice(0, 30), marcas: Math.max(0, parseInt(a && a.marcas) || 0) })) : [];
   r.recursoAtual = p.recursoAtual == null || p.recursoAtual === '' ? null : Math.max(0, parseInt(p.recursoAtual) || 0);
   r.evolucao = {};
@@ -563,7 +639,7 @@ function calcular(p){
   ATRIBUTOS.forEach(a => A[a.id] = p.atributos[a.id] + (bonusAttr[a.id] || 0));
 
   // Somatórios
-  const B = { slots:0, carga:0, mov:0, critDano:0, dadoMagico:0, dadoCura:0, ignoraDF:0, alcanceArco:0 };
+  const B = { slots:0, carga:0, mov:0, critDano:0, dadoMagico:0, dadoCura:0, ignoraDF:0, alcanceArco:0, usosCusto1:0 };
   const fontes = { slots:[], carga:[], mov:[], critDano:[], dadoMagico:[], dadoCura:[] };
   let df = 0, dm = 0, peso = 0; const partesDF = [], partesDM = [];
   lista.forEach(({it}) => peso += it.peso || 0);
@@ -661,7 +737,7 @@ function atualizarTopo(){
 
 const RENDER = {
   ficha:() => rFicha(), equipar:() => rEquipar(), magias:() => rMagias(), status:() => rStatus(), evolucao:() => rEvolucao(), salvos:() => rSalvos(),
-  itens:() => rCompItens(), habilidades:() => rHabilidades(), grimorio:() => rCompMagias(), tutoriais:() => rTutoriais()
+  itens:() => rCompItens(), habilidades:() => rHabilidades(), grimorio:() => rCompMagias(), bestiario:() => rBestiario(), atlas:() => rAtlas(), tutoriais:() => rTutoriais()
 };
 
 function render(){
@@ -694,9 +770,12 @@ function rFicha(){
     <div class="campo"><label for="f-classe">Classe</label>
       <select id="f-classe">${CLASSES.map(c => `<option value="${c.id}"${c.id === P.classe ? ' selected' : ''}>${c.nome}</option>`).join('')}</select></div>
     <div class="campo"><label>Nível</label>
-      <div class="nivel"><button class="selo" data-nivel="-1" aria-label="Diminuir nível"${P.nivel <= 1 ? ' disabled' : ''}>−</button>
+      <div class="nivel"><button class="btn pequeno simples" data-nivel="-5" aria-label="Diminuir 5 níveis"${P.nivel <= 1 ? ' disabled' : ''}>−5</button>
+      <button class="selo" data-nivel="-1" aria-label="Diminuir nível"${P.nivel <= 1 ? ' disabled' : ''}>−</button>
       <span class="num">${P.nivel}</span>
-      <button class="selo" data-nivel="1" aria-label="Aumentar nível"${P.nivel >= REGRAS.nivelMax ? ' disabled' : ''}>+</button></div></div>
+      <button class="selo" data-nivel="1" aria-label="Aumentar nível"${P.nivel >= REGRAS.nivelMax ? ' disabled' : ''}>+</button>
+      <button class="btn pequeno simples" data-nivel="5" aria-label="Aumentar 5 níveis"${P.nivel >= REGRAS.nivelMax ? ' disabled' : ''}>+5</button></div>
+      <p class="nota">Nível máximo: ${REGRAS.nivelMax}.</p></div>
     <div class="classe-info">
       <p class="capitular">${esc(cls.descricao)}</p>
       <p><b>Categoria:</b> ${catC.nome} (${catC.pontos.fisico} físicos, ${catC.pontos.mental} mentais, ${catC.pontos.social} sociais)</p>
@@ -731,7 +810,7 @@ function tipoItem(it){
   if (ARMADURAS.includes(it)) return 'Armadura';
   return 'Acessório';
 }
-function detalheItem(it){
+function detalheItem(it, comHistoria){
   if (!it) return '';
   const partes = [];
   if (ARMAS.includes(it)) {
@@ -752,7 +831,11 @@ function detalheItem(it){
     partes.push(`DF ${it.df}, DM ${it.dm}`);
   }
   partes.push(`${it.peso} kg`);
-  return `<div class="detalhe">${tierBadge(it.tier)} ${realce(partes.join(', '))}${it.efeito ? `<br><em>${realce(esc(it.efeito))}</em>` : ''}</div>`;
+  const attrs = it.atributos ? Object.entries(it.atributos).map(([k, v]) => `+${v} ${k}`).join(', ') : '';
+  return `<div class="detalhe">${tierBadge(it.tier)}${it.tema ? ` <span class="tema-item">${esc(it.tema)}</span>` : ''} ${realce(partes.join(', '))}` +
+    `${attrs ? `<br><b>${realce(attrs)}</b>` : ''}${it.efeito ? `<br><em>${realce(esc(it.efeito))}</em>` : ''}` +
+    `${it.desvantagem ? `<div class="desvantagem-item"><b>Desvantagem:</b> ${realce(esc(it.desvantagem))}</div>` : ''}` +
+    `${comHistoria && it.historia ? `<div class="historia-item">${esc(it.historia)}</div>` : ''}</div>`;
 }
 
 /* ----- Equipar ----- */
@@ -821,7 +904,7 @@ function renderModal(){
   $('#modal-lista').innerHTML = h;
 }
 function abrirModal(slotId){
-  modalSlot = slotId; modalTier = 'todos';
+  modalSlot = slotId; modalTier = 'todos'; modalMagia = null;
   renderModal();
   $('#modal-fundo').hidden = false;
   document.body.style.overflow = 'hidden';
@@ -833,7 +916,7 @@ function abrirModal(slotId){
 let modalVolta = null;
 function abrirInfo(id, origem){
   const inf = INFO[id]; if (!inf) return;
-  modalSlot = null; modalVolta = origem || null;
+  modalSlot = null; modalMagia = null; modalVolta = origem || null;
   $('#modal-titulo').innerHTML = `${inf.titulo}${inf.sub ? `<small>${inf.sub}</small>` : ''}`;
   $('#modal-filtros').innerHTML = '';
   $('#modal-lista').innerHTML = `<div class="info-corpo">${inf.html}</div>`;
@@ -848,7 +931,7 @@ function fecharModal(viaHistorico){
   $('#modal-fundo').hidden = true;
   document.body.style.overflow = '';
   const volta = modalVolta || document.querySelector(`[data-escolher="${modalSlot}"]`);
-  modalSlot = null; modalVolta = null;
+  modalSlot = null; modalVolta = null; modalMagia = null; modalMon = null;
   if (!viaHistorico && history.state && history.state.modal) { try { history.back(); } catch(e) {} }
   if (volta) volta.focus();
 }
@@ -881,9 +964,22 @@ function valorMagia(m, r){
   }
   return '';
 }
-function infoMagia(m){
-  const c = custo(m);
-  return realce(`${c} slot${c > 1 ? 's' : ''}${m.dado && m.calc !== 'absorve' ? `, ${m.dado}d10` : ''}, ${esc(m.alcance)}, recarga ${m.recarga} ${m.recarga === 1 ? 'turno' : 'turnos'}${m.efeito ? `. ${esc(m.efeito)}` : ''}`);
+function usosMax(m, r){ return m.usos.qtd + (custo(m) === 1 && m.usos.por === 'batalha' ? (r.B.usosCusto1 || 0) : 0); }
+function usosRestantes(m, r){ return Math.max(0, usosMax(m, r) - (P.usosMagia[m.id] || 0)); }
+const textoUsos = (m, r) => `${r ? usosMax(m, r) : m.usos.qtd} ${USOS_POR[m.usos.por]}`;
+
+const ORDEM_TIER = Object.keys(TIERS);
+const porTier = lista => lista.slice().sort((a, b) => ORDEM_TIER.indexOf(a.tier) - ORDEM_TIER.indexOf(b.tier));
+function linhaMagia(m, r, comCaixa){
+  const marcada = P.magias.includes(m.id), c = custo(m);
+  const bloqueada = comCaixa && !marcada && r.slotsUsados + c > r.slots;
+  const rest = usosRestantes(m, r), max = usosMax(m, r);
+  return `<div class="linha-magia${bloqueada ? ' bloqueada' : ''}${marcada ? ' equipada' : ''}">
+    ${comCaixa ? `<input type="checkbox" data-magia="${m.id}"${marcada ? ' checked' : ''}${bloqueada ? ' disabled' : ''} aria-label="Equipar ${esc(m.nome)}">` : ''}
+    <div class="meio"><button class="nome-magia" data-magia-info="${m.id}"><i class="ponto" style="background:${TIERS[m.tier].cor}"></i>${esc(m.nome)}</button>
+      <span class="resumo">${realce(esc(m.resumo))}</span></div>
+    <div class="lado">${c} slot${c > 1 ? 's' : ''}${marcada ? `<br><span class="usos${rest === 0 ? ' zerado' : ''}">${rest}/${max}</span>` : ''}</div>
+  </div>`;
 }
 
 function rMagias(){
@@ -891,22 +987,72 @@ function rMagias(){
   const pct = r.slots ? Math.min(100, r.slotsUsados / r.slots * 100) : 100;
   let h = `<div class="contador${r.slotsUsados > r.slots ? ' excedido' : ''}"><span>Slots</span>
     <span class="barra"><i style="width:${pct}%"></i></span><span>${r.slotsUsados} de ${r.slots}</span></div>
-    <p class="nota">Slots = INT ${r.A.INT} × ${REGRAS.slotsPorINT}${r.B.slots ? ` + ${r.B.slots} dos itens` : ''}. Você faz até ${r.ataquesMag} ${r.ataquesMag > 1 ? 'ataques mágicos' : 'ataque mágico'} por turno (INT).</p>`;
-  Object.keys(TIPOS_MAGIA).forEach(t => {
-    h += `<section class="bloco"><h2>${TIPOS_MAGIA[t]}</h2>`;
-    MAGIAS.filter(m => m.tipo === t).forEach(m => {
-      const marcada = P.magias.includes(m.id), c = custo(m);
-      const bloqueada = !marcada && r.slotsUsados + c > r.slots;
-      const v = valorMagia(m, r);
-      h += `<label class="magia${bloqueada ? ' bloqueada' : ''}">
-        <input type="checkbox" data-magia="${m.id}"${marcada ? ' checked' : ''}${bloqueada ? ' disabled' : ''}>
-        <div><div class="titulo">${esc(m.nome)} ${tierBadge(m.tier)}</div>
-        <div class="info">${infoMagia(m)}</div>
-        ${v ? `<div class="valor-calc">${v}</div>` : ''}</div></label>`;
-    });
-    h += `</section>`;
+    <p class="nota">Marque para equipar. Toque no nome para ver a magia completa. Slots = INT ${r.A.INT} × ${REGRAS.slotsPorINT}${r.B.slots ? ` + ${r.B.slots} dos itens` : ''}; você faz até ${r.ataquesMag} ${r.ataquesMag > 1 ? 'ataques mágicos' : 'ataque mágico'} por turno.</p>`;
+  if (P.magias.length) h += `<div class="botoes reset-usos">
+      <button class="btn pequeno" data-usos-reset="batalha">Nova batalha</button>
+      <button class="btn pequeno" data-usos-reset="dia">Novo dia</button>
+      <button class="btn pequeno" data-usos-reset="sessao">Nova sessão</button></div>`;
+  Object.keys(CATEGORIAS_MAGIA).forEach(cat => {
+    const ms = porTier(MAGIAS.filter(m => m.categoria === cat)); if (!ms.length) return;
+    h += `<section class="bloco"><h2>${CATEGORIAS_MAGIA[cat]} <small>${ms.filter(m => P.magias.includes(m.id)).length} de ${ms.length}</small></h2>` +
+      ms.map(m => linhaMagia(m, r, true)).join('') + `</section>`;
   });
   return h;
+}
+
+/* ----- Modal de magia ----- */
+let modalMagia = null;
+function renderModalMagia(){
+  const m = magia(modalMagia); if (!m) return;
+  const r = calcular(P), c = custo(m), marcada = P.magias.includes(m.id);
+  const rest = usosRestantes(m, r), max = usosMax(m, r);
+  const cabe = r.slotsUsados + c <= r.slots;
+  const formula = m.calc === 'dano' ? `(INT + foco + ${m.dado})d10 × nível − DM do alvo` :
+    m.calc === 'cura' ? `(FDV + foco${m.dado ? ` + ${m.dado}` : ''})d10 × nível` :
+    m.calc === 'absorve' ? 'FDV d10 × nível' : '';
+  $('#modal-titulo').innerHTML = `${esc(m.nome)}<small>${TIERS[m.tier].nome}, ${CATEGORIAS_MAGIA[m.categoria].toLowerCase()}, ${c} slot${c > 1 ? 's' : ''}</small>`;
+  $('#modal-filtros').innerHTML = '';
+  $('#modal-lista').innerHTML = `<div class="info-corpo">
+    <p class="resumo-grande">${realce(esc(m.resumo))}</p>
+    <dl class="ficha-magia">
+      <dt>Alcance</dt><dd>${esc(m.alcance)}</dd>
+      <dt>Usos</dt><dd>${textoUsos(m, r)}</dd>
+      ${m.conjuracao ? `<dt>Conjuração</dt><dd>${esc(m.conjuracao)}</dd>` : ''}
+      ${m.dado ? `<dt>Dado da magia</dt><dd>${realce(m.dado + 'd10')}</dd>` : ''}
+      <dt>Custo</dt><dd>${c} slot${c > 1 ? 's' : ''} (tier ${TIERS[m.tier].nome.toLowerCase()})</dd>
+    </dl>
+    <p>${realce(esc(m.efeito))}</p>
+    ${m.desvantagem ? `<div class="desvantagem"><b>Desvantagem:</b> ${realce(esc(m.desvantagem))}</div>` : ''}
+    ${m.historia ? `<p class="historia">${esc(m.historia)}</p>` : ''}
+    ${formula ? `<div class="formula">${realce(formula)}</div>` : ''}
+    ${m.calc ? `<p class="valor-calc">Para ${esc(P.nome || 'seu personagem')}: ${valorMagia(m, r)}</p>` : ''}
+    ${marcada ? `<div class="usos-bloco"><div><b>Usos restantes:</b> <span class="usos-num${rest === 0 ? ' zerado' : ''}">${rest} de ${max}</span> <span class="nota">${USOS_POR[m.usos.por]}</span></div>
+      <div class="botoes"><button class="btn" data-mg-usar="${m.id}"${rest === 0 ? ' disabled' : ''}>Usar</button>
+      <button class="btn simples" data-mg-devolver="${m.id}"${rest >= max ? ' disabled' : ''}>Devolver 1 uso</button></div></div>` : ''}
+    <div class="botoes" style="margin-top:14px">${marcada
+      ? `<button class="btn simples" data-mg-remover="${m.id}">Tirar das magias equipadas</button>`
+      : `<button class="btn lacre" data-mg-equipar="${m.id}"${cabe ? '' : ' disabled'}>${cabe ? `Equipar por ${c} slot${c > 1 ? 's' : ''}` : `Faltam ${r.slotsUsados + c - r.slots} slots`}</button>`}</div>
+  </div>`;
+}
+function abrirMagia(id, origem){
+  modalSlot = null; modalMagia = id; modalVolta = origem || null;
+  renderModalMagia();
+  $('#modal-fundo').hidden = false;
+  document.body.style.overflow = 'hidden';
+  $('#modal-lista').scrollTop = 0;
+  try { history.pushState({ modal:true }, ''); } catch(e) {}
+  $('#fechar-modal').focus();
+}
+function acaoMagia(b){
+  const id = b.dataset.mgUsar || b.dataset.mgDevolver || b.dataset.mgEquipar || b.dataset.mgRemover;
+  const m = magia(id); if (!m) return false;
+  const r = calcular(P);
+  if (b.dataset.mgUsar) { if (usosRestantes(m, r) > 0) { P.usosMagia[id] = (P.usosMagia[id] || 0) + 1; toast(`${m.nome} usada`); } }
+  else if (b.dataset.mgDevolver) { P.usosMagia[id] = Math.max(0, (P.usosMagia[id] || 0) - 1); if (!P.usosMagia[id]) delete P.usosMagia[id]; }
+  else if (b.dataset.mgEquipar) { if (r.slotsUsados + custo(m) <= r.slots && !P.magias.includes(id)) { P.magias.push(id); toast(`${m.nome} equipada`); } }
+  else if (b.dataset.mgRemover) { P.magias = P.magias.filter(x => x !== id); delete P.usosMagia[id]; toast(`${m.nome} removida`); }
+  const y = window.scrollY; render(); window.scrollTo(0, y); renderModalMagia();
+  return true;
 }
 
 /* ----- Status ----- */
@@ -1119,7 +1265,7 @@ function rSalvos(){
 }
 
 /* ----- Compêndio de itens ----- */
-const filtroItens = { cat:'todos', tier:'todos', busca:'' };
+const filtroItens = { cat:'todos', tier:'todos', col:'todos', busca:'' };
 const CATS_ITENS = { todos:'Todos', armas:'Armas', magicas:'Armas mágicas', escudos:'Escudos', armaduras:'Armaduras', acessorios:'Acessórios' };
 function catItem(it){
   if (ARMAS.includes(it)) return it.foco ? 'magicas' : 'armas';
@@ -1139,6 +1285,7 @@ function rCompItens(){
     <div class="filtros">
       <input type="search" id="busca-itens" value="${esc(filtroItens.busca)}" placeholder="Buscar por nome ou efeito" aria-label="Buscar itens">
       ${chips('itens-cat', CATS_ITENS, filtroItens.cat)}
+      ${chips('itens-col', Object.assign({ todos:'Todas as coleções', normais:'Itens comuns da forja' }, COLECOES), filtroItens.col)}
       ${chips('itens-tier', opcoesTier(), filtroItens.tier)}
     </div>
     <div id="lista-comp">${listaItens()}</div>`;
@@ -1148,25 +1295,26 @@ function listaItens(){
   const filtrados = TODOS.filter(it =>
     (filtroItens.cat === 'todos' || catItem(it) === filtroItens.cat) &&
     (filtroItens.tier === 'todos' || it.tier === filtroItens.tier) &&
-    (!b || semAcento(it.nome + ' ' + (it.efeito || '')).includes(b)));
+    (filtroItens.col === 'todos' || (filtroItens.col === 'normais' ? !it.colecao : it.colecao === filtroItens.col)) &&
+    (!b || semAcento(it.nome + ' ' + (it.efeito || '') + ' ' + (it.tema || '') + ' ' + (it.historia || '')).includes(b)));
   if (!filtrados.length) return `<section class="bloco"><p class="vazio">Nenhum item com esses filtros. Tente outro tier ou limpe a busca.</p></section>`;
   let h = '';
   Object.keys(CATS_ITENS).filter(c => c !== 'todos').forEach(c => {
     const its = filtrados.filter(it => catItem(it) === c); if (!its.length) return;
     h += `<section class="bloco"><h2>${CATS_ITENS[c]} <small>${its.length}</small></h2>` +
-      its.map(it => `<div class="entrada"><div class="nome">${esc(it.nome)}</div>${detalheItem(it)}</div>`).join('') + `</section>`;
+      porTier(its).map(it => `<div class="entrada"><div class="nome">${esc(it.nome)}</div>${detalheItem(it, true)}</div>`).join('') + `</section>`;
   });
   return h;
 }
 
 /* ----- Compêndio de magias ----- */
-const filtroMagias = { tipo:'todos', tier:'todos', busca:'' };
+const filtroMagias = { cat:'todos', tier:'todos', busca:'' };
 function rCompMagias(){
   return `<h2 class="titulo-pagina">Compêndio de magias</h2>
-    <p class="intro">Qualquer personagem pode aprender magias, desde que tenha slots para equipá-las.</p>
+    <p class="intro">Qualquer personagem pode aprender magias, desde que tenha slots para equipá-las. Quanto mais poderosa, mais slots custa. Toque no nome para ver a magia completa.</p>
     <div class="filtros">
-      <input type="search" id="busca-magias" value="${esc(filtroMagias.busca)}" placeholder="Buscar por nome ou efeito" aria-label="Buscar magias">
-      ${chips('magias-tipo', Object.assign({ todos:'Todas' }, TIPOS_MAGIA), filtroMagias.tipo)}
+      <input type="search" id="busca-magias" value="${esc(filtroMagias.busca)}" placeholder="Buscar por nome, resumo ou efeito" aria-label="Buscar magias">
+      ${chips('magias-cat', Object.assign({ todos:'Todas' }, CATEGORIAS_MAGIA), filtroMagias.cat)}
       ${chips('magias-tier', opcoesTier(), filtroMagias.tier)}
     </div>
     <div id="lista-comp">${listaMagias()}</div>`;
@@ -1174,26 +1322,248 @@ function rCompMagias(){
 function listaMagias(){
   const b = semAcento(filtroMagias.busca.trim()), r = calcular(P);
   const filtradas = MAGIAS.filter(m =>
-    (filtroMagias.tipo === 'todos' || m.tipo === filtroMagias.tipo) &&
+    (filtroMagias.cat === 'todos' || m.categoria === filtroMagias.cat) &&
     (filtroMagias.tier === 'todos' || m.tier === filtroMagias.tier) &&
-    (!b || semAcento(m.nome + ' ' + m.efeito).includes(b)));
-  if (!filtradas.length) return `<section class="bloco"><p class="vazio">Nenhuma magia com esses filtros. Tente outro tipo ou limpe a busca.</p></section>`;
+    (!b || semAcento(m.nome + ' ' + m.resumo + ' ' + m.efeito).includes(b)));
+  if (!filtradas.length) return `<section class="bloco"><p class="vazio">Nenhuma magia com esses filtros. Tente outra categoria ou limpe a busca.</p></section>`;
   let h = '';
-  Object.keys(TIPOS_MAGIA).forEach(t => {
-    const ms = filtradas.filter(m => m.tipo === t); if (!ms.length) return;
-    h += `<section class="bloco"><h2>${TIPOS_MAGIA[t]} <small>${ms.length}</small></h2>` +
-      ms.map(m => {
-        const formula = m.calc === 'dano' ? `Dano: (INT + foco + ${m.dado})d10 × nível` :
-          m.calc === 'cura' ? `Cura: (FDV + foco${m.dado ? ` + ${m.dado}` : ''})d10 × nível` :
-          m.calc === 'absorve' ? 'Absorve: FDV d10 × nível' : '';
-        const v = valorMagia(m, r);
-        return `<div class="entrada"><div class="nome">${esc(m.nome)} ${tierBadge(m.tier)}</div>
-          <div class="detalhe">${infoMagia(m)}${formula ? `<br><em>${realce(formula)}</em>` : ''}</div>
-          ${v ? `<div class="valor-calc">Para ${esc(P.nome || 'seu personagem')}: ${v}</div>` : ''}</div>`;
-      }).join('') + `</section>`;
+  Object.keys(CATEGORIAS_MAGIA).forEach(cat => {
+    const ms = porTier(filtradas.filter(m => m.categoria === cat)); if (!ms.length) return;
+    h += `<section class="bloco"><h2>${CATEGORIAS_MAGIA[cat]} <small>${ms.length}</small></h2>
+      <p class="nota" style="margin:-4px 0 6px">${esc(DESCRICAO_CATEGORIA_MAGIA[cat])}</p>` +
+      ms.map(m => linhaMagia(m, r, false)).join('') + `</section>`;
   });
   return h;
 }
+
+/* ----- Bestiário ----- */
+const LS_BATALHA = 'rpgHex_batalha';
+let BATALHA = (lsGet(LS_BATALHA, []) || []).filter(b => b && MONSTROS.some(m => m.id === b.id));
+function salvarBatalha(){ lsSet(LS_BATALHA, BATALHA); }
+const monstro = id => MONSTROS.find(m => m.id === id) || null;
+const filtroMon = { dif:'todos', tipo:'todos', origem:'todos', local:'todos', busca:'' };
+const origemDe = m => ORIGENS[m.origem] ? m.origem : 'comum';
+function tagOrigem(m){ const o = ORIGENS[origemDe(m)]; return origemDe(m) === 'comum' ? '' : `<span class="tag-dif" style="background:${o.cor}">${o.nome}</span>`; }
+let modalMon = null;
+
+function estrelas(d){ return `<span class="estrelas" style="color:${DIFICULDADES[d].cor}" aria-label="Dificuldade ${d}">${'★'.repeat(d)}${'☆'.repeat(5 - d)}</span>`; }
+function tagDif(d){ return `<span class="tag-dif" style="background:${DIFICULDADES[d].cor}">${d}, ${DIFICULDADES[d].nome}</span>`; }
+
+function calcMonstro(mon, nivel, difN){
+  const n = clamp(nivel, 1, REGRAS.nivelMax), D = DIFICULDADES[difN] || DIFICULDADES[2], T = TAMANHOS[mon.tamanho], mult = Math.ceil(n / 2);
+  const A = Object.assign({ FOR:1, CON:1, DEX:1, AGI:1, INT:1, FDV:1, PER:1 }, mon.atributos);
+  const eq = mon.equip || {};
+  const arma = eq.arma ? item(eq.arma) : null;
+  const sec = eq.secundaria ? item(eq.secundaria) : null;
+  const escudo = sec && ehEscudo(sec) ? sec : null;
+  let df = (mon.defesaNatural || {}).df || 0, dm = (mon.defesaNatural || {}).dm || 0;
+  ['elmo','peitoral','luvas','botas'].forEach(sl => { const it = item(eq[sl]); if (it) { df += it.df || 0; dm += it.dm || 0; } });
+  const vida = Math.round((T.vidaBase + A.CON * T.fatorVida * n) * D.vida);
+  const defF = Math.round(df * A.CON * mult * D.defesa);
+  const defM = Math.round(dm * A.FDV * mult * D.defesa);
+  const defD10 = Math.min(REGRAS.defesaMaxD10, A.DEX + (escudo ? escudo.defesa : 0));
+  const cat = arma && !arma.foco ? CATEGORIAS_ARMA[arma.categoria] : CATEGORIAS_ARMA.desarmado;
+  const acoes = Math.max(0, A.AGI + (cat.acoesExtra || 0) - (escudo ? escudo.perdeAcao || 0 : 0));
+  const custoAt = cat.custo || 1;
+  const ataquesTurno = acoes === 0 ? '0' : acoes >= custoAt ? String(Math.floor(acoes / custoAt)) : `1 a cada ${Math.ceil(custoAt / acoes)} turnos`;
+  const bonusFoco = (arma && arma.bonus && arma.bonus.dadoMagico) || 0;
+  const ataques = [];
+  if (arma && !arma.foco) ataques.push({ nome: arma.nome, dados: Math.max(1, A.FOR + arma.dados + D.dano), tipo:'fisico',
+    alcance: arma.alcance > 1 ? `${arma.alcance} hex` : 'Adjacente', efeito: arma.efeito || '' });
+  (mon.ataques || []).forEach(a => {
+    const mag = a.tipo === 'magico';
+    ataques.push({ nome: a.nome, dados: Math.max(1, (mag ? A.INT : A.FOR) + a.dados + D.dano), tipo: mag ? 'magico' : 'fisico', alcance: a.alcance || 'Adjacente', efeito: a.efeito || '' });
+  });
+  if (!ataques.length) ataques.push({ nome:'Pancada', dados: Math.max(1, A.FOR + D.dano), tipo:'fisico', alcance:'Adjacente', efeito:'' });
+  const magias = (mon.magias || []).map(magia).filter(Boolean).map(m => ({ m,
+    dados: m.calc === 'dano' ? `${Math.max(1, A.INT + bonusFoco + m.dado + D.dano)}d10 × ${n}` :
+           m.calc === 'cura' ? `${A.FDV + m.dado}d10 × ${n}` : m.calc === 'absorve' ? `${A.FDV + m.dado}d10 × ${n}` : '' }));
+  return { n, D, T, A, arma, escudo, df, dm, vida, defF, defM, defD10, ataquesTurno, ataques, magias,
+    ataquesMag: magias.length ? A.INT : 0, crit: A.PER >= REGRAS.perLimiarCritico ? REGRAS.critComPER : REGRAS.critBase,
+    movimento: REGRAS.movimentoBase + A.AGI * REGRAS.movimentoPorAGI + T.movimento, mult };
+}
+
+function resumoMon(mon){
+  const atq = (mon.equip && mon.equip.arma && item(mon.equip.arma)) ? item(mon.equip.arma).nome : (mon.ataques && mon.ataques[0] ? mon.ataques[0].nome : 'Pancada');
+  return `${mon.tipo}, ${TAMANHOS[mon.tamanho].nome.toLowerCase()}. ${atq}${mon.magias && mon.magias.length ? ', usa magias' : ''}${(mon.drops || []).length ? '' : ', sem drop'}`;
+}
+
+function textoDrop(dp){
+  if (dp.item) { const it = item(dp.item); return it ? `${tierBadge(it.tier)} ${esc(it.nome)}` : esc(dp.item); }
+  return realce(esc(dp.texto));
+}
+
+function fichaMonstro(mon, c){
+  const eqNomes = Object.entries(mon.equip || {}).map(([sl, id]) => item(id)).filter(Boolean);
+  return `
+    ${mon.local ? `<p style="margin:0 0 6px"><b>Onde encontrar:</b> ${esc(mon.local)}</p>` : ''}
+    <p style="margin:0 0 8px">${esc(mon.descricao)}</p>
+    ${mon.historia ? `<p class="historia">${esc(mon.historia)}</p>` : ''}
+    <div class="attrs-mon">${['FOR','CON','DEX','AGI','INT','FDV','PER'].map(k => `<div><span>${k}</span><b>${c.A[k]}</b></div>`).join('')}</div>
+    <dl class="ficha-magia">
+      <dt>Vida</dt><dd><b>${fmt(c.vida)}</b> <span class="nota">(${c.T.vidaBase} + CON ${c.A.CON} × ${c.T.fatorVida} × ${c.n}) × ${c.D.vida}</span></dd>
+      <dt>Defesa física</dt><dd><b>${fmt(c.defF)}</b> <span class="nota">${c.df} × CON ${c.A.CON} × ${c.mult} × ${c.D.defesa}</span></dd>
+      <dt>Defesa mágica</dt><dd><b>${fmt(c.defM)}</b> <span class="nota">${c.dm} × FDV ${c.A.FDV} × ${c.mult} × ${c.D.defesa}</span></dd>
+      <dt>Defesa no d10</dt><dd>${c.defD10} ou menos</dd>
+      <dt>Ataques</dt><dd>${c.ataquesTurno} por turno${c.ataquesMag ? `, ${c.ataquesMag} mágicos` : ''}</dd>
+      <dt>Movimento</dt><dd>${c.movimento} hex</dd>
+      <dt>Crítico</dt><dd>${c.crit}%</dd>
+    </dl>
+    <h3 class="sub-titulo">Ataques</h3>
+    <ul class="lista-simples">${c.ataques.map(a => `<li><b>${esc(a.nome)}:</b> ${realce(`${a.dados}d10 × ${c.n}`)}${a.tipo === 'magico' ? ' mágico' : ''}, ${esc(a.alcance.toLowerCase())}${a.efeito ? `. ${realce(esc(a.efeito))}` : ''}</li>`).join('')}</ul>
+    <p class="nota">Dados = FOR (ou INT) + dado do ataque${c.D.dano > 0 ? ` + ${c.D.dano} da dificuldade` : c.D.dano < 0 ? ` − ${-c.D.dano} da dificuldade` : ''}, mínimo 1d10.</p>
+    ${c.magias.length ? `<h3 class="sub-titulo">Magias</h3><ul class="lista-simples">${c.magias.map(x => `<li><b>${esc(x.m.nome)}:</b> ${realce(esc(x.m.resumo))}${x.dados ? `, ${realce(x.dados)}` : ''}; ${x.m.usos.qtd} ${USOS_POR[x.m.usos.por]}</li>`).join('')}</ul>` : ''}
+    ${mon.habilidades && mon.habilidades.length ? `<h3 class="sub-titulo">Habilidades</h3><ul class="lista-simples">${mon.habilidades.map(hb => `<li><b>${esc(hb.nome)}</b> <span class="nota">${esc(hb.tipo.toLowerCase())}${hb.usos && hb.usos !== '—' ? `, ${esc(hb.usos)}` : ''}</span><br>${realce(esc(hb.efeito))}</li>`).join('')}</ul>` : ''}
+    ${eqNomes.length ? `<h3 class="sub-titulo">Equipamento</h3><p>${eqNomes.map(it => `${tierBadge(it.tier)} ${esc(it.nome)}`).join(', ')}</p>` : ''}
+    ${mon.fraquezas ? `<p><b>Fraquezas:</b> ${realce(esc(mon.fraquezas))}</p>` : ''}
+    ${mon.resistencias ? `<p><b>Resistências:</b> ${realce(esc(mon.resistencias))}</p>` : ''}
+    <h3 class="sub-titulo">Drops</h3>
+    ${(mon.drops || []).length ? `<ul class="lista-simples">${mon.drops.map(dp => `<li>${textoDrop(dp)}: <b>${dp.chance}%</b></li>`).join('')}</ul>` : '<p class="vazio">Este monstro não deixa nada.</p>'}`;
+}
+
+function renderModalMon(){
+  if (!modalMon) return;
+  const inst = modalMon.uid ? BATALHA.find(b => b.uid === modalMon.uid) : null;
+  const mon = monstro(inst ? inst.id : modalMon.id); if (!mon) return;
+  const nivel = inst ? inst.nivel : modalMon.nivel, dif = inst ? inst.dif : modalMon.dif;
+  const c = calcMonstro(mon, nivel, dif);
+  $('#modal-titulo').innerHTML = `${esc(inst ? inst.nome : mon.nome)}<small>${esc(mon.tipo)}, ${c.T.nome.toLowerCase()}${mon.especial ? `, ${esc(mon.especial)}` : ''}</small>`;
+  $('#modal-filtros').innerHTML = '';
+  $('#modal-lista').innerHTML = `<div class="info-corpo">
+    <div class="controle-nivel"><b>Nível</b>
+      <button class="selo" data-mon-nivelm="-1" aria-label="Diminuir nível"${nivel <= 1 ? ' disabled' : ''}>−</button>
+      <span class="num">${nivel}</span>
+      <button class="selo" data-mon-nivelm="1" aria-label="Aumentar nível"${nivel >= REGRAS.nivelMax ? ' disabled' : ''}>+</button>
+      <button class="btn pequeno simples" data-mon-igualm="1"${nivel === P.nivel ? ' disabled' : ''}>Nível do personagem (${P.nivel})</button></div>
+    <div class="chips" role="group" aria-label="Dificuldade">${[1,2,3,4,5].map(d => `<button class="chip" data-mon-difm="${d}" aria-pressed="${d === dif}">${d} ${DIFICULDADES[d].nome}</button>`).join('')}</div>
+    <p style="margin:8px 0">${estrelas(dif)} ${tagOrigem(mon)} ${mon.especial ? `<span class="tag-esp">${esc(mon.especial)}</span>` : ''} ${dif !== mon.dificuldade ? `<span class="nota">(original: ${mon.dificuldade}, ${DIFICULDADES[mon.dificuldade].nome.toLowerCase()})</span>` : ''}</p>
+    ${fichaMonstro(mon, c)}
+    ${inst ? '' : `<div class="botoes" style="margin-top:14px"><button class="btn lacre" data-mon-add="1">Adicionar à batalha no nível ${nivel}</button></div>`}
+  </div>`;
+}
+function abrirMonstro(opts, origem){
+  modalSlot = null; modalMagia = null; modalMon = opts; modalVolta = origem || null;
+  renderModalMon();
+  $('#modal-fundo').hidden = false;
+  document.body.style.overflow = 'hidden';
+  $('#modal-lista').scrollTop = 0;
+  try { history.pushState({ modal:true }, ''); } catch(e) {}
+  $('#fechar-modal').focus();
+}
+function nomearInstancias(){
+  const cont = {};
+  BATALHA.forEach(b => cont[b.id] = (cont[b.id] || 0) + 1);
+  const idx = {};
+  BATALHA.forEach(b => { const m = monstro(b.id); idx[b.id] = (idx[b.id] || 0) + 1; b.nome = cont[b.id] > 1 ? `${m.nome} ${idx[b.id]}` : m.nome; });
+}
+function acaoMonModal(b){
+  const inst = modalMon.uid ? BATALHA.find(x => x.uid === modalMon.uid) : null;
+  if (b.dataset.monNivelm) { if (inst) inst.nivel = clamp(inst.nivel + parseInt(b.dataset.monNivelm), 1, REGRAS.nivelMax); else modalMon.nivel = clamp(modalMon.nivel + parseInt(b.dataset.monNivelm), 1, REGRAS.nivelMax); }
+  else if (b.dataset.monIgualm) { if (inst) inst.nivel = P.nivel; else modalMon.nivel = P.nivel; }
+  else if (b.dataset.monDifm) { const d = parseInt(b.dataset.monDifm); if (inst) inst.dif = d; else modalMon.dif = d; }
+  else if (b.dataset.monAdd) {
+    BATALHA.push({ uid: 'm' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), id: modalMon.id, nivel: modalMon.nivel, dif: modalMon.dif, dano: 0 });
+    nomearInstancias(); salvarBatalha(); toast(`${monstro(modalMon.id).nome} entrou na batalha`);
+  }
+  else return false;
+  salvarBatalha();
+  if (aba === 'bestiario') { const y = window.scrollY; render(); window.scrollTo(0, y); }
+  renderModalMon();
+  return true;
+}
+
+function cardInimigo(b){
+  const mon = monstro(b.id), c = calcMonstro(mon, b.nivel, b.dif);
+  const atual = Math.max(0, c.vida - b.dano), pct = c.vida ? atual / c.vida * 100 : 0, caido = atual <= 0;
+  return `<div class="inimigo${caido ? ' caido' : ''}">
+    <div class="topo-ini"><button class="nome-magia" data-mon-ficha="${b.uid}">${esc(b.nome)}</button>
+      <span class="nv">Nv ${b.nivel}</span>${estrelas(b.dif)}${mon.especial ? `<span class="tag-esp">${esc(mon.especial)}</span>` : ''}
+      <button class="fechar" data-mon-rem="${b.uid}" aria-label="Tirar ${esc(b.nome)} da batalha">✕</button></div>
+    <div class="barra-vida"><i style="width:${pct}%"></i><span>${caido ? 'Caído' : `${fmt(atual)} / ${fmt(c.vida)}`}</span></div>
+    <div class="linha-dano"><input type="text" inputmode="numeric" class="dano-input" data-uid="${b.uid}" placeholder="Valor" aria-label="Valor de dano ou cura para ${esc(b.nome)}">
+      <button class="btn pequeno lacre" data-mon-dano="${b.uid}">Dano</button>
+      <button class="btn pequeno simples" data-mon-cura="${b.uid}">Curar</button></div>
+    <div class="mini-stats"><span><b class="atr">DF</b> ${fmt(c.defF)}</span><span><b class="atr">DM</b> ${fmt(c.defM)}</span>
+      <span>Defesa ≤ ${c.defD10}</span><span>${c.ataquesTurno} ataque(s)</span><span>Mov ${c.movimento}</span></div>
+    <div class="ataques-ini">${c.ataques.map(a => `${esc(a.nome)} ${realce(`${a.dados}d10 × ${c.n}`)}`).join(', ')}${c.magias.length ? `; magias: ${c.magias.map(x => esc(x.m.nome)).join(', ')}` : ''}</div>
+    <div class="botoes">
+      <button class="btn pequeno simples" data-mon-nv="${b.uid}" data-d="-1"${b.nivel <= 1 ? ' disabled' : ''}>Nível −</button>
+      <button class="btn pequeno simples" data-mon-nv="${b.uid}" data-d="1"${b.nivel >= REGRAS.nivelMax ? ' disabled' : ''}>Nível +</button>
+      ${caido ? `<button class="btn pequeno" data-mon-drop="${b.uid}">Sortear drops</button>` : ''}
+    </div></div>`;
+}
+
+function rBestiario(){
+  let h = `<h2 class="titulo-pagina">Bestiário</h2>
+    <p class="intro">Escolha monstros para a batalha e ajuste o nível para acompanhar o grupo. Vida, defesas e dano mudam na hora.</p>`;
+  if (BATALHA.length) {
+    const vivos = BATALHA.filter(b => { const c = calcMonstro(monstro(b.id), b.nivel, b.dif); return c.vida - b.dano > 0; }).length;
+    h += `<section class="bloco batalha"><h2>Batalha <small>${vivos} de ${BATALHA.length} de pé</small></h2>
+      <div class="botoes" style="margin-bottom:8px">
+        <button class="btn pequeno" data-bat-igualar="1">Todos no nível ${P.nivel}</button>
+        <button class="btn pequeno simples" data-bat-curar="1">Curar todos</button>
+        <button class="btn pequeno simples" data-bat-limpar="1">Encerrar batalha</button></div>
+      ${BATALHA.map(cardInimigo).join('')}</section>`;
+  }
+  const tipos = [...new Set(MONSTROS.map(m => m.tipo))];
+  h += `<div class="filtros">
+      <input type="search" id="busca-mon" value="${esc(filtroMon.busca)}" placeholder="Buscar monstro" aria-label="Buscar monstro">
+      ${chips('mon-dif', Object.assign({ todos:'Todas' }, ...[1,2,3,4,5].map(d => ({ [d]: `${d} ${DIFICULDADES[d].nome}` }))), filtroMon.dif)}
+      ${chips('mon-origem', Object.assign({ todos:'Todas as origens' }, ...Object.entries(ORIGENS).map(([k, o]) => ({ [k]: o.nome }))), filtroMon.origem)}
+      ${chips('mon-local', Object.assign({ todos:'Todos os lugares' }, ...[...new Set(MONSTROS.map(m => m.local).filter(Boolean))].sort().map(l => ({ [l]: l }))), filtroMon.local)}
+      ${chips('mon-tipo', Object.assign({ todos:'Todos os tipos' }, ...tipos.map(t => ({ [t]: t }))), filtroMon.tipo)}
+    </div><div id="lista-mon">${listaMonstros()}</div>`;
+  return h;
+}
+function listaMonstros(){
+  const b = semAcento(filtroMon.busca.trim());
+  const lista = MONSTROS.filter(m => (filtroMon.dif === 'todos' || String(m.dificuldade) === filtroMon.dif) &&
+    (filtroMon.tipo === 'todos' || m.tipo === filtroMon.tipo) && (filtroMon.origem === 'todos' || origemDe(m) === filtroMon.origem) && (filtroMon.local === 'todos' || m.local === filtroMon.local) && (!b || semAcento(m.nome + ' ' + m.tipo + ' ' + m.descricao + ' ' + (m.historia || '') + ' ' + (m.local || '')).includes(b)));
+  if (!lista.length) return `<section class="bloco"><p class="vazio">Nenhum monstro com esses filtros.</p></section>`;
+  let h = filtroMon.origem !== 'todos' ? `<p class="nota" style="margin:10px 2px 0">${esc(ORIGENS[filtroMon.origem].desc)}</p>` : '';
+  [1,2,3,4,5].forEach(d => {
+    const ms = lista.filter(m => m.dificuldade === d); if (!ms.length) return;
+    h += `<section class="bloco"><h2>${DIFICULDADES[d].nome} ${estrelas(d)}</h2>` + ms.map(m => `
+      <div class="linha-mon"><div><button class="nome-magia" data-mon-info="${m.id}">${esc(m.nome)}</button>${m.especial ? ` <span class="tag-esp">${esc(m.especial)}</span>` : ''} ${tagOrigem(m)}
+        <div class="resumo">${esc(resumoMon(m))}${m.local ? ` <span class="local-mon">📍 ${esc(m.local)}</span>` : ''}</div></div>
+        <div class="lado"><button class="btn pequeno" data-mon-rapido="${m.id}">+ Batalha</button></div></div>`).join('') + `</section>`;
+  });
+  return h;
+}
+function sortearDrops(b){
+  const mon = monstro(b.id);
+  const ganhos = (mon.drops || []).filter(dp => Math.floor(Math.random() * 100) + 1 <= dp.chance);
+  INFO.drops = { titulo: `Drops de ${b.nome}`, html: (mon.drops || []).length
+    ? (ganhos.length ? `<ul class="lista-simples">${ganhos.map(dp => `<li>${textoDrop(dp)}</li>`).join('')}</ul>` : '<p class="vazio">Nada caiu desta vez.</p>') +
+      `<p class="nota">Cada drop é sorteado separadamente pela chance dele (d100).</p>`
+    : '<p class="vazio">Este monstro não deixa nada.</p>' };
+}
+
+/* ----- Atlas ----- */
+let atlasReg = REGIOES[0].id;
+function rAtlas(){
+  const reg = REGIOES.find(r => r.id === atlasReg) || REGIOES[0];
+  let h = `<h2 class="titulo-pagina">Atlas</h2>
+    <p class="intro">Os mapas de Aether, com os monstros e os itens de cada lugar.</p>
+    ${chips('atlas-reg', Object.fromEntries(REGIOES.map(r => [r.id, r.nome])), reg.id)}
+    <section class="bloco"><h2>${esc(reg.nome)}</h2><p class="capitular">${esc(reg.descricao)}</p>
+    ${reg.imagem ? `<a class="mapa" href="${esc(reg.imagem)}" target="_blank" rel="noopener">
+        <img src="${esc(reg.imagem)}" alt="Mapa de ${esc(reg.nome)}" loading="lazy" onerror="this.parentNode.classList.add('sem-imagem')">
+        <span class="falta">Mapa não encontrado. Coloque o arquivo em ${esc(reg.imagem)}, na mesma pasta do index.html.</span></a>
+      <p class="nota">Toque no mapa para abrir em tamanho cheio e dar zoom.</p>` : ''}
+    </section>`;
+  reg.lugares.forEach(l => {
+    const mons = porDificuldade(MONSTROS.filter(m => m.local === l.nome));
+    const itens = porTier(TODOS.filter(it => it.tema && (l.temas || []).includes(it.tema)));
+    h += `<section class="bloco lugar"><h2>${esc(l.nome)} ${mons.length ? `<small>${mons.length} ${mons.length === 1 ? 'criatura' : 'criaturas'}</small>` : ''}</h2>
+      <p>${esc(l.desc)}</p>
+      ${mons.length ? `<div class="lugar-lista"><b>Criaturas:</b> ${mons.map(m => `<button class="nome-magia" data-mon-info="${m.id}">${esc(m.nome)}</button> ${estrelas(m.dificuldade)}${m.especial ? ` <span class="tag-esp">${esc(m.especial)}</span>` : ''}`).join('<br>')}</div>` : ''}
+      ${itens.length ? `<div class="lugar-lista"><b>Itens daqui:</b><br>${itens.map(it => `${tierBadge(it.tier)} ${esc(it.nome)}`).join('<br>')}</div>` : ''}
+    </section>`;
+  });
+  return h;
+}
+const porDificuldade = lista => lista.slice().sort((a, b) => a.dificuldade - b.dificuldade);
 
 /* ----- Habilidades ----- */
 let habClasse = null;
@@ -1202,6 +1572,7 @@ const COR_CATEGORIA = { 'Dano':'#8e1b1b', 'Defesa':'#2c5a8c', 'Cura própria':'#
   'Furtividade':'#3b3b52', 'Assassinato':'#8e1b1b', 'Veneno':'#3d6b2a',
   'Precisão':'#a8761c', 'Perfuração':'#8e1b1b', 'Mobilidade':'#2c5a8c' };
 
+const listaNiveis = arr => arr.length > 1 ? `${arr.slice(0, -1).join(', ')} e ${arr[arr.length - 1]}` : String(arr[0]);
 function dadosHabilidade(hb, r){
   if (!hb.calc) return '';
   const max = r.recursoMax || 0, min = hb.calc.minimo || 1, rec = esc(r.cls.recurso), k = hb.calc.porPonto;
@@ -1221,10 +1592,10 @@ function dadosHabilidade(hb, r){
 
 function rHabilidades(){
   const id = habClasse || P.classe, cls = classe(id), minha = id === P.classe, r = calcular(P);
-  const livres = r.pontosHab - r.pontosHabGastos, intervalo = REGRAS.habilidades.intervaloNiveis;
+  const livres = r.pontosHab - r.pontosHabGastos, liberacao = listaNiveis(REGRAS.habilidades.niveisLiberacao);
   const novoFormato = cls.habilidades.every(h => h.categoria);
   let h = `<h2 class="titulo-pagina">Habilidades</h2>
-    <p class="intro">Você começa com ${REGRAS.habilidades.pontosIniciais} ponto de habilidade no nível 1 e ganha mais 1 a cada ${REGRAS.habilidades.pontosACadaNiveis} níveis. Novas habilidades são liberadas a cada ${intervalo} níveis e custam 1 ponto cada. Como os pontos são poucos, escolha bem: as de níveis anteriores continuam à venda.</p>
+    <p class="intro">Você começa com ${REGRAS.habilidades.pontosIniciais} ponto de habilidade no nível 1 e ganha mais 1 a cada ${REGRAS.habilidades.pontosACadaNiveis} níveis. Novas habilidades aparecem nos níveis ${liberacao} e custam 1 ponto cada. Como os pontos são poucos, escolha bem: as de níveis anteriores continuam à venda.</p>
     ${chips('hab-classe', Object.fromEntries(CLASSES.map(c => [c.id, c.nome])), id)}`;
 
   if (minha) {
@@ -1361,9 +1732,14 @@ function rTutoriais(){
       <p>Classes guerreiras não conseguem PER ${R.perLimiarCritico} com os pontos do nível 1: esse é um caminho de ladinos, arqueiros e magos, ou de itens raros.</p>`],
     ['Magias', `
       <div class="formula">Slots = INT × ${R.slotsPorINT} + bônus dos itens</div>
+      <p>Quanto mais poderosa a magia, maior o tier e mais slots ela ocupa:</p>
       ${tabela(['Tier','Custo em slots'], Object.entries(R.custoSlotPorTier).map(([k,v]) => [TIERS[k].nome, v]))}
-      <div class="formula">Dano mágico = (INT em d10 + foco + dado da magia) × nível − defesa mágica<br>Cura = (FDV em d10 + foco + dado da magia) × nível</div>
-      <p>Qualquer classe pode equipar magias. Um guerreiro com INT 1 tem 2 slots e causa pouco dano mágico, mas pode usar uma Pele de Pedra ou um Pés Ligeiros. A recarga é quantos turnos esperar para lançar a mesma magia de novo.</p>`],
+      <p>Cada magia tem um número de <b>usos</b>, que voltam em momentos diferentes. As magias mais poderosas voltam menos vezes:</p>
+      ${tabela(['Usos','Voltam quando'], [['Por batalha','Começa uma nova batalha'], ['Por dia','O personagem descansa uma noite'], ['Por sessão','Começa uma nova sessão de jogo']])}
+      <p>Na aba Magias, os botões Nova batalha, Novo dia e Nova sessão restauram os usos certos. Nova sessão restaura todos.</p>
+      ${tabela(['Categoria','O que faz'], Object.keys(CATEGORIAS_MAGIA).map(k => [CATEGORIAS_MAGIA[k], DESCRICAO_CATEGORIA_MAGIA[k]]))}
+      <div class="formula">Dano mágico = (INT + foco + dado da magia) d10 × nível − defesa mágica<br>Cura = (FDV + foco + dado da magia) d10 × nível</div>
+      <p>Qualquer classe pode equipar magias. Um guerreiro com INT 1 tem 2 slots e causa pouco dano mágico, mas pode levar uma Pele de Pedra e um Pés Ligeiros.</p>`],
     ['Carga e movimento', `
       <div class="formula">Carga = ${R.cargaBase} kg + FOR × ${R.cargaPorFOR} kg<br>Movimento = ${R.movimentoBase} hex + AGI × ${R.movimentoPorAGI} hex</div>
       <p>Com FOR 1 você carrega ${R.cargaBase + R.cargaPorFOR} kg, e com FOR 5 carrega ${R.cargaBase + 5 * R.cargaPorFOR} kg. Cada ${R.pesoPorPenalidade} kg acima da carga tira 1 hexágono de movimento.</p>
@@ -1378,10 +1754,12 @@ function rTutoriais(){
       ${tabela(['Atributo','Melhoria','Efeito por bolinha','Gasto'], EVOLUCOES.map(ev => [ev.attr, ev.nome, ev.efeito, `×${ev.gasto}`]))}
       <p>Os pontos de recurso alimentam as habilidades de classe: ${CLASSES.map(c => `${c.nome.toLowerCase()} usa ${c.recurso}`).join(', ')}.</p>`],
     ['Habilidades e recursos', `
-      <div class="formula">Pontos de habilidade = ${REGRAS.habilidades.pontosIniciais} + 1 a cada ${REGRAS.habilidades.pontosACadaNiveis} níveis<br>Novas habilidades a cada ${REGRAS.habilidades.intervaloNiveis} níveis, 1 ponto cada</div>
-      <p>O ponto do nível 1 é grátis e fica guardado até o nível ${REGRAS.habilidades.intervaloNiveis}, quando aparecem as primeiras 3 habilidades da classe. Depois disso chegam mais 3 habilidades e mais 1 ponto a cada ${REGRAS.habilidades.intervaloNiveis} níveis:</p>
-      ${tabela(['Nível', ...[1, 5, 10, 15, 20]], [['Pontos', ...[1, 5, 10, 15, 20].map(nv => REGRAS.habilidades.pontosIniciais + Math.floor(nv / REGRAS.habilidades.pontosACadaNiveis))], ['Habilidades à venda', ...[1, 5, 10, 15, 20].map(nv => Math.floor(nv / REGRAS.habilidades.intervaloNiveis) * 3)]])}
-      <p>No nível 20 você tem 5 pontos para 12 habilidades, então cada personagem da mesma classe acaba diferente.</p>
+      <div class="formula">Pontos de habilidade = ${REGRAS.habilidades.pontosIniciais} + 1 a cada ${REGRAS.habilidades.pontosACadaNiveis} níveis<br>Novas habilidades nos níveis ${listaNiveis(REGRAS.habilidades.niveisLiberacao)}, 1 ponto cada</div>
+      <p>O ponto do nível 1 é grátis e fica guardado até o nível ${REGRAS.habilidades.niveisLiberacao[0]}, quando aparecem as primeiras 3 habilidades da classe. Cada nível da lista acima traz mais 3 habilidades:</p>
+      ${(() => { const nvs = [1, ...REGRAS.habilidades.niveisLiberacao]; return tabela(['Nível', ...nvs], [
+        ['Pontos', ...nvs.map(nv => REGRAS.habilidades.pontosIniciais + Math.floor(nv / REGRAS.habilidades.pontosACadaNiveis))],
+        ['Habilidades à venda', ...nvs.map(nv => REGRAS.habilidades.niveisLiberacao.filter(x => x <= nv).length * 3)]]); })()}
+      <p>Depois do nível 20 as habilidades ficam mais raras (a cada 10 níveis), mas os pontos continuam chegando a cada ${REGRAS.habilidades.pontosACadaNiveis} níveis. No nível ${REGRAS.nivelMax} você tem ${REGRAS.habilidades.pontosIniciais + Math.floor(REGRAS.nivelMax / REGRAS.habilidades.pontosACadaNiveis)} pontos para ${REGRAS.habilidades.niveisLiberacao.length * 3} habilidades, então cada personagem da mesma classe acaba diferente.</p>
       <p>Cada classe usa um recurso para ativar as habilidades: ${CLASSES.map(c => `${c.nome.toLowerCase()} usa ${c.recurso}`).join(', ')}. A evolução de FDV aumenta o máximo.</p>
       ${CLASSES.filter(c => c.recursoRegra).map(c => `<p><b>${esc(c.recurso)} (${c.nome.toLowerCase()}):</b> ${esc(c.recursoRegra)} O máximo é ${c.recursoBase} mais a evolução.</p>`).join('')}
       <p>Quanto mais recurso gasto, mais forte a habilidade. Um Golpe Furioso com 1 Fúria soma +1d10; com 5, soma +5d10. As habilidades de guerreiro são divididas em quatro tipos:</p>
@@ -1416,6 +1794,15 @@ function rTutoriais(){
       <p><b>Exemplo de Marcas:</b> um ladino com AGI 4 e adaga ataca 5 vezes. Se 3 ataques passarem pela defesa, o alvo fica com 3 Marcas, e um Golpe Certeiro com essas 3 soma +3d10.</p>
       <p><b>Recuperar Fé:</b> um clérigo com 2 ações de ataque e 2 ataques mágicos pode gastar 1 de cada para recuperar 1 Fé e ainda atacar e lançar uma magia no mesmo turno.</p>
       <p><b>Exemplo de fusão:</b> com Fusão Elemental, Chama (2d10) + Rajada de Gelo (1d10) viram Vapor Escaldante: 3d10 + INT em cone, deixando os alvos lentos. Como é um ataque só, a defesa mágica do alvo é subtraída uma vez, e não duas.</p>`],
+    ['Monstros e o bestiário', `
+      <p>Os monstros seguem as mesmas regras dos personagens, com dois ajustes: a <b>dificuldade</b> e o <b>tamanho</b>.</p>
+      <div class="formula">Vida = (vida base do tamanho + CON × fator do tamanho × nível) × dificuldade<br>Defesa = (defesa natural + armaduras) × CON ou FDV × ⌈nível ÷ 2⌉ × dificuldade<br>Dano = (FOR + dado do ataque + dados da dificuldade) d10 × nível</div>
+      ${tabela(['Dificuldade','Vida','Defesas','Dados de dano'], [1,2,3,4,5].map(d => [`${d}, ${DIFICULDADES[d].nome}`, `× ${DIFICULDADES[d].vida}`, `× ${DIFICULDADES[d].defesa}`, DIFICULDADES[d].dano > 0 ? `+${DIFICULDADES[d].dano}d10` : DIFICULDADES[d].dano < 0 ? `${DIFICULDADES[d].dano}d10` : '—']))}
+      ${tabela(['Tamanho','Vida base','Vida por CON e nível','Movimento'], Object.values(TAMANHOS).map(t => [t.nome, t.vidaBase, t.fatorVida, t.movimento ? `+${t.movimento}` : '—']))}
+      <p>Além da dificuldade, cada monstro tem uma <b>origem</b>:</p>
+      ${tabela(['Origem','O que significa'], Object.values(ORIGENS).map(o => [o.nome, o.desc]))}
+      <p>Humanoides usam armas e armaduras do jogo, e elas contam como nos personagens. Monstros mais fortes podem ter habilidades e magias. Cada drop é sorteado separadamente pela sua chance, e alguns monstros não deixam nada.</p>
+      <p>Na página Bestiário, <b>+ Batalha</b> coloca o monstro no nível do seu personagem. Na batalha, dá para mudar o nível e a dificuldade de cada um, marcar dano e cura e sortear os drops de quem caiu.</p>`],
     ['Tiers de itens', `
       ${tabela(['Tier','O que oferece'], [
         [TIERS.comum.nome, 'Valores base, sem efeito especial'],
@@ -1423,7 +1810,13 @@ function rTutoriais(){
         [TIERS.perfeito.nome, 'Dois modificadores e pode dar atributos'],
         [TIERS.lendario.nome, 'Dois modificadores e uma habilidade exclusiva'],
         [TIERS.unico.nome, 'Item com nome e história, só existe um no mundo; pode ter uma desvantagem']])}
-      <p>Acessórios iguais não acumulam: dois Anéis de Guarda contam como um.</p>`],
+      <p>Acessórios iguais não acumulam: dois Anéis de Guarda contam como um.</p>
+      <p>Além dos itens de forja, existem três coleções de itens especiais, difíceis de encontrar:</p>
+      ${tabela(['Coleção','De onde vem'], [
+        ['Semideuses', 'Relíquias dos semideuses de cada raça. Quase nunca aparecem: só em ruínas, templos esquecidos ou nas mãos de quem não deveria tê-las.'],
+        ['Cidades', 'O melhor trabalho de cada cidade ou reino. Compradas caro, dadas como recompensa ou tiradas de quem as usava.'],
+        ['Monstros', 'Itens únicos feitos de partes de monstros de dificuldade 3 ou mais. Caem raramente (5% a 25%).']])}
+      <p>Itens Únicos têm nome próprio, história e uma <b>desvantagem</b> que vem junto com o poder.</p>`],
     ['Diferenças entre as classes', `
       ${tabela(['Classe','Papel','Vida','Armas','Armaduras'], CLASSES.map(c => [c.nome, c.papel, `CON × ${c.fatorVida}`, c.armas, c.armaduras]))}
       <ul>${CLASSES.map(c => `<li><b>${c.nome}:</b> ${c.descricao} Passiva ${c.passiva.nome}: ${c.passiva.texto}</li>`).join('')}</ul>
@@ -1450,6 +1843,8 @@ $('#modal-fundo').addEventListener('click', e => {
   const b = e.target.closest('button'); if (!b) return;
   if (b.dataset.filtro === 'modal-tier') { modalTier = b.dataset.valor; renderModal(); $('#modal-lista').scrollTop = 0; return; }
   if (b.dataset.ir) { fecharModal(); irPara(b.dataset.ir); return; }
+  if (b.dataset.mgUsar || b.dataset.mgDevolver || b.dataset.mgEquipar || b.dataset.mgRemover) { acaoMagia(b); return; }
+  if (modalMon && acaoMonModal(b)) return;
   if (b.dataset.item !== undefined && modalSlot) equipar(modalSlot, b.dataset.item);
 });
 window.addEventListener('popstate', () => fecharModal(true));
@@ -1491,6 +1886,38 @@ conteudo.addEventListener('click', e => {
   }
 
   if (t.dataset.info) { abrirInfo(t.dataset.info, t); return; }
+  if (t.dataset.magiaInfo) { abrirMagia(t.dataset.magiaInfo, t); return; }
+  if (t.dataset.monInfo) { const m = monstro(t.dataset.monInfo); abrirMonstro({ id: m.id, nivel: P.nivel, dif: m.dificuldade }, t); return; }
+  if (t.dataset.monFicha) { abrirMonstro({ uid: t.dataset.monFicha }, t); return; }
+  if (t.dataset.monRapido) {
+    const m = monstro(t.dataset.monRapido);
+    BATALHA.push({ uid: 'm' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), id: m.id, nivel: P.nivel, dif: m.dificuldade, dano: 0 });
+    nomearInstancias(); salvarBatalha(); toast(`${m.nome} entrou na batalha, nível ${P.nivel}`); render(); window.scrollTo(0, 0); return;
+  }
+  if (t.dataset.monRem || t.dataset.monNv || t.dataset.monDano || t.dataset.monCura || t.dataset.monDrop) {
+    const uid = t.dataset.monRem || t.dataset.monNv || t.dataset.monDano || t.dataset.monCura || t.dataset.monDrop;
+    const b = BATALHA.find(x => x.uid === uid); if (!b) return;
+    if (t.dataset.monRem) { BATALHA = BATALHA.filter(x => x.uid !== uid); nomearInstancias(); }
+    else if (t.dataset.monNv) b.nivel = clamp(b.nivel + parseInt(t.dataset.d), 1, REGRAS.nivelMax);
+    else if (t.dataset.monDrop) { sortearDrops(b); abrirInfo('drops', t); return; }
+    else {
+      const inp = document.querySelector(`.dano-input[data-uid="${uid}"]`), v = parseInt(inp && inp.value) || 0;
+      if (!v) { toast('Digite um valor primeiro'); if (inp) inp.focus(); return; }
+      const max = calcMonstro(monstro(b.id), b.nivel, b.dif).vida;
+      b.dano = clamp(b.dano + (t.dataset.monDano ? v : -v), 0, max);
+      toast(t.dataset.monDano ? `${b.nome} sofreu ${fmt(v)}` : `${b.nome} recuperou ${fmt(v)}`);
+    }
+    salvarBatalha(); const y = window.scrollY; render(); window.scrollTo(0, y); return;
+  }
+  if (t.dataset.batIgualar) { BATALHA.forEach(b => b.nivel = P.nivel); salvarBatalha(); toast(`Todos no nível ${P.nivel}`); const y = window.scrollY; render(); window.scrollTo(0, y); return; }
+  if (t.dataset.batCurar) { BATALHA.forEach(b => b.dano = 0); salvarBatalha(); const y = window.scrollY; render(); window.scrollTo(0, y); return; }
+  if (t.dataset.batLimpar) { if (!confirm('Encerrar a batalha e tirar todos os monstros?')) return; BATALHA = []; salvarBatalha(); render(); return; }
+  if (t.dataset.usosReset) {
+    const tipo = t.dataset.usosReset, zera = { batalha:['batalha'], dia:['batalha','dia'], sessao:['batalha','dia','sessao'] }[tipo];
+    Object.keys(P.usosMagia).forEach(id => { const m = magia(id); if (m && zera.includes(m.usos.por)) delete P.usosMagia[id]; });
+    toast({ batalha:'Usos por batalha restaurados', dia:'Usos por batalha e por dia restaurados', sessao:'Todos os usos restaurados' }[tipo]);
+    const y = window.scrollY; render(); window.scrollTo(0, y); return;
+  }
   if (t.dataset.rec) {
     const r = calcular(P); if (r.recursoMax == null) return;
     const v = t.dataset.rec;
@@ -1527,8 +1954,8 @@ conteudo.addEventListener('click', e => {
 
   if (t.dataset.filtro) {
     const v = t.dataset.valor;
-    ({ 'itens-cat':() => filtroItens.cat = v, 'itens-tier':() => filtroItens.tier = v,
-       'magias-tipo':() => filtroMagias.tipo = v, 'magias-tier':() => filtroMagias.tier = v,
+    ({ 'itens-cat':() => filtroItens.cat = v, 'itens-tier':() => filtroItens.tier = v, 'itens-col':() => filtroItens.col = v,
+       'magias-cat':() => filtroMagias.cat = v, 'mon-dif':() => filtroMon.dif = v, 'mon-tipo':() => filtroMon.tipo = v, 'mon-origem':() => filtroMon.origem = v, 'mon-local':() => filtroMon.local = v, 'atlas-reg':() => atlasReg = v, 'magias-tier':() => filtroMagias.tier = v,
        'hab-classe':() => habClasse = v })[t.dataset.filtro]();
     const y = window.scrollY; render(); window.scrollTo(0, y); return;
   }
@@ -1597,6 +2024,7 @@ conteudo.addEventListener('change', e => {
   if (t.dataset.magia) {
     const id = t.dataset.magia;
     P.magias = t.checked ? [...new Set([...P.magias, id])] : P.magias.filter(x => x !== id);
+    if (!t.checked) delete P.usosMagia[id];
     const y = window.scrollY; render(); window.scrollTo(0, y); return;
   }
 });
@@ -1605,11 +2033,13 @@ conteudo.addEventListener('input', e => {
   const t = e.target;
   if (t.id === 'f-nome') { P.nome = t.value; atualizarTopo(); guardarRascunho(); return; }
   if (t.classList.contains('alvo-nome')) { const a = P.alvos[parseInt(t.dataset.idx)]; if (a) { a.nome = t.value; guardarRascunho(); } return; }
+  if (t.classList.contains('dano-input')) { t.value = t.value.replace(/\D/g, ''); return; }
   if (t.id === 'evo-extras') {
     t.value = t.value.replace(/\D/g, '');
     P.pontosExtras = parseInt(t.value) || 0; guardarRascunho(); return;
   }
   if (t.id === 'busca-itens') { filtroItens.busca = t.value; $('#lista-comp').innerHTML = listaItens(); return; }
+  if (t.id === 'busca-mon') { filtroMon.busca = t.value; $('#lista-mon').innerHTML = listaMonstros(); return; }
   if (t.id === 'busca-magias') { filtroMagias.busca = t.value; $('#lista-comp').innerHTML = listaMagias(); return; }
 });
 
