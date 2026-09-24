@@ -423,6 +423,11 @@ details.capitulo .corpo{padding:0 16px 14px}
 .barra-vida{position:relative;height:26px;margin:8px 0;border:1px solid var(--lacre-escuro);border-radius:3px;background:var(--pergaminho-claro);overflow:hidden}
 .barra-vida i{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(180deg,#b23a3a,var(--lacre));transition:width .2s}
 .barra-vida span{position:relative;display:block;text-align:center;font-weight:700;line-height:24px;color:var(--tinta);text-shadow:0 0 3px #fff,0 0 3px #fff}
+.marca-fase{position:absolute;top:0;bottom:0;width:2px;background:var(--couro-escuro);opacity:.7;z-index:1}
+.fase-ativa{margin:4px 0;padding:6px 10px;border-left:4px solid #e0622a;background:rgba(224,98,42,.12);font-size:.95rem}
+ol.fases{padding-left:1.2em;margin:4px 0}
+ol.fases li{margin:4px 0;padding:4px 6px;border-radius:3px}
+ol.fases li.ativa{background:rgba(224,98,42,.15);border-left:3px solid #e0622a}
 .linha-dano{display:flex;gap:6px;align-items:center}
 .linha-dano input{max-width:110px;min-height:42px;text-align:center}
 .mini-stats{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 4px}
@@ -1520,7 +1525,7 @@ let modalMon = null;
 function estrelas(d){ return `<span class="estrelas" style="color:${DIFICULDADES[d].cor}" aria-label="Dificuldade ${d}">${'★'.repeat(d)}${'☆'.repeat(5 - d)}</span>`; }
 function tagDif(d){ return `<span class="tag-dif" style="background:${DIFICULDADES[d].cor}">${d}, ${DIFICULDADES[d].nome}</span>`; }
 
-function calcMonstro(mon, nivel, difN){
+function calcMonstro(mon, nivel, difN, pctVida){
   const n = clamp(nivel, 1, REGRAS.nivelMax), D = DIFICULDADES[difN] || DIFICULDADES[2], T = TAMANHOS[mon.tamanho], mult = Math.ceil(n / 2);
   const A = Object.assign({ FOR:1, CON:1, DEX:1, AGI:1, INT:1, FDV:1, PER:1 }, mon.atributos);
   // escala de atributos pela dificuldade escolhida (em relação à original do monstro)
@@ -1540,27 +1545,31 @@ function calcMonstro(mon, nivel, difN){
   ['elmo','peitoral','luvas','botas'].forEach(sl => { const it = item(eq[sl]); if (it) { df += it.df || 0; dm += it.dm || 0; } });
   if (passo) { const dp = ESCALA_DIFICULDADE.defesaPorPasso || { df: 0, dm: 0 }; df = Math.max(0, df + dp.df * passo); dm = Math.max(0, dm + dp.dm * passo); }
   const vida = Math.round((T.vidaBase + A.CON * T.fatorVida * n) * D.vida);
-  const defF = Math.round(df * A.CON * mult * D.defesa);
-  const defM = Math.round(dm * A.FDV * mult * D.defesa);
+  // fases por porcentagem de vida (só quando a vida atual é informada)
+  const fasesAtivas = pctVida == null ? [] : (mon.fases || []).filter(f => pctVida <= f.abaixoDe);
+  const md = { ataques: 0, dados: 0, df: 1, dm: 1 };
+  fasesAtivas.forEach(f => { const m = f.mod || {}; md.ataques += m.ataques || 0; md.dados += m.dados || 0; md.df *= m.df == null ? 1 : m.df; md.dm *= m.dm == null ? 1 : m.dm; });
+  const defF = Math.round(df * A.CON * mult * D.defesa * md.df);
+  const defM = Math.round(dm * A.FDV * mult * D.defesa * md.dm);
   const defD10 = Math.min(REGRAS.defesaMaxD10, A.DEX + (escudo ? escudo.defesa : 0));
   const cat = arma && !arma.foco ? CATEGORIAS_ARMA[arma.categoria] : CATEGORIAS_ARMA.desarmado;
-  const acoes = Math.max(0, A.AGI + (cat.acoesExtra || 0) - (escudo ? escudo.perdeAcao || 0 : 0));
+  const acoes = Math.max(0, A.AGI + md.ataques + (cat.acoesExtra || 0) - (escudo ? escudo.perdeAcao || 0 : 0));
   const custoAt = cat.custo || 1;
   const ataquesTurno = acoes === 0 ? '0' : acoes >= custoAt ? String(Math.floor(acoes / custoAt)) : `1 a cada ${Math.ceil(custoAt / acoes)} turnos`;
   const bonusFoco = (arma && arma.bonus && arma.bonus.dadoMagico) || 0;
   const ataques = [];
-  if (arma && !arma.foco) ataques.push({ nome: arma.nome, dados: Math.max(1, A.FOR + arma.dados + D.dano), tipo:'fisico',
+  if (arma && !arma.foco) ataques.push({ nome: arma.nome, dados: Math.max(1, A.FOR + arma.dados + D.dano + md.dados), tipo:'fisico',
     alcance: arma.alcance > 1 ? `${arma.alcance} hex` : 'Adjacente', efeito: arma.efeito || '' });
   (mon.ataques || []).forEach(a => {
     const mag = a.tipo === 'magico';
-    ataques.push({ nome: a.nome, dados: Math.max(1, (mag ? A.INT : A.FOR) + a.dados + D.dano), tipo: mag ? 'magico' : 'fisico', alcance: a.alcance || 'Adjacente', efeito: a.efeito || '' });
+    ataques.push({ nome: a.nome, dados: Math.max(1, (mag ? A.INT : A.FOR) + a.dados + D.dano + md.dados), tipo: mag ? 'magico' : 'fisico', alcance: a.alcance || 'Adjacente', efeito: a.efeito || '' });
   });
-  if (!ataques.length) ataques.push({ nome:'Pancada', dados: Math.max(1, A.FOR + D.dano), tipo:'fisico', alcance:'Adjacente', efeito:'' });
+  if (!ataques.length) ataques.push({ nome:'Pancada', dados: Math.max(1, A.FOR + D.dano + md.dados), tipo:'fisico', alcance:'Adjacente', efeito:'' });
   const magias = (mon.magias || []).map(magia).filter(Boolean).map(m => ({ m,
     dados: m.calc === 'dano' ? `${Math.max(1, A.INT + bonusFoco + m.dado + D.dano)}d10 × ${n}` :
            m.calc === 'cura' ? `${A.FDV + m.dado}d10 × ${n}` : m.calc === 'absorve' ? `${A.FDV + m.dado}d10 × ${n}` : '' }));
-  return { n, D, T, A, deltaA, passo, arma, escudo, df, dm, vida, defF, defM, defD10, ataquesTurno, ataques, magias,
-    ataquesMag: magias.length ? A.INT : 0, crit: A.PER >= REGRAS.perLimiarCritico ? REGRAS.critComPER : REGRAS.critBase,
+  return { n, D, T, A, deltaA, passo, fasesAtivas, md, arma, escudo, df, dm, vida, defF, defM, defD10, ataquesTurno, ataques, magias,
+    ataquesMag: magias.length ? A.INT + md.ataques : 0, crit: A.PER >= REGRAS.perLimiarCritico ? REGRAS.critComPER : REGRAS.critBase,
     movimento: REGRAS.movimentoBase + A.AGI * REGRAS.movimentoPorAGI + T.movimento, mult };
 }
 
@@ -1574,6 +1583,14 @@ function textoDrop(dp){
   return realce(esc(dp.texto));
 }
 
+function textoMod(m){
+  const p = [];
+  if (m.ataques) p.push(`${m.ataques > 0 ? '+' : ''}${m.ataques} ação de ataque`);
+  if (m.dados) p.push(`${m.dados > 0 ? '+' : ''}${m.dados}d10 nos ataques`);
+  if (m.df != null && m.df !== 1) p.push(`DF ×${String(m.df).replace('.', ',')}`);
+  if (m.dm != null && m.dm !== 1) p.push(`DM ×${String(m.dm).replace('.', ',')}`);
+  return p.join(', ');
+}
 function fichaMonstro(mon, c){
   const eqNomes = Object.entries(mon.equip || {}).map(([sl, id]) => item(id)).filter(Boolean);
   return `
@@ -1595,6 +1612,7 @@ function fichaMonstro(mon, c){
     <ul class="lista-simples">${c.ataques.map(a => `<li><b>${esc(a.nome)}:</b> ${realce(`${a.dados}d10 × ${c.n}`)}${a.tipo === 'magico' ? ' mágico' : ''}, ${esc(a.alcance.toLowerCase())}${a.efeito ? `. ${realce(esc(a.efeito))}` : ''}</li>`).join('')}</ul>
     <p class="nota">Dados = FOR (ou INT) + dado do ataque${c.D.dano > 0 ? ` + ${c.D.dano} da dificuldade` : c.D.dano < 0 ? ` − ${-c.D.dano} da dificuldade` : ''}, mínimo 1d10.</p>
     ${c.magias.length ? `<h3 class="sub-titulo">Magias</h3><ul class="lista-simples">${c.magias.map(x => `<li><b>${esc(x.m.nome)}:</b> ${realce(esc(x.m.resumo))}${x.dados ? `, ${realce(x.dados)}` : ''}; ${x.m.usos.qtd} ${USOS_POR[x.m.usos.por]}</li>`).join('')}</ul>` : ''}
+    ${(mon.fases || []).length ? `<h3 class="sub-titulo">Fases de combate</h3><ol class="fases">${mon.fases.slice().sort((a, b) => b.abaixoDe - a.abaixoDe).map(f => `<li${c.fasesAtivas.includes(f) ? ' class="ativa"' : ''}><b>${f.abaixoDe >= 100 ? 'Desde o início' : `Abaixo de ${f.abaixoDe}%`}: ${esc(f.nome)}.</b> ${realce(esc(f.efeito))}${f.mod ? `<br><small>${textoMod(f.mod)}</small>` : ''}</li>`).join('')}</ol>` : ''}
     ${mon.habilidades && mon.habilidades.length ? `<h3 class="sub-titulo">Habilidades</h3><ul class="lista-simples">${mon.habilidades.map(hb => `<li><b>${esc(hb.nome)}</b> <span class="nota">${esc(hb.tipo.toLowerCase())}${hb.usos && hb.usos !== '—' ? `, ${esc(hb.usos)}` : ''}</span><br>${realce(esc(hb.efeito))}</li>`).join('')}</ul>` : ''}
     ${eqNomes.length ? `<h3 class="sub-titulo">Equipamento</h3><p>${eqNomes.map(it => `${tierBadge(it.tier)} ${esc(it.nome)}`).join(', ')}</p>` : ''}
     ${mon.fraquezas ? `<p><b>Fraquezas:</b> ${realce(esc(mon.fraquezas))}</p>` : ''}
@@ -1608,7 +1626,8 @@ function renderModalMon(){
   const inst = modalMon.uid ? BATALHA.find(b => b.uid === modalMon.uid) : null;
   const mon = monstro(inst ? inst.id : modalMon.id); if (!mon) return;
   const nivel = inst ? inst.nivel : modalMon.nivel, dif = inst ? inst.dif : modalMon.dif;
-  const c = calcMonstro(mon, nivel, dif);
+  const base = calcMonstro(mon, nivel, dif);
+  const c = inst ? calcMonstro(mon, nivel, dif, Math.max(0, base.vida - inst.dano) / base.vida * 100) : base;
   $('#modal-titulo').innerHTML = `${esc(inst ? inst.nome : mon.nome)}<small>${esc(mon.tipo)}, ${c.T.nome.toLowerCase()}${mon.especial ? `, ${esc(mon.especial)}` : ''}</small>`;
   $('#modal-filtros').innerHTML = '';
   $('#modal-lista').innerHTML = `<div class="info-corpo">
@@ -1655,13 +1674,18 @@ function acaoMonModal(b){
 }
 
 function cardInimigo(b){
-  const mon = monstro(b.id), c = calcMonstro(mon, b.nivel, b.dif);
-  const atual = Math.max(0, c.vida - b.dano), pct = c.vida ? atual / c.vida * 100 : 0, caido = atual <= 0;
+  const mon = monstro(b.id), base = calcMonstro(mon, b.nivel, b.dif);
+  const atual = Math.max(0, base.vida - b.dano), pct = base.vida ? atual / base.vida * 100 : 0, caido = atual <= 0;
+  const c = calcMonstro(mon, b.nivel, b.dif, pct);
+  const fase = c.fasesAtivas.slice().sort((x, y) => x.abaixoDe - y.abaixoDe)[0];
+  const proxima = (mon.fases || []).filter(f => pct > f.abaixoDe).sort((x, y) => y.abaixoDe - x.abaixoDe)[0];
   return `<div class="inimigo${caido ? ' caido' : ''}">
     <div class="topo-ini"><button class="nome-magia" data-mon-ficha="${b.uid}">${esc(b.nome)}</button>
       <span class="nv">Nv ${b.nivel}</span>${estrelas(b.dif)}${mon.especial ? `<span class="tag-esp">${esc(mon.especial)}</span>` : ''}
       <button class="fechar" data-mon-rem="${b.uid}" aria-label="Tirar ${esc(b.nome)} da batalha">✕</button></div>
-    <div class="barra-vida"><i style="width:${pct}%"></i><span>${caido ? 'Caído' : `${fmt(atual)} / ${fmt(c.vida)}`}</span></div>
+    <div class="barra-vida"><i style="width:${pct}%"></i>${(mon.fases || []).filter(f => f.abaixoDe < 100).map(f => `<em class="marca-fase" style="left:${f.abaixoDe}%" title="${esc(f.nome)}"></em>`).join('')}<span>${caido ? 'Caído' : `${fmt(atual)} / ${fmt(c.vida)} (${Math.round(pct)}%)`}</span></div>
+    ${!caido && fase ? `<div class="fase-ativa">⚡ <b>${esc(fase.nome)}</b>: ${realce(esc(fase.efeito))}${fase.mod ? ` <small>(${textoMod(fase.mod)})</small>` : ''}</div>` : ''}
+    ${!caido && proxima ? `<div class="nota">Próxima fase abaixo de ${proxima.abaixoDe}%: ${esc(proxima.nome)}</div>` : ''}
     <div class="linha-dano"><input type="text" inputmode="numeric" class="dano-input" data-uid="${b.uid}" placeholder="Valor" aria-label="Valor de dano ou cura para ${esc(b.nome)}">
       <button class="btn pequeno lacre" data-mon-dano="${b.uid}">Dano</button>
       <button class="btn pequeno simples" data-mon-cura="${b.uid}">Curar</button></div>
@@ -2364,6 +2388,7 @@ function impMonstros(n){
         <b>Vida ${fmt(c.vida)}</b> · DF ${fmt(c.defF)} · DM ${fmt(c.defM)} · def ≤${c.defD10} · ${c.ataquesTurno} atq · mov ${c.movimento} · crít ${c.crit}%<br>
         ${c.ataques.map(a => `${esc(a.nome)} <b>${a.dados}d10</b>${a.tipo === 'magico' ? ' mág.' : ''}${a.efeito ? ` (${esc(a.efeito)})` : ''}`).join('; ')}
         ${c.magias.length ? `<br>Magias: ${c.magias.map(x => `${esc(x.m.nome)}${x.dados ? ` ${x.dados.split(' ×')[0]}` : ''}`).join(', ')}` : ''}
+        ${(m.fases || []).length ? `<br><i>Fases:</i> ${m.fases.slice().sort((a, b) => b.abaixoDe - a.abaixoDe).map(f => `<b>${f.abaixoDe >= 100 ? 'início' : `&lt;${f.abaixoDe}%`} ${esc(f.nome)}</b>: ${esc(f.efeito)}${f.mod ? ` (${textoMod(f.mod)})` : ''}`).join(' ')}` : ''}
         ${(m.habilidades || []).length ? `<br>${m.habilidades.map(h => `<b>${esc(h.nome)}</b> (${esc(h.usos && h.usos !== '—' ? h.usos : h.tipo.toLowerCase())}): ${esc(h.efeito)}`).join(' ')}` : ''}
         ${m.fraquezas ? `<br><i>Fraco:</i> ${esc(m.fraquezas)}` : ''}${m.resistencias ? ` <i>Resiste:</i> ${esc(m.resistencias)}` : ''}
         <br><small>Drops: ${(m.drops || []).length ? m.drops.map(dp => `${dp.item ? esc((item(dp.item) || {}).nome || dp.item) : esc(dp.texto)} ${dp.chance}%`).join(', ') : 'nenhum'}</small></div>`; }).join('') + `</div>`;
@@ -2572,6 +2597,7 @@ function rTutoriais(){
       <p>Ao usar um monstro numa dificuldade diferente da original, os <b>atributos também mudam</b>: cada nível acima soma ${Object.entries(ESCALA_DIFICULDADE.porPasso).map(([k, v]) => `+${v} ${k}`).join(', ')}, mais +${ESCALA_DIFICULDADE.intConjurador} INT se ele usar magia, +1 PER a cada ${ESCALA_DIFICULDADE.perACada} níveis e +${ESCALA_DIFICULDADE.defesaPorPasso.df} DF e +${ESCALA_DIFICULDADE.defesaPorPasso.dm} DM na defesa natural. Assim ele ganha mais ataques (AGI), mais ataques mágicos (INT), mais dano (FOR) e defesas maiores (CON, FDV e DEX). Cada nível abaixo tira os mesmos valores, sem passar de 1.</p>
       <p>Além da dificuldade, cada monstro tem uma <b>origem</b>:</p>
       ${tabela(['Origem','O que significa'], Object.values(ORIGENS).map(o => [o.nome, o.desc]))}
+      <p>Alguns monstros têm <b>fases de combate</b>: quando a vida cai abaixo de uma porcentagem (75%, 50%, 25%...), eles mudam de comportamento, ganham ações, dados ou perdem defesa. Na batalha do Bestiário, a fase liga sozinha ao marcar o dano, e a barra de vida mostra onde fica cada limite.</p>
       <p>Humanoides usam armas e armaduras do jogo, e elas contam como nos personagens. Monstros mais fortes podem ter habilidades e magias. Cada drop é sorteado separadamente pela sua chance, e alguns monstros não deixam nada.</p>
       <p>Na página Bestiário, <b>+ Batalha</b> coloca o monstro no nível do seu personagem. Na batalha, dá para mudar o nível e a dificuldade de cada um, marcar dano e cura e sortear os drops de quem caiu.</p>`],
     ['Perícias', `
@@ -2737,9 +2763,13 @@ conteudo.addEventListener('click', e => {
     else {
       const inp = document.querySelector(`.dano-input[data-uid="${uid}"]`), v = parseInt(inp && inp.value) || 0;
       if (!v) { toast('Digite um valor primeiro'); if (inp) inp.focus(); return; }
-      const max = calcMonstro(monstro(b.id), b.nivel, b.dif).vida;
+      const mon = monstro(b.id), max = calcMonstro(mon, b.nivel, b.dif).vida;
+      const antes = (max - b.dano) / max * 100;
       b.dano = clamp(b.dano + (t.dataset.monDano ? v : -v), 0, max);
-      toast(t.dataset.monDano ? `${b.nome} sofreu ${fmt(v)}` : `${b.nome} recuperou ${fmt(v)}`);
+      const depois = (max - b.dano) / max * 100;
+      const nova = (mon.fases || []).filter(f => f.abaixoDe < 100 && depois <= f.abaixoDe && antes > f.abaixoDe).sort((x, y) => x.abaixoDe - y.abaixoDe)[0];
+      if (nova && depois > 0) toast(`⚡ ${b.nome} entrou na fase: ${nova.nome}!`);
+      else toast(t.dataset.monDano ? `${b.nome} sofreu ${fmt(v)}` : `${b.nome} recuperou ${fmt(v)}`);
     }
     salvarBatalha(); const y = window.scrollY; render(); window.scrollTo(0, y); return;
   }
