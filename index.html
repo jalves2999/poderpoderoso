@@ -411,6 +411,7 @@ details.capitulo .corpo{padding:0 16px 14px}
 .lista-preco li.missao{display:block;border-top:none;padding:0 0 6px 12px;font-size:.92rem;font-style:italic;color:var(--tinta-suave)}
 .fontes{margin-top:6px;padding:6px 10px;border-left:3px solid var(--ouro);background:rgba(224,194,124,.15);font-size:.95rem;line-height:1.6}
 .lugar-lista{margin-top:8px;line-height:1.9}
+.tag-treino{display:inline-block;font-size:.78rem;font-weight:700;padding:0 7px;border-radius:9px;border:1px solid var(--lacre);color:var(--lacre)}
 .local-mon{display:inline-block;font-size:.9rem;color:var(--lapis);font-weight:600}
 .batalha{background:linear-gradient(180deg,rgba(59,37,23,.12),rgba(214,192,140,.25))}
 .inimigo{padding:12px 0;border-top:1px solid rgba(63,48,29,.45)}
@@ -432,11 +433,96 @@ details.capitulo .corpo{padding:0 16px 14px}
 .attrs-mon{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;text-align:center;margin:8px 0 10px}
 .attrs-mon div{padding:4px 0;border:1px solid rgba(63,48,29,.4);border-radius:3px;background:rgba(255,252,240,.6)}
 .attrs-mon b{display:block;font-size:1.15rem}
+.attrs-mon small{display:block;font-size:.72rem;font-weight:700}
+.attrs-mon small.sobe{color:var(--musgo)}
+.attrs-mon small.desce{color:var(--lacre)}
 .attrs-mon span{font-size:.75rem;font-weight:700;color:var(--lapis)}
 .lista-simples{margin:6px 0;padding-left:1.1em}
 .lista-simples li{margin:4px 0}
 .sub-titulo{font-family:var(--titulo);font-weight:700;font-size:1.25rem;color:var(--lacre);margin:14px 0 4px}
 .inimigo .botoes{margin-top:6px;gap:6px}
+
+/* ---------- Sub-abas ---------- */
+.sub-abas{display:grid;grid-template-columns:1fr 1fr;gap:0;margin:14px 0 6px;border:1px solid var(--couro);border-radius:4px;overflow:hidden}
+.sub-abas button{min-height:48px;cursor:pointer;border:none;font-family:var(--titulo);font-size:1.25rem;font-weight:700;color:var(--couro);background:rgba(255,252,240,.6)}
+.sub-abas button + button{border-left:1px solid var(--couro)}
+.sub-abas button[aria-selected=true]{background:var(--couro);color:var(--ouro-claro)}
+.sub-abas .qtd{font-family:var(--texto);font-size:.8rem;padding:0 7px;border-radius:9px;background:var(--ouro);color:var(--couro-escuro);vertical-align:3px}
+
+/* ---------- Dungeons ---------- */
+.dg-mapa-wrap{overflow:auto;margin:12px 0 4px;padding:8px;border:2px solid var(--couro);border-radius:4px;
+  background:radial-gradient(ellipse at 50% 40%,#3a2a1c,#1d140c);max-height:70vh}
+.dg-mapa{display:block;margin:0 auto}
+.dg-linha{stroke:#b98e3b;stroke-width:5;stroke-linecap:round}
+.dg-linha.secreta{stroke-dasharray:6 8;stroke:#8a6ad1}
+.dg-sala{cursor:pointer}
+.dg-sala rect{fill:#f1e4c3;stroke:#6d5a40;stroke-width:2}
+.dg-sala.conhecida rect{fill:#6b5a44;stroke:#b98e3b;stroke-dasharray:4 4}
+.dg-sala.mestre rect{fill:#d9c9a3}
+.dg-sala.oculta rect{stroke:#8a6ad1}
+.dg-sala.resolvida rect{fill:#cbd8b0}
+.dg-sala.atual rect{stroke:#e0622a;stroke-width:4}
+.dg-sala.sel rect{stroke:#e0c27c;stroke-width:4}
+.dg-sala .dg-ic{font-size:20px;text-anchor:middle}
+.dg-sala .dg-nome{font-size:11.5px;font-weight:700;text-anchor:middle;fill:#1a1209;font-family:var(--texto)}
+.dg-sala.conhecida .dg-nome,.dg-sala.conhecida .dg-ic{fill:#f1e4c3}
+.dg-sala .dg-ok{font-size:14px;fill:#3d6b2a;font-weight:700;text-anchor:middle}
+.dg-sala:focus{outline:none}
+.dg-sala:focus rect{stroke:#e0c27c;stroke-width:4}
+.dg-mestre{display:flex;align-items:center;gap:8px;min-height:40px;font-weight:600}
+.dg-mestre input{width:22px;height:22px;accent-color:var(--lacre)}
+.segredo-passado{margin-top:10px;padding:10px 12px;border-left:4px solid #4b1f5e;background:rgba(75,31,94,.08);font-style:italic}
+
+/* ---------- Missões ---------- */
+.nome-missao{padding:0;border:none;background:none;cursor:pointer;text-align:left;font-family:var(--titulo);font-weight:700;font-size:1.35rem;color:var(--lacre);text-decoration:underline;text-decoration-color:var(--ouro);text-underline-offset:3px}
+.missao-card.feita{opacity:.72}
+.meta-missao{font-size:.95rem;color:var(--tinta-suave)}
+.etapas-ic{font-size:1.3rem;letter-spacing:4px;margin:4px 0}
+.etapas{padding-left:1.2em;margin:4px 0}
+.etapa{margin:0 0 10px;padding:8px 10px;border-left:3px solid var(--ouro);background:rgba(255,252,240,.55)}
+.etapa-armadilha,.etapa-maldicao{border-left-color:var(--lacre)}
+.etapa-bencao{border-left-color:var(--musgo)}
+.etapa-chefe,.etapa-raro{border-left-color:#4b1f5e}
+.etapa-cab{margin-bottom:3px}
+.etapa-cab small{color:var(--tinta-suave)}
+.enigma{margin-top:4px;font-style:italic}
+.solucao{margin-top:4px}
+.solucao summary{cursor:pointer;font-weight:700;color:var(--lacre)}
+.imp-missao ol{margin:4px 0;padding-left:1.2em}
+
+/* ---------- Impressão ---------- */
+.imp-opcoes{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px 12px}
+.imp-opcoes label{display:flex;align-items:center;gap:8px;min-height:36px;font-weight:600}
+.imp-opcoes input{width:22px;height:22px;accent-color:var(--lacre)}
+.imp-doc{margin-top:18px;padding:14px;background:#fffdf6;border:1px solid var(--tinta-suave);color:#111;font-size:.9rem}
+.imp-doc .imp-titulo{font-family:var(--titulo);font-size:1.8rem;margin:0 0 6px;color:var(--lacre)}
+.imp-secao > h2{font-family:var(--titulo);font-size:1.5rem;color:var(--lacre);border-bottom:2px solid var(--ouro);margin:18px 0 8px}
+.imp-secao h3{font-size:1.05rem;margin:12px 0 4px}
+.imp-secao ul{padding-left:1.1em;margin:4px 0}
+.imp-tab{width:100%;border-collapse:collapse;margin:6px 0 10px;font-size:.82rem;line-height:1.3}
+.imp-tab th,.imp-tab td{border:1px solid #9a8a70;padding:3px 5px;vertical-align:top;text-align:left}
+.imp-tab th{background:#efe3c4}
+.imp-doc{overflow-x:auto}
+.imp-duas{display:grid;grid-template-columns:1fr;gap:10px}
+@media (min-width:700px){.imp-duas{grid-template-columns:1fr 1fr}}
+.imp-cartoes{column-width:320px;column-gap:10px}
+.imp-cartao{break-inside:avoid;border:1px solid #9a8a70;padding:6px 8px;margin:0 0 8px;font-size:.8rem;line-height:1.35;background:#fff}
+.ficha-branca .imp-tab td{height:24px}
+@media print{
+  @page{margin:12mm}
+  body,.livro{background:#fff!important;box-shadow:none!important;padding:0!important;max-width:none!important}
+  .topo,.abas,.btn-topo,.imp-controles,.gaveta,.veu,.modal-fundo,.aviso-toast{display:none!important}
+  .folha{padding:0!important}
+  .imp-doc{border:none;padding:0;margin:0;font-size:9pt;overflow:visible;background:#fff}
+  .imp-secao{break-before:page}
+  .imp-secao:first-of-type{break-before:auto}
+  .imp-tab{font-size:8pt}
+  .imp-tab tr{break-inside:avoid}
+  .imp-duas{grid-template-columns:1fr 1fr}
+  .imp-cartoes{column-count:2;column-width:auto}
+  .imp-cartao{font-size:7.5pt}
+  .dado,.atr{color:#000!important}
+}
 
 /* ---------- Evolução ---------- */
 .bolsa{position:sticky;top:var(--topo);z-index:3;margin:12px 0 0;padding:10px 14px;background:var(--couro);color:var(--ouro-claro);
@@ -571,19 +657,22 @@ const PAGINAS = {
   magias:      { nome:'Magias equipadas',      ic:'✨', grupo:'Seu personagem' },
   status:      { nome:'Status',                ic:'🛡️', grupo:'Seu personagem' },
   evolucao:    { nome:'Evolução',              ic:'⭐', grupo:'Seu personagem' },
-  habilidades: { nome:'Habilidades',           ic:'⚜️', grupo:'Seu personagem' },
+  habilidades: { nome:'Habilidades e perícias', ic:'⚜️', grupo:'Seu personagem' },
   salvos:      { nome:'Personagens salvos',    ic:'💾', grupo:'Seu personagem' },
   itens:       { nome:'Compêndio de itens',    ic:'📖', grupo:'Biblioteca' },
   grimorio:    { nome:'Compêndio de magias',   ic:'🔮', grupo:'Biblioteca' },
+  pericias:    { nome:'Compêndio de perícias', ic:'🎓', grupo:'Biblioteca' },
   bestiario:   { nome:'Bestiário',             ic:'🐉', grupo:'Biblioteca' },
   atlas:       { nome:'Atlas',                 ic:'🗺️', grupo:'Biblioteca' },
-  tutoriais:   { nome:'Tutoriais',             ic:'🕯️', grupo:'Biblioteca' }
+  tutoriais:   { nome:'Tutoriais',             ic:'🕯️', grupo:'Biblioteca' },
+  missoes:     { nome:'Missões',               ic:'📜', grupo:'Mesa do mestre' },
+  impressao:   { nome:'Impressão de dados',    ic:'🖨️', grupo:'Mesa do mestre' }
 };
 
 /* ================= Personagem ================= */
 function novo(classeId){
   const a = {}; ATRIBUTOS.forEach(x => a[x.id] = REGRAS.attrMin);
-  return { id:null, nome:'', classe: classeId || CLASSES[0].id, nivel:1, atributos:a, equip:{}, magias:[], pontosExtras:0, evolucao:{}, habilidades:[], recursoAtual:null, alvos:[], usosMagia:{} };
+  return { id:null, nome:'', classe: classeId || CLASSES[0].id, nivel:1, atributos:a, equip:{}, magias:[], pontosExtras:0, evolucao:{}, habilidades:[], recursoAtual:null, alvos:[], usosMagia:{}, pericias:[], periciasEquipadas:[] };
 }
 function normalizar(p){
   const base = novo(p && p.classe);
@@ -599,6 +688,9 @@ function normalizar(p){
   delete r.pontosEvolucao;
   const habsClasse = classe(r.classe).habilidades.map(h => h.id);
   r.habilidades = Array.isArray(p.habilidades) ? [...new Set(p.habilidades)].filter(id => habsClasse.includes(id)) : [];
+  r.pericias = Array.isArray(p.pericias) ? [...new Set(p.pericias)].filter(id => PERICIAS.some(x => x.id === id)) : [];
+  r.periciasEquipadas = Array.isArray(p.periciasEquipadas) ? [...new Set(p.periciasEquipadas)].filter(id => r.pericias.includes(id))
+    : (p.periciasEquipadas === undefined ? r.pericias.slice() : []);
   r.usosMagia = {};
   Object.entries(p.usosMagia || {}).forEach(([id, v]) => { const k = Math.max(0, parseInt(v) || 0); if (k && magia(id)) r.usosMagia[id] = k; });
   r.alvos = Array.isArray(p.alvos) ? p.alvos.slice(0, 12).map(a => ({ nome: String((a && a.nome) || '').slice(0, 30), marcas: Math.max(0, parseInt(a && a.marcas) || 0) })) : [];
@@ -766,7 +858,7 @@ function atualizarTopo(){
 
 const RENDER = {
   ficha:() => rFicha(), equipar:() => rEquipar(), magias:() => rMagias(), status:() => rStatus(), evolucao:() => rEvolucao(), salvos:() => rSalvos(),
-  itens:() => rCompItens(), habilidades:() => rHabilidades(), grimorio:() => rCompMagias(), bestiario:() => rBestiario(), atlas:() => rAtlas(), tutoriais:() => rTutoriais()
+  itens:() => rCompItens(), habilidades:() => rHabilidades(), grimorio:() => rCompMagias(), pericias:() => rPericias(), bestiario:() => rBestiario(), atlas:() => rAtlas(), tutoriais:() => rTutoriais(), impressao:() => rImpressao(), missoes:() => rMissoes()
 };
 
 function render(){
@@ -1022,12 +1114,25 @@ function rMagias(){
       <button class="btn pequeno" data-usos-reset="batalha">Nova batalha</button>
       <button class="btn pequeno" data-usos-reset="dia">Novo dia</button>
       <button class="btn pequeno" data-usos-reset="sessao">Nova sessão</button></div>`;
+  h += painelFiltros('magiasEq', `<input type="search" id="busca-magias-eq" value="${esc(filtroMagiasEq.busca)}" placeholder="Buscar magia" aria-label="Buscar magias">`, [
+    ['Categoria', chips('meq-cat', Object.assign({ todos:'Todas' }, CATEGORIAS_MAGIA), filtroMagiasEq.cat)],
+    ['Tier', chips('meq-tier', opcoesTier(), filtroMagiasEq.tier)],
+    ['Mostrar', chips('meq-ver', { todos:'Todas', equipadas:'Equipadas', cabem:'Cabem nos slots livres' }, filtroMagiasEq.ver)]], contaAtivos(filtroMagiasEq));
+  return h + `<div id="lista-magias-eq">${listaMagiasEq(r)}</div>`;
+}
+const filtroMagiasEq = { cat:'todos', tier:'todos', ver:'todos', busca:'' };
+function listaMagiasEq(r = calcular(P)){
+  const f = filtroMagiasEq, b = semAcento(f.busca.trim()), livres = r.slots - r.slotsUsados;
+  const passa = m => (f.cat === 'todos' || m.categoria === f.cat) && (f.tier === 'todos' || m.tier === f.tier) &&
+    (f.ver === 'todos' || (f.ver === 'equipadas' ? P.magias.includes(m.id) : !P.magias.includes(m.id) && custo(m) <= livres)) &&
+    (!b || semAcento(m.nome + ' ' + m.resumo + ' ' + m.efeito).includes(b));
+  let h = '';
   Object.keys(CATEGORIAS_MAGIA).forEach(cat => {
-    const ms = porTier(MAGIAS.filter(m => m.categoria === cat)); if (!ms.length) return;
-    h += `<section class="bloco"><h2>${CATEGORIAS_MAGIA[cat]} <small>${ms.filter(m => P.magias.includes(m.id)).length} de ${ms.length}</small></h2>` +
+    const todas = MAGIAS.filter(m => m.categoria === cat), ms = porTier(todas.filter(passa)); if (!ms.length) return;
+    h += `<section class="bloco"><h2>${CATEGORIAS_MAGIA[cat]} <small>${todas.filter(m => P.magias.includes(m.id)).length} equipadas de ${todas.length}</small></h2>` +
       ms.map(m => linhaMagia(m, r, true)).join('') + `</section>`;
   });
-  return h;
+  return h || `<section class="bloco"><p class="vazio">Nenhuma magia com esses filtros.</p></section>`;
 }
 
 /* ----- Ficha de criatura invocada ----- */
@@ -1076,7 +1181,8 @@ function renderModalMagia(){
     ${m.historia ? `<p class="historia">${esc(m.historia)}</p>` : ''}
     ${formula ? `<div class="formula">${realce(formula)}</div>` : ''}
     ${m.calc ? `<p class="valor-calc">Para ${esc(P.nome || 'seu personagem')}: ${valorMagia(m, r)}</p>` : ''}
-    ${(() => { const q = mestresDaMagia(m.id); return q.length ? `<div class="fontes"><b>Quem ensina:</b><br>${q.map(x => `${esc(x.ms.nome)} (${esc(x.ms.lugar)}): ${textoEnsino(m, x.e)}`).join('<br>')}</div>` : ''; })()}
+    ${(() => { const q = mestresDaMagia(m.id), ms = MISSOES.filter(x => (x.recompensas.magias || []).includes(m.id));
+      return q.length || ms.length ? `<div class="fontes">${q.length ? `<b>Quem ensina:</b><br>${q.map(x => `${esc(x.ms.nome)} (${esc(x.ms.lugar)}): ${textoEnsino(m, x.e)}`).join('<br>')}` : ''}${q.length && ms.length ? '<br>' : ''}${ms.length ? `<b>Recompensa de missão:</b> ${ms.map(x => `<button class="nome-magia" data-missao-info="${x.id}">${esc(x.nome)}</button>`).join(', ')}` : ''}</div>` : ''; })()}
     ${marcada ? `<div class="usos-bloco"><div><b>Usos restantes:</b> <span class="usos-num${rest === 0 ? ' zerado' : ''}">${rest} de ${max}</span> <span class="nota">${USOS_POR[m.usos.por]}</span></div>
       <div class="botoes"><button class="btn" data-mg-usar="${m.id}"${rest === 0 ? ' disabled' : ''}>Usar</button>
       <button class="btn simples" data-mg-devolver="${m.id}"${rest >= max ? ' disabled' : ''}>Devolver 1 uso</button></div></div>` : ''}
@@ -1240,6 +1346,14 @@ function rStatus(){
         <span class="tp">${t ? `T+${t}` : ''}${t && pe ? '<br>' : ''}${pe ? `P+${pe}` : ''}</span></button>`;
     }).join('') +
     `</div><p class="legenda">T = bônus em testes, P = bônus em perícias, vindos da evolução.</p></section>`;
+
+  // ----- Perícias equipadas -----
+  const pEq = PERICIAS.filter(pc => P.periciasEquipadas.includes(pc.id));
+  h += `<section class="painel"><h2>Perícias <button class="btn pequeno simples" data-abrir-pericias="1">${pEq.length} ${pEq.length === 1 ? 'equipada' : 'equipadas'} de ${P.pericias.length}</button></h2>` +
+    (pEq.length ? `<div class="cards">${pEq.map(pc => { const bn = bonusPericia(pc, r);
+      INFO['per-' + pc.id] = { titulo: esc(pc.nome), sub: `perícia de ${pc.attr}`, html: `<p>${esc(pc.descricao)}</p><div class="formula">+1 equipada${bn.evo ? ` + ${bn.evo} da evolução de ${pc.attr}` : ''} = +${bn.total}</div><p>Teste com ${realce(pc.attr)} ${r.A[pc.attr]}.</p><button class="btn simples" data-pericia-cat="${pc.id}">Ver no Compêndio</button>` };
+      return `<button class="card" data-info="per-${pc.id}"><span class="rot">${esc(pc.nome)}</span><span class="val">+${bn.total}</span><span class="sub">${pc.attr} ${r.A[pc.attr]}</span></button>`; }).join('')}</div>`
+      : '<p class="vazio">Nenhuma perícia equipada. Equipe na aba Habilidades › Perícias.</p>') + `</section>`;
 
   // ----- Habilidades -----
   const livres = r.pontosHab - r.pontosHabGastos;
@@ -1409,12 +1523,22 @@ function tagDif(d){ return `<span class="tag-dif" style="background:${DIFICULDAD
 function calcMonstro(mon, nivel, difN){
   const n = clamp(nivel, 1, REGRAS.nivelMax), D = DIFICULDADES[difN] || DIFICULDADES[2], T = TAMANHOS[mon.tamanho], mult = Math.ceil(n / 2);
   const A = Object.assign({ FOR:1, CON:1, DEX:1, AGI:1, INT:1, FDV:1, PER:1 }, mon.atributos);
+  // escala de atributos pela dificuldade escolhida (em relação à original do monstro)
+  const passo = difN - (mon.dificuldade || difN), deltaA = {};
+  if (passo) {
+    const E = ESCALA_DIFICULDADE, conjurador = (mon.magias || []).length || (mon.ataques || []).some(a => a.tipo === 'magico');
+    const soma = (k, v) => { const novo = Math.max(1, A[k] + v); deltaA[k] = novo - A[k]; A[k] = novo; };
+    Object.entries(E.porPasso).forEach(([k, v]) => soma(k, v * passo));
+    if (conjurador) soma('INT', E.intConjurador * passo);
+    soma('PER', Math.trunc(passo / E.perACada));
+  }
   const eq = mon.equip || {};
   const arma = eq.arma ? item(eq.arma) : null;
   const sec = eq.secundaria ? item(eq.secundaria) : null;
   const escudo = sec && ehEscudo(sec) ? sec : null;
   let df = (mon.defesaNatural || {}).df || 0, dm = (mon.defesaNatural || {}).dm || 0;
   ['elmo','peitoral','luvas','botas'].forEach(sl => { const it = item(eq[sl]); if (it) { df += it.df || 0; dm += it.dm || 0; } });
+  if (passo) { const dp = ESCALA_DIFICULDADE.defesaPorPasso || { df: 0, dm: 0 }; df = Math.max(0, df + dp.df * passo); dm = Math.max(0, dm + dp.dm * passo); }
   const vida = Math.round((T.vidaBase + A.CON * T.fatorVida * n) * D.vida);
   const defF = Math.round(df * A.CON * mult * D.defesa);
   const defM = Math.round(dm * A.FDV * mult * D.defesa);
@@ -1435,7 +1559,7 @@ function calcMonstro(mon, nivel, difN){
   const magias = (mon.magias || []).map(magia).filter(Boolean).map(m => ({ m,
     dados: m.calc === 'dano' ? `${Math.max(1, A.INT + bonusFoco + m.dado + D.dano)}d10 × ${n}` :
            m.calc === 'cura' ? `${A.FDV + m.dado}d10 × ${n}` : m.calc === 'absorve' ? `${A.FDV + m.dado}d10 × ${n}` : '' }));
-  return { n, D, T, A, arma, escudo, df, dm, vida, defF, defM, defD10, ataquesTurno, ataques, magias,
+  return { n, D, T, A, deltaA, passo, arma, escudo, df, dm, vida, defF, defM, defD10, ataquesTurno, ataques, magias,
     ataquesMag: magias.length ? A.INT : 0, crit: A.PER >= REGRAS.perLimiarCritico ? REGRAS.critComPER : REGRAS.critBase,
     movimento: REGRAS.movimentoBase + A.AGI * REGRAS.movimentoPorAGI + T.movimento, mult };
 }
@@ -1456,7 +1580,8 @@ function fichaMonstro(mon, c){
     ${mon.local ? `<p style="margin:0 0 6px"><b>Onde encontrar:</b> ${esc(mon.local)}</p>` : ''}
     <p style="margin:0 0 8px">${esc(mon.descricao)}</p>
     ${mon.historia ? `<p class="historia">${esc(mon.historia)}</p>` : ''}
-    <div class="attrs-mon">${['FOR','CON','DEX','AGI','INT','FDV','PER'].map(k => `<div><span>${k}</span><b>${c.A[k]}</b></div>`).join('')}</div>
+    <div class="attrs-mon">${['FOR','CON','DEX','AGI','INT','FDV','PER'].map(k => `<div><span>${k}</span><b>${c.A[k]}</b>${c.deltaA[k] ? `<small class="${c.deltaA[k] > 0 ? 'sobe' : 'desce'}">${c.deltaA[k] > 0 ? '+' : ''}${c.deltaA[k]}</small>` : ''}</div>`).join('')}</div>
+    ${c.passo ? `<p class="nota" style="margin:-4px 0 8px">Atributos ajustados em ${c.passo > 0 ? '+' : ''}${c.passo} ${Math.abs(c.passo) === 1 ? 'nível' : 'níveis'} de dificuldade em relação à original: mais (ou menos) ataques, dano, vida e defesas.</p>` : ''}
     <dl class="ficha-magia">
       <dt>Vida</dt><dd><b>${fmt(c.vida)}</b> <span class="nota">(${c.T.vidaBase} + CON ${c.A.CON} × ${c.T.fatorVida} × ${c.n}) × ${c.D.vida}</span></dd>
       <dt>Defesa física</dt><dd><b>${fmt(c.defF)}</b> <span class="nota">${c.df} × CON ${c.A.CON} × ${c.mult} × ${c.D.defesa}</span></dd>
@@ -1625,12 +1750,14 @@ function fontesItem(id){
   MONSTROS.forEach(m => (m.drops || []).forEach(dp => { if (dp.item === id) drops.push({ m, chance: dp.chance }); }));
   drops.sort((a, b) => b.chance - a.chance || a.m.dificuldade - b.m.dificuldade);
   const lojas = LOJAS.filter(l => l.itens.includes(id));
-  return { drops, lojas };
+  const missoes = MISSOES.filter(ms => (ms.recompensas.itens || []).some(x => x.id === id));
+  return { drops, lojas, missoes };
 }
 function htmlFontes(it){
   const f = fontesItem(it.id); const partes = [];
   if (f.lojas.length) partes.push(`<b>À venda:</b> ${f.lojas.map(l => `${esc(l.nome)} (${esc(l.lugar)}), ${moedas(precoItem(it, l))}`).join('; ')}`);
   if (f.drops.length) partes.push(`<b>Cai de:</b> ${f.drops.map(x => `<button class="nome-magia" data-mon-info="${x.m.id}">${esc(x.m.nome)}</button> ${x.chance}%`).join(', ')}`);
+  if (f.missoes.length) partes.push(`<b>Recompensa de missão:</b> ${f.missoes.map(ms => `<button class="nome-magia" data-missao-info="${ms.id}">${esc(ms.nome)}</button>`).join(', ')}`);
   if (it.obtencao) partes.push(`<b>Como obter:</b> ${esc(it.obtencao)}`);
   return partes.length ? `<div class="fontes">${partes.join('<br>')}</div>` : '';
 }
@@ -1659,7 +1786,8 @@ function abrirPericiaInfo(chave, origem){
        <dt>${p.forma === 'venda' ? 'Preço' : p.forma === 'troca' ? 'Pede em troca' : 'Missão'}</dt><dd>${esc(p.custo)}</dd>
      </dl>
      <p class="nota">${esc(es.descricao)}</p>
-     ${outros.length ? `<p><b>Também ensinam:</b> ${outros.map(o => `${esc(o.nome)} (${esc(o.lugar)})`).join(', ')}</p>` : ''}` };
+     ${outros.length ? `<p><b>Também ensinam:</b> ${outros.map(o => `${esc(o.nome)} (${esc(o.lugar)})`).join(', ')}</p>` : ''}
+     ${periciaPorNome(p.pericia) ? `<button class="btn simples" data-pericia-cat="${periciaPorNome(p.pericia).id}">Ver no Compêndio de perícias</button>` : ''}` };
   abrirInfo('pericia', origem);
 }
 function mestresDaMagia(id){
@@ -1668,6 +1796,86 @@ function mestresDaMagia(id){
   return r;
 }
 function textoEnsino(m, e){ return e.missao ? `Missão: ${esc(e.missao)}` : (precoMagia(m) ? moedas(precoMagia(m)) : 'Missão a combinar'); }
+
+/* ----- Compêndio de perícias ----- */
+const filtroPericias = { attr:'todos', aprendidas:'todos', busca:'' };
+const periciaPorNome = nome => PERICIAS.find(p => p.nome === nome) || null;
+const professores = pc => { const r = []; ESPECIALISTAS.forEach(es => es.ensina.forEach(e => { if (e.pericia === pc.nome) r.push({ es, e }); })); return r; };
+function bonusPericia(pc, r){
+  const evo = r.E.pericia[pc.attr] || 0, aprendida = P.pericias.includes(pc.id), equipada = P.periciasEquipadas.includes(pc.id);
+  const apr = equipada ? 1 : 0;
+  return { evo, apr, aprendida, equipada, total: evo + apr, pode: equipada || !pc.somenteTreinada };
+}
+const limitePericias = () => REGRAS.pericias && REGRAS.pericias.limiteEquipadas;
+function alternarPericia(id, acao){
+  const pc = PERICIAS.find(p => p.id === id); if (!pc) return;
+  if (acao === 'aprender') {
+    if (!P.pericias.includes(id)) P.pericias.push(id);
+    const lim = limitePericias();
+    if (!P.periciasEquipadas.includes(id) && (!lim || P.periciasEquipadas.length < lim)) P.periciasEquipadas.push(id);
+    toast(`${pc.nome} aprendida`);
+  } else if (acao === 'esquecer') {
+    P.pericias = P.pericias.filter(x => x !== id); P.periciasEquipadas = P.periciasEquipadas.filter(x => x !== id);
+    toast(`${pc.nome} removida`);
+  } else if (acao === 'equipar') {
+    const lim = limitePericias();
+    if (lim && P.periciasEquipadas.length >= lim) { toast(`Limite de ${lim} perícias equipadas`); return; }
+    if (!P.periciasEquipadas.includes(id)) P.periciasEquipadas.push(id);
+    toast(`${pc.nome} equipada`);
+  } else if (acao === 'desequipar') {
+    P.periciasEquipadas = P.periciasEquipadas.filter(x => x !== id); toast(`${pc.nome} guardada`);
+  }
+}
+function rPericias(){
+  return `<h2 class="titulo-pagina">Compêndio de perícias</h2>
+    <p class="intro">Perícias são o que o personagem sabe fazer além de lutar. Cada uma usa um atributo. Toque no nome para ver os detalhes, quem ensina e marcar as que o seu personagem aprendeu.</p>
+    ${painelFiltros('pericias', `<input type="search" id="busca-pericias" value="${esc(filtroPericias.busca)}" placeholder="Buscar perícia, uso ou nome em outro sistema" aria-label="Buscar perícias">`, [
+      ['Atributo', chips('pericias-attr', Object.assign({ todos:'Todos' }, ...ATRIBUTOS.map(a => ({ [a.id]: a.id }))), filtroPericias.attr)],
+      ['Seu personagem', chips('pericias-apr', { todos:'Todas', sim:'Aprendidas', nao:'Não aprendidas' }, filtroPericias.aprendidas)]], contaAtivos(filtroPericias))}
+    <div id="lista-comp">${listaPericias()}</div>`;
+}
+function listaPericias(){
+  const b = semAcento(filtroPericias.busca.trim()), r = calcular(P);
+  const lista = PERICIAS.filter(pc => (filtroPericias.attr === 'todos' || pc.attr === filtroPericias.attr) &&
+    (filtroPericias.aprendidas === 'todos' || (filtroPericias.aprendidas === 'sim') === P.pericias.includes(pc.id)) &&
+    (!b || semAcento(pc.nome + ' ' + pc.descricao + ' ' + pc.tambem + ' ' + pc.usos.join(' ')).includes(b)));
+  if (!lista.length) return `<section class="bloco"><p class="vazio">Nenhuma perícia com esses filtros.</p></section>`;
+  let h = '';
+  ATRIBUTOS.forEach(a => {
+    const ps = lista.filter(pc => pc.attr === a.id); if (!ps.length) return;
+    h += `<section class="bloco"><h2>${a.id} <small>${esc(a.nome)}</small></h2>` + ps.map(pc => {
+      const bn = bonusPericia(pc, r), apr = P.pericias.includes(pc.id);
+      return `<div class="linha-mon"><div><button class="nome-magia" data-pericia-cat="${pc.id}">${esc(pc.nome)}</button>${pc.somenteTreinada ? ' <span class="tag-treino">só treinada</span>' : ''}
+        <div class="resumo">${esc(pc.descricao)}</div></div>
+        <div class="lado">${apr ? `<span class="usos">${bn.equipada ? '✓ equipada' : '✓ aprendida'}</span><br>` : ''}${bn.total ? `<b>+${bn.total}</b>` : ''}</div></div>`;
+    }).join('') + `</section>`;
+  });
+  return h;
+}
+function abrirPericiaCatalogo(id, origem){
+  const pc = PERICIAS.find(p => p.id === id); if (!pc) return;
+  const r = calcular(P), bn = bonusPericia(pc, r), apr = P.pericias.includes(pc.id);
+  const at = ATRIBUTOS.find(a => a.id === pc.attr), prof = professores(pc);
+  INFO['pericia-cat'] = { titulo: esc(pc.nome), sub: `perícia de ${at.nome}${pc.somenteTreinada ? ', só treinada' : ''}`, html:
+    `<p>${realce(esc(pc.descricao))}</p>
+     <h3 class="sub-titulo">Exemplos de uso</h3><ul class="lista-simples">${pc.usos.map(u => `<li>${esc(u)}</li>`).join('')}</ul>
+     <p class="nota"><b>Em outros sistemas:</b> ${esc(pc.tambem)}</p>
+     ${pc.somenteTreinada ? '<div class="desvantagem-item">Só pode ser usada por quem aprendeu com um especialista.</div>' : ''}
+     <h3 class="sub-titulo">Para ${esc(P.nome || 'seu personagem')}</h3>
+     <dl class="ficha-magia">
+       <dt>Atributo</dt><dd>${realce(pc.attr)} ${r.A[pc.attr]}</dd>
+       <dt>Aprendida</dt><dd>${apr ? (bn.equipada ? 'sim, equipada (+1)' : 'sim, guardada (sem bônus)') : 'não'}</dd>
+       <dt>Evolução de ${pc.attr}</dt><dd>${bn.evo ? `+${bn.evo}` : 'nenhuma'}</dd>
+       <dt>Bônus total</dt><dd><b>${bn.pode ? `+${bn.total}` : 'não pode usar sem treino'}</b></dd>
+     </dl>
+     <div class="botoes">${apr
+        ? `<button class="btn" data-pc-acao="${bn.equipada ? 'desequipar' : 'equipar'}" data-pc="${pc.id}">${bn.equipada ? 'Guardar (desequipar)' : 'Equipar'}</button><button class="btn simples" data-pc-acao="esquecer" data-pc="${pc.id}">Remover das aprendidas</button>`
+        : `<button class="btn" data-pc-acao="aprender" data-pc="${pc.id}">Marcar como aprendida</button>`}</div>
+     <h3 class="sub-titulo">Quem ensina</h3>
+     ${prof.length ? `<ul class="lista-simples">${prof.map(x => `<li><b>${esc(x.es.nome)}</b>, ${esc(x.es.lugar)}<br>${FORMAS_ENSINO[x.e.forma]}: ${esc(x.e.custo)}</li>`).join('')}</ul>` : '<p class="vazio">Ninguém ensina ainda. Só pela evolução.</p>'}
+     ${(() => { const ms = MISSOES.filter(x => (x.recompensas.pericias || []).includes(pc.nome)); return ms.length ? `<p><b>Recompensa de missão:</b> ${ms.map(x => `<button class="nome-magia" data-missao-info="${x.id}">${esc(x.nome)}</button>`).join(', ')}</p>` : ''; })()}` };
+  abrirInfo('pericia-cat', origem);
+}
 
 /* ----- Atlas ----- */
 let atlasReg = REGIOES[0].id;
@@ -1689,10 +1897,18 @@ function rAtlas(){
       <p>${esc(l.desc)}</p>
       ${mons.length ? `<div class="lugar-lista"><b>Criaturas:</b> ${mons.map(m => `<button class="nome-magia" data-mon-info="${m.id}">${esc(m.nome)}</button> ${estrelas(m.dificuldade)}${m.especial ? ` <span class="tag-esp">${esc(m.especial)}</span>` : ''}`).join('<br>')}</div>` : ''}
       ${itens.length ? `<div class="lugar-lista"><b>Itens daqui:</b><br>${itens.map(it => `${tierBadge(it.tier)} <button class="nome-magia" data-item-info="${it.id}">${esc(it.nome)}</button>`).join('<br>')}</div>` : ''}
-      ${blocoLojas(l.nome)}${blocoMestres(l.nome)}${blocoEspecialistas(l.nome)}${blocoTesouros(mons)}
+      ${blocoMissoes(l.nome)}${blocoDungeons(l.nome)}${blocoLojas(l.nome)}${blocoMestres(l.nome)}${blocoEspecialistas(l.nome)}${blocoTesouros(mons)}
     </section>`;
   });
   return h;
+}
+function blocoMissoes(lugar){
+  const ms = MISSOES.filter(m => m.lugar === lugar); if (!ms.length) return '';
+  return `<details class="sub-bloco"><summary>📜 Missões <small>${ms.length}</small></summary><ul class="lista-preco">${ms.map(m => `<li><span><button class="nome-magia" data-missao-info="${m.id}">${esc(m.nome)}</button></span><b>nv ${m.nivel}+ ${estrelas(m.dificuldade)}</b></li>`).join('')}</ul></details>`;
+}
+function blocoDungeons(lugar){
+  const ds = DUNGEONS.filter(x => x.lugar === lugar); if (!ds.length) return '';
+  return `<details class="sub-bloco"><summary>🏰 Dungeons <small>${ds.length}</small></summary><ul class="lista-preco">${ds.map(x => `<li><span><button class="nome-magia" data-abrir-dungeon="${x.id}">${TIPOS_DUNGEON[x.tipo].ic} ${esc(x.nome)}</button></span><b>nv ${x.nivel}+ ${estrelas(x.dificuldade)}</b></li>`).join('')}</ul></details>`;
 }
 function blocoLojas(lugar){
   return LOJAS.filter(l => l.lugar === lugar).map(l => `<details class="sub-bloco"><summary>🛒 ${esc(l.nome)} <small>${l.itens.length} itens${l.mult !== 1 ? `, preços ×${String(l.mult).replace('.', ',')}` : ''}</small></summary>
@@ -1745,11 +1961,37 @@ function dadosHabilidade(hb, r){
   return '';
 }
 
+let subAbaHab = 'habilidades';
+function abasHab(){
+  return `<div class="sub-abas" role="tablist">
+    <button role="tab" data-sub-hab="habilidades" aria-selected="${subAbaHab === 'habilidades'}">⚜️ Habilidades</button>
+    <button role="tab" data-sub-hab="pericias" aria-selected="${subAbaHab === 'pericias'}">🎓 Perícias <span class="qtd">${P.periciasEquipadas.length}</span></button></div>`;
+}
+function rPericiasPersonagem(){
+  const r = calcular(P), lim = limitePericias();
+  const aprendidas = PERICIAS.filter(pc => P.pericias.includes(pc.id));
+  const equipadas = aprendidas.filter(pc => P.periciasEquipadas.includes(pc.id)), guardadas = aprendidas.filter(pc => !P.periciasEquipadas.includes(pc.id));
+  const linha = pc => { const bn = bonusPericia(pc, r);
+    return `<div class="linha-mon"><div><button class="nome-magia" data-pericia-cat="${pc.id}">${esc(pc.nome)}</button> <span class="atr">${pc.attr}</span>${pc.somenteTreinada ? ' <span class="tag-treino">só treinada</span>' : ''}
+      <div class="resumo">${esc(pc.descricao)}</div></div>
+      <div class="lado">${bn.equipada ? `<b>+${bn.total}</b><br>` : ''}<button class="btn pequeno${bn.equipada ? ' simples' : ''}" data-pc-acao="${bn.equipada ? 'desequipar' : 'equipar'}" data-pc="${pc.id}">${bn.equipada ? 'Guardar' : 'Equipar'}</button></div></div>`; };
+  const faltam = PERICIAS.filter(pc => !P.pericias.includes(pc.id));
+  return abasHab() + `<p class="intro">Aqui ficam as perícias que ${esc(P.nome || 'o seu personagem')} aprendeu com especialistas ou em missões. Só as <b>equipadas</b> dão bônus e aparecem no Status${lim ? ` (máximo ${lim})` : ''}.</p>
+    <section class="bloco"><h2>Equipadas <small>${equipadas.length}${lim ? ` de ${lim}` : ''}</small></h2>
+      ${equipadas.length ? equipadas.map(linha).join('') : '<p class="vazio">Nenhuma perícia equipada.</p>'}</section>
+    ${guardadas.length ? `<section class="bloco"><h2>Guardadas <small>${guardadas.length}</small></h2>${guardadas.map(linha).join('')}</section>` : ''}
+    <section class="bloco"><h2>Aprendeu uma perícia nova?</h2>
+      <p style="margin-top:0">Escolha a perícia que o personagem comprou, trocou ou ganhou numa missão.</p>
+      <div class="linha-dano"><select id="pc-nova" style="flex:1">${ATRIBUTOS.map(a => { const ps = faltam.filter(pc => pc.attr === a.id); return ps.length ? `<optgroup label="${a.id} ${esc(a.nome)}">${ps.map(pc => `<option value="${pc.id}">${esc(pc.nome)}</option>`).join('')}</optgroup>` : ''; }).join('')}</select>
+      <button class="btn" data-pc-adicionar="1"${faltam.length ? '' : ' disabled'}>Adicionar</button></div>
+      <p class="nota">Para ver quem ensina cada uma e quanto custa, abra o <button class="nome-magia" data-ir="pericias">Compêndio de perícias</button>.</p></section>`;
+}
 function rHabilidades(){
+  if (subAbaHab === 'pericias') return rPericiasPersonagem();
   const id = habClasse || P.classe, cls = classe(id), minha = id === P.classe, r = calcular(P);
   const livres = r.pontosHab - r.pontosHabGastos, liberacao = listaNiveis(REGRAS.habilidades.niveisLiberacao);
   const novoFormato = cls.habilidades.every(h => h.categoria);
-  let h = `<h2 class="titulo-pagina">Habilidades</h2>
+  let h = abasHab() + `
     <p class="intro">Você começa com ${REGRAS.habilidades.pontosIniciais} ponto de habilidade no nível 1 e ganha mais 1 a cada ${REGRAS.habilidades.pontosACadaNiveis} níveis. Novas habilidades aparecem nos níveis ${liberacao} e custam 1 ponto cada. Como os pontos são poucos, escolha bem: as de níveis anteriores continuam à venda.</p>
     ${chips('hab-classe', Object.fromEntries(CLASSES.map(c => [c.id, c.nome])), id)}`;
 
@@ -1820,6 +2062,379 @@ function rHabilidades(){
   });
   if (!minha) h += `<p class="nota">Mostrando a classe ${esc(cls.nome)}. Seu personagem é ${esc(classe(P.classe).nome.toLowerCase())}; toque na classe dele para aprender habilidades.</p>`;
   return h;
+}
+
+/* ----- Missões ----- */
+const LS_MISSOES = 'rpgHex_missoes';
+let missoesFeitas = new Set(lsGet(LS_MISSOES, []) || []);
+const filtroMissoes = { regiao:'todos', dif:'todos', recompensa:'todos', status:'todos', busca:'' };
+const regiaoDoLugar = lugar => (REGIOES.find(r => r.lugares.some(l => l.nome === lugar)) || {}).id;
+function recompensasTxt(ms, links = true){
+  const r = ms.recompensas, partes = [];
+  (r.itens || []).forEach(x => { const it = item(x.id); if (it) partes.push(`${tierBadge(it.tier)} ${links ? `<button class="nome-magia" data-item-info="${it.id}">${esc(it.nome)}</button>` : esc(it.nome)}${x.chance && x.chance < 100 ? ` <small>${x.chance}%</small>` : ''}`); });
+  (r.magias || []).forEach(id => { const m = magia(id); if (m) partes.push(`✨ ${links ? `<button class="nome-magia" data-magia-info="${m.id}">${esc(m.nome)}</button>` : esc(m.nome)} <small>${TIERS[m.tier].nome.toLowerCase()}</small>`); });
+  (r.pericias || []).forEach(n => { const pc = periciaPorNome(n); partes.push(`🎓 ${pc && links ? `<button class="nome-magia" data-pericia-cat="${pc.id}">${esc(n)}</button>` : esc(n)}`); });
+  if (r.dinheiro) partes.push(`💰 ${moedas(r.dinheiro)}`);
+  return partes;
+}
+let subAbaMis = 'missoes';
+function abasMis(){
+  return `<div class="sub-abas" role="tablist">
+    <button role="tab" data-sub-mis="missoes" aria-selected="${subAbaMis === 'missoes'}">📜 Missões</button>
+    <button role="tab" data-sub-mis="dungeons" aria-selected="${subAbaMis === 'dungeons'}">🏰 Dungeons</button></div>`;
+}
+function rMissoes(){
+  if (subAbaMis === 'dungeons') return rDungeons();
+  return abasMis() + `
+    <p class="intro">Aventuras prontas para conseguir itens, magias e perícias. Cada missão traz o NPC que a oferece, as etapas (com armadilhas, enigmas, bênçãos, maldições e inimigos raros), o chefe e as recompensas. As soluções dos enigmas ficam escondidas para o mestre.</p>
+    ${painelFiltros('missoes', `<input type="search" id="busca-missoes" value="${esc(filtroMissoes.busca)}" placeholder="Buscar missão, NPC, lugar ou recompensa" aria-label="Buscar missões">`, [
+      ['Região', chips('mis-reg', Object.assign({ todos:'Todas' }, ...REGIOES.map(r => ({ [r.id]: r.nome }))), filtroMissoes.regiao)],
+      ['Dificuldade', chips('mis-dif', Object.assign({ todos:'Todas' }, ...[1,2,3,4,5].map(d => ({ [d]: `${d} ${DIFICULDADES[d].nome}` }))), filtroMissoes.dif)],
+      ['Recompensa', chips('mis-rec', { todos:'Qualquer', itens:'Itens', magias:'Magias', pericias:'Perícias' }, filtroMissoes.recompensa)],
+      ['Situação', chips('mis-st', { todos:'Todas', abertas:'Em aberto', feitas:'Concluídas' }, filtroMissoes.status)]], contaAtivos(filtroMissoes))}
+    <div id="lista-comp">${listaMissoes()}</div>`;
+}
+function listaMissoes(){
+  const b = semAcento(filtroMissoes.busca.trim()), f = filtroMissoes;
+  const lista = MISSOES.filter(ms => (f.regiao === 'todos' || regiaoDoLugar(ms.lugar) === f.regiao) &&
+    (f.dif === 'todos' || String(ms.dificuldade) === f.dif) &&
+    (f.recompensa === 'todos' || (ms.recompensas[f.recompensa] || []).length) &&
+    (f.status === 'todos' || (f.status === 'feitas') === missoesFeitas.has(ms.id)) &&
+    (!b || semAcento([ms.nome, ms.lugar, ms.npc.nome, ms.gancho, ...recompensasTxt(ms, false)].join(' ')).includes(b)))
+    .sort((a, b2) => a.nivel - b2.nivel);
+  if (!lista.length) return `<section class="bloco"><p class="vazio">Nenhuma missão com esses filtros.</p></section>`;
+  return lista.map(ms => `<section class="bloco missao-card${missoesFeitas.has(ms.id) ? ' feita' : ''}">
+    <h2><button class="nome-missao" data-missao-info="${ms.id}">${esc(ms.nome)}</button> <small>nv ${ms.nivel}+</small></h2>
+    <p class="meta-missao">${estrelas(ms.dificuldade)} · 📍 ${esc(ms.lugar)} · 🗣️ ${esc(ms.npc.nome)}${missoesFeitas.has(ms.id) ? ' · <b>✓ concluída</b>' : ''}</p>
+    <p>${esc(ms.gancho)}</p>
+    <p class="etapas-ic">${ms.etapas.map(e => `<span title="${TIPOS_ETAPA[e.tipo].nome}">${TIPOS_ETAPA[e.tipo].ic}</span>`).join(' ')}</p>
+    <div class="fontes"><b>Recompensas:</b> ${recompensasTxt(ms).join(' · ')}</div>
+  </section>`).join('');
+}
+function abrirMissao(id, origem){
+  const ms = MISSOES.find(x => x.id === id); if (!ms) return;
+  const feita = missoesFeitas.has(ms.id);
+  const monBtn = mid => { const m = monstro(mid); return m ? `<button class="nome-magia" data-mon-info="${m.id}">${esc(m.nome)}</button> ${estrelas(m.dificuldade)}` : esc(mid); };
+  INFO['missao'] = { titulo: esc(ms.nome), sub: `nível ${ms.nivel}+, ${DIFICULDADES[ms.dificuldade].nome.toLowerCase()}, ${esc(ms.lugar)}`, html:
+    `<p><b>Quem oferece:</b> ${esc(ms.npc.nome)}. <i>${esc(ms.npc.descricao)}</i></p>
+     <p>${esc(ms.gancho)}</p>
+     <h3 class="sub-titulo">Etapas</h3>
+     <ol class="etapas">${ms.etapas.map(e => `<li class="etapa etapa-${e.tipo}">
+        <div class="etapa-cab">${TIPOS_ETAPA[e.tipo].ic} <b>${esc(e.titulo)}</b> <small>${TIPOS_ETAPA[e.tipo].nome}${e.chance ? `, ${e.chance}% de chance` : ''}</small></div>
+        <div>${realce(esc(e.texto))}</div>
+        ${e.teste ? `<div><b>Teste:</b> ${realce(esc(e.teste))}. <b>Se falhar:</b> ${realce(esc(e.falha))}</div>` : ''}
+        ${e.enigma ? `<div class="enigma"><b>Enigma:</b> ${esc(e.enigma)}</div><details class="solucao"><summary>Solução (só o mestre)</summary><p>${esc(e.solucao)}</p></details>` : ''}
+        ${(e.inimigos || []).length ? `<div><b>Inimigos:</b> ${e.inimigos.map(monBtn).join(', ')}</div>` : ''}
+      </li>`).join('')}</ol>
+     <h3 class="sub-titulo">Recompensas</h3>
+     <p>${recompensasTxt(ms).join('<br>')}</p>
+     ${ms.recompensas.extra ? `<p class="nota">${esc(ms.recompensas.extra)}</p>` : ''}
+     <button class="btn${feita ? ' simples' : ' lacre'}" data-missao-feita="${ms.id}">${feita ? 'Marcar como em aberto' : 'Marcar como concluída'}</button>` };
+  abrirInfo('missao', origem);
+}
+
+/* ----- Dungeons ----- */
+const LS_DUNGEONS = 'rpgHex_dungeons';
+let estDungeons = lsGet(LS_DUNGEONS, {}) || {};
+let dungeonAberta = null, salaSel = null, ultimoEvento = null;
+const filtroDungeons = { tipo:'todos', dif:'todos' };
+function estDg(id){ if (!estDungeons[id]) estDungeons[id] = { visitadas:[], reveladas:[], resolvidas:[], atual:null, mestre:false }; return estDungeons[id]; }
+function salvarDg(){ lsSet(LS_DUNGEONS, estDungeons); }
+const dungeon = id => DUNGEONS.find(x => x.id === id) || null;
+function vizinhos(dg, sid){ return dg.conexoes.filter(c => c[0] === sid || c[1] === sid).map(c => ({ id: c[0] === sid ? c[1] : c[0], rot: c[2] || '' })); }
+function salaVisivel(dg, sala, st){
+  if (st.mestre) return 'mestre';
+  if (st.visitadas.includes(sala.id)) return 'visitada';
+  if (sala.oculta && !st.reveladas.includes(sala.id)) return null;
+  if (sala.tipo === 'entrada' && !st.visitadas.length) return 'conhecida';
+  return vizinhos(dg, sala.id).some(v => st.visitadas.includes(v.id)) ? 'conhecida' : null;
+}
+function rDungeons(){
+  if (dungeonAberta) return rExplorar(dungeon(dungeonAberta));
+  const lista = DUNGEONS.filter(dg => (filtroDungeons.tipo === 'todos' || dg.tipo === filtroDungeons.tipo) && (filtroDungeons.dif === 'todos' || String(dg.dificuldade) === filtroDungeons.dif))
+    .sort((a, b) => a.nivel - b.nivel);
+  return abasMis() + `<p class="intro">Lugares para explorar sala por sala, com inimigos, tesouros, armadilhas, bênçãos, maldições e segredos sobre o passado. O mapa se revela conforme o grupo avança.</p>
+    ${painelFiltros('dungeons', '', [
+      ['Tipo', chips('dg-tipo', Object.assign({ todos:'Todos' }, ...Object.entries(TIPOS_DUNGEON).map(([k, t]) => ({ [k]: `${t.ic} ${t.nome}` }))), filtroDungeons.tipo)],
+      ['Dificuldade', chips('dg-dif', Object.assign({ todos:'Todas' }, ...[1,2,3,4,5].map(d => ({ [d]: `${d} ${DIFICULDADES[d].nome}` }))), filtroDungeons.dif)]], contaAtivos(filtroDungeons))}
+    ${lista.length ? lista.map(dg => { const st = estDg(dg.id), total = dg.salas.length;
+      return `<section class="bloco missao-card"><h2><button class="nome-missao" data-dungeon="${dg.id}">${TIPOS_DUNGEON[dg.tipo].ic} ${esc(dg.nome)}</button> <small>nv ${dg.nivel}+</small></h2>
+        <p class="meta-missao">${estrelas(dg.dificuldade)} · ${TIPOS_DUNGEON[dg.tipo].nome} · 📍 ${esc(dg.lugar)} · ${total} salas${st.visitadas.length ? ` · <b>${st.visitadas.length} exploradas</b>` : ''}</p>
+        <p>${esc(dg.descricao)}</p>
+        <p class="etapas-ic">${[...new Set(dg.salas.map(sl => sl.tipo))].map(t => `<span title="${TIPOS_SALA[t].nome}">${TIPOS_SALA[t].ic}</span>`).join(' ')}</p>
+        <button class="btn" data-dungeon="${dg.id}">${st.visitadas.length ? 'Continuar exploração' : 'Explorar'}</button></section>`; }).join('')
+      : '<section class="bloco"><p class="vazio">Nenhuma dungeon com esses filtros.</p></section>'}`;
+}
+function mapaDungeon(dg, st){
+  const W = 118, H = 84, bw = 100, bh = 58;
+  const xs = dg.salas.map(sl => sl.x), ys = dg.salas.map(sl => sl.y);
+  const minX = Math.min(...xs), minY = Math.min(...ys), maxX = Math.max(...xs), maxY = Math.max(...ys);
+  const px = sl => (sl.x - minX) * W + 10, py = sl => (sl.y - minY) * H + 10;
+  const vis = {}; dg.salas.forEach(sl => vis[sl.id] = salaVisivel(dg, sl, st));
+  const porId = id => dg.salas.find(sl => sl.id === id);
+  let linhas = '';
+  dg.conexoes.forEach(c => {
+    const a = porId(c[0]), b = porId(c[1]); if (!vis[a.id] || !vis[b.id]) return;
+    const secreta = a.oculta || b.oculta;
+    linhas += `<line x1="${px(a) + bw / 2}" y1="${py(a) + bh / 2}" x2="${px(b) + bw / 2}" y2="${py(b) + bh / 2}" class="dg-linha${secreta ? ' secreta' : ''}"/>`;
+  });
+  let salas = '';
+  dg.salas.forEach(sl => {
+    const v = vis[sl.id]; if (!v) return;
+    const conhecido = v === 'visitada' || v === 'mestre', atual = st.atual === sl.id, sel = salaSel === sl.id;
+    const cls = `dg-sala ${v}${atual ? ' atual' : ''}${sel ? ' sel' : ''}${st.resolvidas.includes(sl.id) ? ' resolvida' : ''}${sl.oculta ? ' oculta' : ''}`;
+    const nome = sl.nome.length > 15 ? sl.nome.slice(0, 14) + '…' : sl.nome;
+    salas += `<g class="${cls}" data-sala="${sl.id}" tabindex="0" role="button" aria-label="${esc(conhecido ? sl.nome : 'Sala desconhecida')}">
+      <rect x="${px(sl)}" y="${py(sl)}" width="${bw}" height="${bh}" rx="8"/>
+      <text x="${px(sl) + bw / 2}" y="${py(sl) + 24}" class="dg-ic">${conhecido ? TIPOS_SALA[sl.tipo].ic : '?'}</text>
+      <text x="${px(sl) + bw / 2}" y="${py(sl) + 46}" class="dg-nome">${conhecido ? esc(nome) : '???'}</text>
+      ${st.resolvidas.includes(sl.id) ? `<text x="${px(sl) + bw - 12}" y="${py(sl) + 16}" class="dg-ok">✓</text>` : ''}</g>`;
+  });
+  const largura = (maxX - minX) * W + bw + 20, altura = (maxY - minY) * H + bh + 20;
+  return `<div class="dg-mapa-wrap"><svg class="dg-mapa" viewBox="0 0 ${largura} ${altura}" width="${largura}" height="${altura}" role="img" aria-label="Mapa da dungeon">${linhas}${salas}</svg></div>`;
+}
+function painelSala(dg, st){
+  const sl = dg.salas.find(x => x.id === (salaSel || st.atual)); if (!sl) return `<section class="bloco"><p class="vazio">Toque na entrada 🚪 para começar.</p></section>`;
+  const v = salaVisivel(dg, sl, st), conhecida = v === 'visitada' || v === 'mestre';
+  const visitada = st.visitadas.includes(sl.id);
+  const vz = vizinhos(dg, sl.id);
+  const podeEntrar = !visitada && (sl.tipo === 'entrada' && !st.visitadas.length || vz.some(x => st.visitadas.includes(x.id)));
+  if (!conhecida) return `<section class="bloco dg-painel"><h2>Sala desconhecida</h2><p>O grupo ainda não sabe o que há aqui.</p>
+    ${podeEntrar ? `<button class="btn lacre" data-entrar="${sl.id}">Entrar</button>` : ''}</section>`;
+  const t = sl.tesouro || {};
+  const ocultosAqui = vz.filter(x => { const o = dg.salas.find(y => y.id === x.id); return o.oculta && !st.reveladas.includes(o.id); });
+  const monBtn = mid => { const m = monstro(mid); return m ? `<button class="nome-magia" data-mon-info="${m.id}">${esc(m.nome)}</button> ${estrelas(m.dificuldade)}` : esc(mid); };
+  return `<section class="bloco dg-painel etapa-${sl.tipo}"><h2>${TIPOS_SALA[sl.tipo].ic} ${esc(sl.nome)} <small>${TIPOS_SALA[sl.tipo].nome}${sl.oculta ? ', secreta' : ''}</small></h2>
+    ${!visitada ? `<p class="nota">Visão do mestre: o grupo ainda não entrou aqui.</p>` : ''}
+    <p>${realce(esc(sl.texto))}</p>
+    ${(sl.inimigos || []).length ? `<p><b>Inimigos:</b> ${sl.inimigos.map(monBtn).join(', ')} <button class="btn pequeno simples" data-dg-batalha="${sl.id}">Levar para a batalha</button></p>` : ''}
+    ${sl.teste ? `<p><b>Teste:</b> ${realce(esc(sl.teste))}. <b>Se falhar:</b> ${realce(esc(sl.falha))}</p>` : ''}
+    ${sl.efeito ? `<p><b>Efeito:</b> ${realce(esc(sl.efeito))}</p>` : ''}
+    ${sl.enigma ? `<div class="enigma"><b>Enigma:</b> ${esc(sl.enigma)}</div><details class="solucao"><summary>Solução (só o mestre)</summary><p>${esc(sl.solucao)}</p></details>` : ''}
+    ${sl.segredo ? `<div class="segredo-passado"><b>📜 Segredo:</b> ${esc(sl.segredo)}</div>` : ''}
+    ${(t.dinheiro || (t.itens || []).length) ? `<p><b>Tesouro:</b> ${[t.dinheiro ? `💰 ${moedas(t.dinheiro)}` : '', ...(t.itens || []).map(x => { const it = item(x.id); return it ? `${tierBadge(it.tier)} <button class="nome-magia" data-item-info="${it.id}">${esc(it.nome)}</button>${x.chance ? ` <small>${x.chance}%</small>` : ''}` : ''; })].filter(Boolean).join(' · ')}</p>` : ''}
+    <p class="nota"><b>Saídas:</b> ${vz.filter(x => { const o = dg.salas.find(y => y.id === x.id); return !o.oculta || st.reveladas.includes(o.id) || st.mestre; }).map(x => { const o = dg.salas.find(y => y.id === x.id); const conh = st.visitadas.includes(o.id) || st.mestre;
+      return `${conh ? esc(o.nome) : 'passagem desconhecida'}${x.rot ? ` (${esc(x.rot)})` : ''}`; }).join(', ') || 'nenhuma'}</p>
+    <div class="botoes">
+      ${podeEntrar ? `<button class="btn lacre" data-entrar="${sl.id}">Entrar</button>` : ''}
+      ${visitada && st.atual !== sl.id ? `<button class="btn" data-entrar="${sl.id}">Ir para cá</button>` : ''}
+      ${visitada ? `<button class="btn${st.resolvidas.includes(sl.id) ? ' simples' : ''}" data-resolver="${sl.id}">${st.resolvidas.includes(sl.id) ? 'Reabrir' : 'Marcar como resolvida'}</button>` : ''}
+      ${visitada && ocultosAqui.length ? `<button class="btn simples" data-procurar="${sl.id}">🔍 Procurar passagem secreta</button>` : ''}
+    </div>
+    ${visitada && ocultosAqui.length ? `<p class="nota">Teste de PER (Percepção ou Investigação). Se passar, toque em Procurar para revelar a passagem.</p>` : ''}
+  </section>`;
+}
+function rExplorar(dg){
+  const st = estDg(dg.id);
+  if (!salaSel) salaSel = st.atual || (dg.salas.find(sl => sl.tipo === 'entrada') || dg.salas[0]).id;
+  const total = dg.salas.filter(sl => !sl.oculta).length, ocultas = dg.salas.filter(sl => sl.oculta).length;
+  const exploradas = st.visitadas.length, chefe = dg.salas.find(sl => sl.tipo === 'chefe');
+  const concluida = chefe && st.resolvidas.includes(chefe.id);
+  return abasMis() + `<button class="btn pequeno simples" data-dungeon-voltar="1">← Todas as dungeons</button>
+    <section class="bloco"><h2>${TIPOS_DUNGEON[dg.tipo].ic} ${esc(dg.nome)} <small>nv ${dg.nivel}+</small></h2>
+      <p class="meta-missao">${estrelas(dg.dificuldade)} · ${TIPOS_DUNGEON[dg.tipo].nome} · 📍 ${esc(dg.lugar)}</p>
+      <p>${esc(dg.descricao)}</p>
+      <p class="meta-missao">Exploradas: <b>${exploradas}</b> de ${total}${ocultas ? ` (+ ${ocultas} ${ocultas === 1 ? 'sala secreta' : 'salas secretas'})` : ''}</p>
+      <label class="dg-mestre"><input type="checkbox" data-dg-mestre="1"${st.mestre ? ' checked' : ''}> Visão do mestre (mostrar o mapa inteiro)</label>
+    </section>
+    ${mapaDungeon(dg, st)}
+    <p class="nota" style="text-align:center">Toque numa sala para ver os detalhes. Salas com ? ainda não foram exploradas.</p>
+    ${painelSala(dg, st)}
+    <section class="bloco"><h2>Na exploração</h2>
+      <div class="botoes"><button class="btn" data-dg-evento="1">🎲 Rolar evento (1d10)</button><button class="btn simples" data-dg-reiniciar="1">Reiniciar exploração</button></div>
+      ${ultimoEvento && ultimoEvento.dg === dg.id ? `<div class="fontes" style="margin-top:10px"><b>Rolou ${ultimoEvento.d}:</b> ${esc(ultimoEvento.ev.texto)}${(ultimoEvento.ev.inimigos || []).length ? `<br><b>Inimigos:</b> ${ultimoEvento.ev.inimigos.map(i => `<button class="nome-magia" data-mon-info="${i}">${esc((monstro(i) || {}).nome || i)}</button>`).join(', ')}` : ''}</div>` : ''}
+      <p class="nota">Role um evento sempre que o grupo passar muito tempo num lugar, descansar, ou fizer barulho.</p>
+      ${concluida || st.mestre ? `<div class="segredo-passado"><b>📜 O segredo do passado:</b> ${esc(dg.segredoFinal)}</div>` : '<p class="nota">O segredo desta dungeon aparece quando o chefe for derrotado (marque a sala do chefe como resolvida).</p>'}
+    </section>`;
+}
+
+/* ----- Impressão de dados ----- */
+const SECOES_IMP = {
+  regras: 'Regras resumidas', condicoes: 'Condições', classes: 'Classes e habilidades', evolucao: 'Tabela de evolução',
+  armas: 'Armas', escudos: 'Escudos', armaduras: 'Armaduras', acessorios: 'Acessórios',
+  magias: 'Magias', pericias: 'Perícias', monstros: 'Monstros', encontros: 'Encontros por lugar',
+  missoes: 'Missões', dungeons: 'Dungeons', comercio: 'Lojas, mestres e especialistas', ficha: 'Ficha em branco'
+};
+const impSel = new Set(Object.keys(SECOES_IMP));
+let impNivel = null;
+const tb = (cab, linhas, classe = '') => `<table class="imp-tab ${classe}"><thead><tr>${cab.map(c => `<th>${c}</th>`).join('')}</tr></thead><tbody>${linhas.map(l => `<tr>${l.map(c => `<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+const attrsTxt = it => it.atributos ? Object.entries(it.atributos).map(([k, v]) => `+${v} ${k}`).join(', ') : '';
+const efeitoTxt = it => [attrsTxt(it), it.efeito ? esc(it.efeito) : '', it.desvantagem ? `<i>Desvantagem: ${esc(it.desvantagem)}</i>` : ''].filter(Boolean).join('. ');
+const valorTxt = it => PRECOS_ITEM[it.tier] ? moedas(arredondaPreco(PRECOS_ITEM[it.tier] * fatorItem(it))) : '—';
+
+function impRegras(){
+  const R = REGRAS;
+  return `
+  <div class="imp-col">
+    <h3>Criação</h3>
+    ${tb(['Categoria','Classes','Físicos','Mentais','Sociais'], Object.entries(CATEGORIAS_CLASSE).map(([k, c]) => [c.nome, CLASSES.filter(x => x.categoria === k).map(x => x.nome).join(', '), c.pontos.fisico, c.pontos.mental, c.pontos.social]))}
+    <p>Atributos entre ${R.attrMin} e ${R.attrMax}, distribuídos só no nível 1. Nível máximo ${R.nivelMax}.</p>
+    <h3>Fórmulas</h3>
+    <ul>
+      <li><b>Vida</b> = ${R.vidaBase} + CON × fator da classe × nível (${CLASSES.map(c => `${c.nome} ${c.fatorVida}`).join(', ')}).</li>
+      <li><b>Defesa física</b> = DF dos itens × CON × ⌈nível ÷ 2⌉. <b>Defesa mágica</b> = DM dos itens × FDV × ⌈nível ÷ 2⌉. Subtraídas de cada ataque.</li>
+      <li><b>Chance de defesa</b>: 1d10 ≤ DEX + escudo (leve +1, pesado +2 e −1 ação). Máximo ${R.defesaMaxD10}.</li>
+      <li><b>Dano físico</b> = (FOR + dado da arma) d10 × nível − DF do alvo. Mínimo ${R.danoMinimoPct}% do dano bruto.</li>
+      <li><b>Dano mágico</b> = (INT + foco + dado da magia) d10 × nível − DM do alvo. <b>Cura</b> = (FDV + foco + dado) d10 × nível.</li>
+      <li><b>Ataques físicos por turno</b> = AGI (+1 arma muito leve, −1 escudo pesado). Arma muito pesada: 2 ações por ataque. <b>Ataques mágicos</b> = INT. <b>Reações</b> = ${R.reacoesBase} + evolução.</li>
+      <li><b>Crítico</b>: d10 separado; 1 é crítico (${R.critBase}%), 1–2 com PER ${R.perLimiarCritico}+. Crítico = +${R.critBonusBase}% no dano final.</li>
+      <li><b>Movimento</b> = ${R.movimentoBase} + AGI hex. <b>Carga</b> = ${R.cargaBase} + FOR × ${R.cargaPorFOR} kg; −1 movimento a cada ${R.pesoPorPenalidade} kg acima.</li>
+      <li><b>FOR abaixo da exigida pela arma</b>: −1 DEX e −1 movimento por ponto.</li>
+      <li><b>Slots de magia</b> = INT × ${R.slotsPorINT}. Custo por tier: ${Object.entries(R.custoSlotPorTier).map(([k, v]) => `${TIERS[k].nome} ${v}`).join(', ')}. Usos por batalha, por dia ou por sessão.</li>
+    </ul>
+  </div>
+  <div class="imp-col">
+    <h3>Progressão</h3>
+    <ul>
+      <li><b>Evolução</b>: ${R.evolucao.pontosPorNivel} pontos por nível. Peso = 11 − atributo. 1ª bolinha = peso × gasto; cada seguinte custa o dobro. Máximo ${R.evolucao.maxBolinhas}.</li>
+      <li><b>Habilidades</b>: ${R.habilidades.pontosIniciais} ponto no nível 1, +1 a cada ${R.habilidades.pontosACadaNiveis} níveis. Novas habilidades nos níveis ${listaNiveis(R.habilidades.niveisLiberacao)}; 1 ponto cada.</li>
+    </ul>
+    <h3>Recursos das classes</h3>
+    ${tb(['Classe','Recurso','Máximo','Regra'], CLASSES.map(c => [c.nome, c.recurso, c.recursoBase != null ? `${c.recursoBase}${c.recursoNoAlvo ? ' por inimigo' : ''} + evolução + itens` : '—', esc(c.recursoRegra || '')]))}
+    <h3>Dinheiro e preços</h3>
+    <p>10 bronze = 1 prata · 100 prata = 1 ouro · 1000 ouro = 1 platina.</p>
+    ${tb(['Tier','Item (base)','Magia'], Object.keys(PRECOS_ITEM).map(t => [TIERS[t].nome, moedas(PRECOS_ITEM[t]), PRECOS_MAGIA[t] ? moedas(PRECOS_MAGIA[t]) : 'Missão']))}
+    <h3>Monstros</h3>
+    ${tb(['Dif.','Vida','Defesas','Dano'], [1,2,3,4,5].map(d => [`${d} ${DIFICULDADES[d].nome}`, `×${DIFICULDADES[d].vida}`, `×${DIFICULDADES[d].defesa}`, DIFICULDADES[d].dano ? `${DIFICULDADES[d].dano > 0 ? '+' : ''}${DIFICULDADES[d].dano}d10` : '—']))}
+    ${tb(['Tamanho','Vida base','Fator CON','Mov.'], Object.values(TAMANHOS).map(t => [t.nome, t.vidaBase, t.fatorVida, t.movimento ? `+${t.movimento}` : '—']))}
+    <p>Vida do monstro = (vida base + CON × fator × nível) × dificuldade. Dano = (FOR ou INT + dado + dificuldade) d10 × nível. Cada nível de dificuldade acima do original soma +1 em FOR, CON, DEX, AGI e FDV (+1 INT se usa magia, +1 PER a cada 2 níveis).</p>
+  </div>`;
+}
+function impCondicoes(){
+  return tb(['Condição','Efeito'], [
+    ['Preso', 'Não se move no próximo turno (ou até passar no teste indicado).'],
+    ['Derrubado', 'No chão. Levantar gasta o movimento do turno.'],
+    ['Oculto / invisível', 'Não pode ser alvo até ser notado (teste de PER) ou até atacar.'],
+    ['Envenenado', 'Sofre o dano indicado no início de cada turno, ignorando a defesa.'],
+    ['Sangrando', 'Sofre o dano indicado no início do próximo turno, ignorando a defesa.'],
+    ['Queimando', 'Chão em chamas: dano a quem começa o turno nele.'],
+    ['Atordoado', 'Perde a próxima ação de ataque.'],
+    ['Lento', 'Perde hexágonos de movimento pelo tempo indicado.'],
+    ['Com medo', 'Não pode se aproximar da fonte do medo; pode perder ações, conforme o efeito.'],
+    ['Controlado', 'O inimigo decide o movimento e o ataque no próximo turno.'],
+    ['Marca Carmesim', 'Com 3 Marcas, perde 1 ação de ataque por turno. Qualquer cura remove todas.'],
+    ['Engolido', 'Sofre o dano por turno até causar a porcentagem indicada da vida da criatura de dentro.']]);
+}
+function impClasses(){
+  return CLASSES.map(c => `<h3>${esc(c.nome)} <small>${esc(c.recurso)}, vida CON × ${c.fatorVida}</small></h3>
+    <p><b>Passiva, ${esc(c.passiva.nome)}:</b> ${esc(c.passiva.texto)} <b>Armas:</b> ${esc(c.armas)}. <b>Armaduras:</b> ${esc(c.armaduras)}.</p>
+    ${tb(['Nv','Habilidade','Tipo','Custo','Recurso','Recarga','Alcance','Efeito'], c.habilidades.map(h => [h.nivel, `<b>${esc(h.nome)}</b>${h.categoria ? `<br><small>${esc(h.categoria)}</small>` : ''}`, esc(h.tipo), esc(h.custo), esc(h.recursoGasto || '—'), esc(h.recarga), esc(h.alcance), esc(h.efeito)]))}`).join('');
+}
+function impEvolucao(){
+  const pesos = REGRAS.evolucao.pesos;
+  return `<p>Custo de cada bolinha para cada valor de atributo (peso × gasto, dobrando). Marque as bolinhas na planilha.</p>
+    ${tb(['Atributo','Melhoria','Efeito','Gasto'], EVOLUCOES.map(ev => [ev.attr, `<b>${esc(ev.nome)}</b>`, esc(ev.efeito), `×${ev.gasto}`]))}
+    ${tb(['Valor do atributo', ...[1,2,3,4,5,6,7].map(String)], [['Peso', ...[1,2,3,4,5,6,7].map(v => pesos[v])]])}
+    ${tb(['Gasto', '1ª bolinha (atributo 1 a 7)', '2ª', '3ª', '4ª', '5ª'], [3,4,5,10,20].map(g => [`×${g}`, [1,2,3,4,5,6,7].map(v => pesos[v] * g).join(' / '), ...[1,2,3,4].map(k => [1,2,3,4,5,6,7].map(v => pesos[v] * g * Math.pow(2, k)).join(' / '))]))}`;
+}
+function impArmas(){
+  return tb(['Arma','Tier','Categoria','Mãos','Dano','Alc.','FOR','Peso','Valor','Bônus e efeito'], porTier(ARMAS).map(a => { const c = CATEGORIAS_ARMA[a.categoria];
+    return [`<b>${esc(a.nome)}</b>`, TIERS[a.tier].nome, c.nome + (a.foco ? ` (${a.foco})` : ''), a.maos, a.dados ? `${a.dados}d10` : '—', a.alcance, c.forMin || '—', a.peso, valorTxt(a), efeitoTxt(a)]; }));
+}
+function impEscudos(){
+  return tb(['Escudo','Tier','Tipo','Defesa d10','Perde ação','Peso','Valor','Efeito'], porTier(ESCUDOS).map(e => [`<b>${esc(e.nome)}</b>`, TIERS[e.tier].nome, e.tipoEscudo, `+${e.defesa}`, e.perdeAcao || '—', e.peso, valorTxt(e), efeitoTxt(e)]));
+}
+function impArmaduras(){
+  const ordemSlot = ['elmo','peitoral','luvas','botas'];
+  return ordemSlot.map(sl => `<h3>${sl[0].toUpperCase() + sl.slice(1)}</h3>` + tb(['Peça','Tier','Tipo','DF','DM','Peso','Valor','Bônus e efeito'],
+    porTier(ARMADURAS.filter(a => a.slot === sl)).map(a => [`<b>${esc(a.nome)}</b>`, TIERS[a.tier].nome, a.tipo, a.df, a.dm, a.peso, valorTxt(a), efeitoTxt(a)]))).join('');
+}
+function impAcessorios(){
+  return tb(['Acessório','Tier','DF','DM','Peso','Valor','Bônus e efeito'], porTier(ACESSORIOS).map(a => [`<b>${esc(a.nome)}</b>`, TIERS[a.tier].nome, a.df || '—', a.dm || '—', a.peso, valorTxt(a), efeitoTxt(a)]));
+}
+function impMagias(n){
+  return Object.keys(CATEGORIAS_MAGIA).map(cat => `<h3>${CATEGORIAS_MAGIA[cat]}</h3>` + tb(['Magia','Tier','Slots','Dado','Alcance','Usos','Efeito'],
+    porTier(MAGIAS.filter(m => m.categoria === cat)).map(m => {
+      let ef = esc(m.efeito);
+      if (m.criatura) { const c = calcMonstro(m.criatura, n, m.criatura.dificuldade);
+        ef += `<br><small><b>${esc(m.criatura.nome)}${(m.criatura.quantidade || 1) > 1 ? ` ×${m.criatura.quantidade}` : ''} (nv ${n}):</b> Vida ${fmt(c.vida)}, DF ${fmt(c.defF)}, DM ${fmt(c.defM)}, def ≤${c.defD10}, mov ${c.movimento}${m.criatura.naoLuta ? ', não luta' : `, ${c.ataquesTurno} atq: ${c.ataques.map(a => `${esc(a.nome)} ${a.dados}d10`).join(', ')}`}. Dura ${esc(m.criatura.duracao)}.</small>`; }
+      if (m.desvantagem) ef += `<br><i>Desvantagem: ${esc(m.desvantagem)}</i>`;
+      return [`<b>${esc(m.nome)}</b>${m.conjuracao ? `<br><small>${esc(m.conjuracao)}</small>` : ''}`, TIERS[m.tier].nome, custo(m), m.dado ? `${m.dado}d10` : '—', esc(m.alcance), `${m.usos.qtd} ${USOS_POR[m.usos.por]}`, ef];
+    }))).join('');
+}
+function impPericias(){
+  return tb(['Perícia','Atributo','Treino','Descrição','Quem ensina'], PERICIAS.map(pc => [`<b>${esc(pc.nome)}</b>`, pc.attr, pc.somenteTreinada ? 'só treinada' : '—', esc(pc.descricao),
+    professores(pc).map(x => `${esc(x.es.nome)} (${esc(x.es.lugar)}, ${FORMAS_ENSINO[x.e.forma].toLowerCase()}: ${esc(x.e.custo)})`).join('; ')]));
+}
+function impMonstros(n){
+  return `<p>Valores calculados no nível ${n}, com a dificuldade original de cada monstro.</p><div class="imp-cartoes">` +
+    porDificuldade(MONSTROS).map(m => { const c = calcMonstro(m, n, m.dificuldade);
+      return `<div class="imp-cartao"><b>${esc(m.nome)}</b> <small>${'★'.repeat(m.dificuldade)} ${esc(m.tipo)}, ${c.T.nome.toLowerCase()}${m.especial ? `, ${esc(m.especial)}` : ''}${m.local ? ` · ${esc(m.local)}` : ''}</small><br>
+        ${['FOR','CON','DEX','AGI','INT','FDV','PER'].map(k => `${k} ${c.A[k]}`).join(' · ')}<br>
+        <b>Vida ${fmt(c.vida)}</b> · DF ${fmt(c.defF)} · DM ${fmt(c.defM)} · def ≤${c.defD10} · ${c.ataquesTurno} atq · mov ${c.movimento} · crít ${c.crit}%<br>
+        ${c.ataques.map(a => `${esc(a.nome)} <b>${a.dados}d10</b>${a.tipo === 'magico' ? ' mág.' : ''}${a.efeito ? ` (${esc(a.efeito)})` : ''}`).join('; ')}
+        ${c.magias.length ? `<br>Magias: ${c.magias.map(x => `${esc(x.m.nome)}${x.dados ? ` ${x.dados.split(' ×')[0]}` : ''}`).join(', ')}` : ''}
+        ${(m.habilidades || []).length ? `<br>${m.habilidades.map(h => `<b>${esc(h.nome)}</b> (${esc(h.usos && h.usos !== '—' ? h.usos : h.tipo.toLowerCase())}): ${esc(h.efeito)}`).join(' ')}` : ''}
+        ${m.fraquezas ? `<br><i>Fraco:</i> ${esc(m.fraquezas)}` : ''}${m.resistencias ? ` <i>Resiste:</i> ${esc(m.resistencias)}` : ''}
+        <br><small>Drops: ${(m.drops || []).length ? m.drops.map(dp => `${dp.item ? esc((item(dp.item) || {}).nome || dp.item) : esc(dp.texto)} ${dp.chance}%`).join(', ') : 'nenhum'}</small></div>`; }).join('') + `</div>`;
+}
+function impEncontros(){
+  return REGIOES.map(r => `<h3>${esc(r.nome)}</h3>` + tb(['Lugar','Criaturas'], r.lugares.map(l => [esc(l.nome),
+    porDificuldade(MONSTROS.filter(m => m.local === l.nome)).map(m => `${esc(m.nome)} (${m.dificuldade})`).join(', ') || '—']))).join('');
+}
+function impMissoes(){
+  return MISSOES.slice().sort((a, b) => a.nivel - b.nivel).map(ms => `<div class="imp-cartao imp-missao"><b>${esc(ms.nome)}</b> <small>nv ${ms.nivel}+ · ${'★'.repeat(ms.dificuldade)} · ${esc(ms.lugar)} · NPC: ${esc(ms.npc.nome)}</small><br>${esc(ms.gancho)}
+    <ol>${ms.etapas.map(e => `<li><b>${TIPOS_ETAPA[e.tipo].nome}: ${esc(e.titulo)}.</b> ${esc(e.texto)}${e.teste ? ` Teste: ${esc(e.teste)}; falha: ${esc(e.falha)}` : ''}${e.enigma ? ` Enigma: ${esc(e.enigma)} <i>Solução: ${esc(e.solucao)}</i>` : ''}${(e.inimigos || []).length ? ` Inimigos: ${e.inimigos.map(i => esc((monstro(i) || {}).nome || i)).join(', ')}${e.chance ? ` (${e.chance}%)` : ''}.` : ''}</li>`).join('')}</ol>
+    Recompensas: ${recompensasTxt(ms, false).join(', ')}.${ms.recompensas.extra ? ` ${esc(ms.recompensas.extra)}` : ''}</div>`).join('');
+}
+function impDungeons(){
+  return DUNGEONS.slice().sort((a, b) => a.nivel - b.nivel).map(dg => `<div class="imp-cartao imp-missao"><b>${esc(dg.nome)}</b> <small>${TIPOS_DUNGEON[dg.tipo].nome} · nv ${dg.nivel}+ · ${'★'.repeat(dg.dificuldade)} · ${esc(dg.lugar)}</small><br>${esc(dg.descricao)}
+    <ol>${dg.salas.map(sl => `<li><b>${esc(sl.nome)}</b> (${TIPOS_SALA[sl.tipo].nome}${sl.oculta ? ', secreta' : ''}; liga com: ${vizinhos(dg, sl.id).map(v => esc(dg.salas.find(y => y.id === v.id).nome)).join(', ')}). ${esc(sl.texto)}${(sl.inimigos || []).length ? ` Inimigos: ${sl.inimigos.map(i => esc((monstro(i) || {}).nome || i)).join(', ')}.` : ''}${sl.teste ? ` Teste: ${esc(sl.teste)}; falha: ${esc(sl.falha)}` : ''}${sl.efeito ? ` Efeito: ${esc(sl.efeito)}` : ''}${sl.enigma ? ` Enigma: ${esc(sl.enigma)} <i>Solução: ${esc(sl.solucao)}</i>` : ''}${sl.segredo ? ` Segredo: ${esc(sl.segredo)}` : ''}${sl.tesouro ? ` Tesouro: ${[sl.tesouro.dinheiro ? moedas(sl.tesouro.dinheiro) : '', ...(sl.tesouro.itens || []).map(x => `${esc((item(x.id) || {}).nome || x.id)}${x.chance ? ` ${x.chance}%` : ''}`)].filter(Boolean).join(', ')}.` : ''}</li>`).join('')}</ol>
+    <i>Segredo do passado:</i> ${esc(dg.segredoFinal)}<br><small>Eventos (1d10): ${(EVENTOS_DUNGEON[dg.tipo] || []).map(e => `${e.min === e.max ? e.min : `${e.min}–${e.max}`} ${esc(e.texto)}`).join(' | ')}</small></div>`).join('');
+}
+function impComercio(){
+  return `<h3>Lojas</h3>` + tb(['Loja','Lugar','Preço','Itens'], LOJAS.map(l => [`<b>${esc(l.nome)}</b><br><small>${esc(l.dono)}</small>`, esc(l.lugar), `×${String(l.mult).replace('.', ',')}`,
+      porTier(l.itens.map(item).filter(Boolean)).map(it => `${esc(it.nome)} ${moedas(precoItem(it, l))}`).join('; ')])) +
+    `<h3>Mestres de magia</h3>` + tb(['Mestre','Lugar','Magias'], MESTRES.map(ms => [`<b>${esc(ms.nome)}</b>`, esc(ms.lugar),
+      ms.ensina.map(e => { const m = magia(e.magia); return m ? `${esc(m.nome)} (${e.missao ? 'missão: ' + esc(e.missao) : moedas(precoMagia(m))})` : ''; }).join('; ')])) +
+    `<h3>Especialistas em perícias</h3>` + tb(['Especialista','Lugar','Perícias'], ESPECIALISTAS.map(es => [`<b>${esc(es.nome)}</b>`, esc(es.lugar),
+      es.ensina.map(p => `${esc(p.pericia)} (${FORMAS_ENSINO[p.forma].toLowerCase()}: ${esc(p.custo)})`).join('; ')]));
+}
+function impFicha(){
+  const linha = (n, cls = '') => Array.from({ length:n }, () => `<tr>${cls}</tr>`).join('');
+  return `<div class="ficha-branca">
+    <table class="imp-tab"><tr><td><b>Nome</b></td><td colspan="3"></td><td><b>Classe</b></td><td></td><td><b>Nível</b></td><td></td></tr>
+      <tr><td><b>Recurso</b></td><td></td><td><b>Máx.</b></td><td></td><td><b>Pontos de evolução</b></td><td></td><td><b>Pontos de habilidade</b></td><td></td></tr></table>
+    <table class="imp-tab"><thead><tr><th>Atributo</th>${ATRIBUTOS.map(a => `<th>${a.id}</th>`).join('')}</tr></thead>
+      <tbody><tr><td>Distribuído</td>${ATRIBUTOS.map(() => '<td></td>').join('')}</tr><tr><td>Itens</td>${ATRIBUTOS.map(() => '<td></td>').join('')}</tr>
+      <tr><td><b>Final</b></td>${ATRIBUTOS.map(() => '<td></td>').join('')}</tr><tr><td>Peso evol.</td>${ATRIBUTOS.map(() => '<td></td>').join('')}</tr></tbody></table>
+    <table class="imp-tab"><tr><td><b>Vida máx.</b></td><td></td><td><b>Vida atual</b></td><td></td><td><b>DF</b></td><td></td><td><b>DM</b></td><td></td></tr>
+      <tr><td><b>Defesa d10</b></td><td></td><td><b>Ataques fís.</b></td><td></td><td><b>Ataques mág.</b></td><td></td><td><b>Reações</b></td><td></td></tr>
+      <tr><td><b>Dano físico</b></td><td>d10 ×</td><td><b>Dano mágico</b></td><td>d10 ×</td><td><b>Cura</b></td><td>d10 ×</td><td><b>Crítico</b></td><td></td></tr>
+      <tr><td><b>Movimento</b></td><td></td><td><b>Carga</b></td><td></td><td><b>Slots</b></td><td></td><td><b>Dinheiro</b></td><td></td></tr></table>
+    <table class="imp-tab"><thead><tr><th>Equipamento</th><th>Item</th><th>DF/DM ou dano</th><th>Peso</th><th>Efeito</th></tr></thead>
+      <tbody>${['Arma','Mão secundária','Elmo','Peitoral','Luvas','Botas','Acessório I','Acessório II','Acessório III','Acessório IV'].map(sl => `<tr><td>${sl}</td><td></td><td></td><td></td><td></td></tr>`).join('')}</tbody></table>
+    <table class="imp-tab"><thead><tr><th>Magia</th><th>Slots</th><th>Usos</th><th>Dados</th></tr></thead><tbody>${linha(6, '<td></td><td></td><td>□ □ □ □ □ □</td><td></td>')}</tbody></table>
+    <table class="imp-tab"><thead><tr><th>Habilidade</th><th>Nível</th><th>Custo</th><th>Recarga</th></tr></thead><tbody>${linha(5, '<td></td><td></td><td></td><td></td>')}</tbody></table>
+    <table class="imp-tab"><thead><tr><th>Evolução</th><th>Bolinhas</th><th>Evolução</th><th>Bolinhas</th></tr></thead><tbody>
+      ${Array.from({ length: Math.ceil(EVOLUCOES.length / 2) }, (_, i) => { const a = EVOLUCOES[i * 2], b = EVOLUCOES[i * 2 + 1];
+        return `<tr><td>${a.attr} ${esc(a.nome)}</td><td>○ ○ ○ ○ ○</td><td>${b ? `${b.attr} ${esc(b.nome)}` : ''}</td><td>${b ? '○ ○ ○ ○ ○' : ''}</td></tr>`; }).join('')}</tbody></table>
+    <table class="imp-tab"><thead><tr><th>Perícias aprendidas</th><th>Bônus</th><th>Anotações</th></tr></thead><tbody>${linha(6, '<td></td><td></td><td></td>')}</tbody></table>
+  </div>`;
+}
+function rImpressao(){
+  const n = impNivel || P.nivel;
+  const blocos = {
+    regras: () => `<div class="imp-duas">${impRegras()}</div>`, condicoes: impCondicoes, classes: impClasses, evolucao: impEvolucao,
+    armas: impArmas, escudos: impEscudos, armaduras: impArmaduras, acessorios: impAcessorios,
+    magias: () => impMagias(n), pericias: impPericias, monstros: () => impMonstros(n), encontros: impEncontros,
+    missoes: impMissoes, dungeons: impDungeons, comercio: impComercio, ficha: impFicha
+  };
+  let h = `<div class="imp-controles">
+    <h2 class="titulo-pagina">Impressão de dados</h2>
+    <p class="intro">Tudo do jogo em papel, para consultar na mesa sem o celular. Escolha as partes, ajuste o nível dos monstros e invocações, e toque em Imprimir (ou salve como PDF).</p>
+    <section class="bloco"><h2>O que imprimir</h2>
+      <div class="imp-opcoes">${Object.entries(SECOES_IMP).map(([k, v]) => `<label><input type="checkbox" data-imp-sec="${k}"${impSel.has(k) ? ' checked' : ''}> ${v}</label>`).join('')}</div>
+      <div class="botoes" style="margin-top:10px"><button class="btn pequeno simples" data-imp-todas="1">Marcar tudo</button><button class="btn pequeno simples" data-imp-todas="0">Desmarcar tudo</button></div>
+      <div class="campo" style="margin-top:12px"><label for="imp-nivel">Nível dos monstros e invocações</label>
+        <input type="text" inputmode="numeric" id="imp-nivel" value="${n}" style="max-width:120px"></div>
+      <button class="btn lacre" data-imprimir="1">🖨️ Imprimir</button>
+      <p class="nota">No celular, a impressão abre o menu de compartilhar do Android: escolha "Salvar como PDF" ou uma impressora.</p>
+    </section></div>
+    <div class="imp-doc">
+      <h1 class="imp-titulo">Aether: dados do jogo</h1>`;
+  Object.keys(SECOES_IMP).forEach(k => { if (impSel.has(k)) h += `<section class="imp-secao"><h2>${SECOES_IMP[k]}</h2>${blocos[k]()}</section>`; });
+  return h + `</div>`;
 }
 
 /* ----- Tutoriais ----- */
@@ -1954,10 +2569,16 @@ function rTutoriais(){
       <div class="formula">Vida = (vida base do tamanho + CON × fator do tamanho × nível) × dificuldade<br>Defesa = (defesa natural + armaduras) × CON ou FDV × ⌈nível ÷ 2⌉ × dificuldade<br>Dano = (FOR + dado do ataque + dados da dificuldade) d10 × nível</div>
       ${tabela(['Dificuldade','Vida','Defesas','Dados de dano'], [1,2,3,4,5].map(d => [`${d}, ${DIFICULDADES[d].nome}`, `× ${DIFICULDADES[d].vida}`, `× ${DIFICULDADES[d].defesa}`, DIFICULDADES[d].dano > 0 ? `+${DIFICULDADES[d].dano}d10` : DIFICULDADES[d].dano < 0 ? `${DIFICULDADES[d].dano}d10` : '—']))}
       ${tabela(['Tamanho','Vida base','Vida por CON e nível','Movimento'], Object.values(TAMANHOS).map(t => [t.nome, t.vidaBase, t.fatorVida, t.movimento ? `+${t.movimento}` : '—']))}
+      <p>Ao usar um monstro numa dificuldade diferente da original, os <b>atributos também mudam</b>: cada nível acima soma ${Object.entries(ESCALA_DIFICULDADE.porPasso).map(([k, v]) => `+${v} ${k}`).join(', ')}, mais +${ESCALA_DIFICULDADE.intConjurador} INT se ele usar magia, +1 PER a cada ${ESCALA_DIFICULDADE.perACada} níveis e +${ESCALA_DIFICULDADE.defesaPorPasso.df} DF e +${ESCALA_DIFICULDADE.defesaPorPasso.dm} DM na defesa natural. Assim ele ganha mais ataques (AGI), mais ataques mágicos (INT), mais dano (FOR) e defesas maiores (CON, FDV e DEX). Cada nível abaixo tira os mesmos valores, sem passar de 1.</p>
       <p>Além da dificuldade, cada monstro tem uma <b>origem</b>:</p>
       ${tabela(['Origem','O que significa'], Object.values(ORIGENS).map(o => [o.nome, o.desc]))}
       <p>Humanoides usam armas e armaduras do jogo, e elas contam como nos personagens. Monstros mais fortes podem ter habilidades e magias. Cada drop é sorteado separadamente pela sua chance, e alguns monstros não deixam nada.</p>
       <p>Na página Bestiário, <b>+ Batalha</b> coloca o monstro no nível do seu personagem. Na batalha, dá para mudar o nível e a dificuldade de cada um, marcar dano e cura e sortear os drops de quem caiu.</p>`],
+    ['Perícias', `
+      <p>Perícias são o que o personagem sabe fazer fora do combate: escalar, mentir, abrir fechaduras, curar, rastrear. Cada perícia usa um atributo.</p>
+      <div class="formula">Bônus da perícia = +1 se aprendida + evolução "Perícia de ATRIBUTO"</div>
+      <p>Algumas perícias são <b>só treinadas</b>, como Arrombamento, Alquimia e Arcanismo aplicado a itens: quem não aprendeu não consegue usar.</p>
+      <p>Especialistas espalhados pelo mundo ensinam por venda, troca ou missão. O Compêndio de perícias mostra os ${PERICIAS.length} tipos, com exemplos de uso, o nome parecido em D&D, Pathfinder e Tormenta, e quem ensina cada uma.</p>`],
     ['Comércio e aprendizado', `
       <div class="formula">10 bronze = 1 prata<br>100 prata = 1 ouro<br>1000 ouro = 1 platina</div>
       <p>Itens Comuns, Raros e Perfeitos podem ser comprados em lojas. O preço depende do tier e do tipo do item (uma couraça custa mais que um par de luvas), e cada loja ainda multiplica o valor:</p>
@@ -2009,6 +2630,18 @@ $('#modal-fundo').addEventListener('click', e => {
   if (b.dataset.monInfo) { const m = monstro(b.dataset.monInfo); modalMagia = null; abrirMonstro({ id: m.id, nivel: P.nivel, dif: m.dificuldade }); return; }
   if (b.dataset.magiaInfo) { abrirMagia(b.dataset.magiaInfo); return; }
   if (b.dataset.itemInfo) { abrirItemInfo(b.dataset.itemInfo, b.dataset.loja); return; }
+  if (b.dataset.periciaCat) { abrirPericiaCatalogo(b.dataset.periciaCat); return; }
+  if (b.dataset.abrirPericias) { fecharModal(); subAbaHab = 'pericias'; irPara('habilidades'); return; }
+  if (b.dataset.missaoInfo) { abrirMissao(b.dataset.missaoInfo); return; }
+  if (b.dataset.missaoFeita) {
+    const id = b.dataset.missaoFeita; missoesFeitas.has(id) ? missoesFeitas.delete(id) : missoesFeitas.add(id);
+    lsSet(LS_MISSOES, [...missoesFeitas]); toast(missoesFeitas.has(id) ? 'Missão concluída' : 'Missão reaberta');
+    const y = window.scrollY; render(); window.scrollTo(0, y); abrirMissao(id); return;
+  }
+  if (b.dataset.pcAcao) {
+    const id = b.dataset.pc; alternarPericia(id, b.dataset.pcAcao);
+    const y = window.scrollY; render(); window.scrollTo(0, y); abrirPericiaCatalogo(id); return;
+  }
   if (b.dataset.mgUsar || b.dataset.mgDevolver || b.dataset.mgEquipar || b.dataset.mgRemover) { acaoMagia(b); return; }
   if (modalMon && acaoMonModal(b)) return;
   if (b.dataset.item !== undefined && modalSlot) equipar(modalSlot, b.dataset.item);
@@ -2020,6 +2653,8 @@ $('#lista-menu').addEventListener('click', e => {
 });
 
 conteudo.addEventListener('click', e => {
+  const g = e.target.closest('[data-sala]');
+  if (g) { salaSel = g.dataset.sala; const y = window.scrollY; render(); window.scrollTo(0, y); const p = document.querySelector('.dg-painel'); if (p && p.scrollIntoView) p.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); return; }
   const t = e.target.closest('button'); if (!t) return;
 
   if (t.dataset.ir) { irPara(t.dataset.ir); return; }
@@ -2052,14 +2687,40 @@ conteudo.addEventListener('click', e => {
   }
 
   if (t.dataset.limparFiltros) {
-    const alvo = { itens: filtroItens, magias: filtroMagias, mon: filtroMon }[t.dataset.limparFiltros];
+    const alvo = { itens: filtroItens, magias: filtroMagias, mon: filtroMon, pericias: filtroPericias, missoes: filtroMissoes, magiasEq: filtroMagiasEq, dungeons: filtroDungeons }[t.dataset.limparFiltros];
     Object.keys(alvo).forEach(k => { if (k !== 'busca') alvo[k] = 'todos'; });
     const y = window.scrollY; render(); window.scrollTo(0, y); return;
   }
+  if (t.dataset.imprimir) { window.print(); return; }
+  if (t.dataset.impTodas !== undefined) { if (t.dataset.impTodas === '1') Object.keys(SECOES_IMP).forEach(k => impSel.add(k)); else impSel.clear(); render(); return; }
+  if (t.dataset.abrirPericias) { subAbaHab = 'pericias'; irPara('habilidades'); return; }
   if (t.dataset.info) { abrirInfo(t.dataset.info, t); return; }
   if (t.dataset.magiaInfo) { abrirMagia(t.dataset.magiaInfo, t); return; }
   if (t.dataset.itemInfo) { abrirItemInfo(t.dataset.itemInfo, t.dataset.loja, t); return; }
   if (t.dataset.periciaInfo) { abrirPericiaInfo(t.dataset.periciaInfo, t); return; }
+  if (t.dataset.periciaCat) { abrirPericiaCatalogo(t.dataset.periciaCat, t); return; }
+  if (t.dataset.missaoInfo) { abrirMissao(t.dataset.missaoInfo, t); return; }
+  if (t.dataset.abrirDungeon) { subAbaMis = 'dungeons'; dungeonAberta = t.dataset.abrirDungeon; salaSel = null; irPara('missoes'); return; }
+  if (t.dataset.subMis) { subAbaMis = t.dataset.subMis; dungeonAberta = null; salaSel = null; render(); window.scrollTo(0, 0); return; }
+  if (t.dataset.dungeon) { dungeonAberta = t.dataset.dungeon; salaSel = null; render(); window.scrollTo(0, 0); return; }
+  if (t.dataset.dungeonVoltar) { dungeonAberta = null; salaSel = null; render(); window.scrollTo(0, 0); return; }
+  if (t.dataset.entrar || t.dataset.resolver || t.dataset.procurar || t.dataset.dgEvento || t.dataset.dgReiniciar || t.dataset.dgBatalha) {
+    const dg = dungeon(dungeonAberta), st = estDg(dg.id);
+    if (t.dataset.entrar) { const id = t.dataset.entrar; if (!st.visitadas.includes(id)) st.visitadas.push(id); st.atual = id; salaSel = id; }
+    else if (t.dataset.resolver) { const id = t.dataset.resolver; st.resolvidas = st.resolvidas.includes(id) ? st.resolvidas.filter(x => x !== id) : [...st.resolvidas, id]; }
+    else if (t.dataset.procurar) { vizinhos(dg, t.dataset.procurar).forEach(v => { const o = dg.salas.find(y => y.id === v.id); if (o.oculta && !st.reveladas.includes(o.id)) { st.reveladas.push(o.id); toast(`Passagem secreta encontrada: ${o.nome}`); } }); }
+    else if (t.dataset.dgEvento) { const n = Math.floor(Math.random() * 10) + 1; const ev = (EVENTOS_DUNGEON[dg.tipo] || []).find(e => n >= e.min && n <= e.max); ultimoEvento = { dg: dg.id, d: n, ev }; }
+    else if (t.dataset.dgReiniciar) { if (!confirm('Reiniciar a exploração desta dungeon?')) return; delete estDungeons[dg.id]; salaSel = null; ultimoEvento = null; }
+    else if (t.dataset.dgBatalha) {
+      const sl = dg.salas.find(x => x.id === t.dataset.dgBatalha);
+      (sl.inimigos || []).forEach(mid => { const m = monstro(mid); if (m) BATALHA.push({ uid: 'm' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6), id: m.id, nivel: P.nivel, dif: m.dificuldade, dano: 0 }); });
+      nomearInstancias(); salvarBatalha(); toast('Inimigos levados para a batalha no Bestiário'); return;
+    }
+    salvarDg(); const y = window.scrollY; render(); window.scrollTo(0, y); return;
+  }
+  if (t.dataset.subHab) { subAbaHab = t.dataset.subHab; render(); window.scrollTo(0, 0); return; }
+  if (t.dataset.pcAcao) { alternarPericia(t.dataset.pc, t.dataset.pcAcao); const y = window.scrollY; render(); window.scrollTo(0, y); return; }
+  if (t.dataset.pcAdicionar) { const v = $('#pc-nova') && $('#pc-nova').value; if (v) { alternarPericia(v, 'aprender'); const y = window.scrollY; render(); window.scrollTo(0, y); } return; }
   if (t.dataset.monInfo) { const m = monstro(t.dataset.monInfo); abrirMonstro({ id: m.id, nivel: P.nivel, dif: m.dificuldade }, t); return; }
   if (t.dataset.monFicha) { abrirMonstro({ uid: t.dataset.monFicha }, t); return; }
   if (t.dataset.monRapido) {
@@ -2128,7 +2789,7 @@ conteudo.addEventListener('click', e => {
   if (t.dataset.filtro) {
     const v = t.dataset.valor;
     ({ 'itens-cat':() => filtroItens.cat = v, 'itens-tier':() => filtroItens.tier = v, 'itens-col':() => filtroItens.col = v,
-       'magias-cat':() => filtroMagias.cat = v, 'mon-dif':() => filtroMon.dif = v, 'mon-tipo':() => filtroMon.tipo = v, 'mon-origem':() => filtroMon.origem = v, 'mon-local':() => filtroMon.local = v, 'atlas-reg':() => atlasReg = v, 'magias-tier':() => filtroMagias.tier = v,
+       'magias-cat':() => filtroMagias.cat = v, 'pericias-attr':() => filtroPericias.attr = v, 'mis-reg':() => filtroMissoes.regiao = v, 'dg-tipo':() => filtroDungeons.tipo = v, 'dg-dif':() => filtroDungeons.dif = v, 'meq-cat':() => filtroMagiasEq.cat = v, 'meq-tier':() => filtroMagiasEq.tier = v, 'meq-ver':() => filtroMagiasEq.ver = v, 'mis-dif':() => filtroMissoes.dif = v, 'mis-rec':() => filtroMissoes.recompensa = v, 'mis-st':() => filtroMissoes.status = v, 'pericias-apr':() => filtroPericias.aprendidas = v, 'mon-dif':() => filtroMon.dif = v, 'mon-tipo':() => filtroMon.tipo = v, 'mon-origem':() => filtroMon.origem = v, 'mon-local':() => filtroMon.local = v, 'atlas-reg':() => atlasReg = v, 'magias-tier':() => filtroMagias.tier = v,
        'hab-classe':() => habClasse = v })[t.dataset.filtro]();
     const y = window.scrollY; render(); window.scrollTo(0, y); return;
   }
@@ -2185,6 +2846,9 @@ conteudo.addEventListener('click', e => {
 
 conteudo.addEventListener('change', e => {
   const t = e.target;
+  if (t.dataset.dgMestre) { estDg(dungeonAberta).mestre = t.checked; salvarDg(); const y = window.scrollY; render(); window.scrollTo(0, y); return; }
+  if (t.dataset.impSec) { if (t.checked) impSel.add(t.dataset.impSec); else impSel.delete(t.dataset.impSec); const y = window.scrollY; render(); window.scrollTo(0, y); return; }
+  if (t.id === 'imp-nivel') { impNivel = clamp(parseInt(t.value) || P.nivel, 1, REGRAS.nivelMax); const y = window.scrollY; render(); window.scrollTo(0, y); return; }
   if (t.id === 'evo-extras') { const y = window.scrollY; render(); window.scrollTo(0, y); return; }
   if (t.id === 'f-classe') {
     if (P.habilidades.length && !confirm('Trocar de classe apaga as habilidades aprendidas. Continuar?')) { t.value = P.classe; return; }
@@ -2212,6 +2876,9 @@ conteudo.addEventListener('input', e => {
     P.pontosExtras = parseInt(t.value) || 0; guardarRascunho(); return;
   }
   if (t.id === 'busca-itens') { filtroItens.busca = t.value; $('#lista-comp').innerHTML = listaItens(); return; }
+  if (t.id === 'busca-missoes') { filtroMissoes.busca = t.value; $('#lista-comp').innerHTML = listaMissoes(); return; }
+  if (t.id === 'busca-magias-eq') { filtroMagiasEq.busca = t.value; $('#lista-magias-eq').innerHTML = listaMagiasEq(); return; }
+  if (t.id === 'busca-pericias') { filtroPericias.busca = t.value; $('#lista-comp').innerHTML = listaPericias(); return; }
   if (t.id === 'busca-mon') { filtroMon.busca = t.value; $('#lista-mon').innerHTML = listaMonstros(); return; }
   if (t.id === 'busca-magias') { filtroMagias.busca = t.value; $('#lista-comp').innerHTML = listaMagias(); return; }
 });
