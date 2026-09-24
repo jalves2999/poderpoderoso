@@ -1586,7 +1586,7 @@ const MONSTROS = [
     equip: { arma: 'adaga', elmo: 'capuz_couro' },
     ataques: [],
     habilidades: [ { nome: 'Fuga Rápida', tipo: 'Reação', usos: '1 por batalha', efeito: 'Quando fica abaixo de 30% da vida, move 3 hex sem ser interceptado.' } ],
-    drops: [ { item: 'adaga', chance: 20 }, { item: 'capuz_couro', chance: 10 }, { texto: '1d10 moedas de cobre', chance: 80 } ] },
+    drops: [ { item: 'adaga', chance: 20 }, { item: 'capuz_couro', chance: 10 }, { texto: '1d10 moedas de bronze', chance: 80 } ] },
 
   { id: 'kobold', nome: 'Kobold', tipo: 'Humanoide', tamanho: 'pequeno', dificuldade: 1, local: 'Forte Anão da Guarda',
     descricao: 'Parente distante dos dragões, adora armadilhas e ataques à distância.',
@@ -2313,7 +2313,7 @@ const MONSTROS = [
     habilidades: [
       { nome: 'Rixa Antiga', tipo: 'Passiva', usos: '—', efeito: 'Se houver Goblins Cinzas na batalha, ele ataca os Cinzas primeiro, mesmo que os heróis estejam mais perto.' },
       { nome: 'Sumir na Mata', tipo: 'Reação', usos: '1 por batalha', efeito: 'No mato alto, fica oculto e se move 3 hex sem ser interceptado.' } ],
-    drops: [ { item: 'fisga_goblin_verde', chance: 10 }, { texto: '1d10 moedas de cobre e uma pedra bonita', chance: 80 } ] },
+    drops: [ { item: 'fisga_goblin_verde', chance: 10 }, { texto: '1d10 moedas de bronze e uma pedra bonita', chance: 80 } ] },
 
   { id: 'goblin_cinza', nome: 'Goblin Cinza', tipo: 'Humanoide', tamanho: 'pequeno', dificuldade: 2, local: 'Goblins Cinzas',
     descricao: 'Um goblin de pele cinza, sobrancelhas queimadas e óculos de solda, sempre com alguma bomba no cinto.',
@@ -2677,11 +2677,27 @@ const REGIOES = [
 
 /* =========================================================
    COMÉRCIO E APRENDIZADO
-   Preços em moedas de ouro. O preço de um item é o valor do tier × o multiplicador da loja.
-   Itens Lendários e Únicos não são vendidos: vêm de monstros, missões e lugares especiais.
+   Dinheiro: 10 bronze = 1 prata, 100 prata = 1 ouro, 1000 ouro = 1 platina.
+   Todos os valores abaixo estão em BRONZE (a menor moeda).
+   Preço de um item = valor do tier × fator do tipo de item × multiplicador da loja.
+   Itens Lendários e Únicos não são vendidos: o valor serve de referência para trocas e recompensas.
    ========================================================= */
-const PRECOS_ITEM  = { comum: 10, raro: 120, perfeito: 600 };
-const PRECOS_MAGIA = { comum: 30, raro: 150, perfeito: 800 };
+const MOEDAS = [
+  { nome: 'platina', valor: 1000000 },
+  { nome: 'ouro',    valor: 1000 },
+  { nome: 'prata',   valor: 10 },
+  { nome: 'bronze',  valor: 1 }
+];
+// comum: poucas pratas | raro: algum ouro | perfeito: muito ouro | lendário e único: platina
+const PRECOS_ITEM  = { comum: 150, raro: 5000, perfeito: 120000, lendario: 2000000, unico: 8000000 };
+const PRECOS_MAGIA = { comum: 300, raro: 8000, perfeito: 150000 };
+// o tipo do item ajusta o preço
+const FATOR_PRECO = {
+  categoria: { muito_leve: 0.6, leve: 0.8, media: 1, pesada: 1.3, muito_pesada: 1.6, foco: 1.2 },
+  slot:      { elmo: 0.7, luvas: 0.6, botas: 0.7, peitoral: 1.5 },
+  tipo:      { placas: 1.3, malha: 1.1, couro: 0.8, brocado: 1.1, tecido: 0.9 },
+  escudo: 1, acessorio: 1.2
+};
 const FORMAS_ENSINO = { venda: 'Venda', troca: 'Troca', missao: 'Missão' };
 
 const LOJAS = [
@@ -2823,36 +2839,36 @@ const MESTRES = [
 
 const ESPECIALISTAS = [
   { id: 'marta_dedos', nome: 'Marta Dedos-Leves', lugar: 'Cidade Baixa (Verdom)', descricao: 'Ex-ladra que agora vende o que sabe.',
-    ensina: [ { pericia: 'Arrombamento', attr: 'DEX', forma: 'venda', custo: '40 moedas de ouro' },
+    ensina: [ { pericia: 'Arrombamento', attr: 'DEX', forma: 'venda', custo: '4 ouro' },
               { pericia: 'Prestidigitação', attr: 'DEX', forma: 'missao', custo: 'Pegar de volta um anel roubado dela nos Esgotos de Verdom.' } ] },
   { id: 'irma_ondina', nome: 'Irmã Ondina', lugar: 'Igreja do Jurgmund', descricao: 'Cuida dos feridos da Cidade Baixa há trinta anos.',
-    ensina: [ { pericia: 'Medicina', attr: 'FDV', forma: 'venda', custo: '30 moedas de ouro, doadas aos pobres' },
+    ensina: [ { pericia: 'Medicina', attr: 'FDV', forma: 'venda', custo: '3 ouro, doados aos pobres' },
               { pericia: 'Religião', attr: 'INT', forma: 'missao', custo: 'Levar remédios às Fazendas durante uma semana.' } ] },
   { id: 'aldric', nome: 'Guarda-florestal Aldric', lugar: 'Castelo de Vernand', descricao: 'Conhece cada trilha das matas de Vernand, inclusive as que hoje são de Verdom.',
     ensina: [ { pericia: 'Rastreamento', attr: 'PER', forma: 'missao', custo: 'Caçar as Aranhas Gigantes que atacam os lenhadores.' },
               { pericia: 'Sobrevivência', attr: 'CON', forma: 'troca', custo: 'Uma pele de urso ou de lobo.' } ] },
   { id: 'dorgan', nome: 'Mestre Dorgan Pé-de-Casco', lugar: 'Porto Tortuoso (Cidade dos Anões)', descricao: 'Ferreiro e engenheiro. Ensina quem aguenta o calor da forja.',
     ensina: [ { pericia: 'Ferraria', attr: 'FOR', forma: 'troca', custo: 'Três placas de ferro rúnico ou metal raro.' },
-              { pericia: 'Engenharia', attr: 'INT', forma: 'venda', custo: '60 moedas de ouro' } ] },
+              { pericia: 'Engenharia', attr: 'INT', forma: 'venda', custo: '6 ouro' } ] },
   { id: 'fuzz', nome: 'Fuzz, o Pirotécnico', lugar: 'Goblins Cinzas', descricao: 'Goblin sem sobrancelhas e com todos os dedos, o que é raro.',
     ensina: [ { pericia: 'Explosivos', attr: 'INT', forma: 'troca', custo: 'Um segredo dos Goblins Verdes.' } ] },
   { id: 'baleeiro_ossk', nome: 'Velho Baleeiro Ossk', lugar: 'Kurnamin', descricao: 'Perdeu um braço para Murlach e nunca parou de pescar.',
-    ensina: [ { pericia: 'Navegação', attr: 'PER', forma: 'venda', custo: '30 moedas de ouro' },
+    ensina: [ { pericia: 'Navegação', attr: 'PER', forma: 'venda', custo: '3 ouro' },
               { pericia: 'Natação', attr: 'FOR', forma: 'troca', custo: 'Um barril de rum de Korgara.' } ] },
   { id: 'alquimista_brasa', nome: 'Alquimista Seraph', lugar: 'Cidade de Karlach', descricao: 'Estuda os cristais carmesins com luvas de três camadas.',
-    ensina: [ { pericia: 'Alquimia', attr: 'INT', forma: 'venda', custo: '80 moedas de ouro' },
+    ensina: [ { pericia: 'Alquimia', attr: 'INT', forma: 'venda', custo: '8 ouro' },
               { pericia: 'Conhecimento dos Cristais', attr: 'INT', forma: 'missao', custo: 'Trazer uma Bolsa de sangue carmesim do Lago Corrompido.' } ] },
   { id: 'grukka', nome: 'Mestre de Guerra Grukka', lugar: 'Grande Cidade Orc Lonk-Carn', descricao: 'Treina os guerreiros da capital. Não ensina quem nunca apanhou.',
     ensina: [ { pericia: 'Atletismo', attr: 'FOR', forma: 'missao', custo: 'Aguentar três rodadas de luta contra ele sem cair.' },
-              { pericia: 'Intimidação', attr: 'MOR', forma: 'venda', custo: '50 moedas de ouro' } ] },
+              { pericia: 'Intimidação', attr: 'MOR', forma: 'venda', custo: '5 ouro' } ] },
   { id: 'mestre_etiqueta', nome: "Mestre de Corte S'lorn", lugar: 'Cidade de Atrelon', descricao: 'Ensina a falar com reis serpentarianos sem ofendê-los.',
-    ensina: [ { pericia: 'Etiqueta da Corte', attr: 'APA', forma: 'venda', custo: '60 moedas de ouro' },
+    ensina: [ { pericia: 'Etiqueta da Corte', attr: 'APA', forma: 'venda', custo: '6 ouro' },
               { pericia: 'Persuasão', attr: 'CAR', forma: 'missao', custo: 'Entregar uma carta ao Templo de S\'ssara sem abri-la.' } ] },
   { id: 'bibliotecaria', nome: 'Bibliotecária Ilen de Nazarik', lugar: 'Cidade de Nazarik', descricao: 'Guarda livros de toda Aether e empresta a quem devolve.',
     ensina: [ { pericia: 'História', attr: 'INT', forma: 'troca', custo: 'Um livro ou diário antigo encontrado em ruínas.' },
-              { pericia: 'Idiomas Antigos', attr: 'INT', forma: 'venda', custo: '70 moedas de ouro' } ] },
+              { pericia: 'Idiomas Antigos', attr: 'INT', forma: 'venda', custo: '7 ouro' } ] },
   { id: 'astromante_pericia', nome: 'O Astromante', lugar: 'Torre de Observação Estelar', descricao: 'Também ensina a ler o céu.',
     ensina: [ { pericia: 'Navegação pelas Estrelas', attr: 'PER', forma: 'missao', custo: 'Passar três noites vigiando a torre com ele.' } ] },
   { id: 'turgu_pericia', nome: 'Turgu', lugar: 'Acampamento Orc de Turgu', descricao: 'Negocia tudo, inclusive o que sabe.',
-    ensina: [ { pericia: 'Negociação', attr: 'CAR', forma: 'troca', custo: 'Qualquer coisa que valha pelo menos 50 moedas de ouro.' } ] }
+    ensina: [ { pericia: 'Negociação', attr: 'CAR', forma: 'troca', custo: 'Qualquer coisa que valha pelo menos 5 ouro.' } ] }
 ];

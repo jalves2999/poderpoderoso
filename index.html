@@ -52,7 +52,12 @@ body{font-family:var(--texto);font-size:1.06rem;line-height:1.5;color:var(--tint
   border-bottom:3px double var(--ouro);color:var(--ouro-claro);
 }
 .topo h1{font-family:var(--titulo);font-weight:700;font-size:1.75rem;line-height:1.05;margin:0;text-shadow:0 2px 0 #000}
-.topo .quem{font-style:italic;font-size:.95rem;color:#d9c6a0;margin-top:2px;min-height:1.3em}
+.topo .quem{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:4px 10px;margin-top:4px;min-height:1.3em}
+.topo .quem-texto{font-style:italic;font-size:.95rem;color:#d9c6a0}
+.btn-status{display:inline-flex;align-items:center;gap:5px;min-height:36px;padding:4px 12px;cursor:pointer;
+  font-family:var(--texto);font-size:.92rem;font-weight:700;color:var(--ouro-claro);
+  background:rgba(224,194,124,.1);border:1px solid var(--ouro);border-radius:18px}
+.btn-status[aria-current=page]{background:var(--ouro);color:var(--couro-escuro)}
 .botao-menu{
   position:absolute;left:10px;top:calc(12px + env(safe-area-inset-top,0px));width:44px;height:44px;cursor:pointer;
   background:none;border:1px solid var(--ouro);border-radius:3px;color:var(--ouro-claro);font-size:1.4rem;line-height:1;
@@ -460,9 +465,9 @@ details.capitulo .corpo{padding:0 16px 14px}
 .testes th:first-child,.testes td:first-child{text-align:left}
 
 /* ---------- Navegação inferior ---------- */
-.abas{position:fixed;left:0;right:0;bottom:0;z-index:10;display:grid;grid-template-columns:repeat(6,1fr);max-width:720px;margin:0 auto;
+.abas{position:fixed;left:0;right:0;bottom:0;z-index:10;display:grid;grid-template-columns:repeat(5,1fr);max-width:720px;margin:0 auto;
   padding-bottom:env(safe-area-inset-bottom,0px);background:linear-gradient(180deg,var(--couro),var(--couro-escuro));border-top:3px double var(--ouro)}
-.abas button{font-family:var(--texto);background:none;border:none;color:#bfa77a;cursor:pointer;min-height:62px;padding:6px 1px;font-size:.72rem;font-weight:600;
+.abas button{font-family:var(--texto);background:none;border:none;color:#bfa77a;cursor:pointer;min-height:62px;padding:6px 1px;font-size:.78rem;font-weight:600;
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
 .abas button .ic{font-size:1.35rem;line-height:1}
 .abas button[aria-selected=true]{color:var(--ouro-claro);background:rgba(224,194,124,.12);box-shadow:inset 0 3px 0 var(--ouro)}
@@ -479,7 +484,7 @@ details.capitulo .corpo{padding:0 16px 14px}
   <header class="topo" id="topo">
     <button class="botao-menu" id="abrir-menu" aria-label="Abrir índice" aria-controls="gaveta" aria-expanded="false">☰</button>
     <h1>Livro do Aventureiro</h1>
-    <div class="quem" id="quem"></div>
+    <div class="quem"><span class="quem-texto" id="quem"></span><button class="btn-status" id="btn-status" aria-label="Abrir Status do personagem">🛡️ Status</button></div>
   </header>
   <main class="folha" id="conteudo"></main>
 </div>
@@ -501,7 +506,6 @@ details.capitulo .corpo{padding:0 16px 14px}
   <button role="tab" data-aba="ficha"   aria-selected="true"><span class="ic">📜</span>Ficha</button>
   <button role="tab" data-aba="equipar" aria-selected="false"><span class="ic">⚔️</span>Equipar</button>
   <button role="tab" data-aba="magias"  aria-selected="false"><span class="ic">✨</span>Magias</button>
-  <button role="tab" data-aba="status"  aria-selected="false"><span class="ic">🛡️</span>Status</button>
   <button role="tab" data-aba="evolucao" aria-selected="false"><span class="ic">⭐</span>Evolução</button>
   <button role="tab" data-aba="habilidades" aria-selected="false"><span class="ic">⚜️</span>Habilidades</button>
 </nav>
@@ -768,6 +772,7 @@ const RENDER = {
 function render(){
   atualizarTopo();
   document.querySelectorAll('.abas button').forEach(b => b.setAttribute('aria-selected', b.dataset.aba === aba));
+  if (aba === 'status') $('#btn-status').setAttribute('aria-current', 'page'); else $('#btn-status').removeAttribute('aria-current');
   $('#conteudo').innerHTML = RENDER[aba]();
   renderMenu();
   guardarRascunho();
@@ -941,7 +946,7 @@ function abrirModal(slotId){
 let modalVolta = null;
 function abrirInfo(id, origem){
   const inf = INFO[id]; if (!inf) return;
-  modalSlot = null; modalMagia = null; modalVolta = origem || null;
+  modalSlot = null; modalMagia = null; modalMon = null; modalVolta = origem || null;
   $('#modal-titulo').innerHTML = `${inf.titulo}${inf.sub ? `<small>${inf.sub}</small>` : ''}`;
   $('#modal-filtros').innerHTML = '';
   $('#modal-lista').innerHTML = `<div class="info-corpo">${inf.html}</div>`;
@@ -1081,7 +1086,7 @@ function renderModalMagia(){
   </div>`;
 }
 function abrirMagia(id, origem){
-  modalSlot = null; modalMagia = id; modalVolta = origem || null;
+  modalSlot = null; modalMagia = id; modalMon = null; modalVolta = origem || null;
   renderModalMagia();
   $('#modal-fundo').hidden = false;
   document.body.style.overflow = 'hidden';
@@ -1592,9 +1597,29 @@ function sortearDrops(b){
 
 /* ----- Onde conseguir ----- */
 const lojaPorId = id => LOJAS.find(l => l.id === id);
-const precoItem = (it, loja) => PRECOS_ITEM[it.tier] ? Math.round(PRECOS_ITEM[it.tier] * ((loja && loja.mult) || 1)) : null;
+function fatorItem(it){
+  const F = FATOR_PRECO;
+  if (ARMAS.includes(it)) return F.categoria[it.categoria] || 1;
+  if (ehEscudo(it)) return F.escudo;
+  if (ARMADURAS.includes(it)) return (F.slot[it.slot] || 1) * (F.tipo[it.tipo] || 1);
+  return F.acessorio;
+}
+// arredonda para um valor "de loja": comuns em prata, raros em décimos de ouro, perfeitos em ouro
+function arredondaPreco(v){
+  const passo = v < 1000 ? 10 : v < 20000 ? 100 : v < 1000000 ? 1000 : 100000;
+  return Math.max(passo, Math.round(v / passo) * passo);
+}
+const precoItem = (it, loja) => PRECOS_ITEM[it.tier] ? arredondaPreco(PRECOS_ITEM[it.tier] * fatorItem(it) * ((loja && loja.mult) || 1)) : null;
 const precoMagia = m => PRECOS_MAGIA[m.tier] || null;
-const moedas = v => `${fmt(v)} ${v === 1 ? 'moeda' : 'moedas'} de ouro`;
+// 12340 bronze -> "12 ouro e 34 prata"
+function moedas(v){
+  if (v == null) return '—';
+  const partes = [];
+  let resto = Math.round(v);
+  MOEDAS.forEach(mo => { const q = Math.floor(resto / mo.valor); if (q) { partes.push(`${fmt(q)} ${mo.nome}`); resto -= q * mo.valor; } });
+  if (!partes.length) return '0 bronze';
+  return partes.slice(0, 2).join(' e ');
+}
 function fontesItem(id){
   const drops = [];
   MONSTROS.forEach(m => (m.drops || []).forEach(dp => { if (dp.item === id) drops.push({ m, chance: dp.chance }); }));
@@ -1608,6 +1633,34 @@ function htmlFontes(it){
   if (f.drops.length) partes.push(`<b>Cai de:</b> ${f.drops.map(x => `<button class="nome-magia" data-mon-info="${x.m.id}">${esc(x.m.nome)}</button> ${x.chance}%`).join(', ')}`);
   if (it.obtencao) partes.push(`<b>Como obter:</b> ${esc(it.obtencao)}`);
   return partes.length ? `<div class="fontes">${partes.join('<br>')}</div>` : '';
+}
+function abrirItemInfo(id, lojaId, origem){
+  const it = item(id); if (!it) return;
+  const loja = lojaId ? lojaPorId(lojaId) : null;
+  const valor = PRECOS_ITEM[it.tier] ? arredondaPreco(PRECOS_ITEM[it.tier] * fatorItem(it)) : null;
+  INFO['item-' + id] = { titulo: esc(it.nome), sub: `${TIERS[it.tier].nome}, ${tipoItem(it).toLowerCase()}`, html:
+    `${detalheItem(it, true)}
+     ${loja ? `<p style="margin:10px 0 0"><b>Preço em ${esc(loja.nome)}:</b> ${moedas(precoItem(it, loja))}</p>` : ''}
+     <p style="margin:6px 0"><b>Valor de referência:</b> ${moedas(valor)}${['lendario','unico'].includes(it.tier) ? ' (não se vende em lojas)' : ''}</p>
+     ${htmlFontes(it)}` };
+  abrirInfo('item-' + id, origem);
+}
+function abrirPericiaInfo(chave, origem){
+  const [esId, idx] = chave.split(':'); const es = ESPECIALISTAS.find(x => x.id === esId); if (!es) return;
+  const p = es.ensina[parseInt(idx)]; if (!p) return;
+  const outros = ESPECIALISTAS.filter(x => x.id !== es.id && x.ensina.some(q => q.pericia === p.pericia));
+  const at = ATRIBUTOS.find(a => a.id === p.attr);
+  INFO['pericia'] = { titulo: esc(p.pericia), sub: `perícia de ${at ? at.nome : p.attr}`, html:
+    `<p>Aprender <b>${esc(p.pericia)}</b> dá <b>+1</b> nas perícias de ${realce(p.attr)} desse tipo, como uma bolinha de evolução.</p>
+     <dl class="ficha-magia">
+       <dt>Quem ensina</dt><dd>${esc(es.nome)}</dd>
+       <dt>Onde</dt><dd>${esc(es.lugar)}</dd>
+       <dt>Forma</dt><dd>${FORMAS_ENSINO[p.forma]}</dd>
+       <dt>${p.forma === 'venda' ? 'Preço' : p.forma === 'troca' ? 'Pede em troca' : 'Missão'}</dt><dd>${esc(p.custo)}</dd>
+     </dl>
+     <p class="nota">${esc(es.descricao)}</p>
+     ${outros.length ? `<p><b>Também ensinam:</b> ${outros.map(o => `${esc(o.nome)} (${esc(o.lugar)})`).join(', ')}</p>` : ''}` };
+  abrirInfo('pericia', origem);
 }
 function mestresDaMagia(id){
   const r = [];
@@ -1635,7 +1688,7 @@ function rAtlas(){
     h += `<section class="bloco lugar"><h2>${esc(l.nome)} ${mons.length ? `<small>${mons.length} ${mons.length === 1 ? 'criatura' : 'criaturas'}</small>` : ''}</h2>
       <p>${esc(l.desc)}</p>
       ${mons.length ? `<div class="lugar-lista"><b>Criaturas:</b> ${mons.map(m => `<button class="nome-magia" data-mon-info="${m.id}">${esc(m.nome)}</button> ${estrelas(m.dificuldade)}${m.especial ? ` <span class="tag-esp">${esc(m.especial)}</span>` : ''}`).join('<br>')}</div>` : ''}
-      ${itens.length ? `<div class="lugar-lista"><b>Itens daqui:</b><br>${itens.map(it => `${tierBadge(it.tier)} ${esc(it.nome)}`).join('<br>')}</div>` : ''}
+      ${itens.length ? `<div class="lugar-lista"><b>Itens daqui:</b><br>${itens.map(it => `${tierBadge(it.tier)} <button class="nome-magia" data-item-info="${it.id}">${esc(it.nome)}</button>`).join('<br>')}</div>` : ''}
       ${blocoLojas(l.nome)}${blocoMestres(l.nome)}${blocoEspecialistas(l.nome)}${blocoTesouros(mons)}
     </section>`;
   });
@@ -1644,7 +1697,7 @@ function rAtlas(){
 function blocoLojas(lugar){
   return LOJAS.filter(l => l.lugar === lugar).map(l => `<details class="sub-bloco"><summary>🛒 ${esc(l.nome)} <small>${l.itens.length} itens${l.mult !== 1 ? `, preços ×${String(l.mult).replace('.', ',')}` : ''}</small></summary>
     <p class="nota">${esc(l.dono)}. ${esc(l.descricao)}</p>
-    <ul class="lista-preco">${porTier(l.itens.map(item).filter(Boolean)).map(it => `<li><span>${tierBadge(it.tier)} ${esc(it.nome)}</span><b>${moedas(precoItem(it, l))}</b></li>`).join('')}</ul></details>`).join('');
+    <ul class="lista-preco">${porTier(l.itens.map(item).filter(Boolean)).map(it => `<li><span>${tierBadge(it.tier)} <button class="nome-magia" data-item-info="${it.id}" data-loja="${l.id}">${esc(it.nome)}</button></span><b>${moedas(precoItem(it, l))}</b></li>`).join('')}</ul></details>`).join('');
 }
 function blocoMestres(lugar){
   return MESTRES.filter(ms => ms.lugar === lugar).map(ms => `<details class="sub-bloco"><summary>✨ ${esc(ms.nome)} <small>ensina ${ms.ensina.length} magias</small></summary>
@@ -1654,7 +1707,7 @@ function blocoMestres(lugar){
 function blocoEspecialistas(lugar){
   return ESPECIALISTAS.filter(es => es.lugar === lugar).map(es => `<details class="sub-bloco"><summary>🎓 ${esc(es.nome)} <small>${es.ensina.length} ${es.ensina.length === 1 ? 'perícia' : 'perícias'}</small></summary>
     <p class="nota">${esc(es.descricao)}</p>
-    <ul class="lista-preco">${es.ensina.map(p => `<li><span><b>${esc(p.pericia)}</b> <span class="atr">${p.attr}</span></span><b>${FORMAS_ENSINO[p.forma]}</b></li><li class="missao">${esc(p.custo)}</li>`).join('')}</ul>
+    <ul class="lista-preco">${es.ensina.map((p, i) => `<li><span><button class="nome-magia" data-pericia-info="${es.id}:${i}">${esc(p.pericia)}</button> <span class="atr">${p.attr}</span></span><b>${FORMAS_ENSINO[p.forma]}</b></li><li class="missao">${esc(p.custo)}</li>`).join('')}</ul>
     <p class="nota">Cada perícia aprendida vale +1 nas perícias daquele tipo, como uma bolinha de evolução.</p></details>`).join('');
 }
 function blocoTesouros(mons){
@@ -1663,7 +1716,7 @@ function blocoTesouros(mons){
   if (!vistos.size) return '';
   const lista = [...vistos.values()].sort((a, b) => ORDEM_TIER.indexOf(b.it.tier) - ORDEM_TIER.indexOf(a.it.tier));
   return `<details class="sub-bloco"><summary>💰 Tesouros das criaturas daqui <small>${lista.length} itens</small></summary>
-    <ul class="lista-preco">${lista.map(x => `<li><span>${tierBadge(x.it.tier)} ${esc(x.it.nome)}</span><b>${esc(x.m.nome)}, ${x.chance}%</b></li>`).join('')}</ul></details>`;
+    <ul class="lista-preco">${lista.map(x => `<li><span>${tierBadge(x.it.tier)} <button class="nome-magia" data-item-info="${x.it.id}">${esc(x.it.nome)}</button></span><b>${esc(x.m.nome)}, ${x.chance}%</b></li>`).join('')}</ul></details>`;
 }
 const porDificuldade = lista => lista.slice().sort((a, b) => a.dificuldade - b.dificuldade);
 
@@ -1906,8 +1959,9 @@ function rTutoriais(){
       <p>Humanoides usam armas e armaduras do jogo, e elas contam como nos personagens. Monstros mais fortes podem ter habilidades e magias. Cada drop é sorteado separadamente pela sua chance, e alguns monstros não deixam nada.</p>
       <p>Na página Bestiário, <b>+ Batalha</b> coloca o monstro no nível do seu personagem. Na batalha, dá para mudar o nível e a dificuldade de cada um, marcar dano e cura e sortear os drops de quem caiu.</p>`],
     ['Comércio e aprendizado', `
-      <p>Itens Comuns, Raros e Perfeitos podem ser comprados em lojas. O preço base depende do tier, e cada loja multiplica o preço:</p>
-      ${tabela(['Tier','Item','Aprender magia'], Object.keys(PRECOS_ITEM).map(t => [TIERS[t].nome, moedas(PRECOS_ITEM[t]), moedas(PRECOS_MAGIA[t])]))}
+      <div class="formula">10 bronze = 1 prata<br>100 prata = 1 ouro<br>1000 ouro = 1 platina</div>
+      <p>Itens Comuns, Raros e Perfeitos podem ser comprados em lojas. O preço depende do tier e do tipo do item (uma couraça custa mais que um par de luvas), e cada loja ainda multiplica o valor:</p>
+      ${tabela(['Tier','Item (valor base)','Aprender magia'], Object.keys(PRECOS_ITEM).map(t => [TIERS[t].nome, moedas(PRECOS_ITEM[t]) + (['lendario','unico'].includes(t) ? ' (não se vende)' : ''), PRECOS_MAGIA[t] ? moedas(PRECOS_MAGIA[t]) : 'Missão']))}
       <p>Itens e magias Lendários e Únicos não se compram: vêm de monstros fortes, missões e lugares especiais. Quanto mais forte o monstro, melhores os itens que ele deixa: criaturas de dificuldade 2 e 3 deixam itens Raros, e as de 3 a 5 deixam Perfeitos.</p>
       <p>Especialistas ensinam perícias por <b>venda</b> (moedas), <b>troca</b> (um objeto ou segredo) ou <b>missão</b>. Cada perícia aprendida vale +1 nas perícias daquele tipo.</p>
       <p>No Atlas, cada lugar mostra as lojas, os mestres de magia, os especialistas e os tesouros das criaturas. No Compêndio de itens, cada item mostra onde conseguir.</p>`],
@@ -1942,6 +1996,7 @@ document.querySelector('.abas').addEventListener('click', e => {
   const b = e.target.closest('button[data-aba]'); if (b) irPara(b.dataset.aba);
 });
 $('#abrir-menu').addEventListener('click', abrirMenu);
+$('#btn-status').addEventListener('click', () => irPara('status'));
 $('#fechar-menu').addEventListener('click', fecharMenu);
 $('#veu').addEventListener('click', fecharMenu);
 document.addEventListener('keydown', e => { if (e.key === 'Escape') { if (!$('#modal-fundo').hidden) fecharModal(); else fecharMenu(); } });
@@ -1951,6 +2006,9 @@ $('#modal-fundo').addEventListener('click', e => {
   const b = e.target.closest('button'); if (!b) return;
   if (b.dataset.filtro === 'modal-tier') { modalTier = b.dataset.valor; renderModal(); $('#modal-lista').scrollTop = 0; return; }
   if (b.dataset.ir) { fecharModal(); irPara(b.dataset.ir); return; }
+  if (b.dataset.monInfo) { const m = monstro(b.dataset.monInfo); modalMagia = null; abrirMonstro({ id: m.id, nivel: P.nivel, dif: m.dificuldade }); return; }
+  if (b.dataset.magiaInfo) { abrirMagia(b.dataset.magiaInfo); return; }
+  if (b.dataset.itemInfo) { abrirItemInfo(b.dataset.itemInfo, b.dataset.loja); return; }
   if (b.dataset.mgUsar || b.dataset.mgDevolver || b.dataset.mgEquipar || b.dataset.mgRemover) { acaoMagia(b); return; }
   if (modalMon && acaoMonModal(b)) return;
   if (b.dataset.item !== undefined && modalSlot) equipar(modalSlot, b.dataset.item);
@@ -2000,6 +2058,8 @@ conteudo.addEventListener('click', e => {
   }
   if (t.dataset.info) { abrirInfo(t.dataset.info, t); return; }
   if (t.dataset.magiaInfo) { abrirMagia(t.dataset.magiaInfo, t); return; }
+  if (t.dataset.itemInfo) { abrirItemInfo(t.dataset.itemInfo, t.dataset.loja, t); return; }
+  if (t.dataset.periciaInfo) { abrirPericiaInfo(t.dataset.periciaInfo, t); return; }
   if (t.dataset.monInfo) { const m = monstro(t.dataset.monInfo); abrirMonstro({ id: m.id, nivel: P.nivel, dif: m.dificuldade }, t); return; }
   if (t.dataset.monFicha) { abrirMonstro({ uid: t.dataset.monFicha }, t); return; }
   if (t.dataset.monRapido) {
