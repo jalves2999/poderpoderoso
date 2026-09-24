@@ -259,6 +259,8 @@ details.capitulo .corpo{padding:0 16px 14px}
 .modal .cab small{display:block;font-family:var(--texto);font-size:0.98rem;color:var(--tinta-suave);font-weight:400}
 .modal .cab button{width:44px;height:44px;flex:none;cursor:pointer;background:none;border:1px solid var(--tinta-suave);border-radius:3px;font-size:1.2rem;color:var(--tinta)}
 .modal .chips{padding:8px 16px 0;margin:0}
+#modal-busca{margin:10px 16px 0;width:calc(100% - 32px)}
+.contagem{margin:12px 2px 0;font-weight:700;color:var(--tinta-suave)}
 .modal .lista{overflow-y:auto;padding:4px 16px 16px;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
 .modal .grupo{font-style:italic;color:var(--tinta-suave);margin:14px 0 4px;padding-bottom:3px;border-bottom:1px solid rgba(185,142,59,.6)}
 .opcao{display:block;width:100%;text-align:left;cursor:pointer;margin:6px 0;padding:10px 12px;
@@ -801,7 +803,9 @@ function calcular(p){
   const defesaD10 = clamp(defesaBruta, 0, REGRAS.defesaMaxD10);
 
   // Ações de ataque por turno
-  const acoesExtra = cat.acoesExtra || 0;
+  // arma muito leve só dá a ação extra se a mão secundária estiver sem escudo
+  const acoesExtra = cat.acoesExtra && !escudo ? cat.acoesExtra : 0;
+  if (cat.acoesExtra && escudo) avisos.push(`${arma.nome} só dá +${cat.acoesExtra} ação de ataque sem escudo. Com ${escudo.nome} na outra mão, o bônus não vale.`);
   const perdaEscudo = escudo ? (escudo.perdeAcao || 0) : 0;
   const acoesAtaque = Math.max(0, A.AGI + E.acoesAtaque + acoesExtra - perdaEscudo);
   const custoAtaque = cat.custo || 1;
@@ -944,7 +948,7 @@ function detalheItem(it, comHistoria){
     const c = CATEGORIAS_ARMA[it.categoria];
     partes.push(`${c.nome}, ${it.maos === 2 ? 'duas mãos' : 'uma mão'}`);
     if (it.dados) partes.push(`dano ${it.dados}d10`);
-    if (c.acoesExtra) partes.push(`+${c.acoesExtra} ação de ataque por turno`);
+    if (c.acoesExtra) partes.push(`+${c.acoesExtra} ação de ataque por turno, só sem escudo`);
     if (c.custo > 1) partes.push(`cada ataque custa ${c.custo} ações`);
     if (c.forMin) partes.push(`FOR ${c.forMin}`);
     if (it.alcance > 1) partes.push(`alcance ${it.alcance}`);
@@ -986,7 +990,7 @@ function rEquipar(){
 }
 
 /* ----- Modal de escolha de item ----- */
-let modalSlot = null, modalTier = 'todos';
+let modalSlot = null, modalTier = 'todos', modalBusca = '';
 function alertaItem(it, slotId){
   const r = calcular(P), msgs = [];
   if (ARMAS.includes(it)) {
@@ -994,7 +998,9 @@ function alertaItem(it, slotId){
     if (c.forMin && r.A.FOR < c.forMin) msgs.push(`Pede FOR ${c.forMin}; você tem ${r.A.FOR}`);
     if (slotId === 'arma' && it.maos === 2 && P.equip.secundaria) msgs.push('Duas mãos: vai liberar a mão secundária');
   }
-  if (ehEscudo(it) && it.perdeAcao && r.A.AGI + r.acoesExtra - it.perdeAcao <= 0) msgs.push('Com sua AGI, você ficaria sem ataques físicos');
+  if (ehEscudo(it) && it.perdeAcao && r.A.AGI + r.E.acoesAtaque - it.perdeAcao <= 0) msgs.push('Com sua AGI, você ficaria sem ataques físicos');
+  if (ehEscudo(it) && r.cat.acoesExtra) msgs.push(`Com escudo, ${r.arma.nome} perde o +${r.cat.acoesExtra} ação de ataque`);
+  if (slotId === 'arma' && ARMAS.includes(it) && (CATEGORIAS_ARMA[it.categoria] || {}).acoesExtra && r.escudo) msgs.push(`Com ${r.escudo.nome} na outra mão, não ganha o +1 ação de ataque`);
   if (slotId.startsWith('acess')) {
     const outro = SLOTS.some(s => s.id !== slotId && s.id.startsWith('acess') && P.equip[s.id] === it.id);
     if (outro) msgs.push('Já equipado em outro slot: o efeito não acumula');
@@ -1010,9 +1016,10 @@ function renderModal(){
   const todos = s.lista();
   const tiersPresentes = Object.keys(TIERS).filter(t => todos.some(it => it.tier === t));
   $('#modal-titulo').innerHTML = `${esc(s.nome.replace(/ \(.*\)/, ''))}<small>${todos.length} itens disponíveis</small>`;
-  $('#modal-filtros').innerHTML = tiersPresentes.length > 1
+  if (!$('#modal-busca')) $('#modal-filtros').innerHTML = `<input type="search" id="modal-busca" placeholder="🔍 Buscar neste espaço" aria-label="Buscar item" value="${esc(modalBusca)}"><div id="modal-chips"></div>`;
+  $('#modal-chips').innerHTML = tiersPresentes.length > 1
     ? chips('modal-tier', Object.assign({ todos:'Todos' }, ...tiersPresentes.map(t => ({ [t]: TIERS[t].nome }))), modalTier) : '';
-  const lista = todos.filter(it => modalTier === 'todos' || it.tier === modalTier);
+  const lista = todos.filter(it => (modalTier === 'todos' || it.tier === modalTier) && (!modalBusca.trim() || combinaBusca(it, modalBusca)));
   const grupos = {};
   lista.forEach(it => {
     const g = s.id === 'secundaria' ? (ehEscudo(it) ? 'Escudos' : 'Focos de uma mão')
@@ -1027,11 +1034,11 @@ function renderModal(){
         <span class="nome"><span>${esc(it.nome)}</span>${it.id === atual ? '<span class="marca">Equipado</span>' : ''}</span>
         ${detalheItem(it)}${alertaItem(it, s.id)}</button>`).join('');
   });
-  if (!lista.length) h += `<p class="vazio">Nenhum item deste tier para este slot.</p>`;
+  if (!lista.length) h += `<p class="vazio">Nenhum item encontrado para este espaço.</p>`;
   $('#modal-lista').innerHTML = h;
 }
 function abrirModal(slotId){
-  modalSlot = slotId; modalTier = 'todos'; modalMagia = null;
+  modalSlot = slotId; modalTier = 'todos'; modalBusca = ''; modalMagia = null; $('#modal-filtros').innerHTML = '';
   renderModal();
   $('#modal-fundo').hidden = false;
   document.body.style.overflow = 'hidden';
@@ -1268,7 +1275,7 @@ function rStatus(){
   ], '', 'q4');
 
   // ----- Ataque -----
-  let expFis = `<div class="formula">Ataques físicos = AGI + evolução + arma muito leve − escudo pesado</div>AGI ${A.AGI}` +
+  let expFis = `<div class="formula">Ataques físicos = AGI + evolução + arma muito leve (sem escudo) − escudo pesado</div>AGI ${A.AGI}` +
     (r.E.acoesAtaque ? ` + ${r.E.acoesAtaque} (evolução)` : '') +
     (r.acoesExtra ? ` + ${r.acoesExtra} (arma ${r.cat.nome.toLowerCase()})` : '') +
     (r.perdaEscudo ? ` − ${r.perdaEscudo} (${esc(r.escudo.nome)})` : '') +
@@ -1435,7 +1442,29 @@ function rSalvos(){
 }
 
 /* ----- Compêndio de itens ----- */
-const filtroItens = { cat:'todos', tier:'todos', col:'todos', busca:'' };
+const filtroItens = { cat:'todos', tier:'todos', col:'todos', ordem:'tier', busca:'' };
+// texto completo de busca de um item: nome, efeito, tipo, atributos, lugar, lojas, monstros e missões
+const _indiceItem = {};
+// cada palavra precisa aparecer; siglas de atributo em maiúsculas (FOR, INT...) procuram itens que dão aquele atributo
+function combinaBusca(it, busca){
+  return busca.trim().split(/\s+/).every(p => {
+    const sig = ATRIBUTOS.find(a => a.id === p);
+    if (sig) return !!(it.atributos && it.atributos[sig.id]) || (sig.id === 'FOR' && CATEGORIAS_ARMA[it.categoria] && CATEGORIAS_ARMA[it.categoria].forMin && false);
+    return textoBuscaItem(it).includes(semAcento(p));
+  });
+}
+function textoBuscaItem(it){
+  if (_indiceItem[it.id]) return _indiceItem[it.id];
+  const f = fontesItem(it.id), partes = [it.nome, it.efeito, it.tema, it.historia, it.desvantagem, it.obtencao, tipoItem(it), TIERS[it.tier].nome];
+  if (ARMAS.includes(it)) { const c = CATEGORIAS_ARMA[it.categoria]; partes.push(c.nome, it.foco || '', it.maos === 2 ? 'duas maos' : 'uma mao', `${it.dados}d10`, it.alcance > 1 ? 'distancia arco' : 'corpo a corpo'); }
+  if (ARMADURAS.includes(it)) partes.push(TIPOS_ARMADURA[it.tipo], it.slot);
+  if (ehEscudo(it)) partes.push('escudo', it.tipoEscudo);
+  if (it.atributos) Object.entries(it.atributos).forEach(([k]) => { const a = ATRIBUTOS.find(x => x.id === k); partes.push(k, a ? a.nome : ''); });
+  if (it.bonus) Object.keys(it.bonus).forEach(k => partes.push({ slots:'slots magia', dadoMagico:'dano magico', dadoCura:'cura', carga:'carga', mov:'movimento', critDano:'critico', recurso:'recurso mp fe furia foco marca', ignoraDF:'perfura defesa', usosCusto1:'usos magia' }[k] || k));
+  if (it.df) partes.push('defesa fisica DF'); if (it.dm) partes.push('defesa magica DM');
+  f.lojas.forEach(l => partes.push(l.nome, l.lugar)); f.drops.forEach(x => partes.push(x.m.nome, x.m.local || '')); f.missoes.forEach(m => partes.push(m.nome));
+  return (_indiceItem[it.id] = semAcento(partes.filter(Boolean).join(' ')));
+}
 const CATS_ITENS = { todos:'Todos', armas:'Armas', magicas:'Armas mágicas', escudos:'Escudos', armaduras:'Armaduras', acessorios:'Acessórios' };
 function catItem(it){
   if (ARMAS.includes(it)) return it.foco ? 'magicas' : 'armas';
@@ -1462,10 +1491,12 @@ const opcoesTier = () => Object.assign({ todos:'Todos os tiers' }, ...Object.ent
 function rCompItens(){
   return `<h2 class="titulo-pagina">Compêndio de itens</h2>
     <p class="intro">Tudo o que existe nas forjas e nos tesouros do reino.</p>
-    ${painelFiltros('itens', `<input type="search" id="busca-itens" value="${esc(filtroItens.busca)}" placeholder="Buscar por nome, efeito ou lugar" aria-label="Buscar itens">`, [
+    ${painelFiltros('itens', `<input type="search" id="busca-itens" value="${esc(filtroItens.busca)}" placeholder="🔍 Buscar item: nome, efeito, atributo, lugar, monstro..." aria-label="Buscar itens">`, [
       ['Categoria', chips('itens-cat', CATS_ITENS, filtroItens.cat)],
       ['Coleção', chips('itens-col', Object.assign({ todos:'Todas as coleções', normais:'Itens comuns da forja' }, COLECOES), filtroItens.col)],
-      ['Tier', chips('itens-tier', opcoesTier(), filtroItens.tier)]], contaAtivos(filtroItens))}
+      ['Tier', chips('itens-tier', opcoesTier(), filtroItens.tier)],
+      ['Ordem', chips('itens-ord', { tier:'Por tier', nome:'Por nome', preco:'Por preço', peso:'Por peso' }, filtroItens.ordem)]], contaAtivos(filtroItens) - 1)}
+    <p class="nota" style="margin:6px 2px 0">Busque por nome, efeito, atributo em maiúsculas (FOR, INT, PER...), tipo (arco, escudo, peitoral), bônus (crítico, cura, movimento), lugar, loja, monstro ou missão. Várias palavras juntas filtram mais.</p>
     <div id="lista-comp">${listaItens()}</div>`;
 }
 function listaItens(){
@@ -1474,13 +1505,16 @@ function listaItens(){
     (filtroItens.cat === 'todos' || catItem(it) === filtroItens.cat) &&
     (filtroItens.tier === 'todos' || it.tier === filtroItens.tier) &&
     (filtroItens.col === 'todos' || (filtroItens.col === 'normais' ? !it.colecao : it.colecao === filtroItens.col)) &&
-    (!b || semAcento(it.nome + ' ' + (it.efeito || '') + ' ' + (it.tema || '') + ' ' + (it.historia || '') + ' ' + fontesItem(it.id).lojas.map(l => l.lugar).join(' ')).includes(b)));
-  if (!filtrados.length) return `<section class="bloco"><p class="vazio">Nenhum item com esses filtros. Tente outro tier ou limpe a busca.</p></section>`;
-  let h = '';
+    (!b || combinaBusca(it, filtroItens.busca)));
+  if (!filtrados.length) return `<section class="bloco"><p class="vazio">Nenhum item encontrado${b ? ` para "${esc(filtroItens.busca.trim())}"` : ''}. Tente outras palavras ou limpe os filtros.</p></section>`;
+  const ordenar = its => filtroItens.ordem === 'nome' ? its.slice().sort((a, c) => a.nome.localeCompare(c.nome, 'pt'))
+    : filtroItens.ordem === 'preco' ? its.slice().sort((a, c) => (PRECOS_ITEM[a.tier] * fatorItem(a)) - (PRECOS_ITEM[c.tier] * fatorItem(c)))
+    : filtroItens.ordem === 'peso' ? its.slice().sort((a, c) => (a.peso || 0) - (c.peso || 0)) : porTier(its);
+  let h = `<p class="contagem">${filtrados.length} ${filtrados.length === 1 ? 'item encontrado' : 'itens encontrados'}${b ? ` para "${esc(filtroItens.busca.trim())}"` : ''}</p>`;
   Object.keys(CATS_ITENS).filter(c => c !== 'todos').forEach(c => {
     const its = filtrados.filter(it => catItem(it) === c); if (!its.length) return;
     h += `<section class="bloco"><h2>${CATS_ITENS[c]} <small>${its.length}</small></h2>` +
-      porTier(its).map(it => `<div class="entrada"><div class="nome">${esc(it.nome)}</div>${detalheItem(it, true)}${htmlFontes(it)}</div>`).join('') + `</section>`;
+      ordenar(its).map(it => `<div class="entrada"><div class="nome">${esc(it.nome)}</div>${detalheItem(it, true)}${htmlFontes(it)}</div>`).join('') + `</section>`;
   });
   return h;
 }
@@ -1553,7 +1587,7 @@ function calcMonstro(mon, nivel, difN, pctVida){
   const defM = Math.round(dm * A.FDV * mult * D.defesa * md.dm);
   const defD10 = Math.min(REGRAS.defesaMaxD10, A.DEX + (escudo ? escudo.defesa : 0));
   const cat = arma && !arma.foco ? CATEGORIAS_ARMA[arma.categoria] : CATEGORIAS_ARMA.desarmado;
-  const acoes = Math.max(0, A.AGI + md.ataques + (cat.acoesExtra || 0) - (escudo ? escudo.perdeAcao || 0 : 0));
+  const acoes = Math.max(0, A.AGI + md.ataques + (escudo ? 0 : (cat.acoesExtra || 0)) - (escudo ? escudo.perdeAcao || 0 : 0));
   const custoAt = cat.custo || 1;
   const ataquesTurno = acoes === 0 ? '0' : acoes >= custoAt ? String(Math.floor(acoes / custoAt)) : `1 a cada ${Math.ceil(custoAt / acoes)} turnos`;
   const bonusFoco = (arma && arma.bonus && arma.bonus.dadoMagico) || 0;
@@ -2300,7 +2334,7 @@ function impRegras(){
       <li><b>Chance de defesa</b>: 1d10 ≤ DEX + escudo (leve +1, pesado +2 e −1 ação). Máximo ${R.defesaMaxD10}.</li>
       <li><b>Dano físico</b> = (FOR + dado da arma) d10 × nível − DF do alvo. Mínimo ${R.danoMinimoPct}% do dano bruto.</li>
       <li><b>Dano mágico</b> = (INT + foco + dado da magia) d10 × nível − DM do alvo. <b>Cura</b> = (FDV + foco + dado) d10 × nível.</li>
-      <li><b>Ataques físicos por turno</b> = AGI (+1 arma muito leve, −1 escudo pesado). Arma muito pesada: 2 ações por ataque. <b>Ataques mágicos</b> = INT. <b>Reações</b> = ${R.reacoesBase} + evolução.</li>
+      <li><b>Ataques físicos por turno</b> = AGI (+1 com arma muito leve sem escudo, −1 escudo pesado). Arma muito pesada: 2 ações por ataque. <b>Ataques mágicos</b> = INT. <b>Reações</b> = ${R.reacoesBase} + evolução.</li>
       <li><b>Crítico</b>: d10 separado; 1 é crítico (${R.critBase}%), 1–2 com PER ${R.perLimiarCritico}+. Crítico = +${R.critBonusBase}% no dano final.</li>
       <li><b>Movimento</b> = ${R.movimentoBase} + AGI hex. <b>Carga</b> = ${R.cargaBase} + FOR × ${R.cargaPorFOR} kg; −1 movimento a cada ${R.pesoPorPenalidade} kg acima.</li>
       <li><b>FOR abaixo da exigida pela arma</b>: −1 DEX e −1 movimento por ponto.</li>
@@ -2510,14 +2544,14 @@ function rTutoriais(){
       ${tabela(['Categoria','Dado base','Efeito nos ataques','FOR mínima'],
         Object.entries(CATEGORIAS_ARMA).filter(([k]) => k !== 'desarmado' && k !== 'foco').map(([k,c]) => {
           const base = { muito_leve:'1d10', leve:'1d10', media:'2d10', pesada:'3d10', muito_pesada:'5d10' }[k];
-          const ef = c.acoesExtra ? `+${c.acoesExtra} ação de ataque por turno` : c.custo > 1 ? `cada ataque custa ${c.custo} ações` : 'normal';
+          const ef = c.acoesExtra ? `+${c.acoesExtra} ação de ataque por turno (só sem escudo)` : c.custo > 1 ? `cada ataque custa ${c.custo} ações` : 'normal';
           return [c.nome, base, ef, c.forMin || '—'];
         }))}
-      <p><b>Muito leve:</b> dano baixo, mas dá 1 ação de ataque a mais por turno. Um ladino com AGI 4 e adaga ataca 5 vezes.</p>
+      <p><b>Muito leve:</b> dano baixo, mas dá 1 ação de ataque a mais por turno, <b>desde que a outra mão não tenha escudo</b>. Um ladino com AGI 4 e adaga ataca 5 vezes; com um broquel, ataca 4.</p>
       <p><b>Muito pesada:</b> cada ataque custa 2 ações, mas rola 5d10 da arma. Um guerreiro com AGI 2 e martelo de guerra ataca 1 vez por turno, com muito mais dados em cada golpe. Como a defesa do alvo sai de cada ataque, poucos golpes grandes passam melhor por armaduras grossas.</p>
       <p>Com FOR abaixo da mínima, cada ponto que falta tira ${R.penalidadeFOR.dex} de DEX e ${R.penalidadeFOR.movimento} de movimento.</p>`],
     ['Ataques por turno', `
-      <div class="formula">Ataques físicos = AGI (+1 com arma muito leve, −1 com escudo pesado)<br>Ataques mágicos = INT</div>
+      <div class="formula">Ataques físicos = AGI (+1 com arma muito leve sem escudo, −1 com escudo pesado)<br>Ataques mágicos = INT</div>
       <p>Cada ponto de AGI é 1 ação de ataque físico por turno, e cada ponto de INT é 1 ataque mágico. Um não substitui o outro: um personagem com AGI 2 e INT 3 pode atacar 2 vezes com a arma e lançar 3 magias no mesmo turno.</p>
       <p>Armas muito pesadas gastam 2 ações por ataque. Com AGI 1, o ataque é preparado num turno e sai no seguinte.</p>
       <p>Habilidades físicas gastam ações de ataque físico, e habilidades mágicas gastam ataques mágicos, conforme a descrição de cada uma.</p>`],
@@ -2673,6 +2707,7 @@ $('#modal-fundo').addEventListener('click', e => {
   if (b.dataset.item !== undefined && modalSlot) equipar(modalSlot, b.dataset.item);
 });
 window.addEventListener('popstate', () => fecharModal(true));
+$('#modal-fundo').addEventListener('input', e => { if (e.target.id === 'modal-busca' && modalSlot) { modalBusca = e.target.value; renderModal(); } });
 $('#lista-menu').addEventListener('click', e => {
   const b = e.target.closest('[data-ir]'); if (!b) return;
   fecharMenu(); irPara(b.dataset.ir);
@@ -2713,8 +2748,9 @@ conteudo.addEventListener('click', e => {
   }
 
   if (t.dataset.limparFiltros) {
+    if (t.dataset.limparFiltros === 'itens') filtroItens.ordem = 'tier';
     const alvo = { itens: filtroItens, magias: filtroMagias, mon: filtroMon, pericias: filtroPericias, missoes: filtroMissoes, magiasEq: filtroMagiasEq, dungeons: filtroDungeons }[t.dataset.limparFiltros];
-    Object.keys(alvo).forEach(k => { if (k !== 'busca') alvo[k] = 'todos'; });
+    Object.keys(alvo).forEach(k => { if (k !== 'busca' && k !== 'ordem') alvo[k] = 'todos'; });
     const y = window.scrollY; render(); window.scrollTo(0, y); return;
   }
   if (t.dataset.imprimir) { window.print(); return; }
@@ -2818,7 +2854,7 @@ conteudo.addEventListener('click', e => {
 
   if (t.dataset.filtro) {
     const v = t.dataset.valor;
-    ({ 'itens-cat':() => filtroItens.cat = v, 'itens-tier':() => filtroItens.tier = v, 'itens-col':() => filtroItens.col = v,
+    ({ 'itens-cat':() => filtroItens.cat = v, 'itens-tier':() => filtroItens.tier = v, 'itens-col':() => filtroItens.col = v, 'itens-ord':() => filtroItens.ordem = v,
        'magias-cat':() => filtroMagias.cat = v, 'pericias-attr':() => filtroPericias.attr = v, 'mis-reg':() => filtroMissoes.regiao = v, 'dg-tipo':() => filtroDungeons.tipo = v, 'dg-dif':() => filtroDungeons.dif = v, 'meq-cat':() => filtroMagiasEq.cat = v, 'meq-tier':() => filtroMagiasEq.tier = v, 'meq-ver':() => filtroMagiasEq.ver = v, 'mis-dif':() => filtroMissoes.dif = v, 'mis-rec':() => filtroMissoes.recompensa = v, 'mis-st':() => filtroMissoes.status = v, 'pericias-apr':() => filtroPericias.aprendidas = v, 'mon-dif':() => filtroMon.dif = v, 'mon-tipo':() => filtroMon.tipo = v, 'mon-origem':() => filtroMon.origem = v, 'mon-local':() => filtroMon.local = v, 'atlas-reg':() => atlasReg = v, 'magias-tier':() => filtroMagias.tier = v,
        'hab-classe':() => habClasse = v })[t.dataset.filtro]();
     const y = window.scrollY; render(); window.scrollTo(0, y); return;
