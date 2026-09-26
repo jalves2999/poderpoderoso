@@ -508,6 +508,32 @@ ol.fases li.ativa{background:rgba(224,98,42,.15);border-left:3px solid #e0622a}
 .dg-mestre input{width:22px;height:22px;accent-color:var(--lacre)}
 .segredo-passado{margin-top:10px;padding:10px 12px;border-left:4px solid #4b1f5e;background:rgba(75,31,94,.08);font-style:italic}
 
+/* ---------- Mapa desenhado da dungeon ---------- */
+.dg-img-wrap{overflow:auto;margin:12px 0 4px;border:2px solid var(--couro);border-radius:4px;background:#0d0906;max-height:78vh}
+.dg-img-palco{position:relative;min-width:100%}
+.dg-zoom{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px;margin:12px 0 0}
+.dg-zoom span{min-width:52px;text-align:center;font-weight:700}
+.dg-zoom .btn-icone{background:var(--couro);font-size:1.4rem}
+.dg-zoom .btn-icone:disabled{opacity:.4;cursor:default}
+.dg-zoom a.btn{text-decoration:none}
+.dg-img-palco img{display:block;width:100%;height:auto}
+.dg-img-wrap .falta{display:none;padding:14px;color:#cbb487;font-style:italic}
+.dg-img-wrap.sem-imagem .dg-img-palco{display:none}
+.dg-img-wrap.sem-imagem .falta{display:block}
+.dg-nevoa{position:absolute;width:19%;aspect-ratio:1.3;transform:translate(-50%,-50%);border-radius:50%;pointer-events:none;
+  background:radial-gradient(ellipse at center,rgba(8,5,3,.92) 35%,rgba(8,5,3,.6) 60%,rgba(8,5,3,0) 72%)}
+.dg-marca{position:absolute;transform:translate(-50%,-50%);width:var(--m,42px);height:var(--m,42px);border-radius:50%;cursor:pointer;padding:0;
+  border:3px solid #b98e3b;background:rgba(241,228,195,.95);box-shadow:0 0 0 2px rgba(0,0,0,.6),0 3px 10px rgba(0,0,0,.7);font-size:calc(var(--m,42px) * .48);line-height:1;z-index:2}
+.dg-marca.conhecida{background:rgba(60,45,30,.95);color:#f1e4c3;border-style:dashed}
+.dg-marca.mestre{opacity:.9}
+.dg-marca.oculta{border-color:#8a6ad1}
+.dg-marca.resolvida{background:rgba(203,216,176,.95)}
+.dg-marca.atual{border-color:#e0622a;box-shadow:0 0 0 3px rgba(224,98,42,.5),0 0 18px rgba(224,98,42,.9);animation:pulsar 1.6s ease-in-out infinite}
+.dg-marca.sel{outline:3px solid #e0c27c;outline-offset:2px}
+.dg-marca .ok{position:absolute;right:-6px;top:-8px;font-size:14px;color:#3d6b2a;font-weight:700;background:#f1e4c3;border-radius:50%;width:18px;height:18px;line-height:18px}
+@keyframes pulsar{50%{box-shadow:0 0 0 6px rgba(224,98,42,.25),0 0 22px rgba(224,98,42,1)}}
+@media (prefers-reduced-motion:reduce){.dg-marca.atual{animation:none}}
+
 /* ---------- Missões ---------- */
 .nome-missao{padding:0;border:none;background:none;cursor:pointer;text-align:left;font-family:var(--titulo);font-weight:700;font-size:1.35rem;color:var(--lacre);text-decoration:underline;text-decoration-color:var(--ouro);text-underline-offset:3px}
 .missao-card.feita{opacity:.72}
@@ -2070,7 +2096,7 @@ function rAtlas(){
       <p>${esc(l.desc)}</p>
       ${mons.length ? `<div class="lugar-lista"><b>Criaturas:</b> ${mons.map(m => `<button class="nome-magia" data-mon-info="${m.id}">${esc(m.nome)}</button> ${estrelas(m.dificuldade)}${m.especial ? ` <span class="tag-esp">${esc(m.especial)}</span>` : ''}`).join('<br>')}</div>` : ''}
       ${itens.length ? `<div class="lugar-lista"><b>Itens daqui:</b><br>${itens.map(it => `${tierBadge(it.tier)} <button class="nome-magia" data-item-info="${it.id}">${esc(it.nome)}</button>`).join('<br>')}</div>` : ''}
-      ${blocoMissoes(l.nome)}${blocoDungeons(l.nome)}${blocoLojas(l.nome)}${blocoMestres(l.nome)}${blocoEspecialistas(l.nome)}${blocoTesouros(mons)}
+      ${blocoNpcs(l.nome)}${blocoMissoes(l.nome)}${blocoDungeons(l.nome)}${blocoLojas(l.nome)}${blocoMestres(l.nome)}${blocoEspecialistas(l.nome)}${blocoTesouros(mons)}
     </section>`;
   });
   return h;
@@ -2078,6 +2104,11 @@ function rAtlas(){
 function blocoMissoes(lugar){
   const ms = MISSOES.filter(m => m.lugar === lugar); if (!ms.length) return '';
   return `<details class="sub-bloco"><summary>📜 Missões <small>${ms.length}</small></summary><ul class="lista-preco">${ms.map(m => `<li><span><button class="nome-magia" data-missao-info="${m.id}">${esc(m.nome)}</button></span><b>nv ${m.nivel}+ ${estrelas(m.dificuldade)}</b></li>`).join('')}</ul></details>`;
+}
+function blocoNpcs(lugar){
+  const ds = DUNGEONS.filter(x => x.npc && x.npc.lugar === lugar); if (!ds.length) return '';
+  return ds.map(x => `<details class="sub-bloco"><summary>🗣️ ${esc(x.npc.nome)} <small>NPC</small></summary><div style="padding:0 12px 10px"><p>${esc(x.npc.descricao)}</p><p>${esc(x.npc.gancho)}</p>
+    <button class="btn pequeno" data-abrir-dungeon="${x.id}">${TIPOS_DUNGEON[x.tipo].ic} Ver ${esc(x.nome)}</button></div></details>`).join('');
 }
 function blocoDungeons(lugar){
   const ds = DUNGEONS.filter(x => x.lugar === lugar); if (!ds.length) return '';
@@ -2338,6 +2369,27 @@ function rDungeons(){
         <button class="btn" data-dungeon="${dg.id}">${st.visitadas.length ? 'Continuar exploração' : 'Explorar'}</button></section>`; }).join('')
       : '<section class="bloco"><p class="vazio">Nenhuma dungeon com esses filtros.</p></section>'}`;
 }
+const ZOOMS_DG = [1, 1.5, 2, 3, 4];
+let zoomDg = null;
+function mapaImagem(dg, st){
+  if (zoomDg == null) zoomDg = window.innerWidth < 700 ? 2 : 1;
+  const marcas = dg.salas.map(sl => {
+    const v = salaVisivel(dg, sl, st); const conhecido = v === 'visitada' || v === 'mestre';
+    const nevoa = !st.mestre && !st.visitadas.includes(sl.id) ? `<span class="dg-nevoa" style="left:${sl.px}%;top:${sl.py}%"></span>` : '';
+    if (!v) return nevoa;
+    const cls = `dg-marca ${v}${st.atual === sl.id ? ' atual' : ''}${salaSel === sl.id ? ' sel' : ''}${st.resolvidas.includes(sl.id) ? ' resolvida' : ''}${sl.oculta ? ' oculta' : ''}`;
+    return nevoa + `<button class="${cls}" data-sala="${sl.id}" style="left:${sl.px}%;top:${sl.py}%" aria-label="${esc(conhecido ? sl.nome : 'Sala desconhecida')}">
+      <span class="ic">${conhecido ? TIPOS_SALA[sl.tipo].ic : '?'}</span>${st.resolvidas.includes(sl.id) ? '<span class="ok">✓</span>' : ''}</button>`;
+  }).join('');
+  return `<div class="dg-zoom no-print"><button class="btn-icone" data-dg-zoom="-1" aria-label="Diminuir o zoom"${zoomDg <= ZOOMS_DG[0] ? ' disabled' : ''}>−</button>
+      <span>${Math.round(zoomDg * 100)}%</span>
+      <button class="btn-icone" data-dg-zoom="1" aria-label="Aumentar o zoom"${zoomDg >= ZOOMS_DG[ZOOMS_DG.length - 1] ? ' disabled' : ''}>＋</button>
+      <button class="btn pequeno simples" data-dg-zoom="0">Ajustar à tela</button>
+      <a class="btn pequeno simples" href="${esc(dg.imagem)}" target="_blank" rel="noopener">Abrir imagem</a></div>
+    <div class="dg-img-wrap" id="dg-img-wrap"><div class="dg-img-palco" style="width:${zoomDg * 100}%;--m:${Math.round(24 + zoomDg * 8)}px"><img src="${esc(dg.imagem)}" alt="Mapa de ${esc(dg.nome)}" onerror="this.closest('.dg-img-wrap').classList.add('sem-imagem')">${marcas}</div>
+    <p class="falta">Imagem do mapa não encontrada (${esc(dg.imagem)}). Veja o mapa em grade abaixo.</p></div>
+    <p class="nota" style="text-align:center">Use ＋ e − para dar zoom e arraste para ver o mapa. As áreas escuras ainda não foram exploradas.</p>`;
+}
 function mapaDungeon(dg, st){
   const W = 118, H = 84, bw = 100, bh = 58;
   const xs = dg.salas.map(sl => sl.x), ys = dg.salas.map(sl => sl.y);
@@ -2397,6 +2449,12 @@ function painelSala(dg, st){
     ${visitada && ocultosAqui.length ? `<p class="nota">Teste de PER (Percepção ou Investigação). Se passar, toque em Procurar para revelar a passagem.</p>` : ''}
   </section>`;
 }
+function blocoNpcDungeon(dg){
+  const n = dg.npc, rp = recompensasTxt({ recompensas: n.recompensa || {} });
+  return `<details class="sub-bloco"><summary>🗣️ ${esc(n.nome)} <small>${esc(n.lugar)}</small></summary><div style="padding:0 12px 10px">
+    <p>${esc(n.descricao)}</p><p><b>O pedido:</b> ${esc(n.gancho)}</p>${n.dicas ? `<p><b>Dicas que ela dá:</b> ${esc(n.dicas)}</p>` : ''}
+    ${rp.length ? `<p><b>Recompensa ao voltar:</b><br>${rp.join('<br>')}</p>` : ''}${n.recompensa && n.recompensa.extra ? `<p class="nota">${esc(n.recompensa.extra)}</p>` : ''}</div></details>`;
+}
 function rExplorar(dg){
   const st = estDg(dg.id);
   if (!salaSel) salaSel = st.atual || (dg.salas.find(sl => sl.tipo === 'entrada') || dg.salas[0]).id;
@@ -2410,7 +2468,8 @@ function rExplorar(dg){
       <p class="meta-missao">Exploradas: <b>${exploradas}</b> de ${total}${ocultas ? ` (+ ${ocultas} ${ocultas === 1 ? 'sala secreta' : 'salas secretas'})` : ''}</p>
       <label class="dg-mestre"><input type="checkbox" data-dg-mestre="1"${st.mestre ? ' checked' : ''}> Visão do mestre (mostrar o mapa inteiro)</label>
     </section>
-    ${mapaDungeon(dg, st)}
+    ${dg.imagem ? mapaImagem(dg, st) : ''}${dg.imagem ? `<details class="sub-bloco"><summary>Ver mapa em grade</summary>${mapaDungeon(dg, st)}</details>` : mapaDungeon(dg, st)}
+    ${dg.npc ? blocoNpcDungeon(dg) : ''}
     <p class="nota" style="text-align:center">Toque numa sala para ver os detalhes. Salas com ? ainda não foram exploradas.</p>
     ${painelSala(dg, st)}
     <section class="bloco"><h2>Na exploração</h2>
@@ -3085,6 +3144,15 @@ conteudo.addEventListener('click', e => {
   if (t.dataset.subMis) { subAbaMis = t.dataset.subMis; dungeonAberta = null; salaSel = null; render(); window.scrollTo(0, 0); return; }
   if (t.dataset.dungeon) { dungeonAberta = t.dataset.dungeon; salaSel = null; render(); window.scrollTo(0, 0); return; }
   if (t.dataset.dungeonVoltar) { dungeonAberta = null; salaSel = null; render(); window.scrollTo(0, 0); return; }
+  if (t.dataset.dgZoom !== undefined) {
+    const wrap = $('#dg-img-wrap'), v = parseInt(t.dataset.dgZoom);
+    const cx = wrap ? (wrap.scrollLeft + wrap.clientWidth / 2) / wrap.scrollWidth : .5, cy = wrap ? (wrap.scrollTop + wrap.clientHeight / 2) / wrap.scrollHeight : .5;
+    const i = ZOOMS_DG.indexOf(zoomDg);
+    zoomDg = v === 0 ? 1 : ZOOMS_DG[clamp((i < 0 ? 0 : i) + v, 0, ZOOMS_DG.length - 1)];
+    const y = window.scrollY; render(); window.scrollTo(0, y);
+    const w2 = $('#dg-img-wrap'); if (w2) { w2.scrollLeft = cx * w2.scrollWidth - w2.clientWidth / 2; w2.scrollTop = cy * w2.scrollHeight - w2.clientHeight / 2; }
+    return;
+  }
   if (t.dataset.entrar || t.dataset.resolver || t.dataset.procurar || t.dataset.dgEvento || t.dataset.dgReiniciar || t.dataset.dgBatalha) {
     const dg = dungeon(dungeonAberta), st = estDg(dg.id);
     if (t.dataset.entrar) { const id = t.dataset.entrar; if (!st.visitadas.includes(id)) st.visitadas.push(id); st.atual = id; salaSel = id; }
