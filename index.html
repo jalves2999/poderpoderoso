@@ -59,6 +59,7 @@ body{font-family:var(--texto);font-size:1.06rem;line-height:1.5;color:var(--tint
 .sub-topo{font-size:.9rem;color:#e8d8b0;font-style:italic}
 .stats-topo{display:flex;flex-wrap:wrap;gap:2px 10px;margin-top:3px;font-size:.88rem;font-weight:700;color:#f3e7c9}
 .stats-topo span{white-space:nowrap}
+.recurso-topo{display:inline-block;vertical-align:3px;margin-left:4px;padding:1px 8px;border-radius:10px;font-family:var(--texto);font-size:.8rem;font-weight:700;color:var(--couro-escuro);background:var(--ouro);text-shadow:none}
 .acoes-topo{flex:none;display:flex;flex-direction:column;gap:6px}
 .btn-icone{width:44px;height:44px;cursor:pointer;border:1px solid var(--ouro);border-radius:50%;font-size:1.25rem;line-height:1;
   background:rgba(18,11,6,.7);color:var(--ouro-claro);box-shadow:0 1px 4px rgba(0,0,0,.6)}
@@ -935,9 +936,9 @@ let aba = 'ficha';
 function atualizarTopo(){
   const cls = classe(P.classe), r = calcular(P);
   $('#img-retrato').style.visibility = ''; $('#img-retrato').src = srcRetrato(P.retrato || retratoPadrao(P.classe));
-  $('#quem').textContent = P.nome || 'Aventureiro sem nome';
+  $('#quem').innerHTML = `${esc(P.nome || 'Aventureiro sem nome')}${r.recursoMax != null ? ` <span class="recurso-topo" title="${esc(cls.recurso)} máximo">${esc(cls.recurso)} ${r.recursoMax}${cls.recursoNoAlvo ? '/alvo' : ''}</span>` : ''}`;
   $('#quem-sub').textContent = `${cls.nome}, nível ${P.nivel}`;
-  $('#stats-topo').innerHTML = `<span title="Vida">❤️ ${fmt(r.vida)}</span><span title="Defesa física">🛡️ ${fmt(r.defF)}</span><span title="Defesa mágica">✨ ${fmt(r.defM)}</span><span title="Dano físico">⚔️ ${r.dadosF}d10×${r.n}</span><span title="Ataques físicos por turno">🗡️ ${r.acoesAtaque === 0 ? 0 : r.turnosPorAtaque > 1 ? `1/${r.turnosPorAtaque}t` : r.ataquesFis}</span><span title="Ataques mágicos por turno">🔮 ${r.ataquesMag}</span><span title="Movimento em hexágonos">👣 ${r.movimento}</span>`;
+  $('#stats-topo').innerHTML = `<span title="Vida">❤️ ${fmt(r.vida)}</span><span title="Defesa física">🛡️ ${fmt(r.defF)}</span><span title="Defesa mágica">✨ ${fmt(r.defM)}</span><span title="Dano físico">⚔️ ${r.dadosF}d10×${r.n}</span><span title="Dano mágico (sem o dado da magia)">🔥 ${r.dadosM}d10×${r.n}</span><span title="Ataques físicos por turno">🗡️ ${r.acoesAtaque === 0 ? 0 : r.turnosPorAtaque > 1 ? `1/${r.turnosPorAtaque}t` : r.ataquesFis}</span><span title="Ataques mágicos por turno">🔮 ${r.ataquesMag}</span><span title="Movimento em hexágonos">👣 ${r.movimento}</span>`;
   document.documentElement.style.setProperty('--topo', $('#topo').offsetHeight + 'px');
 }
 
@@ -2836,7 +2837,7 @@ function rTutoriais(){
   const R = REGRAS;
   const caps = [
     ['Como usar o app', `
-      <p>O app tem duas partes. A <b>barra de baixo</b> é o seu personagem: Ficha (atributos e nível), Equipar, Magias, Evolução e Habilidades (com a aba de Perícias). No topo ficam o retrato, o nome, o nível, a vida (❤️), as defesas física (🛡️) e mágica (✨), o dano (⚔️), os ataques físicos (🗡️) e mágicos (🔮) por turno e o movimento em hexágonos (👣). À direita, o botão <b>🛡️</b> abre o Status (toque em qualquer card para ver a fórmula) e o botão <b>💾</b> (ou tocar no retrato) abre os personagens: salvar o atual, abrir um salvo ou criar um novo escolhendo classe e retrato.</p>
+      <p>O app tem duas partes. A <b>barra de baixo</b> é o seu personagem: Ficha (atributos e nível), Equipar, Magias, Evolução e Habilidades (com a aba de Perícias). No topo ficam o retrato, o nome, o nível, a vida (❤️), as defesas física (🛡️) e mágica (✨), o recurso da classe com o valor máximo (ao lado do nome), o dano físico (⚔️) e mágico (🔥, sem o dado da magia), os ataques físicos (🗡️) e mágicos (🔮) por turno e o movimento em hexágonos (👣). À direita, o botão <b>🛡️</b> abre o Status (toque em qualquer card para ver a fórmula) e o botão <b>💾</b> (ou tocar no retrato) abre os personagens: salvar o atual, abrir um salvo ou criar um novo escolhendo classe e retrato.</p>
       <p>O botão redondo <b>☰</b>, flutuando no canto esquerdo, abre o índice.</p>
       <p>O índice abre o resto:</p>
       ${tabela(['Grupo','Páginas'], [
