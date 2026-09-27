@@ -469,6 +469,24 @@ ol.fases li.ativa{background:rgba(224,98,42,.15);border-left:3px solid #e0622a}
 .sub-abas button[aria-selected=true]{background:var(--couro);color:var(--ouro-claro)}
 .sub-abas .qtd{font-family:var(--texto);font-size:.8rem;padding:0 7px;border-radius:9px;background:var(--ouro);color:var(--couro-escuro);vertical-align:3px}
 
+/* ---------- Área em hexágonos ---------- */
+.area-hex{margin:10px 0;padding:8px;border:1px solid rgba(63,48,29,.4);border-radius:4px;background:rgba(255,252,240,.55);text-align:center}
+.area-hex svg{display:block;margin:0 auto;width:100%;max-width:230px;height:auto}
+.area-hex polygon{stroke:#6d5a40;stroke-width:.7}
+.area-hex .h-vazio{fill:#efe3c4}
+.area-hex .h-alcance{fill:#a9c6de}
+.area-hex .h-area{fill:#d9603b}
+.area-hex .h-alvo{fill:#8e1b1b}
+.area-hex .h-voce{fill:#e0c27c;stroke:#6d5a40;stroke-width:1.4}
+.area-hex .h-self{fill:#d9603b}
+.area-hex .h-estrela{text-anchor:middle;fill:#3a2512}
+.area-hex figcaption{margin-top:6px;font-size:.88rem;color:var(--tinta-suave);line-height:1.5}
+.area-hex .lg{display:inline-block;width:12px;height:12px;border-radius:2px;border:1px solid #6d5a40;vertical-align:-1px;margin:0 3px 0 8px}
+.lg-voce{background:#e0c27c}.lg-alcance{background:#a9c6de}.lg-area{background:#d9603b}.lg-alvo{background:#8e1b1b}
+.area-hex.compacto{float:right;width:96px;margin:0 0 6px 10px;padding:4px}
+.area-hex.compacto figcaption{font-size:.72rem;margin-top:2px;line-height:1.25}
+.hc-corpo::after{content:'';display:block;clear:both}
+
 /* ---------- Preparo de sessão ---------- */
 .abas-sessao{margin:12px 0 0}
 .abas-sessao .chip b{font-size:.8rem;margin-left:2px}
@@ -1228,6 +1246,78 @@ function listaMagiasEq(r = calcular(P)){
   return h || `<section class="bloco"><p class="vazio">Nenhuma magia com esses filtros.</p></section>`;
 }
 
+/* ----- Área de efeito em hexágonos ----- */
+// Lê o texto de alcance e devolve a forma: self, toque, alvo, multi, raioSelf, raioAlvo, cone, linha (ou null)
+function areaDe(txt){
+  if (!txt) return null;
+  const t = semAcento(txt), num = re => { const m = t.match(re); return m ? parseInt(m[1]) : null; };
+  const variavel = /por (furia|marca|foco|mp)|a cada|igual a/.test(t);
+  if (/^ate (\d+) hex/.test(t)) return { tipo:'alvo', alcance: num(/^ate (\d+)/) };
+  if (/km|ilimitado|qualquer|que voce ve\b|marcados|seu movimento|das magias|da magia|o menor|o maior|a maior|o dobro|voce e ate \d+ aliados/.test(t) && !/raio/.test(t)) return null;
+  if (/^si mesmo/.test(t)) return { tipo:'self' };
+  if (/^toque, ate (\d+)/.test(t)) return { tipo:'multi', alcance:1, alvos: num(/ate (\d+)/), toque:true };
+  if (/^toque/.test(t)) return { tipo:'toque' };
+  if (/todos os adjacentes|aliados adjacentes/.test(t)) return { tipo:'raioSelf', raio:1 };
+  if (/adjacente/.test(t)) return { tipo:'toque' };
+  if (/^cone de (\d+)/.test(t)) return { tipo:'cone', alcance: num(/cone de (\d+)/) };
+  if (/^linha de (\d+)/.test(t)) return { tipo:'linha', alcance: num(/linha de (\d+)/) };
+  if (/linha reta/.test(t)) return { tipo:'linha', alcance: num(/^(\d+)/) || 2, variavel:true };
+  if (/^linha ate/.test(t)) return { tipo:'linha', alcance: 6, longe:true };
+  if (/^(\d+) hex, alvo \+ (\d+) hex ao redor/.test(t)) return { tipo:'raioAlvo', alcance: num(/^(\d+)/), raio:1 };
+  if (/^(\d+) hex, raio (\d+)/.test(t)) return { tipo:'raioAlvo', alcance: num(/^(\d+)/), raio: num(/raio (\d+)/) };
+  if (/^da arma, raio (\d+)/.test(t)) return { tipo:'raioAlvo', alcance: 4, raio: num(/raio (\d+)/), arma:true, variavel };
+  if (/^raio (\d+)/.test(t)) return { tipo:'raioSelf', raio: num(/^raio (\d+)/), variavel };
+  if (/^raio igual/.test(t)) return { tipo:'raioSelf', raio: 2, variavel:true };
+  if (/a ate (\d+) hex/.test(t) && /(todos|aliados|voce e)/.test(t)) return { tipo:'raioSelf', raio: num(/a ate (\d+) hex/) };
+  if (/^(\d+) hex, (ate )?(\d+) (alvos|aliados)/.test(t)) { const m = t.match(/^(\d+) hex, (?:ate )?(\d+)/); return { tipo:'multi', alcance: parseInt(m[1]), alvos: parseInt(m[2]) }; }
+  if (/(\d+) hex por marca/.test(t)) return { tipo:'alvo', alcance: num(/(\d+) hex/), variavel:true };
+  const n = num(/(\d+) hex/);
+  if (n) return { tipo:'alvo', alcance: n };
+  return null;
+}
+function diagramaArea(txt, compacto){
+  const a = areaDe(txt); if (!a) return '';
+  const DMAX = 6, s = compacto ? 7 : 10, sq = Math.sqrt(3);
+  const dAlc = Math.min(a.alcance || 0, DMAX), raio = Math.min(a.raio || 0, 4);
+  const R = Math.max(1, a.tipo === 'raioSelf' ? raio + 1 : a.tipo === 'raioAlvo' ? Math.min(dAlc + raio, 8) : a.tipo === 'self' ? 1 : dAlc + (a.tipo === 'alvo' || a.tipo === 'multi' ? 0 : 0) || 1);
+  const dist = (q1, r1, q2, r2) => (Math.abs(q1 - q2) + Math.abs(r1 - r2) + Math.abs(q1 + r1 - q2 - r2)) / 2;
+  const DIRS = [[1,0],[1,-1],[0,-1],[-1,0],[-1,1],[0,1]];
+  const alvos = [];
+  if (a.tipo === 'alvo' || a.tipo === 'toque') alvos.push([a.tipo === 'toque' ? 1 : dAlc, 0]);
+  if (a.tipo === 'multi') { const d = a.toque ? 1 : dAlc; [0,2,4,1,3,5].slice(0, Math.min(a.alvos || 2, 6)).forEach(i => alvos.push([DIRS[i][0] * d, DIRS[i][1] * d])); }
+  const centro = a.tipo === 'raioAlvo' ? [dAlc, 0] : null;
+  let hexes = '';
+  for (let q = -R; q <= R; q++) for (let r = Math.max(-R, -q - R); r <= Math.min(R, -q + R); r++) {
+    const d0 = dist(q, r, 0, 0), x = s * sq * (q + r / 2), y = s * 1.5 * r;
+    let cls = 'h-vazio';
+    const ang = Math.atan2(-y, x) * 180 / Math.PI;
+    if (a.tipo === 'toque' || a.tipo === 'alvo' || a.tipo === 'multi' || a.tipo === 'raioAlvo') { const lim = a.tipo === 'toque' || (a.tipo === 'multi' && a.toque) ? 1 : dAlc; if (d0 > 0 && d0 <= lim) cls = 'h-alcance'; }
+    if (a.tipo === 'raioSelf' && d0 > 0 && d0 <= raio) cls = 'h-area';
+    if (a.tipo === 'cone' && d0 > 0 && d0 <= dAlc && Math.abs(ang) <= 31) cls = 'h-area';
+    if (a.tipo === 'linha' && r === 0 && q > 0 && q <= dAlc) cls = 'h-area';
+    if (centro && dist(q, r, centro[0], centro[1]) <= raio) cls = 'h-area';
+    if (centro && q === centro[0] && r === centro[1]) cls = 'h-alvo';
+    if (alvos.some(([aq, ar]) => aq === q && ar === r)) cls = 'h-alvo';
+    if (d0 === 0) cls = a.tipo === 'self' ? 'h-voce h-self' : 'h-voce';
+    const pts = [0,1,2,3,4,5].map(i => { const an = Math.PI / 180 * (60 * i - 30); return `${(x + s * .94 * Math.cos(an)).toFixed(1)},${(y + s * .94 * Math.sin(an)).toFixed(1)}`; }).join(' ');
+    hexes += `<polygon class="${cls}" points="${pts}"/>`;
+    if (d0 === 0) hexes += `<text x="${x.toFixed(1)}" y="${(y + s * .38).toFixed(1)}" class="h-estrela" font-size="${s * 1.05}">★</text>`;
+  }
+  const W = s * sq * (R + .5) * 2 + 4, H = s * (1.5 * R * 2 + 2) + 4;
+  const reduzido = (a.alcance || 0) > DMAX || (a.raio || 0) > 4;
+  const legenda = {
+    self: 'Afeta só você.', toque: 'Um alvo encostado em você.',
+    alvo: `Um alvo a até ${a.alcance} hex${a.variavel ? ' (aumenta com o recurso)' : ''}.`,
+    multi: `${a.alvos} alvos ${a.toque ? 'por toque' : `a até ${a.alcance} hex`}.`,
+    raioSelf: `Tudo a até ${a.raio} hex ao seu redor${a.variavel ? ' (cresce com o recurso)' : ''}.`,
+    raioAlvo: `Área de raio ${a.raio} centrada ${a.arma ? 'no alcance da arma' : `num ponto a até ${a.alcance} hex`}${a.variavel ? ' (cresce com o recurso)' : ''}.`,
+    cone: `Cone de ${a.alcance} hex à sua frente.`,
+    linha: a.longe ? 'Linha reta até onde o alcance chegar.' : `Linha reta de ${a.alcance} hex${a.variavel ? ' (cresce com o recurso)' : ''}.`
+  }[a.tipo];
+  return `<figure class="area-hex${compacto ? ' compacto' : ''}"><svg viewBox="${(-W / 2).toFixed(1)} ${(-H / 2).toFixed(1)} ${W.toFixed(1)} ${H.toFixed(1)}" role="img" aria-label="${esc(legenda)}">${hexes}</svg>
+    <figcaption>${compacto ? '' : `<span class="lg lg-voce"></span>você <span class="lg lg-alcance"></span>alcance <span class="lg lg-area"></span>área atingida <span class="lg lg-alvo"></span>alvo<br>`}${esc(legenda)}${reduzido ? ` <i>Desenho reduzido${a.alcance > DMAX ? `: o alcance real é ${a.alcance} hex` : ''}${a.raio > 4 ? `${a.alcance > DMAX ? ' e' : ':'} o raio real é ${a.raio} hex` : ''}.</i>` : ''}</figcaption></figure>`;
+}
+
 /* ----- Ficha de criatura invocada ----- */
 function fichaCriatura(cri){
   const c = calcMonstro(cri, P.nivel, cri.dificuldade);
@@ -1269,6 +1359,7 @@ function renderModalMagia(){
       <dt>Custo</dt><dd>${c} slot${c > 1 ? 's' : ''} (tier ${TIERS[m.tier].nome.toLowerCase()})</dd>
     </dl>
     <p>${realce(esc(m.efeito))}</p>
+    ${diagramaArea(m.alcance)}
     ${m.criatura ? fichaCriatura(m.criatura) : ''}
     ${m.desvantagem ? `<div class="desvantagem"><b>Desvantagem:</b> ${realce(esc(m.desvantagem))}</div>` : ''}
     ${m.historia ? `<p class="historia">${esc(m.historia)}</p>` : ''}
@@ -2255,7 +2346,7 @@ function rHabilidades(){
       h += `<div class="hc${estado}">
         <div class="topo-hc"><span class="nome">${esc(hb.nome)}</span>${hb.categoria ? `<span class="cat" style="background:${COR_CATEGORIA[hb.categoria] || '#6d5a40'}">${esc(hb.categoria)}</span>` : ''}</div>
         <div class="meta">${esc(hb.tipo)}, ${esc(hb.custo.toLowerCase())}${hb.recursoGasto ? `, <b>${esc(cls.recurso)}: ${esc(hb.recursoGasto)}</b>` : ''}, recarga ${esc(hb.recarga)}, alcance ${esc(hb.alcance.toLowerCase())}</div>
-        <div>${realce(esc(hb.efeito))}</div>
+        <div class="hc-corpo">${diagramaArea(hb.alcance, true)}<div>${realce(esc(hb.efeito))}</div></div>
         ${hb.exemplos ? `<ul class="exemplos">${hb.exemplos.map(x => `<li>${realce(esc(x))}</li>`).join('')}</ul>` : ''}
         ${minha ? dadosHabilidade(hb, r) : ''}
         ${minha ? `<div class="acoes-hc">${tem
@@ -2845,6 +2936,7 @@ function rTutoriais(){
         ['Biblioteca', 'Compêndio de itens, de magias e de perícias, Bestiário, Atlas e estes Tutoriais'],
         ['Mesa do mestre', 'Preparo de sessão, Missões e Dungeons, Impressão de dados']])}
       <p>Tudo fica salvo neste aparelho. Em <b>Personagens salvos</b> e no <b>Preparo de sessão</b> há botões de exportar e importar, para fazer cópia de segurança ou passar para outro celular.</p>
+      <p>Magias e habilidades com alcance em hexágonos mostram um desenho do campo: a estrela dourada é você, o azul é até onde dá para mirar, o laranja é a área atingida e o vermelho escuro é o alvo.</p>
       <p>Nomes sublinhados em dourado são links: tocando, abre a ficha do item, magia, perícia, monstro ou missão.</p>`],
     ['Criando seu personagem', `
       <p>Todo personagem começa no nível 1 com os pontos já distribuídos. Depois disso os atributos não mudam: a evolução vem do nível, que multiplica dano, vida e defesa, e dos itens.</p>
