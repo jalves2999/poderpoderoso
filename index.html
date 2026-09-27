@@ -273,6 +273,11 @@ details.capitulo .corpo{padding:0 16px 14px}
 .modal .cab button{width:44px;height:44px;flex:none;cursor:pointer;background:none;border:1px solid var(--tinta-suave);border-radius:3px;font-size:1.2rem;color:var(--tinta)}
 .modal .chips{padding:8px 16px 0;margin:0}
 #modal-busca{margin:10px 16px 0;width:calc(100% - 32px)}
+.modal-det{margin:8px 16px 0}
+.modal-det summary{min-height:40px;padding:6px 12px}
+#modal-chips{max-height:34vh;overflow-y:auto}
+#modal-chips .rotulo-filtro{margin-top:6px}
+#modal-chips .chips{padding:4px 0 0;flex-wrap:wrap}
 .contagem{margin:12px 2px 0;font-weight:700;color:var(--tinta-suave)}
 .modal .lista{overflow-y:auto;padding:4px 16px 16px;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
 .modal .grupo{font-style:italic;color:var(--tinta-suave);margin:14px 0 4px;padding-bottom:3px;border-bottom:1px solid rgba(185,142,59,.6)}
@@ -468,6 +473,68 @@ ol.fases li.ativa{background:rgba(224,98,42,.15);border-left:3px solid #e0622a}
 .sub-abas button + button{border-left:1px solid var(--couro)}
 .sub-abas button[aria-selected=true]{background:var(--couro);color:var(--ouro-claro)}
 .sub-abas .qtd{font-family:var(--texto);font-size:.8rem;padding:0 7px;border-radius:9px;background:var(--ouro);color:var(--couro-escuro);vertical-align:3px}
+
+/* ---------- Ficha para imprimir ---------- */
+.fp-folhas{overflow-x:auto;margin-top:12px}
+.folha-a4{width:194mm;min-height:277mm;margin:0 auto 14px;padding:4mm;background:#fff;color:#111;font-family:Georgia,'Times New Roman',serif;font-size:8.6pt;box-shadow:0 2px 10px rgba(0,0,0,.35);box-sizing:border-box}
+.fp-titulo{text-align:center;font-family:var(--titulo);font-weight:700;font-size:20pt;letter-spacing:1px;color:#c3151c;
+  text-shadow:-1px -1px 0 #3a0000,1px -1px 0 #3a0000,-1px 1px 0 #3a0000,2px 2px 0 #3a0000;margin:0 0 2mm}
+.fp-titulo.pequeno{font-size:14pt}
+.fp-ident{display:grid;grid-template-columns:3fr 1.3fr;gap:.8mm 5mm;border:2px solid #1f2a3a;border-radius:3mm;padding:2mm 3mm;margin-bottom:2mm}
+.fp-campo{display:flex;align-items:flex-end;gap:2mm;min-height:5.2mm}
+.fp-campo span{flex:1;border-bottom:1px solid #333;min-height:4.5mm;padding:0 1mm;font-family:var(--texto);font-size:10pt}
+.fp-meio{display:grid;grid-template-columns:1.25fr 1fr;gap:2mm;margin-bottom:2mm}
+.fp-t{width:100%;border-collapse:collapse}
+.fp-t th,.fp-t td{border:1px solid #2c3e50;padding:.6mm 1mm;vertical-align:middle}
+.fp-t th{background:#cfe2f3;font-weight:700;font-size:7.8pt}
+.fp-t td.esq,.fp-t .esq{text-align:left}
+.fp-t .pequeno{font-size:7.2pt;line-height:1.2}
+.fp-centro td,.fp-atr td{text-align:center;font-family:var(--texto);font-size:10pt}
+.fp-atr th.fp-escuro{background:#1f3b5c;color:#fff}
+.fp-atr tr > th:first-child{text-align:center;font-size:8pt;width:26%}
+.fp-atr tr{height:5.8mm}
+.g-fis > th,.g-fis > td:first-child{background:#c7ebc9}
+.g-men > th,.g-men > td:first-child{background:#c3dcf2}
+.g-soc > th,.g-soc > td:first-child{background:#f7cfb4}
+.fp-lado{display:flex;flex-direction:column;gap:1.5mm}
+.fp-caixa{border:2px solid #1f3b5c;border-radius:2mm;overflow:hidden}
+.fp-cab{background:#1f3b5c;color:#fff;text-align:center;font-weight:700;font-size:10pt;padding:.8mm;letter-spacing:.5px}
+.fp-caixa .fp-t th,.fp-caixa .fp-t td{border-color:#1f3b5c}
+.fp-caixa tr.alta td,.fp-faixa tr.alta td{height:6.5mm}
+.fp-faixa{margin-bottom:2mm}
+.fp-faixa-titulo{margin:1.6mm 0 .8mm;padding:.8mm 3mm;text-align:center;font-weight:700;font-size:11pt;color:#fff;background:#1f3b5c;border-radius:2mm}
+.fp-faixa-titulo small{font-weight:400;font-size:8pt}
+.fp-faixa-titulo.evo{background:#1f5b4c}
+.fp-faixa-titulo.per{background:#4b2f6b}
+.fp-faixa-titulo.bencao{background:#3d6b2a}
+.fp-faixa-titulo.maldicao{background:#7a1c1c}
+.fp-faixa-titulo.montaria{background:#6d4a1f}
+.fp-evo-duas{display:grid;grid-template-columns:1fr 1fr;gap:2mm}
+.fp-evo th{background:#1f5b4c;color:#fff}
+.fp-evo.roxo th{background:#4b2f6b}
+.fp-evo td{text-align:center;font-size:7.4pt;padding:.2mm .6mm}
+.fp-evo td.esq{font-size:7.6pt}
+.bols{white-space:nowrap}
+.bol{display:inline-block;width:2.6mm;height:2.6mm;border:1px solid #222;border-radius:50%;margin:0 .25mm;vertical-align:middle}
+.bol.cheia{background:#222}
+.fp-pericias{display:grid;grid-template-columns:1fr 1fr;column-gap:6mm;border:2px solid #4b2f6b;border-radius:2mm;padding:1mm 3mm}
+.fp-linha{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:1px solid #666;min-height:5.2mm;font-family:var(--texto);font-size:9.5pt}
+.fp-linhas td{height:5.3mm}
+.fp-linhas th{background:#dfe9f5}
+.fp-dinheiro .fp-moedas{display:grid;grid-template-columns:repeat(4,1fr);gap:2mm}
+.fp-moedas span{border:1px solid #2c3e50;border-radius:1.5mm;min-height:9mm;padding:.5mm 1.5mm;font-size:7.5pt;color:#444}
+.fp-duas{display:grid;grid-template-columns:1fr 1fr;gap:3mm}
+.fp-montaria{display:grid;grid-template-columns:1fr 1fr;gap:1.5mm 5mm;margin-bottom:1.5mm}
+.fp-montaria .larga{grid-column:1 / -1}
+.espacos{display:flex;gap:1.5mm;border:none!important}
+.espacos i{display:inline-block;width:5mm;height:5mm;border:1px solid #333}
+@media print{
+  @page{size:A4 portrait;margin:6mm}
+  .fp-folhas{overflow:visible;margin:0}
+  .folha-a4{box-shadow:none;margin:0;padding:0;width:auto;min-height:0;break-after:page}
+  .folha-a4:last-child{break-after:auto}
+  .fp-t th,.g-fis > th,.g-men > th,.g-soc > th,.fp-cab,.fp-faixa-titulo,.bol.cheia,.fp-atr th.fp-escuro{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
 
 /* ---------- Área em hexágonos ---------- */
 .area-hex{margin:10px 0;padding:8px;border:1px solid rgba(63,48,29,.4);border-radius:4px;background:rgba(255,252,240,.55);text-align:center}
@@ -749,6 +816,7 @@ const PAGINAS = {
   evolucao:    { nome:'Evolução',              ic:'⭐', grupo:'Seu personagem' },
   habilidades: { nome:'Habilidades e perícias', ic:'⚜️', grupo:'Seu personagem' },
   salvos:      { nome:'Personagens salvos',    ic:'💾', grupo:'Seu personagem' },
+  fichaPapel:  { nome:'Imprimir ficha',        ic:'🖨️', grupo:'Seu personagem' },
   itens:       { nome:'Compêndio de itens',    ic:'📖', grupo:'Biblioteca' },
   grimorio:    { nome:'Compêndio de magias',   ic:'🔮', grupo:'Biblioteca' },
   pericias:    { nome:'Compêndio de perícias', ic:'🎓', grupo:'Biblioteca' },
@@ -961,7 +1029,7 @@ function atualizarTopo(){
 }
 
 const RENDER = {
-  ficha:() => rFicha(), equipar:() => rEquipar(), magias:() => rMagias(), status:() => rStatus(), evolucao:() => rEvolucao(), salvos:() => rSalvos(),
+  ficha:() => rFicha(), equipar:() => rEquipar(), magias:() => rMagias(), status:() => rStatus(), evolucao:() => rEvolucao(), salvos:() => rSalvos(), fichaPapel:() => rFichaPapel(),
   itens:() => rCompItens(), habilidades:() => rHabilidades(), grimorio:() => rCompMagias(), pericias:() => rPericias(), bestiario:() => rBestiario(), atlas:() => rAtlas(), tutoriais:() => rTutoriais(), impressao:() => rImpressao(), missoes:() => rMissoes(), preparo:() => rPreparo()
 };
 
@@ -1087,8 +1155,27 @@ function rEquipar(){
   return h;
 }
 
+/* ----- Filtros de tipo na escolha de item ----- */
+const CATS_PESO_ARMA = { todos:'Todos', muito_leve:'Muito leve', leve:'Leve', media:'Média', pesada:'Pesada', muito_pesada:'Muito pesada' };
+const PESO_ARMADURA = { todos:'Todos', placas:'Pesada (placas)', malha:'Média (malha)', runica:'Média (rúnica)', couro:'Leve (couro)', brocado:'Mágica (brocado)', tecido:'Mágica leve (tecido)' };
+function passaTipo(it, f){
+  const arma = ARMAS.includes(it);
+  if (f.tipo !== 'todos') {
+    if (!arma) return false;
+    const magico = !!it.foco;
+    if (f.tipo === 'magico' && !magico) return false;
+    if (f.tipo === 'distancia' && (magico || it.alcance <= 1)) return false;
+    if (f.tipo === 'corpo' && (magico || it.alcance > 1)) return false;
+  }
+  if (f.peso !== 'todos' && !(arma && it.categoria === f.peso)) return false;
+  if (f.armadura !== 'todos' && !(ARMADURAS.includes(it) && it.tipo === f.armadura)) return false;
+  return true;
+}
+
 /* ----- Modal de escolha de item ----- */
 let modalSlot = null, modalTier = 'todos', modalBusca = '';
+const filtroModal = { tipo:'todos', peso:'todos', armadura:'todos' };
+let modalFiltrosAbertos = false;
 function alertaItem(it, slotId){
   const r = calcular(P), msgs = [];
   if (ARMAS.includes(it)) {
@@ -1115,10 +1202,21 @@ function renderModal(){
   const todos = s.lista();
   const tiersPresentes = Object.keys(TIERS).filter(t => todos.some(it => it.tier === t));
   $('#modal-titulo').innerHTML = `${esc(s.nome.replace(/ \(.*\)/, ''))}<small>${todos.length} itens disponíveis</small>`;
-  if (!$('#modal-busca')) $('#modal-filtros').innerHTML = `<input type="search" id="modal-busca" placeholder="🔍 Buscar neste espaço" aria-label="Buscar item" value="${esc(modalBusca)}"><div id="modal-chips"></div>`;
-  $('#modal-chips').innerHTML = tiersPresentes.length > 1
-    ? chips('modal-tier', Object.assign({ todos:'Todos' }, ...tiersPresentes.map(t => ({ [t]: TIERS[t].nome }))), modalTier) : '';
-  const lista = todos.filter(it => (modalTier === 'todos' || it.tier === modalTier) && (!modalBusca.trim() || combinaBusca(it, modalBusca)));
+  if (!$('#modal-busca')) $('#modal-filtros').innerHTML = `<input type="search" id="modal-busca" placeholder="🔍 Buscar neste espaço" aria-label="Buscar item" value="${esc(modalBusca)}">
+    <details class="det-filtros modal-det" id="modal-det"${modalFiltrosAbertos ? ' open' : ''}><summary id="modal-det-sum"></summary><div id="modal-chips" class="corpo-filtros"></div></details>`;
+  const ehArma = s.id === 'arma' || s.id === 'secundaria', ehArmadura = ['elmo','peitoral','luvas','botas'].includes(s.id);
+  const gruposF = [];
+  if (tiersPresentes.length > 1) gruposF.push(['Tier', chips('modal-tier', Object.assign({ todos:'Todos' }, ...tiersPresentes.map(t => ({ [t]: TIERS[t].nome }))), modalTier)]);
+  if (ehArma) {
+    gruposF.push(['Tipo', chips('md-tipo', { todos:'Todos', corpo:'⚔️ Corpo a corpo', distancia:'🏹 À distância', magico:'🔮 Mágico' }, filtroModal.tipo)]);
+    gruposF.push(['Peso da arma', chips('md-peso', CATS_PESO_ARMA, filtroModal.peso)]);
+  }
+  if (ehArmadura) gruposF.push(['Peso da armadura', chips('md-arm', PESO_ARMADURA, filtroModal.armadura)]);
+  const nAtivos = (modalTier !== 'todos') + (filtroModal.tipo !== 'todos') + (filtroModal.peso !== 'todos') + (filtroModal.armadura !== 'todos');
+  $('#modal-det').hidden = !gruposF.length;
+  $('#modal-det-sum').innerHTML = `Filtros${nAtivos ? ` <span class="qtd">${nAtivos} ${nAtivos === 1 ? 'ativo' : 'ativos'}</span>` : ''}`;
+  $('#modal-chips').innerHTML = gruposF.map(([rot, html]) => `<span class="rotulo-filtro">${rot}</span>${html}`).join('');
+  const lista = todos.filter(it => (modalTier === 'todos' || it.tier === modalTier) && passaTipo(it, filtroModal) && (!modalBusca.trim() || combinaBusca(it, modalBusca)));
   const grupos = {};
   lista.forEach(it => {
     const g = s.id === 'secundaria' ? (ehEscudo(it) ? 'Escudos' : it.foco ? 'Focos de uma mão' : 'Armas leves (−1 na defesa)')
@@ -1137,7 +1235,7 @@ function renderModal(){
   $('#modal-lista').innerHTML = h;
 }
 function abrirModal(slotId){
-  modalSlot = slotId; modalTier = 'todos'; modalBusca = ''; modalMagia = null; $('#modal-filtros').innerHTML = '';
+  modalSlot = slotId; modalTier = 'todos'; modalBusca = ''; Object.keys(filtroModal).forEach(k => filtroModal[k] = 'todos'); modalMagia = null; $('#modal-filtros').innerHTML = '';
   renderModal();
   $('#modal-fundo').hidden = false;
   document.body.style.overflow = 'hidden';
@@ -2919,6 +3017,119 @@ function acaoForm(b){
   return false;
 }
 
+/* ----- Ficha para imprimir ----- */
+let fichaEmBranco = false, fichaMagias = null;
+function bonusCurto(t){
+  const m = t.match(/^([+−-]\S+)/), v = m ? m[1] : '';
+  if (/testes de/.test(t)) return `${v} teste`;
+  if (/perícias de/.test(t)) return `${v} perícia`;
+  if (/ação de ataque/.test(t)) return `${v} ataque`;
+  if (/reação/.test(t)) return `${v} reação`;
+  if (/crítico/.test(t)) return '+10% crít.';
+  if (/recurso/.test(t)) return `${v} recurso`;
+  if (/dano físico/.test(t)) return `${v} físico`;
+  if (/dano mágico/.test(t)) return `${v} mágico`;
+  if (/maestria/.test(t)) return '−1 poder';
+  return t.replace(/ de carga/, '');
+}
+function rFichaPapel(){
+  const r = calcular(P), cls = classe(P.classe), B = fichaEmBranco, v = x => B ? '' : x;
+  if (fichaMagias == null) fichaMagias = P.magias.length > 0;
+  const catCls = CATEGORIAS_CLASSE[cls.categoria] || { pontos: {} };
+  const ATR_GRUPO = { fisico:'g-fis', mental:'g-men', social:'g-soc' };
+  const linhasVazias = (n, cols) => Array.from({ length: Math.max(0, n) }, () => `<tr>${'<td></td>'.repeat(cols)}</tr>`).join('');
+  const bol = (k, max) => Array.from({ length: max }, (_, i) => `<span class="bol${!B && i < k ? ' cheia' : ''}"></span>`).join('');
+
+  // ---------- Folha 1 ----------
+  const atrLinhas = ATRIBUTOS.map(a => {
+    const base = P.atributos[a.id], it = r.bonusAttr[a.id] || 0, tst = r.E.teste[a.id] || 0, per = r.E.pericia[a.id] || 0;
+    return `<tr class="${ATR_GRUPO[a.grupo]}"><th>${esc(a.nome)}</th><td>${v(base)}</td><td>${v(it ? '+' + it : '')}</td><td><b>${v(r.A[a.id])}</b></td><td>${v(11 - r.A[a.id] > 0 ? 11 - r.A[a.id] : 1)}</td><td>${v(tst ? '+' + tst : '')}</td><td>${v(per ? '+' + per : '')}</td></tr>`;
+  }).join('');
+  const caixa = (titulo, cabs, vals) => `<div class="fp-caixa"><div class="fp-cab">${titulo}</div><table class="fp-t fp-centro"><tr>${cabs.map(c => `<th>${c}</th>`).join('')}</tr><tr class="alta">${vals.map(x => `<td>${v(x)}</td>`).join('')}</tr></table></div>`;
+  const metade = Math.ceil(EVOLUCOES.length / 2);
+  const tabEvo = (lista, cor) => `<table class="fp-t fp-evo ${cor}"><tr><th>Melhoria</th><th>Bônus</th><th>Atri</th><th>Gasto</th><th>Nível</th></tr>${lista.map(ev => {
+    const a = ATRIBUTOS.find(x => x.id === ev.attr), k = (P.evolucao || {})[ev.id] || 0;
+    return `<tr class="${ATR_GRUPO[a ? a.grupo : 'fisico']}"><td class="esq">${esc(ev.nome)}</td><td>${esc(bonusCurto(ev.efeito))}</td><td>${ev.attr}</td><td>×${ev.gasto}</td><td class="bols">${bol(k, REGRAS.evolucao.maxBolinhas)}</td></tr>`; }).join('')}</table>`;
+  const pericias = B ? [] : PERICIAS.filter(pc => P.pericias.includes(pc.id));
+  const linhaPer = pc => pc ? `<div class="fp-linha"><span>${esc(pc.nome)} (${pc.attr})${P.periciasEquipadas.includes(pc.id) ? '' : ' · guardada'}</span><b>+${bonusPericia(pc, r).total}</b></div>` : '<div class="fp-linha"></div>';
+  const perLinhas = Array.from({ length: Math.max(10, pericias.length) }, (_, i) => linhaPer(pericias[i]));
+  const folha1 = `<div class="folha-a4">
+    <div class="fp-titulo">LIVRO DO AVENTUREIRO</div>
+    <div class="fp-ident">
+      <div class="fp-campo larga"><b>Jogador:</b><span></span></div><div class="fp-campo"><b>Conduta:</b><span></span></div>
+      <div class="fp-campo larga"><b>Nome:</b><span>${v(esc(P.nome || ''))}</span></div><div class="fp-campo"><b>Classe:</b><span>${v(cls.nome)}</span></div>
+      <div class="fp-campo larga"><b>Vantagens:</b><span></span></div><div class="fp-campo"><b>Raça:</b><span></span></div>
+      <div class="fp-campo larga"><b>Desvantagens:</b><span></span></div><div class="fp-campo"><b>Nível:</b><span>${v(P.nivel)}</span><b>XP:</b><span></span></div>
+    </div>
+    <div class="fp-meio">
+      <table class="fp-t fp-atr"><tr><th class="fp-escuro">Atributos</th><th class="fp-escuro">Pontos<br><small>${B ? '—' : `${catCls.pontos.fisico}/${catCls.pontos.mental}/${catCls.pontos.social}`}</small></th><th class="fp-escuro">Itens</th><th class="fp-escuro">Total</th><th class="fp-escuro">Peso evol.</th><th class="fp-escuro">Bônus teste</th><th class="fp-escuro">Perícia</th></tr>${atrLinhas}</table>
+      <div class="fp-lado">
+        ${caixa('Status gerais', ['Pontos de vida', B ? 'Recurso' : `${esc(cls.recurso)} máx.`], [fmt(r.vida), r.recursoMax != null ? `${r.recursoMax}${cls.recursoNoAlvo ? '/alvo' : ''}` : '—'])}
+        ${caixa('Dano (d10 × nível)', ['Físico', 'Mão sec.', 'Mágico', 'Cura'], [`${r.dadosF}d10`, r.armaSec ? `${r.dadosF2}d10` : '—', `${r.dadosM}d10`, `${r.dadosC}d10`])}
+        ${caixa('Proteção', ['Def. física', 'Def. mágica', 'Defesa d10', 'Reações'], [fmt(r.defF), fmt(r.defM), `≤ ${r.defesaD10}`, r.reacoes])}
+        ${caixa('Ações por turno', ['Ataques', 'Mágicos', 'Movimento'], [r.acoesAtaque === 0 ? 0 : r.turnosPorAtaque > 1 ? `1 a cada ${r.turnosPorAtaque}t` : r.ataquesFis, r.ataquesMag, `${r.movimento} hex`])}
+      </div>
+    </div>
+    <table class="fp-t fp-faixa fp-centro"><tr><th>Carga</th><th>Crítico %</th><th>Bônus crítico</th><th>Slots de magia</th><th>Arma</th><th>Mão secundária</th></tr>
+      <tr class="alta"><td>${v(`${r.peso} / ${r.carga} kg`)}</td><td>${v(r.crit + '%')}</td><td>${v('+' + r.critBonus + '%')}</td><td>${v(`${r.slotsUsados} / ${r.slots}`)}</td><td>${v(esc(r.arma.nome))}</td><td>${v(r.escudo ? esc(r.escudo.nome) : r.armaSec ? esc(r.armaSec.nome) : '')}</td></tr></table>
+    <div class="fp-faixa-titulo evo">Status de evolução${B ? '' : ` <small>(${fmt(r.gastos)} de ${fmt(r.totalEvo)} pontos gastos)</small>`}</div>
+    <div class="fp-evo-duas">${tabEvo(EVOLUCOES.slice(0, metade), 'verde')}${tabEvo(EVOLUCOES.slice(metade), 'roxo')}</div>
+    <div class="fp-faixa-titulo per">Perícias</div>
+    <div class="fp-pericias">${perLinhas.join('')}</div>
+  </div>`;
+
+  // ---------- Folha 2 ----------
+  const habs = B ? [] : cls.habilidades.filter(hb => P.habilidades.includes(hb.id));
+  const itensEq = B ? [] : SLOTS.map(sl => ({ sl, it: item(P.equip[sl.id]) })).filter(x => x.it);
+  const curto = t => { t = String(t || ''); return t.length > 110 ? t.slice(0, 107) + '…' : t; };
+  const folha2 = `<div class="folha-a4">
+    <div class="fp-titulo pequeno">${B ? '' : esc(P.nome || '')} · Habilidades, itens e montaria</div>
+    <div class="fp-faixa-titulo">Habilidades</div>
+    <table class="fp-t fp-linhas"><tr><th style="width:24%">Habilidade</th><th style="width:6%">Nv</th><th style="width:14%">Custo / recurso</th><th style="width:11%">Recarga</th><th>Efeito</th></tr>
+      ${habs.map(hb => `<tr><td class="esq"><b>${esc(hb.nome)}</b></td><td>${hb.nivel}</td><td>${esc(hb.custo)}${hb.recursoGasto ? `<br>${esc(cls.recurso)}: ${esc(hb.recursoGasto)}` : ''}</td><td>${esc(hb.recarga)}</td><td class="esq pequeno">${esc(curto(hb.efeito))}</td></tr>`).join('')}
+      ${linhasVazias(9 - Math.ceil(habs.length * 1.8), 5)}</table>
+    <div class="fp-faixa-titulo">Itens</div>
+    <table class="fp-t fp-linhas"><tr><th style="width:30%">Nome</th><th style="width:9%">Peso</th><th>Descrição</th></tr>
+      ${itensEq.map(x => `<tr><td class="esq"><b>${esc(x.it.nome)}</b><br><small>${esc(x.sl.nome.split(' (')[0])}</small></td><td>${x.it.peso || 0} kg</td><td class="esq pequeno">${esc(curto([tipoItem(x.it), x.it.efeito].filter(Boolean).join('. ')))}</td></tr>`).join('')}
+      ${linhasVazias(14 - Math.ceil(itensEq.length * 1.7), 3)}</table>
+    <div class="fp-dinheiro"><div class="fp-faixa-titulo">Dinheiro</div><div class="fp-moedas"><span>Platina</span><span>Ouro</span><span>Prata</span><span>Bronze</span></div></div>
+    <div class="fp-duas">
+      <div><div class="fp-faixa-titulo bencao">Bênçãos</div><table class="fp-t fp-linhas">${linhasVazias(3, 1)}</table></div>
+      <div><div class="fp-faixa-titulo maldicao">Maldições</div><table class="fp-t fp-linhas">${linhasVazias(3, 1)}</table></div>
+    </div>
+    <div class="fp-faixa-titulo montaria">Montaria</div>
+    <div class="fp-montaria">
+      <div class="fp-campo"><b>Nome:</b><span></span></div><div class="fp-campo"><b>Velocidade:</b><span></span><b>hex</b></div>
+      <div class="fp-campo larga"><b>Carga (espaços):</b><span class="espacos">${'<i></i>'.repeat(12)}</span></div>
+    </div>
+    <table class="fp-t fp-linhas"><tr><th style="width:30%">Item da montaria</th><th style="width:9%">Peso</th><th>Descrição</th></tr>${linhasVazias(5, 3)}</table>
+  </div>`;
+
+  // ---------- Folha 3 (opcional): magias ----------
+  const mags = B ? [] : P.magias.map(magia).filter(Boolean);
+  const folha3 = fichaMagias ? `<div class="folha-a4">
+    <div class="fp-titulo pequeno">${B ? '' : esc(P.nome || '')} · Magias</div>
+    <div class="fp-faixa-titulo">Magias equipadas${B ? '' : ` <small>(${r.slotsUsados} de ${r.slots} slots)</small>`}</div>
+    <table class="fp-t fp-linhas"><tr><th style="width:22%">Magia</th><th style="width:6%">Slots</th><th style="width:12%">Dados</th><th style="width:14%">Alcance</th><th style="width:13%">Usos</th><th>Efeito</th></tr>
+      ${mags.map(m => `<tr><td class="esq"><b>${esc(m.nome)}</b><br><small>${esc(CATEGORIAS_MAGIA[m.categoria])}, ${esc(TIERS[m.tier].nome.toLowerCase())}</small></td><td>${custo(m)}</td><td>${m.calc === 'dano' ? `${r.dadosM + m.dado}d10 × ${r.n}` : m.calc === 'cura' ? `${r.dadosC + m.dado}d10 × ${r.n}` : m.dado ? m.dado + 'd10' : '—'}</td><td class="pequeno">${esc(m.alcance)}</td><td>${'□ '.repeat(Math.min(m.usos.qtd, 8))}<br><small>por ${esc(m.usos.por === 'sessao' ? 'sessão' : m.usos.por)}</small></td><td class="esq pequeno">${esc(curto(m.efeito))}</td></tr>`).join('')}
+      ${linhasVazias(18 - Math.ceil(mags.length * 1.5), 6)}</table>
+    <div class="fp-faixa-titulo">Anotações</div>
+    <table class="fp-t fp-linhas">${linhasVazias(8, 1)}</table>
+  </div>` : '';
+
+  return `<div class="no-print">
+    <h2 class="titulo-pagina">Imprimir ficha</h2>
+    <p class="intro">A ficha no papel, no mesmo formato da ficha de mesa: atributos, status, evolução e perícias na primeira folha; habilidades, itens, dinheiro, bênçãos, maldições e montaria na segunda.</p>
+    <section class="bloco">
+      <label class="dg-mestre"><input type="radio" name="fp-modo" data-fp-modo="dados"${B ? '' : ' checked'}> Preencher com os dados de ${esc(P.nome || 'seu personagem')}</label>
+      <label class="dg-mestre"><input type="radio" name="fp-modo" data-fp-modo="branco"${B ? ' checked' : ''}> Ficha em branco, para preencher à mão</label>
+      <label class="dg-mestre"><input type="checkbox" data-fp-magias="1"${fichaMagias ? ' checked' : ''}> Incluir uma terceira folha de magias</label>
+      <button class="btn lacre" data-imprimir="1">🖨️ Imprimir ficha</button>
+      <p class="nota">No celular, escolha "Salvar como PDF" ou uma impressora no menu que abrir. Papel A4, retrato.</p>
+    </section></div>
+    <div class="fp-folhas">${folha1}${folha2}${folha3}</div>`;
+}
+
 /* ----- Tutoriais ----- */
 function tabela(cab, linhas){
   return `<div class="tabela"><table><thead><tr>${cab.map(c => `<th>${c}</th>`).join('')}</tr></thead><tbody>` +
@@ -2932,7 +3143,7 @@ function rTutoriais(){
       <p>O botão redondo <b>☰</b>, flutuando no canto esquerdo, abre o índice.</p>
       <p>O índice abre o resto:</p>
       ${tabela(['Grupo','Páginas'], [
-        ['Seu personagem', 'Ficha, Equipamento, Magias, Status, Evolução, Habilidades e perícias, Personagens salvos'],
+        ['Seu personagem', 'Ficha, Equipamento, Magias, Status, Evolução, Habilidades e perícias, Personagens salvos, Imprimir ficha (a ficha em papel, preenchida ou em branco)'],
         ['Biblioteca', 'Compêndio de itens, de magias e de perícias, Bestiário, Atlas e estes Tutoriais'],
         ['Mesa do mestre', 'Preparo de sessão, Missões e Dungeons, Impressão de dados']])}
       <p>Tudo fica salvo neste aparelho. Em <b>Personagens salvos</b> e no <b>Preparo de sessão</b> há botões de exportar e importar, para fazer cópia de segurança ou passar para outro celular.</p>
@@ -3134,6 +3345,7 @@ $('#modal-fundo').addEventListener('click', e => {
   if (e.target === e.currentTarget) { fecharModal(); return; }
   const b = e.target.closest('button'); if (!b) return;
   if (b.dataset.filtro === 'modal-tier') { modalTier = b.dataset.valor; renderModal(); $('#modal-lista').scrollTop = 0; return; }
+  if (b.dataset.filtro && b.dataset.filtro.startsWith('md-')) { const k = { 'md-tipo':'tipo', 'md-peso':'peso', 'md-arm':'armadura' }[b.dataset.filtro]; if (k) { filtroModal[k] = b.dataset.valor; renderModal(); $('#modal-lista').scrollTop = 0; } return; }
   if (b.dataset.ir) { fecharModal(); irPara(b.dataset.ir); return; }
   if (b.dataset.monInfo) { const m = monstro(b.dataset.monInfo); modalMagia = null; abrirMonstro({ id: m.id, nivel: P.nivel, dif: m.dificuldade }); return; }
   if (b.dataset.magiaInfo) { abrirMagia(b.dataset.magiaInfo); return; }
@@ -3162,6 +3374,7 @@ $('#modal-fundo').addEventListener('input', e => {
   if (modalPers && e.target.id === 'pers-nome') { persNovo.nome = e.target.value; return; }
   if (modalForm && e.target.dataset.ff) { const k = e.target.dataset.ff; modalForm.dados[k] = e.target.dataset.moeda ? lerMoedas(e.target.value) : e.target.value; }
 });
+$('#modal-fundo').addEventListener('toggle', e => { if (e.target.id === 'modal-det') modalFiltrosAbertos = e.target.open; }, true);
 $('#modal-fundo').addEventListener('change', e => {
   if (modalPers && e.target.id === 'pers-classe') { const antes = persNovo.classe; persNovo.classe = e.target.value; if ((RETRATOS[antes] || []).includes(persNovo.retrato)) persNovo.retrato = retratoPadrao(persNovo.classe); renderPers(); return; } if (modalForm && e.target.dataset.ff && e.target.tagName === 'SELECT') modalForm.dados[e.target.dataset.ff] = e.target.value; });
 $('#lista-menu').addEventListener('click', e => {
@@ -3335,6 +3548,7 @@ conteudo.addEventListener('click', e => {
   if (t.dataset.filtro) {
     const v = t.dataset.valor;
     ({ 'itens-cat':() => filtroItens.cat = v, 'itens-tier':() => filtroItens.tier = v, 'itens-col':() => filtroItens.col = v, 'itens-ord':() => filtroItens.ordem = v,
+
        'magias-cat':() => filtroMagias.cat = v, 'pericias-attr':() => filtroPericias.attr = v, 'mis-reg':() => filtroMissoes.regiao = v, 'dg-tipo':() => filtroDungeons.tipo = v, 'dg-dif':() => filtroDungeons.dif = v, 'meq-cat':() => filtroMagiasEq.cat = v, 'meq-tier':() => filtroMagiasEq.tier = v, 'meq-ver':() => filtroMagiasEq.ver = v, 'mis-dif':() => filtroMissoes.dif = v, 'mis-rec':() => filtroMissoes.recompensa = v, 'mis-st':() => filtroMissoes.status = v, 'pericias-apr':() => filtroPericias.aprendidas = v, 'mon-dif':() => filtroMon.dif = v, 'mon-tipo':() => filtroMon.tipo = v, 'mon-origem':() => filtroMon.origem = v, 'mon-local':() => filtroMon.local = v, 'atlas-reg':() => atlasReg = v, 'magias-tier':() => filtroMagias.tier = v,
        'hab-classe':() => habClasse = v })[t.dataset.filtro]();
     const y = window.scrollY; render(); window.scrollTo(0, y); return;
@@ -3385,6 +3599,8 @@ conteudo.addEventListener('click', e => {
 conteudo.addEventListener('change', e => {
   const t = e.target;
   if (t.dataset.dgMestre) { estDg(dungeonAberta).mestre = t.checked; salvarDg(); const y = window.scrollY; render(); window.scrollTo(0, y); return; }
+  if (t.dataset.fpModo) { fichaEmBranco = t.dataset.fpModo === 'branco'; const y = window.scrollY; render(); window.scrollTo(0, y); return; }
+  if (t.dataset.fpMagias) { fichaMagias = t.checked; const y = window.scrollY; render(); window.scrollTo(0, y); return; }
   if (t.dataset.impSec) { if (t.checked) impSel.add(t.dataset.impSec); else impSel.delete(t.dataset.impSec); const y = window.scrollY; render(); window.scrollTo(0, y); return; }
   if (t.id === 'imp-nivel') { impNivel = clamp(parseInt(t.value) || P.nivel, 1, REGRAS.nivelMax); const y = window.scrollY; render(); window.scrollTo(0, y); return; }
   if (t.id === 'evo-extras') { const y = window.scrollY; render(); window.scrollTo(0, y); return; }
