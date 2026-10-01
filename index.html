@@ -536,6 +536,11 @@ ol.fases li.ativa{background:rgba(224,98,42,.15);border-left:3px solid #e0622a}
   .fp-t th,.g-fis > th,.g-men > th,.g-soc > th,.fp-cab,.fp-faixa-titulo,.bol.cheia,.fp-atr th.fp-escuro{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
 
+.marca-bencao{border-left:4px solid var(--musgo);padding-left:10px}
+.marca-maldicao{border-left:4px solid var(--lacre);padding-left:10px}
+.card-bencao{border-color:var(--musgo)!important}
+.card-maldicao{border-color:var(--lacre)!important}
+
 /* ---------- Área em hexágonos ---------- */
 .area-hex{margin:10px 0;padding:8px;border:1px solid rgba(63,48,29,.4);border-radius:4px;background:rgba(255,252,240,.55);text-align:center}
 .area-hex svg{display:block;margin:0 auto;width:100%;max-width:230px;height:auto}
@@ -552,7 +557,7 @@ ol.fases li.ativa{background:rgba(224,98,42,.15);border-left:3px solid #e0622a}
 .lg-voce{background:#e0c27c}.lg-alcance{background:#a9c6de}.lg-area{background:#d9603b}.lg-alvo{background:#8e1b1b}
 .area-hex.compacto{float:right;width:96px;margin:0 0 6px 10px;padding:4px}
 .area-hex.compacto figcaption{font-size:.72rem;margin-top:2px;line-height:1.25}
-.hc-corpo::after{content:'';display:block;clear:both}
+.hc-corpo::after,.lista-com-area li::after{content:'';display:block;clear:both}
 
 /* ---------- Preparo de sessão ---------- */
 .abas-sessao{margin:12px 0 0}
@@ -820,6 +825,7 @@ const PAGINAS = {
   itens:       { nome:'Compêndio de itens',    ic:'📖', grupo:'Biblioteca' },
   grimorio:    { nome:'Compêndio de magias',   ic:'🔮', grupo:'Biblioteca' },
   pericias:    { nome:'Compêndio de perícias', ic:'🎓', grupo:'Biblioteca' },
+  bencaos:     { nome:'Bênçãos e maldições',   ic:'✨', grupo:'Biblioteca' },
   bestiario:   { nome:'Bestiário',             ic:'🐉', grupo:'Biblioteca' },
   atlas:       { nome:'Atlas',                 ic:'🗺️', grupo:'Biblioteca' },
   tutoriais:   { nome:'Tutoriais',             ic:'🕯️', grupo:'Biblioteca' },
@@ -834,7 +840,7 @@ const todosRetratos = () => Object.values(RETRATOS).flat();
 const srcRetrato = id => `imagens/retratos/${id}.jpg`;
 function novo(classeId){
   const a = {}; ATRIBUTOS.forEach(x => a[x.id] = REGRAS.attrMin);
-  return { id:null, nome:'', retrato: retratoPadrao(classeId || CLASSES[0].id), classe: classeId || CLASSES[0].id, nivel:1, atributos:a, equip:{}, magias:[], pontosExtras:0, evolucao:{}, habilidades:[], recursoAtual:null, alvos:[], usosMagia:{}, pericias:[], periciasEquipadas:[] };
+  return { id:null, nome:'', retrato: retratoPadrao(classeId || CLASSES[0].id), classe: classeId || CLASSES[0].id, nivel:1, atributos:a, equip:{}, magias:[], pontosExtras:0, evolucao:{}, habilidades:[], recursoAtual:null, alvos:[], usosMagia:{}, pericias:[], periciasEquipadas:[], marcas:[] };
 }
 function normalizar(p){
   const base = novo(p && p.classe);
@@ -854,6 +860,7 @@ function normalizar(p){
   r.pericias = Array.isArray(p.pericias) ? [...new Set(p.pericias)].filter(id => PERICIAS.some(x => x.id === id)) : [];
   r.periciasEquipadas = Array.isArray(p.periciasEquipadas) ? [...new Set(p.periciasEquipadas)].filter(id => r.pericias.includes(id))
     : (p.periciasEquipadas === undefined ? r.pericias.slice() : []);
+  r.marcas = Array.isArray(p.marcas) ? [...new Set(p.marcas)].filter(id => BENCAOS_MALDICOES.some(x => x.id === id)) : [];
   r.usosMagia = {};
   Object.entries(p.usosMagia || {}).forEach(([id, v]) => { const k = Math.max(0, parseInt(v) || 0); if (k && magia(id)) r.usosMagia[id] = k; });
   r.alvos = Array.isArray(p.alvos) ? p.alvos.slice(0, 12).map(a => ({ nome: String((a && a.nome) || '').slice(0, 30), marcas: Math.max(0, parseInt(a && a.marcas) || 0) })) : [];
@@ -920,6 +927,9 @@ function calcular(p){
   // Atributos finais
   const bonusAttr = {};
   ef.forEach(({it}) => { if (it.atributos) for (const k in it.atributos) bonusAttr[k] = (bonusAttr[k] || 0) + it.atributos[k]; });
+  const testeItens = {}, fontesTeste = {};
+  ef.forEach(({it}) => { if (it.testes) for (const k in it.testes) { testeItens[k] = (testeItens[k] || 0) + it.testes[k]; (fontesTeste[k] = fontesTeste[k] || []).push(`${it.nome} +${it.testes[k]}`); } });
+  const marcas = (p.marcas || []).map(id => BENCAOS_MALDICOES.find(x => x.id === id)).filter(Boolean);
   const A = {};
   ATRIBUTOS.forEach(a => A[a.id] = p.atributos[a.id] + (bonusAttr[a.id] || 0));
 
@@ -934,6 +944,7 @@ function calcular(p){
     const b = it.bonus || {};
     for (const k in B) if (b[k]) { B[k] += b[k]; if (fontes[k]) fontes[k].push(`${it.nome} +${b[k]}`); }
   });
+
 
   // Arma e penalidades
   const cat = CATEGORIAS_ARMA[arma.categoria] || CATEGORIAS_ARMA.desarmado;
@@ -1010,7 +1021,7 @@ function calcular(p){
   const recursoInicial = recursoMax == null ? 0 : cls.recursoInicio === 'max' ? recursoMax : (cls.recursoInicio || 0);
   const recursoAtual = recursoMax == null ? 0 : clamp(p.recursoAtual == null ? recursoInicial : p.recursoAtual, 0, recursoMax);
 
-  return { cls, n, mult, A, bonusAttr, arma, cat, falta, dexEf, carga, peso, excesso, penCarga, movBruto, movimento,
+  return { cls, n, mult, A, bonusAttr, testeItens, fontesTeste, marcas, arma, cat, falta, dexEf, carga, peso, excesso, penCarga, movBruto, movimento,
     vida, df, dm, defF, defM, partesDF, partesDM, escudo, bonusEscudo, defesaBruta, defesaD10,
     armaSec, dadosF2, penDuasArmas, acoesExtra, perdaEscudo, acoesAtaque, custoAtaque, ataquesFis, turnosPorAtaque, ataquesMag,
     dadosF, dadosM, dadosC, slots, slotsUsados, crit, faixaBase, faixaCrit, critBonus, B, fontes, avisos, habilidades, pontosHab, pontosHabGastos, recursoMax, recursoInicial, recursoAtual, E, reacoes, gastos, totalEvo };
@@ -1030,7 +1041,7 @@ function atualizarTopo(){
 
 const RENDER = {
   ficha:() => rFicha(), equipar:() => rEquipar(), magias:() => rMagias(), status:() => rStatus(), evolucao:() => rEvolucao(), salvos:() => rSalvos(), fichaPapel:() => rFichaPapel(),
-  itens:() => rCompItens(), habilidades:() => rHabilidades(), grimorio:() => rCompMagias(), pericias:() => rPericias(), bestiario:() => rBestiario(), atlas:() => rAtlas(), tutoriais:() => rTutoriais(), impressao:() => rImpressao(), missoes:() => rMissoes(), preparo:() => rPreparo()
+  itens:() => rCompItens(), habilidades:() => rHabilidades(), grimorio:() => rCompMagias(), pericias:() => rPericias(), bencaos:() => rBencaos(), bestiario:() => rBestiario(), atlas:() => rAtlas(), tutoriais:() => rTutoriais(), impressao:() => rImpressao(), missoes:() => rMissoes(), preparo:() => rPreparo()
 };
 
 function render(){
@@ -1106,6 +1117,7 @@ function tipoItem(it){
   if (ARMADURAS.includes(it)) return 'Armadura';
   return 'Acessório';
 }
+function textoTestes(it){ return it.testes ? Object.entries(it.testes).map(([k, v]) => `+${v} em testes de ${k}`).join(', ') : ''; }
 function detalheItem(it, comHistoria){
   if (!it) return '';
   const partes = [];
@@ -1130,7 +1142,7 @@ function detalheItem(it, comHistoria){
   partes.push(`${it.peso} kg`);
   const attrs = it.atributos ? Object.entries(it.atributos).map(([k, v]) => `+${v} ${k}`).join(', ') : '';
   return `<div class="detalhe">${tierBadge(it.tier)}${it.tema ? ` <span class="tema-item">${esc(it.tema)}</span>` : ''} ${realce(partes.join(', '))}` +
-    `${attrs ? `<br><b>${realce(attrs)}</b>` : ''}${it.efeito ? `<br><em>${realce(esc(it.efeito))}</em>` : ''}` +
+    `${attrs ? `<br><b>${realce(attrs)}</b>` : ''}${it.testes ? `<br><b class="bonus-teste">🎯 ${realce(textoTestes(it))}</b>` : ''}${it.efeito ? `<br><em>${realce(esc(it.efeito))}</em>` : ''}` +
     `${it.desvantagem ? `<div class="desvantagem-item"><b>Desvantagem:</b> ${realce(esc(it.desvantagem))}</div>` : ''}` +
     `${comHistoria && it.historia ? `<div class="historia-item">${esc(it.historia)}</div>` : ''}</div>`;
 }
@@ -1355,7 +1367,7 @@ function areaDe(txt){
   if (/^si mesmo/.test(t)) return { tipo:'self' };
   if (/^toque, ate (\d+)/.test(t)) return { tipo:'multi', alcance:1, alvos: num(/ate (\d+)/), toque:true };
   if (/^toque/.test(t)) return { tipo:'toque' };
-  if (/todos os adjacentes|aliados adjacentes/.test(t)) return { tipo:'raioSelf', raio:1 };
+  if (/todos os adjacentes|aliados adjacentes|mesmo hexagono/.test(t)) return { tipo:'raioSelf', raio:1 };
   if (/adjacente/.test(t)) return { tipo:'toque' };
   if (/^cone de (\d+)/.test(t)) return { tipo:'cone', alcance: num(/cone de (\d+)/) };
   if (/^linha de (\d+)/.test(t)) return { tipo:'linha', alcance: num(/linha de (\d+)/) };
@@ -1372,6 +1384,26 @@ function areaDe(txt){
   const n = num(/(\d+) hex/);
   if (n) return { tipo:'alvo', alcance: n };
   return null;
+}
+// procura uma área dentro de um texto de efeito (habilidades e fases de monstros)
+function areaDoTexto(txt){
+  if (!txt) return null;
+  const t = semAcento(txt); let m;
+  if ((m = t.match(/cone de (\d+)/))) return `Cone de ${m[1]} hex`;
+  if ((m = t.match(/linha de (\d+)/))) return `Linha de ${m[1]} hex`;
+  if ((m = t.match(/raio (\d+) a ate (\d+) hex/))) return `${m[2]} hex, raio ${m[1]}`;
+  if ((m = t.match(/a ate (\d+) hex[^.]*?raio (\d+)/))) return `${m[1]} hex, raio ${m[2]}`;
+  if ((m = t.match(/linha reta ate (\d+)/))) return `Linha de ${m[1]} hex`;
+  if ((m = t.match(/(um alvo|reaparece|um inimigo) a ate (\d+) hex/))) return `${m[2]} hex`;
+  if ((m = t.match(/a ate (\d+) hex/)) && !/^\s*$/.test(m[1])) return `Raio ${m[1]}`;
+  if ((m = t.match(/raio (\d+)/))) return `Raio ${m[1]}`;
+  if (/todos os adjacentes|adjacentes a ele|todos adjacentes|todos os inimigos adjacentes/.test(t)) return 'Todos os adjacentes';
+  return null;
+}
+function diagramaMonstro(txt, deTexto){
+  const alc = deTexto ? areaDoTexto(txt) : txt; const a = areaDe(alc);
+  if (!a || a.tipo === 'toque' || a.tipo === 'self') return '';
+  return diagramaArea(alc, true).replace(/sua frente/g, 'frente dele').replace(/seu redor/g, 'redor dele').replace(/você/g, 'o monstro');
 }
 function diagramaArea(txt, compacto){
   const a = areaDe(txt); if (!a) return '';
@@ -1621,23 +1653,30 @@ function rStatus(){
      <br><button class="btn" data-ir="evolucao">Abrir Evolução</button>` };
   h += `<section class="painel"><h2>Atributos <button class="btn pequeno simples" data-info="evo">${fmt(resta)} pontos de evolução</button></h2><div class="attrs">` +
     ATRIBUTOS.map(a => {
-      const t = r.E.teste[a.id] || 0, pe = r.E.pericia[a.id] || 0, bi = r.bonusAttr[a.id] || 0;
+      const te = r.E.teste[a.id] || 0, ti = r.testeItens[a.id] || 0, t = te + ti, pe = r.E.pericia[a.id] || 0, bi = r.bonusAttr[a.id] || 0;
       INFO['attr-' + a.id] = { titulo: `${a.id}, ${a.nome}`, html:
         `<p>${esc(a.desc)}.</p>Valor distribuído: ${P.atributos[a.id]}${bi ? `<br>Itens: +${bi}` : ''}<br>Valor final: <b>${A[a.id]}</b>
-         <br>Bônus em testes: ${t ? `+${t}` : 'nenhum'}<br>Bônus em perícias: ${pe ? `+${pe}` : 'nenhum'}
+         <br>Bônus em testes: ${t ? `<b>+${t}</b> (${[te ? `evolução +${te}` : '', ...(r.fontesTeste[a.id] || [])].filter(Boolean).join(', ')})` : 'nenhum'}<br>Teste de perícia: d20 ≤ ${testeAtributo(a.id)}
          <br>Peso na evolução: ${pesoAttr(a.id)}` };
       return `<button class="attr" data-info="attr-${a.id}"><span class="sig">${a.id}</span>
         <span class="v">${A[a.id]}${bi ? `<sup>+${bi}</sup>` : ''}</span>
         <span class="tp">${t ? `T+${t}` : ''}${t && pe ? '<br>' : ''}${pe ? `P+${pe}` : ''}</span></button>`;
     }).join('') +
-    `</div><p class="legenda">T = bônus em testes, P = bônus em perícias, vindos da evolução.</p></section>`;
+    `</div><p class="legenda">T = bônus em testes (evolução e itens), P = bônus de perícia da evolução.</p></section>`;
+
+  // ----- Bênçãos e maldições -----
+  if (r.marcas.length) {
+    h += `<section class="painel"><h2>Bênçãos e maldições <button class="btn pequeno simples" data-ir="bencaos">ver todas</button></h2><div class="cards">${r.marcas.map(mc => {
+      INFO['mc-' + mc.id] = { titulo: esc(mc.nome), sub: `${mc.tipo === 'bencao' ? 'bênção' : 'maldição'} · ${esc(mc.origem)}`, html: cartaoMarca(mc, true) };
+      return `<button class="card ${mc.tipo === 'bencao' ? 'card-bencao' : 'card-maldicao'}" data-info="mc-${mc.id}"><span class="rot">${mc.tipo === 'bencao' ? '✨' : '☠️'} ${esc(mc.nome)}</span><span class="sub">${esc(efeitoCurto(mc.efeito, 70))}</span></button>`; }).join('')}</div></section>`;
+  }
 
   // ----- Perícias equipadas -----
   const pEq = PERICIAS.filter(pc => P.periciasEquipadas.includes(pc.id));
   h += `<section class="painel"><h2>Perícias <button class="btn pequeno simples" data-abrir-pericias="1">${pEq.length} ${pEq.length === 1 ? 'equipada' : 'equipadas'} de ${P.pericias.length}</button></h2>` +
     (pEq.length ? `<div class="cards">${pEq.map(pc => { const bn = bonusPericia(pc, r);
-      INFO['per-' + pc.id] = { titulo: esc(pc.nome), sub: `perícia de ${pc.attr}`, html: `<p>${esc(pc.descricao)}</p><div class="formula">+1 equipada${bn.evo ? ` + ${bn.evo} da evolução de ${pc.attr}` : ''} = +${bn.total}</div><p>Teste com ${realce(pc.attr)} ${r.A[pc.attr]}.</p><button class="btn simples" data-pericia-cat="${pc.id}">Ver no Compêndio</button>` };
-      return `<button class="card" data-info="per-${pc.id}"><span class="rot">${esc(pc.nome)}</span><span class="val">+${bn.total}</span><span class="sub">${pc.attr} ${r.A[pc.attr]}</span></button>`; }).join('')}</div>`
+      INFO['per-' + pc.id] = { titulo: esc(pc.nome), sub: `perícia de ${pc.attr}`, html: `<p>${esc(pc.descricao)}</p><div class="formula">Teste: ${dadoPericia()} ≤ ${contaTeste(bn, pc)}</div><p>Role ${dadoPericia()}: passa com <b>${bn.teste}</b> ou menos. O mesmo número vale para todas as perícias de ${pc.attr}.</p><button class="btn simples" data-pericia-cat="${pc.id}">Ver no Compêndio</button>` };
+      return `<button class="card" data-info="per-${pc.id}"><span class="rot">${esc(pc.nome)}</span><span class="val">≤ ${bn.teste}</span><span class="sub">${dadoPericia()}, ${pc.attr} ${bn.attr}${bonusTesteAttr(pc.attr, r) ? ` · bônus de teste +${bonusTesteAttr(pc.attr, r)}` : ''}</span></button>`; }).join('')}</div>`
       : '<p class="vazio">Nenhuma perícia equipada. Equipe na aba Habilidades › Perícias.</p>') + `</section>`;
 
   // ----- Habilidades -----
@@ -1792,6 +1831,7 @@ function textoBuscaItem(it){
   if (it.atributos) Object.entries(it.atributos).forEach(([k]) => { const a = ATRIBUTOS.find(x => x.id === k); partes.push(k, a ? a.nome : ''); });
   if (it.bonus) Object.keys(it.bonus).forEach(k => partes.push({ slots:'slots magia', dadoMagico:'dano magico', dadoCura:'cura', carga:'carga', mov:'movimento', critDano:'critico', recurso:'recurso mp fe furia foco marca', ignoraDF:'perfura defesa', usosCusto1:'usos magia' }[k] || k));
   if (it.df) partes.push('defesa fisica DF'); if (it.dm) partes.push('defesa magica DM');
+  if (it.testes) Object.keys(it.testes).forEach(k => partes.push('teste testes bonus de teste', k));
   f.lojas.forEach(l => partes.push(l.nome, l.lugar)); f.drops.forEach(x => partes.push(x.m.nome, x.m.local || '')); f.missoes.forEach(m => partes.push(m.nome));
   return (_indiceItem[it.id] = semAcento(partes.filter(Boolean).join(' ')));
 }
@@ -1974,11 +2014,11 @@ function fichaMonstro(mon, c){
       <dt>Crítico</dt><dd>${c.crit}%</dd>
     </dl>
     <h3 class="sub-titulo">Ataques</h3>
-    <ul class="lista-simples">${c.ataques.map(a => `<li><b>${esc(a.nome)}:</b> ${realce(`${a.dados}d10 × ${c.n}`)}${a.tipo === 'magico' ? ' mágico' : ''}, ${esc(a.alcance.toLowerCase())}${a.efeito ? `. ${realce(esc(a.efeito))}` : ''}</li>`).join('')}</ul>
+    <ul class="lista-simples lista-com-area">${c.ataques.map(a => `<li>${diagramaMonstro(a.alcance)}<b>${esc(a.nome)}:</b> ${realce(`${a.dados}d10 × ${c.n}`)}${a.tipo === 'magico' ? ' mágico' : ''}, ${esc(a.alcance.toLowerCase())}${a.efeito ? `. ${realce(esc(a.efeito))}` : ''}</li>`).join('')}</ul>
     <p class="nota">Dados = FOR (ou INT) + dado do ataque${c.D.dano > 0 ? ` + ${c.D.dano} da dificuldade` : c.D.dano < 0 ? ` − ${-c.D.dano} da dificuldade` : ''}, mínimo 1d10.</p>
     ${c.magias.length ? `<h3 class="sub-titulo">Magias</h3><ul class="lista-simples">${c.magias.map(x => `<li><b>${esc(x.m.nome)}:</b> ${realce(esc(x.m.resumo))}${x.dados ? `, ${realce(x.dados)}` : ''}; ${x.m.usos.qtd} ${USOS_POR[x.m.usos.por]}</li>`).join('')}</ul>` : ''}
-    ${(mon.fases || []).length ? `<h3 class="sub-titulo">Fases de combate</h3><ol class="fases">${mon.fases.slice().sort((a, b) => b.abaixoDe - a.abaixoDe).map(f => `<li${c.fasesAtivas.includes(f) ? ' class="ativa"' : ''}><b>${f.abaixoDe >= 100 ? 'Desde o início' : `Abaixo de ${f.abaixoDe}%`}: ${esc(f.nome)}.</b> ${realce(esc(f.efeito))}${f.mod ? `<br><small>${textoMod(f.mod)}</small>` : ''}</li>`).join('')}</ol>` : ''}
-    ${mon.habilidades && mon.habilidades.length ? `<h3 class="sub-titulo">Habilidades</h3><ul class="lista-simples">${mon.habilidades.map(hb => `<li><b>${esc(hb.nome)}</b> <span class="nota">${esc(hb.tipo.toLowerCase())}${hb.usos && hb.usos !== '—' ? `, ${esc(hb.usos)}` : ''}</span><br>${realce(esc(hb.efeito))}</li>`).join('')}</ul>` : ''}
+    ${(mon.fases || []).length ? `<h3 class="sub-titulo">Fases de combate</h3><ol class="fases lista-com-area">${mon.fases.slice().sort((a, b) => b.abaixoDe - a.abaixoDe).map(f => `<li${c.fasesAtivas.includes(f) ? ' class="ativa"' : ''}>${diagramaMonstro(f.efeito, true)}<b>${f.abaixoDe >= 100 ? 'Desde o início' : `Abaixo de ${f.abaixoDe}%`}: ${esc(f.nome)}.</b> ${realce(esc(f.efeito))}${f.mod ? `<br><small>${textoMod(f.mod)}</small>` : ''}</li>`).join('')}</ol>` : ''}
+    ${mon.habilidades && mon.habilidades.length ? `<h3 class="sub-titulo">Habilidades</h3><ul class="lista-simples lista-com-area">${mon.habilidades.map(hb => `<li>${diagramaMonstro(hb.efeito, true)}<b>${esc(hb.nome)}</b> <span class="nota">${esc(hb.tipo.toLowerCase())}${hb.usos && hb.usos !== '—' ? `, ${esc(hb.usos)}` : ''}</span><br>${realce(esc(hb.efeito))}</li>`).join('')}</ul>` : ''}
     ${eqNomes.length ? `<h3 class="sub-titulo">Equipamento</h3><p>${eqNomes.map(it => `${tierBadge(it.tier)} ${esc(it.nome)}`).join(', ')}</p>` : ''}
     ${mon.fraquezas ? `<p><b>Fraquezas:</b> ${realce(esc(mon.fraquezas))}</p>` : ''}
     ${mon.resistencias ? `<p><b>Resistências:</b> ${realce(esc(mon.resistencias))}</p>` : ''}
@@ -2192,8 +2232,17 @@ const periciaPorNome = nome => PERICIAS.find(p => p.nome === nome) || null;
 const professores = pc => { const r = []; ESPECIALISTAS.forEach(es => es.ensina.forEach(e => { if (e.pericia === pc.nome) r.push({ es, e }); })); return r; };
 function bonusPericia(pc, r){
   const evo = r.E.pericia[pc.attr] || 0, aprendida = P.pericias.includes(pc.id), equipada = P.periciasEquipadas.includes(pc.id);
-  const apr = equipada ? 1 : 0;
-  return { evo, apr, aprendida, equipada, total: evo + apr, pode: equipada || !pc.somenteTreinada };
+  const apr = equipada ? 1 : 0, total = evo + apr, pode = equipada || !pc.somenteTreinada;
+  const attr = P.atributos[pc.attr] || 0;
+  return { evo, apr, aprendida, equipada, total, pode, base: REGRAS.pericias.base, attr, teste: testeAtributo(pc.attr) };
+}
+// teste de perícia de um atributo: base + pontos distribuídos, com máximo
+function testeAtributo(id, p = P){ return Math.min(REGRAS.pericias.maximo, REGRAS.pericias.base + (p.atributos[id] || 0)); }
+const dadoPericia = () => `d${(REGRAS.pericias && REGRAS.pericias.dado) || 20}`;
+function bonusTesteAttr(id, r){ return (r.E.teste[id] || 0) + (r.testeItens[id] || 0); }
+function textoTeste(bn){ return bn.pode ? `${dadoPericia()} ≤ ${bn.teste}` : 'só treinada'; }
+function contaTeste(bn, pc){
+  return `${bn.base} + ${bn.attr} ${bn.attr === 1 ? 'ponto' : 'pontos'} em ${pc.attr} = ${bn.teste}${bn.base + bn.attr > REGRAS.pericias.maximo ? ` (máximo ${REGRAS.pericias.maximo})` : ''}`;
 }
 const limitePericias = () => REGRAS.pericias && REGRAS.pericias.limiteEquipadas;
 function alternarPericia(id, acao){
@@ -2236,7 +2285,7 @@ function listaPericias(){
       const bn = bonusPericia(pc, r), apr = P.pericias.includes(pc.id);
       return `<div class="linha-mon"><div><button class="nome-magia" data-pericia-cat="${pc.id}">${esc(pc.nome)}</button>${pc.somenteTreinada ? ' <span class="tag-treino">só treinada</span>' : ''}
         <div class="resumo">${esc(pc.descricao)}</div></div>
-        <div class="lado">${apr ? `<span class="usos">${bn.equipada ? '✓ equipada' : '✓ aprendida'}</span><br>` : ''}${bn.total ? `<b>+${bn.total}</b>` : ''}</div></div>`;
+        <div class="lado">${apr ? `<span class="usos">${bn.equipada ? '✓ equipada' : '✓ aprendida'}</span><br>` : ''}<b>${textoTeste(bn)}</b></div></div>`;
     }).join('') + `</section>`;
   });
   return h;
@@ -2252,10 +2301,10 @@ function abrirPericiaCatalogo(id, origem){
      ${pc.somenteTreinada ? '<div class="desvantagem-item">Só pode ser usada por quem aprendeu com um especialista.</div>' : ''}
      <h3 class="sub-titulo">Para ${esc(P.nome || 'seu personagem')}</h3>
      <dl class="ficha-magia">
-       <dt>Atributo</dt><dd>${realce(pc.attr)} ${r.A[pc.attr]}</dd>
-       <dt>Aprendida</dt><dd>${apr ? (bn.equipada ? 'sim, equipada (+1)' : 'sim, guardada (sem bônus)') : 'não'}</dd>
-       <dt>Evolução de ${pc.attr}</dt><dd>${bn.evo ? `+${bn.evo}` : 'nenhuma'}</dd>
-       <dt>Bônus total</dt><dd><b>${bn.pode ? `+${bn.total}` : 'não pode usar sem treino'}</b></dd>
+       <dt>Atributo</dt><dd>${realce(pc.attr)} (${bn.attr} ${bn.attr === 1 ? 'ponto distribuído' : 'pontos distribuídos'})</dd>
+       <dt>Aprendida</dt><dd>${apr ? (bn.equipada ? 'sim, equipada' : 'sim, guardada') : 'não'}</dd>
+       <dt>Teste</dt><dd><b>${bn.pode ? `${dadoPericia()} ≤ ${bn.teste}` : 'não pode usar sem treino'}</b>${bn.pode ? `<br><small>${contaTeste(bn, pc)}</small>` : ''}</dd>
+       <dt>Bônus de teste</dt><dd>${bonusTesteAttr(pc.attr, r) ? `+${bonusTesteAttr(pc.attr, r)} (${[r.E.teste[pc.attr] ? `evolução +${r.E.teste[pc.attr]}` : '', ...(r.fontesTeste[pc.attr] || [])].filter(Boolean).join(', ')}), à parte do teste` : 'nenhum'}</dd>
      </dl>
      <div class="botoes">${apr
         ? `<button class="btn" data-pc-acao="${bn.equipada ? 'desequipar' : 'equipar'}" data-pc="${pc.id}">${bn.equipada ? 'Guardar (desequipar)' : 'Equipar'}</button><button class="btn simples" data-pc-acao="esquecer" data-pc="${pc.id}">Remover das aprendidas</button>`
@@ -2264,6 +2313,44 @@ function abrirPericiaCatalogo(id, origem){
      ${prof.length ? `<ul class="lista-simples">${prof.map(x => `<li><b>${esc(x.es.nome)}</b>, ${esc(x.es.lugar)}<br>${FORMAS_ENSINO[x.e.forma]}: ${esc(x.e.custo)}</li>`).join('')}</ul>` : '<p class="vazio">Ninguém ensina ainda. Só pela evolução.</p>'}
      ${(() => { const ms = MISSOES.filter(x => (x.recompensas.pericias || []).includes(pc.nome)); return ms.length ? `<p><b>Recompensa de missão:</b> ${ms.map(x => `<button class="nome-magia" data-missao-info="${x.id}">${esc(x.nome)}</button>`).join(', ')}</p>` : ''; })()}` };
   abrirInfo('pericia-cat', origem);
+}
+
+/* ----- Bênçãos e maldições ----- */
+const filtroMarcas = { tipo:'todos', fonte:'todos', meu:'todos', busca:'' };
+const efeitoCurto = (t, n) => t.length > n ? t.slice(0, n - 1).replace(/\s+\S*$/, '') + '…' : t;
+function resumoMarca(mc){
+  const p = [];
+  if (mc.atributos) Object.entries(mc.atributos).forEach(([k, v]) => p.push(`${v > 0 ? '+' : ''}${v} ${k}`));
+  if (mc.df) p.push(`+${mc.df} DF`); if (mc.dm) p.push(`+${mc.dm} DM`);
+  const nb = { slots:'slots', dadoCura:'d10 nas curas', dadoMagico:'d10 mágico', recurso:'recurso', carga:'kg de carga', mov:'movimento' };
+  if (mc.bonus) Object.entries(mc.bonus).forEach(([k, v]) => p.push(`${v > 0 ? '+' : ''}${v} ${nb[k] || k}`));
+  return p.join(', ');
+}
+function cartaoMarca(mc, comBotao){
+  const tem = P.marcas.includes(mc.id), ben = mc.tipo === 'bencao', rs = resumoMarca(mc);
+  return `<div class="entrada marca-${mc.tipo}"><div class="nome">${ben ? '✨' : '☠️'} ${esc(mc.nome)}${tem ? ` <span class="marca">${esc(P.nome || 'Seu personagem')} tem</span>` : ''}</div>
+    <p class="meta-missao" style="margin:0 0 4px">${ben ? 'Bênção' : 'Maldição'} · ${esc(mc.origem)}</p>
+    <p style="margin:4px 0">${realce(esc(mc.efeito))}</p>
+    <p class="nota" style="margin:2px 0"><b>Como ${ben ? 'receber' : 'pegar'}:</b> ${esc(mc.comoGanha)}</p>
+    <p class="nota" style="margin:2px 0"><b>Dura:</b> ${esc(mc.duracao)}. <b>${ben ? 'Como perder' : 'Como remover'}:</b> ${esc(mc.comoRemover)}</p>
+    ${comBotao ? `<button class="btn pequeno${tem ? ' simples' : ''}" data-marca="${mc.id}">${tem ? 'Tirar do personagem' : ben ? 'Dar ao personagem' : 'Aplicar no personagem'}</button>` : ''}</div>`;
+}
+function rBencaos(){
+  return `<h2 class="titulo-pagina">Bênçãos e maldições</h2>
+    <p class="intro">Marcas que o mundo deixa nos heróis: presentes dos semideuses das raças, de Jurgmund e dos colossos, heranças dos cinco heróis, e maldições de monstros, lugares e do Deus Marcado. Elas não mudam atributos nem números: fazem coisas acontecerem com o personagem, como rolar um dado de novo, ouvir o metal ou virar sapo.</p>
+    ${painelFiltros('marcas', `<input type="search" id="busca-marcas" value="${esc(filtroMarcas.busca)}" placeholder="Buscar por nome, origem, monstro ou lugar" aria-label="Buscar bênçãos e maldições">`, [
+      ['Tipo', chips('mc-tipo', { todos:'Todas', bencao:'✨ Bênçãos', maldicao:'☠️ Maldições' }, filtroMarcas.tipo)],
+      ['Origem', chips('mc-fonte', Object.assign({ todos:'Todas' }, FONTES_MARCA), filtroMarcas.fonte)],
+      ['Seu personagem', chips('mc-meu', { todos:'Todas', sim:'Que ele tem' }, filtroMarcas.meu)]], contaAtivos(filtroMarcas))}
+    <div id="lista-comp">${listaMarcas()}</div>`;
+}
+function listaMarcas(){
+  const f = filtroMarcas, b = semAcento(f.busca.trim());
+  const lista = BENCAOS_MALDICOES.filter(mc => (f.tipo === 'todos' || mc.tipo === f.tipo) && (f.fonte === 'todos' || mc.fonte === f.fonte) &&
+    (f.meu === 'todos' || P.marcas.includes(mc.id)) && (!b || semAcento([mc.nome, mc.origem, mc.efeito, mc.comoGanha, mc.comoRemover].join(' ')).includes(b)));
+  if (!lista.length) return '<section class="bloco"><p class="vazio">Nada encontrado com esses filtros.</p></section>';
+  return ['bencao', 'maldicao'].map(t => { const ls = lista.filter(mc => mc.tipo === t); if (!ls.length) return '';
+    return `<section class="bloco"><h2>${t === 'bencao' ? '✨ Bênçãos' : '☠️ Maldições'} <small>${ls.length}</small></h2>${ls.map(mc => cartaoMarca(mc, true)).join('')}</section>`; }).join('');
 }
 
 /* ----- Atlas ----- */
@@ -2368,7 +2455,7 @@ function rPericiasPersonagem(){
   const linha = pc => { const bn = bonusPericia(pc, r);
     return `<div class="linha-mon"><div><button class="nome-magia" data-pericia-cat="${pc.id}">${esc(pc.nome)}</button> <span class="atr">${pc.attr}</span>${pc.somenteTreinada ? ' <span class="tag-treino">só treinada</span>' : ''}
       <div class="resumo">${esc(pc.descricao)}</div></div>
-      <div class="lado">${bn.equipada ? `<b>+${bn.total}</b><br>` : ''}<button class="btn pequeno${bn.equipada ? ' simples' : ''}" data-pc-acao="${bn.equipada ? 'desequipar' : 'equipar'}" data-pc="${pc.id}">${bn.equipada ? 'Guardar' : 'Equipar'}</button></div></div>`; };
+      <div class="lado"><b>${textoTeste(bn)}</b><br><button class="btn pequeno${bn.equipada ? ' simples' : ''}" data-pc-acao="${bn.equipada ? 'desequipar' : 'equipar'}" data-pc="${pc.id}">${bn.equipada ? 'Guardar' : 'Equipar'}</button></div></div>`; };
   const faltam = PERICIAS.filter(pc => !P.pericias.includes(pc.id));
   return abasHab() + `<p class="intro">Aqui ficam as perícias que ${esc(P.nome || 'o seu personagem')} aprendeu com especialistas ou em missões. Só as <b>equipadas</b> dão bônus e aparecem no Status${lim ? ` (máximo ${lim})` : ''}.</p>
     <section class="bloco"><h2>Equipadas <small>${equipadas.length}${lim ? ` de ${lim}` : ''}</small></h2>
@@ -2702,6 +2789,7 @@ function impRegras(){
       <li><b>Crítico</b>: d10 separado; 1 é crítico (${R.critBase}%), 1–2 com PER ${R.perLimiarCritico}+. Crítico = +${R.critBonusBase}% no dano final.</li>
       <li><b>Movimento</b> = ${R.movimentoBase} + AGI hex. <b>Carga</b> = ${R.cargaBase} + FOR × ${R.cargaPorFOR} kg; −1 movimento a cada ${R.pesoPorPenalidade} kg acima.</li>
       <li><b>FOR abaixo da exigida pela arma</b>: −1 DEX e −1 movimento por ponto.</li>
+      <li><b>Teste de perícia</b>: 1d20 ≤ ${R.pericias.base} + pontos distribuídos no atributo (máximo ${R.pericias.maximo}). Vale para todas as perícias daquele atributo.</li>
       <li><b>Slots de magia</b> = INT × ${R.slotsPorINT}. Custo por tier: ${Object.entries(R.custoSlotPorTier).map(([k, v]) => `${TIERS[k].nome} ${v}`).join(', ')}. Usos por batalha, por dia ou por sessão.</li>
     </ul>
   </div>
@@ -3042,8 +3130,8 @@ function rFichaPapel(){
 
   // ---------- Folha 1 ----------
   const atrLinhas = ATRIBUTOS.map(a => {
-    const base = P.atributos[a.id], it = r.bonusAttr[a.id] || 0, tst = r.E.teste[a.id] || 0, per = r.E.pericia[a.id] || 0;
-    return `<tr class="${ATR_GRUPO[a.grupo]}"><th>${esc(a.nome)}</th><td>${v(base)}</td><td>${v(it ? '+' + it : '')}</td><td><b>${v(r.A[a.id])}</b></td><td>${v(11 - r.A[a.id] > 0 ? 11 - r.A[a.id] : 1)}</td><td>${v(tst ? '+' + tst : '')}</td><td>${v(per ? '+' + per : '')}</td></tr>`;
+    const base = P.atributos[a.id], it = r.bonusAttr[a.id] || 0, tst = bonusTesteAttr(a.id, r), per = testeAtributo(a.id);
+    return `<tr class="${ATR_GRUPO[a.grupo]}"><th>${esc(a.nome)}</th><td>${v(base)}</td><td>${v(it ? '+' + it : '')}</td><td><b>${v(r.A[a.id])}</b></td><td>${v(11 - r.A[a.id] > 0 ? 11 - r.A[a.id] : 1)}</td><td>${v(tst ? '+' + tst : '')}</td><td><b>${v(per)}</b></td></tr>`;
   }).join('');
   const caixa = (titulo, cabs, vals) => `<div class="fp-caixa"><div class="fp-cab">${titulo}</div><table class="fp-t fp-centro"><tr>${cabs.map(c => `<th>${c}</th>`).join('')}</tr><tr class="alta">${vals.map(x => `<td>${v(x)}</td>`).join('')}</tr></table></div>`;
   const metade = Math.ceil(EVOLUCOES.length / 2);
@@ -3051,7 +3139,7 @@ function rFichaPapel(){
     const a = ATRIBUTOS.find(x => x.id === ev.attr), k = (P.evolucao || {})[ev.id] || 0;
     return `<tr class="${ATR_GRUPO[a ? a.grupo : 'fisico']}"><td class="esq">${esc(ev.nome)}</td><td>${esc(bonusCurto(ev.efeito))}</td><td>${ev.attr}</td><td>×${ev.gasto}</td><td class="bols">${bol(k, REGRAS.evolucao.maxBolinhas)}</td></tr>`; }).join('')}</table>`;
   const pericias = B ? [] : PERICIAS.filter(pc => P.pericias.includes(pc.id));
-  const linhaPer = pc => pc ? `<div class="fp-linha"><span>${esc(pc.nome)} (${pc.attr})${P.periciasEquipadas.includes(pc.id) ? '' : ' · guardada'}</span><b>+${bonusPericia(pc, r).total}</b></div>` : '<div class="fp-linha"></div>';
+  const linhaPer = pc => pc ? `<div class="fp-linha"><span>${esc(pc.nome)} (${pc.attr})${P.periciasEquipadas.includes(pc.id) ? '' : ' · guardada'}</span></div>` : '<div class="fp-linha"></div>';
   const perLinhas = Array.from({ length: Math.max(10, pericias.length) }, (_, i) => linhaPer(pericias[i]));
   const folha1 = `<div class="folha-a4">
     <div class="fp-titulo">LIVRO DO AVENTUREIRO</div>
@@ -3062,7 +3150,7 @@ function rFichaPapel(){
       <div class="fp-campo larga"><b>Desvantagens:</b><span></span></div><div class="fp-campo"><b>Nível:</b><span>${v(P.nivel)}</span><b>XP:</b><span></span></div>
     </div>
     <div class="fp-meio">
-      <table class="fp-t fp-atr"><tr><th class="fp-escuro">Atributos</th><th class="fp-escuro">Pontos<br><small>${B ? '—' : `${catCls.pontos.fisico}/${catCls.pontos.mental}/${catCls.pontos.social}`}</small></th><th class="fp-escuro">Itens</th><th class="fp-escuro">Total</th><th class="fp-escuro">Peso evol.</th><th class="fp-escuro">Bônus teste</th><th class="fp-escuro">Perícia</th></tr>${atrLinhas}</table>
+      <table class="fp-t fp-atr"><tr><th class="fp-escuro">Atributos</th><th class="fp-escuro">Pontos<br><small>${B ? '—' : `${catCls.pontos.fisico}/${catCls.pontos.mental}/${catCls.pontos.social}`}</small></th><th class="fp-escuro">Itens</th><th class="fp-escuro">Total</th><th class="fp-escuro">Peso evol.</th><th class="fp-escuro">Bônus teste</th><th class="fp-escuro">Perícia<br><small>d20 ≤</small></th></tr>${atrLinhas}</table>
       <div class="fp-lado">
         ${caixa('Status gerais', ['Pontos de vida', B ? 'Recurso' : `${esc(cls.recurso)} máx.`], [fmt(r.vida), r.recursoMax != null ? `${r.recursoMax}${cls.recursoNoAlvo ? '/alvo' : ''}` : '—'])}
         ${caixa('Dano (d10 × nível)', ['Físico', 'Mão sec.', 'Mágico', 'Cura'], [`${r.dadosF}d10`, r.armaSec ? `${r.dadosF2}d10` : '—', `${r.dadosM}d10`, `${r.dadosC}d10`])}
@@ -3094,8 +3182,8 @@ function rFichaPapel(){
       ${linhasVazias(14 - Math.ceil(itensEq.length * 1.7), 3)}</table>
     <div class="fp-dinheiro"><div class="fp-faixa-titulo">Dinheiro</div><div class="fp-moedas"><span>Platina</span><span>Ouro</span><span>Prata</span><span>Bronze</span></div></div>
     <div class="fp-duas">
-      <div><div class="fp-faixa-titulo bencao">Bênçãos</div><table class="fp-t fp-linhas">${linhasVazias(3, 1)}</table></div>
-      <div><div class="fp-faixa-titulo maldicao">Maldições</div><table class="fp-t fp-linhas">${linhasVazias(3, 1)}</table></div>
+      ${['bencao', 'maldicao'].map(tp => { const ls = B ? [] : r.marcas.filter(mc => mc.tipo === tp);
+        return `<div><div class="fp-faixa-titulo ${tp}">${tp === 'bencao' ? 'Bênçãos' : 'Maldições'}</div><table class="fp-t fp-linhas">${ls.map(mc => `<tr><td class="esq pequeno"><b>${esc(mc.nome)}</b>: ${esc(efeitoCurto(mc.efeito, 110))}</td></tr>`).join('')}${linhasVazias(3 - ls.length, 1)}</table></div>`; }).join('')}
     </div>
     <div class="fp-faixa-titulo montaria">Montaria</div>
     <div class="fp-montaria">
@@ -3147,7 +3235,7 @@ function rTutoriais(){
         ['Biblioteca', 'Compêndio de itens, de magias e de perícias, Bestiário, Atlas e estes Tutoriais'],
         ['Mesa do mestre', 'Preparo de sessão, Missões e Dungeons, Impressão de dados']])}
       <p>Tudo fica salvo neste aparelho. Em <b>Personagens salvos</b> e no <b>Preparo de sessão</b> há botões de exportar e importar, para fazer cópia de segurança ou passar para outro celular.</p>
-      <p>Magias e habilidades com alcance em hexágonos mostram um desenho do campo: a estrela dourada é você, o azul é até onde dá para mirar, o laranja é a área atingida e o vermelho escuro é o alvo.</p>
+      <p>Magias, habilidades e os ataques e habilidades dos monstros com alcance ou área em hexágonos mostram um desenho do campo: a estrela dourada é você, o azul é até onde dá para mirar, o laranja é a área atingida e o vermelho escuro é o alvo.</p>
       <p>Nomes sublinhados em dourado são links: tocando, abre a ficha do item, magia, perícia, monstro ou missão.</p>`],
     ['Criando seu personagem', `
       <p>Todo personagem começa no nível 1 com os pontos já distribuídos. Depois disso os atributos não mudam: a evolução vem do nível, que multiplica dano, vida e defesa, e dos itens.</p>
@@ -3282,7 +3370,8 @@ function rTutoriais(){
       <p>Na página Bestiário, <b>+ Batalha</b> coloca o monstro no nível do seu personagem. Na batalha, dá para mudar o nível e a dificuldade de cada um, marcar dano e cura e sortear os drops de quem caiu.</p>`],
     ['Perícias', `
       <p>Perícias são o que o personagem sabe fazer fora do combate: escalar, mentir, abrir fechaduras, curar, rastrear. Cada perícia usa um atributo.</p>
-      <div class="formula">Bônus da perícia = +1 se aprendida + evolução "Perícia de ATRIBUTO"</div>
+      <div class="formula">Teste de perícia: role 1d20 e passe com ${REGRAS.pericias.base} + pontos distribuídos no atributo ou menos (máximo ${REGRAS.pericias.maximo})</div>
+      <p>O número é o mesmo para todas as perícias do atributo. Exemplo: com FOR 1, Atletismo e Escalar passam com <b>10 ou menos</b>; com FOR 3, com 12 ou menos. Na ficha impressa, ele fica na coluna Perícia, na linha do atributo.</p>
       <p>Algumas perícias são <b>só treinadas</b>, como Arrombamento, Alquimia e Arcanismo aplicado a itens: quem não aprendeu não consegue usar.</p>
       <p>Especialistas espalhados pelo mundo ensinam por venda, troca ou missão. O Compêndio de perícias mostra os ${PERICIAS.length} tipos, com exemplos de uso, o nome parecido em D&D, Pathfinder e Tormenta, e quem ensina cada uma.</p>`],
     ['Comércio e aprendizado', `
@@ -3292,6 +3381,9 @@ function rTutoriais(){
       <p>Itens e magias Lendários e Únicos não se compram: vêm de monstros fortes, missões e lugares especiais. Quanto mais forte o monstro, melhores os itens que ele deixa: criaturas de dificuldade 2 e 3 deixam itens Raros, e as de 3 a 5 deixam Perfeitos.</p>
       <p>Especialistas ensinam perícias por <b>venda</b> (moedas), <b>troca</b> (um objeto ou segredo) ou <b>missão</b>. Cada perícia aprendida vale +1 nas perícias daquele tipo.</p>
       <p>No Atlas, cada lugar mostra as lojas, os mestres de magia, os especialistas e os tesouros das criaturas. No Compêndio de itens, cada item mostra onde conseguir.</p>`],
+    ['Bênçãos e maldições', `
+      <p>O mundo deixa marcas nos heróis. <b>Bênçãos</b> vêm dos semideuses das raças, de Jurgmund e dos colossos, dos heróis da Primeira Era e de lugares sagrados. <b>Maldições</b> vêm de monstros, lugares perigosos e do Deus Marcado.</p>
+      <p>Elas <b>não mudam atributos nem números</b>: fazem algo diferente acontecer. A Sorte do Bobo deixa rolar qualquer dado de novo uma vez por sessão; a Bênção da Bigorna faz o personagem ouvir o metal; a Pele de Sapo transforma quem tira 10 na defesa. Cada uma diz como se recebe, quanto tempo dura e como se perde ou remove. O mestre aplica pela página Bênçãos e maldições, e elas aparecem no Status e na ficha impressa.</p>`],
     ['Mesa do mestre', `
       <p>Ferramentas para o mestre preparar e conduzir a sessão:</p>
       <ul>
@@ -3351,6 +3443,7 @@ $('#modal-fundo').addEventListener('click', e => {
   if (b.dataset.magiaInfo) { abrirMagia(b.dataset.magiaInfo); return; }
   if (b.dataset.itemInfo) { abrirItemInfo(b.dataset.itemInfo, b.dataset.loja); return; }
   if (b.dataset.periciaCat) { abrirPericiaCatalogo(b.dataset.periciaCat); return; }
+  if (b.dataset.marca) { const id = b.dataset.marca; P.marcas = P.marcas.includes(id) ? P.marcas.filter(x => x !== id) : [...P.marcas, id]; fecharModal(); const y = window.scrollY; render(); window.scrollTo(0, y); toast('Atualizado'); return; }
   if (b.dataset.abrirPericias) { fecharModal(); subAbaHab = 'pericias'; irPara('habilidades'); return; }
   if (b.dataset.missaoInfo) { abrirMissao(b.dataset.missaoInfo); return; }
   if (b.dataset.missaoFeita) {
@@ -3419,7 +3512,7 @@ conteudo.addEventListener('click', e => {
 
   if (t.dataset.limparFiltros) {
     if (t.dataset.limparFiltros === 'itens') filtroItens.ordem = 'tier';
-    const alvo = { itens: filtroItens, magias: filtroMagias, mon: filtroMon, pericias: filtroPericias, missoes: filtroMissoes, magiasEq: filtroMagiasEq, dungeons: filtroDungeons }[t.dataset.limparFiltros];
+    const alvo = { itens: filtroItens, magias: filtroMagias, mon: filtroMon, pericias: filtroPericias, marcas: filtroMarcas, missoes: filtroMissoes, magiasEq: filtroMagiasEq, dungeons: filtroDungeons }[t.dataset.limparFiltros];
     Object.keys(alvo).forEach(k => { if (k !== 'busca' && k !== 'ordem') alvo[k] = 'todos'; });
     const y = window.scrollY; render(); window.scrollTo(0, y); return;
   }
@@ -3447,6 +3540,10 @@ conteudo.addEventListener('click', e => {
   if (t.dataset.encBatalha) { const enc = sessao().encontros[parseInt(t.dataset.encBatalha)];
     (enc.monstros || []).forEach(x => { for (let k = 0; k < (x.qtd || 1); k++) BATALHA.push({ uid: novoId('m'), id: x.id, nivel: x.nivel, dif: x.dif, dano: 0 }); });
     nomearInstancias(); salvarBatalha(); toast('Encontro levado para a batalha do Bestiário'); return; }
+  if (t.dataset.marca) { const id = t.dataset.marca, mc = BENCAOS_MALDICOES.find(x => x.id === id);
+    P.marcas = P.marcas.includes(id) ? P.marcas.filter(x => x !== id) : [...P.marcas, id];
+    toast(P.marcas.includes(id) ? `${mc.nome}: ${mc.tipo === 'bencao' ? 'bênção recebida' : 'maldição aplicada'}` : `${mc.nome} removida`);
+    const y = window.scrollY; render(); window.scrollTo(0, y); return; }
   if (t.dataset.subMis) { subAbaMis = t.dataset.subMis; dungeonAberta = null; salaSel = null; render(); window.scrollTo(0, 0); return; }
   if (t.dataset.dungeon) { dungeonAberta = t.dataset.dungeon; salaSel = null; render(); window.scrollTo(0, 0); return; }
   if (t.dataset.dungeonVoltar) { dungeonAberta = null; salaSel = null; render(); window.scrollTo(0, 0); return; }
@@ -3549,7 +3646,7 @@ conteudo.addEventListener('click', e => {
     const v = t.dataset.valor;
     ({ 'itens-cat':() => filtroItens.cat = v, 'itens-tier':() => filtroItens.tier = v, 'itens-col':() => filtroItens.col = v, 'itens-ord':() => filtroItens.ordem = v,
 
-       'magias-cat':() => filtroMagias.cat = v, 'pericias-attr':() => filtroPericias.attr = v, 'mis-reg':() => filtroMissoes.regiao = v, 'dg-tipo':() => filtroDungeons.tipo = v, 'dg-dif':() => filtroDungeons.dif = v, 'meq-cat':() => filtroMagiasEq.cat = v, 'meq-tier':() => filtroMagiasEq.tier = v, 'meq-ver':() => filtroMagiasEq.ver = v, 'mis-dif':() => filtroMissoes.dif = v, 'mis-rec':() => filtroMissoes.recompensa = v, 'mis-st':() => filtroMissoes.status = v, 'pericias-apr':() => filtroPericias.aprendidas = v, 'mon-dif':() => filtroMon.dif = v, 'mon-tipo':() => filtroMon.tipo = v, 'mon-origem':() => filtroMon.origem = v, 'mon-local':() => filtroMon.local = v, 'atlas-reg':() => atlasReg = v, 'magias-tier':() => filtroMagias.tier = v,
+       'magias-cat':() => filtroMagias.cat = v, 'pericias-attr':() => filtroPericias.attr = v, 'mis-reg':() => filtroMissoes.regiao = v, 'mc-tipo':() => filtroMarcas.tipo = v, 'mc-fonte':() => filtroMarcas.fonte = v, 'mc-meu':() => filtroMarcas.meu = v, 'dg-tipo':() => filtroDungeons.tipo = v, 'dg-dif':() => filtroDungeons.dif = v, 'meq-cat':() => filtroMagiasEq.cat = v, 'meq-tier':() => filtroMagiasEq.tier = v, 'meq-ver':() => filtroMagiasEq.ver = v, 'mis-dif':() => filtroMissoes.dif = v, 'mis-rec':() => filtroMissoes.recompensa = v, 'mis-st':() => filtroMissoes.status = v, 'pericias-apr':() => filtroPericias.aprendidas = v, 'mon-dif':() => filtroMon.dif = v, 'mon-tipo':() => filtroMon.tipo = v, 'mon-origem':() => filtroMon.origem = v, 'mon-local':() => filtroMon.local = v, 'atlas-reg':() => atlasReg = v, 'magias-tier':() => filtroMagias.tier = v,
        'hab-classe':() => habClasse = v })[t.dataset.filtro]();
     const y = window.scrollY; render(); window.scrollTo(0, y); return;
   }
@@ -3631,6 +3728,7 @@ conteudo.addEventListener('input', e => {
   }
   if (t.id === 'busca-itens') { filtroItens.busca = t.value; $('#lista-comp').innerHTML = listaItens(); return; }
   if (['ss-titulo','ss-data','ss-resumo','ss-notas'].includes(t.id)) { const ss = sessao(); if (ss) { ss[{ 'ss-titulo':'titulo', 'ss-data':'data', 'ss-resumo':'resumo', 'ss-notas':'notas' }[t.id]] = t.value; salvarSessoes(); } return; }
+  if (t.id === 'busca-marcas') { filtroMarcas.busca = t.value; $('#lista-comp').innerHTML = listaMarcas(); return; }
   if (t.id === 'busca-missoes') { filtroMissoes.busca = t.value; $('#lista-comp').innerHTML = listaMissoes(); return; }
   if (t.id === 'busca-magias-eq') { filtroMagiasEq.busca = t.value; $('#lista-magias-eq').innerHTML = listaMagiasEq(); return; }
   if (t.id === 'busca-pericias') { filtroPericias.busca = t.value; $('#lista-comp').innerHTML = listaPericias(); return; }
